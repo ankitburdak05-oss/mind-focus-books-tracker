@@ -1,0 +1,67 @@
+name: Build Native Android APK
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v3
+
+    - name: Prepare Android Assets
+      run: |
+        mkdir -p android/app/src/main/assets
+        cp index.html android/app/src/main/assets/
+        cp style.css android/app/src/main/assets/
+        cp app.js android/app/src/main/assets/
+        cp books-data.js android/app/src/main/assets/
+        cp icon-192.png android/app/src/main/assets/
+        cp icon-512.png android/app/src/main/assets/
+
+    - name: Install Gradle Wrapper
+      working-directory: ./android
+      run: |
+        gradle wrapper --gradle-version 8.5
+        chmod +x gradlew
+
+    - name: Build Native Standalone APK
+      working-directory: ./android
+      run: |
+        ./gradlew assembleRelease --stacktrace
+
+    - name: Rename APK
+      run: |
+        cp android/app/build/outputs/apk/release/app-release.apk MindFocusBooks-Native.apk || cp android/app/build/outputs/apk/release/app-release-unsigned.apk MindFocusBooks-Native.apk
+
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: MindFocusBooks-Native-APK
+        path: MindFocusBooks-Native.apk
+
+    - name: Create GitHub Release with APK
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v1.0.0
+        name: "Mind Focus Books Tracker - Native Android APK v1.0"
+        body: "Real Standalone Native Android APK (Full-screen WebView, zero URL bar, 100% offline)."
+        files: MindFocusBooks-Native.apk
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
