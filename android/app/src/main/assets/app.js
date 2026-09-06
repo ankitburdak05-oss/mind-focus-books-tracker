@@ -1,5 +1,6 @@
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
+const PIN_KEY = 'mind_focus_pin_v1';
 
 let state = {
   books: [],
@@ -12,7 +13,11 @@ let state = {
   currentPage: 1,
   pageSize: 25,
   editingBookIndex: -1,
-  theme: 'dark'
+  theme: 'dark',
+  currentEditingCoverImage: '',
+  currentLendIndex: -1,
+  pinLocked: false,
+  enteredPin: ''
 };
 
 const ICONS = {
@@ -32,6 +37,7 @@ const ICONS = {
 
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
+  initPrivacyLock();
   loadData();
   populateCategoryDropdown();
   setupEventListeners();
@@ -254,12 +260,17 @@ function getFilteredAndSortedBooks() {
       (b.author && b.author.toLowerCase().includes(q)) ||
       (b.no && b.no.toLowerCase().includes(q)) ||
       (b.category && b.category.toLowerCase().includes(q)) ||
-      (b.takeaway && b.takeaway.toLowerCase().includes(q))
+      (b.takeaway && b.takeaway.toLowerCase().includes(q)) ||
+      (b.lent_to && b.lent_to.toLowerCase().includes(q))
     );
   }
 
   if (state.statusFilter !== 'ALL') {
-    list = list.filter(b => (b.status || 'PENDING').toUpperCase() === state.statusFilter);
+    if (state.statusFilter === 'LENT') {
+      list = list.filter(b => b.lent_to && b.lent_to.trim().length > 0);
+    } else {
+      list = list.filter(b => (b.status || 'PENDING').toUpperCase() === state.statusFilter);
+    }
   }
 
   if (state.categoryFilter !== 'ALL') {
@@ -385,6 +396,10 @@ function renderStatistics() {
   if (cDoneEl) cDoneEl.innerText = done;
   const cPendingEl = document.getElementById('countPending');
   if (cPendingEl) cPendingEl.innerText = pending;
+
+  const lentCount = state.books.filter(b => b.lent_to && b.lent_to.trim().length > 0).length;
+  const cLentEl = document.getElementById('countLent');
+  if (cLentEl) cLentEl.innerText = lentCount;
 }
 
 function renderCategoryPills() {
@@ -432,8 +447,10 @@ function renderBookList() {
 
   if (state.viewMode === 'table') {
     renderTableView(container, paginated);
-  } else {
+  } else if (state.viewMode === 'grid') {
     renderGridView(container, paginated);
+  } else if (state.viewMode === 'bookshelf') {
+    renderBookshelfView(container, paginated);
   }
 
   renderPagination(paginationContainer, totalItems, totalPages);
@@ -475,7 +492,9 @@ function renderTableView(container, books) {
     html += '<tr>' +
       '<td style="font-weight:700; color:var(--text-muted);">' + escapeHtml(b.no) + '</td>' +
       '<td class="book-title-cell"><div class="book-title-text">' + escapeHtml(b.title) + '</div>' +
-      '<div class="book-author-text">' + escapeHtml(b.author) + ' • ' + escapeHtml(b.language || 'HINDI') + '</div></td>' +
+      '<div class="book-author-text">' + escapeHtml(b.author) + ' • ' + escapeHtml(b.language || 'HINDI') + '</div>' +
+      (b.lent_to ? '<div style="margin-top:2px;"><span class="badge badge-lent" onclick="openLendModal(' + origIdx + ')" title="Click to manage or return">🤝 Lent to ' + escapeHtml(b.lent_to) + '</span></div>' : '') +
+      '</td>' +
       '<td>' + escapeHtml(b.author) + '</td>' +
       '<td><span class="badge badge-cat">' + escapeHtml(b.category || 'General') + '</span></td>' +
       '<td><select class="status-select status-' + (b.status || 'PENDING') + '" onchange="onStatusChange(' + origIdx + ', this.value)">' +
@@ -495,6 +514,7 @@ function renderTableView(container, books) {
       ICONS.note + ' ' + (hasNotes ? 'Notes' : 'Add Note') + '</button></td>' +
       '<td><div style="display:flex; gap:0.35rem;">' +
       (b.status === 'DONE' ? '<button class="btn btn-icon-only btn-sm" title="View Completion Certificate" style="color:#10b981;" onclick="openCompletionCard(' + origIdx + ')">🏆</button>' : '') +
+      '<button class="btn btn-icon-only btn-sm" title="' + (b.lent_to ? 'Manage Lent: ' + escapeHtml(b.lent_to) : 'Lend book to a friend') + '" onclick="openLendModal(' + origIdx + ')">🤝</button>' +
       '<button class="btn btn-icon-only btn-sm" title="Edit book" onclick="openEditModal(' + origIdx + ')">' + ICONS.edit + '</button>' +
       '<button class="btn btn-icon-only btn-sm btn-danger" title="Delete book" onclick="deleteBook(' + origIdx + ')">' + ICONS.trash + '</button>' +
       '</div></td></tr>';
@@ -523,7 +543,9 @@ function renderGridView(container, books) {
     }
 
     html += '<div class="book-card">' +
-      '<div class="book-card-header"><div>' +
+      '<div class="book-card-header" style="display:flex; gap:0.75rem; align-items:flex-start;">' +
+      (b.cover_image ? '<img src="' + b.cover_image + '" alt="cover" style="width:44px; height:62px; object-fit:cover; border-radius:4px; flex-shrink:0; box-shadow:0 2px 5px rgba(0,0,0,0.35);">' : '') +
+      '<div style="flex:1;">' +
       '<div class="book-card-no">' + escapeHtml(b.no) + '</div>' +
       '<div class="book-card-title">' + escapeHtml(b.title) + '</div>' +
       '<div class="book-card-author">by ' + escapeHtml(b.author) + ' • ' + escapeHtml(b.language || 'HINDI') + '</div></div>' +
@@ -532,6 +554,7 @@ function renderGridView(container, books) {
       '<option value="READING" ' + (b.status === 'READING' ? 'selected' : '') + '>📖 READING</option>' +
       '<option value="DONE" ' + (b.status === 'DONE' ? 'selected' : '') + '>✅ DONE</option>' +
       '</select></div>' +
+      (b.lent_to ? '<div class="card-lent-banner"><span>🤝 Lent to: <strong>' + escapeHtml(b.lent_to) + '</strong> (' + (b.lent_date || 'Date N/A') + ')</span><button class="btn btn-sm" onclick="returnBook(' + origIdx + ')" style="padding:2px 8px; font-size:0.75rem; background:#10b981; color:#fff; border:none; cursor:pointer;">Return</button></div>' : '') +
       '<div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">' +
       '<span class="badge badge-cat">' + escapeHtml(b.category || 'General') + '</span>' +
       '<span class="badge-days" style="' + (isReading ? 'color:#60a5fa; border-color:#2563eb; background:rgba(59,130,246,0.1);' : '') + '">' + days + ' days read' + (isReading ? ' 🔥' : '') + '</span>' +
@@ -544,6 +567,7 @@ function renderGridView(container, books) {
       '<div class="card-meta-row"><div class="star-rating">' + starsHtml + '</div>' +
       '<div class="card-actions">' +
       (b.status === 'DONE' ? '<button class="btn btn-sm" style="color:#10b981; border-color:rgba(16,185,129,0.3);" onclick="openCompletionCard(' + origIdx + ')" title="Share completion card">🏆 Card</button>' : '') +
+      '<button class="btn btn-sm" onclick="openLendModal(' + origIdx + ')">🤝 ' + (b.lent_to ? 'Lent' : 'Lend') + '</button>' +
       '<button class="btn btn-sm" onclick="openTakeawayModal(' + origIdx + ')">' + ICONS.note + ' Notes</button>' +
       '<button class="btn btn-sm btn-icon-only" onclick="openEditModal(' + origIdx + ')">' + ICONS.edit + '</button>' +
       '<button class="btn btn-sm btn-icon-only btn-danger" onclick="deleteBook(' + origIdx + ')">' + ICONS.trash + '</button>' +
@@ -709,12 +733,23 @@ function setupEventListeners() {
     startDateInput.addEventListener('change', updateDays);
     endDateInput.addEventListener('change', updateDays);
   }
+
+  const privacyLockBtn = document.getElementById('privacyLockBtn');
+  if (privacyLockBtn) privacyLockBtn.addEventListener('click', handlePrivacyBtnClick);
+
+  const scanBarcodeBtn = document.getElementById('scanBarcodeBtn');
+  if (scanBarcodeBtn) scanBarcodeBtn.addEventListener('click', openBarcodeScanner);
+
+  const viewBookshelfBtn = document.getElementById('viewBookshelfBtn');
+  if (viewBookshelfBtn) viewBookshelfBtn.addEventListener('click', () => setViewMode('bookshelf'));
 }
 
 function setViewMode(mode) {
   state.viewMode = mode;
   document.getElementById('viewTableBtn').classList.toggle('active', mode === 'table');
   document.getElementById('viewGridBtn').classList.toggle('active', mode === 'grid');
+  const shelfBtn = document.getElementById('viewBookshelfBtn');
+  if (shelfBtn) shelfBtn.classList.toggle('active', mode === 'bookshelf');
   renderBookList();
 }
 
@@ -767,8 +802,70 @@ function resetFilters() {
   renderApp();
 }
 
+function updateCoverPreview() {
+  const previewImg = document.getElementById('coverPreviewImg');
+  const placeholder = document.getElementById('coverPlaceholderText');
+  const removeBtn = document.getElementById('removeCoverBtn');
+  if (state.currentEditingCoverImage) {
+    if (previewImg) {
+      previewImg.src = state.currentEditingCoverImage;
+      previewImg.style.display = 'block';
+    }
+    if (placeholder) placeholder.style.display = 'none';
+    if (removeBtn) removeBtn.style.display = 'inline-flex';
+  } else {
+    if (previewImg) {
+      previewImg.src = '';
+      previewImg.style.display = 'none';
+    }
+    if (placeholder) placeholder.style.display = 'block';
+    if (removeBtn) removeBtn.style.display = 'none';
+  }
+}
+
+function handleCoverImageUpload(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      const maxW = 320;
+      const maxH = 480;
+      let w = img.width;
+      let h = img.height;
+      if (w > maxW || h > maxH) {
+        if (w / h > maxW / maxH) {
+          h = Math.round((h * maxW) / w);
+          w = maxW;
+        } else {
+          w = Math.round((w * maxH) / h);
+          h = maxH;
+        }
+      }
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+      state.currentEditingCoverImage = canvas.toDataURL('image/jpeg', 0.75);
+      updateCoverPreview();
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function removeCoverPhoto() {
+  state.currentEditingCoverImage = '';
+  updateCoverPreview();
+}
+
 function openAddModal() {
   state.editingBookIndex = -1;
+  state.currentEditingCoverImage = '';
+  updateCoverPreview();
   document.getElementById('bookModalTitle').innerText = 'Add New Book';
   document.getElementById('editBookNo').value = 'book ' + (state.books.length + 1);
   document.getElementById('editBookTitle').value = '';
@@ -790,6 +887,9 @@ function openEditModal(index) {
   state.editingBookIndex = index;
   const book = state.books[index];
   if (!book) return;
+
+  state.currentEditingCoverImage = book.cover_image || '';
+  updateCoverPreview();
 
   document.getElementById('bookModalTitle').innerText = 'Edit: ' + (book.title || book.no);
   document.getElementById('editBookNo').value = book.no || '';
@@ -820,6 +920,7 @@ function saveBookModal() {
   }
 
   const priceVal = parseFloat(document.getElementById('editBookPrice').value);
+  const existing = state.editingBookIndex >= 0 ? state.books[state.editingBookIndex] : {};
 
   const bookData = {
     no: document.getElementById('editBookNo').value.trim() || ('book ' + (state.books.length + 1)),
@@ -834,7 +935,12 @@ function saveBookModal() {
     rating: document.getElementById('editBookRating').value,
     price: (!isNaN(priceVal) && priceVal >= 0) ? priceVal : 0,
     availability: document.getElementById('editBookAvailability').value,
-    takeaway: document.getElementById('editBookTakeaway').value.trim()
+    takeaway: document.getElementById('editBookTakeaway').value.trim(),
+    cover_image: state.currentEditingCoverImage || existing.cover_image || '',
+    lent_to: existing.lent_to || '',
+    lent_date: existing.lent_date || '',
+    lent_expected: existing.lent_expected || '',
+    lent_contact: existing.lent_contact || ''
   };
 
   if (state.editingBookIndex >= 0) {
@@ -1335,3 +1441,528 @@ function downloadCompletionCardImage() {
     showToast('Could not save image directly. Try taking a screenshot.', 'error');
   });
 }
+
+// ==========================================
+// FEATURE: BOOK LEND / BORROW TRACKER
+// ==========================================
+function openLendModal(index) {
+  const book = state.books[index];
+  if (!book) return;
+
+  state.currentLendIndex = index;
+  const titleEl = document.getElementById('lendModalBookTitle');
+  const authEl = document.getElementById('lendModalBookAuthor');
+  const borrowerInput = document.getElementById('lendBorrowerName');
+  const dateInput = document.getElementById('lendDate');
+  const expInput = document.getElementById('lendExpectedDate');
+  const contactInput = document.getElementById('lendContact');
+  const returnBtn = document.getElementById('returnBookBtn');
+
+  if (titleEl) titleEl.innerText = book.title || book.no;
+  if (authEl) authEl.innerText = 'by ' + (book.author || 'Unknown');
+  if (borrowerInput) borrowerInput.value = book.lent_to || '';
+  if (dateInput) dateInput.value = book.lent_date || getTodayString();
+  if (expInput) expInput.value = book.lent_expected || '';
+  if (contactInput) contactInput.value = book.lent_contact || '';
+
+  if (returnBtn) {
+    returnBtn.style.display = book.lent_to ? 'inline-flex' : 'none';
+  }
+
+  document.getElementById('lendModalOverlay').classList.add('active');
+}
+
+function closeLendModal() {
+  document.getElementById('lendModalOverlay').classList.remove('active');
+  state.currentLendIndex = -1;
+}
+
+function saveLendModal() {
+  if (state.currentLendIndex < 0) return;
+  const book = state.books[state.currentLendIndex];
+  if (!book) return;
+
+  const borrower = document.getElementById('lendBorrowerName').value.trim();
+  if (!borrower) {
+    alert('Please enter borrower name (Kisko di hai?)');
+    return;
+  }
+
+  book.lent_to = borrower;
+  book.lent_date = document.getElementById('lendDate').value || getTodayString();
+  book.lent_expected = document.getElementById('lendExpectedDate').value || '';
+  book.lent_contact = document.getElementById('lendContact').value.trim();
+
+  markChange();
+  saveData();
+  closeLendModal();
+  renderApp();
+  showToast('Book lent to ' + borrower + '! 🤝', 'success');
+}
+
+function returnBook(index) {
+  const book = state.books[index];
+  if (!book) return;
+  const prevBorrower = book.lent_to;
+  book.lent_to = '';
+  book.lent_date = '';
+  book.lent_expected = '';
+  book.lent_contact = '';
+
+  markChange();
+  saveData();
+  renderApp();
+  showToast('Marked "' + book.title + '" as returned from ' + (prevBorrower || 'borrower') + '! ✅', 'success');
+}
+
+function markCurrentBookReturned() {
+  if (state.currentLendIndex >= 0) {
+    returnBook(state.currentLendIndex);
+    closeLendModal();
+  }
+}
+
+// ==========================================
+// FEATURE: BARCODE / ISBN SCANNER
+// ==========================================
+let scannerStream = null;
+let scannerFacingMode = 'environment';
+let isScanningActive = false;
+let barcodeDetector = null;
+
+if ('BarcodeDetector' in window) {
+  try {
+    barcodeDetector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'qr_code'] });
+  } catch (e) {
+    console.log('BarcodeDetector init error:', e);
+  }
+}
+
+function openBarcodeScanner() {
+  document.getElementById('manualIsbnInput').value = '';
+  document.getElementById('isbnLookupStatus').innerText = '';
+  document.getElementById('barcodeScannerOverlay').classList.add('active');
+  startCameraStream();
+}
+
+function closeBarcodeScanner() {
+  stopCameraStream();
+  document.getElementById('barcodeScannerOverlay').classList.remove('active');
+}
+
+async function startCameraStream() {
+  const statusEl = document.getElementById('scannerStatusText');
+  const videoEl = document.getElementById('scannerVideo');
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    if (statusEl) statusEl.innerText = 'Camera API not supported. Please use manual ISBN lookup below.';
+    return;
+  }
+
+  stopCameraStream();
+  if (statusEl) statusEl.innerText = 'Requesting camera access...';
+
+  try {
+    const constraints = {
+      video: {
+        facingMode: { ideal: scannerFacingMode },
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      }
+    };
+    scannerStream = await navigator.mediaDevices.getUserMedia(constraints);
+    if (videoEl) {
+      videoEl.srcObject = scannerStream;
+      await videoEl.play();
+      if (statusEl) statusEl.innerText = 'Align barcode inside the target box';
+      isScanningActive = true;
+      scanFrameLoop();
+    }
+  } catch (err) {
+    console.error('Camera stream error:', err);
+    if (statusEl) statusEl.innerText = 'Camera access blocked or unavailable. You can enter ISBN manually below.';
+  }
+}
+
+function stopCameraStream() {
+  isScanningActive = false;
+  if (scannerStream) {
+    scannerStream.getTracks().forEach(track => track.stop());
+    scannerStream = null;
+  }
+  const videoEl = document.getElementById('scannerVideo');
+  if (videoEl) videoEl.srcObject = null;
+}
+
+function switchScannerCamera() {
+  scannerFacingMode = scannerFacingMode === 'environment' ? 'user' : 'environment';
+  startCameraStream();
+}
+
+async function scanFrameLoop() {
+  if (!isScanningActive) return;
+  const videoEl = document.getElementById('scannerVideo');
+
+  if (barcodeDetector && videoEl && videoEl.readyState >= 2) {
+    try {
+      const barcodes = await barcodeDetector.detect(videoEl);
+      if (barcodes && barcodes.length > 0) {
+        const raw = barcodes[0].rawValue;
+        if (raw) {
+          isScanningActive = false;
+          const statusEl = document.getElementById('scannerStatusText');
+          if (statusEl) statusEl.innerText = 'Found Barcode: ' + raw + '! Fetching book info...';
+          stopCameraStream();
+          fetchBookByIsbn(raw);
+          return;
+        }
+      }
+    } catch (e) {
+      // ignore frame skip
+    }
+  }
+
+  if (isScanningActive) {
+    requestAnimationFrame(scanFrameLoop);
+  }
+}
+
+function handleBarcodePhotoUpload(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+  const statusEl = document.getElementById('isbnLookupStatus');
+
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = async () => {
+      if (barcodeDetector) {
+        try {
+          if (statusEl) statusEl.innerText = 'Scanning uploaded image for barcode...';
+          const barcodes = await barcodeDetector.detect(img);
+          if (barcodes && barcodes.length > 0) {
+            const raw = barcodes[0].rawValue;
+            fetchBookByIsbn(raw);
+            return;
+          }
+        } catch (err) {
+          console.error('Image scan error:', err);
+        }
+      }
+      if (statusEl) statusEl.innerText = 'Could not detect barcode from image. Try entering ISBN manually.';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function lookupManualIsbn() {
+  const input = document.getElementById('manualIsbnInput');
+  if (!input) return;
+  const cleaned = input.value.replace(/[^0-9X]/gi, '').trim();
+  if (cleaned.length < 9) {
+    alert('Please enter a valid 10 or 13-digit ISBN number.');
+    return;
+  }
+  fetchBookByIsbn(cleaned);
+}
+
+async function fetchBookByIsbn(isbn) {
+  const statusEl = document.getElementById('isbnLookupStatus');
+  if (statusEl) statusEl.innerHTML = '<span style="color:#3b82f6;">🔍 Fetching details for ISBN: <strong>' + escapeHtml(isbn) + '</strong>...</span>';
+
+  let foundData = null;
+
+  // 1. Try Open Library API
+  try {
+    const olRes = await fetch('https://openlibrary.org/api/books?bibkeys=ISBN:' + isbn + '&jscmd=data&format=json');
+    if (olRes.ok) {
+      const olJson = await olRes.json();
+      const olKey = 'ISBN:' + isbn;
+      if (olJson && olJson[olKey]) {
+        const b = olJson[olKey];
+        foundData = {
+          title: b.title || '',
+          author: (b.authors && b.authors.length > 0) ? b.authors.map(a => a.name).join(', ') : '',
+          category: (b.subjects && b.subjects.length > 0) ? b.subjects[0].name : 'Focus & Concentration',
+          coverUrl: b.cover ? (b.cover.medium || b.cover.large || b.cover.small) : '',
+          pages: b.number_of_pages || 0
+        };
+      }
+    }
+  } catch (e) {
+    console.log('OpenLibrary fetch failed:', e);
+  }
+
+  // 2. Try Google Books API if Open Library had missing data
+  if (!foundData || !foundData.title) {
+    try {
+      const gbRes = await fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:' + isbn);
+      if (gbRes.ok) {
+        const gbJson = await gbRes.json();
+        if (gbJson.items && gbJson.items.length > 0) {
+          const info = gbJson.items[0].volumeInfo;
+          foundData = {
+            title: info.title || '',
+            author: (info.authors && info.authors.length > 0) ? info.authors.join(', ') : '',
+            category: (info.categories && info.categories.length > 0) ? info.categories[0] : 'Focus & Concentration',
+            coverUrl: info.imageLinks ? (info.imageLinks.thumbnail || info.imageLinks.smallThumbnail) : '',
+            pages: info.pageCount || 0
+          };
+        }
+      }
+    } catch (e) {
+      console.log('Google Books fetch failed:', e);
+    }
+  }
+
+  if (foundData && foundData.title) {
+    if (statusEl) statusEl.innerHTML = '<span style="color:#10b981;">✅ Found: <strong>' + escapeHtml(foundData.title) + '</strong>! Opening form...</span>';
+    setTimeout(() => {
+      applyFetchedBookData(foundData);
+    }, 600);
+  } else {
+    if (statusEl) statusEl.innerHTML = '<span style="color:#ef4444;">⚠️ No metadata found for ISBN ' + escapeHtml(isbn) + '. You can enter it manually in Add Book.</span>';
+  }
+}
+
+function applyFetchedBookData(data) {
+  closeBarcodeScanner();
+  openAddModal();
+
+  if (data.title) document.getElementById('editBookTitle').value = data.title;
+  if (data.author) document.getElementById('editBookAuthor').value = data.author;
+  if (data.category) document.getElementById('editBookCategory').value = data.category;
+
+  if (data.coverUrl) {
+    state.currentEditingCoverImage = data.coverUrl;
+    updateCoverPreview();
+  }
+
+  showToast('Book details auto-filled from ISBN! 📚', 'success');
+}
+
+// ==========================================
+// FEATURE: PRIVACY LOCK (4-DIGIT PIN)
+// ==========================================
+function initPrivacyLock() {
+  const savedPin = localStorage.getItem(PIN_KEY);
+  updatePrivacyBtnHeader(Boolean(savedPin));
+
+  if (savedPin) {
+    state.pinLocked = true;
+    showPinLockScreen();
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      const pin = localStorage.getItem(PIN_KEY);
+      if (pin) {
+        state.pinLocked = true;
+      }
+    } else {
+      const pin = localStorage.getItem(PIN_KEY);
+      if (pin && state.pinLocked) {
+        showPinLockScreen();
+      }
+    }
+  });
+}
+
+function updatePrivacyBtnHeader(isPinSet) {
+  const btn = document.getElementById('privacyLockBtn');
+  if (!btn) return;
+  if (isPinSet) {
+    btn.innerHTML = '🔒 PIN Active';
+    btn.style.borderColor = 'rgba(16,185,129,0.5)';
+    btn.style.color = '#10b981';
+  } else {
+    btn.innerHTML = '🔓 Set PIN';
+    btn.style.borderColor = '';
+    btn.style.color = '';
+  }
+}
+
+function showPinLockScreen() {
+  clearEnteredPin();
+  const overlay = document.getElementById('privacyLockOverlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function hidePinLockScreen() {
+  const overlay = document.getElementById('privacyLockOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function updatePinDots() {
+  for (let i = 0; i < 4; i++) {
+    const dot = document.getElementById('pinDot' + i);
+    if (dot) {
+      dot.classList.toggle('active', i < state.enteredPin.length);
+    }
+  }
+}
+
+function enterPinDigit(digit) {
+  if (state.enteredPin.length >= 4) return;
+  state.enteredPin += String(digit);
+  updatePinDots();
+
+  const errEl = document.getElementById('pinErrorMessage');
+  if (errEl) errEl.innerText = '';
+
+  if (state.enteredPin.length === 4) {
+    setTimeout(verifyEnteredPin, 100);
+  }
+}
+
+function deletePinDigit() {
+  if (state.enteredPin.length > 0) {
+    state.enteredPin = state.enteredPin.slice(0, -1);
+    updatePinDots();
+  }
+}
+
+function clearEnteredPin() {
+  state.enteredPin = '';
+  updatePinDots();
+  const errEl = document.getElementById('pinErrorMessage');
+  if (errEl) errEl.innerText = '';
+}
+
+function verifyEnteredPin() {
+  const savedPin = localStorage.getItem(PIN_KEY);
+  if (!savedPin) {
+    state.pinLocked = false;
+    hidePinLockScreen();
+    return;
+  }
+
+  if (state.enteredPin === savedPin) {
+    state.pinLocked = false;
+    hidePinLockScreen();
+    clearEnteredPin();
+    showToast('Library Unlocked! 🔓', 'success');
+  } else {
+    const card = document.getElementById('lockCard');
+    const errEl = document.getElementById('pinErrorMessage');
+    if (errEl) errEl.innerText = 'Incorrect PIN. Try again.';
+    if (card) {
+      card.classList.add('shake-animation');
+      setTimeout(() => {
+        card.classList.remove('shake-animation');
+        clearEnteredPin();
+      }, 450);
+    } else {
+      clearEnteredPin();
+    }
+  }
+}
+
+function handlePrivacyBtnClick() {
+  openPinSetupModal();
+}
+
+function openPinSetupModal() {
+  const savedPin = localStorage.getItem(PIN_KEY);
+  document.getElementById('newPinInput').value = '';
+  document.getElementById('confirmPinInput').value = '';
+  document.getElementById('pinSetupStatus').innerText = '';
+
+  const removeBtn = document.getElementById('removePinBtn');
+  if (removeBtn) {
+    removeBtn.style.display = savedPin ? 'inline-flex' : 'none';
+  }
+
+  document.getElementById('pinSetupModalOverlay').classList.add('active');
+}
+
+function closePinSetupModal() {
+  document.getElementById('pinSetupModalOverlay').classList.remove('active');
+}
+
+function savePrivacyPin() {
+  const pin1 = document.getElementById('newPinInput').value.trim();
+  const pin2 = document.getElementById('confirmPinInput').value.trim();
+  const statusEl = document.getElementById('pinSetupStatus');
+
+  if (!/^\d{4}$/.test(pin1)) {
+    if (statusEl) statusEl.innerText = 'PIN must be exactly 4 numbers (0-9).';
+    return;
+  }
+
+  if (pin1 !== pin2) {
+    if (statusEl) statusEl.innerText = 'PINs do not match. Please verify.';
+    return;
+  }
+
+  localStorage.setItem(PIN_KEY, pin1);
+  updatePrivacyBtnHeader(true);
+  closePinSetupModal();
+  showToast('Privacy PIN enabled successfully! 🔒', 'success');
+}
+
+function removePrivacyPin() {
+  if (confirm('Are you sure you want to remove the PIN lock?')) {
+    localStorage.removeItem(PIN_KEY);
+    state.pinLocked = false;
+    updatePrivacyBtnHeader(false);
+    closePinSetupModal();
+    showToast('Privacy PIN removed.', '');
+  }
+}
+
+// ==========================================
+// FEATURE: 3D REALISTIC WOODEN BOOKSHELF VIEW
+// ==========================================
+function renderBookshelfView(container, books) {
+  if (!books || books.length === 0) {
+    container.innerHTML = '<div class="empty-state" style="padding:4rem 1rem; text-align:center; color:var(--text-muted);">' +
+      '<div style="font-size:2.5rem; margin-bottom:0.5rem;">📚</div>' +
+      '<div>No books found matching your current filter.</div></div>';
+    return;
+  }
+
+  const booksPerShelf = 6;
+  const shelvesCount = Math.ceil(books.length / booksPerShelf);
+  let html = '<div class="bookshelf-container">';
+
+  for (let s = 0; s < shelvesCount; s++) {
+    const shelfBooks = books.slice(s * booksPerShelf, (s + 1) * booksPerShelf);
+    html += '<div class="shelf-unit"><div class="shelf-books-row">';
+
+    shelfBooks.forEach(b => {
+      const origIdx = b.originalIndex;
+      const days = getBookEffectiveDays(b);
+      const isReading = b.status === 'READING';
+      const isDone = b.status === 'DONE';
+      const isLent = Boolean(b.lent_to);
+
+      let spineColor = '#3b82f6';
+      if (isDone) spineColor = '#10b981';
+      else if (isReading) spineColor = '#f59e0b';
+      else if (isLent) spineColor = '#8b5cf6';
+
+      let statusBadge = '';
+      if (isLent) statusBadge = '<span class="shelf-book-badge" style="background:#8b5cf6;">🤝 Lent</span>';
+      else if (isReading) statusBadge = '<span class="shelf-book-badge" style="background:#f59e0b;">📖 Reading</span>';
+      else if (isDone) statusBadge = '<span class="shelf-book-badge" style="background:#10b981;">✅ Finished</span>';
+
+      html += '<div class="shelf-book" onclick="openEditModal(' + origIdx + ')" title="' + escapeHtml(b.title) + ' by ' + escapeHtml(b.author) + ' (Click to view/edit)">' +
+        '<div class="shelf-book-inner" style="border-left: 5px solid ' + spineColor + ';">' +
+        (b.cover_image 
+          ? '<img class="shelf-book-cover" src="' + b.cover_image + '" alt="cover">'
+          : '<div class="shelf-book-spine"><div class="shelf-book-spine-title">' + escapeHtml(b.title) + '</div><div class="shelf-book-spine-author">' + escapeHtml(b.author) + '</div></div>') +
+        statusBadge +
+        '</div>' +
+        '<div class="shelf-book-label">' + escapeHtml(b.title) + '</div>' +
+        '</div>';
+    });
+
+    html += '</div><div class="shelf-wood"></div></div>';
+  }
+
+  html += '</div>';
+  container.innerHTML = html;
+}
+
