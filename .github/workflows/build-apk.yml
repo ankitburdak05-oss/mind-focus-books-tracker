@@ -36,6 +36,7 @@ jobs:
         cp icon-512.png android/app/src/main/assets/
         cp jspdf.umd.min.js android/app/src/main/assets/
         cp jspdf.plugin.autotable.min.js android/app/src/main/assets/
+        cp html2canvas.min.js android/app/src/main/assets/
 
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3

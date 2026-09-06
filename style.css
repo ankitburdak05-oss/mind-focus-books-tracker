@@ -1319,3 +1319,134 @@ textarea.form-control {
   color: #ffffff !important;
   border-color: #059669 !important;
 }
+
+/* Certificate Card / Reading Completion Card (Feature 4) */
+.certificate-card {
+  width: 100%;
+  max-width: 500px;
+  background: linear-gradient(135deg, #0f172a, #1e1b4b);
+  border: 2px solid #6366f1;
+  border-radius: 16px;
+  padding: 1.75rem;
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.5);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+.cert-watermark {
+  position: absolute;
+  right: -20px;
+  bottom: -15px;
+  font-size: 4rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.03);
+  letter-spacing: 4px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cert-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.25rem;
+}
+
+.cert-badge {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.cert-date {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.cert-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #f8fafc;
+  margin-bottom: 0.35rem;
+}
+
+.cert-author {
+  font-size: 0.95rem;
+  color: #cbd5e1;
+  margin-bottom: 1.25rem;
+}
+
+.cert-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 0.85rem;
+  margin-bottom: 1.25rem;
+  text-align: center;
+}
+
+.cert-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.cert-stat-label {
+  font-size: 0.68rem;
+  color: #94a3b8;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.cert-stat-val {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.cert-takeaway {
+  background: rgba(99, 102, 241, 0.12);
+  border-left: 3px solid #818cf8;
+  border-radius: 8px;
+  padding: 0.85rem;
+  margin-bottom: 1.25rem;
+}
+
+.cert-takeaway-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #a5b4fc;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.03em;
+}
+
+.cert-takeaway-text {
+  font-size: 0.85rem;
+  color: #f1f5f9;
+  line-height: 1.45;
+  font-style: italic;
+}
+
+.cert-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.85rem;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}

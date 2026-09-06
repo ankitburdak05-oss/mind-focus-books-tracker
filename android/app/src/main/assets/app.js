@@ -209,6 +209,10 @@ function onStatusChange(index, newStatus) {
     }
     book.count_days = calculateDaysDifference(book.start_date, book.end_date);
     showToast('Completed book: "' + book.title + '"! 🎉', 'success');
+    // Feature 4: Open Completion Card
+    setTimeout(() => {
+      openCompletionCard(index);
+    }, 600);
   } else if (newStatus === 'PENDING') {
     book.end_date = '';
     showToast('Marked "' + book.title + '" as Pending.', '');
@@ -303,6 +307,17 @@ function renderStatistics() {
 
   const avgDays = booksWithDays > 0 ? (totalDays / booksWithDays).toFixed(1) : '0';
   const pct = total > 0 ? ((done / total) * 100).toFixed(1) : '0.0';
+
+  // Feature 5: Money & Time Invested (ROI of Reading)
+  // Assuming average book price = ₹399 & average reading time = 6 hours per completed book + 1 hr/reading
+  const moneyValue = (done * 399).toLocaleString('en-IN');
+  const hoursInvested = Math.round((done * 6) + (reading * 2) + (totalDays * 0.5));
+
+  const moneyEl = document.getElementById('kpiMoneySaved');
+  if (moneyEl) moneyEl.innerText = '₹' + moneyValue;
+
+  const hoursEl = document.getElementById('kpiHoursInvested');
+  if (hoursEl) hoursEl.innerText = hoursInvested + ' hrs';
 
   const pctEl = document.getElementById('progressPctText');
   if (pctEl) pctEl.innerText = pct + '% Completed';
@@ -434,6 +449,7 @@ function renderTableView(container, books) {
       '<td><button class="takeaway-btn ' + (hasNotes ? 'has-content' : '') + '" onclick="openTakeawayModal(' + origIdx + ')">' +
       ICONS.note + ' ' + (hasNotes ? 'Notes' : 'Add Note') + '</button></td>' +
       '<td><div style="display:flex; gap:0.35rem;">' +
+      (b.status === 'DONE' ? '<button class="btn btn-icon-only btn-sm" title="View Completion Certificate" style="color:#10b981;" onclick="openCompletionCard(' + origIdx + ')">🏆</button>' : '') +
       '<button class="btn btn-icon-only btn-sm" title="Edit book" onclick="openEditModal(' + origIdx + ')">' + ICONS.edit + '</button>' +
       '<button class="btn btn-icon-only btn-sm btn-danger" title="Delete book" onclick="deleteBook(' + origIdx + ')">' + ICONS.trash + '</button>' +
       '</div></td></tr>';
@@ -478,6 +494,7 @@ function renderGridView(container, books) {
       '<div class="book-card-body"><div class="card-dates"><span>Start: ' + (b.start_date || 'Not started') + '</span><span>End: ' + endDateDisplay + '</span></div>' +
       '<div class="card-meta-row"><div class="star-rating">' + starsHtml + '</div>' +
       '<div class="card-actions">' +
+      (b.status === 'DONE' ? '<button class="btn btn-sm" style="color:#10b981; border-color:rgba(16,185,129,0.3);" onclick="openCompletionCard(' + origIdx + ')" title="Share completion card">🏆 Card</button>' : '') +
       '<button class="btn btn-sm" onclick="openTakeawayModal(' + origIdx + ')">' + ICONS.note + ' Notes</button>' +
       '<button class="btn btn-sm btn-icon-only" onclick="openEditModal(' + origIdx + ')">' + ICONS.edit + '</button>' +
       '<button class="btn btn-sm btn-icon-only btn-danger" onclick="deleteBook(' + origIdx + ')">' + ICONS.trash + '</button>' +
@@ -591,6 +608,11 @@ function setupEventListeners() {
   }
 
   document.getElementById('addBookBtn').addEventListener('click', openAddModal);
+
+  const pickNextBookBtn = document.getElementById('pickNextBookBtn');
+  if (pickNextBookBtn) {
+    pickNextBookBtn.addEventListener('click', openPickBookModal);
+  }
 
   const exportCsvBtn = document.getElementById('exportCsvBtn');
   if (exportCsvBtn) {
@@ -1055,5 +1077,188 @@ if ('caches' in window) {
     names.forEach(name => {
       if (name !== 'books-tracker-v2') caches.delete(name);
     });
+  });
+}
+
+// ==========================================
+// FEATURE 2: PICK NEXT BOOK SPINNER
+// ==========================================
+let currentlyPickedBook = null;
+let isSpinning = false;
+
+function openPickBookModal() {
+  const select = document.getElementById('pickMoodCategory');
+  if (select) {
+    const cats = [...new Set(state.books.map(b => b.category || 'General'))].sort();
+    select.innerHTML = '<option value="ALL">✨ Any Category (Surprise Me)</option>' +
+      cats.map(c => '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>').join('');
+  }
+
+  // Reset display
+  const card = document.getElementById('spinnerDisplayCard');
+  const txt = document.getElementById('spinnerText');
+  const sub = document.getElementById('spinnerSubText');
+  const icon = document.getElementById('spinnerIcon');
+  const act = document.getElementById('pickedBookActions');
+  const spinBtn = document.getElementById('spinNowBtn');
+
+  if (icon) icon.innerText = '📚';
+  if (txt) txt.innerText = 'Ready to find your next great book?';
+  if (sub) sub.innerText = 'Click Spin below to pick from your pending books';
+  if (act) act.style.display = 'none';
+  if (spinBtn) {
+    spinBtn.disabled = false;
+    spinBtn.style.display = 'inline-flex';
+  }
+  currentlyPickedBook = null;
+
+  document.getElementById('pickBookModalOverlay').classList.add('active');
+}
+
+function closePickBookModal() {
+  document.getElementById('pickBookModalOverlay').classList.remove('active');
+}
+
+function spinForNextBook() {
+  if (isSpinning) return;
+
+  const moodCat = document.getElementById('pickMoodCategory').value;
+  let pool = state.books.filter(b => (!b.status || b.status === 'PENDING'));
+
+  if (moodCat !== 'ALL') {
+    pool = pool.filter(b => b.category === moodCat);
+  }
+
+  if (pool.length === 0) {
+    alert('No pending books found in this category! Try selecting "Any Category".');
+    return;
+  }
+
+  isSpinning = true;
+  const icon = document.getElementById('spinnerIcon');
+  const txt = document.getElementById('spinnerText');
+  const sub = document.getElementById('spinnerSubText');
+  const act = document.getElementById('pickedBookActions');
+  const spinBtn = document.getElementById('spinNowBtn');
+
+  if (act) act.style.display = 'none';
+  if (spinBtn) spinBtn.disabled = true;
+
+  const icons = ['📖', '⚡', '🧠', '💡', '🔥', '📚', '🎯', '✨'];
+  let count = 0;
+  const totalSpins = 20;
+
+  const interval = setInterval(() => {
+    const randomBook = pool[Math.floor(Math.random() * pool.length)];
+    if (icon) icon.innerText = icons[count % icons.length];
+    if (txt) txt.innerText = randomBook.title;
+    if (sub) sub.innerText = 'by ' + randomBook.author + ' (' + (randomBook.category || 'General') + ')';
+    count++;
+
+    if (count >= totalSpins) {
+      clearInterval(interval);
+      isSpinning = false;
+      const finalBook = pool[Math.floor(Math.random() * pool.length)];
+      currentlyPickedBook = finalBook;
+
+      if (icon) icon.innerText = '🎉';
+      if (txt) txt.innerHTML = '<span style="color:#10b981;">' + escapeHtml(finalBook.title) + '</span>';
+      if (sub) sub.innerText = 'by ' + finalBook.author + ' • ' + (finalBook.category || 'General');
+
+      if (act) act.style.display = 'flex';
+      if (spinBtn) spinBtn.style.display = 'none';
+
+      const startBtn = document.getElementById('startReadingPickedBtn');
+      if (startBtn) {
+        startBtn.onclick = () => {
+          const idx = state.books.findIndex(b => b.no === finalBook.no && b.title === finalBook.title);
+          if (idx !== -1) {
+            onStatusChange(idx, 'READING');
+            closePickBookModal();
+            showToast('Now Reading: "' + finalBook.title + '"! 🚀', 'success');
+          }
+        };
+      }
+    }
+  }, 80);
+}
+
+// ==========================================
+// FEATURE 4: BOOK COMPLETION CARD
+// ==========================================
+let currentCompletionIndex = -1;
+
+function openCompletionCard(index) {
+  const book = state.books[index];
+  if (!book) return;
+
+  currentCompletionIndex = index;
+  const titleEl = document.getElementById('certBookTitle');
+  const authEl = document.getElementById('certBookAuthor');
+  const dateEl = document.getElementById('certDate');
+  const daysEl = document.getElementById('certDaysRead');
+  const ratingEl = document.getElementById('certRating');
+  const catEl = document.getElementById('certCategory');
+  const takeawayText = document.getElementById('certTakeawayText');
+  const takeawayBox = document.getElementById('certTakeawayBox');
+
+  const days = getBookEffectiveDays(book);
+  const ratingNum = parseInt(book.rating) || 5;
+  let stars = '★'.repeat(ratingNum) + '☆'.repeat(Math.max(0, 5 - ratingNum));
+
+  if (titleEl) titleEl.innerText = book.title || 'Untitled Book';
+  if (authEl) authEl.innerText = 'by ' + (book.author || 'Unknown Author');
+  if (dateEl) dateEl.innerText = book.end_date || getTodayString();
+  if (daysEl) daysEl.innerText = days + (days === 1 ? ' Day' : ' Days');
+  if (ratingEl) ratingEl.innerText = stars;
+  if (catEl) catEl.innerText = book.category || 'General';
+
+  if (takeawayText && takeawayBox) {
+    if (book.takeaway && book.takeaway.trim().length > 0) {
+      takeawayText.innerText = '"' + book.takeaway.trim() + '"';
+      takeawayBox.style.display = 'block';
+    } else {
+      takeawayText.innerText = '"Continuous learning and daily improvement lead to mastery."';
+      takeawayBox.style.display = 'block';
+    }
+  }
+
+  document.getElementById('completionCardModalOverlay').classList.add('active');
+}
+
+function closeCompletionCardModal() {
+  document.getElementById('completionCardModalOverlay').classList.remove('active');
+}
+
+function downloadCompletionCardImage() {
+  const cardElement = document.getElementById('certificateCaptureArea');
+  if (!cardElement) return;
+
+  if (typeof html2canvas === 'undefined') {
+    showToast('Snapshot library initializing... Please try again in 2 seconds.', 'error');
+    return;
+  }
+
+  showToast('Generating HD completion card...', '');
+
+  html2canvas(cardElement, {
+    scale: 2,
+    backgroundColor: null,
+    useCORS: true,
+    logging: false
+  }).then(canvas => {
+    const link = document.createElement('a');
+    const bookTitle = (state.books[currentCompletionIndex] && state.books[currentCompletionIndex].title) 
+      ? state.books[currentCompletionIndex].title.replace(/[^a-zA-Z0-9]/g, '_').slice(0, 20)
+      : 'book';
+    link.download = 'Reading_Card_' + bookTitle + '.png';
+    link.href = canvas.toDataURL('image/png');
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast('Completion Card PNG saved to your downloads!', 'success');
+  }).catch(err => {
+    console.error('Snapshot error:', err);
+    showToast('Could not save image directly. Try taking a screenshot.', 'error');
   });
 }
