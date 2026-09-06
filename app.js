@@ -233,6 +233,17 @@ function onRatingChange(index, rating) {
   }
 }
 
+function onPriceChange(index, priceValue) {
+  if (state.books[index]) {
+    const val = parseFloat(priceValue);
+    state.books[index].price = (!isNaN(val) && val >= 0) ? val : 0;
+    markChange();
+    saveData();
+    renderStatistics();
+    showToast('Updated price for "' + state.books[index].title + '" to ₹' + state.books[index].price, 'success');
+  }
+}
+
 function getFilteredAndSortedBooks() {
   let list = state.books.map((b, originalIndex) => ({ ...b, originalIndex }));
 
@@ -276,6 +287,8 @@ function getFilteredAndSortedBooks() {
       case 'author_asc': return (a.author || '').localeCompare(b.author || '');
       case 'rating_desc': return (Number(b.rating) || 0) - (Number(a.rating) || 0);
       case 'days_desc': return (Number(b.count_days) || 0) - (Number(a.count_days) || 0);
+      case 'price_desc': return (Number(b.price) || 0) - (Number(a.price) || 0);
+      case 'price_asc': return (Number(a.price) || 0) - (Number(b.price) || 0);
       default: return 0;
     }
   });
@@ -308,13 +321,40 @@ function renderStatistics() {
   const avgDays = booksWithDays > 0 ? (totalDays / booksWithDays).toFixed(1) : '0';
   const pct = total > 0 ? ((done / total) * 100).toFixed(1) : '0.0';
 
-  // Feature 5: Money & Time Invested (ROI of Reading)
-  // Assuming average book price = ₹399 & average reading time = 6 hours per completed book + 1 hr/reading
-  const moneyValue = (done * 399).toLocaleString('en-IN');
+  // Knowledge Value: Sum of book purchase prices entered by user
+  let totalCustomPrice = 0;
+  let pricedBooksCount = 0;
+  state.books.forEach(b => {
+    const p = parseFloat(b.price);
+    if (!isNaN(p) && p > 0) {
+      totalCustomPrice += p;
+      pricedBooksCount++;
+    }
+  });
+
+  // If user entered prices, display exact sum; otherwise default to done * ₹399
+  let displayMoney = 0;
+  if (totalCustomPrice > 0) {
+    displayMoney = totalCustomPrice;
+  } else if (done > 0) {
+    displayMoney = done * 399;
+  }
+
+  const moneyValue = displayMoney.toLocaleString('en-IN');
   const hoursInvested = Math.round((done * 6) + (reading * 2) + (totalDays * 0.5));
 
   const moneyEl = document.getElementById('kpiMoneySaved');
   if (moneyEl) moneyEl.innerText = '₹' + moneyValue;
+
+  const moneySubEl = document.getElementById('kpiMoneySubtext');
+  if (moneySubEl) {
+    if (totalCustomPrice > 0) {
+      moneySubEl.innerText = '(' + pricedBooksCount + ' Book' + (pricedBooksCount > 1 ? 's' : '') + ' Total)';
+      moneySubEl.style.display = 'block';
+    } else {
+      moneySubEl.style.display = 'none';
+    }
+  }
 
   const hoursEl = document.getElementById('kpiHoursInvested');
   if (hoursEl) hoursEl.innerText = hoursInvested + ' hrs';
@@ -406,6 +446,7 @@ function renderTableView(container, books) {
     '<th class="sortable" onclick="handleSort(\'author\')">AUTHOR</th>' +
     '<th>CATEGORY</th>' +
     '<th>STATUS</th>' +
+    '<th class="sortable" onclick="handleSort(\'price\')">PRICE (₹)</th>' +
     '<th>START DATE</th>' +
     '<th>END DATE</th>' +
     '<th class="sortable" onclick="handleSort(\'days\')">DAYS</th>' +
@@ -442,6 +483,10 @@ function renderTableView(container, books) {
       '<option value="READING" ' + (b.status === 'READING' ? 'selected' : '') + '>📖 READING</option>' +
       '<option value="DONE" ' + (b.status === 'DONE' ? 'selected' : '') + '>✅ DONE</option>' +
       '</select></td>' +
+      '<td><div class="table-price-wrapper" title="Click to edit purchase price">' +
+      '<span class="currency-symbol">₹</span>' +
+      '<input type="number" class="table-price-input" value="' + (b.price > 0 ? b.price : '') + '" placeholder="0" min="0" onchange="onPriceChange(' + origIdx + ', this.value)">' +
+      '</div></td>' +
       '<td style="font-size:0.82rem; color:var(--text-secondary);">' + (b.start_date || '-') + '</td>' +
       '<td style="font-size:0.82rem;">' + endDateDisplay + '</td>' +
       '<td>' + daysBadge + '</td>' +
@@ -489,7 +534,11 @@ function renderGridView(container, books) {
       '</select></div>' +
       '<div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">' +
       '<span class="badge badge-cat">' + escapeHtml(b.category || 'General') + '</span>' +
-      '<span class="badge-days" style="' + (isReading ? 'color:#60a5fa; border-color:#2563eb; background:rgba(59,130,246,0.1);' : '') + '">' + days + ' days read' + (isReading ? ' 🔥' : '') + '</span></div>' +
+      '<span class="badge-days" style="' + (isReading ? 'color:#60a5fa; border-color:#2563eb; background:rgba(59,130,246,0.1);' : '') + '">' + days + ' days read' + (isReading ? ' 🔥' : '') + '</span>' +
+      '<div class="card-price-wrapper" title="Purchase cost (₹)">' +
+      '<span class="currency-symbol">₹</span>' +
+      '<input type="number" class="card-price-input" value="' + (b.price > 0 ? b.price : '') + '" placeholder="Price" min="0" onchange="onPriceChange(' + origIdx + ', this.value)">' +
+      '</div></div>' +
       (b.takeaway ? '<div class="card-takeaway-preview" onclick="openTakeawayModal(' + origIdx + ')" title="Click to view notes">💡 <strong>Takeaway:</strong> ' + escapeHtml(b.takeaway) + '</div>' : '') +
       '<div class="book-card-body"><div class="card-dates"><span>Start: ' + (b.start_date || 'Not started') + '</span><span>End: ' + endDateDisplay + '</span></div>' +
       '<div class="card-meta-row"><div class="star-rating">' + starsHtml + '</div>' +
@@ -692,6 +741,8 @@ function handleSort(col) {
     state.sortBy = state.sortBy === 'days_desc' ? 'no_asc' : 'days_desc';
   } else if (col === 'rating') {
     state.sortBy = state.sortBy === 'rating_desc' ? 'no_asc' : 'rating_desc';
+  } else if (col === 'price') {
+    state.sortBy = state.sortBy === 'price_desc' ? 'price_asc' : 'price_desc';
   }
   document.getElementById('sortSelect').value = state.sortBy;
   renderBookList();
@@ -729,6 +780,7 @@ function openAddModal() {
   document.getElementById('editEndDate').value = '';
   document.getElementById('editCountDays').value = '0';
   document.getElementById('editBookRating').value = '';
+  document.getElementById('editBookPrice').value = '';
   document.getElementById('editBookAvailability').value = 'AVAILABLE';
   document.getElementById('editBookTakeaway').value = '';
   document.getElementById('bookModalOverlay').classList.add('active');
@@ -750,6 +802,7 @@ function openEditModal(index) {
   document.getElementById('editEndDate').value = book.end_date || '';
   document.getElementById('editCountDays').value = book.count_days || 0;
   document.getElementById('editBookRating').value = book.rating || '';
+  document.getElementById('editBookPrice').value = (book.price !== undefined && book.price !== null && book.price !== '') ? book.price : '';
   document.getElementById('editBookAvailability').value = book.availability || 'AVAILABLE';
   document.getElementById('editBookTakeaway').value = book.takeaway || '';
   document.getElementById('bookModalOverlay').classList.add('active');
@@ -766,6 +819,8 @@ function saveBookModal() {
     return;
   }
 
+  const priceVal = parseFloat(document.getElementById('editBookPrice').value);
+
   const bookData = {
     no: document.getElementById('editBookNo').value.trim() || ('book ' + (state.books.length + 1)),
     title: title,
@@ -777,6 +832,7 @@ function saveBookModal() {
     end_date: document.getElementById('editEndDate').value,
     count_days: parseInt(document.getElementById('editCountDays').value) || 0,
     rating: document.getElementById('editBookRating').value,
+    price: (!isNaN(priceVal) && priceVal >= 0) ? priceVal : 0,
     availability: document.getElementById('editBookAvailability').value,
     takeaway: document.getElementById('editBookTakeaway').value.trim()
   };
@@ -836,7 +892,7 @@ function saveTakeawayModal() {
 }
 
 function exportToCsv() {
-  const headers = ['NO', 'BOOK TITLE', 'AUTHOR', 'LANGUAGE', 'STATUS', 'START DATE', 'END DATE', 'COUNT DAYS', 'RATING', 'CATEGORY', 'KEY LEARNING / TAKEAWAY', 'BOOK AVAILABILITY'];
+  const headers = ['NO', 'BOOK TITLE', 'AUTHOR', 'LANGUAGE', 'STATUS', 'PRICE (INR)', 'START DATE', 'END DATE', 'COUNT DAYS', 'RATING', 'CATEGORY', 'KEY LEARNING / TAKEAWAY', 'BOOK AVAILABILITY'];
   
   const rows = state.books.map(b => [
     '"' + (b.no || '').replace(/"/g, '""') + '"',
@@ -844,6 +900,7 @@ function exportToCsv() {
     '"' + (b.author || '').replace(/"/g, '""') + '"',
     '"' + (b.language || '').replace(/"/g, '""') + '"',
     '"' + (b.status || 'PENDING').replace(/"/g, '""') + '"',
+    b.price || 0,
     '"' + (b.start_date || '').replace(/"/g, '""') + '"',
     '"' + (b.status === 'READING' ? getTodayString() : (b.end_date || '')).replace(/"/g, '""') + '"',
     getBookEffectiveDays(b),
@@ -899,6 +956,14 @@ function exportToPdf() {
     const reading = state.books.filter(b => b.status === 'READING').length;
     const pending = total - done - reading;
 
+    // Calculate total value for PDF header
+    let totalCustomPrice = 0;
+    state.books.forEach(b => {
+      const p = parseFloat(b.price);
+      if (!isNaN(p) && p > 0) totalCustomPrice += p;
+    });
+    const moneyStr = totalCustomPrice > 0 ? ('₹' + totalCustomPrice.toLocaleString('en-IN')) : ('₹' + (done * 399).toLocaleString('en-IN'));
+
     // Header Title
     doc.setFontSize(18);
     doc.setTextColor(30, 41, 59);
@@ -908,7 +973,7 @@ function exportToPdf() {
     doc.setFontSize(10);
     doc.setTextColor(100, 116, 139);
     doc.text(
-      'Generated: ' + today + '  |  Total Books: ' + total + '  |  Finished: ' + done + '  |  Currently Reading: ' + reading + '  |  Pending: ' + pending,
+      'Generated: ' + today + '  |  Total Books: ' + total + '  |  Finished: ' + done + '  |  Reading: ' + reading + '  |  Value: ' + moneyStr,
       40,
       58
     );
@@ -919,6 +984,7 @@ function exportToPdf() {
       const isReading = b.status === 'READING';
       const endDate = isReading ? today + ' (Reading)' : (b.end_date || '-');
       const rating = b.rating ? b.rating + ' ★' : '-';
+      const price = b.price ? ('₹' + b.price) : '-';
       const takeaway = b.takeaway ? b.takeaway.slice(0, 120) + (b.takeaway.length > 120 ? '...' : '') : '-';
 
       return [
@@ -927,6 +993,7 @@ function exportToPdf() {
         b.author || '',
         b.category || '',
         b.status || 'PENDING',
+        price,
         b.start_date || '-',
         endDate,
         days + ' d',
@@ -937,7 +1004,7 @@ function exportToPdf() {
 
     doc.autoTable({
       startY: 70,
-      head: [['No', 'Book Title', 'Author', 'Category', 'Status', 'Start Date', 'End Date', 'Days', 'Rating', 'Key Takeaway / Notes']],
+      head: [['No', 'Book Title', 'Author', 'Category', 'Status', 'Price', 'Start Date', 'End Date', 'Days', 'Rating', 'Key Takeaway / Notes']],
       body: tableRows,
       theme: 'grid',
       headStyles: {
@@ -953,16 +1020,17 @@ function exportToPdf() {
         valign: 'middle'
       },
       columnStyles: {
-        0: { cellWidth: 35, halign: 'center', fontStyle: 'bold' },
-        1: { cellWidth: 155, fontStyle: 'bold' },
-        2: { cellWidth: 95 },
-        3: { cellWidth: 85 },
-        4: { cellWidth: 55, halign: 'center' },
-        5: { cellWidth: 55, halign: 'center' },
-        6: { cellWidth: 65, halign: 'center' },
-        7: { cellWidth: 40, halign: 'center' },
-        8: { cellWidth: 40, halign: 'center' },
-        9: { cellWidth: 145 }
+        0: { cellWidth: 32, halign: 'center', fontStyle: 'bold' },
+        1: { cellWidth: 145, fontStyle: 'bold' },
+        2: { cellWidth: 90 },
+        3: { cellWidth: 80 },
+        4: { cellWidth: 50, halign: 'center' },
+        5: { cellWidth: 45, halign: 'center' },
+        6: { cellWidth: 55, halign: 'center' },
+        7: { cellWidth: 60, halign: 'center' },
+        8: { cellWidth: 35, halign: 'center' },
+        9: { cellWidth: 35, halign: 'center' },
+        10: { cellWidth: 140 }
       },
       alternateRowStyles: {
         fillColor: [248, 250, 252]
@@ -1212,6 +1280,11 @@ function openCompletionCard(index) {
   if (daysEl) daysEl.innerText = days + (days === 1 ? ' Day' : ' Days');
   if (ratingEl) ratingEl.innerText = stars;
   if (catEl) catEl.innerText = book.category || 'General';
+
+  const priceEl = document.getElementById('certPrice');
+  if (priceEl) {
+    priceEl.innerText = (book.price && Number(book.price) > 0) ? ('₹' + Number(book.price).toLocaleString('en-IN')) : 'Priceless';
+  }
 
   if (takeawayText && takeawayBox) {
     if (book.takeaway && book.takeaway.trim().length > 0) {

@@ -150,11 +150,12 @@
           <span class="kpi-value" id="kpiAvgDays">0.0</span>
         </div>
       </div>
-      <div class="kpi-card kpi-roi-card" title="Value of knowledge unlocked (Based on avg ₹399/book)">
+      <div class="kpi-card kpi-roi-card" title="Total book purchase value & knowledge investment">
         <div class="kpi-icon-wrap" style="background:rgba(16, 185, 129, 0.18); color:#10b981;">💰</div>
         <div class="kpi-meta">
           <span class="kpi-label">KNOWLEDGE VALUE</span>
           <span class="kpi-value" id="kpiMoneySaved" style="color:#10b981;">₹0</span>
+          <span id="kpiMoneySubtext" style="font-size:0.72rem; color:var(--text-muted); font-weight:600; display:none;"></span>
         </div>
       </div>
       <div class="kpi-card kpi-roi-card" title="Total hours invested in reading">
@@ -229,6 +230,8 @@
             <option value="author_asc">Sort: Author Name</option>
             <option value="rating_desc">Sort: Highest Rating</option>
             <option value="days_desc">Sort: Most Days Read</option>
+            <option value="price_desc">Sort: Highest Price (₹)</option>
+            <option value="price_asc">Sort: Lowest Price (₹)</option>
           </select>
 
           <select id="pageSizeSelect" class="select-input">
@@ -308,19 +311,8 @@
 
         <div class="form-row">
           <div class="form-group">
-            <label class="form-label">Start Date</label>
-            <input type="date" id="editStartDate" class="form-control">
-          </div>
-          <div class="form-group">
-            <label class="form-label">End Date</label>
-            <input type="date" id="editEndDate" class="form-control">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Count Days (Auto-calculated)</label>
-            <input type="number" id="editCountDays" class="form-control" min="0">
+            <label class="form-label">Price (₹ Purchase Cost)</label>
+            <input type="number" id="editBookPrice" class="form-control" placeholder="e.g. 299" min="0">
           </div>
           <div class="form-group">
             <label class="form-label">Rating (1 to 5 Stars)</label>
@@ -333,6 +325,22 @@
               <option value="5">5 Stars ★★★★★</option>
             </select>
           </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Start Date</label>
+            <input type="date" id="editStartDate" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Date</label>
+            <input type="date" id="editEndDate" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Count Days (Auto-calculated)</label>
+          <input type="number" id="editCountDays" class="form-control" min="0">
         </div>
 
         <div class="form-group">
@@ -444,6 +452,10 @@
             <div class="cert-stat">
               <span class="cert-stat-label">CATEGORY</span>
               <span class="cert-stat-val" id="certCategory">Psychology</span>
+            </div>
+            <div class="cert-stat">
+              <span class="cert-stat-label">VALUE</span>
+              <span class="cert-stat-val" id="certPrice" style="color:#10b981;">₹0</span>
             </div>
           </div>
 

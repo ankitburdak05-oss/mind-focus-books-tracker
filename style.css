@@ -1389,8 +1389,8 @@ textarea.form-control {
 
 .cert-stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 10px;
@@ -1449,4 +1449,89 @@ textarea.form-control {
   padding-top: 0.85rem;
   font-size: 0.72rem;
   color: #94a3b8;
+}
+
+/* Price Inline Inputs & Badges */
+.table-price-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.45rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.table-price-wrapper:focus-within {
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.currency-symbol {
+  color: #10b981;
+  font-weight: 700;
+  font-size: 0.85rem;
+  user-select: none;
+}
+
+.table-price-input {
+  width: 62px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.table-price-input::placeholder {
+  color: var(--text-muted);
+  font-weight: 400;
+}
+
+.table-price-input::-webkit-inner-spin-button,
+.table-price-input::-webkit-outer-spin-button,
+.card-price-input::-webkit-inner-spin-button,
+.card-price-input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.table-price-input,
+.card-price-input {
+  -moz-appearance: textfield;
+}
+
+.card-price-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: var(--radius-sm);
+  padding: 0.2rem 0.5rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.card-price-wrapper:focus-within {
+  border-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25);
+}
+
+.card-price-input {
+  width: 58px;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #10b981;
+  font-weight: 700;
+  font-size: 0.85rem;
+  font-family: inherit;
+}
+
+.card-price-input::placeholder {
+  color: rgba(16, 185, 129, 0.5);
+  font-weight: 400;
 }
