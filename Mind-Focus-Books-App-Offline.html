@@ -1,0 +1,4449 @@
+﻿<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🧠 Mind & Focus Books Tracker (150 Books)</title>
+    <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0f19">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <style>
+﻿:root {
+  --bg-primary: #0b0f19;
+  --bg-secondary: #151e2e;
+  --bg-card: #1a2436;
+  --bg-hover: #243248;
+  --border-color: #2b394f;
+  --text-primary: #f8fafc;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --accent-primary: #4f46e5;
+  --accent-primary-hover: #4338ca;
+  --accent-glow: rgba(79, 70, 229, 0.35);
+
+  --status-pending-bg: rgba(148, 163, 184, 0.12);
+  --status-pending-text: #cbd5e1;
+  --status-pending-border: #475569;
+
+  --status-reading-bg: rgba(59, 130, 246, 0.18);
+  --status-reading-text: #60a5fa;
+  --status-reading-border: #2563eb;
+
+  --status-done-bg: rgba(16, 185, 129, 0.18);
+  --status-done-text: #34d399;
+  --status-done-border: #059669;
+
+  --avail-badge-bg: rgba(239, 68, 68, 0.15);
+  --avail-badge-text: #f87171;
+  --avail-badge-border: #dc2626;
+
+  --cat-badge-bg: rgba(168, 85, 247, 0.15);
+  --cat-badge-text: #c084fc;
+  --cat-badge-border: #7e22ce;
+
+  --star-filled: #f59e0b;
+  --star-empty: #475569;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+  --shadow-md: 0 6px 12px -2px rgba(0,0,0,0.35);
+  --shadow-lg: 0 14px 28px -4px rgba(0,0,0,0.45);
+}
+
+[data-theme="light"] {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
+  --bg-card: #ffffff;
+  --bg-hover: #f1f5f9;
+  --border-color: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-muted: #94a3b8;
+  --accent-primary: #4f46e5;
+  --accent-primary-hover: #4338ca;
+  --accent-glow: rgba(79, 70, 229, 0.15);
+
+  --status-pending-bg: #f1f5f9;
+  --status-pending-text: #64748b;
+  --status-pending-border: #cbd5e1;
+
+  --status-reading-bg: #eff6ff;
+  --status-reading-text: #1d4ed8;
+  --status-reading-border: #bfdbfe;
+
+  --status-done-bg: #ecfdf5;
+  --status-done-text: #047857;
+  --status-done-border: #a7f3d0;
+
+  --avail-badge-bg: #fef2f2;
+  --avail-badge-text: #b91c1c;
+  --avail-badge-border: #fecaca;
+
+  --cat-badge-bg: #faf5ff;
+  --cat-badge-text: #7e22ce;
+  --cat-badge-border: #e9d5ff;
+
+  --star-filled: #d97706;
+  --star-empty: #cbd5e1;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.app-header {
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  padding: 1rem 1.75rem;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-inner {
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.brand-section {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.brand-icon {
+  font-size: 2rem;
+  background: var(--bg-primary);
+  width: 50px;
+  height: 50px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border-color);
+}
+
+.brand-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.brand-badge {
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  border: 1px solid var(--accent-primary);
+  font-size: 0.72rem;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  font-weight: 600;
+}
+
+.brand-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.5rem 0.95rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.btn:hover {
+  background-color: var(--bg-hover);
+  border-color: var(--text-muted);
+}
+
+.btn-primary {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+}
+
+.btn-primary:hover {
+  background-color: var(--accent-primary-hover);
+  border-color: var(--accent-primary-hover);
+  box-shadow: 0 0 16px var(--accent-glow);
+}
+
+.btn-success {
+  background-color: #059669;
+  color: #ffffff;
+  border-color: #059669;
+}
+.btn-success:hover { background-color: #047857; }
+
+.btn-danger {
+  background-color: #dc2626;
+  color: #ffffff;
+  border-color: #dc2626;
+}
+.btn-danger:hover { background-color: #b91c1c; }
+
+.btn-sm {
+  padding: 0.35rem 0.65rem;
+  font-size: 0.78rem;
+}
+
+.btn-icon-only {
+  padding: 0.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.main-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.progress-card {
+  background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.progress-title {
+  font-size: 1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-primary);
+}
+
+.progress-pct {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #10b981;
+}
+
+.progress-track {
+  width: 100%;
+  height: 14px;
+  background-color: var(--bg-primary);
+  border-radius: 7px;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #6366f1, #3b82f6, #10b981);
+  width: 0%;
+  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 7px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.kpi-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-primary);
+}
+
+.kpi-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.kpi-indigo { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+.kpi-green { background: rgba(16, 185, 129, 0.15); color: #34d399; }
+.kpi-blue { background: rgba(59, 130, 246, 0.15); color: #60a5fa; }
+.kpi-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; }
+.kpi-purple { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
+
+.kpi-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  font-weight: 700;
+}
+
+.kpi-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.controls-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.controls-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-box {
+  position: relative;
+  flex: 1;
+  min-width: 260px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.65rem 1rem 0.65rem 2.5rem;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.search-icon {
+  position: absolute;
+  left: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  pointer-events: none;
+  display: flex;
+}
+
+.clear-search-btn {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.2rem;
+  display: none;
+  font-size: 1rem;
+}
+
+.view-toggles {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  background-color: var(--bg-primary);
+  padding: 0.25rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.view-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.15s;
+}
+
+.view-btn svg { width: 16px; height: 16px; }
+
+.view-btn.active {
+  background-color: var(--bg-card);
+  color: var(--text-primary);
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+.filters-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.tab-pills {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.tab-pill {
+  padding: 0.35rem 0.8rem;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.tab-pill:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.tab-pill.active {
+  background-color: var(--accent-primary);
+  color: #ffffff;
+  border-color: var(--accent-primary);
+  font-weight: 700;
+}
+
+.pill-count {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.1rem 0.45rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
+}
+
+.filter-selects {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.select-input {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 0.45rem 0.85rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+}
+
+.select-input:focus {
+  border-color: var(--accent-primary);
+}
+
+.category-summary-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  padding: 0.5rem 0;
+}
+
+.category-tags-list {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.cat-tag-btn {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.25rem 0.65rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition: all 0.2s;
+}
+
+.cat-tag-btn:hover, .cat-tag-btn.active {
+  background: var(--cat-badge-bg);
+  color: var(--cat-badge-text);
+  border-color: var(--cat-badge-border);
+}
+
+.cat-color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.table-wrapper {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  box-shadow: var(--shadow-sm);
+}
+
+.books-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.88rem;
+}
+
+.books-table th {
+  background-color: var(--bg-primary);
+  color: var(--text-secondary);
+  font-weight: 700;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.books-table th.sortable {
+  cursor: pointer;
+}
+
+.books-table th.sortable:hover {
+  color: var(--text-primary);
+}
+
+.books-table td {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+  vertical-align: middle;
+}
+
+.books-table tbody tr:hover {
+  background-color: var(--bg-hover);
+}
+
+.book-title-cell {
+  max-width: 280px;
+}
+
+.book-title-text {
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.book-author-text {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.status-select {
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  border: 1px solid transparent;
+  outline: none;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+}
+
+.status-PENDING {
+  background-color: var(--status-pending-bg);
+  color: var(--status-pending-text);
+  border-color: var(--status-pending-border);
+}
+
+.status-READING {
+  background-color: var(--status-reading-bg);
+  color: var(--status-reading-text);
+  border-color: var(--status-reading-border);
+}
+
+.status-DONE {
+  background-color: var(--status-done-bg);
+  color: var(--status-done-text);
+  border-color: var(--status-done-border);
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.badge-cat {
+  background: var(--cat-badge-bg);
+  color: var(--cat-badge-text);
+  border: 1px solid var(--cat-badge-border);
+}
+
+.badge-avail-unavail {
+  background: var(--avail-badge-bg);
+  color: var(--avail-badge-text);
+  border: 1px solid var(--avail-badge-border);
+}
+
+.badge-avail-avail {
+  background: var(--status-done-bg);
+  color: var(--status-done-text);
+  border: 1px solid var(--status-done-border);
+}
+
+.badge-days {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--accent-primary);
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+}
+
+.star-rating {
+  display: inline-flex;
+  gap: 2px;
+  cursor: pointer;
+}
+
+.star-rating span {
+  font-size: 1.1rem;
+  color: var(--star-empty);
+  transition: transform 0.15s;
+}
+
+.star-rating span.filled {
+  color: var(--star-filled);
+}
+
+.star-rating span:hover {
+  transform: scale(1.25);
+}
+
+.takeaway-btn {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.3rem 0.6rem;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.takeaway-btn.has-content {
+  background: rgba(99, 102, 241, 0.15);
+  border-color: var(--accent-primary);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.takeaway-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.25rem;
+}
+
+.book-card {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+}
+
+.book-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent-primary);
+}
+
+.book-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.book-card-no {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.book-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text-primary);
+  margin-top: 0.25rem;
+}
+
+.book-card-author {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+.book-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: auto;
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.75rem;
+}
+
+.card-meta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.card-dates {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-takeaway-preview {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  background: var(--bg-primary);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius-sm);
+  border-left: 3px solid var(--accent-primary);
+  white-space: pre-wrap;
+  max-height: 60px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 1rem;
+}
+
+.modal-overlay.active {
+  display: flex;
+}
+
+.modal-content {
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  flex-direction: column;
+  animation: modalIn 0.2s ease-out;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.modal-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: var(--text-primary);
+}
+
+.modal-body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.form-label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.form-control {
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  padding: 0.6rem 0.8rem;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.form-control:focus {
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+textarea.form-control {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 110;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.toast {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 0.75rem 1.25rem;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.88rem;
+  border-left: 4px solid var(--accent-primary);
+  animation: toastIn 0.3s ease;
+}
+
+.toast.toast-success { border-left-color: #10b981; }
+.toast.toast-error { border-left-color: #ef4444; }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3.5rem 1rem;
+  color: var(--text-secondary);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  border: 1px dashed var(--border-color);
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 0.75rem;
+}
+
+.pagination-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+}
+
+.page-btn {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  min-width: 34px;
+  height: 34px;
+  padding: 0 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: var(--bg-hover);
+  border-color: var(--text-muted);
+}
+
+.page-btn.active {
+  background: var(--accent-primary);
+  color: #fff;
+  border-color: var(--accent-primary);
+}
+
+.page-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .header-inner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  .kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .filter-selects {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); transform: scale(1); }
+  50% { transform: scale(1.03); }
+  70% { box-shadow: 0 0 0 12px rgba(245, 158, 11, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); transform: scale(1); }
+}
+
+.pulse-btn {
+  animation: pulseGlow 1.8s infinite;
+}
+
+.btn-warning {
+  background-color: #f59e0b !important;
+  color: #0b0f19 !important;
+  border-color: #d97706 !important;
+  font-weight: 700 !important;
+}
+
+.btn-warning:hover {
+  background-color: #d97706 !important;
+  color: #ffffff !important;
+}
+
+.btn-updated {
+  background-color: #10b981 !important;
+  color: #ffffff !important;
+  border-color: #059669 !important;
+}
+
+</style>
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand-section">
+        <div class="brand-icon">🧠</div>
+        <div>
+          <div class="brand-title">
+            <span>MIND & FOCUS BOOKS TRACKER</span>
+            <span class="brand-badge">OFFLINE APP</span>
+          </div>
+          <div class="brand-subtitle">150 Curated Books Reading System • Zero Internet Required</div>
+        </div>
+      </div>
+      
+      <div class="header-actions">
+        <button class="btn btn-warning pulse-btn" id="headerUpdateBtn" style="display:none;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
+          <span id="updateBtnText">💾 Update</span>
+        </button>
+        <button class="btn btn-primary" id="installAppBtn" title="Install App">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Install
+        </button>
+        <button class="btn btn-primary" id="addBookBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          Add Book
+        </button>
+        <button class="btn" id="exportCsvBtn" title="Export to Excel CSV format">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Export Excel
+        </button>
+        <button class="btn" id="exportJsonBtn" title="Export complete backup as JSON">
+          Backup JSON
+        </button>
+        <button class="btn" id="importFileBtn" title="Import backup JSON file">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Import
+        </button>
+        <button class="btn" id="resetDataBtn" title="Reset back to default 150 Excel books">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
+          Reset
+        </button>
+        <button class="btn" id="themeToggleBtn">
+          Light
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="main-container">
+
+    <!-- Progress Tracker Card -->
+    <section class="progress-card">
+      <div class="progress-header">
+        <div class="progress-title">
+          <span>📊 PROGRESS TRACKER</span>
+          <span id="progressSubText" style="color:var(--text-secondary); font-size:0.85rem; font-weight:500;">(0 / 150 Books Finished)</span>
+        </div>
+        <div class="progress-pct" id="progressPctText">0.0% Completed</div>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" id="progressBarFill" style="width: 0%;"></div>
+      </div>
+    </section>
+
+    <!-- KPI Cards Grid (Matches Excel Row 3 & 4) -->
+    <section class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap kpi-indigo">📚</div>
+        <div class="kpi-meta">
+          <span class="kpi-label">TOTAL BOOKS</span>
+          <span class="kpi-value" id="kpiTotalBooks">150</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap kpi-green">✅</div>
+        <div class="kpi-meta">
+          <span class="kpi-label">BOOKS DONE</span>
+          <span class="kpi-value" id="kpiBooksDone">0</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap kpi-blue">📖</div>
+        <div class="kpi-meta">
+          <span class="kpi-label">CURRENTLY READING</span>
+          <span class="kpi-value" id="kpiCurrentlyReading">1</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap kpi-amber">⏳</div>
+        <div class="kpi-meta">
+          <span class="kpi-label">TOTAL DAYS READ</span>
+          <span class="kpi-value" id="kpiTotalDays">0</span>
+        </div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon-wrap kpi-purple">⚡</div>
+        <div class="kpi-meta">
+          <span class="kpi-label">AVG DAYS / BOOK</span>
+          <span class="kpi-value" id="kpiAvgDays">0.0</span>
+        </div>
+      </div>
+    </section>
+    <!-- Search & Controls Bar -->
+    <section class="controls-card">
+      <div class="controls-top">
+        <div class="search-box">
+          <span class="search-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </span>
+          <input type="text" id="searchInput" class="search-input" placeholder="Search books by title, author, category, or notes...">
+          <button id="clearSearchBtn" class="clear-search-btn" title="Clear search">✕</button>
+        </div>
+
+        <div class="view-toggles">
+          <button id="viewTableBtn" class="view-btn active" title="Spreadsheet Table View">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
+            Table
+          </button>
+          <button id="viewGridBtn" class="view-btn" title="Library Grid View">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Cards
+          </button>
+        </div>
+      </div>
+
+      <div class="filters-row">
+        <div class="tab-pills">
+          <button class="tab-pill active" data-status="ALL">
+            All <span class="pill-count" id="countAll">150</span>
+          </button>
+          <button class="tab-pill" data-status="READING">
+            📖 Reading <span class="pill-count" id="countReading">1</span>
+          </button>
+          <button class="tab-pill" data-status="DONE">
+            ✅ Finished <span class="pill-count" id="countDone">0</span>
+          </button>
+          <button class="tab-pill" data-status="PENDING">
+            ⏳ Pending <span class="pill-count" id="countPending">149</span>
+          </button>
+        </div>
+
+        <div class="filter-selects">
+          <select id="categoryFilter" class="select-input">
+            <option value="ALL">All Categories</option>
+          </select>
+
+          <select id="availabilityFilter" class="select-input">
+            <option value="ALL">All Availability</option>
+            <option value="AVAILABLE">Available</option>
+            <option value="UNAVAILABLE">Unavailable</option>
+          </select>
+
+          <select id="sortSelect" class="select-input">
+            <option value="no_asc">Sort: Book Number (1-150)</option>
+            <option value="no_desc">Sort: Book Number (150-1)</option>
+            <option value="title_asc">Sort: Title (A - Z)</option>
+            <option value="title_desc">Sort: Title (Z - A)</option>
+            <option value="author_asc">Sort: Author Name</option>
+            <option value="rating_desc">Sort: Highest Rating</option>
+            <option value="days_desc">Sort: Most Days Read</option>
+          </select>
+
+          <select id="pageSizeSelect" class="select-input">
+            <option value="25">25 per page</option>
+            <option value="50">50 per page</option>
+            <option value="100">100 per page</option>
+            <option value="150">All (150)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Quick Category Pills -->
+      <div class="category-summary-bar">
+        <div class="category-tags-list" id="categoryTagsContainer"></div>
+      </div>
+    </section>
+
+    <!-- Books Display Area -->
+    <div id="booksContentArea"></div>
+
+    <!-- Pagination -->
+    <div id="paginationArea"></div>
+
+  </main>
+  <!-- Add / Edit Book Modal -->
+  <div class="modal-overlay" id="bookModalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title" id="bookModalTitle">Edit Book</h3>
+        <button class="modal-close" onclick="closeBookModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Book No</label>
+            <input type="text" id="editBookNo" class="form-control" placeholder="e.g. book 151">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Language</label>
+            <input type="text" id="editBookLanguage" class="form-control" placeholder="e.g. HINDI, ENGLISH">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Book Title *</label>
+          <input type="text" id="editBookTitle" class="form-control" placeholder="Enter book title">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Author</label>
+            <input type="text" id="editBookAuthor" class="form-control" placeholder="Author name">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <input type="text" id="editBookCategory" class="form-control" placeholder="e.g. Focus & Concentration">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Status</label>
+            <select id="editBookStatus" class="form-control">
+              <option value="PENDING">⏳ PENDING</option>
+              <option value="READING">📖 READING</option>
+              <option value="DONE">✅ DONE</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Availability</label>
+            <select id="editBookAvailability" class="form-control">
+              <option value="AVAILABLE">Available</option>
+              <option value="UNAVAILABLE">Unavailable</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Start Date</label>
+            <input type="date" id="editStartDate" class="form-control">
+          </div>
+          <div class="form-group">
+            <label class="form-label">End Date</label>
+            <input type="date" id="editEndDate" class="form-control">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Count Days (Auto-calculated)</label>
+            <input type="number" id="editCountDays" class="form-control" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Rating (1 to 5 Stars)</label>
+            <select id="editBookRating" class="form-control">
+              <option value="">No Rating</option>
+              <option value="1">1 Star ★</option>
+              <option value="2">2 Stars ★★</option>
+              <option value="3">3 Stars ★★★</option>
+              <option value="4">4 Stars ★★★★</option>
+              <option value="5">5 Stars ★★★★★</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Key Learning / Takeaway</label>
+          <textarea id="editBookTakeaway" class="form-control" placeholder="What are the key learnings, quotes, or actionable insights from this book?"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeBookModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveBookModal()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Takeaway Notes Modal -->
+  <div class="modal-overlay" id="takeawayModalOverlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 class="modal-title">💡 Key Learnings & Notes</h3>
+        <button class="modal-close" onclick="closeTakeawayModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="takeawayBookTitle" style="font-weight:700; color:var(--text-primary); font-size:1.05rem;"></div>
+        <div class="form-group">
+          <label class="form-label">Your Insights, Action Items & Summary:</label>
+          <textarea id="takeawayTextarea" class="form-control" style="min-height:180px;" placeholder="Write down key takeaways, life lessons, or summary of this book..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeTakeawayModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveTakeawayModal()">Save Notes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden File Input for Import -->
+  <input type="file" id="importFileInput" accept=".json" style="display:none;">
+
+  <!-- Toast Notification Area -->
+  
+  
+
+        <!-- Option 3: Laptop Desktop App -->
+        <div style="background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem;">
+          <h4 style="color: var(--text-primary); font-size: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+            <span>💻 Option 3: Laptop Me Desktop App Banayein</span>
+          </h4>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.45;">
+            Chrome ya Edge browser me URL / Address bar ke daayi taraf <strong>⊕ Install App</strong> icon dikhta hai. Us par click karke aap ise laptop me standalone app ki tarah install kar sakte hain!
+          </p>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button class="btn" onclick="closeDownloadAppModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Standalone Offline Scripts -->
+  
+  <script>
+const DEFAULT_BOOKS = [
+  {
+    "no": "book 1",
+    "title": "Hyperfocus",
+    "author": "Chris Bailey",
+    "language": "HINDI",
+    "status": "READING",
+    "start_date": "2026-08-21",
+    "end_date": "2026-09-06",
+    "count_days": 16,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 2",
+    "title": "The Power Of Your Subconscious Mind",
+    "author": "Joseph Murphy",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 3",
+    "title": "Limitless: Upgrade Your Brain, Learn Anything Faster, and Unlock Your Exceptional Life",
+    "author": "Jim Kwik",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 4",
+    "title": "Thinking, Fast and Slow",
+    "author": "Daniel Kahneman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 5",
+    "title": "Deep Work",
+    "author": "Cal Newport",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": "",
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 6",
+    "title": "Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones",
+    "author": "James Clear",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 7",
+    "title": "Make It Stick: The Science of Successful Learning",
+    "author": "Peter C. Brown",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 8",
+    "title": "Moonwalking with Einstein: The Art and Science of Remembering Everything",
+    "author": "Joshua Foer",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 9",
+    "title": "Mindset: The New Psychology of Success",
+    "author": "Carol S. Dweck",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 10",
+    "title": "The Power of Habit: Why We Do What We Do in Life and Business",
+    "author": "Charles Duhigg",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 11",
+    "title": "Brain Rules: 12 Principles for Surviving and Thriving at Work, Home, and School",
+    "author": "John Medina",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 12",
+    "title": "Focus: the hidden driver of excellence",
+    "author": "Daniel Goleman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 13",
+    "title": "Flow",
+    "author": "Mihaly Csikszentmihalyi",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 14",
+    "title": "The Organized Mind",
+    "author": "Daniel J. Levitin",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 15",
+    "title": "Your Memory",
+    "author": "Kenneth L. Higbee",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 16",
+    "title": "Peak",
+    "author": "Anders Ericsson",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 17",
+    "title": "The Shallows",
+    "author": "Nicholas Carr",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 18",
+    "title": "Essentialism",
+    "author": "Greg McKeown",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 19",
+    "title": "Indistractable",
+    "author": "Nir Eyal",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 20",
+    "title": "Spark",
+    "author": "John J. Ratey",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 21",
+    "title": "A Mind for Numbers",
+    "author": "Barbara Oakley",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 22",
+    "title": "Unlimited Memory",
+    "author": "Kevin Horsley",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 23",
+    "title": "The Brain That Changes Itself",
+    "author": "Norman Doidge",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 24",
+    "title": "Outliers",
+    "author": "Malcolm Gladwell",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 25",
+    "title": "Grit",
+    "author": "Angela Duckworth",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 26",
+    "title": "Stolen Focus",
+    "author": "Johann Hari",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 27",
+    "title": "Digital Minimalism",
+    "author": "Cal Newport",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 28",
+    "title": "The Art of Learning",
+    "author": "Josh Waitzkin",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 29",
+    "title": "Mastery",
+    "author": "Robert Greene",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 30",
+    "title": "Blink",
+    "author": "Malcolm Gladwell",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 31",
+    "title": "Predictably Irrational",
+    "author": "Dan Ariely",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 32",
+    "title": "Drive",
+    "author": "Daniel H. Pink",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 33",
+    "title": "Mind Mapping",
+    "author": "Tony Buzan",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 34",
+    "title": "The 5 Second Rule",
+    "author": "Mel Robbins",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 35",
+    "title": "How We Learn",
+    "author": "Benedict Carey",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 36",
+    "title": "The Talent Code",
+    "author": "Daniel Coyle",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 37",
+    "title": "Pragmatic Thinking and Learning",
+    "author": "Andy Hunt",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 38",
+    "title": "Rewire Your Brain",
+    "author": "John B. Arden",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 39",
+    "title": "Memory Rescue",
+    "author": "Daniel G. Amen",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 40",
+    "title": "Switch",
+    "author": "Chip Heath and Dan Heath",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 41",
+    "title": "Algorithms to Live By",
+    "author": "Brian Christian",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 42",
+    "title": "Thinking in Systems",
+    "author": "Donella Meadows",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 43",
+    "title": "The Willpower Instinct",
+    "author": "Kelly McGonigal",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 44",
+    "title": "Influence",
+    "author": "Robert B. Cialdini",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 45",
+    "title": "Nudge",
+    "author": "Richard H. Thaler",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 46",
+    "title": "Mindfulness in Plain English",
+    "author": "Henepola Gunaratana",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 47",
+    "title": "Waking Up",
+    "author": "Sam Harris",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 48",
+    "title": "10% Happier",
+    "author": "Dan Harris",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 49",
+    "title": "The Power of Now",
+    "author": "Eckhart Tolle",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 50",
+    "title": "Awaken the Giant Within",
+    "author": "Anthony Robbins",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 51",
+    "title": "The 7 Habits of Highly Effective People",
+    "author": "Stephen R. Covey",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 52",
+    "title": "Smarter Faster Better",
+    "author": "Charles Duhigg",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 53",
+    "title": "Ego is the Enemy",
+    "author": "Ryan Holiday",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 54",
+    "title": "Obstacle is the Way",
+    "author": "Ryan Holiday",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 55",
+    "title": "Daily Stoic",
+    "author": "Ryan Holiday",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 56",
+    "title": "Principles",
+    "author": "Ray Dalio",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 57",
+    "title": "Think and Grow Rich",
+    "author": "Napoleon Hill",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 58",
+    "title": "The Miracle Morning",
+    "author": "Hal Elrod",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 59",
+    "title": "Quiet",
+    "author": "Susan Cain",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 60",
+    "title": "Factfulness",
+    "author": "Hans Rosling",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 61",
+    "title": "Range",
+    "author": "David Epstein",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 62",
+    "title": "The Checklist Manifesto",
+    "author": "Atul Gawande",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 63",
+    "title": "Building a Second Brain",
+    "author": "Tiago Forte",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 64",
+    "title": "Getting Things Done",
+    "author": "David Allen",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 65",
+    "title": "Eat That Frog!",
+    "author": "Brian Tracy",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 66",
+    "title": "The One Thing",
+    "author": "Gary Keller",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 67",
+    "title": "Procrastination",
+    "author": "Jane B. Burka",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 68",
+    "title": "Superlearning",
+    "author": "Peter Hollins",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 69",
+    "title": "Learn Like an Einstein",
+    "author": "Peter Hollins",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 70",
+    "title": "The First 20 Hours",
+    "author": "Josh Kaufman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 71",
+    "title": "Ultralearning",
+    "author": "Scott H. Young",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 72",
+    "title": "Mind Hacking",
+    "author": "Sir John Hargrave",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 73",
+    "title": "The Joy of Movement",
+    "author": "Kelly McGonigal",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 74",
+    "title": "Why We Sleep",
+    "author": "Matthew Walker",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 75",
+    "title": "Breath",
+    "author": "James Nestor",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 76",
+    "title": "Altered Traits",
+    "author": "Daniel Goleman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 77",
+    "title": "Emotional Intelligence",
+    "author": "Daniel Goleman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 78",
+    "title": "Social Intelligence",
+    "author": "Daniel Goleman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 79",
+    "title": "Incognito",
+    "author": "David Eagleman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 80",
+    "title": "The Brain",
+    "author": "David Eagleman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 81",
+    "title": "Livewired",
+    "author": "David Eagleman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 82",
+    "title": "Behave",
+    "author": "Robert M. Sapolsky",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 83",
+    "title": "Super Thinking",
+    "author": "Gabriel Weinberg",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 84",
+    "title": "The Great Mental Models",
+    "author": "Shane Parrish",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 85",
+    "title": "Thinking in Bets",
+    "author": "Annie Duke",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 86",
+    "title": "Noise",
+    "author": "Daniel Kahneman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 87",
+    "title": "Black Box Thinking",
+    "author": "Matthew Syed",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 88",
+    "title": "The Art of Thinking Clearly",
+    "author": "Rolf Dobelli",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 89",
+    "title": "A Rulebook for Arguments",
+    "author": "Anthony Weston",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 90",
+    "title": "Intuition Pumps and Other Tools for Thinking",
+    "author": "Daniel C. Dennett",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 91",
+    "title": "The Mind's I",
+    "author": "Douglas R. Hofstadter",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 92",
+    "title": "Gödel, Escher, Bach",
+    "author": "Douglas R. Hofstadter",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 93",
+    "title": "How to Read a Book",
+    "author": "Mortimer J. Adler",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 94",
+    "title": "The Memory Book",
+    "author": "Harry Lorayne",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 95",
+    "title": "Remember It!",
+    "author": "Nelson Dellis",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 96",
+    "title": "Fluent Forever",
+    "author": "Gabriel Wyner",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 97",
+    "title": "Words Can Change Your Brain",
+    "author": "Andrew Newberg",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 98",
+    "title": "The Memory Illusion",
+    "author": "Julia Shaw",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 99",
+    "title": "The Invisible Gorilla",
+    "author": "Christopher Chabris",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 100",
+    "title": "You Are Not So Smart",
+    "author": "David McRaney",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 101",
+    "title": "Hooked",
+    "author": "Nir Eyal",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 102",
+    "title": "Peak Mind: Find Your Focus, Own Your Attention, Invest 12 Minutes a Day",
+    "author": "Amishi P. Jha",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 103",
+    "title": "The Extended Mind: The Power of Thinking Outside the Brain",
+    "author": "Annie Murphy Paul",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 104",
+    "title": "Focusing",
+    "author": "Eugene T. Gendlin",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 105",
+    "title": "Keep Your Brain Alive: 83 Neurobic Exercises to Help Prevent Memory Loss",
+    "author": "Lawrence C. Katz & Manning Rubin",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 106",
+    "title": "Brain Food: The Surprising Science of Eating for Cognitive Power",
+    "author": "Lisa Mosconi",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 107",
+    "title": "Smart Thinking: Three Essential Keys to Solve Problems, Innovate, and Get Things Done",
+    "author": "Art Markman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 108",
+    "title": "Finish What You Start: The Art of Following Through, Taking Action, Executing, & Self-Discipline",
+    "author": "Peter Hollins",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 109",
+    "title": "10-Minute Focus: 25 Small Habits to Master Your Attention",
+    "author": "Damon Zahariades",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 110",
+    "title": "Fast Focus: A Quick-Start Guide To Mastering Your Attention",
+    "author": "Damon Zahariades",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 111",
+    "title": "The User's Guide to the Brain: Perception, Attention, and the Four Theaters of the Brain",
+    "author": "John J. Ratey",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 112",
+    "title": "Use Your Head: How to Unleash the Power of Your Mind",
+    "author": "Tony Buzan",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 113",
+    "title": "The Brain That Changes Its Habits",
+    "author": "Jeffrey M. Schwartz",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 114",
+    "title": "The Focus Zone: How to Beat Procrastination and Major Distractions",
+    "author": "Lucy Jo Palladino",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 115",
+    "title": "Super Brain: Unleashing the Explosive Power of Your Mind",
+    "author": "Deepak Chopra & Rudolph E. Tanzi",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 116",
+    "title": "Brain Wash: Detox Your Mind for Clearer Thinking, Deeper Relationships, and Lasting Happiness",
+    "author": "David Perlmutter & Austin Perlmutter",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 117",
+    "title": "The SharpBrains Guide to Brain Fitness: How to Optimize Brain Health and Performance",
+    "author": "Alvaro Fernandez & Elkhonon Goldberg",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 118",
+    "title": "High Performance Habits: How Extraordinary People Become That Way",
+    "author": "Brendon Burchard",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 119",
+    "title": "The Focus Effect: Change Your Habits, Change Your Life",
+    "author": "Greg Wells",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 120",
+    "title": "Speed Reading: How to Read a Book a Day",
+    "author": "Kam Knight",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 121",
+    "title": "Memory Improvement: How to Improve Your Memory in Just 30 Days",
+    "author": "Kevin Horsley",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 122",
+    "title": "Brain Power: 64 Actionable Ideas to Open Your Mind",
+    "author": "Michael J. Gelb",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 123",
+    "title": "How to Develop a Super-Power Memory",
+    "author": "Harry Lorayne",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 124",
+    "title": "Biohack Your Brain: How to Boost Cognitive Health, Performance, and Power",
+    "author": "Kristen Willeumier",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 125",
+    "title": "The Age-Proof Brain: New Science to Prevent Memory Loss and Keep Your Mind Sharp",
+    "author": "Marc Milstein",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 126",
+    "title": "Clear Thinking: Turning Ordinary Moments into Extraordinary Results",
+    "author": "Shane Parrish",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 127",
+    "title": "The Practice of Groundedness: A Transformative Path to Success",
+    "author": "Brad Stulberg",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 128",
+    "title": "Make Your Brain Smarter: Increase Your Brain's Creativity, Energy, and Focus",
+    "author": "Sandra Bond Chapman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 129",
+    "title": "The Productivity Project: Accomplishing More by Managing Your Time, Attention, and Energy",
+    "author": "Chris Bailey",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 130",
+    "title": "How to Break Up with Your Phone: 30-Day Plan to Take Back Your Life",
+    "author": "Catherine Price",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 131",
+    "title": "Bored and Brilliant: How Spacing Out Can Unlock Your Most Productive Self",
+    "author": "Manoush Zomorodi",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 132",
+    "title": "Attention Pays: How to Drive Profitability, Productivity, and Accountability",
+    "author": "Neen James",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 133",
+    "title": "Learn, Improve, Master: How to Develop Any Skill and Acquire Expertise",
+    "author": "Nick Velasquez",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 134",
+    "title": "Hyper-Learning: How to Adapt to the Speed of Change",
+    "author": "Edward D. Hess",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 135",
+    "title": "Habits of a Happy Brain: Retrain Your Brain to Boost Your Neurochemicals",
+    "author": "Loretta Graziano Breuning",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 136",
+    "title": "The Art of Memory",
+    "author": "Frances A. Yates",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 137",
+    "title": "Master Your Mind Design Your Destiny",
+    "author": "Adam Khoo",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 138",
+    "title": "Mental Toughness: How to Build Strong Mental Habits",
+    "author": "Damon Zahariades",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 139",
+    "title": "Super Human Brain: Science-Backed Strategies to Sharpen Memory",
+    "author": "Nicole M. Avena",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 140",
+    "title": "The Brain Always Wins",
+    "author": "Chris Parker & Dr. John Sullivan",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 141",
+    "title": "Smart Change: Five Tools to Create New Habits",
+    "author": "Art Markman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Habits & Discipline",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 142",
+    "title": "Unkinking Your Brain",
+    "author": "Stephen S. Ilardi",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 143",
+    "title": "The Sweet Spot: How to Find Your Groove at Home and Work",
+    "author": "Christine Carter",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 144",
+    "title": "Brain Switch",
+    "author": "Craig Adams",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 145",
+    "title": "Ageless Brain: High-Powered Brain Health",
+    "author": "Rico Caveglia",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 146",
+    "title": "Focus: The Ultimate Guide to Improving Your Focus",
+    "author": "Ian Tuhovsky",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Focus & Concentration",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 147",
+    "title": "Fast Brain: How to Think Faster and Sharper",
+    "author": "David J. Lieberman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Brain Science",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 148",
+    "title": "Visual Intelligence: Sharpen Your Perception, Change Your Life",
+    "author": "Amy E. Herman",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 149",
+    "title": "Mind Over Mind: The Surprising Science of Expectation",
+    "author": "Chris Berdik",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Mindset & Logic",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  },
+  {
+    "no": "book 150",
+    "title": "Visual Learning: Learn Faster, Remember More",
+    "author": "Peter Hollins",
+    "language": "HINDI",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": "",
+    "category": "Memory & Learning",
+    "takeaway": "",
+    "availability": "UNAVAILABLE"
+  }
+];
+
+</script>
+<script>
+﻿const STORAGE_KEY = 'mind_focus_books_v1';
+const THEME_KEY = 'mind_focus_theme_v1';
+
+let state = {
+  books: [],
+  searchQuery: '',
+  statusFilter: 'ALL',
+  categoryFilter: 'ALL',
+  availabilityFilter: 'ALL',
+  sortBy: 'no_asc',
+  viewMode: 'table',
+  currentPage: 1,
+  pageSize: 25,
+  editingBookIndex: -1,
+  theme: 'dark'
+};
+
+const ICONS = {
+  book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>',
+  clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>',
+  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>',
+  moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>',
+  download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>',
+  upload: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>',
+  refresh: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>',
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>',
+  note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>'
+};
+
+document.addEventListener("DOMContentLoaded", () => {
+  initTheme();
+  loadData();
+  populateCategoryDropdown();
+  setupEventListeners();
+  renderApp();
+});
+function initTheme() {
+  const saved = localStorage.getItem(THEME_KEY) || 'dark';
+  state.theme = saved;
+  document.documentElement.setAttribute('data-theme', saved);
+  updateThemeButton();
+}
+
+function toggleTheme() {
+  state.theme = state.theme === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', state.theme);
+  localStorage.setItem(THEME_KEY, state.theme);
+  updateThemeButton();
+}
+
+function updateThemeButton() {
+  const btn = document.getElementById('themeToggleBtn');
+  if (btn) {
+    btn.innerHTML = state.theme === 'dark' ? (ICONS.sun + ' Light') : (ICONS.moon + ' Dark');
+  }
+}
+
+function loadData() {
+  const local = localStorage.getItem(STORAGE_KEY);
+  if (local) {
+    try {
+      state.books = JSON.parse(local);
+    } catch (e) {
+      state.books = (typeof DEFAULT_BOOKS !== 'undefined') ? [...DEFAULT_BOOKS] : [];
+    }
+  } else {
+    state.books = (typeof DEFAULT_BOOKS !== 'undefined') ? [...DEFAULT_BOOKS] : [];
+  }
+
+  // Live recalculate days for reading books
+  state.books.forEach(b => {
+    if (b.status === 'READING' && b.start_date) {
+      b.count_days = getBookEffectiveDays(b);
+    }
+  });
+  saveData();
+}
+
+function saveData() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state.books));
+}
+
+function populateCategoryDropdown() {
+  const select = document.getElementById('categoryFilter');
+  if (!select) return;
+  const cats = Array.from(new Set(state.books.map(b => b.category).filter(Boolean))).sort();
+  select.innerHTML = '<option value="ALL">All Categories</option>' + 
+    cats.map(c => '<option value="' + escapeHtml(c) + '">' + escapeHtml(c) + '</option>').join('');
+}
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function getTodayString() {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  return y + '-' + m + '-' + d;
+}
+
+function calculateDaysDifference(start, end) {
+  if (!start) return 0;
+  const sParts = String(start).split('-');
+  const eParts = String(end || getTodayString()).split('-');
+  if (sParts.length < 3 || eParts.length < 3) return 0;
+  const sDate = new Date(parseInt(sParts[0]), parseInt(sParts[1]) - 1, parseInt(sParts[2]));
+  const eDate = new Date(parseInt(eParts[0]), parseInt(eParts[1]) - 1, parseInt(eParts[2]));
+  if (isNaN(sDate.getTime()) || isNaN(eDate.getTime())) return 0;
+  const diffTime = eDate.getTime() - sDate.getTime();
+  const diffDays = Math.round(diffTime / (1000 * 60 * 60 * 24));
+  return Math.max(0, diffDays);
+}
+
+function getBookEffectiveEndDate(b) {
+  if (b.status === 'READING') {
+    return getTodayString();
+  }
+  return b.end_date || '';
+}
+
+function getBookEffectiveDays(b) {
+  if (b.status === 'READING') {
+    if (b.start_date) {
+      return calculateDaysDifference(b.start_date, getTodayString());
+    }
+    return 0;
+  } else if (b.status === 'DONE') {
+    if (b.start_date && b.end_date) {
+      return calculateDaysDifference(b.start_date, b.end_date);
+    }
+    return parseInt(b.count_days) || 0;
+  }
+  return parseInt(b.count_days) || 0;
+}
+
+// Change Tracking & Update Logic
+let pendingChanges = 0;
+
+function markChange() {
+  pendingChanges++;
+  const btn = document.getElementById('headerUpdateBtn');
+  const txt = document.getElementById('updateBtnText');
+  if (btn && txt) {
+    txt.innerHTML = '💾 Update (' + pendingChanges + ' Change' + (pendingChanges > 1 ? 's' : '') + ')';
+    btn.style.display = 'inline-flex';
+    btn.classList.remove('btn-updated');
+    btn.classList.add('pulse-btn');
+  }
+}
+
+function handleUpdateClick() {
+  saveData();
+
+  // If running inside desktop app (pywebview), save directly to disk books-data.js as well
+  if (window.pywebview && window.pywebview.api && window.pywebview.api.save_books) {
+    window.pywebview.api.save_books(JSON.stringify(state.books)).then(() => {
+      console.log('Saved to books-data.js file on disk!');
+    }).catch(e => console.log('Disk save note:', e));
+  }
+
+  const btn = document.getElementById('headerUpdateBtn');
+  const txt = document.getElementById('updateBtnText');
+  if (btn && txt) {
+    btn.classList.remove('pulse-btn');
+    btn.classList.add('btn-updated');
+    txt.innerHTML = '✅ Updated!';
+    showToast('All ' + pendingChanges + ' changes successfully updated and saved!', 'success');
+    pendingChanges = 0;
+    setTimeout(() => {
+      if (pendingChanges === 0) {
+        btn.style.display = 'none';
+        btn.classList.remove('btn-updated');
+      }
+    }, 2500);
+  }
+}
+
+function onStatusChange(index, newStatus) {
+  const book = state.books[index];
+  if (!book) return;
+
+  const today = getTodayString();
+  book.status = newStatus;
+
+  if (newStatus === 'READING') {
+    if (!book.start_date) {
+      book.start_date = today;
+    }
+    book.end_date = '';
+    book.count_days = calculateDaysDifference(book.start_date, today);
+    showToast('Started reading: "' + book.title + '"!', 'success');
+  } else if (newStatus === 'DONE') {
+    if (!book.start_date) {
+      book.start_date = today;
+    }
+    if (!book.end_date) {
+      book.end_date = today;
+    }
+    book.count_days = calculateDaysDifference(book.start_date, book.end_date);
+    showToast('Completed book: "' + book.title + '"! 🎉', 'success');
+  } else if (newStatus === 'PENDING') {
+    book.end_date = '';
+    showToast('Marked "' + book.title + '" as Pending.', '');
+  }
+
+  markChange();
+  saveData();
+  renderApp();
+}
+
+function onRatingChange(index, rating) {
+  if (state.books[index]) {
+    state.books[index].rating = rating;
+    markChange();
+    saveData();
+    renderApp();
+    showToast('Rated ' + rating + ' ★ for "' + state.books[index].title + '"', 'success');
+  }
+}
+
+function getFilteredAndSortedBooks() {
+  let list = state.books.map((b, originalIndex) => ({ ...b, originalIndex }));
+
+  if (state.searchQuery.trim()) {
+    const q = state.searchQuery.toLowerCase().trim();
+    list = list.filter(b => 
+      (b.title && b.title.toLowerCase().includes(q)) ||
+      (b.author && b.author.toLowerCase().includes(q)) ||
+      (b.no && b.no.toLowerCase().includes(q)) ||
+      (b.category && b.category.toLowerCase().includes(q)) ||
+      (b.takeaway && b.takeaway.toLowerCase().includes(q))
+    );
+  }
+
+  if (state.statusFilter !== 'ALL') {
+    list = list.filter(b => (b.status || 'PENDING').toUpperCase() === state.statusFilter);
+  }
+
+  if (state.categoryFilter !== 'ALL') {
+    list = list.filter(b => b.category === state.categoryFilter);
+  }
+
+  if (state.availabilityFilter !== 'ALL') {
+    list = list.filter(b => (b.availability || 'AVAILABLE').toUpperCase() === state.availabilityFilter);
+  }
+
+  list.sort((a, b) => {
+    switch (state.sortBy) {
+      case 'no_asc': {
+        const numA = parseInt((a.no || '').replace(/\D/g, '')) || 0;
+        const numB = parseInt((b.no || '').replace(/\D/g, '')) || 0;
+        return numA - numB;
+      }
+      case 'no_desc': {
+        const numA = parseInt((a.no || '').replace(/\D/g, '')) || 0;
+        const numB = parseInt((b.no || '').replace(/\D/g, '')) || 0;
+        return numB - numA;
+      }
+      case 'title_asc': return (a.title || '').localeCompare(b.title || '');
+      case 'title_desc': return (b.title || '').localeCompare(a.title || '');
+      case 'author_asc': return (a.author || '').localeCompare(b.author || '');
+      case 'rating_desc': return (Number(b.rating) || 0) - (Number(a.rating) || 0);
+      case 'days_desc': return (Number(b.count_days) || 0) - (Number(a.count_days) || 0);
+      default: return 0;
+    }
+  });
+
+  return list;
+}
+
+function renderApp() {
+  renderStatistics();
+  renderCategoryPills();
+  renderBookList();
+}
+
+function renderStatistics() {
+  const total = state.books.length;
+  const done = state.books.filter(b => b.status === 'DONE').length;
+  const reading = state.books.filter(b => b.status === 'READING').length;
+  const pending = state.books.filter(b => !b.status || b.status === 'PENDING').length;
+
+  let totalDays = 0;
+  let booksWithDays = 0;
+  state.books.forEach(b => {
+    const days = getBookEffectiveDays(b);
+    if (days > 0) {
+      totalDays += days;
+      booksWithDays++;
+    }
+  });
+
+  const avgDays = booksWithDays > 0 ? (totalDays / booksWithDays).toFixed(1) : '0';
+  const pct = total > 0 ? ((done / total) * 100).toFixed(1) : '0.0';
+
+  const pctEl = document.getElementById('progressPctText');
+  if (pctEl) pctEl.innerText = pct + '% Completed';
+  const subEl = document.getElementById('progressSubText');
+  if (subEl) subEl.innerText = '(' + done + ' / ' + total + ' Books Finished)';
+  const barEl = document.getElementById('progressBarFill');
+  if (barEl) barEl.style.width = pct + '%';
+
+  const tbEl = document.getElementById('kpiTotalBooks');
+  if (tbEl) tbEl.innerText = total;
+  const bdEl = document.getElementById('kpiBooksDone');
+  if (bdEl) bdEl.innerText = done;
+  const crEl = document.getElementById('kpiCurrentlyReading');
+  if (crEl) crEl.innerText = reading;
+  const tdEl = document.getElementById('kpiTotalDays');
+  if (tdEl) tdEl.innerText = totalDays;
+  const adEl = document.getElementById('kpiAvgDays');
+  if (adEl) adEl.innerText = avgDays;
+
+  const caEl = document.getElementById('countAll');
+  if (caEl) caEl.innerText = total;
+  const cReadingEl = document.getElementById('countReading');
+  if (cReadingEl) cReadingEl.innerText = reading;
+  const cDoneEl = document.getElementById('countDone');
+  if (cDoneEl) cDoneEl.innerText = done;
+  const cPendingEl = document.getElementById('countPending');
+  if (cPendingEl) cPendingEl.innerText = pending;
+}
+
+function renderCategoryPills() {
+  const container = document.getElementById('categoryTagsContainer');
+  if (!container) return;
+
+  const catCounts = {};
+  state.books.forEach(b => {
+    const c = b.category || 'Uncategorized';
+    catCounts[c] = (catCounts[c] || 0) + 1;
+  });
+
+  const categories = Object.keys(catCounts).sort();
+  const colors = ['#6366f1', '#10b981', '#f59e0b', '#ec4899', '#06b6d4', '#8b5cf6'];
+
+  let html = categories.map((cat, i) => {
+    const color = colors[i % colors.length];
+    const isAct = state.categoryFilter === cat ? 'active' : '';
+    return '<button class="cat-tag-btn ' + isAct + '" onclick="setCategoryFilter(\'' + escapeHtml(cat) + '\')">' +
+      '<span class="cat-color-dot" style="background:' + color + '"></span>' +
+      '<span>' + escapeHtml(cat) + '</span>' +
+      '<span style="opacity:0.75; font-size:0.72rem;">(' + catCounts[cat] + ')</span>' +
+      '</button>';
+  }).join('');
+
+  container.innerHTML = html;
+}
+function renderBookList() {
+  const filtered = getFilteredAndSortedBooks();
+  const totalItems = filtered.length;
+
+  const totalPages = Math.ceil(totalItems / state.pageSize) || 1;
+  if (state.currentPage > totalPages) state.currentPage = totalPages;
+  const startIdx = (state.currentPage - 1) * state.pageSize;
+  const paginated = filtered.slice(startIdx, startIdx + state.pageSize);
+
+  const container = document.getElementById('booksContentArea');
+  const paginationContainer = document.getElementById('paginationArea');
+
+  if (totalItems === 0) {
+    container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📚</div><h3>No books found</h3><p>Try clearing your search query or changing active filters.</p><button class="btn btn-primary" style="margin-top:1rem;" onclick="resetFilters()">Reset Filters</button></div>';
+    paginationContainer.innerHTML = '';
+    return;
+  }
+
+  if (state.viewMode === 'table') {
+    renderTableView(container, paginated);
+  } else {
+    renderGridView(container, paginated);
+  }
+
+  renderPagination(paginationContainer, totalItems, totalPages);
+}
+
+function renderTableView(container, books) {
+  let html = '<div class="table-wrapper"><table class="books-table"><thead><tr>' +
+    '<th class="sortable" onclick="handleSort(\'no\')">NO</th>' +
+    '<th class="sortable" onclick="handleSort(\'title\')">BOOK TITLE</th>' +
+    '<th class="sortable" onclick="handleSort(\'author\')">AUTHOR</th>' +
+    '<th>CATEGORY</th>' +
+    '<th>STATUS</th>' +
+    '<th>START DATE</th>' +
+    '<th>END DATE</th>' +
+    '<th class="sortable" onclick="handleSort(\'days\')">DAYS</th>' +
+    '<th class="sortable" onclick="handleSort(\'rating\')">RATING</th>' +
+    '<th>TAKEAWAY</th>' +
+    '<th>ACTIONS</th></tr></thead><tbody>';
+
+  books.forEach(b => {
+    const origIdx = b.originalIndex;
+    const days = getBookEffectiveDays(b);
+    const isReading = b.status === 'READING';
+    const endDateDisplay = isReading 
+      ? '<span class="badge" style="background:rgba(59,130,246,0.18); color:var(--status-reading-text); border:1px solid var(--status-reading-border); font-size:0.75rem; font-weight:600;">' + getTodayString() + ' (Today)</span>'
+      : (b.end_date || '-');
+    const daysBadge = isReading
+      ? '<span class="badge-days" style="color:#60a5fa; border-color:#2563eb; background:rgba(59,130,246,0.1);">' + days + ' d 🔥</span>'
+      : '<span class="badge-days">' + days + ' d</span>';
+    const hasNotes = b.takeaway && b.takeaway.trim().length > 0;
+    const ratingNum = parseInt(b.rating) || 0;
+
+    let starsHtml = '';
+    for (let s = 1; s <= 5; s++) {
+      starsHtml += '<span class="' + (s <= ratingNum ? 'filled' : '') + '" onclick="onRatingChange(' + origIdx + ', ' + s + ')">★</span>';
+    }
+
+    html += '<tr>' +
+      '<td style="font-weight:700; color:var(--text-muted);">' + escapeHtml(b.no) + '</td>' +
+      '<td class="book-title-cell"><div class="book-title-text">' + escapeHtml(b.title) + '</div>' +
+      '<div class="book-author-text">' + escapeHtml(b.author) + ' • ' + escapeHtml(b.language || 'HINDI') + '</div></td>' +
+      '<td>' + escapeHtml(b.author) + '</td>' +
+      '<td><span class="badge badge-cat">' + escapeHtml(b.category || 'General') + '</span></td>' +
+      '<td><select class="status-select status-' + (b.status || 'PENDING') + '" onchange="onStatusChange(' + origIdx + ', this.value)">' +
+      '<option value="PENDING" ' + (b.status === 'PENDING' ? 'selected' : '') + '>⏳ PENDING</option>' +
+      '<option value="READING" ' + (b.status === 'READING' ? 'selected' : '') + '>📖 READING</option>' +
+      '<option value="DONE" ' + (b.status === 'DONE' ? 'selected' : '') + '>✅ DONE</option>' +
+      '</select></td>' +
+      '<td style="font-size:0.82rem; color:var(--text-secondary);">' + (b.start_date || '-') + '</td>' +
+      '<td style="font-size:0.82rem;">' + endDateDisplay + '</td>' +
+      '<td>' + daysBadge + '</td>' +
+      '<td><div class="star-rating">' + starsHtml + '</div></td>' +
+      '<td><button class="takeaway-btn ' + (hasNotes ? 'has-content' : '') + '" onclick="openTakeawayModal(' + origIdx + ')">' +
+      ICONS.note + ' ' + (hasNotes ? 'Notes' : 'Add Note') + '</button></td>' +
+      '<td><div style="display:flex; gap:0.35rem;">' +
+      '<button class="btn btn-icon-only btn-sm" title="Edit book" onclick="openEditModal(' + origIdx + ')">' + ICONS.edit + '</button>' +
+      '<button class="btn btn-icon-only btn-sm btn-danger" title="Delete book" onclick="deleteBook(' + origIdx + ')">' + ICONS.trash + '</button>' +
+      '</div></td></tr>';
+  });
+
+  html += '</tbody></table></div>';
+  container.innerHTML = html;
+}
+
+function renderGridView(container, books) {
+  let html = '<div class="books-grid">';
+  books.forEach(b => {
+    const origIdx = b.originalIndex;
+    const days = getBookEffectiveDays(b);
+    const isReading = b.status === 'READING';
+    const endDateDisplay = isReading 
+      ? '<span class="badge" style="background:rgba(59,130,246,0.18); color:var(--status-reading-text); border:1px solid var(--status-reading-border); font-size:0.75rem; font-weight:600;">' + getTodayString() + ' (Today)</span>'
+      : (b.end_date || '-');
+    const daysBadge = isReading
+      ? '<span class="badge-days" style="color:#60a5fa; border-color:#2563eb; background:rgba(59,130,246,0.1);">' + days + ' d 🔥</span>'
+      : '<span class="badge-days">' + days + ' d</span>';
+    const ratingNum = parseInt(b.rating) || 0;
+    let starsHtml = '';
+    for (let s = 1; s <= 5; s++) {
+      starsHtml += '<span class="' + (s <= ratingNum ? 'filled' : '') + '" onclick="onRatingChange(' + origIdx + ', ' + s + ')">★</span>';
+    }
+
+    html += '<div class="book-card">' +
+      '<div class="book-card-header"><div>' +
+      '<div class="book-card-no">' + escapeHtml(b.no) + '</div>' +
+      '<div class="book-card-title">' + escapeHtml(b.title) + '</div>' +
+      '<div class="book-card-author">by ' + escapeHtml(b.author) + ' • ' + escapeHtml(b.language || 'HINDI') + '</div></div>' +
+      '<select class="status-select status-' + (b.status || 'PENDING') + '" onchange="onStatusChange(' + origIdx + ', this.value)">' +
+      '<option value="PENDING" ' + (b.status === 'PENDING' ? 'selected' : '') + '>⏳ PENDING</option>' +
+      '<option value="READING" ' + (b.status === 'READING' ? 'selected' : '') + '>📖 READING</option>' +
+      '<option value="DONE" ' + (b.status === 'DONE' ? 'selected' : '') + '>✅ DONE</option>' +
+      '</select></div>' +
+      '<div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">' +
+      '<span class="badge badge-cat">' + escapeHtml(b.category || 'General') + '</span>' +
+      '<span class="badge-days" style="' + (isReading ? 'color:#60a5fa; border-color:#2563eb; background:rgba(59,130,246,0.1);' : '') + '">' + days + ' days read' + (isReading ? ' 🔥' : '') + '</span></div>' +
+      (b.takeaway ? '<div class="card-takeaway-preview" onclick="openTakeawayModal(' + origIdx + ')" title="Click to view notes">💡 <strong>Takeaway:</strong> ' + escapeHtml(b.takeaway) + '</div>' : '') +
+      '<div class="book-card-body"><div class="card-dates"><span>Start: ' + (b.start_date || 'Not started') + '</span><span>End: ' + endDateText + '</span></div>' +
+      '<div class="card-meta-row"><div class="star-rating">' + starsHtml + '</div>' +
+      '<div class="card-actions">' +
+      '<button class="btn btn-sm" onclick="openTakeawayModal(' + origIdx + ')">' + ICONS.note + ' Notes</button>' +
+      '<button class="btn btn-sm btn-icon-only" onclick="openEditModal(' + origIdx + ')">' + ICONS.edit + '</button>' +
+      '<button class="btn btn-sm btn-icon-only btn-danger" onclick="deleteBook(' + origIdx + ')">' + ICONS.trash + '</button>' +
+      '</div></div></div></div>';
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function renderPagination(container, totalItems, totalPages) {
+  const start = (state.currentPage - 1) * state.pageSize + 1;
+  const end = Math.min(start + state.pageSize - 1, totalItems);
+
+  let pagesHtml = '';
+  for (let p = 1; p <= totalPages; p++) {
+    if (p === 1 || p === totalPages || (p >= state.currentPage - 2 && p <= state.currentPage + 2)) {
+      pagesHtml += '<button class="page-btn ' + (p === state.currentPage ? 'active' : '') + '" onclick="goToPage(' + p + ')">' + p + '</button>';
+    } else if (p === state.currentPage - 3 || p === state.currentPage + 3) {
+      pagesHtml += '<span style="padding:0 0.2rem; color:var(--text-muted);">...</span>';
+    }
+  }
+
+  container.innerHTML = '<div class="pagination-bar">' +
+    '<div>Showing <strong>' + start + '</strong> to <strong>' + end + '</strong> of <strong>' + totalItems + '</strong> books</div>' +
+    '<div class="pagination-controls">' +
+    '<button class="page-btn" ' + (state.currentPage <= 1 ? 'disabled' : '') + ' onclick="goToPage(' + (state.currentPage - 1) + ')">Prev</button>' +
+    pagesHtml +
+    '<button class="page-btn" ' + (state.currentPage >= totalPages ? 'disabled' : '') + ' onclick="goToPage(' + (state.currentPage + 1) + ')">Next</button>' +
+    '</div></div>';
+}
+function setupEventListeners() {
+  const searchInput = document.getElementById('searchInput');
+  const clearSearchBtn = document.getElementById('clearSearchBtn');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      state.searchQuery = e.target.value;
+      state.currentPage = 1;
+      clearSearchBtn.style.display = state.searchQuery ? 'block' : 'none';
+      renderBookList();
+    });
+  }
+
+  if (clearSearchBtn) {
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      state.searchQuery = '';
+      clearSearchBtn.style.display = 'none';
+      state.currentPage = 1;
+      renderBookList();
+    });
+  }
+
+  document.getElementById('viewTableBtn').addEventListener('click', () => setViewMode('table'));
+  document.getElementById('viewGridBtn').addEventListener('click', () => setViewMode('grid'));
+
+  document.querySelectorAll('.tab-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('.tab-pill').forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      state.statusFilter = pill.dataset.status;
+      state.currentPage = 1;
+      renderBookList();
+    });
+  });
+
+  document.getElementById('categoryFilter').addEventListener('change', (e) => {
+    state.categoryFilter = e.target.value;
+    state.currentPage = 1;
+    renderApp();
+  });
+
+  document.getElementById('availabilityFilter').addEventListener('change', (e) => {
+    state.availabilityFilter = e.target.value;
+    state.currentPage = 1;
+    renderBookList();
+  });
+
+  document.getElementById('sortSelect').addEventListener('change', (e) => {
+    state.sortBy = e.target.value;
+    renderBookList();
+  });
+
+  document.getElementById('pageSizeSelect').addEventListener('change', (e) => {
+    state.pageSize = parseInt(e.target.value) || 25;
+    state.currentPage = 1;
+    renderBookList();
+  });
+
+  document.getElementById('themeToggleBtn').addEventListener('click', toggleTheme);
+
+  
+  const updateBtn = document.getElementById('headerUpdateBtn');
+  if (updateBtn) updateBtn.addEventListener('click', handleUpdateClick);
+
+  const installBtn = document.getElementById('installAppBtn');
+  if (installBtn) installBtn.addEventListener('click', handleInstallApp);
+
+  document.getElementById('addBookBtn').addEventListener('click', openAddModal);
+  document.getElementById('exportCsvBtn').addEventListener('click', exportToCsv);
+  document.getElementById('exportJsonBtn').addEventListener('click', exportToJson);
+  document.getElementById('importFileBtn').addEventListener('click', () => document.getElementById('importFileInput').click());
+  document.getElementById('importFileInput').addEventListener('change', handleFileImport);
+  document.getElementById('resetDataBtn').addEventListener('click', confirmResetData);
+
+  const startDateInput = document.getElementById('editStartDate');
+  const endDateInput = document.getElementById('editEndDate');
+  if (startDateInput && endDateInput) {
+    const updateDays = () => {
+      const s = startDateInput.value;
+      const e = endDateInput.value;
+      document.getElementById('editCountDays').value = calculateDaysDifference(s, e);
+    };
+    startDateInput.addEventListener('change', updateDays);
+    endDateInput.addEventListener('change', updateDays);
+  }
+}
+
+function setViewMode(mode) {
+  state.viewMode = mode;
+  document.getElementById('viewTableBtn').classList.toggle('active', mode === 'table');
+  document.getElementById('viewGridBtn').classList.toggle('active', mode === 'grid');
+  renderBookList();
+}
+
+function setCategoryFilter(cat) {
+  if (state.categoryFilter === cat) {
+    state.categoryFilter = 'ALL';
+    document.getElementById('categoryFilter').value = 'ALL';
+  } else {
+    state.categoryFilter = cat;
+    document.getElementById('categoryFilter').value = cat;
+  }
+  state.currentPage = 1;
+  renderApp();
+}
+
+function handleSort(col) {
+  if (col === 'no') {
+    state.sortBy = state.sortBy === 'no_asc' ? 'no_desc' : 'no_asc';
+  } else if (col === 'title') {
+    state.sortBy = state.sortBy === 'title_asc' ? 'title_desc' : 'title_asc';
+  } else if (col === 'author') {
+    state.sortBy = state.sortBy === 'author_asc' ? 'no_asc' : 'author_asc';
+  } else if (col === 'days') {
+    state.sortBy = state.sortBy === 'days_desc' ? 'no_asc' : 'days_desc';
+  } else if (col === 'rating') {
+    state.sortBy = state.sortBy === 'rating_desc' ? 'no_asc' : 'rating_desc';
+  }
+  document.getElementById('sortSelect').value = state.sortBy;
+  renderBookList();
+}
+
+function goToPage(p) {
+  state.currentPage = p;
+  renderBookList();
+  window.scrollTo({ top: 380, behavior: 'smooth' });
+}
+
+function resetFilters() {
+  state.searchQuery = '';
+  state.statusFilter = 'ALL';
+  state.categoryFilter = 'ALL';
+  state.availabilityFilter = 'ALL';
+  state.currentPage = 1;
+  document.getElementById('searchInput').value = '';
+  document.getElementById('categoryFilter').value = 'ALL';
+  document.getElementById('availabilityFilter').value = 'ALL';
+  document.querySelectorAll('.tab-pill').forEach(p => p.classList.toggle('active', p.dataset.status === 'ALL'));
+  renderApp();
+}
+
+function openAddModal() {
+  state.editingBookIndex = -1;
+  document.getElementById('bookModalTitle').innerText = 'Add New Book';
+  document.getElementById('editBookNo').value = 'book ' + (state.books.length + 1);
+  document.getElementById('editBookTitle').value = '';
+  document.getElementById('editBookAuthor').value = '';
+  document.getElementById('editBookLanguage').value = 'HINDI';
+  document.getElementById('editBookCategory').value = 'Focus & Concentration';
+  document.getElementById('editBookStatus').value = 'PENDING';
+  document.getElementById('editStartDate').value = '';
+  document.getElementById('editEndDate').value = '';
+  document.getElementById('editCountDays').value = '0';
+  document.getElementById('editBookRating').value = '';
+  document.getElementById('editBookAvailability').value = 'AVAILABLE';
+  document.getElementById('editBookTakeaway').value = '';
+  document.getElementById('bookModalOverlay').classList.add('active');
+}
+
+function openEditModal(index) {
+  state.editingBookIndex = index;
+  const book = state.books[index];
+  if (!book) return;
+
+  document.getElementById('bookModalTitle').innerText = 'Edit: ' + (book.title || book.no);
+  document.getElementById('editBookNo').value = book.no || '';
+  document.getElementById('editBookTitle').value = book.title || '';
+  document.getElementById('editBookAuthor').value = book.author || '';
+  document.getElementById('editBookLanguage').value = book.language || 'HINDI';
+  document.getElementById('editBookCategory').value = book.category || 'Focus & Concentration';
+  document.getElementById('editBookStatus').value = book.status || 'PENDING';
+  document.getElementById('editStartDate').value = book.start_date || '';
+  document.getElementById('editEndDate').value = book.end_date || '';
+  document.getElementById('editCountDays').value = book.count_days || 0;
+  document.getElementById('editBookRating').value = book.rating || '';
+  document.getElementById('editBookAvailability').value = book.availability || 'AVAILABLE';
+  document.getElementById('editBookTakeaway').value = book.takeaway || '';
+  document.getElementById('bookModalOverlay').classList.add('active');
+}
+
+function closeBookModal() {
+  document.getElementById('bookModalOverlay').classList.remove('active');
+}
+
+function saveBookModal() {
+  const title = document.getElementById('editBookTitle').value.trim();
+  if (!title) {
+    alert('Please enter a book title!');
+    return;
+  }
+
+  const bookData = {
+    no: document.getElementById('editBookNo').value.trim() || ('book ' + (state.books.length + 1)),
+    title: title,
+    author: document.getElementById('editBookAuthor').value.trim() || 'Unknown',
+    language: document.getElementById('editBookLanguage').value.trim() || 'HINDI',
+    category: document.getElementById('editBookCategory').value.trim() || 'General',
+    status: document.getElementById('editBookStatus').value,
+    start_date: document.getElementById('editStartDate').value,
+    end_date: document.getElementById('editEndDate').value,
+    count_days: parseInt(document.getElementById('editCountDays').value) || 0,
+    rating: document.getElementById('editBookRating').value,
+    availability: document.getElementById('editBookAvailability').value,
+    takeaway: document.getElementById('editBookTakeaway').value.trim()
+  };
+
+  if (state.editingBookIndex >= 0) {
+    state.books[state.editingBookIndex] = bookData;
+    showToast('Updated "' + title + '"', 'success');
+  } else {
+    state.books.push(bookData);
+    showToast('Added "' + title + '" to library', 'success');
+  }
+
+  markChange();
+  saveData();
+  populateCategoryDropdown();
+  closeBookModal();
+  renderApp();
+}
+
+function deleteBook(index) {
+  const book = state.books[index];
+  if (!book) return;
+  if (confirm('Are you sure you want to delete "' + (book.title || book.no) + '"?')) {
+    state.books.splice(index, 1);
+    markChange();
+    saveData();
+    populateCategoryDropdown();
+    renderApp();
+    showToast('Deleted book.', '');
+  }
+}
+
+function openTakeawayModal(index) {
+  state.editingBookIndex = index;
+  const book = state.books[index];
+  if (!book) return;
+
+  document.getElementById('takeawayBookTitle').innerText = book.no + ' • ' + book.title;
+  document.getElementById('takeawayTextarea').value = book.takeaway || '';
+  document.getElementById('takeawayModalOverlay').classList.add('active');
+}
+
+function closeTakeawayModal() {
+  document.getElementById('takeawayModalOverlay').classList.remove('active');
+}
+
+function saveTakeawayModal() {
+  if (state.editingBookIndex >= 0 && state.books[state.editingBookIndex]) {
+    const text = document.getElementById('takeawayTextarea').value.trim();
+    state.books[state.editingBookIndex].takeaway = text;
+    markChange();
+    saveData();
+    closeTakeawayModal();
+    renderBookList();
+    showToast('Key takeaways saved successfully!', 'success');
+  }
+}
+
+function exportToCsv() {
+  const headers = ['NO', 'BOOK TITLE', 'AUTHOR', 'LANGUAGE', 'STATUS', 'START DATE', 'END DATE', 'COUNT DAYS', 'RATING', 'CATEGORY', 'KEY LEARNING / TAKEAWAY', 'BOOK AVAILABILITY'];
+  
+  const rows = state.books.map(b => [
+    '"' + (b.no || '').replace(/"/g, '""') + '"',
+    '"' + (b.title || '').replace(/"/g, '""') + '"',
+    '"' + (b.author || '').replace(/"/g, '""') + '"',
+    '"' + (b.language || '').replace(/"/g, '""') + '"',
+    '"' + (b.status || 'PENDING').replace(/"/g, '""') + '"',
+    '"' + (b.start_date || '').replace(/"/g, '""') + '"',
+    '"' + (b.status === 'READING' ? getTodayString() : (b.end_date || '')).replace(/"/g, '""') + '"',
+    getBookEffectiveDays(b),
+    b.rating || '',
+    '"' + (b.category || '').replace(/"/g, '""') + '"',
+    '"' + (b.takeaway || '').replace(/"/g, '""') + '"',
+    '"' + (b.availability || '').replace(/"/g, '""') + '"'
+  ]);
+
+  const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', 'Mind_Focus_Books_Tracker_' + getTodayString() + '.csv');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast('Excel CSV file downloaded offline!', 'success');
+}
+
+function exportToJson() {
+  const jsonContent = JSON.stringify(state.books, null, 2);
+  const blob = new Blob([jsonContent], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.setAttribute('href', url);
+  link.setAttribute('download', 'mind_focus_books_backup_' + getTodayString() + '.json');
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  showToast('JSON backup downloaded offline!', 'success');
+}
+
+function handleFileImport(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    try {
+      const data = JSON.parse(evt.target.result);
+      if (Array.isArray(data)) {
+        if (confirm('Import ' + data.length + ' books? This will replace your current library.')) {
+          state.books = data;
+          saveData();
+          populateCategoryDropdown();
+          renderApp();
+          showToast('Imported ' + data.length + ' books successfully!', 'success');
+        }
+      } else {
+        alert('Invalid JSON file format. Must be an array of books.');
+      }
+    } catch (err) {
+      alert('Error parsing JSON file: ' + err.message);
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function confirmResetData() {
+  if (confirm('Are you sure you want to reset all data back to the original 150 Excel books? Any new books added manually will be replaced.')) {
+    state.books = (typeof DEFAULT_BOOKS !== 'undefined') ? [...DEFAULT_BOOKS] : [];
+    saveData();
+    populateCategoryDropdown();
+    renderApp();
+    showToast('Reset to original 150 Excel books successfully!', 'success');
+  }
+}
+
+function showToast(message, type) {
+  type = type || '';
+  const container = document.getElementById('toastContainer');
+  if (!container) return;
+  const toast = document.createElement('div');
+  toast.className = 'toast ' + (type === 'success' ? 'toast-success' : type === 'error' ? 'toast-error' : '');
+  toast.innerHTML = '<span>' + message + '</span>';
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px)';
+    toast.style.transition = 'all 0.3s ease';
+    setTimeout(() => toast.remove(), 300);
+  }, 3200);
+}
+
+// PWA Install Logic
+let deferredInstallPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredInstallPrompt = e;
+  const btn = document.getElementById('installAppBtn');
+  if (btn) {
+    btn.style.boxShadow = '0 0 16px rgba(99, 102, 241, 0.6)';
+  }
+});
+
+function handleInstallApp() {
+  if (deferredInstallPrompt) {
+    deferredInstallPrompt.prompt();
+    deferredInstallPrompt.userChoice.then((choice) => {
+      if (choice.outcome === 'accepted') {
+        showToast('App installed successfully!', 'success');
+      }
+      deferredInstallPrompt = null;
+    });
+  } else {
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+      alert('Phone me Install karne ke liye:\n\n1. Chrome browser me upar daayi taraf 3 dots (⋮) par tap karein.\n2. "Install app" ya "Add to Home screen" par click karein.\n\nApp aapke phone ke home screen par install ho jayegi!');
+    } else {
+      alert('Laptop me Install karne ke liye:\n\n1. Browser me upar address bar (URL) ke right corner me ⊕ (Install) icon par click karein.\n2. "Install" par click karte hi yeh desktop app ban jayegi!');
+    }
+  }
+}
+
+// Register Service Worker
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  });
+}
+
+</script>
+</body>
+</html>
