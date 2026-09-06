@@ -35,23 +35,20 @@ jobs:
         cp icon-192.png android/app/src/main/assets/
         cp icon-512.png android/app/src/main/assets/
 
-    - name: Generate Debug Keystore
-      working-directory: ./android/app
-      run: |
-        keytool -genkey -v -keystore debug.keystore -storepass android -alias androiddebugkey -keypass android -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=AndroidDebug,O=Android,C=US"
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+      with:
+        gradle-version: '8.5'
 
-    - name: Build Standalone Debug APK
+    - name: Build Standalone Debug APK with Gradle
       working-directory: ./android
       run: |
-        chmod +x gradlew || true
-        gradle wrapper --gradle-version 8.5
-        chmod +x gradlew
-        ./gradlew assembleDebug --stacktrace
+        gradle assembleDebug --stacktrace --info
 
     - name: Locate and Rename APK
       run: |
         find android/app/build/outputs/apk/ -name "*.apk"
-        cp android/app/build/outputs/apk/debug/app-debug.apk MindFocusBooks-Native.apk
+        cp $(find android/app/build/outputs/apk/ -name "*.apk" | head -n 1) MindFocusBooks-Native.apk
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
