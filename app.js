@@ -901,3 +901,13 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('./sw.js').catch(() => {});
   });
 }
+
+
+// Auto-purge old caches
+if ('caches' in window) {
+  caches.keys().then(names => {
+    names.forEach(name => {
+      if (name !== 'books-tracker-v2') caches.delete(name);
+    });
+  });
+}
