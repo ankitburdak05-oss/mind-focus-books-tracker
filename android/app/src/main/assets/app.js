@@ -1,4 +1,4 @@
-﻿const STORAGE_KEY = 'mind_focus_books_v1';
+const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 
 let state = {
@@ -475,7 +475,7 @@ function renderGridView(container, books) {
       '<span class="badge badge-cat">' + escapeHtml(b.category || 'General') + '</span>' +
       '<span class="badge-days" style="' + (isReading ? 'color:#60a5fa; border-color:#2563eb; background:rgba(59,130,246,0.1);' : '') + '">' + days + ' days read' + (isReading ? ' 🔥' : '') + '</span></div>' +
       (b.takeaway ? '<div class="card-takeaway-preview" onclick="openTakeawayModal(' + origIdx + ')" title="Click to view notes">💡 <strong>Takeaway:</strong> ' + escapeHtml(b.takeaway) + '</div>' : '') +
-      '<div class="book-card-body"><div class="card-dates"><span>Start: ' + (b.start_date || 'Not started') + '</span><span>End: ' + endDateText + '</span></div>' +
+      '<div class="book-card-body"><div class="card-dates"><span>Start: ' + (b.start_date || 'Not started') + '</span><span>End: ' + endDateDisplay + '</span></div>' +
       '<div class="card-meta-row"><div class="star-rating">' + starsHtml + '</div>' +
       '<div class="card-actions">' +
       '<button class="btn btn-sm" onclick="openTakeawayModal(' + origIdx + ')">' + ICONS.note + ' Notes</button>' +
@@ -572,13 +572,58 @@ function setupEventListeners() {
   const updateBtn = document.getElementById('headerUpdateBtn');
   if (updateBtn) updateBtn.addEventListener('click', handleUpdateClick);
 
-  const installBtn = document.getElementById('installAppBtn');
-  if (installBtn) installBtn.addEventListener('click', handleInstallApp);
+  // Download Dropdown Toggle
+  const downloadDropdown = document.getElementById('downloadDropdown');
+  const downloadDropdownBtn = document.getElementById('downloadDropdownBtn');
+  const downloadDropdownMenu = document.getElementById('downloadDropdownMenu');
+
+  if (downloadDropdownBtn && downloadDropdownMenu) {
+    downloadDropdownBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      downloadDropdownMenu.classList.toggle('show');
+    });
+
+    document.addEventListener('click', (e) => {
+      if (!downloadDropdown.contains(e.target)) {
+        downloadDropdownMenu.classList.remove('show');
+      }
+    });
+  }
 
   document.getElementById('addBookBtn').addEventListener('click', openAddModal);
-  document.getElementById('exportCsvBtn').addEventListener('click', exportToCsv);
-  document.getElementById('exportJsonBtn').addEventListener('click', exportToJson);
-  document.getElementById('importFileBtn').addEventListener('click', () => document.getElementById('importFileInput').click());
+
+  const exportCsvBtn = document.getElementById('exportCsvBtn');
+  if (exportCsvBtn) {
+    exportCsvBtn.addEventListener('click', () => {
+      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
+      exportToCsv();
+    });
+  }
+
+  const exportPdfBtn = document.getElementById('exportPdfBtn');
+  if (exportPdfBtn) {
+    exportPdfBtn.addEventListener('click', () => {
+      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
+      exportToPdf();
+    });
+  }
+
+  const exportJsonBtn = document.getElementById('exportJsonBtn');
+  if (exportJsonBtn) {
+    exportJsonBtn.addEventListener('click', () => {
+      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
+      exportToJson();
+    });
+  }
+
+  const importFileBtn = document.getElementById('importFileBtn');
+  if (importFileBtn) {
+    importFileBtn.addEventListener('click', () => {
+      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
+      document.getElementById('importFileInput').click();
+    });
+  }
+
   document.getElementById('importFileInput').addEventListener('change', handleFileImport);
   document.getElementById('resetDataBtn').addEventListener('click', confirmResetData);
 
@@ -809,6 +854,107 @@ function exportToJson() {
   link.click();
   document.body.removeChild(link);
   showToast('JSON backup downloaded offline!', 'success');
+}
+
+function exportToPdf() {
+  try {
+    const { jsPDF } = window.jspdf || {};
+    if (!jsPDF) {
+      // Fallback to browser print if jsPDF library is not loaded
+      window.print();
+      return;
+    }
+
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'pt',
+      format: 'a4'
+    });
+
+    const today = getTodayString();
+    const total = state.books.length;
+    const done = state.books.filter(b => b.status === 'DONE').length;
+    const reading = state.books.filter(b => b.status === 'READING').length;
+    const pending = total - done - reading;
+
+    // Header Title
+    doc.setFontSize(18);
+    doc.setTextColor(30, 41, 59);
+    doc.text('Mind & Focus Books Tracker - Reading Library', 40, 40);
+
+    // Subtitle & Statistics
+    doc.setFontSize(10);
+    doc.setTextColor(100, 116, 139);
+    doc.text(
+      'Generated: ' + today + '  |  Total Books: ' + total + '  |  Finished: ' + done + '  |  Currently Reading: ' + reading + '  |  Pending: ' + pending,
+      40,
+      58
+    );
+
+    // Prepare Table Rows
+    const tableRows = state.books.map(b => {
+      const days = getBookEffectiveDays(b);
+      const isReading = b.status === 'READING';
+      const endDate = isReading ? today + ' (Reading)' : (b.end_date || '-');
+      const rating = b.rating ? b.rating + ' ★' : '-';
+      const takeaway = b.takeaway ? b.takeaway.slice(0, 120) + (b.takeaway.length > 120 ? '...' : '') : '-';
+
+      return [
+        b.no || '',
+        b.title || '',
+        b.author || '',
+        b.category || '',
+        b.status || 'PENDING',
+        b.start_date || '-',
+        endDate,
+        days + ' d',
+        rating,
+        takeaway
+      ];
+    });
+
+    doc.autoTable({
+      startY: 70,
+      head: [['No', 'Book Title', 'Author', 'Category', 'Status', 'Start Date', 'End Date', 'Days', 'Rating', 'Key Takeaway / Notes']],
+      body: tableRows,
+      theme: 'grid',
+      headStyles: {
+        fillColor: [79, 70, 229],
+        textColor: [255, 255, 255],
+        fontSize: 8,
+        fontStyle: 'bold',
+        halign: 'center'
+      },
+      bodyStyles: {
+        fontSize: 7.5,
+        textColor: [15, 23, 42],
+        valign: 'middle'
+      },
+      columnStyles: {
+        0: { cellWidth: 35, halign: 'center', fontStyle: 'bold' },
+        1: { cellWidth: 155, fontStyle: 'bold' },
+        2: { cellWidth: 95 },
+        3: { cellWidth: 85 },
+        4: { cellWidth: 55, halign: 'center' },
+        5: { cellWidth: 55, halign: 'center' },
+        6: { cellWidth: 65, halign: 'center' },
+        7: { cellWidth: 40, halign: 'center' },
+        8: { cellWidth: 40, halign: 'center' },
+        9: { cellWidth: 145 }
+      },
+      alternateRowStyles: {
+        fillColor: [248, 250, 252]
+      },
+      margin: { left: 30, right: 30, bottom: 30 }
+    });
+
+    doc.save('Mind_Focus_Books_Library_' + today + '.pdf');
+    showToast('PDF Document successfully downloaded!', 'success');
+  } catch (err) {
+    console.error('PDF export error:', err);
+    // Graceful fallback to browser print if an issue occurs
+    window.print();
+  }
 }
 
 function handleFileImport(e) {
