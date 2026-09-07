@@ -1022,6 +1022,12 @@ function exportToCsv() {
   const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\r\n');
   const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
   const url = URL.createObjectURL(blob);
+  if (window.Android && typeof window.Android.saveBackupFile === 'function') {
+    window.Android.saveBackupFile(csvContent, 'Mind_Focus_Books_Tracker_' + getTodayString() + '.csv');
+    showToast('Excel CSV saved to phone Downloads! 📊', 'success');
+    return;
+  }
+
   const link = document.createElement('a');
   link.setAttribute('href', url);
   link.setAttribute('download', 'Mind_Focus_Books_Tracker_' + getTodayString() + '.csv');
@@ -1033,11 +1039,19 @@ function exportToCsv() {
 
 function exportToJson() {
   const jsonContent = JSON.stringify(state.books, null, 2);
+  const fileName = 'mind_focus_books_backup_' + getTodayString() + '.json';
+
+  if (window.Android && typeof window.Android.saveBackupFile === 'function') {
+    window.Android.saveBackupFile(jsonContent, fileName);
+    showToast('JSON backup saved to phone Downloads! 💾', 'success');
+    return;
+  }
+
   const blob = new Blob([jsonContent], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const link = document.createElement('a');
   link.setAttribute('href', url);
-  link.setAttribute('download', 'mind_focus_books_backup_' + getTodayString() + '.json');
+  link.setAttribute('download', fileName);
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -2179,11 +2193,19 @@ function closeBackupModal() {
 }
 
 function downloadBackupFile() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.books, null, 2));
   const now = new Date();
   const dateSlug = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   const fileName = 'MindFocusBooks_Backup_' + dateSlug + '.json';
+  const jsonContent = JSON.stringify(state.books, null, 2);
 
+  if (window.Android && typeof window.Android.saveBackupFile === 'function') {
+    window.Android.saveBackupFile(jsonContent, fileName);
+    triggerAutoSnapshot();
+    showToast('Backup saved to your phone Downloads! 💾', 'success');
+    return;
+  }
+
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(jsonContent);
   const downloadAnchor = document.createElement('a');
   downloadAnchor.setAttribute("href", dataStr);
   downloadAnchor.setAttribute("download", fileName);
@@ -2200,6 +2222,11 @@ async function shareBackupToCloud() {
   const dateSlug = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
   const fileName = 'MindFocusBooks_Backup_' + dateSlug + '.json';
   const jsonContent = JSON.stringify(state.books, null, 2);
+
+  if (window.Android && typeof window.Android.shareBackup === 'function') {
+    window.Android.shareBackup(jsonContent, fileName);
+    return;
+  }
 
   if (navigator.canShare) {
     try {
