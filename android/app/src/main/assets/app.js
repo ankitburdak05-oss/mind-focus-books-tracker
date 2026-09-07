@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof initDynamicIslandHud === 'function') initDynamicIslandHud();
   if (typeof initSpotlightIsland === 'function') initSpotlightIsland();
   if (typeof updateDnaKpiChip === 'function') updateDnaKpiChip();
+  if (typeof initSearchOptionsDrawer === 'function') initSearchOptionsDrawer();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -566,6 +567,7 @@ function renderApp() {
   renderCategoryPills();
   renderBookList();
   if (typeof updateDnaKpiChip === 'function') updateDnaKpiChip();
+  if (typeof updateSearchDrawerFilterBadge === 'function') updateSearchDrawerFilterBadge();
 }
 
 function renderStatistics() {
@@ -2910,7 +2912,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v2.0.0';
+const CURRENT_APP_VERSION = 'v2.0.1';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -4243,4 +4245,69 @@ window.closeReadingDnaModal = closeReadingDnaModal;
 window.handleDnaBackdrop = handleDnaBackdrop;
 window.updateDnaKpiChip = updateDnaKpiChip;
 window.calculatePaceEstimate = calculatePaceEstimate;
+
+// ==========================================
+// SEARCH OPTIONS COLLAPSIBLE DRAWER (TEER 🔽)
+// ==========================================
+function toggleSearchOptionsDrawer() {
+  const drawer = document.getElementById('searchOptionsDrawer');
+  const btn = document.getElementById('toggleFiltersDrawerBtn');
+  const arrow = document.getElementById('sdtArrowIcon');
+  if (!drawer || !btn) return;
+
+  const isOpen = drawer.classList.contains('open');
+  if (isOpen) {
+    drawer.classList.remove('open');
+    btn.classList.remove('open');
+    if (arrow) arrow.innerText = '▼';
+    localStorage.setItem('mindfocus_search_drawer_open', '0');
+  } else {
+    drawer.classList.add('open');
+    btn.classList.add('open');
+    if (arrow) arrow.innerText = '▲';
+    localStorage.setItem('mindfocus_search_drawer_open', '1');
+  }
+}
+
+function initSearchOptionsDrawer() {
+  const saved = localStorage.getItem('mindfocus_search_drawer_open');
+  // Default closed to keep screen clean, or restore if user opened it
+  if (saved === '1') {
+    const drawer = document.getElementById('searchOptionsDrawer');
+    const btn = document.getElementById('toggleFiltersDrawerBtn');
+    const arrow = document.getElementById('sdtArrowIcon');
+    if (drawer) drawer.classList.add('open');
+    if (btn) btn.classList.add('open');
+    if (arrow) arrow.innerText = '▲';
+  }
+  updateSearchDrawerFilterBadge();
+}
+
+function updateSearchDrawerFilterBadge() {
+  const btn = document.getElementById('toggleFiltersDrawerBtn');
+  if (!btn) return;
+
+  let activeCount = 0;
+  if (state.statusFilter && state.statusFilter !== 'ALL') activeCount++;
+  if (state.categoryFilter && state.categoryFilter !== 'ALL') activeCount++;
+  if (state.availabilityFilter && state.availabilityFilter !== 'ALL') activeCount++;
+  if (state.sortBy && state.sortBy !== 'no_asc') activeCount++;
+
+  let badge = btn.querySelector('.sdt-badge');
+  if (activeCount > 0) {
+    if (!badge) {
+      badge = document.createElement('span');
+      badge.className = 'sdt-badge';
+      btn.appendChild(badge);
+    }
+    badge.innerText = activeCount + ' active';
+  } else if (badge) {
+    badge.remove();
+  }
+}
+
+window.toggleSearchOptionsDrawer = toggleSearchOptionsDrawer;
+window.initSearchOptionsDrawer = initSearchOptionsDrawer;
+window.updateSearchDrawerFilterBadge = updateSearchDrawerFilterBadge;
+
 

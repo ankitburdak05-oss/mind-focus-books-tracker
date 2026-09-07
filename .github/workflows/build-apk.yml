@@ -87,9 +87,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v2.0.0
-        name: "Mind Focus Books Tracker v2.0.0 - Spatial Luxury Sanctuary Edition"
-        body: "Release v2.0.0: Revolutionary 10-Feature World-Class Spatial Luxury Sanctuary Edition — Dynamic Chromatic Aurora (Apple Music / VisionOS spatial glow), 3D Holographic Touch Tilt & Foil Sheen, Dynamic Island Capsule HUD (floating top pill), Hypnotic Ambience Soundwave Visualizer, Spotlight Command Island (instant teleport search), Luxury Page-Flip Physics & Pace Estimator, Deep Obsidian OLED Glassmorphism 2.0, Royal Editorial Serif Typography & Metallic Gold Foil Accents, Deep Sanctuary Focus Mode (distraction-zero reading room with 25-min Pomodoro timer), and Interactive Reading DNA Galaxy Constellation."
+        tag_name: v2.0.1
+        name: "Mind Focus Books Tracker v2.0.1 - Collapsible Filter Drawer Edition"
+        body: "Release v2.0.1: Added sleek collapsible filter drawer with drop-arrow (teer 🔽) trigger right beneath the search box, keeping library view ultra-clean while keeping all filter, view, scan, and sort options 1-tap accessible. Includes active filter count indicator."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

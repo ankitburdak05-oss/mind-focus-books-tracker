@@ -611,6 +611,93 @@ body {
   font-size: 1rem;
 }
 
+/* Arrow Toggle Button (Teer 🔽) below Search Box */
+.search-drawer-toggle-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 0.2rem;
+}
+
+.search-drawer-toggle-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 0.35rem 1.1rem;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.search-drawer-toggle-btn:hover {
+  background: rgba(99, 102, 241, 0.18);
+  border-color: rgba(99, 102, 241, 0.45);
+  color: #c7d2fe;
+  transform: translateY(-1px);
+}
+
+.search-drawer-toggle-btn:active {
+  transform: scale(0.97);
+}
+
+.search-drawer-toggle-btn .sdt-arrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  color: #818cf8;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-drawer-toggle-btn.open {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #818cf8;
+  color: #e0e7ff;
+}
+
+.search-drawer-toggle-btn.open .sdt-arrow {
+  transform: rotate(180deg);
+  color: #fbbf24;
+}
+
+.search-drawer-toggle-btn .sdt-badge {
+  background: #6366f1;
+  color: #fff;
+  font-size: 0.65rem;
+  padding: 1px 6px;
+  border-radius: 10px;
+  font-weight: 800;
+}
+
+.search-options-drawer {
+  display: none;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin-top: 0.4rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  animation: drawerSlideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-options-drawer.open {
+  display: flex;
+}
+
+@keyframes drawerSlideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .view-toggles {
   display: flex;
   align-items: center;

@@ -167,7 +167,18 @@
           <input type="text" id="searchInput" class="search-input" placeholder="Search books by title, author, category, or notes...">
           <button id="clearSearchBtn" class="clear-search-btn" title="Clear search">✕</button>
         </div>
+      </div>
 
+      <!-- Arrow Toggle Button (Teer 🔽) directly below Search Box -->
+      <div class="search-drawer-toggle-row">
+        <button type="button" class="search-drawer-toggle-btn" id="toggleFiltersDrawerBtn" onclick="toggleSearchOptionsDrawer()" title="Click to show/hide all filters and view options">
+          <span class="sdt-label">⚙️ Filter &amp; View Options</span>
+          <span class="sdt-arrow" id="sdtArrowIcon">▼</span>
+        </button>
+      </div>
+
+      <!-- Collapsible Options Drawer -->
+      <div class="search-options-drawer" id="searchOptionsDrawer">
         <div class="controls-btn-group" style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
           <button id="scanBarcodeBtn" class="btn" style="background: linear-gradient(135deg, #059669, #10b981); color:#ffffff; border:none; font-weight:700;" title="Scan physical book barcode / ISBN with camera">
             📷 Scan ISBN
@@ -191,62 +202,62 @@
             </button>
           </div>
         </div>
-      </div>
 
-      <div class="filters-row">
-        <div class="tab-pills">
-          <button class="tab-pill active" data-status="ALL">
-            All <span class="pill-count" id="countAll">150</span>
-          </button>
-          <button class="tab-pill" data-status="READING">
-            📖 Reading <span class="pill-count" id="countReading">1</span>
-          </button>
-          <button class="tab-pill" data-status="DONE">
-            ✅ Finished <span class="pill-count" id="countDone">0</span>
-          </button>
-          <button class="tab-pill" data-status="PENDING">
-            ⏳ Pending <span class="pill-count" id="countPending">149</span>
-          </button>
-          <button class="tab-pill" data-status="LENT" title="Books lent to friends or relatives">
-            👥 Lent Out <span class="pill-count" id="countLent">0</span>
-          </button>
+        <div class="filters-row">
+          <div class="tab-pills">
+            <button class="tab-pill active" data-status="ALL">
+              All <span class="pill-count" id="countAll">150</span>
+            </button>
+            <button class="tab-pill" data-status="READING">
+              📖 Reading <span class="pill-count" id="countReading">1</span>
+            </button>
+            <button class="tab-pill" data-status="DONE">
+              ✅ Finished <span class="pill-count" id="countDone">0</span>
+            </button>
+            <button class="tab-pill" data-status="PENDING">
+              ⏳ Pending <span class="pill-count" id="countPending">149</span>
+            </button>
+            <button class="tab-pill" data-status="LENT" title="Books lent to friends or relatives">
+              👥 Lent Out <span class="pill-count" id="countLent">0</span>
+            </button>
+          </div>
+
+          <div class="filter-selects">
+            <select id="categoryFilter" class="select-input">
+              <option value="ALL">All Categories</option>
+            </select>
+
+            <select id="availabilityFilter" class="select-input">
+              <option value="ALL">All Availability</option>
+              <option value="AVAILABLE">Available</option>
+              <option value="UNAVAILABLE">Unavailable</option>
+            </select>
+
+            <select id="sortSelect" class="select-input">
+              <option value="no_asc">Sort: Book Number (1-150)</option>
+              <option value="no_desc">Sort: Book Number (150-1)</option>
+              <option value="title_asc">Sort: Title (A - Z)</option>
+              <option value="title_desc">Sort: Title (Z - A)</option>
+              <option value="author_asc">Sort: Author Name</option>
+              <option value="rating_desc">Sort: Highest Rating</option>
+              <option value="days_desc">Sort: Most Days Read</option>
+              <option value="price_desc">Sort: Highest Price (₹)</option>
+              <option value="price_asc">Sort: Lowest Price (₹)</option>
+            </select>
+
+            <select id="pageSizeSelect" class="select-input">
+              <option value="25">25 per page</option>
+              <option value="50">50 per page</option>
+              <option value="100">100 per page</option>
+              <option value="150">All (150)</option>
+            </select>
+          </div>
         </div>
 
-        <div class="filter-selects">
-          <select id="categoryFilter" class="select-input">
-            <option value="ALL">All Categories</option>
-          </select>
-
-          <select id="availabilityFilter" class="select-input">
-            <option value="ALL">All Availability</option>
-            <option value="AVAILABLE">Available</option>
-            <option value="UNAVAILABLE">Unavailable</option>
-          </select>
-
-          <select id="sortSelect" class="select-input">
-            <option value="no_asc">Sort: Book Number (1-150)</option>
-            <option value="no_desc">Sort: Book Number (150-1)</option>
-            <option value="title_asc">Sort: Title (A - Z)</option>
-            <option value="title_desc">Sort: Title (Z - A)</option>
-            <option value="author_asc">Sort: Author Name</option>
-            <option value="rating_desc">Sort: Highest Rating</option>
-            <option value="days_desc">Sort: Most Days Read</option>
-            <option value="price_desc">Sort: Highest Price (₹)</option>
-            <option value="price_asc">Sort: Lowest Price (₹)</option>
-          </select>
-
-          <select id="pageSizeSelect" class="select-input">
-            <option value="25">25 per page</option>
-            <option value="50">50 per page</option>
-            <option value="100">100 per page</option>
-            <option value="150">All (150)</option>
-          </select>
+        <!-- Quick Category Pills -->
+        <div class="category-summary-bar">
+          <div class="category-tags-list" id="categoryTagsContainer"></div>
         </div>
-      </div>
-
-      <!-- Quick Category Pills -->
-      <div class="category-summary-bar">
-        <div class="category-tags-list" id="categoryTagsContainer"></div>
       </div>
     </section>
 
@@ -903,7 +914,7 @@
         <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:12px; padding:1rem; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Books Tracker</div>
-            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 2.0.0 (Spatial Luxury Sanctuary Edition)</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 2.0.1 (Collapsible Filter Drawer &amp; Spatial Sanctuary)</div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn">
             🔄 Check Update
