@@ -782,11 +782,14 @@ function renderGridView(container, books) {
     const coverUrl = getBookCover(b);
     let coverHtml = '';
     if (coverUrl) {
-      coverHtml = '<img src="' + coverUrl + '" alt="cover" style="width:52px; height:74px; object-fit:cover; border-radius:8px; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,0.35);">';
+      coverHtml = '<div style="position:relative; width:56px; height:80px; flex-shrink:0; border-radius:8px; overflow:hidden; box-shadow:-4px 8px 18px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1);">' +
+        '<img src="' + coverUrl + '" alt="cover" style="width:100%; height:100%; object-fit:cover;">' +
+        '<div style="position:absolute; top:0; left:0; bottom:0; width:4px; background:linear-gradient(90deg, rgba(0,0,0,0.4), transparent); pointer-events:none;"></div>' +
+        '</div>';
     } else {
       const catColor = isReading ? '#3b82f6' : (isDone ? '#10b981' : '#f59e0b');
-      coverHtml = '<div style="width:52px; height:74px; border-radius:8px; flex-shrink:0; background:linear-gradient(135deg, ' + catColor + '22, ' + catColor + '44); border:1px solid ' + catColor + '55; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 8px rgba(0,0,0,0.15); font-size:1.3rem;">' +
-        '<span>' + (isReading ? '📖' : (isDone ? '✅' : '📚')) + '</span>' +
+      coverHtml = '<div style="width:56px; height:80px; border-radius:8px; flex-shrink:0; background:linear-gradient(135deg, ' + catColor + '22, ' + catColor + '44); border:1px solid ' + catColor + '55; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:-4px 6px 14px rgba(0,0,0,0.3); font-size:1.4rem;">' +
+        '<span>' + (isReading ? '📖' : (isDone ? '✅' : '⏳')) + '</span>' +
         '<span style="font-size:0.6rem; font-weight:800; color:var(--text-muted); margin-top:2px;">#' + escapeHtml(b.no) + '</span>' +
         '</div>';
     }
@@ -794,22 +797,23 @@ function renderGridView(container, books) {
     const ratingNum = parseInt(b.rating) || 0;
     const starSnippet = ratingNum > 0 ? ('<span style="color:#f59e0b; font-size:0.75rem; font-weight:700;">★ ' + ratingNum + '</span>') : '';
     const statusText = isDone ? 'Done' : (isReading ? 'Reading' : 'Pending');
-    const statusBg = isDone ? '#10b981' : (isReading ? '#3b82f6' : 'rgba(255,255,255,0.08)');
-    const statusColor = (isDone || isReading) ? '#ffffff' : 'var(--text-muted)';
+    const statusBg = isDone ? 'rgba(16,185,129,0.22)' : (isReading ? 'rgba(59,130,246,0.22)' : 'rgba(255,255,255,0.06)');
+    const statusColor = isDone ? '#34d399' : (isReading ? '#60a5fa' : 'var(--text-muted)');
+    const statusBorder = isDone ? 'rgba(16,185,129,0.45)' : (isReading ? 'rgba(59,130,246,0.45)' : 'rgba(255,255,255,0.12)');
 
     html += '<div class="book-card ' + statusCardClass + '" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;" title="' + escapeHtml(b.title) + ' - Tap to view & update progress">' +
-      '<div class="book-card-header" style="display:flex; gap:0.75rem; align-items:flex-start;">' +
+      '<div class="book-card-header" style="display:flex; gap:0.85rem; align-items:flex-start;">' +
       coverHtml +
       '<div style="flex:1; min-width:0;">' +
-      '<div class="book-card-no">BOOK #' + escapeHtml(b.no) + '</div>' +
-      '<div class="book-card-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:800; font-size:0.98rem;" title="' + escapeHtml(b.title) + '">' + escapeHtml(b.title) + '</div>' +
-      '<div class="book-card-author">by ' + escapeHtml(b.author) + '</div>' +
-      '<div style="display:flex; gap:0.4rem; align-items:center; margin-top:0.25rem;">' +
-      '<span class="badge badge-cat">' + escapeHtml(b.category || 'General') + '</span>' +
+      '<div class="book-card-no" style="letter-spacing:0.04em;">BOOK #' + escapeHtml(b.no) + '</div>' +
+      '<div class="book-card-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:800; font-size:1rem; letter-spacing:-0.01em; margin:1px 0;" title="' + escapeHtml(b.title) + '">' + escapeHtml(b.title) + '</div>' +
+      '<div class="book-card-author" style="font-size:0.82rem; color:var(--text-secondary);">by ' + escapeHtml(b.author) + '</div>' +
+      '<div style="display:flex; gap:0.4rem; align-items:center; margin-top:0.35rem;">' +
+      '<span class="badge badge-cat" style="border-radius:12px; font-size:0.7rem;">' + escapeHtml(b.category || 'General') + '</span>' +
       starSnippet +
       '</div>' +
       '</div>' +
-      '<span class="badge" style="background:' + statusBg + '; color:' + statusColor + '; font-size:0.72rem; font-weight:700; flex-shrink:0;">' + statusText + '</span>' +
+      '<span class="badge" style="background:' + statusBg + '; color:' + statusColor + '; border:1px solid ' + statusBorder + '; font-size:0.72rem; font-weight:800; border-radius:14px; padding:3px 9px; flex-shrink:0;">' + statusText + '</span>' +
       '</div>' +
 
       // Sleek Mini Page Progress Bar
@@ -2887,7 +2891,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v1.8.2';
+const CURRENT_APP_VERSION = 'v1.9.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -2928,7 +2932,7 @@ async function checkForAppUpdates(showFeedback = true) {
     const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
     if (!res.ok) throw new Error('Could not contact update server');
     const data = await res.json();
-    const tagName = data.tag_name || 'v1.8.2';
+    const tagName = data.tag_name || 'v1.9.0';
     const releaseName = data.name || ('Mind Focus Books Tracker ' + tagName);
 
     let apkUrl = 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/' + tagName + '/MindFocusBooks-Native.apk';
@@ -2943,7 +2947,7 @@ async function checkForAppUpdates(showFeedback = true) {
     if (tagName === CURRENT_APP_VERSION) {
       if (icon) icon.innerText = '✅';
       if (title) title.innerText = 'App is Up to Date (' + CURRENT_APP_VERSION + ')';
-      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>You are running the latest version with Top Now Reading Hero Spotlight, Compact KPI Strip & Page Tracker!<br><small style="color:var(--text-muted);">Zero data loss permanent keystore build.</small>';
+      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>You are running the latest version with Deep Obsidian Glassmorphism, 3D Spine Shadows & Floating Island Dock!<br><small style="color:var(--text-muted);">Zero data loss permanent keystore build.</small>';
       if (actionBtn) {
         actionBtn.style.display = 'inline-flex';
         actionBtn.innerText = '🔄 Re-download / Repair ' + tagName;
@@ -2952,7 +2956,7 @@ async function checkForAppUpdates(showFeedback = true) {
     } else {
       if (icon) icon.innerText = '👑';
       if (title) title.innerText = 'New Update Available: ' + tagName;
-      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>Top Now Reading Hero Spotlight restored with Luxury Page Tracker & Compact KPI Strip!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero data loss.</small>';
+      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>Apple Books-grade Luxury Glassmorphism Overhaul, 3D Book Spines, Ambient Mesh & Floating Island Dock are ready!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero data loss.</small>';
       if (actionBtn) {
         actionBtn.style.display = 'inline-flex';
         actionBtn.innerText = '⚡ Install ' + tagName + ' Now';

@@ -87,9 +87,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v1.8.2
-        name: "Mind Focus Books Tracker v1.8.2 - Luxury Focus & Page Tracker Edition"
-        body: "Release v1.8.2: Restored Top Now Reading Hero Spotlight with interactive page tracker, 3D curated cover, compact KPI strip, 1-tap detail sheet, and rich notes formatting chips."
+        tag_name: v1.9.0
+        name: "Mind Focus Books Tracker v1.9.0 - Luxury Obsidian Glass Edition"
+        body: "Release v1.9.0: Complete Visual Luxury Overhaul — Deep Obsidian OLED theme, Ambient Mesh Glow, Frosted Glass Cards (Glassmorphism), Realistic 3D Book Spine Shadows, Tactile Micro-Tap Feedback, and Floating Island Glass Bottom Dock with active glow dot."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
