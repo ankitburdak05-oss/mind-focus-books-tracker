@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="add_book"
+        android:enabled="true"
+        android:shortcutShortLabel="@string/shortcut_add_book"
+        android:shortcutLongLabel="@string/shortcut_add_book_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.mindfocus.bookstracker"
+            android:targetClass="com.mindfocus.bookstracker.MainActivity">
+            <extra android:name="action" android:value="add_book" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="scan_barcode"
+        android:enabled="true"
+        android:shortcutShortLabel="@string/shortcut_scan_barcode"
+        android:shortcutLongLabel="@string/shortcut_scan_barcode_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.mindfocus.bookstracker"
+            android:targetClass="com.mindfocus.bookstracker.MainActivity">
+            <extra android:name="action" android:value="scan_barcode" />
+        </intent>
+    </shortcut>
+    <shortcut
+        android:shortcutId="bookshelf"
+        android:enabled="true"
+        android:shortcutShortLabel="@string/shortcut_bookshelf"
+        android:shortcutLongLabel="@string/shortcut_bookshelf_long">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.mindfocus.bookstracker"
+            android:targetClass="com.mindfocus.bookstracker.MainActivity">
+            <extra android:name="action" android:value="open_bookshelf" />
+        </intent>
+    </shortcut>
+</shortcuts>

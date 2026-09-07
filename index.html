@@ -847,6 +847,139 @@
     </div>
   </div>
 
+  <!-- Bottom Navigation Dock (One-Hand Thumb Controls) -->
+  <nav class="bottom-nav-dock" id="bottomNavDock">
+    <button type="button" class="dock-item active" id="dockHomeBtn" onclick="switchBottomTab('home')">
+      <span class="dock-icon">🏠</span>
+      <span class="dock-label">Library</span>
+    </button>
+    <button type="button" class="dock-item" id="dockBookshelfBtn" onclick="switchBottomTab('bookshelf')">
+      <span class="dock-icon">📚</span>
+      <span class="dock-label">Bookshelf</span>
+    </button>
+    <button type="button" class="dock-item" id="dockLentBtn" onclick="switchBottomTab('lent')">
+      <span class="dock-icon">👥</span>
+      <span class="dock-label">Lent Out</span>
+    </button>
+    <button type="button" class="dock-item" id="dockRouletteBtn" onclick="openPickBookModal()">
+      <span class="dock-icon">🎲</span>
+      <span class="dock-label">Roulette</span>
+    </button>
+    <button type="button" class="dock-item" id="dockSettingsBtn" onclick="openSettingsModal()">
+      <span class="dock-icon">⚙️</span>
+      <span class="dock-label">Settings</span>
+    </button>
+  </nav>
+
+  <!-- App Settings & Update Modal -->
+  <div class="modal-overlay" id="appSettingsModalOverlay">
+    <div class="modal-content" style="max-width:480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">⚙️ App Settings & Hub</h3>
+        <button class="modal-close" onclick="closeSettingsModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:1rem;">
+        <!-- App Version Card -->
+        <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:10px; padding:1rem; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Books Tracker</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 1.2 (Permanent Key Signed)</div>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn">
+            🔄 Check Update
+          </button>
+        </div>
+
+        <!-- Settings Options List -->
+        <div style="display:flex; flex-direction:column; gap:0.6rem;">
+          <div class="backup-action-card" onclick="openBackupModal()" style="cursor:pointer;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span style="font-size:1.4rem;">💾</span>
+              <div style="flex:1;">
+                <div style="font-weight:700; font-size:0.92rem; color:var(--text-primary);">Auto-Backup & Safety Hub</div>
+                <div style="font-size:0.78rem; color:var(--text-secondary);">Phone downloads, Google Drive share & rollback</div>
+              </div>
+              <span style="color:var(--text-muted);">›</span>
+            </div>
+          </div>
+
+          <div class="backup-action-card" onclick="openPinSetupModal()" style="cursor:pointer;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span style="font-size:1.4rem;">🔒</span>
+              <div style="flex:1;">
+                <div style="font-weight:700; font-size:0.92rem; color:var(--text-primary);">Privacy PIN Lock</div>
+                <div style="font-size:0.78rem; color:var(--text-secondary);">Protect notes and library with 4-digit code</div>
+              </div>
+              <span style="color:var(--text-muted);">›</span>
+            </div>
+          </div>
+
+          <div class="backup-action-card" onclick="exportToCsv()" style="cursor:pointer;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span style="font-size:1.4rem;">📊</span>
+              <div style="flex:1;">
+                <div style="font-weight:700; font-size:0.92rem; color:var(--text-primary);">Export to Excel (CSV)</div>
+                <div style="font-size:0.78rem; color:var(--text-secondary);">Download full spreadsheet to phone</div>
+              </div>
+              <span style="color:var(--text-muted);">›</span>
+            </div>
+          </div>
+
+          <div class="backup-action-card" onclick="exportToPdf()" style="cursor:pointer;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span style="font-size:1.4rem;">📄</span>
+              <div style="flex:1;">
+                <div style="font-weight:700; font-size:0.92rem; color:var(--text-primary);">Download PDF Report</div>
+                <div style="font-size:0.78rem; color:var(--text-secondary);">Print-ready reading report with ratings</div>
+              </div>
+              <span style="color:var(--text-muted);">›</span>
+            </div>
+          </div>
+
+          <div class="backup-action-card" onclick="toggleTheme()" style="cursor:pointer;">
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <span style="font-size:1.4rem;">🌓</span>
+              <div style="flex:1;">
+                <div style="font-weight:700; font-size:0.92rem; color:var(--text-primary);">Switch Theme (Dark / Light)</div>
+                <div style="font-size:0.78rem; color:var(--text-secondary);">Toggle night mode or daylight theme</div>
+              </div>
+              <span style="color:var(--text-muted);">›</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" onclick="closeSettingsModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- In-App Update Modal -->
+  <div class="modal-overlay" id="updateCheckerModalOverlay">
+    <div class="modal-content" style="max-width:440px; text-align:center;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔄 App Update</h3>
+        <button class="modal-close" onclick="closeUpdateCheckerModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:1rem; padding:1.5rem 1.25rem;">
+        <div id="updateModalIcon" style="font-size:2.8rem;">🚀</div>
+        <div id="updateModalTitle" style="font-size:1.15rem; font-weight:800; color:var(--text-primary);">Checking for Updates...</div>
+        <div id="updateModalDesc" style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
+          Checking GitHub for the latest release...
+        </div>
+        <div id="updateModalProgress" style="display:none; width:100%; height:6px; background:var(--border-color); border-radius:3px; overflow:hidden;">
+          <div style="width:100%; height:100%; background:linear-gradient(90deg, #3b82f6, #10b981); animation: pulse 1.5s infinite;"></div>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:center; gap:0.75rem;">
+        <button type="button" class="btn" onclick="closeUpdateCheckerModal()">Close</button>
+        <button type="button" class="btn btn-primary" id="updateModalActionBtn" style="display:none; background:#10b981; border-color:#10b981; font-weight:700;">
+          ⚡ Update Now
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Hidden File Input for Import -->
   <input type="file" id="importFileInput" accept=".json" style="display:none;">
 

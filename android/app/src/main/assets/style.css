@@ -1946,3 +1946,66 @@ textarea.form-control {
   border-color: var(--accent-color);
 }
 
+/* ==========================================
+   APP FEATURE 2: BOTTOM NAVIGATION DOCK
+   ========================================== */
+.bottom-nav-dock {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: var(--bg-surface);
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 999;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.25);
+  padding: 0 0.5rem;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+.dock-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.35rem 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 58px;
+  gap: 2px;
+}
+
+.dock-item .dock-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.dock-item:hover, .dock-item.active {
+  color: var(--accent-color);
+}
+
+.dock-item.active .dock-icon {
+  transform: translateY(-2px) scale(1.15);
+}
+
+body {
+  padding-bottom: 74px;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+

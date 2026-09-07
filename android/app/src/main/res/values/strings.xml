@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Books Tracker</string>
+    <string name="shortcut_add_book">Add New Book</string>
+    <string name="shortcut_add_book_long">Add a new book to library</string>
+    <string name="shortcut_scan_barcode">Scan Barcode</string>
+    <string name="shortcut_scan_barcode_long">Scan book ISBN with camera</string>
+    <string name="shortcut_bookshelf">3D Bookshelf</string>
+    <string name="shortcut_bookshelf_long">Open realistic wooden bookshelf</string>
+</resources>

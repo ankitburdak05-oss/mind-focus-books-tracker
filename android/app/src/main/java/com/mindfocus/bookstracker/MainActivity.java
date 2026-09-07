@@ -120,8 +120,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        // Load 100% offline local HTML assets packaged directly inside the APK
-        webView.loadUrl("file:///android_asset/index.html");
+        // Load 100% offline local HTML assets packaged directly inside the APK with shortcut intent action
+        String initialUrl = "file:///android_asset/index.html";
+        String action = getIntent() != null ? getIntent().getStringExtra("action") : null;
+        if (action != null && !action.isEmpty()) {
+            initialUrl += "?action=" + action;
+        }
+        webView.loadUrl(initialUrl);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        String action = intent != null ? intent.getStringExtra("action") : null;
+        if (action != null && !action.isEmpty() && webView != null) {
+            webView.loadUrl("file:///android_asset/index.html?action=" + action);
+        }
     }
 
     @Override
@@ -197,6 +212,58 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, "Share error: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
+        }
+
+        @JavascriptInterface
+        public void downloadAndInstallApk(String apkUrl) {
+            new Thread(() -> {
+                try {
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Downloading update... Please wait ⏳", Toast.LENGTH_SHORT).show());
+                    java.net.URL url = new java.net.URL(apkUrl);
+                    java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
+                    connection.setInstanceFollowRedirects(true);
+                    connection.connect();
+
+                    int status = connection.getResponseCode();
+                    if (status == java.net.HttpURLConnection.HTTP_MOVED_TEMP || status == java.net.HttpURLConnection.HTTP_MOVED_PERM || status == 307 || status == 308) {
+                        String newUrl = connection.getHeaderField("Location");
+                        connection = (java.net.HttpURLConnection) new java.net.URL(newUrl).openConnection();
+                        connection.connect();
+                    }
+
+                    File cacheDir = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "updates");
+                    if (!cacheDir.exists()) cacheDir.mkdirs();
+                    File apkFile = new File(cacheDir, "MindFocusBooks-Update.apk");
+
+                    try (java.io.InputStream in = connection.getInputStream();
+                         FileOutputStream out = new FileOutputStream(apkFile)) {
+                        byte[] buffer = new byte[8192];
+                        int bytesRead;
+                        while ((bytesRead = in.read(buffer)) != -1) {
+                            out.write(buffer, 0, bytesRead);
+                        }
+                    }
+
+                    runOnUiThread(() -> {
+                        try {
+                            Uri apkUri = androidx.core.content.FileProvider.getUriForFile(
+                                    MainActivity.this,
+                                    getPackageName() + ".fileprovider",
+                                    apkFile
+                            );
+                            Intent installIntent = new Intent(Intent.ACTION_VIEW);
+                            installIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+                            installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(installIntent);
+                        } catch (Exception e) {
+                            Toast.makeText(MainActivity.this, "Installation error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+                    });
+                } catch (Exception e) {
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Download failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                }
+            }).start();
         }
     }
 

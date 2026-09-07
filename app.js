@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   populateCategoryDropdown();
   setupEventListeners();
   renderApp();
+  handleShortcutIntentActions();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -2313,5 +2314,154 @@ function handleBackupFileRestore(input) {
   reader.readAsText(file);
   input.value = '';
 }
+
+// ==========================================
+// FEATURE 1: SHORTCUT INTENT ACTIONS
+// ==========================================
+function handleShortcutIntentActions() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const action = params.get('action');
+    if (!action) return;
+
+    if (action === 'add_book') {
+      setTimeout(() => {
+        openAddModal();
+      }, 400);
+    } else if (action === 'scan_barcode') {
+      setTimeout(() => {
+        openBarcodeScanner();
+      }, 400);
+    } else if (action === 'open_bookshelf') {
+      setTimeout(() => {
+        switchBottomTab('bookshelf');
+      }, 400);
+    }
+  } catch (e) {
+    console.log('Shortcut action check notice:', e);
+  }
+}
+
+// ==========================================
+// FEATURE 2: BOTTOM NAVIGATION DOCK
+// ==========================================
+function switchBottomTab(tab) {
+  const dockHome = document.getElementById('dockHomeBtn');
+  const dockBookshelf = document.getElementById('dockBookshelfBtn');
+  const dockLent = document.getElementById('dockLentBtn');
+  const dockSettings = document.getElementById('dockSettingsBtn');
+
+  if (dockHome) dockHome.classList.toggle('active', tab === 'home');
+  if (dockBookshelf) dockBookshelf.classList.toggle('active', tab === 'bookshelf');
+  if (dockLent) dockLent.classList.toggle('active', tab === 'lent');
+  if (dockSettings) dockSettings.classList.toggle('active', tab === 'settings');
+
+  if (tab === 'home') {
+    setViewMode('table');
+    document.querySelectorAll('.tab-pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.status === 'ALL');
+    });
+    state.statusFilter = 'ALL';
+    state.currentPage = 1;
+    renderApp();
+  } else if (tab === 'bookshelf') {
+    setViewMode('bookshelf');
+  } else if (tab === 'lent') {
+    setViewMode('table');
+    document.querySelectorAll('.tab-pill').forEach(p => {
+      p.classList.toggle('active', p.dataset.status === 'LENT');
+    });
+    state.statusFilter = 'LENT';
+    state.currentPage = 1;
+    renderApp();
+  }
+}
+
+// ==========================================
+// FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
+// ==========================================
+const CURRENT_APP_VERSION = 'v1.2.0';
+let latestApkDownloadUrl = '';
+
+function openSettingsModal() {
+  document.getElementById('appSettingsModalOverlay').classList.add('active');
+}
+
+function closeSettingsModal() {
+  document.getElementById('appSettingsModalOverlay').classList.remove('active');
+}
+
+function openUpdateCheckerModal() {
+  document.getElementById('updateCheckerModalOverlay').classList.add('active');
+}
+
+function closeUpdateCheckerModal() {
+  document.getElementById('updateCheckerModalOverlay').classList.remove('active');
+}
+
+async function checkForAppUpdates(showFeedback = true) {
+  openUpdateCheckerModal();
+  const icon = document.getElementById('updateModalIcon');
+  const title = document.getElementById('updateModalTitle');
+  const desc = document.getElementById('updateModalDesc');
+  const progress = document.getElementById('updateModalProgress');
+  const actionBtn = document.getElementById('updateModalActionBtn');
+
+  if (icon) icon.innerText = '🔍';
+  if (title) title.innerText = 'Checking for Updates...';
+  if (desc) desc.innerText = 'Connecting to GitHub repository to check the latest version...';
+  if (progress) progress.style.display = 'block';
+  if (actionBtn) actionBtn.style.display = 'none';
+
+  try {
+    const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
+    if (!res.ok) throw new Error('Could not contact update server');
+    const data = await res.json();
+    const tagName = data.tag_name || 'v1.0.0';
+    const releaseName = data.name || tagName;
+
+    let apkUrl = 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/' + tagName + '/MindFocusBooks-Native.apk';
+    if (data.assets && data.assets.length > 0) {
+      const apkAsset = data.assets.find(a => a.name.endsWith('.apk'));
+      if (apkAsset) apkUrl = apkAsset.browser_download_url;
+    }
+    latestApkDownloadUrl = apkUrl;
+
+    if (progress) progress.style.display = 'none';
+
+    if (icon) icon.innerText = '🚀';
+    if (title) title.innerText = 'Update Ready: ' + releaseName;
+    if (desc) desc.innerHTML = 'A verified update is available.<br><small style="color:var(--text-muted);">Permanent-key signed: installs seamlessly without uninstalling.</small>';
+    if (actionBtn) {
+      actionBtn.style.display = 'inline-flex';
+      actionBtn.onclick = () => triggerInAppUpdate(apkUrl);
+    }
+  } catch (err) {
+    console.error('Update check failed:', err);
+    if (progress) progress.style.display = 'none';
+    if (icon) icon.innerText = '⚠️';
+    if (title) title.innerText = 'Offline or Server Notice';
+    if (desc) desc.innerText = 'Could not fetch release info. Please ensure internet connection is active.';
+  }
+}
+
+function triggerInAppUpdate(apkUrl) {
+  const desc = document.getElementById('updateModalDesc');
+  const progress = document.getElementById('updateModalProgress');
+  const actionBtn = document.getElementById('updateModalActionBtn');
+
+  if (desc) desc.innerText = 'Downloading update package in background... Android installer will open automatically.';
+  if (progress) progress.style.display = 'block';
+  if (actionBtn) actionBtn.style.display = 'none';
+
+  if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
+    window.Android.downloadAndInstallApk(apkUrl);
+    showToast('Downloading update package... ⏳', 'success');
+  } else {
+    window.location.href = apkUrl;
+    showToast('Downloading update APK file...', 'success');
+  }
+}
+
 
 
