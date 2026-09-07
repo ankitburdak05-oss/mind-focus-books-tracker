@@ -10,18 +10,28 @@ android {
         applicationId "com.mindfocus.bookstracker"
         minSdk 21
         targetSdk 34
-        versionCode 1
-        versionName "1.0"
+        versionCode System.getenv("GITHUB_RUN_NUMBER") ? (Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER")) + 10) : 2
+        versionName "1.1." + (System.getenv("GITHUB_RUN_NUMBER") ?: "2")
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("mindfocus.keystore")
+            storePassword "mindfocus123"
+            keyAlias "mindfocus"
+            keyPassword "mindfocus123"
+        }
     }
 
     buildTypes {
         debug {
             minifyEnabled false
             debuggable true
+            signingConfig signingConfigs.release
         }
         release {
             minifyEnabled false
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 }

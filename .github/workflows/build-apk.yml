@@ -38,20 +38,44 @@ jobs:
         cp jspdf.plugin.autotable.min.js android/app/src/main/assets/
         cp html2canvas.min.js android/app/src/main/assets/
 
+    - name: Ensure Permanent Keystore Exists
+      working-directory: ./android/app
+      run: |
+        if [ ! -f "mindfocus.keystore" ]; then
+          echo "Generating permanent release keystore..."
+          keytool -genkeypair -v \
+            -keystore mindfocus.keystore \
+            -alias mindfocus \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -storepass "mindfocus123" \
+            -keypass "mindfocus123" \
+            -dname "CN=MindFocus, OU=BooksTracker, O=MindFocus, L=Delhi, ST=DL, C=IN"
+          
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add mindfocus.keystore
+          git commit -m "Add permanent release keystore for seamless updates [skip ci]" || true
+          git push origin main || true
+        else
+          echo "Permanent release keystore already present."
+        fi
+
     - name: Setup Gradle
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: '8.5'
 
-    - name: Build Standalone Debug APK with Gradle
+    - name: Build Standalone APK with Gradle
       working-directory: ./android
       run: |
-        gradle assembleDebug --stacktrace --info
+        gradle assembleRelease --stacktrace --info
 
     - name: Locate and Rename APK
       run: |
         find android/app/build/outputs/apk/ -name "*.apk"
-        cp $(find android/app/build/outputs/apk/ -name "*.apk" | head -n 1) MindFocusBooks-Native.apk
+        cp $(find android/app/build/outputs/apk/ -name "*release*.apk" | head -n 1) MindFocusBooks-Native.apk || cp $(find android/app/build/outputs/apk/ -name "*.apk" | head -n 1) MindFocusBooks-Native.apk
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
@@ -63,8 +87,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         tag_name: v1.0.0
-        name: "Mind Focus Books Tracker - Native Android APK v1.0"
-        body: "Genuine Standalone Native Android APK (Full-screen WebView, zero URL bar, 100% offline, Vidmate-style)."
+        name: "Mind Focus Books Tracker - Native Android APK"
+        body: "Permanent signed release APK. Updates seamlessly without needing to uninstall previous version."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
