@@ -87,9 +87,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v1.4.0
-        name: "Mind Focus Books Tracker v1.4.0 - 3D Cards, Ambience & Streaks"
-        body: "Permanent signed release APK v1.4.0 featuring Modern 3D Floating Book Cards, 100% Offline Ambience Sound Synthesizer (Rain, Forest, Cafe, Alpha Waves), and Daily Reading Streak Gamification with Achievement Badges."
+        tag_name: v1.5.0
+        name: "Mind Focus Books Tracker v1.5.0 - Luxury Showcase Edition"
+        body: "Permanent signed release APK v1.5.0 featuring Now Reading Hero Spotlight, Netflix-style Curated Horizontal Shelves, and Modern Showcase Experience."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

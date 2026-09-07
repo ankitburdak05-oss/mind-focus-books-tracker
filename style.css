@@ -2404,5 +2404,378 @@ body {
   color: var(--text-muted);
 }
 
+/* ==========================================================
+   LUXURY SHOWCASE: NOW READING HERO & HORIZONTAL SHELVES
+   ========================================================== */
+.now-reading-hero {
+  position: relative;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(59, 130, 246, 0.06), rgba(16, 185, 129, 0.08));
+  border: 1px solid rgba(99, 102, 241, 0.28);
+  border-radius: 20px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.now-reading-hero::before {
+  content: '';
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(99, 102, 241, 0) 70%);
+  pointer-events: none;
+  animation: heroPulseGlow 4s infinite alternate ease-in-out;
+}
+
+@keyframes heroPulseGlow {
+  0% { transform: scale(0.9); opacity: 0.5; }
+  100% { transform: scale(1.2); opacity: 0.9; }
+}
+
+.hero-content-wrap {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 640px) {
+  .hero-content-wrap {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+}
+
+.hero-book-visual {
+  position: relative;
+  flex-shrink: 0;
+  perspective: 600px;
+}
+
+.hero-3d-book {
+  width: 90px;
+  height: 130px;
+  border-radius: 8px;
+  object-fit: cover;
+  box-shadow: -6px 8px 24px rgba(0, 0, 0, 0.4), 0 0 14px rgba(99, 102, 241, 0.3);
+  transform: rotateY(-12deg) rotateX(4deg);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hero-book-visual:hover .hero-3d-book {
+  transform: rotateY(-2deg) rotateX(0deg) scale(1.05);
+}
+
+.hero-book-placeholder {
+  width: 90px;
+  height: 130px;
+  border-radius: 8px;
+  background: linear-gradient(145deg, #1e1b4b, #312e81);
+  border: 1px solid rgba(129, 140, 248, 0.4);
+  box-shadow: -6px 8px 24px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: rotateY(-12deg) rotateX(4deg);
+  transition: transform 0.4s ease;
+  color: #fff;
+  text-align: center;
+  padding: 0.4rem;
+}
+
+.hero-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.hero-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.25rem 0.65rem;
+  background: rgba(59, 130, 246, 0.18);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 20px;
+  color: #60a5fa;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  width: fit-content;
+}
+
+@media (max-width: 640px) {
+  .hero-pill-badge {
+    margin: 0 auto;
+  }
+}
+
+.hero-title {
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--text-primary);
+  line-height: 1.25;
+  margin: 0;
+}
+
+.hero-author {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.hero-quote-snippet {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  background: rgba(0, 0, 0, 0.08);
+  border-left: 3px solid #6366f1;
+  padding: 0.4rem 0.75rem;
+  border-radius: 0 8px 8px 0;
+  margin-top: 0.2rem;
+}
+
+.hero-actions-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 0.6rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .hero-actions-row {
+    justify-content: center;
+  }
+}
+
+.hero-btn-primary {
+  background: linear-gradient(135deg, #4f46e5, #3b82f6);
+  color: #fff !important;
+  border: none;
+  font-weight: 800;
+  font-size: 0.92rem;
+  padding: 0.65rem 1.4rem;
+  border-radius: 24px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.38);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hero-btn-primary:hover {
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 8px 22px rgba(79, 70, 229, 0.5);
+}
+
+.hero-btn-ambient {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #10b981;
+  font-size: 0.82rem;
+  font-weight: 700;
+  padding: 0.55rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: all 0.2s;
+}
+
+.hero-btn-ambient:hover {
+  background: rgba(16, 185, 129, 0.25);
+  transform: translateY(-1px);
+}
+
+/* ==========================================================
+   CURATED HORIZONTAL SHELVES (NETFLIX / APPLE BOOKS STYLE)
+   ========================================================== */
+.curated-shelves-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.shelf-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.shelf-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 0.25rem;
+}
+
+.shelf-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  letter-spacing: -0.2px;
+}
+
+.shelf-subtitle {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+
+.shelf-carousel {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0.5rem 0.25rem 1rem 0.25rem;
+  scrollbar-width: thin;
+}
+
+.shelf-carousel::-webkit-scrollbar {
+  height: 4px;
+}
+
+.shelf-carousel::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+.mini-shelf-card {
+  flex: 0 0 145px;
+  scroll-snap-align: start;
+  background: var(--bg-card, var(--bg-secondary));
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.65rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+  position: relative;
+}
+
+.mini-shelf-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+  border-color: var(--accent-primary, #6366f1);
+}
+
+.mini-card-cover-wrap {
+  width: 100%;
+  height: 165px;
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(135deg, rgba(99,102,241,0.1), rgba(59,130,246,0.15));
+}
+
+.mini-card-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.mini-card-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  text-align: center;
+  gap: 0.3rem;
+}
+
+.mini-card-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-top: 0.15rem;
+}
+
+.mini-card-author {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mini-card-rating {
+  font-size: 0.75rem;
+  color: #f59e0b;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+/* Quote Cards Shelf */
+.mini-quote-card {
+  flex: 0 0 240px;
+  scroll-snap-align: start;
+  background: var(--bg-card, var(--bg-secondary));
+  border: 1px solid var(--border-color);
+  border-left: 4px solid #10b981;
+  border-radius: 12px;
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.6rem;
+  cursor: pointer;
+  transition: all 0.22s ease;
+}
+
+.mini-quote-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+  border-color: #10b981;
+}
+
+.mini-quote-text {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-primary);
+  line-height: 1.45;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.mini-quote-book {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  border-top: 1px solid var(--border-color);
+  padding-top: 0.4rem;
+}
+
+
 
 
