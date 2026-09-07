@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof initSpotlightIsland === 'function') initSpotlightIsland();
   if (typeof updateDnaKpiChip === 'function') updateDnaKpiChip();
   if (typeof initSearchOptionsDrawer === 'function') initSearchOptionsDrawer();
-  if (typeof checkRemoteBroadcastNotice === 'function') checkRemoteBroadcastNotice();
+  if (typeof startLiveNoticeListener === 'function') startLiveNoticeListener();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -2913,7 +2913,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v2.0.1';
+const CURRENT_APP_VERSION = 'v2.0.2';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -4315,6 +4315,7 @@ window.updateSearchDrawerFilterBadge = updateSearchDrawerFilterBadge;
 // FEATURE: IN-APP CLOUD BROADCAST NOTICE (POPUP WITHOUT UPDATE)
 // ==========================================================
 let currentBroadcastNoticeId = '';
+let broadcastNoticeInterval = null;
 
 async function checkRemoteBroadcastNotice() {
   try {
@@ -4333,12 +4334,18 @@ async function checkRemoteBroadcastNotice() {
       } catch (locErr) {}
     }
 
-    if (!data || !data.active || !data.message) return;
+    const overlay = document.getElementById('inAppNoticeModalOverlay');
+    if (!data || !data.active || !data.message) {
+      if (overlay && overlay.classList.contains('active')) {
+        overlay.classList.remove('active');
+      }
+      return;
+    }
 
     currentBroadcastNoticeId = data.id || 'notice-default';
     const lastDismissed = localStorage.getItem('mindfocus_dismissed_notice_id');
 
-    if (lastDismissed !== currentBroadcastNoticeId) {
+    if (data.forceShow || lastDismissed !== currentBroadcastNoticeId) {
       showInAppNoticePopup(data);
     }
   } catch (e) {
@@ -4371,9 +4378,21 @@ function dismissInAppNotice() {
   if (overlay) overlay.classList.remove('active');
 }
 
+function startLiveNoticeListener() {
+  if (broadcastNoticeInterval) clearInterval(broadcastNoticeInterval);
+  checkRemoteBroadcastNotice();
+  // Poll every 3 seconds for instant real-time broadcast delivery without refreshing
+  broadcastNoticeInterval = setInterval(checkRemoteBroadcastNotice, 3000);
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') checkRemoteBroadcastNotice();
+  });
+  window.addEventListener('focus', checkRemoteBroadcastNotice);
+}
+
 window.checkRemoteBroadcastNotice = checkRemoteBroadcastNotice;
 window.showInAppNoticePopup = showInAppNoticePopup;
 window.dismissInAppNotice = dismissInAppNotice;
+window.startLiveNoticeListener = startLiveNoticeListener;
 
 
 

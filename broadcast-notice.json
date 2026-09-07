@@ -1,9 +1,10 @@
-﻿{
-  "id": "notice-2026-09-07-reset",
+{
+  "id": "notice-2026-09-07-reset-live",
   "active": true,
+  "forceShow": true,
   "icon": "📢",
   "title": "Notice",
   "message": "aaj reset kar bhai",
   "btnText": "OK, Samajh Gaya",
-  "timestamp": "2026-09-07T21:36:00Z"
+  "timestamp": "2026-09-07T21:48:00Z"
 }

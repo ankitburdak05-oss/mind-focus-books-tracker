@@ -32,6 +32,7 @@ jobs:
         cp style.css android/app/src/main/assets/
         cp app.js android/app/src/main/assets/
         cp books-data.js android/app/src/main/assets/
+        cp broadcast-notice.json android/app/src/main/assets/ || true
         cp icon-192.png android/app/src/main/assets/
         cp icon-512.png android/app/src/main/assets/
         cp jspdf.umd.min.js android/app/src/main/assets/
@@ -87,9 +88,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v2.0.1
-        name: "Mind Focus Books Tracker v2.0.1 - Collapsible Filter Drawer Edition"
-        body: "Release v2.0.1: Added sleek collapsible filter drawer with drop-arrow (teer 🔽) trigger right beneath the search box, keeping library view ultra-clean while keeping all filter, view, scan, and sort options 1-tap accessible. Includes active filter count indicator."
+        tag_name: v2.0.2
+        name: "Mind Focus Books Tracker v2.0.2 - Real-Time In-App Cloud Notice & Spatial Sanctuary"
+        body: "Release v2.0.2: Real-time in-app cloud broadcast notice receiver without page reload/refresh, plus collapsible search drawer (teer 🔽) and full 10-feature spatial sanctuary engine."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
