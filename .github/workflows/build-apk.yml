@@ -37,6 +37,7 @@ jobs:
         cp jspdf.umd.min.js android/app/src/main/assets/
         cp jspdf.plugin.autotable.min.js android/app/src/main/assets/
         cp html2canvas.min.js android/app/src/main/assets/
+        cp tesseract.min.js android/app/src/main/assets/
 
     - name: Ensure Permanent Keystore Exists
       working-directory: ./android/app

@@ -87,6 +87,9 @@ function loadData() {
 
 function saveData() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state.books));
+  if (typeof triggerAutoSnapshot === 'function') {
+    triggerAutoSnapshot();
+  }
 }
 
 function populateCategoryDropdown() {
@@ -1965,4 +1968,323 @@ function renderBookshelfView(container, books) {
   html += '</div>';
   container.innerHTML = html;
 }
+
+// ==========================================
+// FEATURE 1: PAGE TEXT SCANNER / OCR
+// ==========================================
+let currentOcrTargetField = 'takeawayTextarea';
+let currentOcrImageDataUrl = '';
+let isOcrHighContrast = false;
+
+function openOcrScanner(targetField) {
+  currentOcrTargetField = targetField || 'takeawayTextarea';
+  currentOcrImageDataUrl = '';
+  isOcrHighContrast = false;
+
+  const previewWrap = document.getElementById('ocrPreviewWrap');
+  const previewImg = document.getElementById('ocrPreviewImg');
+  const statusWrap = document.getElementById('ocrStatusWrap');
+  const resultWrap = document.getElementById('ocrResultWrap');
+  const insertBtn = document.getElementById('ocrInsertBtn');
+  const bwBtn = document.getElementById('ocrFilterBwBtn');
+  const fileInput = document.getElementById('ocrImageFileInput');
+
+  if (previewWrap) previewWrap.style.display = 'none';
+  if (previewImg) previewImg.src = '';
+  if (statusWrap) statusWrap.style.display = 'none';
+  if (resultWrap) resultWrap.style.display = 'none';
+  if (insertBtn) insertBtn.style.display = 'none';
+  if (bwBtn) bwBtn.style.display = 'none';
+  if (fileInput) fileInput.value = '';
+
+  document.getElementById('ocrScannerOverlay').classList.add('active');
+}
+
+function closeOcrScanner() {
+  document.getElementById('ocrScannerOverlay').classList.remove('active');
+}
+
+function handleOcrPhotoUpload(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    currentOcrImageDataUrl = e.target.result;
+    const previewImg = document.getElementById('ocrPreviewImg');
+    const previewWrap = document.getElementById('ocrPreviewWrap');
+    const bwBtn = document.getElementById('ocrFilterBwBtn');
+
+    if (previewImg && previewWrap) {
+      previewImg.src = currentOcrImageDataUrl;
+      previewWrap.style.display = 'block';
+    }
+    if (bwBtn) bwBtn.style.display = 'inline-flex';
+
+    // Automatically trigger text recognition
+    runOcrExtraction(currentOcrImageDataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+
+function toggleOcrContrast() {
+  if (!currentOcrImageDataUrl) return;
+  isOcrHighContrast = !isOcrHighContrast;
+
+  const img = new Image();
+  img.onload = () => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = img.width;
+    canvas.height = img.height;
+    ctx.drawImage(img, 0, 0);
+
+    if (isOcrHighContrast) {
+      const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const d = imgData.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+        const val = gray > 128 ? 255 : 0;
+        d[i] = val;
+        d[i + 1] = val;
+        d[i + 2] = val;
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
+
+    const processedUrl = canvas.toDataURL('image/jpeg', 0.85);
+    const previewImg = document.getElementById('ocrPreviewImg');
+    if (previewImg) previewImg.src = processedUrl;
+    runOcrExtraction(processedUrl);
+  };
+  img.src = currentOcrImageDataUrl;
+}
+
+async function runOcrExtraction(imageSrc) {
+  const statusWrap = document.getElementById('ocrStatusWrap');
+  const statusText = document.getElementById('ocrStatusText');
+  const progressBar = document.getElementById('ocrProgressBar');
+  const resultWrap = document.getElementById('ocrResultWrap');
+  const resultText = document.getElementById('ocrResultText');
+  const insertBtn = document.getElementById('ocrInsertBtn');
+
+  if (statusWrap) statusWrap.style.display = 'block';
+  if (resultWrap) resultWrap.style.display = 'none';
+  if (insertBtn) insertBtn.style.display = 'none';
+  if (progressBar) progressBar.style.width = '10%';
+  if (statusText) statusText.innerText = 'Initializing OCR reader...';
+
+  if (typeof Tesseract === 'undefined') {
+    if (statusText) statusText.innerText = 'OCR engine loading... Please wait 3 seconds and retry.';
+    showToast('OCR engine initializing...', '');
+    return;
+  }
+
+  try {
+    const res = await Tesseract.recognize(imageSrc, 'eng', {
+      logger: (m) => {
+        if (m && m.progress) {
+          const pct = Math.round(m.progress * 100);
+          if (progressBar) progressBar.style.width = pct + '%';
+          if (statusText) statusText.innerText = (m.status ? (m.status.charAt(0).toUpperCase() + m.status.slice(1)) : 'Scanning') + ' (' + pct + '%)...';
+        }
+      }
+    });
+
+    const text = (res && res.data && res.data.text) ? res.data.text.trim() : '';
+
+    if (progressBar) progressBar.style.width = '100%';
+    if (statusText) statusText.innerText = text ? 'Text extracted successfully! ✅' : 'No readable text found. Try a clearer or higher-contrast photo.';
+
+    if (resultWrap && resultText) {
+      resultText.value = text;
+      resultWrap.style.display = 'block';
+    }
+    if (insertBtn && text) {
+      insertBtn.style.display = 'inline-flex';
+    }
+  } catch (err) {
+    console.error('OCR Error:', err);
+    if (statusText) statusText.innerText = 'Could not read text from this image. Please ensure good lighting and clear text.';
+  }
+}
+
+function applyOcrToNotes() {
+  const resultTextEl = document.getElementById('ocrResultText');
+  if (!resultTextEl) return;
+  const quote = resultTextEl.value.trim();
+  if (!quote) {
+    alert('No text to insert.');
+    return;
+  }
+
+  const targetEl = document.getElementById(currentOcrTargetField);
+  if (targetEl) {
+    const existing = targetEl.value.trim();
+    if (existing) {
+      targetEl.value = existing + '\n\n' + quote;
+    } else {
+      targetEl.value = quote;
+    }
+    showToast('Quote inserted into Notes! 📝', 'success');
+  }
+  closeOcrScanner();
+}
+
+// ==========================================
+// FEATURE 5: AUTO-BACKUP & SAFETY HUB
+// ==========================================
+const BACKUP_KEY = 'mind_focus_backup_snapshot_v1';
+const BACKUP_META_KEY = 'mind_focus_backup_meta_v1';
+
+function triggerAutoSnapshot() {
+  try {
+    const payload = {
+      timestamp: new Date().toISOString(),
+      booksCount: state.books.length,
+      books: state.books
+    };
+    localStorage.setItem(BACKUP_KEY, JSON.stringify(payload));
+    localStorage.setItem(BACKUP_META_KEY, JSON.stringify({
+      lastSaved: new Date().toLocaleString('en-IN'),
+      booksCount: state.books.length
+    }));
+  } catch (e) {
+    console.log('Snapshot storage notice:', e);
+  }
+}
+
+function openBackupModal() {
+  const countEl = document.getElementById('backupStatusBooksCount');
+  const dateEl = document.getElementById('backupStatusLastSaved');
+
+  const metaStr = localStorage.getItem(BACKUP_META_KEY);
+  let meta = null;
+  if (metaStr) {
+    try { meta = JSON.parse(metaStr); } catch (e) {}
+  }
+
+  if (countEl) {
+    countEl.innerText = state.books.length + ' Books Protected';
+  }
+  if (dateEl) {
+    dateEl.innerText = meta ? ('Last Auto-Snapshot: ' + meta.lastSaved) : ('Last Auto-Snapshot: Today, ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+  }
+
+  document.getElementById('backupModalOverlay').classList.add('active');
+}
+
+function closeBackupModal() {
+  document.getElementById('backupModalOverlay').classList.remove('active');
+}
+
+function downloadBackupFile() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state.books, null, 2));
+  const now = new Date();
+  const dateSlug = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+  const fileName = 'MindFocusBooks_Backup_' + dateSlug + '.json';
+
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", fileName);
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+
+  triggerAutoSnapshot();
+  showToast('Backup saved to your Downloads! 💾', 'success');
+}
+
+async function shareBackupToCloud() {
+  const now = new Date();
+  const dateSlug = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+  const fileName = 'MindFocusBooks_Backup_' + dateSlug + '.json';
+  const jsonContent = JSON.stringify(state.books, null, 2);
+
+  if (navigator.canShare) {
+    try {
+      const file = new File([jsonContent], fileName, { type: 'application/json' });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: 'Mind Focus Books Backup',
+          text: 'My Mind Focus Books Tracker Backup (' + state.books.length + ' books)'
+        });
+        showToast('Shared backup to Cloud/App! ☁️', 'success');
+        return;
+      }
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.log('File share error, falling back to download:', err);
+      } else {
+        return;
+      }
+    }
+  }
+
+  downloadBackupFile();
+  showToast('Backup file downloaded! You can upload it to Google Drive.', 'success');
+}
+
+function quickRollbackSnapshot() {
+  const snapStr = localStorage.getItem(BACKUP_KEY);
+  if (!snapStr) {
+    alert('No previous auto-snapshot found yet.');
+    return;
+  }
+
+  try {
+    const snap = JSON.parse(snapStr);
+    if (!snap.books || !Array.isArray(snap.books)) {
+      alert('Snapshot data invalid.');
+      return;
+    }
+
+    if (confirm('Rollback library to snapshot saved at ' + (snap.timestamp ? new Date(snap.timestamp).toLocaleString('en-IN') : 'previous save') + ' (' + snap.books.length + ' books)? Current unsaved changes will be replaced.')) {
+      state.books = snap.books;
+      saveData();
+      populateCategoryDropdown();
+      renderApp();
+      closeBackupModal();
+      showToast('Library restored from Auto-Snapshot! 🔄', 'success');
+    }
+  } catch (e) {
+    alert('Could not restore snapshot.');
+  }
+}
+
+function handleBackupFileRestore(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const reader = new FileReader();
+
+  reader.onload = (e) => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      let newBooks = [];
+      if (Array.isArray(parsed)) {
+        newBooks = parsed;
+      } else if (parsed && Array.isArray(parsed.books)) {
+        newBooks = parsed.books;
+      } else {
+        alert('Invalid JSON backup format.');
+        return;
+      }
+
+      if (confirm('Restore ' + newBooks.length + ' books from "' + file.name + '"? This will update your library.')) {
+        state.books = newBooks;
+        saveData();
+        populateCategoryDropdown();
+        renderApp();
+        closeBackupModal();
+        showToast('Restored ' + newBooks.length + ' books successfully! 📚', 'success');
+      }
+    } catch (err) {
+      alert('Failed to parse backup JSON file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
 

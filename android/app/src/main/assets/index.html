@@ -74,6 +74,13 @@
                 <div class="dropdown-desc">Full offline data backup of all books & notes</div>
               </div>
             </a>
+            <a href="javascript:void(0)" class="dropdown-item" onclick="openBackupModal()">
+              <span class="dropdown-icon">🛡️</span>
+              <div>
+                <div class="dropdown-title">Auto-Backup & Cloud Hub</div>
+                <div class="dropdown-desc">Phone storage, Google Drive share & rollback</div>
+              </div>
+            </a>
             <div class="dropdown-divider"></div>
             <a href="javascript:void(0)" class="dropdown-item" id="importFileBtn">
               <span class="dropdown-icon">📥</span>
@@ -85,6 +92,9 @@
           </div>
         </div>
 
+        <button class="btn" id="backupHubBtn" title="Auto-Backup & Safety Hub" onclick="openBackupModal()">
+          💾 <span id="backupHubBtnText">Backup</span>
+        </button>
         <button class="btn" id="resetDataBtn" title="Reset back to default 150 Excel books">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"></polyline><polyline points="23 20 23 14 17 14"></polyline><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"></path></svg>
           Reset
@@ -375,7 +385,12 @@
         </div>
 
         <div class="form-group">
-          <label class="form-label">Key Learning / Takeaway</label>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Key Learning / Takeaway</label>
+            <button type="button" class="btn btn-sm" onclick="openOcrScanner('editBookTakeaway')" style="color:#6366f1; border-color:rgba(99,102,241,0.3); font-size:0.75rem;">
+              📸 Scan Page (OCR)
+            </button>
+          </div>
           <textarea id="editBookTakeaway" class="form-control" placeholder="What are the key learnings, quotes, or actionable insights from this book?"></textarea>
         </div>
       </div>
@@ -396,7 +411,12 @@
       <div class="modal-body">
         <div id="takeawayBookTitle" style="font-weight:700; color:var(--text-primary); font-size:1.05rem;"></div>
         <div class="form-group">
-          <label class="form-label">Your Insights, Action Items & Summary:</label>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Your Insights, Action Items & Summary:</label>
+            <button type="button" class="btn btn-sm" onclick="openOcrScanner('takeawayTextarea')" style="color:#6366f1; border-color:rgba(99,102,241,0.3); font-size:0.8rem; font-weight:600;">
+              📸 Scan Page (OCR)
+            </button>
+          </div>
           <textarea id="takeawayTextarea" class="form-control" style="min-height:180px;" placeholder="Write down key takeaways, life lessons, or summary of this book..."></textarea>
         </div>
       </div>
@@ -680,6 +700,153 @@
     </div>
   </div>
 
+  <!-- Page Text OCR Scanner Modal (Feature 1) -->
+  <div class="modal-overlay" id="ocrScannerOverlay">
+    <div class="modal-content" style="max-width:540px;">
+      <div class="modal-header">
+        <h3 class="modal-title">📸 Scan Book Page (Extract Quotes / OCR)</h3>
+        <button class="modal-close" onclick="closeOcrScanner()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:1rem;">
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">
+          Take a clear photo of any book page, quote, or paragraph to extract text automatically:
+        </p>
+
+        <div style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
+          <label class="btn btn-primary btn-sm" style="cursor:pointer; margin:0;">
+            📷 Snap / Upload Page Photo
+            <input type="file" id="ocrImageFileInput" accept="image/*" style="display:none;" onchange="handleOcrPhotoUpload(this)">
+          </label>
+          <button type="button" class="btn btn-sm" id="ocrFilterBwBtn" onclick="toggleOcrContrast()" style="display:none;">
+            🌓 High Contrast (B&W)
+          </button>
+        </div>
+
+        <!-- Image Preview Container -->
+        <div id="ocrPreviewWrap" style="display:none; text-align:center; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:8px; padding:0.5rem; max-height:260px; overflow:hidden;">
+          <img id="ocrPreviewImg" src="" alt="Page Snapshot" style="max-width:100%; max-height:240px; object-fit:contain; border-radius:4px;">
+          <canvas id="ocrCanvas" style="display:none;"></canvas>
+        </div>
+
+        <!-- Status & Progress -->
+        <div id="ocrStatusWrap" style="display:none; text-align:center;">
+          <div id="ocrStatusText" style="font-size:0.85rem; font-weight:600; color:#3b82f6; margin-bottom:0.4rem;">
+            Analyzing page text...
+          </div>
+          <div class="ocr-progress-bar-wrap">
+            <div class="ocr-progress-bar-fill" id="ocrProgressBar"></div>
+          </div>
+        </div>
+
+        <!-- Extracted Text Result Area -->
+        <div id="ocrResultWrap" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0; font-weight:700; color:var(--text-primary);">Extracted Quote / Text:</label>
+            <span style="font-size:0.75rem; color:var(--text-muted);">(You can edit before inserting)</span>
+          </div>
+          <textarea id="ocrResultText" class="form-control" style="min-height:120px; font-size:0.88rem;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
+        <button type="button" class="btn" onclick="closeOcrScanner()">Cancel</button>
+        <div style="display:flex; gap:0.5rem;">
+          <button type="button" class="btn btn-primary" id="ocrInsertBtn" onclick="applyOcrToNotes()" style="display:none; background:#10b981; border-color:#10b981;">
+            📝 Insert into Notes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Auto-Backup & Safety Hub Modal (Feature 5) -->
+  <div class="modal-overlay" id="backupModalOverlay">
+    <div class="modal-content" style="max-width:520px;">
+      <div class="modal-header">
+        <h3 class="modal-title">💾 Auto-Backup & Safety Hub</h3>
+        <button class="modal-close" onclick="closeBackupModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:1rem;">
+        <!-- Status Card -->
+        <div class="backup-status-card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:1.1rem; font-weight:700; color:var(--text-primary);" id="backupStatusBooksCount">
+                150 Books Protected
+              </div>
+              <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:0.2rem;" id="backupStatusLastSaved">
+                Last Auto-Snapshot: Today
+              </div>
+            </div>
+            <div style="font-size:2rem;">🛡️</div>
+          </div>
+          <div style="margin-top:0.75rem; font-size:0.82rem; color:#10b981; display:flex; align-items:center; gap:0.4rem;">
+            <span>●</span> All purchase prices, notes, and progress are saved in your offline database.
+          </div>
+        </div>
+
+        <!-- Action 1: Download to Phone -->
+        <div class="backup-action-card">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="font-size:1.5rem;">📥</div>
+            <div style="flex:1;">
+              <div style="font-weight:700; font-size:0.95rem; color:var(--text-primary);">Save Backup File to Phone</div>
+              <div style="font-size:0.8rem; color:var(--text-secondary);">Downloads timestamped JSON file to your phone's Downloads folder</div>
+            </div>
+            <button type="button" class="btn btn-primary btn-sm" onclick="downloadBackupFile()">
+              Download
+            </button>
+          </div>
+        </div>
+
+        <!-- Action 2: Share to Google Drive / WhatsApp -->
+        <div class="backup-action-card">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="font-size:1.5rem;">☁️</div>
+            <div style="flex:1;">
+              <div style="font-weight:700; font-size:0.95rem; color:var(--text-primary);">Send to Google Drive / Cloud</div>
+              <div style="font-size:0.8rem; color:var(--text-secondary);">Share backup file directly to Google Drive, WhatsApp or Email</div>
+            </div>
+            <button type="button" class="btn btn-sm" onclick="shareBackupToCloud()" style="background:#4285f4; color:#fff; border-color:#4285f4; font-weight:600;">
+              Share / Save
+            </button>
+          </div>
+        </div>
+
+        <!-- Action 3: Quick Emergency Rollback -->
+        <div class="backup-action-card">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="font-size:1.5rem;">🔄</div>
+            <div style="flex:1;">
+              <div style="font-weight:700; font-size:0.95rem; color:var(--text-primary);">Emergency Rollback</div>
+              <div style="font-size:0.8rem; color:var(--text-secondary);">Restore the last automatic local snapshot if you made any mistakes</div>
+            </div>
+            <button type="button" class="btn btn-sm btn-warning" onclick="quickRollbackSnapshot()">
+              Rollback
+            </button>
+          </div>
+        </div>
+
+        <!-- Action 4: Restore from File -->
+        <div class="backup-action-card">
+          <div style="display:flex; align-items:center; gap:0.75rem;">
+            <div style="font-size:1.5rem;">📤</div>
+            <div style="flex:1;">
+              <div style="font-weight:700; font-size:0.95rem; color:var(--text-primary);">Restore from Backup File</div>
+              <div style="font-size:0.8rem; color:var(--text-secondary);">Select a previously saved .json backup file from phone</div>
+            </div>
+            <label class="btn btn-sm" style="cursor:pointer; margin:0;">
+              Select File
+              <input type="file" accept=".json" style="display:none;" onchange="handleBackupFileRestore(this)">
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" onclick="closeBackupModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Hidden File Input for Import -->
   <input type="file" id="importFileInput" accept=".json" style="display:none;">
 
@@ -687,6 +854,7 @@
   <script src="html2canvas.min.js"></script>
   <script src="jspdf.umd.min.js"></script>
   <script src="jspdf.plugin.autotable.min.js"></script>
+  <script src="tesseract.min.js"></script>
   <script src="books-data.js"></script>
   <script src="app.js"></script>
 </body>

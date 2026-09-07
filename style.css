@@ -1904,3 +1904,45 @@ textarea.form-control {
   height: 4px;
   background: linear-gradient(90deg, rgba(255,255,255,0.2), rgba(0,0,0,0.1), rgba(255,255,255,0.15));
 }
+
+/* ==========================================
+   FEATURE 1: PAGE OCR SCANNER
+   ========================================== */
+.ocr-progress-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: var(--border-color);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 0.35rem;
+}
+
+.ocr-progress-bar-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #6366f1, #10b981);
+  transition: width 0.25s ease;
+}
+
+/* ==========================================
+   FEATURE 5: AUTO-BACKUP & SAFETY HUB
+   ========================================== */
+.backup-status-card {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(59, 130, 246, 0.08));
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: 10px;
+  padding: 1.1rem;
+}
+
+.backup-action-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.backup-action-card:hover {
+  border-color: var(--accent-color);
+}
+
