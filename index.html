@@ -57,79 +57,57 @@
     <!-- Luxury Showcase: Now Reading Hero Spotlight -->
     <section id="nowReadingHeroSection"></section>
 
-    <!-- Progress Tracker Card -->
-    <section class="progress-card">
-      <div class="progress-header">
-        <div class="progress-title">
-          <span>📊 PROGRESS TRACKER</span>
-          <span id="progressSubText" style="color:var(--text-secondary); font-size:0.85rem; font-weight:500;">(0 / 150 Books Finished)</span>
+    <!-- Compact Luxury KPI & Progress Strip (Ultra-Clean & De-cluttered) -->
+    <section class="compact-kpi-strip">
+      <div class="kpi-strip-item kpi-progress-item" onclick="openStreakModal()" title="Overall Reading Progress & Streak">
+        <div class="kpi-ring-wrap">
+          <svg viewBox="0 0 36 36" class="circular-chart">
+            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            <path class="circle" id="kpiRingFill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+          </svg>
+          <span class="kpi-ring-pct" id="kpiRingPct">0%</span>
         </div>
-        <div class="progress-pct" id="progressPctText">0.0% Completed</div>
+        <div class="kpi-strip-meta">
+          <div class="kpi-strip-title" id="progressSubText">0 / 150 Finished</div>
+          <div class="kpi-strip-sub" id="progressPctText">0.0% Completed</div>
+        </div>
       </div>
-      <div class="progress-track">
-        <div class="progress-fill" id="progressBarFill" style="width: 0%;"></div>
-      </div>
-    </section>
 
-    <!-- KPI Cards Grid (Matches Excel Row 3 & 4) -->
-    <section class="kpi-grid">
-      <div class="kpi-card">
-        <div class="kpi-icon-wrap kpi-indigo">📚</div>
-        <div class="kpi-meta">
-          <span class="kpi-label">TOTAL BOOKS</span>
-          <span class="kpi-value" id="kpiTotalBooks">150</span>
+      <div class="kpi-strip-chips">
+        <div class="kpi-chip" id="chipReading" title="Currently Reading">
+          <span class="chip-icon">📖</span>
+          <span class="chip-val" id="kpiCurrentlyReading">1</span>
+          <span class="chip-lbl">Reading</span>
+        </div>
+        <div class="kpi-chip" id="chipDone" title="Finished Books">
+          <span class="chip-icon">✅</span>
+          <span class="chip-val" id="kpiBooksDone">0</span>
+          <span class="chip-lbl">Done</span>
+        </div>
+        <div class="kpi-chip" onclick="openStreakModal()" style="cursor:pointer;" title="Daily Reading Streak">
+          <span class="chip-icon">🔥</span>
+          <span class="chip-val" id="kpiStreakValue">1 Day</span>
+          <span class="chip-lbl">Streak</span>
+        </div>
+        <div class="kpi-chip" title="Total Books in Library">
+          <span class="chip-icon">📚</span>
+          <span class="chip-val" id="kpiTotalBooks">150</span>
+          <span class="chip-lbl">Total</span>
+        </div>
+        <div class="kpi-chip" title="Knowledge Value">
+          <span class="chip-icon">💰</span>
+          <span class="chip-val" id="kpiMoneySaved">₹0</span>
+          <span class="chip-lbl">Value</span>
         </div>
       </div>
-      <div class="kpi-card">
-        <div class="kpi-icon-wrap kpi-green">✅</div>
-        <div class="kpi-meta">
-          <span class="kpi-label">BOOKS DONE</span>
-          <span class="kpi-value" id="kpiBooksDone">0</span>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon-wrap kpi-blue">📖</div>
-        <div class="kpi-meta">
-          <span class="kpi-label">CURRENTLY READING</span>
-          <span class="kpi-value" id="kpiCurrentlyReading">1</span>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon-wrap kpi-amber">⏳</div>
-        <div class="kpi-meta">
-          <span class="kpi-label">TOTAL DAYS READ</span>
-          <span class="kpi-value" id="kpiTotalDays">0</span>
-        </div>
-      </div>
-      <div class="kpi-card">
-        <div class="kpi-icon-wrap kpi-purple">⚡</div>
-        <div class="kpi-meta">
-          <span class="kpi-label">AVG DAYS / BOOK</span>
-          <span class="kpi-value" id="kpiAvgDays">0.0</span>
-        </div>
-      </div>
-      <div class="kpi-card kpi-roi-card" title="Total book purchase value & knowledge investment">
-        <div class="kpi-icon-wrap" style="background:rgba(16, 185, 129, 0.18); color:#10b981;">💰</div>
-        <div class="kpi-meta">
-          <span class="kpi-label">KNOWLEDGE VALUE</span>
-          <span class="kpi-value" id="kpiMoneySaved" style="color:#10b981;">₹0</span>
-          <span id="kpiMoneySubtext" style="font-size:0.72rem; color:var(--text-muted); font-weight:600; display:none;"></span>
-        </div>
-      </div>
-      <div class="kpi-card kpi-roi-card" title="Total hours invested in reading">
-        <div class="kpi-icon-wrap" style="background:rgba(236, 72, 153, 0.18); color:#f472b6;">⏳</div>
-        <div class="kpi-meta">
-          <span class="kpi-label">HOURS INVESTED</span>
-          <span class="kpi-value" id="kpiHoursInvested" style="color:#f472b6;">0 hrs</span>
-        </div>
-      </div>
-      <div class="kpi-card kpi-roi-card" style="cursor:pointer;" onclick="openStreakModal()" title="Click to view Streak & Achievement Badges">
-        <div class="kpi-icon-wrap" style="background:rgba(245, 158, 11, 0.18); color:#f59e0b;">🔥</div>
-        <div class="kpi-meta">
-          <span class="kpi-label">DAILY STREAK</span>
-          <span class="kpi-value" id="kpiStreakValue" style="color:#f59e0b;">1 Day</span>
-          <span style="font-size:0.72rem; color:var(--text-muted); font-weight:600;">Tap for Badges 🏆</span>
-        </div>
+
+      <!-- Hidden elements preserved for JS backward compatibility -->
+      <div style="display:none;">
+        <div id="progressBarFill" style="width:0%;"></div>
+        <span id="kpiTotalDays">0</span>
+        <span id="kpiAvgDays">0.0</span>
+        <span id="kpiHoursInvested">0 hrs</span>
+        <span id="kpiMoneySubtext"></span>
       </div>
     </section>
 
@@ -231,11 +209,24 @@
 
     <!-- Books Display Area -->
     <div id="booksContentArea"></div>
-
     <!-- Pagination -->
     <div id="paginationArea"></div>
 
   </main>
+  <!-- 1-Tap Luxury Book Detail Sheet (Apple Books / Blinkist Style) -->
+  <div class="modal-overlay" id="bookDetailSheetOverlay">
+    <div class="modal-content book-detail-sheet-content" style="max-width:540px;">
+      <div class="sheet-drag-handle"></div>
+      <div class="modal-header" style="border-bottom:none; padding:1.2rem 1.5rem 0.25rem;">
+        <span class="sheet-category-badge" id="sheetCategoryBadge">Category</span>
+        <button class="modal-close" onclick="closeBookDetailSheet()">&times;</button>
+      </div>
+      <div class="modal-body" id="bookDetailSheetBody" style="padding:0.75rem 1.5rem 1.5rem; gap:1.25rem;">
+        <!-- Dynamically rendered by JS -->
+      </div>
+    </div>
+  </div>
+
   <!-- Add / Edit Book Modal -->
   <div class="modal-overlay" id="bookModalOverlay">
     <div class="modal-content">
@@ -278,13 +269,17 @@
               <span id="coverPlaceholderText" style="font-size:0.75rem; color:var(--text-muted);">No Cover</span>
               <img id="coverPreviewImg" src="" alt="Cover" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:4px;">
             </div>
-            <div style="display:flex; flex-direction:column; gap:0.4rem; flex:1;">
-              <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverImageUpload(this)">
-              <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
-                <button type="button" class="btn btn-sm" onclick="document.getElementById('coverImageFileInput').click()">📷 Upload Cover</button>
-                <button type="button" class="btn btn-sm btn-danger" id="removeCoverBtn" onclick="removeCoverPhoto()" style="display:none;">Remove</button>
+            <div style="display:flex; flex-direction:column; gap:0.5rem; flex:1;">
+              <input type="text" id="editBookCover" class="form-control" placeholder="Paste Image URL or choose file below">
+              <div style="display:flex; gap:0.5rem; align-items:center;">
+                <label class="btn btn-sm" style="cursor:pointer; margin:0;">
+                  📁 Upload Photo
+                  <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverPhotoUpload(this)">
+                </label>
+                <button type="button" class="btn btn-sm btn-danger" id="removeCoverBtn" onclick="removeBookCoverPhoto()" style="display:none;">
+                  Remove
+                </button>
               </div>
-              <span style="font-size:0.75rem; color:var(--text-muted);">Offline auto-compressed (~30KB)</span>
             </div>
           </div>
         </div>
@@ -304,6 +299,18 @@
               <option value="AVAILABLE">Available</option>
               <option value="UNAVAILABLE">Unavailable</option>
             </select>
+          </div>
+        </div>
+
+        <!-- Book Reading Page Tracking -->
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Current Page</label>
+            <input type="number" id="editCurrentPage" class="form-control" placeholder="e.g. 85" min="0">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Total Pages</label>
+            <input type="number" id="editTotalPages" class="form-control" placeholder="e.g. 280" min="1">
           </div>
         </div>
 
@@ -360,13 +367,22 @@
 
   <!-- Takeaway Notes Modal -->
   <div class="modal-overlay" id="takeawayModalOverlay">
-    <div class="modal-content">
+    <div class="modal-content" style="max-width:560px;">
       <div class="modal-header">
         <h3 class="modal-title">💡 Key Learnings & Notes</h3>
         <button class="modal-close" onclick="closeTakeawayModal()">&times;</button>
       </div>
       <div class="modal-body">
         <div id="takeawayBookTitle" style="font-weight:700; color:var(--text-primary); font-size:1.05rem;"></div>
+        
+        <!-- Note Formatting Template Chips -->
+        <div class="note-template-chips">
+          <button type="button" class="chip-action-btn" onclick="insertNoteTemplate('takeaway')">💡 Key Takeaway</button>
+          <button type="button" class="chip-action-btn" onclick="insertNoteTemplate('chapter')">🔖 Chapter Note</button>
+          <button type="button" class="chip-action-btn" onclick="insertNoteTemplate('quote')">⭐ Golden Quote</button>
+          <button type="button" class="chip-action-btn" onclick="insertNoteTemplate('action')">🎯 Action Step</button>
+        </div>
+
         <div class="form-group">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
             <label class="form-label" style="margin:0;">Your Insights, Action Items & Summary:</label>
@@ -374,7 +390,7 @@
               📸 Scan Page (OCR)
             </button>
           </div>
-          <textarea id="takeawayTextarea" class="form-control" style="min-height:180px;" placeholder="Write down key takeaways, life lessons, or summary of this book..."></textarea>
+          <textarea id="takeawayTextarea" class="form-control" style="min-height:220px;" placeholder="Write down key takeaways, life lessons, or summary of this book..."></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -844,7 +860,7 @@
         <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:12px; padding:1rem; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Books Tracker</div>
-            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 1.7 (Clean & Perfected Focus Edition)</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 1.8 (Luxury Reading & Page Tracker Edition)</div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn">
             🔄 Check Update

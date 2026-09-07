@@ -35,6 +35,44 @@ const ICONS = {
   note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>'
 };
 
+const CURATED_BOOK_COVERS = {
+  "hyperfocus": "https://covers.openlibrary.org/b/id/10524458-M.jpg",
+  "the power of your subconscious mind": "https://covers.openlibrary.org/b/id/8231996-M.jpg",
+  "limitless": "https://covers.openlibrary.org/b/id/10414441-M.jpg",
+  "thinking, fast and slow": "https://covers.openlibrary.org/b/id/7288636-M.jpg",
+  "deep work": "https://covers.openlibrary.org/b/id/8302306-M.jpg",
+  "atomic habits": "https://covers.openlibrary.org/b/id/12741544-M.jpg",
+  "the psychology of money": "https://covers.openlibrary.org/b/id/10595166-M.jpg",
+  "rich dad poor dad": "https://covers.openlibrary.org/b/id/8282367-M.jpg",
+  "ikigai": "https://covers.openlibrary.org/b/id/9255566-M.jpg",
+  "can't hurt me": "https://covers.openlibrary.org/b/id/10283416-M.jpg",
+  "meditations": "https://covers.openlibrary.org/b/id/8235116-M.jpg",
+  "start with why": "https://covers.openlibrary.org/b/id/8231856-M.jpg",
+  "the 7 habits of highly effective people": "https://covers.openlibrary.org/b/id/8231946-M.jpg",
+  "ego is the enemy": "https://covers.openlibrary.org/b/id/8235086-M.jpg",
+  "make time": "https://covers.openlibrary.org/b/id/8824156-M.jpg"
+};
+
+function getBookCover(book) {
+  if (book.cover_image && book.cover_image.trim().length > 0) return book.cover_image;
+  const key = (book.title || '').toLowerCase().trim();
+  for (let k of Object.keys(CURATED_BOOK_COVERS)) {
+    if (key.includes(k)) return CURATED_BOOK_COVERS[k];
+  }
+  return null;
+}
+
+function getBookPages(book) {
+  const total = parseInt(book.total_pages) || 280;
+  let curr = parseInt(book.current_page);
+  if (isNaN(curr)) {
+    curr = book.status === 'DONE' ? total : (book.status === 'READING' ? Math.round(total * 0.45) : 0);
+  }
+  curr = Math.max(0, Math.min(curr, total));
+  const pct = Math.round((curr / total) * 100);
+  return { current: curr, total: total, pct: pct };
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initPrivacyLock();
@@ -374,24 +412,37 @@ function renderNowReadingHero() {
   let currentBook = state.books.find(b => b.status === 'READING');
   let origIdx = state.books.findIndex(b => b.status === 'READING');
 
-  // Fallback to first book if none is READING
-  if (!currentBook && state.books.length > 0) {
-    currentBook = state.books[0];
-    origIdx = 0;
-  }
-
+  // If no book is currently in READING status, show an inspiring Roulette prompt
   if (!currentBook) {
-    container.innerHTML = '';
+    container.innerHTML = '<div class="now-reading-hero" style="border-left:4px solid #6366f1; background:linear-gradient(135deg, rgba(99,102,241,0.08), rgba(16,185,129,0.04));">' +
+      '<div class="hero-content-wrap" style="align-items:center;">' +
+      '<div style="font-size:3.2rem; margin-right:0.5rem; filter:drop-shadow(0 4px 12px rgba(99,102,241,0.3)); cursor:pointer;" onclick="openPickBookModal()">🎲</div>' +
+      '<div class="hero-details">' +
+      '<div class="hero-pill-badge" style="background:rgba(99,102,241,0.18); color:#818cf8;">✨ READY FOR YOUR NEXT READ</div>' +
+      '<h2 class="hero-title" style="font-size:1.25rem;">No active book in progress right now</h2>' +
+      '<div class="hero-author">Pick a book from your library or let Book Roulette choose one for you!</div>' +
+      '<div class="hero-actions-row" style="margin-top:0.75rem;">' +
+      '<button class="hero-btn-primary" onclick="openPickBookModal()">' +
+      '🎲 Spin Book Roulette' +
+      '</button>' +
+      '<button class="hero-btn-ambient" onclick="openAmbienceModal()">' +
+      '🎧 Focus Ambience' +
+      '</button>' +
+      '</div>' +
+      '</div>' +
+      '</div>' +
+      '</div>';
     return;
   }
 
   const days = getBookEffectiveDays(currentBook);
-  const isReading = currentBook.status === 'READING';
+  const pages = getBookPages(currentBook);
   const hasNotes = currentBook.takeaway && currentBook.takeaway.trim().length > 0;
+  const coverUrl = getBookCover(currentBook);
   
   let coverHtml = '';
-  if (currentBook.cover_image) {
-    coverHtml = '<img src="' + currentBook.cover_image + '" alt="cover" class="hero-3d-book">';
+  if (coverUrl) {
+    coverHtml = '<img src="' + coverUrl + '" alt="cover" class="hero-3d-book">';
   } else {
     coverHtml = '<div class="hero-book-placeholder">' +
       '<div style="font-size:2.2rem; margin-bottom:0.25rem;">📖</div>' +
@@ -402,17 +453,27 @@ function renderNowReadingHero() {
 
   container.innerHTML = '<div class="now-reading-hero">' +
     '<div class="hero-content-wrap">' +
-    '<div class="hero-book-visual" onclick="openTakeawayModal(' + origIdx + ')" style="cursor:pointer;" title="Click to open book notes">' +
+    '<div class="hero-book-visual" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;" title="Click to view book details & progress">' +
     coverHtml +
     '</div>' +
     '<div class="hero-details">' +
-    '<div class="hero-pill-badge">' + (isReading ? '🔥 CURRENTLY READING • DAY ' + Math.max(1, days) : '⭐ SPOTLIGHT PICK') + '</div>' +
-    '<h2 class="hero-title">' + escapeHtml(currentBook.title) + '</h2>' +
+    '<div class="hero-pill-badge">🔥 CURRENTLY READING • DAY ' + Math.max(1, days) + '</div>' +
+    '<h2 class="hero-title" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;">' + escapeHtml(currentBook.title) + '</h2>' +
     '<div class="hero-author">by ' + escapeHtml(currentBook.author) + ' • <span style="color:#10b981; font-weight:700;">' + escapeHtml(currentBook.category || 'General') + '</span></div>' +
+
+    // Mini Page Progress Bar inside Hero Card
+    '<div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:10px; padding:0.5rem 0.85rem; margin:0.4rem 0; max-width:420px;">' +
+    '<div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:700; color:var(--text-primary); margin-bottom:0.3rem;">' +
+    '<span>Page ' + pages.current + ' of ' + pages.total + '</span>' +
+    '<span style="color:#10b981;">' + pages.pct + '% Completed</span>' +
+    '</div>' +
+    '<div class="page-progress-bar"><div class="page-progress-fill" style="width:' + pages.pct + '%;"></div></div>' +
+    '</div>' +
+
     (hasNotes ? '<div class="hero-quote-snippet">💡 "' + escapeHtml(currentBook.takeaway) + '"</div>' : '') +
     '<div class="hero-actions-row">' +
-    '<button class="hero-btn-primary" onclick="openTakeawayModal(' + origIdx + ')">' +
-    '📖 ' + (isReading ? 'Continue Reading & Notes' : 'Start Reading This Book') +
+    '<button class="hero-btn-primary" onclick="openBookDetailSheet(' + origIdx + ')">' +
+    '📖 Update Page & Notes' +
     '</button>' +
     '<button class="hero-btn-ambient" onclick="openAmbienceModal()">' +
     '🎧 ' + (isAmbiencePlaying ? 'Ambience Active' : 'Focus Ambience') +
@@ -592,9 +653,13 @@ function renderStatistics() {
   const pctEl = document.getElementById('progressPctText');
   if (pctEl) pctEl.innerText = pct + '% Completed';
   const subEl = document.getElementById('progressSubText');
-  if (subEl) subEl.innerText = '(' + done + ' / ' + total + ' Books Finished)';
+  if (subEl) subEl.innerText = done + ' / ' + total + ' Finished';
   const barEl = document.getElementById('progressBarFill');
   if (barEl) barEl.style.width = pct + '%';
+  const ringFill = document.getElementById('kpiRingFill');
+  if (ringFill) ringFill.setAttribute('stroke-dasharray', pct + ', 100');
+  const ringPct = document.getElementById('kpiRingPct');
+  if (ringPct) ringPct.innerText = Math.round(pct) + '%';
 
   const tbEl = document.getElementById('kpiTotalBooks');
   if (tbEl) tbEl.innerText = total;
@@ -752,63 +817,56 @@ function renderGridView(container, books) {
   books.forEach(b => {
     const origIdx = b.originalIndex;
     const days = getBookEffectiveDays(b);
+    const pages = getBookPages(b);
     const isReading = b.status === 'READING';
     const isDone = b.status === 'DONE';
     const statusCardClass = isReading ? 'status-reading-card' : (isDone ? 'status-done-card' : 'status-pending-card');
-    const endDateDisplay = isReading 
-      ? '<span class="badge" style="background:rgba(59,130,246,0.18); color:var(--status-reading-text); border:1px solid var(--status-reading-border); font-size:0.75rem; font-weight:600;">' + getTodayString() + ' (Today)</span>'
-      : (b.end_date || '-');
-    const daysBadge = isReading
-      ? '<span class="badge-days" style="color:#60a5fa; border-color:#2563eb; background:rgba(59,130,246,0.1);">' + days + ' d 🔥</span>'
-      : '<span class="badge-days">' + days + ' d</span>';
-    const ratingNum = parseInt(b.rating) || 0;
-    let starsHtml = '';
-    for (let s = 1; s <= 5; s++) {
-      starsHtml += '<span class="' + (s <= ratingNum ? 'filled' : '') + '" onclick="onRatingChange(' + origIdx + ', ' + s + ')">★</span>';
-    }
-
-    // Cover image or stylish 3D book placeholder
+    
+    const coverUrl = getBookCover(b);
     let coverHtml = '';
-    if (b.cover_image) {
-      coverHtml = '<img src="' + b.cover_image + '" alt="cover" style="width:48px; height:68px; object-fit:cover; border-radius:6px; flex-shrink:0; box-shadow:0 4px 10px rgba(0,0,0,0.35);">';
+    if (coverUrl) {
+      coverHtml = '<img src="' + coverUrl + '" alt="cover" style="width:52px; height:74px; object-fit:cover; border-radius:8px; flex-shrink:0; box-shadow:0 4px 12px rgba(0,0,0,0.35);">';
     } else {
       const catColor = isReading ? '#3b82f6' : (isDone ? '#10b981' : '#f59e0b');
-      coverHtml = '<div style="width:48px; height:68px; border-radius:6px; flex-shrink:0; background:linear-gradient(135deg, ' + catColor + '22, ' + catColor + '44); border:1px solid ' + catColor + '55; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 8px rgba(0,0,0,0.15); font-size:1.3rem;">' +
+      coverHtml = '<div style="width:52px; height:74px; border-radius:8px; flex-shrink:0; background:linear-gradient(135deg, ' + catColor + '22, ' + catColor + '44); border:1px solid ' + catColor + '55; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 8px rgba(0,0,0,0.15); font-size:1.3rem;">' +
         '<span>' + (isReading ? '📖' : (isDone ? '✅' : '📚')) + '</span>' +
         '<span style="font-size:0.6rem; font-weight:800; color:var(--text-muted); margin-top:2px;">#' + escapeHtml(b.no) + '</span>' +
         '</div>';
     }
 
-    html += '<div class="book-card ' + statusCardClass + '">' +
+    const ratingNum = parseInt(b.rating) || 0;
+    const starSnippet = ratingNum > 0 ? ('<span style="color:#f59e0b; font-size:0.75rem; font-weight:700;">★ ' + ratingNum + '</span>') : '';
+    const statusText = isDone ? 'Done' : (isReading ? 'Reading' : 'Pending');
+    const statusBg = isDone ? '#10b981' : (isReading ? '#3b82f6' : 'rgba(255,255,255,0.08)');
+    const statusColor = (isDone || isReading) ? '#ffffff' : 'var(--text-muted)';
+
+    html += '<div class="book-card ' + statusCardClass + '" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;" title="' + escapeHtml(b.title) + ' - Tap to view & update progress">' +
       '<div class="book-card-header" style="display:flex; gap:0.75rem; align-items:flex-start;">' +
       coverHtml +
       '<div style="flex:1; min-width:0;">' +
       '<div class="book-card-no">BOOK #' + escapeHtml(b.no) + '</div>' +
-      '<div class="book-card-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="' + escapeHtml(b.title) + '">' + escapeHtml(b.title) + '</div>' +
-      '<div class="book-card-author">by ' + escapeHtml(b.author) + ' • ' + escapeHtml(b.language || 'HINDI') + '</div></div>' +
-      '<select class="status-select status-' + (b.status || 'PENDING') + '" onchange="onStatusChange(' + origIdx + ', this.value)">' +
-      '<option value="PENDING" ' + (b.status === 'PENDING' ? 'selected' : '') + '>⏳ PENDING</option>' +
-      '<option value="READING" ' + (b.status === 'READING' ? 'selected' : '') + '>📖 READING</option>' +
-      '<option value="DONE" ' + (b.status === 'DONE' ? 'selected' : '') + '>✅ DONE</option>' +
-      '</select></div>' +
-      (b.lent_to ? '<div class="card-lent-banner"><span>🤝 Lent to: <strong>' + escapeHtml(b.lent_to) + '</strong> (' + (b.lent_date || 'Date N/A') + ')</span><button class="btn btn-sm" onclick="returnBook(' + origIdx + ')" style="padding:2px 8px; font-size:0.75rem; background:#10b981; color:#fff; border:none; cursor:pointer;">Return</button></div>' : '') +
-      '<div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">' +
+      '<div class="book-card-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:800; font-size:0.98rem;" title="' + escapeHtml(b.title) + '">' + escapeHtml(b.title) + '</div>' +
+      '<div class="book-card-author">by ' + escapeHtml(b.author) + '</div>' +
+      '<div style="display:flex; gap:0.4rem; align-items:center; margin-top:0.25rem;">' +
       '<span class="badge badge-cat">' + escapeHtml(b.category || 'General') + '</span>' +
-      '<span class="badge-days" style="' + (isReading ? 'color:#60a5fa; border-color:#2563eb; background:rgba(59,130,246,0.1);' : '') + '">' + days + ' days read' + (isReading ? ' 🔥' : '') + '</span>' +
-      '<div class="card-price-wrapper" title="Purchase cost (₹)">' +
-      '<span class="currency-symbol">₹</span>' +
-      '<input type="number" class="card-price-input" value="' + (b.price > 0 ? b.price : '') + '" placeholder="Price" min="0" onchange="onPriceChange(' + origIdx + ', this.value)">' +
-      '</div></div>' +
-      (b.takeaway ? '<div class="card-takeaway-preview" onclick="openTakeawayModal(' + origIdx + ')" title="Click to view notes">💡 <strong>Takeaway:</strong> ' + escapeHtml(b.takeaway) + '</div>' : '') +
-      '<div class="book-card-body"><div class="card-dates"><span>Start: ' + (b.start_date || 'Not started') + '</span><span>End: ' + endDateDisplay + '</span></div>' +
-      '<div class="card-meta-row"><div class="star-rating">' + starsHtml + '</div>' +
-      '<div class="card-actions">' +
-      (b.status === 'DONE' ? '<button class="btn btn-sm" style="color:#10b981; border-color:rgba(16,185,129,0.3);" onclick="openCompletionCard(' + origIdx + ')" title="Share completion card">🏆 Card</button>' : '') +
-      '<button class="btn btn-sm" onclick="openLendModal(' + origIdx + ')">🤝 ' + (b.lent_to ? 'Lent' : 'Lend') + '</button>' +
-      '<button class="btn btn-sm" onclick="openTakeawayModal(' + origIdx + ')">' + ICONS.note + ' Notes</button>' +
-      '<button class="btn btn-sm btn-icon-only" onclick="openEditModal(' + origIdx + ')">' + ICONS.edit + '</button>' +
-      '<button class="btn btn-sm btn-icon-only btn-danger" onclick="deleteBook(' + origIdx + ')">' + ICONS.trash + '</button>' +
-      '</div></div></div></div>';
+      starSnippet +
+      '</div>' +
+      '</div>' +
+      '<span class="badge" style="background:' + statusBg + '; color:' + statusColor + '; font-size:0.72rem; font-weight:700; flex-shrink:0;">' + statusText + '</span>' +
+      '</div>' +
+
+      // Sleek Mini Page Progress Bar
+      '<div class="card-page-progress">' +
+      '<div class="card-page-text">' +
+      '<span>Page ' + pages.current + ' / ' + pages.total + '</span>' +
+      '<span style="color:' + (pages.pct >= 100 ? '#10b981' : 'var(--text-secondary)') + ';">' + pages.pct + '%</span>' +
+      '</div>' +
+      '<div class="page-progress-bar"><div class="page-progress-fill" style="width:' + pages.pct + '%;"></div></div>' +
+      '</div>' +
+
+      (b.lent_to ? '<div class="card-lent-banner" style="margin-top:0.4rem;"><span>🤝 Lent to: <strong>' + escapeHtml(b.lent_to) + '</strong></span></div>' : '') +
+      (b.takeaway ? '<div class="card-takeaway-preview" style="margin-top:0.4rem;">💡 ' + escapeHtml(b.takeaway) + '</div>' : '') +
+      '</div>';
   });
   html += '</div>';
   container.innerHTML = html;
@@ -1127,6 +1185,8 @@ function openAddModal() {
   document.getElementById('editBookLanguage').value = 'HINDI';
   document.getElementById('editBookCategory').value = 'Focus & Concentration';
   document.getElementById('editBookStatus').value = 'PENDING';
+  document.getElementById('editCurrentPage').value = '0';
+  document.getElementById('editTotalPages').value = '280';
   document.getElementById('editStartDate').value = '';
   document.getElementById('editEndDate').value = '';
   document.getElementById('editCountDays').value = '0';
@@ -1145,6 +1205,8 @@ function openEditModal(index) {
   state.currentEditingCoverImage = book.cover_image || '';
   updateCoverPreview();
 
+  const pages = getBookPages(book);
+
   document.getElementById('bookModalTitle').innerText = 'Edit: ' + (book.title || book.no);
   document.getElementById('editBookNo').value = book.no || '';
   document.getElementById('editBookTitle').value = book.title || '';
@@ -1152,6 +1214,8 @@ function openEditModal(index) {
   document.getElementById('editBookLanguage').value = book.language || 'HINDI';
   document.getElementById('editBookCategory').value = book.category || 'Focus & Concentration';
   document.getElementById('editBookStatus').value = book.status || 'PENDING';
+  document.getElementById('editCurrentPage').value = pages.current;
+  document.getElementById('editTotalPages').value = pages.total;
   document.getElementById('editStartDate').value = book.start_date || '';
   document.getElementById('editEndDate').value = book.end_date || '';
   document.getElementById('editCountDays').value = book.count_days || 0;
@@ -1174,6 +1238,8 @@ function saveBookModal() {
   }
 
   const priceVal = parseFloat(document.getElementById('editBookPrice').value);
+  const currP = parseInt(document.getElementById('editCurrentPage').value);
+  const totP = parseInt(document.getElementById('editTotalPages').value);
   const existing = state.editingBookIndex >= 0 ? state.books[state.editingBookIndex] : {};
 
   const bookData = {
@@ -1183,6 +1249,8 @@ function saveBookModal() {
     language: document.getElementById('editBookLanguage').value.trim() || 'HINDI',
     category: document.getElementById('editBookCategory').value.trim() || 'General',
     status: document.getElementById('editBookStatus').value,
+    current_page: !isNaN(currP) ? Math.max(0, currP) : (existing.current_page || 0),
+    total_pages: (!isNaN(totP) && totP > 0) ? totP : (existing.total_pages || 280),
     start_date: document.getElementById('editStartDate').value,
     end_date: document.getElementById('editEndDate').value,
     count_days: parseInt(document.getElementById('editCountDays').value) || 0,
@@ -1249,6 +1317,214 @@ function saveTakeawayModal() {
     renderBookList();
     if (typeof recordReadingActivity === 'function') recordReadingActivity();
     showToast('Key takeaways saved successfully!', 'success');
+  }
+}
+
+function insertNoteTemplate(type) {
+  const textarea = document.getElementById('takeawayTextarea');
+  if (!textarea) return;
+  let snippet = '';
+  if (type === 'takeaway') {
+    snippet = '\n\n💡 KEY TAKEAWAY:\n• ';
+  } else if (type === 'chapter') {
+    snippet = '\n\n🔖 CHAPTER [ ]: \n';
+  } else if (type === 'quote') {
+    snippet = '\n\n⭐ GOLDEN QUOTE:\n"..."\n— ';
+  } else if (type === 'action') {
+    snippet = '\n\n🎯 ACTION STEP:\n• [ ] ';
+  }
+  
+  const start = textarea.selectionStart !== undefined ? textarea.selectionStart : textarea.value.length;
+  const end = textarea.selectionEnd !== undefined ? textarea.selectionEnd : textarea.value.length;
+  const text = textarea.value;
+  textarea.value = text.substring(0, start) + snippet + text.substring(end);
+  textarea.focus();
+  const nextPos = start + snippet.length;
+  textarea.setSelectionRange(nextPos, nextPos);
+}
+
+// ==========================================
+// 1-TAP LUXURY BOOK DETAIL SHEET & PAGE TRACKER
+// ==========================================
+function openBookDetailSheet(origIdx) {
+  const b = state.books[origIdx];
+  if (!b) return;
+
+  const badgeEl = document.getElementById('sheetCategoryBadge');
+  if (badgeEl) badgeEl.innerText = (b.category || 'General').toUpperCase();
+
+  const bodyEl = document.getElementById('bookDetailSheetBody');
+  if (!bodyEl) return;
+
+  const pages = getBookPages(b);
+  const coverUrl = getBookCover(b);
+  const coverHtml = coverUrl 
+    ? '<img class="sheet-cover-img" src="' + escapeHtml(coverUrl) + '" alt="Cover" onerror="this.parentElement.innerHTML=\'<div class=\\\'book-cover-placeholder\\\' style=\\\'width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem; background:#1e293b; color:#94a3b8;\\\'>📖</div>\';">'
+    : '<div class="book-cover-placeholder" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem; background:#1e293b; color:#94a3b8;">📖</div>';
+
+  const isReading = b.status === 'READING';
+  const isDone = b.status === 'DONE';
+  const isPending = !isReading && !isDone;
+
+  const ratingNum = parseInt(b.rating) || 0;
+  let starsHtml = '';
+  for (let s = 1; s <= 5; s++) {
+    const active = s <= ratingNum;
+    starsHtml += '<span onclick="onRatingChange(' + origIdx + ', ' + s + '); openBookDetailSheet(' + origIdx + ');" style="cursor:pointer; font-size:1.4rem; color:' + (active ? '#f59e0b' : 'rgba(255,255,255,0.18)') + '; margin-right:4px;">★</span>';
+  }
+
+  let html = '';
+
+  // Header Hero Row
+  html += '<div class="sheet-hero-row">';
+  html += '  <div class="sheet-cover-wrap">' + coverHtml + '</div>';
+  html += '  <div class="sheet-meta">';
+  html += '    <div style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">BOOK #' + escapeHtml(b.no || (origIdx + 1)) + ' • ' + escapeHtml(b.language || 'HINDI') + '</div>';
+  html += '    <div class="sheet-book-title">' + escapeHtml(b.title) + '</div>';
+  html += '    <div class="sheet-book-author">by ' + escapeHtml(b.author || 'Unknown Author') + '</div>';
+  html += '    <div style="margin-top:0.35rem; display:flex; align-items:center; gap:0.25rem;">' + starsHtml + '</div>';
+  html += '    <div style="margin-top:0.4rem; font-size:0.85rem; font-weight:700; color:var(--text-secondary);">';
+  html += '      <span>Purchase Price: </span>';
+  html += '      <span style="color:#10b981;">₹' + (b.price || 0) + '</span>';
+  html += '    </div>';
+  html += '  </div>';
+  html += '</div>';
+
+  // Status Fast Switcher
+  html += '<div style="display:flex; gap:0.5rem; background:var(--bg-primary); padding:0.4rem; border-radius:12px; border:1px solid var(--border-color);">';
+  html += '  <button type="button" class="btn btn-sm" onclick="setSheetStatus(' + origIdx + ', \'PENDING\')" style="flex:1; border-radius:8px; font-weight:700; ' + (isPending ? 'background:rgba(255,255,255,0.15); color:#fff; border-color:var(--border-color);' : 'background:transparent; color:var(--text-muted); border:none;') + '">⏳ Pending</button>';
+  html += '  <button type="button" class="btn btn-sm" onclick="setSheetStatus(' + origIdx + ', \'READING\')" style="flex:1; border-radius:8px; font-weight:700; ' + (isReading ? 'background:#3b82f6; color:#fff; border:none;' : 'background:transparent; color:var(--text-muted); border:none;') + '">📖 Reading</button>';
+  html += '  <button type="button" class="btn btn-sm" onclick="setSheetStatus(' + origIdx + ', \'DONE\')" style="flex:1; border-radius:8px; font-weight:700; ' + (isDone ? 'background:#10b981; color:#fff; border:none;' : 'background:transparent; color:var(--text-muted); border:none;') + '">✅ Done</button>';
+  html += '</div>';
+
+  // Interactive Page Progress Card
+  html += '<div class="sheet-page-tracker-card">';
+  html += '  <div class="sheet-page-header">';
+  html += '    <div>';
+  html += '      <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700; letter-spacing:0.04em;">Reading Progress</span>';
+  html += '      <div class="sheet-page-current">Page <span id="sheetPageDisplay">' + pages.current + '</span> of ' + pages.total + '</div>';
+  html += '    </div>';
+  html += '    <div class="sheet-page-pct" id="sheetPctDisplay" style="color:' + (pages.pct >= 100 ? '#10b981' : '#3b82f6') + '; font-size:1.1rem; font-weight:900;">' + pages.pct + '%</div>';
+  html += '  </div>';
+  html += '  <input type="range" class="sheet-page-slider" id="sheetPageSlider" min="0" max="' + pages.total + '" value="' + pages.current + '" oninput="handleSheetPageInput(' + origIdx + ', this.value)">';
+  html += '  <div class="sheet-page-quick-buttons">';
+  html += '    <span style="font-size:0.75rem; color:var(--text-muted); margin-right:auto; align-self:center;">Quick Progress:</span>';
+  html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 10)">+10 p</button>';
+  html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 25)">+25 p</button>';
+  html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 50)">+50 p</button>';
+  html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 9999)" style="background:rgba(16,185,129,0.18); color:#10b981; border-color:#10b981;">Finish 🏁</button>';
+  html += '  </div>';
+  html += '</div>';
+
+  // Lending Banner if Lent
+  if (b.lent_to) {
+    html += '<div class="card-lent-banner" style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 0.85rem; border-radius:10px;">';
+    html += '  <span>🤝 Currently lent to: <strong>' + escapeHtml(b.lent_to) + '</strong> (' + (b.lent_date || 'Date N/A') + ')</span>';
+    html += '  <button class="btn btn-sm" onclick="returnBook(' + origIdx + '); openBookDetailSheet(' + origIdx + ');" style="background:#10b981; color:#fff; border:none; padding:4px 10px;">Mark Returned</button>';
+    html += '</div>';
+  }
+
+  // Quick Action Buttons
+  html += '<div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:0.6rem; margin-top:0.25rem;">';
+  html += '  <button type="button" class="btn" onclick="closeBookDetailSheet(); openTakeawayModal(' + origIdx + ');" style="font-weight:700; font-size:0.85rem; justify-content:center;">';
+  html += '    💡 ' + (b.takeaway ? 'Edit Notes' : 'Add Notes');
+  html += '  </button>';
+  html += '  <button type="button" class="btn" onclick="closeBookDetailSheet(); openEditModal(' + origIdx + ');" style="font-weight:700; font-size:0.85rem; justify-content:center;">';
+  html += '    ✏️ Full Edit';
+  html += '  </button>';
+  if (!b.lent_to) {
+    html += '  <button type="button" class="btn" onclick="closeBookDetailSheet(); openLendModal(' + origIdx + ');" style="font-weight:700; font-size:0.85rem; justify-content:center;">';
+    html += '    🤝 Lend to Friend';
+    html += '  </button>';
+  }
+  if (isDone) {
+    html += '  <button type="button" class="btn" onclick="closeBookDetailSheet(); openCompletionCard(' + origIdx + ');" style="font-weight:700; font-size:0.85rem; justify-content:center; color:#10b981; border-color:rgba(16,185,129,0.4);">';
+    html += '    🏆 Trophy Card';
+    html += '  </button>';
+  }
+  html += '  <button type="button" class="btn btn-danger" onclick="closeBookDetailSheet(); deleteBook(' + origIdx + ');" style="font-weight:700; font-size:0.85rem; justify-content:center;">';
+  html += '    🗑️ Delete Book';
+  html += '  </button>';
+  html += '</div>';
+
+  bodyEl.innerHTML = html;
+
+  const overlay = document.getElementById('bookDetailSheetOverlay');
+  if (overlay) overlay.classList.add('active');
+}
+
+function closeBookDetailSheet() {
+  const overlay = document.getElementById('bookDetailSheetOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+function handleSheetPageInput(origIdx, val) {
+  const b = state.books[origIdx];
+  if (!b) return;
+  const total = parseInt(b.total_pages) || 280;
+  let curr = parseInt(val) || 0;
+  curr = Math.max(0, Math.min(curr, total));
+  b.current_page = curr;
+
+  const pct = Math.round((curr / total) * 100);
+
+  const disp = document.getElementById('sheetPageDisplay');
+  const pctDisp = document.getElementById('sheetPctDisplay');
+  if (disp) disp.innerText = curr;
+  if (pctDisp) {
+    pctDisp.innerText = pct + '%';
+    pctDisp.style.color = pct >= 100 ? '#10b981' : '#3b82f6';
+  }
+
+  if (curr >= total && b.status !== 'DONE') {
+    b.status = 'DONE';
+    const today = getTodayString();
+    if (!b.end_date) b.end_date = today;
+    if (!b.start_date) b.start_date = today;
+    b.count_days = calculateDaysDifference(b.start_date, b.end_date);
+    showToast('🎉 Congratulations! You finished "' + b.title + '"!', 'success');
+    if (typeof recordReadingActivity === 'function') recordReadingActivity();
+  } else if (curr > 0 && curr < total && b.status === 'PENDING') {
+    b.status = 'READING';
+    const today = getTodayString();
+    if (!b.start_date) b.start_date = today;
+    showToast('📖 Started reading "' + b.title + '"!', 'info');
+    if (typeof recordReadingActivity === 'function') recordReadingActivity();
+  }
+
+  markChange();
+  saveData();
+  renderApp();
+}
+
+function stepSheetPage(origIdx, step) {
+  const b = state.books[origIdx];
+  if (!b) return;
+  const total = parseInt(b.total_pages) || 280;
+  let curr = parseInt(b.current_page) || 0;
+  curr = Math.max(0, Math.min(curr + step, total));
+  b.current_page = curr;
+
+  const slider = document.getElementById('sheetPageSlider');
+  if (slider) slider.value = curr;
+
+  handleSheetPageInput(origIdx, curr);
+  openBookDetailSheet(origIdx);
+}
+
+function setSheetStatus(origIdx, newStatus) {
+  onStatusChange(origIdx, newStatus);
+  const b = state.books[origIdx];
+  if (b) {
+    const total = parseInt(b.total_pages) || 280;
+    if (newStatus === 'DONE') {
+      b.current_page = total;
+    } else if (newStatus === 'PENDING') {
+      b.current_page = 0;
+    }
+    saveData();
+    renderApp();
+    openBookDetailSheet(origIdx);
   }
 }
 
@@ -2654,7 +2930,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v1.7.0';
+const CURRENT_APP_VERSION = 'v1.8.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -2695,7 +2971,7 @@ async function checkForAppUpdates(showFeedback = true) {
     const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
     if (!res.ok) throw new Error('Could not contact update server');
     const data = await res.json();
-    const tagName = data.tag_name || 'v1.6.0';
+    const tagName = data.tag_name || 'v1.8.0';
     const releaseName = data.name || ('Mind Focus Books Tracker ' + tagName);
 
     let apkUrl = 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/' + tagName + '/MindFocusBooks-Native.apk';
@@ -2710,7 +2986,7 @@ async function checkForAppUpdates(showFeedback = true) {
     if (tagName === CURRENT_APP_VERSION) {
       if (icon) icon.innerText = '✅';
       if (title) title.innerText = 'App is Up to Date (' + CURRENT_APP_VERSION + ')';
-      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>You are running the latest version with Clean Header, Pomodoro Focus Timer & Fixed Modals!<br><small style="color:var(--text-muted);">Zero data loss permanent keystore build.</small>';
+      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>You are running the latest version with Compact KPI Strip, Book Page Tracker, 1-Tap Detail Sheet & Note Formatting Chips!<br><small style="color:var(--text-muted);">Zero data loss permanent keystore build.</small>';
       if (actionBtn) {
         actionBtn.style.display = 'inline-flex';
         actionBtn.innerText = '🔄 Re-download / Repair ' + tagName;
@@ -2719,7 +2995,7 @@ async function checkForAppUpdates(showFeedback = true) {
     } else {
       if (icon) icon.innerText = '👑';
       if (title) title.innerText = 'New Update Available: ' + tagName;
-      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>Clean Header, Settings Hub, Pomodoro Focus Timer & Fixed Modals are ready to install!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero data loss.</small>';
+      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>Compact KPI Strip, Book Page Tracking, 1-Tap Detail Sheet & Curated Covers are ready to install!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero data loss.</small>';
       if (actionBtn) {
         actionBtn.style.display = 'inline-flex';
         actionBtn.innerText = '⚡ Install ' + tagName + ' Now';
@@ -3321,8 +3597,9 @@ window.openPickBookModal = openPickBookModal;
 window.closePickBookModal = closePickBookModal;
 window.openPomodoroModal = openPomodoroModal;
 window.closePomodoroModal = closePomodoroModal;
-
-
-
-
-
+window.openBookDetailSheet = openBookDetailSheet;
+window.closeBookDetailSheet = closeBookDetailSheet;
+window.handleSheetPageInput = handleSheetPageInput;
+window.stepSheetPage = stepSheetPage;
+window.setSheetStatus = setSheetStatus;
+window.insertNoteTemplate = insertNoteTemplate;

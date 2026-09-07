@@ -2777,6 +2777,337 @@ body {
   padding-top: 0.4rem;
 }
 
+/* ==========================================================
+   v1.8.0 LUXURY OVERHAUL: COMPACT KPI STRIP
+   ========================================================== */
+.compact-kpi-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: var(--bg-card, var(--bg-secondary));
+  border: 1px solid var(--border-color);
+  border-radius: 16px;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  flex-wrap: wrap;
+}
+
+.kpi-strip-item {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.kpi-strip-item:hover {
+  transform: scale(1.02);
+}
+
+.kpi-ring-wrap {
+  position: relative;
+  width: 46px;
+  height: 46px;
+  flex-shrink: 0;
+}
+
+.circular-chart {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.circle-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 3.8;
+}
+
+.circle {
+  fill: none;
+  stroke-width: 3.8;
+  stroke-linecap: round;
+  stroke: #10b981;
+  transition: stroke-dasharray 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.kpi-ring-pct {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: #10b981;
+}
+
+.kpi-strip-meta {
+  display: flex;
+  flex-direction: column;
+}
+
+.kpi-strip-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.kpi-strip-sub {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.kpi-strip-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: flex-end;
+}
+
+.kpi-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.75rem;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.kpi-chip:hover {
+  border-color: var(--accent-primary, #6366f1);
+  transform: translateY(-2px);
+}
+
+.chip-icon {
+  font-size: 0.95rem;
+}
+
+.chip-val {
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.chip-lbl {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+/* ==========================================================
+   v1.8.0 LUXURY OVERHAUL: 1-TAP BOOK DETAIL SHEET
+   ========================================================== */
+.book-detail-sheet-content {
+  border-radius: 24px !important;
+  background: var(--bg-card, var(--bg-secondary));
+  box-shadow: 0 -8px 36px rgba(0, 0, 0, 0.45);
+  animation: sheetSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes sheetSlideUp {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.sheet-drag-handle {
+  width: 44px;
+  height: 5px;
+  background: var(--border-color);
+  border-radius: 3px;
+  margin: 10px auto 0;
+  opacity: 0.6;
+}
+
+.sheet-category-badge {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  background: rgba(99, 102, 241, 0.15);
+  color: #818cf8;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.sheet-hero-row {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+}
+
+.sheet-cover-wrap {
+  width: 110px;
+  height: 160px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  background: #1e293b;
+  position: relative;
+}
+
+.sheet-cover-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sheet-meta {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.sheet-book-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.sheet-book-author {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+/* Interactive Page Slider Section in Sheet */
+.sheet-page-tracker-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.sheet-page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sheet-page-current {
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: #10b981;
+}
+
+.sheet-page-pct {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.sheet-page-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  outline: none;
+  accent-color: #10b981;
+}
+
+.sheet-page-quick-buttons {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.page-step-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.35rem 0.65rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.page-step-btn:hover {
+  background: #10b981;
+  color: #fff;
+  border-color: #10b981;
+}
+
+/* Card Face Mini Page Progress */
+.card-page-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin: 0.4rem 0 0.2rem;
+}
+
+.card-page-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.page-progress-bar {
+  width: 100%;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.page-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #10b981);
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+/* Note Template Formatting Chips */
+.note-template-chips {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.6rem;
+}
+
+.chip-action-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.chip-action-btn:hover {
+  background: rgba(99, 102, 241, 0.2);
+  border-color: #818cf8;
+  color: #818cf8;
+}
+
 
 
 

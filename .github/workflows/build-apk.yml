@@ -87,9 +87,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v1.7.0
-        name: "Mind Focus Books Tracker v1.7.0 - Clean & Perfected Focus Edition"
-        body: "Release v1.7.0: Clean header with removed redundant settings button, fixed unclosed modal containers for Ambience and Streak, improved bottom navigation dock, and backdrop modal dismiss."
+        tag_name: v1.8.0
+        name: "Mind Focus Books Tracker v1.8.0 - Luxury Reading & Page Tracker Edition"
+        body: "Release v1.8.0: Compact KPI strip with SVG circular progress ring, Book Reading Page Progress tracking with slider and quick step buttons, 1-Tap Apple Books-style Luxury Book Detail Sheet, Smart Now Reading Hero, Note Formatting Template Chips, and Curated High-Res Book Covers."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
