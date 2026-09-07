@@ -46,23 +46,72 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
-  state.theme = saved;
-  document.documentElement.setAttribute('data-theme', saved);
+  setAppTheme(saved, false);
+}
+
+function setAppTheme(themeName, notify = true) {
+  if (!['dark', 'sepia', 'light'].includes(themeName)) {
+    themeName = 'dark';
+  }
+  state.theme = themeName;
+  document.documentElement.setAttribute('data-theme', themeName);
+  localStorage.setItem(THEME_KEY, themeName);
   updateThemeButton();
+  updateSettingsThemeChoices();
+
+  if (notify) {
+    if (themeName === 'sepia') {
+      showToast('📜 Kindle Sepia Paper: Eye Comfort Mode On', 'success');
+    } else if (themeName === 'dark') {
+      showToast('🌙 Midnight Dark Mode activated', 'info');
+    } else {
+      showToast('☀️ Clean Daylight Mode activated', 'info');
+    }
+  }
+}
+
+function cycleTheme() {
+  const order = ['dark', 'sepia', 'light'];
+  const currentIndex = order.indexOf(state.theme);
+  const nextIndex = (currentIndex + 1) % order.length;
+  setAppTheme(order[nextIndex], true);
 }
 
 function toggleTheme() {
-  state.theme = state.theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', state.theme);
-  localStorage.setItem(THEME_KEY, state.theme);
-  updateThemeButton();
+  cycleTheme();
 }
 
 function updateThemeButton() {
+  const iconSpan = document.getElementById('themeToggleIcon');
+  const textSpan = document.getElementById('themeToggleBtnText');
   const btn = document.getElementById('themeToggleBtn');
-  if (btn) {
-    btn.innerHTML = state.theme === 'dark' ? (ICONS.sun + ' Light') : (ICONS.moon + ' Dark');
+
+  let icon = '🌙';
+  let label = 'Dark';
+  if (state.theme === 'sepia') {
+    icon = '📜';
+    label = 'Sepia';
+  } else if (state.theme === 'light') {
+    icon = '☀️';
+    label = 'Light';
   }
+
+  if (iconSpan && textSpan) {
+    iconSpan.innerText = icon;
+    textSpan.innerText = label;
+  } else if (btn) {
+    btn.innerHTML = `${icon} ${label}`;
+  }
+}
+
+function updateSettingsThemeChoices() {
+  const darkBtn = document.getElementById('themeChoiceDark');
+  const sepiaBtn = document.getElementById('themeChoiceSepia');
+  const lightBtn = document.getElementById('themeChoiceLight');
+
+  if (darkBtn) darkBtn.classList.toggle('active', state.theme === 'dark');
+  if (sepiaBtn) sepiaBtn.classList.toggle('active', state.theme === 'sepia');
+  if (lightBtn) lightBtn.classList.toggle('active', state.theme === 'light');
 }
 
 function loadData() {
@@ -2384,6 +2433,7 @@ const CURRENT_APP_VERSION = 'v1.2.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
+  updateSettingsThemeChoices();
   document.getElementById('appSettingsModalOverlay').classList.add('active');
 }
 

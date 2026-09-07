@@ -78,6 +78,105 @@
   --star-empty: #cbd5e1;
 }
 
+[data-theme="sepia"] {
+  --bg-primary: #f6ecd8;
+  --bg-secondary: #eee1c7;
+  --bg-card: #fdf8ed;
+  --bg-hover: #e5d5b7;
+  --border-color: #d6c3a0;
+  --text-primary: #2b2114;
+  --text-secondary: #5c4b38;
+  --text-muted: #85725d;
+  --accent-primary: #9a4819;
+  --accent-primary-hover: #803a11;
+  --accent-glow: rgba(154, 72, 25, 0.18);
+
+  --status-pending-bg: rgba(133, 114, 93, 0.14);
+  --status-pending-text: #685542;
+  --status-pending-border: #c7b49b;
+
+  --status-reading-bg: rgba(180, 83, 9, 0.15);
+  --status-reading-text: #92400e;
+  --status-reading-border: #f59e0b;
+
+  --status-done-bg: rgba(22, 101, 52, 0.15);
+  --status-done-text: #166534;
+  --status-done-border: #86efac;
+
+  --avail-badge-bg: rgba(185, 28, 28, 0.12);
+  --avail-badge-text: #991b1b;
+  --avail-badge-border: #fca5a5;
+
+  --cat-badge-bg: rgba(120, 53, 15, 0.12);
+  --cat-badge-text: #78350f;
+  --cat-badge-border: #d97706;
+
+  --star-filled: #b45309;
+  --star-empty: #c7b89d;
+  --shadow-sm: 0 1px 3px rgba(43, 33, 20, 0.10);
+  --shadow-md: 0 6px 14px -2px rgba(43, 33, 20, 0.15);
+  --shadow-lg: 0 14px 28px -4px rgba(43, 33, 20, 0.20);
+}
+
+/* Kindle Sepia Eye-Comfort Paper Feel */
+[data-theme="sepia"] .book-row,
+[data-theme="sepia"] .book-card-grid-item,
+[data-theme="sepia"] .modal-content,
+[data-theme="sepia"] .progress-card,
+[data-theme="sepia"] .stat-card,
+[data-theme="sepia"] .bottom-nav-dock {
+  background-color: var(--bg-card);
+  border-color: var(--border-color);
+}
+
+.theme-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.65rem;
+  margin-top: 0.5rem;
+}
+
+.theme-choice-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.theme-choice-btn:hover {
+  border-color: var(--accent-primary);
+  background: var(--bg-hover);
+}
+
+.theme-choice-btn.active {
+  border-color: var(--accent-primary);
+  background: var(--accent-glow);
+  font-weight: 700;
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-choice-btn .theme-icon {
+  font-size: 1.5rem;
+}
+
+.theme-choice-btn .theme-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.theme-choice-btn .theme-sub {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

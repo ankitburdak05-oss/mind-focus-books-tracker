@@ -102,8 +102,8 @@
         <button class="btn" id="privacyLockBtn" title="Privacy PIN Lock">
           🔒 <span id="privacyLockBtnText">PIN Lock</span>
         </button>
-        <button class="btn" id="themeToggleBtn">
-          Light
+        <button class="btn" id="themeToggleBtn" title="Reading Theme & Eye Comfort" onclick="cycleTheme()">
+          <span id="themeToggleIcon">🌙</span> <span id="themeToggleBtnText">Dark</span>
         </button>
       </div>
     </div>
@@ -936,14 +936,30 @@
             </div>
           </div>
 
-          <div class="backup-action-card" onclick="toggleTheme()" style="cursor:pointer;">
-            <div style="display:flex; align-items:center; gap:0.75rem;">
-              <span style="font-size:1.4rem;">🌓</span>
-              <div style="flex:1;">
-                <div style="font-weight:700; font-size:0.92rem; color:var(--text-primary);">Switch Theme (Dark / Light)</div>
-                <div style="font-size:0.78rem; color:var(--text-secondary);">Toggle night mode or daylight theme</div>
+          <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:var(--radius-md); padding:0.9rem;">
+            <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
+              <span style="font-size:1.2rem;">🎨</span>
+              <div>
+                <div style="font-weight:700; font-size:0.9rem; color:var(--text-primary);">Reading Theme & Eye Comfort</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary);">Kindle Vintage Paper warm glow or dark/light modes</div>
               </div>
-              <span style="color:var(--text-muted);">›</span>
+            </div>
+            <div class="theme-picker-grid">
+              <button type="button" class="theme-choice-btn" id="themeChoiceDark" onclick="setAppTheme('dark')">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-label">Midnight Dark</span>
+                <span class="theme-sub">Night reading</span>
+              </button>
+              <button type="button" class="theme-choice-btn" id="themeChoiceSepia" onclick="setAppTheme('sepia')">
+                <span class="theme-icon">📜</span>
+                <span class="theme-label">Kindle Sepia</span>
+                <span class="theme-sub">Zero blue light</span>
+              </button>
+              <button type="button" class="theme-choice-btn" id="themeChoiceLight" onclick="setAppTheme('light')">
+                <span class="theme-icon">☀️</span>
+                <span class="theme-label">Daylight</span>
+                <span class="theme-sub">Clean daylight</span>
+              </button>
             </div>
           </div>
         </div>
