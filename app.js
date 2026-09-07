@@ -2429,7 +2429,7 @@ function switchBottomTab(tab) {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v1.2.0';
+const CURRENT_APP_VERSION = 'v1.3.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -2459,7 +2459,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
   if (icon) icon.innerText = '🔍';
   if (title) title.innerText = 'Checking for Updates...';
-  if (desc) desc.innerText = 'Connecting to GitHub repository to check the latest version...';
+  if (desc) desc.innerText = 'Connecting to GitHub server to check latest release...';
   if (progress) progress.style.display = 'block';
   if (actionBtn) actionBtn.style.display = 'none';
 
@@ -2467,8 +2467,8 @@ async function checkForAppUpdates(showFeedback = true) {
     const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
     if (!res.ok) throw new Error('Could not contact update server');
     const data = await res.json();
-    const tagName = data.tag_name || 'v1.0.0';
-    const releaseName = data.name || tagName;
+    const tagName = data.tag_name || 'v1.3.0';
+    const releaseName = data.name || ('Mind Focus Books Tracker ' + tagName);
 
     let apkUrl = 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/' + tagName + '/MindFocusBooks-Native.apk';
     if (data.assets && data.assets.length > 0) {
@@ -2479,11 +2479,12 @@ async function checkForAppUpdates(showFeedback = true) {
 
     if (progress) progress.style.display = 'none';
 
-    if (icon) icon.innerText = '🚀';
-    if (title) title.innerText = 'Update Ready: ' + releaseName;
-    if (desc) desc.innerHTML = 'A verified update is available.<br><small style="color:var(--text-muted);">Permanent-key signed: installs seamlessly without uninstalling.</small>';
+    if (icon) icon.innerText = '🎉';
+    if (title) title.innerText = 'New Version Available: ' + tagName;
+    if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>Kindle Sepia Paper & Eye-Comfort Mode is ready to install!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero uninstall needed.</small>';
     if (actionBtn) {
       actionBtn.style.display = 'inline-flex';
+      actionBtn.innerText = '⚡ Install ' + tagName + ' Now';
       actionBtn.onclick = () => triggerInAppUpdate(apkUrl);
     }
   } catch (err) {
