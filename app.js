@@ -2627,7 +2627,7 @@ function switchBottomTab(tab) {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v1.5.0';
+const CURRENT_APP_VERSION = 'v1.6.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -2665,7 +2665,7 @@ async function checkForAppUpdates(showFeedback = true) {
     const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
     if (!res.ok) throw new Error('Could not contact update server');
     const data = await res.json();
-    const tagName = data.tag_name || 'v1.5.0';
+    const tagName = data.tag_name || 'v1.6.0';
     const releaseName = data.name || ('Mind Focus Books Tracker ' + tagName);
 
     let apkUrl = 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/' + tagName + '/MindFocusBooks-Native.apk';
@@ -2677,13 +2677,24 @@ async function checkForAppUpdates(showFeedback = true) {
 
     if (progress) progress.style.display = 'none';
 
-    if (icon) icon.innerText = '👑';
-    if (title) title.innerText = 'Luxury Upgrade Available: ' + tagName;
-    if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>Now Reading Hero Spotlight, Netflix-style Curated Shelves & Modern 3D Experience are ready to install!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero data loss.</small>';
-    if (actionBtn) {
-      actionBtn.style.display = 'inline-flex';
-      actionBtn.innerText = '⚡ Install ' + tagName + ' Now';
-      actionBtn.onclick = () => triggerInAppUpdate(apkUrl);
+    if (tagName === CURRENT_APP_VERSION) {
+      if (icon) icon.innerText = '✅';
+      if (title) title.innerText = 'App is Up to Date (' + CURRENT_APP_VERSION + ')';
+      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>You are running the latest version with Clean Header, Pomodoro Focus Timer & Fixed Modals!<br><small style="color:var(--text-muted);">Zero data loss permanent keystore build.</small>';
+      if (actionBtn) {
+        actionBtn.style.display = 'inline-flex';
+        actionBtn.innerText = '🔄 Re-download / Repair ' + tagName;
+        actionBtn.onclick = () => triggerInAppUpdate(apkUrl);
+      }
+    } else {
+      if (icon) icon.innerText = '👑';
+      if (title) title.innerText = 'New Update Available: ' + tagName;
+      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>Clean Header, Settings Hub, Pomodoro Focus Timer & Fixed Modals are ready to install!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero data loss.</small>';
+      if (actionBtn) {
+        actionBtn.style.display = 'inline-flex';
+        actionBtn.innerText = '⚡ Install ' + tagName + ' Now';
+        actionBtn.onclick = () => triggerInAppUpdate(apkUrl);
+      }
     }
   } catch (err) {
     console.error('Update check failed:', err);
