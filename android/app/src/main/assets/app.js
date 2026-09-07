@@ -406,147 +406,28 @@ function getFilteredAndSortedBooks() {
    ========================================================== */
 function renderNowReadingHero() {
   const container = document.getElementById('nowReadingHeroSection');
-  if (!container) return;
-
-  // Find book that is READING
-  let currentBook = state.books.find(b => b.status === 'READING');
-  let origIdx = state.books.findIndex(b => b.status === 'READING');
-
-  // If no book is currently in READING status, show an inspiring Roulette prompt
-  if (!currentBook) {
-    container.innerHTML = '<div class="now-reading-hero" style="border-left:4px solid #6366f1; background:linear-gradient(135deg, rgba(99,102,241,0.08), rgba(16,185,129,0.04));">' +
-      '<div class="hero-content-wrap" style="align-items:center;">' +
-      '<div style="font-size:3.2rem; margin-right:0.5rem; filter:drop-shadow(0 4px 12px rgba(99,102,241,0.3)); cursor:pointer;" onclick="openPickBookModal()">🎲</div>' +
-      '<div class="hero-details">' +
-      '<div class="hero-pill-badge" style="background:rgba(99,102,241,0.18); color:#818cf8;">✨ READY FOR YOUR NEXT READ</div>' +
-      '<h2 class="hero-title" style="font-size:1.25rem;">No active book in progress right now</h2>' +
-      '<div class="hero-author">Pick a book from your library or let Book Roulette choose one for you!</div>' +
-      '<div class="hero-actions-row" style="margin-top:0.75rem;">' +
-      '<button class="hero-btn-primary" onclick="openPickBookModal()">' +
-      '🎲 Spin Book Roulette' +
-      '</button>' +
-      '<button class="hero-btn-ambient" onclick="openAmbienceModal()">' +
-      '🎧 Focus Ambience' +
-      '</button>' +
-      '</div>' +
-      '</div>' +
-      '</div>' +
-      '</div>';
-    return;
+  if (container) {
+    container.innerHTML = '';
+    container.style.display = 'none';
   }
-
-  const days = getBookEffectiveDays(currentBook);
-  const pages = getBookPages(currentBook);
-  const hasNotes = currentBook.takeaway && currentBook.takeaway.trim().length > 0;
-  const coverUrl = getBookCover(currentBook);
-  
-  let coverHtml = '';
-  if (coverUrl) {
-    coverHtml = '<img src="' + coverUrl + '" alt="cover" class="hero-3d-book">';
-  } else {
-    coverHtml = '<div class="hero-book-placeholder">' +
-      '<div style="font-size:2.2rem; margin-bottom:0.25rem;">📖</div>' +
-      '<div style="font-size:0.75rem; font-weight:800; opacity:0.95;">#' + escapeHtml(currentBook.no) + '</div>' +
-      '<div style="font-size:0.65rem; opacity:0.75; margin-top:2px;">' + escapeHtml(currentBook.category || 'Focus') + '</div>' +
-      '</div>';
-  }
-
-  container.innerHTML = '<div class="now-reading-hero">' +
-    '<div class="hero-content-wrap">' +
-    '<div class="hero-book-visual" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;" title="Click to view book details & progress">' +
-    coverHtml +
-    '</div>' +
-    '<div class="hero-details">' +
-    '<div class="hero-pill-badge">🔥 CURRENTLY READING • DAY ' + Math.max(1, days) + '</div>' +
-    '<h2 class="hero-title" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;">' + escapeHtml(currentBook.title) + '</h2>' +
-    '<div class="hero-author">by ' + escapeHtml(currentBook.author) + ' • <span style="color:#10b981; font-weight:700;">' + escapeHtml(currentBook.category || 'General') + '</span></div>' +
-
-    // Mini Page Progress Bar inside Hero Card
-    '<div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:10px; padding:0.5rem 0.85rem; margin:0.4rem 0; max-width:420px;">' +
-    '<div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:700; color:var(--text-primary); margin-bottom:0.3rem;">' +
-    '<span>Page ' + pages.current + ' of ' + pages.total + '</span>' +
-    '<span style="color:#10b981;">' + pages.pct + '% Completed</span>' +
-    '</div>' +
-    '<div class="page-progress-bar"><div class="page-progress-fill" style="width:' + pages.pct + '%;"></div></div>' +
-    '</div>' +
-
-    (hasNotes ? '<div class="hero-quote-snippet">💡 "' + escapeHtml(currentBook.takeaway) + '"</div>' : '') +
-    '<div class="hero-actions-row">' +
-    '<button class="hero-btn-primary" onclick="openBookDetailSheet(' + origIdx + ')">' +
-    '📖 Update Page & Notes' +
-    '</button>' +
-    '<button class="hero-btn-ambient" onclick="openAmbienceModal()">' +
-    '🎧 ' + (isAmbiencePlaying ? 'Ambience Active' : 'Focus Ambience') +
-    '</button>' +
-    '<button class="btn btn-sm" onclick="openEditModal(' + origIdx + ')" style="border-radius:20px; font-weight:600;">' +
-    '⚙️ Edit' +
-    '</button>' +
-    '</div>' +
-    '</div>' +
-    '</div>' +
-    '</div>';
 }
 
 function renderCuratedShelves() {
   const container = document.getElementById('curatedShelvesSection');
-  if (!container) return;
-
-  // 1. Reading & Active Reads Shelf
-  const readingBooks = state.books
-    .map((b, originalIndex) => ({ ...b, originalIndex }))
-    .filter(b => b.status === 'READING');
-
-  // 2. 5-Star Masterpieces Shelf
-  const topRatedBooks = state.books
-    .map((b, originalIndex) => ({ ...b, originalIndex }))
-    .filter(b => parseInt(b.rating) >= 4)
-    .slice(0, 10);
-
-  // 3. Wisdom & Quotes Shelf (books that have takeaways)
-  const quoteBooks = state.books
-    .map((b, originalIndex) => ({ ...b, originalIndex }))
-    .filter(b => b.takeaway && b.takeaway.trim().length > 10)
-    .slice(0, 8);
-
-  let html = '';
-
-  // Shelf 1: Reading Books (if any)
-  if (readingBooks.length > 0) {
-    html += '<div class="shelf-section">' +
-      '<div class="shelf-header">' +
-      '<div class="shelf-title"><span>📖 In Progress</span> <span class="badge" style="background:rgba(59,130,246,0.2); color:#60a5fa;">' + readingBooks.length + ' Active</span></div>' +
-      '<div class="shelf-subtitle">Pick up right where you left off</div>' +
-      '</div>' +
-      '<div class="shelf-carousel">' +
-      readingBooks.map(b => renderMiniShelfCard(b)).join('') +
-      '</div></div>';
+  if (container) {
+    container.innerHTML = '';
+    container.style.display = 'none';
   }
+}
 
-  // Shelf 2: Top Rated Masterpieces
-  if (topRatedBooks.length > 0) {
-    html += '<div class="shelf-section">' +
-      '<div class="shelf-header">' +
-      '<div class="shelf-title"><span>⭐ Highest Rated Gems</span> <span class="badge" style="background:rgba(245,158,11,0.2); color:#f59e0b;">5★ Masterpieces</span></div>' +
-      '<div class="shelf-subtitle">Curated wisdom loved by readers</div>' +
-      '</div>' +
-      '<div class="shelf-carousel">' +
-      topRatedBooks.map(b => renderMiniShelfCard(b)).join('') +
-      '</div></div>';
-  }
-
-  // Shelf 3: Wisdom & Quotes
-  if (quoteBooks.length > 0) {
-    html += '<div class="shelf-section">' +
-      '<div class="shelf-header">' +
-      '<div class="shelf-title"><span>💡 Wisdom & Key Takeaways</span> <span class="badge" style="background:rgba(16,185,129,0.2); color:#10b981;">Quotes</span></div>' +
-      '<div class="shelf-subtitle">Life-changing lessons extracted from your books</div>' +
-      '</div>' +
-      '<div class="shelf-carousel">' +
-      quoteBooks.map(b => renderMiniQuoteCard(b)).join('') +
-      '</div></div>';
-  }
-
-  container.innerHTML = html;
+function filterByStatus(status) {
+  state.statusFilter = status;
+  state.currentPage = 1;
+  document.querySelectorAll('.tab-pill').forEach(pill => {
+    pill.classList.toggle('active', pill.dataset.status === status);
+  });
+  renderBookList();
+  showToast(status === 'ALL' ? 'Showing all 150 books' : ('Filtered by ' + status), 'info');
 }
 
 function renderMiniShelfCard(b) {
@@ -2930,7 +2811,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v1.8.0';
+const CURRENT_APP_VERSION = 'v1.8.1';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -2971,7 +2852,7 @@ async function checkForAppUpdates(showFeedback = true) {
     const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
     if (!res.ok) throw new Error('Could not contact update server');
     const data = await res.json();
-    const tagName = data.tag_name || 'v1.8.0';
+    const tagName = data.tag_name || 'v1.8.1';
     const releaseName = data.name || ('Mind Focus Books Tracker ' + tagName);
 
     let apkUrl = 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/' + tagName + '/MindFocusBooks-Native.apk';
@@ -2986,7 +2867,7 @@ async function checkForAppUpdates(showFeedback = true) {
     if (tagName === CURRENT_APP_VERSION) {
       if (icon) icon.innerText = '✅';
       if (title) title.innerText = 'App is Up to Date (' + CURRENT_APP_VERSION + ')';
-      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>You are running the latest version with Compact KPI Strip, Book Page Tracker, 1-Tap Detail Sheet & Note Formatting Chips!<br><small style="color:var(--text-muted);">Zero data loss permanent keystore build.</small>';
+      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>You are running the latest version: In-Progress pop banner removed, zero scrolling gap, books show immediately at the top!<br><small style="color:var(--text-muted);">Zero data loss permanent keystore build.</small>';
       if (actionBtn) {
         actionBtn.style.display = 'inline-flex';
         actionBtn.innerText = '🔄 Re-download / Repair ' + tagName;
@@ -2995,7 +2876,7 @@ async function checkForAppUpdates(showFeedback = true) {
     } else {
       if (icon) icon.innerText = '👑';
       if (title) title.innerText = 'New Update Available: ' + tagName;
-      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>Compact KPI Strip, Book Page Tracking, 1-Tap Detail Sheet & Curated Covers are ready to install!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero data loss.</small>';
+      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>In-Progress pop banner removed! Zero vertical scrolling gap — library books show instantly right at the top!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero data loss.</small>';
       if (actionBtn) {
         actionBtn.style.display = 'inline-flex';
         actionBtn.innerText = '⚡ Install ' + tagName + ' Now';
@@ -3603,3 +3484,4 @@ window.handleSheetPageInput = handleSheetPageInput;
 window.stepSheetPage = stepSheetPage;
 window.setSheetStatus = setSheetStatus;
 window.insertNoteTemplate = insertNoteTemplate;
+window.filterByStatus = filterByStatus;

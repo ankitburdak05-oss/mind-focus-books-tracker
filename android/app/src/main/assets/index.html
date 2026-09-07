@@ -54,9 +54,6 @@
   <!-- Main Container -->
   <main class="main-container">
 
-    <!-- Luxury Showcase: Now Reading Hero Spotlight -->
-    <section id="nowReadingHeroSection"></section>
-
     <!-- Compact Luxury KPI & Progress Strip (Ultra-Clean & De-cluttered) -->
     <section class="compact-kpi-strip">
       <div class="kpi-strip-item kpi-progress-item" onclick="openStreakModal()" title="Overall Reading Progress & Streak">
@@ -74,12 +71,12 @@
       </div>
 
       <div class="kpi-strip-chips">
-        <div class="kpi-chip" id="chipReading" title="Currently Reading">
+        <div class="kpi-chip" id="chipReading" onclick="filterByStatus('READING')" style="cursor:pointer;" title="Tap to view Currently Reading books">
           <span class="chip-icon">📖</span>
           <span class="chip-val" id="kpiCurrentlyReading">1</span>
           <span class="chip-lbl">Reading</span>
         </div>
-        <div class="kpi-chip" id="chipDone" title="Finished Books">
+        <div class="kpi-chip" id="chipDone" onclick="filterByStatus('DONE')" style="cursor:pointer;" title="Tap to view Finished books">
           <span class="chip-icon">✅</span>
           <span class="chip-val" id="kpiBooksDone">0</span>
           <span class="chip-lbl">Done</span>
@@ -89,7 +86,7 @@
           <span class="chip-val" id="kpiStreakValue">1 Day</span>
           <span class="chip-lbl">Streak</span>
         </div>
-        <div class="kpi-chip" title="Total Books in Library">
+        <div class="kpi-chip" onclick="filterByStatus('ALL')" style="cursor:pointer;" title="Total Books in Library - Tap to view All">
           <span class="chip-icon">📚</span>
           <span class="chip-val" id="kpiTotalBooks">150</span>
           <span class="chip-lbl">Total</span>
@@ -108,11 +105,10 @@
         <span id="kpiAvgDays">0.0</span>
         <span id="kpiHoursInvested">0 hrs</span>
         <span id="kpiMoneySubtext"></span>
+        <div id="nowReadingHeroSection"></div>
+        <div id="curatedShelvesSection"></div>
       </div>
     </section>
-
-    <!-- Curated Shelves Section (Netflix / Apple Books Horizontal Carousels) -->
-    <section id="curatedShelvesSection" class="curated-shelves-wrap"></section>
 
     <!-- Search & Controls Bar -->
     <section class="controls-card">
@@ -860,7 +856,7 @@
         <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:12px; padding:1rem; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Books Tracker</div>
-            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 1.8 (Luxury Reading & Page Tracker Edition)</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 1.8.1 (Instant Clean Books View)</div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn">
             🔄 Check Update
