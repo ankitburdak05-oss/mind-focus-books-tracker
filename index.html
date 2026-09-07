@@ -1329,6 +1329,22 @@
     </div>
   </div>
 
+  <!-- In-App Cloud Broadcast Notice Modal (Pop-up without update) -->
+  <div class="modal-overlay" id="inAppNoticeModalOverlay" style="z-index: 999999;">
+    <div class="modal-content" style="max-width: 440px; text-align: center; border: 1px solid rgba(99, 102, 241, 0.45); box-shadow: 0 20px 60px rgba(0,0,0,0.85), 0 0 35px rgba(99,102,241,0.3); border-radius: 20px; padding: 1.5rem;">
+      <div style="font-size: 3.2rem; margin-bottom: 0.3rem;" id="inAppNoticeIcon">📢</div>
+      <h3 class="modal-title" id="inAppNoticeTitle" style="font-size: 1.35rem; margin-bottom: 0.4rem; justify-content: center; font-weight: 800; color: #fff;">Notice</h3>
+      <div style="font-size: 1.12rem; color: #ffffff; font-weight: 700; line-height: 1.5; margin: 1rem 0; padding: 1rem 1.2rem; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.35); border-radius: 14px;" id="inAppNoticeMessage">
+        aaj reset kar bhai
+      </div>
+      <div style="display: flex; justify-content: center; gap: 0.75rem; margin-top: 1.25rem;">
+        <button type="button" class="btn btn-primary" id="inAppNoticeDismissBtn" onclick="dismissInAppNotice()" style="padding: 0.65rem 2.2rem; font-weight: 800; font-size: 1rem; border-radius: 25px; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);">
+          OK, Samajh Gaya
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Hidden File Input for Import -->
   <input type="file" id="importFileInput" accept=".json" style="display:none;">
 

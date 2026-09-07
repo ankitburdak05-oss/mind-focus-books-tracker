@@ -88,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof initSpotlightIsland === 'function') initSpotlightIsland();
   if (typeof updateDnaKpiChip === 'function') updateDnaKpiChip();
   if (typeof initSearchOptionsDrawer === 'function') initSearchOptionsDrawer();
+  if (typeof checkRemoteBroadcastNotice === 'function') checkRemoteBroadcastNotice();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -4309,5 +4310,70 @@ function updateSearchDrawerFilterBadge() {
 window.toggleSearchOptionsDrawer = toggleSearchOptionsDrawer;
 window.initSearchOptionsDrawer = initSearchOptionsDrawer;
 window.updateSearchDrawerFilterBadge = updateSearchDrawerFilterBadge;
+
+// ==========================================================
+// FEATURE: IN-APP CLOUD BROADCAST NOTICE (POPUP WITHOUT UPDATE)
+// ==========================================================
+let currentBroadcastNoticeId = '';
+
+async function checkRemoteBroadcastNotice() {
+  try {
+    const remoteUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?t=' + Date.now();
+    let data = null;
+
+    try {
+      const res = await fetch(remoteUrl, { cache: 'no-store' });
+      if (res.ok) data = await res.json();
+    } catch (netErr) {}
+
+    if (!data) {
+      try {
+        const localRes = await fetch('broadcast-notice.json?t=' + Date.now(), { cache: 'no-store' });
+        if (localRes.ok) data = await localRes.json();
+      } catch (locErr) {}
+    }
+
+    if (!data || !data.active || !data.message) return;
+
+    currentBroadcastNoticeId = data.id || 'notice-default';
+    const lastDismissed = localStorage.getItem('mindfocus_dismissed_notice_id');
+
+    if (lastDismissed !== currentBroadcastNoticeId) {
+      showInAppNoticePopup(data);
+    }
+  } catch (e) {
+    console.warn('Notice check error:', e);
+  }
+}
+
+function showInAppNoticePopup(data) {
+  const overlay = document.getElementById('inAppNoticeModalOverlay');
+  if (!overlay) return;
+
+  const iconEl = document.getElementById('inAppNoticeIcon');
+  const titleEl = document.getElementById('inAppNoticeTitle');
+  const msgEl = document.getElementById('inAppNoticeMessage');
+  const btnEl = document.getElementById('inAppNoticeDismissBtn');
+
+  if (iconEl && data.icon) iconEl.innerText = data.icon;
+  if (titleEl && data.title) titleEl.innerText = data.title;
+  if (msgEl && data.message) msgEl.innerText = data.message;
+  if (btnEl && data.btnText) btnEl.innerText = data.btnText;
+
+  overlay.classList.add('active');
+}
+
+function dismissInAppNotice() {
+  if (currentBroadcastNoticeId) {
+    localStorage.setItem('mindfocus_dismissed_notice_id', currentBroadcastNoticeId);
+  }
+  const overlay = document.getElementById('inAppNoticeModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+window.checkRemoteBroadcastNotice = checkRemoteBroadcastNotice;
+window.showInAppNoticePopup = showInAppNoticePopup;
+window.dismissInAppNotice = dismissInAppNotice;
+
 
 
