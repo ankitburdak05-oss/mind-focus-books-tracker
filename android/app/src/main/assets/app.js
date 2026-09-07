@@ -82,6 +82,11 @@ document.addEventListener("DOMContentLoaded", () => {
   setupEventListeners();
   renderApp();
   handleShortcutIntentActions();
+  if (typeof initDynamicAurora === 'function') initDynamicAurora();
+  if (typeof init3DCardPhysics === 'function') init3DCardPhysics();
+  if (typeof initDynamicIslandHud === 'function') initDynamicIslandHud();
+  if (typeof initSpotlightIsland === 'function') initSpotlightIsland();
+  if (typeof updateDnaKpiChip === 'function') updateDnaKpiChip();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -452,10 +457,16 @@ function renderNowReadingHero() {
       '</div>';
   }
 
+  const isAudioActive = typeof isAmbiencePlaying !== 'undefined' && isAmbiencePlaying;
+  const wrappedCover = '<div style="position:relative; display:inline-block;">' +
+    '<div class="ambient-soundwave-ring ' + (isAudioActive ? 'active' : '') + '"></div>' +
+    coverHtml +
+    '</div>';
+
   container.innerHTML = '<div class="now-reading-hero">' +
     '<div class="hero-content-wrap">' +
     '<div class="hero-book-visual" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;" title="Click to view book details & progress">' +
-    coverHtml +
+    wrappedCover +
     '</div>' +
     '<div class="hero-details">' +
     '<div class="hero-pill-badge">🔥 CURRENTLY READING • DAY ' + Math.max(1, days) + '</div>' +
@@ -476,6 +487,9 @@ function renderNowReadingHero() {
     '<button class="hero-btn-primary" onclick="openBookDetailSheet(' + origIdx + ')">' +
     '📖 Update Page & Notes' +
     '</button>' +
+    '<button class="hero-btn-ambient" onclick="openSanctuaryMode(' + origIdx + ')" style="background:linear-gradient(135deg, rgba(245,158,11,0.22), rgba(239,68,68,0.22)); border-color:rgba(245,158,11,0.4); color:#fbbf24; font-weight:700;" title="Enter Distraction-Free Reading Sanctuary">' +
+    '🌌 Sanctuary' +
+    '</button>' +
     '<button class="hero-btn-ambient" onclick="openAmbienceModal()">' +
     '🎧 ' + (typeof isAmbiencePlaying !== 'undefined' && isAmbiencePlaying ? 'Ambience Active' : 'Focus Ambience') +
     '</button>' +
@@ -486,6 +500,9 @@ function renderNowReadingHero() {
     '</div>' +
     '</div>' +
     '</div>';
+
+  if (typeof updateDynamicAurora === 'function') updateDynamicAurora(currentBook);
+  if (typeof updateDynamicIslandHud === 'function') updateDynamicIslandHud(currentBook);
 }
 
 function renderCuratedShelves() {
@@ -548,6 +565,7 @@ function renderApp() {
   renderStatistics();
   renderCategoryPills();
   renderBookList();
+  if (typeof updateDnaKpiChip === 'function') updateDnaKpiChip();
 }
 
 function renderStatistics() {
@@ -802,6 +820,7 @@ function renderGridView(container, books) {
     const statusBorder = isDone ? 'rgba(16,185,129,0.45)' : (isReading ? 'rgba(59,130,246,0.45)' : 'rgba(255,255,255,0.12)');
 
     html += '<div class="book-card ' + statusCardClass + '" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;" title="' + escapeHtml(b.title) + ' - Tap to view & update progress">' +
+      '<div class="foil-sheen"></div>' +
       '<div class="book-card-header" style="display:flex; gap:0.85rem; align-items:flex-start;">' +
       coverHtml +
       '<div style="flex:1; min-width:0;">' +
@@ -2891,7 +2910,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v1.9.0';
+const CURRENT_APP_VERSION = 'v2.0.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3423,6 +3442,26 @@ function updateAmbienceUI() {
   if (headerBtnText) {
     headerBtnText.innerText = isAmbiencePlaying ? ('🎧 ' + name) : 'Ambience';
   }
+
+  // Sync Dynamic Island Soundwave Equalizer
+  const islandSw = document.getElementById('islandSoundwave');
+  if (islandSw) {
+    islandSw.classList.toggle('active', isAmbiencePlaying);
+    islandSw.title = isAmbiencePlaying ? ('Playing ' + name) : 'Ambience Soundscape';
+  }
+
+  // Sync Hero Cover Soundwave Ring
+  document.querySelectorAll('.ambient-soundwave-ring').forEach(ring => {
+    ring.classList.toggle('active', isAmbiencePlaying);
+  });
+
+  // Sync Sanctuary Focus Mode Ambience Button
+  const sanctuaryAmbBtn = document.getElementById('sanctuaryAmbienceBtn');
+  if (sanctuaryAmbBtn) {
+    sanctuaryAmbBtn.innerText = isAmbiencePlaying ? ('🎧 ' + name + ': Playing') : '🎧 Ambience: Off';
+    sanctuaryAmbBtn.style.background = isAmbiencePlaying ? '#10b981' : 'rgba(255, 255, 255, 0.08)';
+    sanctuaryAmbBtn.style.color = isAmbiencePlaying ? '#fff' : 'var(--text-primary)';
+  }
 }
 
 function openAmbienceModal() {
@@ -3565,3 +3604,643 @@ window.stepSheetPage = stepSheetPage;
 window.setSheetStatus = setSheetStatus;
 window.insertNoteTemplate = insertNoteTemplate;
 window.filterByStatus = filterByStatus;
+
+/* ==========================================================================
+   MINDFOCUS BOOKS v2.0.0 — SPATIAL LUXURY SANCTUARY EDITION
+   10 Futuristic UI/UX Systems Implementation
+   ========================================================================== */
+
+// --- 1. DYNAMIC CHROMATIC AURORA ---
+const GENRE_AURORAS = {
+  focus: { a1: '#6366f1', a2: '#3b82f6', a3: '#10b981' },
+  habit: { a1: '#6366f1', a2: '#8b5cf6', a3: '#10b981' },
+  wealth: { a1: '#f59e0b', a2: '#d97706', a3: '#10b981' },
+  money: { a1: '#f59e0b', a2: '#ef4444', a3: '#10b981' },
+  psychology: { a1: '#8b5cf6', a2: '#ec4899', a3: '#06b6d4' },
+  mind: { a1: '#8b5cf6', a2: '#6366f1', a3: '#ec4899' },
+  philosophy: { a1: '#d97706', a2: '#4f46e5', a3: '#14b8a6' },
+  stoic: { a1: '#d97706', a2: '#b45309', a3: '#6366f1' },
+  default: { a1: '#6366f1', a2: '#ec4899', a3: '#10b981' }
+};
+
+function getPaletteForBook(book) {
+  if (!book) return GENRE_AURORAS.default;
+  const str = ((book.category || '') + ' ' + (book.title || '')).toLowerCase();
+  for (let key of Object.keys(GENRE_AURORAS)) {
+    if (key !== 'default' && str.includes(key)) {
+      return GENRE_AURORAS[key];
+    }
+  }
+  return GENRE_AURORAS.default;
+}
+
+function updateDynamicAurora(book) {
+  const palette = getPaletteForBook(book);
+  const root = document.documentElement;
+  if (!root) return;
+  root.style.setProperty('--aurora-1', palette.a1);
+  root.style.setProperty('--aurora-2', palette.a2);
+  root.style.setProperty('--aurora-3', palette.a3);
+}
+
+function initDynamicAurora() {
+  const readingBook = state.books.find(b => b.status === 'READING') || state.books[0];
+  updateDynamicAurora(readingBook);
+}
+
+// --- 2. 3D HOLOGRAPHIC CARD PHYSICS & FOIL SHEEN ---
+function init3DCardPhysics() {
+  document.addEventListener('pointermove', (e) => {
+    const card = e.target.closest('.book-card, .now-reading-hero, .sanctuary-cover-wrap');
+    if (!card) return;
+    const r = card.getBoundingClientRect();
+    const x = e.clientX - r.left;
+    const y = e.clientY - r.top;
+    const pctX = Math.round((x / r.width) * 100);
+    const pctY = Math.round((y / r.height) * 100);
+    card.style.setProperty('--sheen-x', pctX + '%');
+    card.style.setProperty('--sheen-y', pctY + '%');
+
+    if (card.classList.contains('book-card')) {
+      const rotY = (((x / r.width) - 0.5) * 12).toFixed(2);
+      const rotX = (-((y / r.height) - 0.5) * 12).toFixed(2);
+      card.style.transform = 'perspective(1000px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) scale3d(1.018, 1.018, 1.018)';
+    }
+  });
+
+  document.addEventListener('pointerleave', (e) => {
+    const card = e.target.closest('.book-card');
+    if (card) card.style.transform = '';
+  }, true);
+
+  document.addEventListener('pointerout', (e) => {
+    if (e.target.classList && e.target.classList.contains('book-card')) {
+      e.target.style.transform = '';
+    }
+  });
+}
+
+// --- 3. DYNAMIC ISLAND CAPSULE HUD ---
+function initDynamicIslandHud() {
+  window.addEventListener('scroll', () => {
+    const hud = document.getElementById('dynamicIslandHud');
+    if (!hud) return;
+    if (window.scrollY > 220) {
+      hud.classList.add('visible');
+    } else {
+      hud.classList.remove('visible');
+    }
+  }, { passive: true });
+
+  const activeBook = state.books.find(b => b.status === 'READING') || state.books[0];
+  updateDynamicIslandHud(activeBook);
+}
+
+function updateDynamicIslandHud(book) {
+  const streakText = document.getElementById('islandStreakText');
+  if (streakText) {
+    const s = state.streak || 1;
+    streakText.innerText = s + 'd Streak';
+  }
+
+  const titleEl = document.getElementById('islandBookTitle');
+  const fillEl = document.getElementById('islandMiniFill');
+  const pctEl = document.getElementById('islandPctText');
+
+  if (book) {
+    const pages = getBookPages(book);
+    if (titleEl) titleEl.innerText = book.title || 'MindFocus';
+    if (fillEl) fillEl.style.width = pages.pct + '%';
+    if (pctEl) pctEl.innerText = pages.pct + '%';
+  } else {
+    if (titleEl) titleEl.innerText = 'MindFocus';
+    if (fillEl) fillEl.style.width = '0%';
+    if (pctEl) pctEl.innerText = '0%';
+  }
+}
+
+function handleDynamicIslandClick(e) {
+  const readingBook = state.books.find(b => b.status === 'READING');
+  if (readingBook) {
+    const origIdx = state.books.indexOf(readingBook);
+    openBookDetailSheet(origIdx);
+  } else {
+    openSpotlightModal();
+  }
+}
+
+// --- 5. SPOTLIGHT COMMAND ISLAND ---
+let spotlightFilterCat = 'ALL';
+let spotlightDebounce = null;
+
+function initSpotlightIsland() {
+  document.addEventListener('keydown', (e) => {
+    if ((e.ctrlKey || e.metaKey) && (e.key === 'k' || e.key === 'K')) {
+      e.preventDefault();
+      openSpotlightModal();
+    } else if (e.key === 'Escape') {
+      closeSpotlightModal();
+      exitSanctuaryMode();
+      closeReadingDnaModal();
+    }
+  });
+}
+
+function openSpotlightModal() {
+  const overlay = document.getElementById('spotlightIslandModal');
+  if (!overlay) return;
+  overlay.classList.add('active');
+  const input = document.getElementById('spotlightInput');
+  if (input) {
+    input.value = '';
+    setTimeout(() => input.focus(), 80);
+  }
+  filterSpotlightCategory('ALL');
+}
+
+function closeSpotlightModal() {
+  const overlay = document.getElementById('spotlightIslandModal');
+  if (overlay) overlay.classList.remove('active');
+}
+
+function handleSpotlightBackdrop(e) {
+  if (e.target.id === 'spotlightIslandModal') {
+    closeSpotlightModal();
+  }
+}
+
+function filterSpotlightCategory(cat, el) {
+  spotlightFilterCat = cat;
+  document.querySelectorAll('.spotlight-pill').forEach(pill => {
+    pill.classList.toggle('active', pill === el || (!el && pill.innerText.toUpperCase().includes(cat)));
+  });
+  const input = document.getElementById('spotlightInput');
+  handleSpotlightSearch(input ? input.value : '');
+}
+
+function handleSpotlightSearch(query) {
+  clearTimeout(spotlightDebounce);
+  spotlightDebounce = setTimeout(() => {
+    renderSpotlightResults(query.trim().toLowerCase());
+  }, 50);
+}
+
+function renderSpotlightResults(q) {
+  const container = document.getElementById('spotlightResultsContainer');
+  if (!container) return;
+
+  let items = [];
+
+  // Quick Action commands
+  const actions = [
+    { type: 'action', title: '🌌 Launch Reading Sanctuary Mode', sub: 'Distraction-zero luxury focus environment', icon: '🌌', fn: () => { closeSpotlightModal(); openSanctuaryMode(); } },
+    { type: 'action', title: '🎧 Play Ambience (Rain Soundscape)', sub: 'Binaural soothing rain sound', icon: '🌧️', fn: () => { closeSpotlightModal(); selectAmbienceTrack('rain'); startAmbienceAudio('rain'); showToast('Rain soundscape playing 🌧️', 'success'); } },
+    { type: 'action', title: '🎧 Play Ambience (Deep Forest)', sub: 'Natural birds & wind soundscape', icon: '🌲', fn: () => { closeSpotlightModal(); selectAmbienceTrack('forest'); startAmbienceAudio('forest'); showToast('Forest soundscape playing 🌲', 'success'); } },
+    { type: 'action', title: '⏱️ Start 25-Min Pomodoro Sprint', sub: 'Focus reading interval with peaceful chime', icon: '⏱️', fn: () => { closeSpotlightModal(); openPomodoroModal(); togglePomodoroTimer(); } },
+    { type: 'action', title: '🌌 View Reading DNA Galaxy Constellation', sub: 'Inspect your interactive finished books cosmic map', icon: '✨', fn: () => { closeSpotlightModal(); openReadingDnaModal(); } },
+    { type: 'action', title: '🎲 Spin Book Roulette', sub: 'Pick a random unread book from library', icon: '🎲', fn: () => { closeSpotlightModal(); openPickBookModal(); } },
+    { type: 'action', title: '🔥 Inspect Daily Reading Streak', sub: 'Track milestone trophies and reading history', icon: '🔥', fn: () => { closeSpotlightModal(); openStreakModal(); } },
+    { type: 'action', title: '➕ Add New Book to Library', sub: 'Create custom book entry', icon: '📚', fn: () => { closeSpotlightModal(); openAddBookModal(); } }
+  ];
+
+  if (spotlightFilterCat === 'ALL' || spotlightFilterCat === 'ACTION') {
+    actions.forEach(a => {
+      if (!q || a.title.toLowerCase().includes(q) || a.sub.toLowerCase().includes(q)) {
+        items.push(a);
+      }
+    });
+  }
+
+  // Search Library Books
+  if (spotlightFilterCat !== 'ACTION') {
+    state.books.forEach((b, idx) => {
+      if (spotlightFilterCat === 'READING' && b.status !== 'READING') return;
+      if (spotlightFilterCat === 'DONE' && b.status !== 'DONE') return;
+
+      const titleMatch = (b.title || '').toLowerCase().includes(q);
+      const authorMatch = (b.author || '').toLowerCase().includes(q);
+      const catMatch = (b.category || '').toLowerCase().includes(q);
+      const takeawayMatch = (b.takeaway || '').toLowerCase().includes(q);
+
+      if (!q || titleMatch || authorMatch || catMatch || takeawayMatch) {
+        items.push({
+          type: 'book',
+          origIdx: idx,
+          book: b,
+          title: b.title,
+          sub: 'by ' + b.author + ' • ' + (b.category || 'General'),
+          icon: b.status === 'DONE' ? '✅' : (b.status === 'READING' ? '📖' : '📚'),
+          status: b.status || 'PENDING',
+          fn: () => { closeSpotlightModal(); openBookDetailSheet(idx); }
+        });
+      }
+    });
+  }
+
+  const badgeEl = document.getElementById('spotlightCountBadge');
+  if (badgeEl) badgeEl.innerText = items.length + ' results found';
+
+  if (items.length === 0) {
+    container.innerHTML = '<div style="padding:2rem; text-align:center; color:var(--text-secondary); font-size:0.9rem;">No matching books or commands found. Try searching for an author, category, or "Rain"</div>';
+    return;
+  }
+
+  const displayItems = items.slice(0, 30);
+  window._spotlightItems = displayItems;
+
+  let html = '';
+  displayItems.forEach((it, i) => {
+    const isAct = it.type === 'action';
+    const tagTxt = isAct ? 'ACTION' : it.status;
+    const tagBg = isAct ? 'rgba(99,102,241,0.2)' : (it.status === 'DONE' ? 'rgba(16,185,129,0.2)' : (it.status === 'READING' ? 'rgba(59,130,246,0.2)' : 'rgba(255,255,255,0.08)'));
+    const tagColor = isAct ? '#a5b4fc' : (it.status === 'DONE' ? '#34d399' : (it.status === 'READING' ? '#60a5fa' : 'var(--text-muted)'));
+
+    html += '<div class="spotlight-item" onclick="triggerSpotlightItem(' + i + ')">' +
+      '<div class="spotlight-item-icon">' + it.icon + '</div>' +
+      '<div class="spotlight-item-info">' +
+      '<div class="spotlight-item-title">' + escapeHtml(it.title) + '</div>' +
+      '<div class="spotlight-item-sub">' + escapeHtml(it.sub) + '</div>' +
+      '</div>' +
+      '<span class="spotlight-item-badge" style="background:' + tagBg + '; color:' + tagColor + ';">' + tagTxt + '</span>' +
+      '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function triggerSpotlightItem(idx) {
+  if (window._spotlightItems && window._spotlightItems[idx]) {
+    window._spotlightItems[idx].fn();
+  }
+}
+
+// --- 6. PACE ESTIMATOR ---
+function calculatePaceEstimate(book) {
+  if (!book) return '~0 hrs';
+  const pages = getBookPages(book);
+  const remaining = Math.max(0, pages.total - pages.current);
+  if (remaining === 0) return 'Complete 🎉';
+  const totalMins = Math.round(remaining * 1.5);
+  if (totalMins < 60) return '~' + totalMins + 'm left';
+  const hours = (totalMins / 60).toFixed(1);
+  return '~' + hours + ' hrs left';
+}
+
+// --- 9. DEEP SANCTUARY FOCUS MODE ---
+let sanctuaryActiveBookIdx = -1;
+let sanctuaryTimerInterval = null;
+let sanctuaryTimerRemaining = 25 * 60;
+let isSanctuaryTimerRunning = false;
+
+function openSanctuaryMode(bookIdx) {
+  if (typeof bookIdx === 'undefined' || bookIdx < 0) {
+    bookIdx = state.books.findIndex(b => b.status === 'READING');
+    if (bookIdx < 0) bookIdx = 0;
+  }
+  sanctuaryActiveBookIdx = bookIdx;
+  const b = state.books[bookIdx];
+  if (!b) return;
+
+  const overlay = document.getElementById('sanctuaryModeOverlay');
+  if (!overlay) return;
+
+  const coverWrap = document.getElementById('sanctuaryCoverWrap');
+  const titleEl = document.getElementById('sanctuaryBookTitle');
+  const authorEl = document.getElementById('sanctuaryBookAuthor');
+  const catBadge = document.getElementById('sanctuaryCategoryBadge');
+  const pagesLabel = document.getElementById('sanctuaryPagesLabel');
+  const paceLabel = document.getElementById('sanctuaryPaceLabel');
+  const barFill = document.getElementById('sanctuaryBarFill');
+  const quoteGlow = document.getElementById('sanctuaryQuoteGlow');
+
+  const coverUrl = getBookCover(b);
+  if (coverWrap) {
+    coverWrap.innerHTML = coverUrl 
+      ? '<img src="' + coverUrl + '" alt="cover">'
+      : '<div style="background:linear-gradient(135deg,#1e3a8a,#3b82f6); width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem;">📖</div>';
+  }
+
+  const pages = getBookPages(b);
+  if (titleEl) titleEl.innerText = b.title;
+  if (authorEl) authorEl.innerText = 'by ' + b.author;
+  if (catBadge) catBadge.innerText = (b.category || 'Focus').toUpperCase();
+  if (pagesLabel) pagesLabel.innerText = 'Page ' + pages.current + ' of ' + pages.total + ' (' + pages.pct + '%)';
+  if (paceLabel) paceLabel.innerText = calculatePaceEstimate(b);
+  if (barFill) barFill.style.width = pages.pct + '%';
+
+  if (quoteGlow) {
+    quoteGlow.innerText = b.takeaway ? ('"' + b.takeaway + '"') : '"Quiet the mind and the soul will speak."';
+  }
+
+  updateSanctuaryTimerUI();
+  updateDynamicAurora(b);
+  overlay.classList.add('active');
+  showToast('Entered Reading Sanctuary 🌌 Distraction-free focus', 'info');
+}
+
+function exitSanctuaryMode() {
+  const overlay = document.getElementById('sanctuaryModeOverlay');
+  if (overlay) overlay.classList.remove('active');
+  if (isSanctuaryTimerRunning) {
+    clearInterval(sanctuaryTimerInterval);
+    isSanctuaryTimerRunning = false;
+  }
+  renderApp();
+}
+
+function updateSanctuaryTimerUI() {
+  const digits = document.getElementById('sanctuaryTimerDigits');
+  const toggleBtn = document.getElementById('sanctuaryTimerToggle');
+  const mins = Math.floor(sanctuaryTimerRemaining / 60);
+  const secs = sanctuaryTimerRemaining % 60;
+  const timeStr = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
+
+  if (digits) digits.innerText = timeStr;
+  if (toggleBtn) {
+    toggleBtn.innerText = isSanctuaryTimerRunning ? '⏸ Pause Sprint' : '▶ Start 25-Min Sprint';
+    toggleBtn.style.background = isSanctuaryTimerRunning ? '#f59e0b' : '#ef4444';
+  }
+}
+
+function toggleSanctuaryTimer() {
+  if (isSanctuaryTimerRunning) {
+    clearInterval(sanctuaryTimerInterval);
+    isSanctuaryTimerRunning = false;
+    updateSanctuaryTimerUI();
+    showToast('Sprint paused', 'info');
+  } else {
+    isSanctuaryTimerRunning = true;
+    updateSanctuaryTimerUI();
+    showToast('Reading sprint active! Deep focus 🕯️', 'success');
+    if (typeof recordReadingActivity === 'function') recordReadingActivity();
+
+    sanctuaryTimerInterval = setInterval(() => {
+      if (sanctuaryTimerRemaining > 0) {
+        sanctuaryTimerRemaining--;
+        updateSanctuaryTimerUI();
+      } else {
+        clearInterval(sanctuaryTimerInterval);
+        isSanctuaryTimerRunning = false;
+        playPomodoroBell();
+        showToast('Sprint complete! Amazing reading session 🌟', 'success');
+        sanctuaryTimerRemaining = 25 * 60;
+        updateSanctuaryTimerUI();
+      }
+    }, 1000);
+  }
+}
+
+function resetSanctuaryTimer() {
+  clearInterval(sanctuaryTimerInterval);
+  isSanctuaryTimerRunning = false;
+  sanctuaryTimerRemaining = 25 * 60;
+  updateSanctuaryTimerUI();
+  showToast('Timer reset to 25 minutes', 'info');
+}
+
+function toggleAmbienceFromSanctuary() {
+  toggleAmbiencePlayback();
+  updateAmbienceUI();
+}
+
+function stepSanctuaryPage(inc) {
+  if (sanctuaryActiveBookIdx < 0) return;
+  const b = state.books[sanctuaryActiveBookIdx];
+  if (!b) return;
+  const pages = getBookPages(b);
+  const newCurr = Math.min(pages.total, pages.current + inc);
+  b.current_page = newCurr;
+  if (newCurr >= pages.total && b.status !== 'DONE') {
+    b.status = 'DONE';
+    if (!b.end_date) b.end_date = new Date().toISOString().split('T')[0];
+    showToast('Book Finished! Masterpiece completed 🏆', 'success');
+  } else if (b.status === 'PENDING') {
+    b.status = 'READING';
+    if (!b.start_date) b.start_date = new Date().toISOString().split('T')[0];
+  }
+  markChange();
+  saveData();
+  openSanctuaryMode(sanctuaryActiveBookIdx);
+  if (typeof recordReadingActivity === 'function') recordReadingActivity();
+}
+
+function finishSanctuaryBook() {
+  if (sanctuaryActiveBookIdx < 0) return;
+  const b = state.books[sanctuaryActiveBookIdx];
+  if (!b) return;
+  const pages = getBookPages(b);
+  b.current_page = pages.total;
+  b.status = 'DONE';
+  if (!b.end_date) b.end_date = new Date().toISOString().split('T')[0];
+  markChange();
+  saveData();
+  openSanctuaryMode(sanctuaryActiveBookIdx);
+  showToast('Congratulations! "' + b.title + '" marked as FINISHED! 🏆', 'success');
+}
+
+// --- 10. READING DNA GALAXY CONSTELLATION ---
+let dnaAnimFrame = null;
+let dnaStars = [];
+let dnaHoveredStar = null;
+
+function updateDnaKpiChip() {
+  const chipVal = document.getElementById('kpiDnaStars');
+  const doneCount = state.books.filter(b => b.status === 'DONE').length;
+  if (chipVal) chipVal.innerText = doneCount + ' ★';
+}
+
+function openReadingDnaModal() {
+  const overlay = document.getElementById('readingDnaModalOverlay');
+  if (!overlay) return;
+  overlay.classList.add('active');
+  renderReadingDnaGalaxy();
+}
+
+function closeReadingDnaModal() {
+  const overlay = document.getElementById('readingDnaModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+  if (dnaAnimFrame) cancelAnimationFrame(dnaAnimFrame);
+}
+
+function handleDnaBackdrop(e) {
+  if (e.target.id === 'readingDnaModalOverlay') closeReadingDnaModal();
+}
+
+function renderReadingDnaGalaxy() {
+  const canvas = document.getElementById('readingDnaCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const finishedBooks = state.books.filter(b => b.status === 'DONE');
+  const statsEl = document.getElementById('dnaFinishedStats');
+  if (statsEl) statsEl.innerText = finishedBooks.length + ' / 150 Stars Ignited';
+
+  dnaStars = [];
+  const W = canvas.width;
+  const H = canvas.height;
+
+  const bgStars = [];
+  for (let i = 0; i < 70; i++) {
+    bgStars.push({
+      x: (Math.sin(i * 99) * 0.5 + 0.5) * W,
+      y: (Math.cos(i * 33) * 0.5 + 0.5) * H,
+      r: (i % 3 === 0) ? 1.5 : 1,
+      alpha: 0.2 + (i % 5) * 0.15
+    });
+  }
+
+  const genreColors = {
+    focus: '#818cf8',
+    habit: '#60a5fa',
+    wealth: '#fbbf24',
+    money: '#f59e0b',
+    psychology: '#ec4899',
+    mind: '#c084fc',
+    philosophy: '#34d399',
+    general: '#38bdf8'
+  };
+
+  finishedBooks.forEach((b, i) => {
+    const angle = (i / Math.max(1, finishedBooks.length)) * Math.PI * 2 * 2.5;
+    const radius = 35 + (i * 14) % (Math.min(W, H) / 2 - 40);
+    const cx = W / 2 + Math.cos(angle) * radius;
+    const cy = H / 2 + Math.sin(angle) * radius;
+
+    const cat = (b.category || 'general').toLowerCase();
+    let col = genreColors.general;
+    for (let k in genreColors) {
+      if (cat.includes(k)) { col = genreColors[k]; break; }
+    }
+
+    dnaStars.push({
+      book: b,
+      origIdx: state.books.indexOf(b),
+      x: cx,
+      y: cy,
+      r: 4.5,
+      color: col
+    });
+  });
+
+  canvas.onmousemove = (e) => {
+    const rect = canvas.getBoundingClientRect();
+    const scaleX = canvas.width / rect.width;
+    const scaleY = canvas.height / rect.height;
+    const mx = (e.clientX - rect.left) * scaleX;
+    const my = (e.clientY - rect.top) * scaleY;
+
+    dnaHoveredStar = null;
+    for (let s of dnaStars) {
+      const dist = Math.hypot(s.x - mx, s.y - my);
+      if (dist < 12) {
+        dnaHoveredStar = s;
+        break;
+      }
+    }
+
+    const tip = document.getElementById('readingDnaTooltip');
+    if (tip) {
+      if (dnaHoveredStar) {
+        tip.style.display = 'block';
+        tip.style.left = (e.clientX - rect.left) + 'px';
+        tip.style.top = (e.clientY - rect.top) + 'px';
+        tip.innerHTML = '★ <strong>' + escapeHtml(dnaHoveredStar.book.title) + '</strong><br><span style="color:var(--text-secondary);">' + escapeHtml(dnaHoveredStar.book.author) + '</span>';
+      } else {
+        tip.style.display = 'none';
+      }
+    }
+  };
+
+  canvas.onclick = () => {
+    if (dnaHoveredStar) {
+      closeReadingDnaModal();
+      openBookDetailSheet(dnaHoveredStar.origIdx);
+    }
+  };
+
+  let step = 0;
+  function animate() {
+    ctx.clearRect(0, 0, W, H);
+
+    const grad = ctx.createRadialGradient(W / 2, H / 2, 20, W / 2, H / 2, W / 1.8);
+    grad.addColorStop(0, '#0c1224');
+    grad.addColorStop(1, '#030509');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, W, H);
+
+    bgStars.forEach(s => {
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255,255,255,' + (s.alpha * (0.8 + 0.2 * Math.sin(step * 0.05 + s.x))) + ')';
+      ctx.fill();
+    });
+
+    if (dnaStars.length > 1) {
+      ctx.beginPath();
+      ctx.strokeStyle = 'rgba(99, 102, 241, 0.35)';
+      ctx.lineWidth = 1.2;
+      ctx.setLineDash([4, 4]);
+      for (let i = 0; i < dnaStars.length; i++) {
+        if (i === 0) ctx.moveTo(dnaStars[i].x, dnaStars[i].y);
+        else ctx.lineTo(dnaStars[i].x, dnaStars[i].y);
+      }
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    dnaStars.forEach(s => {
+      const isHovered = (dnaHoveredStar === s);
+      const pulse = Math.sin(step * 0.08) * 1.5;
+      const radius = isHovered ? (s.r + 3 + pulse) : s.r;
+
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, radius * 2.6, 0, Math.PI * 2);
+      ctx.fillStyle = s.color + '33';
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, radius, 0, Math.PI * 2);
+      ctx.fillStyle = isHovered ? '#ffffff' : s.color;
+      ctx.shadowColor = s.color;
+      ctx.shadowBlur = isHovered ? 18 : 8;
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    });
+
+    if (finishedBooks.length === 0) {
+      ctx.fillStyle = 'rgba(255,255,255,0.7)';
+      ctx.font = '14px -apple-system, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('No books marked finished yet. Read your first book to ignite a star!', W / 2, H / 2);
+    }
+
+    step++;
+    dnaAnimFrame = requestAnimationFrame(animate);
+  }
+
+  if (dnaAnimFrame) cancelAnimationFrame(dnaAnimFrame);
+  animate();
+}
+
+// Global window bindings for 100% reliable HTML interaction
+window.openSpotlightModal = openSpotlightModal;
+window.closeSpotlightModal = closeSpotlightModal;
+window.handleSpotlightSearch = handleSpotlightSearch;
+window.filterSpotlightCategory = filterSpotlightCategory;
+window.handleSpotlightBackdrop = handleSpotlightBackdrop;
+window.triggerSpotlightItem = triggerSpotlightItem;
+window.handleDynamicIslandClick = handleDynamicIslandClick;
+window.openSanctuaryMode = openSanctuaryMode;
+window.exitSanctuaryMode = exitSanctuaryMode;
+window.stepSanctuaryPage = stepSanctuaryPage;
+window.finishSanctuaryBook = finishSanctuaryBook;
+window.toggleSanctuaryTimer = toggleSanctuaryTimer;
+window.resetSanctuaryTimer = resetSanctuaryTimer;
+window.toggleAmbienceFromSanctuary = toggleAmbienceFromSanctuary;
+window.openReadingDnaModal = openReadingDnaModal;
+window.closeReadingDnaModal = closeReadingDnaModal;
+window.handleDnaBackdrop = handleDnaBackdrop;
+window.updateDnaKpiChip = updateDnaKpiChip;
+window.calculatePaceEstimate = calculatePaceEstimate;
+

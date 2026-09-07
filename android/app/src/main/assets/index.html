@@ -21,6 +21,40 @@
 </head>
 <body>
 
+  <!-- Dynamic Chromatic Aurora Background (Apple Music / VisionOS Spatial Glow) -->
+  <div id="ambientAuroraBg" class="ambient-aurora-bg">
+    <div class="aurora-blob aurora-blob-1"></div>
+    <div class="aurora-blob aurora-blob-2"></div>
+    <div class="aurora-blob aurora-blob-3"></div>
+  </div>
+
+  <!-- Dynamic Island Capsule HUD (Smart Floating Pill) -->
+  <aside id="dynamicIslandHud" class="dynamic-island-hud" onclick="handleDynamicIslandClick(event)" role="complementary" aria-label="Dynamic Island Quick Controls">
+    <div class="island-pill-inner">
+      <div class="island-left" id="islandLeftItem" onclick="event.stopPropagation(); openStreakModal();" title="Reading Streak">
+        <span class="island-icon" id="islandStreakIcon">🔥</span>
+        <span class="island-text" id="islandStreakText">1d Streak</span>
+      </div>
+      <div class="island-divider"></div>
+      <div class="island-center" id="islandCenterItem" title="Tap to expand or update progress">
+        <div class="island-book-mini-progress">
+          <span class="island-book-title" id="islandBookTitle">MindFocus Reading</span>
+          <div class="island-mini-bar"><div class="island-mini-fill" id="islandMiniFill" style="width: 0%;"></div></div>
+          <span class="island-pct" id="islandPctText">0%</span>
+        </div>
+      </div>
+      <div class="island-divider"></div>
+      <div class="island-right" id="islandRightItem">
+        <div class="island-soundwave" id="islandSoundwave" onclick="event.stopPropagation(); openAmbienceModal();" title="Ambience Soundscape">
+          <span class="sw-bar"></span><span class="sw-bar"></span><span class="sw-bar"></span>
+        </div>
+        <button type="button" class="island-search-trigger" onclick="event.stopPropagation(); openSpotlightModal();" title="Spotlight Teleport Search (Ctrl+K)">
+          ⚡
+        </button>
+      </div>
+    </div>
+  </aside>
+
   <!-- App Header -->
   <header class="app-header">
     <div class="header-inner">
@@ -39,6 +73,12 @@
         <button class="btn btn-warning pulse-btn" id="headerUpdateBtn" style="display:none;">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>
           <span id="updateBtnText">💾 Update</span>
+        </button>
+        <button class="btn" id="headerSpotlightBtn" onclick="openSpotlightModal()" title="Spotlight Teleport (Ctrl+K)" style="background:rgba(99,102,241,0.18); border-color:rgba(99,102,241,0.35); color:#a5b4fc; font-weight:700;">
+          ⚡ <span class="desktop-only-txt">Spotlight</span>
+        </button>
+        <button class="btn" id="headerSanctuaryBtn" onclick="openSanctuaryMode()" title="Distraction-Zero Sanctuary Mode" style="background:linear-gradient(135deg, rgba(245,158,11,0.18), rgba(239,68,68,0.18)); border-color:rgba(245,158,11,0.35); color:#fbbf24; font-weight:700;">
+          🌌 <span class="desktop-only-txt">Sanctuary</span>
         </button>
         <button class="btn btn-primary" id="addBookBtn" title="Add a new book to library">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -98,6 +138,11 @@
           <span class="chip-icon">💰</span>
           <span class="chip-val" id="kpiMoneySaved">₹0</span>
           <span class="chip-lbl">Value</span>
+        </div>
+        <div class="kpi-chip" onclick="openReadingDnaModal()" style="cursor:pointer; background:linear-gradient(135deg, rgba(99,102,241,0.16), rgba(168,85,247,0.16)); border-color:rgba(168,85,247,0.35);" title="Open Reading DNA Galaxy Constellation">
+          <span class="chip-icon">🌌</span>
+          <span class="chip-val" id="kpiDnaStars">0 ★</span>
+          <span class="chip-lbl">DNA Galaxy</span>
         </div>
       </div>
 
@@ -858,7 +903,7 @@
         <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:12px; padding:1rem; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Books Tracker</div>
-            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 1.9 (Luxury Obsidian Glass Edition)</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 2.0.0 (Spatial Luxury Sanctuary Edition)</div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn">
             🔄 Check Update
@@ -1166,6 +1211,109 @@
       </div>
       <div class="modal-footer" style="justify-content:center;">
         <button type="button" class="btn" onclick="closePomodoroModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Spotlight Command Island (Instant Teleport Search - Feature 5) -->
+  <div class="modal-overlay spotlight-overlay" id="spotlightIslandModal" onclick="handleSpotlightBackdrop(event)">
+    <div class="spotlight-capsule">
+      <div class="spotlight-search-header">
+        <span class="spotlight-search-icon">⚡</span>
+        <input type="text" id="spotlightInput" class="spotlight-input" placeholder="Teleport to any book, author, note, or quick command..." autocomplete="off" oninput="handleSpotlightSearch(this.value)">
+        <span class="spotlight-kbd" onclick="closeSpotlightModal()">ESC</span>
+      </div>
+      <div class="spotlight-quick-filters">
+        <button type="button" class="spotlight-pill active" onclick="filterSpotlightCategory('ALL', this)">All</button>
+        <button type="button" class="spotlight-pill" onclick="filterSpotlightCategory('READING', this)">📖 Reading</button>
+        <button type="button" class="spotlight-pill" onclick="filterSpotlightCategory('DONE', this)">✅ Finished</button>
+        <button type="button" class="spotlight-pill" onclick="filterSpotlightCategory('ACTION', this)">⚡ Actions</button>
+      </div>
+      <div class="spotlight-results-container" id="spotlightResultsContainer">
+        <!-- Dynamically injected results -->
+      </div>
+      <div class="spotlight-footer">
+        <span>Tip: Press <kbd>Ctrl</kbd>+<kbd>K</kbd> anywhere or tap ⚡ to launch Spotlight</span>
+        <span id="spotlightCountBadge">150 books indexed</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deep Sanctuary Focus Mode (Distraction-Zero Reading Room - Feature 9) -->
+  <div id="sanctuaryModeOverlay" class="sanctuary-overlay">
+    <div class="sanctuary-header">
+      <div class="sanctuary-logo">
+        <span class="sanctuary-sparkle">✦</span>
+        <span>READING SANCTUARY</span>
+      </div>
+      <button type="button" class="sanctuary-close-btn" onclick="exitSanctuaryMode()" title="Exit Sanctuary Mode (ESC)">
+        ✕ Exit Sanctuary
+      </button>
+    </div>
+
+    <div class="sanctuary-centerpiece">
+      <div class="sanctuary-aura-halo" id="sanctuaryAuraHalo"></div>
+      <div class="sanctuary-book-stage">
+        <div class="sanctuary-cover-wrap" id="sanctuaryCoverWrap">
+          <!-- Active book cover dynamically injected -->
+        </div>
+        <div class="sanctuary-book-info">
+          <div class="sanctuary-badge" id="sanctuaryCategoryBadge">FOCUS &amp; CLARITY</div>
+          <h1 class="sanctuary-title" id="sanctuaryBookTitle">Active Book</h1>
+          <div class="sanctuary-author" id="sanctuaryBookAuthor">Napoleon Hill</div>
+          
+          <div class="sanctuary-progress-module">
+            <div class="sanctuary-progress-meta">
+              <span id="sanctuaryPagesLabel">Page 0 of 0</span>
+              <span id="sanctuaryPaceLabel" class="sanctuary-pace-badge">~0 hrs left</span>
+            </div>
+            <div class="sanctuary-bar"><div class="sanctuary-bar-fill" id="sanctuaryBarFill" style="width:0%;"></div></div>
+            <div class="sanctuary-quick-steps">
+              <button type="button" onclick="stepSanctuaryPage(10)">+10 Pgs</button>
+              <button type="button" onclick="stepSanctuaryPage(25)">+25 Pgs</button>
+              <button type="button" onclick="stepSanctuaryPage(50)">+50 Pgs</button>
+              <button type="button" onclick="finishSanctuaryBook()" class="sanctuary-finish-btn">🎉 Finished</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sanctuary Focus Pomodoro Timer -->
+      <div class="sanctuary-timer-pod">
+        <div class="sanctuary-timer-display" id="sanctuaryTimerDigits">25:00</div>
+        <div class="sanctuary-timer-controls">
+          <button type="button" class="sanctuary-timer-btn primary" id="sanctuaryTimerToggle" onclick="toggleSanctuaryTimer()">▶ Start 25-Min Sprint</button>
+          <button type="button" class="sanctuary-timer-btn" onclick="resetSanctuaryTimer()">↺ Reset</button>
+          <button type="button" class="sanctuary-timer-btn ambient-btn" id="sanctuaryAmbienceBtn" onclick="toggleAmbienceFromSanctuary()">🎧 Ambience: Off</button>
+        </div>
+        <div class="sanctuary-quote-glow" id="sanctuaryQuoteGlow">"Action is the real measure of intelligence."</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reading DNA Constellation Modal (Interactive Visual Constellation - Feature 10) -->
+  <div class="modal-overlay" id="readingDnaModalOverlay" onclick="handleDnaBackdrop(event)">
+    <div class="modal-content reading-dna-modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title" style="display:flex; align-items:center; gap:0.55rem;">
+          <span style="font-size:1.4rem;">🌌</span>
+          <span>Your Reading DNA Galaxy</span>
+        </h3>
+        <button class="modal-close" onclick="closeReadingDnaModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:1rem 1.25rem;">
+        <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.75rem;">
+          Every finished book forms an interconnected shining star in your cosmic knowledge constellation. Hover or tap any star to inspect its milestone!
+        </div>
+        <div class="reading-dna-canvas-wrap">
+          <canvas id="readingDnaCanvas" width="600" height="340"></canvas>
+          <div class="reading-dna-star-tooltip" id="readingDnaTooltip"></div>
+        </div>
+        <div class="reading-dna-legend" id="readingDnaLegend"></div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <span style="font-size:0.8rem; color:var(--text-muted);" id="dnaFinishedStats">0 / 150 Stars Ignited</span>
+        <button type="button" class="btn" onclick="closeReadingDnaModal()">Close</button>
       </div>
     </div>
   </div>
