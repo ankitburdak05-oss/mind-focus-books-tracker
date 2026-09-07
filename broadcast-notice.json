@@ -1,9 +1,9 @@
 {
-  "id": "notice-2026-09-07-reset-live",
-  "active": false,
-  "icon": "📢",
+  "id": "notice-2026-09-07-sleep-01",
+  "active": true,
+  "icon": "🌙",
   "title": "Notice",
-  "message": "aaj reset kar bhai",
+  "message": "soja bhai raat ho gai hai",
   "btnText": "OK, Samajh Gaya",
-  "timestamp": "2026-09-07T21:48:00Z"
+  "timestamp": "2026-09-07T22:16:00Z"
 }
