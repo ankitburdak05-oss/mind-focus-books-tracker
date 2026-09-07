@@ -87,9 +87,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v1.6.0
-        name: "Mind Focus Books Tracker v1.6.0 - Clean Minimal & Focus Edition"
-        body: "Release v1.6.0 with clean minimal header, consolidated Settings hub, Pomodoro Focus Timer with chime bell, and fixed Ambience & Streak modals z-index."
+        tag_name: v1.7.0
+        name: "Mind Focus Books Tracker v1.7.0 - Clean & Perfected Focus Edition"
+        body: "Release v1.7.0: Clean header with removed redundant settings button, fixed unclosed modal containers for Ambience and Streak, improved bottom navigation dock, and backdrop modal dismiss."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

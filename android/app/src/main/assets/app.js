@@ -984,13 +984,25 @@ function setupEventListeners() {
 
   const viewBookshelfBtn = document.getElementById('viewBookshelfBtn');
   if (viewBookshelfBtn) viewBookshelfBtn.addEventListener('click', () => setViewMode('bookshelf'));
+
+  // Backdrop click to close any modal
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        overlay.classList.remove('active');
+        if (typeof restoreDockActiveTab === 'function') restoreDockActiveTab();
+      }
+    });
+  });
 }
 
 function setViewMode(mode) {
   state.viewMode = mode;
-  document.getElementById('viewTableBtn').classList.toggle('active', mode === 'table');
-  document.getElementById('viewGridBtn').classList.toggle('active', mode === 'grid');
+  const tableBtn = document.getElementById('viewTableBtn');
+  const gridBtn = document.getElementById('viewGridBtn');
   const shelfBtn = document.getElementById('viewBookshelfBtn');
+  if (tableBtn) tableBtn.classList.toggle('active', mode === 'table');
+  if (gridBtn) gridBtn.classList.toggle('active', mode === 'grid');
   if (shelfBtn) shelfBtn.classList.toggle('active', mode === 'bookshelf');
   renderBookList();
 }
@@ -1547,7 +1559,9 @@ function openPickBookModal() {
 }
 
 function closePickBookModal() {
-  document.getElementById('pickBookModalOverlay').classList.remove('active');
+  const overlay = document.getElementById('pickBookModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+  restoreDockActiveTab();
 }
 
 function spinForNextBook() {
@@ -2589,14 +2603,14 @@ function switchBottomTab(tab) {
   const dockBookshelf = document.getElementById('dockBookshelfBtn');
   const dockAmbience = document.getElementById('dockAmbienceBtn');
   const dockStreak = document.getElementById('dockStreakBtn');
-  const dockLent = document.getElementById('dockLentBtn');
+  const dockRoulette = document.getElementById('dockRouletteBtn');
   const dockSettings = document.getElementById('dockSettingsBtn');
 
   if (dockHome) dockHome.classList.toggle('active', tab === 'home');
   if (dockBookshelf) dockBookshelf.classList.toggle('active', tab === 'bookshelf');
   if (dockAmbience) dockAmbience.classList.toggle('active', tab === 'ambience');
   if (dockStreak) dockStreak.classList.toggle('active', tab === 'streak');
-  if (dockLent) dockLent.classList.toggle('active', tab === 'lent');
+  if (dockRoulette) dockRoulette.classList.toggle('active', tab === 'roulette');
   if (dockSettings) dockSettings.classList.toggle('active', tab === 'settings');
 
   if (tab === 'home') {
@@ -2613,30 +2627,46 @@ function switchBottomTab(tab) {
     openAmbienceModal();
   } else if (tab === 'streak') {
     openStreakModal();
-  } else if (tab === 'lent') {
-    setViewMode('table');
-    document.querySelectorAll('.tab-pill').forEach(p => {
-      p.classList.toggle('active', p.dataset.status === 'LENT');
-    });
-    state.statusFilter = 'LENT';
-    state.currentPage = 1;
-    renderApp();
+  } else if (tab === 'roulette') {
+    openPickBookModal();
+  } else if (tab === 'settings') {
+    openSettingsModal();
   }
+}
+
+function restoreDockActiveTab() {
+  const isBookshelf = state.viewMode === 'bookshelf';
+  const dockHome = document.getElementById('dockHomeBtn');
+  const dockBookshelf = document.getElementById('dockBookshelfBtn');
+  const dockAmbience = document.getElementById('dockAmbienceBtn');
+  const dockStreak = document.getElementById('dockStreakBtn');
+  const dockRoulette = document.getElementById('dockRouletteBtn');
+  const dockSettings = document.getElementById('dockSettingsBtn');
+
+  if (dockHome) dockHome.classList.toggle('active', !isBookshelf);
+  if (dockBookshelf) dockBookshelf.classList.toggle('active', isBookshelf);
+  if (dockAmbience) dockAmbience.classList.remove('active');
+  if (dockStreak) dockStreak.classList.remove('active');
+  if (dockRoulette) dockRoulette.classList.remove('active');
+  if (dockSettings) dockSettings.classList.remove('active');
 }
 
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v1.6.0';
+const CURRENT_APP_VERSION = 'v1.7.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
-  document.getElementById('appSettingsModalOverlay').classList.add('active');
+  const overlay = document.getElementById('appSettingsModalOverlay');
+  if (overlay) overlay.classList.add('active');
 }
 
 function closeSettingsModal() {
-  document.getElementById('appSettingsModalOverlay').classList.remove('active');
+  const overlay = document.getElementById('appSettingsModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+  restoreDockActiveTab();
 }
 
 function openUpdateCheckerModal() {
@@ -2933,6 +2963,7 @@ function openStreakModal() {
 function closeStreakModal() {
   const overlay = document.getElementById('streakModalOverlay');
   if (overlay) overlay.classList.remove('active');
+  restoreDockActiveTab();
 }
 
 /* ==========================================================
@@ -2979,7 +3010,8 @@ function startAmbienceAudio(track) {
 
   // Master Gain for volume
   ambienceMasterGain = ctx.createGain();
-  const rawVol = parseInt(document.getElementById('ambienceVolumeSlider')?.value || 60);
+  const volSlider = document.getElementById('ambienceVolumeSlider');
+  const rawVol = parseInt(volSlider ? volSlider.value : 60);
   const vol = (rawVol / 100) * 0.45;
   ambienceMasterGain.gain.setValueAtTime(vol, ctx.currentTime);
   ambienceMasterGain.connect(ctx.destination);
@@ -3165,6 +3197,7 @@ function openAmbienceModal() {
 function closeAmbienceModal() {
   const overlay = document.getElementById('ambienceModalOverlay');
   if (overlay) overlay.classList.remove('active');
+  restoreDockActiveTab();
 }
 
 /* ==========================================================
@@ -3184,6 +3217,7 @@ function openPomodoroModal() {
 function closePomodoroModal() {
   const overlay = document.getElementById('pomodoroTimerModalOverlay');
   if (overlay) overlay.classList.remove('active');
+  restoreDockActiveTab();
 }
 
 function updatePomodoroDisplay() {
@@ -3274,11 +3308,17 @@ function playPomodoroBell() {
   } catch (e) {}
 }
 
-// Global window bindings for 100% reliable modal opening
+// Global window bindings for 100% reliable modal opening and navigation
+window.switchBottomTab = switchBottomTab;
+window.restoreDockActiveTab = restoreDockActiveTab;
 window.openAmbienceModal = openAmbienceModal;
 window.closeAmbienceModal = closeAmbienceModal;
 window.openStreakModal = openStreakModal;
 window.closeStreakModal = closeStreakModal;
+window.openSettingsModal = openSettingsModal;
+window.closeSettingsModal = closeSettingsModal;
+window.openPickBookModal = openPickBookModal;
+window.closePickBookModal = closePickBookModal;
 window.openPomodoroModal = openPomodoroModal;
 window.closePomodoroModal = closePomodoroModal;
 

@@ -47,9 +47,6 @@
         <button class="btn" id="headerPomodoroBtn" onclick="openPomodoroModal()" title="25-Min Focus Reading Timer" style="background:rgba(239, 68, 68, 0.15); border-color:rgba(239, 68, 68, 0.35); color:#ef4444; font-weight:700;">
           ⏱️ <span id="headerPomodoroText">Focus Timer</span>
         </button>
-        <button class="btn" id="headerSettingsBtn" onclick="openSettingsModal()" title="Settings & Utilities" style="font-weight:700;">
-          ⚙️ Settings
-        </button>
       </div>
     </div>
   </header>
@@ -817,19 +814,19 @@
       <span class="dock-icon">📚</span>
       <span class="dock-label">Bookshelf</span>
     </button>
-    <button type="button" class="dock-item" id="dockAmbienceBtn" onclick="openAmbienceModal()">
+    <button type="button" class="dock-item" id="dockAmbienceBtn" onclick="switchBottomTab('ambience')">
       <span class="dock-icon">🎧</span>
       <span class="dock-label">Ambience</span>
     </button>
-    <button type="button" class="dock-item" id="dockStreakBtn" onclick="openStreakModal()">
+    <button type="button" class="dock-item" id="dockStreakBtn" onclick="switchBottomTab('streak')">
       <span class="dock-icon">🔥</span>
       <span class="dock-label">Streak</span>
     </button>
-    <button type="button" class="dock-item" id="dockRouletteBtn" onclick="openPickBookModal()">
+    <button type="button" class="dock-item" id="dockRouletteBtn" onclick="switchBottomTab('roulette')">
       <span class="dock-icon">🎲</span>
       <span class="dock-label">Roulette</span>
     </button>
-    <button type="button" class="dock-item" id="dockSettingsBtn" onclick="openSettingsModal()">
+    <button type="button" class="dock-item" id="dockSettingsBtn" onclick="switchBottomTab('settings')">
       <span class="dock-icon">⚙️</span>
       <span class="dock-label">Settings</span>
     </button>
@@ -847,7 +844,7 @@
         <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:12px; padding:1rem; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Books Tracker</div>
-            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 1.6 (Clean Minimal & Focus Edition)</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 1.7 (Clean & Perfected Focus Edition)</div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn">
             🔄 Check Update
@@ -999,6 +996,8 @@
         </button>
       </div>
     </div>
+  </div>
+
   <!-- Offline Ambience Sound Player Modal -->
   <div class="modal-overlay" id="ambienceModalOverlay">
     <div class="modal-content" style="max-width:480px;">
@@ -1114,6 +1113,8 @@
         <button type="button" class="btn" onclick="closeStreakModal()">Close</button>
       </div>
     </div>
+  </div>
+
   <!-- Pomodoro Reading Focus Timer Modal -->
   <div class="modal-overlay" id="pomodoroTimerModalOverlay">
     <div class="modal-content" style="max-width:440px; text-align:center;">
