@@ -2107,4 +2107,302 @@ body {
   100% { opacity: 0.6; }
 }
 
+/* ==========================================
+   FEATURE A: MODERN 3D FLOATING BOOK CARDS
+   ========================================== */
+.book-card {
+  position: relative;
+  background: var(--bg-card, var(--bg-secondary));
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 1.15rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.28s ease, border-color 0.2s ease;
+  overflow: hidden;
+}
+
+.book-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--accent-primary, #6366f1), #3b82f6);
+  opacity: 0.75;
+  transition: width 0.25s ease, opacity 0.25s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+  border-color: var(--accent-primary, #6366f1);
+}
+
+.book-card:hover::before {
+  width: 6px;
+  opacity: 1;
+}
+
+.book-card.status-reading-card::before {
+  background: linear-gradient(180deg, #3b82f6, #06b6d4);
+}
+
+.book-card.status-done-card::before {
+  background: linear-gradient(180deg, #10b981, #059669);
+}
+
+.book-card.status-pending-card::before {
+  background: linear-gradient(180deg, #f59e0b, #d97706);
+}
+
+/* Streak Flame Badge in Header & KPI */
+.streak-badge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.16), rgba(245, 158, 11, 0.16));
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  color: #f59e0b;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-weight: 800;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.streak-badge-btn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.25), rgba(245, 158, 11, 0.25));
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.35);
+}
+
+.streak-flame-icon {
+  font-size: 1.15rem;
+  animation: flameBounce 1.8s infinite alternate ease-in-out;
+}
+
+@keyframes flameBounce {
+  0% { transform: scale(1) rotate(-3deg); }
+  100% { transform: scale(1.2) rotate(3deg); }
+}
+
+/* ==========================================
+   FEATURE B: OFFLINE AMBIENCE SOUND PLAYER
+   ========================================== */
+.ambience-sound-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.85rem;
+  margin: 0.75rem 0;
+}
+
+.ambience-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 1rem 0.75rem;
+  border-radius: 12px;
+  border: 2px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.22s ease;
+  position: relative;
+  text-align: center;
+}
+
+.ambience-card:hover {
+  border-color: var(--accent-primary, #6366f1);
+  transform: translateY(-2px);
+  background: var(--bg-hover, rgba(99, 102, 241, 0.08));
+}
+
+.ambience-card.active {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.25);
+}
+
+.ambience-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.ambience-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.ambience-desc {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.ambience-playing-indicator {
+  display: none;
+  align-items: center;
+  gap: 3px;
+  height: 12px;
+  margin-top: 4px;
+}
+
+.ambience-card.active .ambience-playing-indicator {
+  display: inline-flex;
+}
+
+.sound-bar {
+  width: 3px;
+  background: #10b981;
+  border-radius: 2px;
+  animation: soundBarPulse 1s infinite ease-in-out alternate;
+}
+.sound-bar:nth-child(1) { height: 6px; animation-delay: 0.1s; }
+.sound-bar:nth-child(2) { height: 12px; animation-delay: 0.3s; }
+.sound-bar:nth-child(3) { height: 8px; animation-delay: 0.2s; }
+.sound-bar:nth-child(4) { height: 14px; animation-delay: 0.4s; }
+
+@keyframes soundBarPulse {
+  0% { transform: scaleY(0.4); }
+  100% { transform: scaleY(1); }
+}
+
+.ambience-volume-slider {
+  width: 100%;
+  accent-color: #10b981;
+  cursor: pointer;
+}
+
+/* ==========================================
+   FEATURE C: DAILY STREAK & TROPHY CABINET
+   ========================================== */
+.streak-hero-card {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.14), rgba(245, 158, 11, 0.18));
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 16px;
+  padding: 1.25rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.streak-flame-large {
+  font-size: 3.2rem;
+  line-height: 1;
+  margin-bottom: 0.3rem;
+  display: inline-block;
+  animation: flameBounce 1.8s infinite alternate ease-in-out;
+}
+
+.streak-count-title {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #f59e0b;
+  letter-spacing: -0.5px;
+}
+
+.streak-subtitle {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: 0.2rem;
+}
+
+.streak-days-track {
+  display: flex;
+  justify-content: center;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.streak-day-dot {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.streak-day-dot.active {
+  background: linear-gradient(135deg, #ef4444, #f59e0b);
+  color: #fff;
+  border-color: #f59e0b;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+}
+
+.badges-cabinet-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.badge-trophy-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 0.85rem 0.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  transition: all 0.2s ease;
+}
+
+.badge-trophy-card.unlocked {
+  border-color: rgba(245, 158, 11, 0.5);
+  background: linear-gradient(180deg, rgba(245, 158, 11, 0.08), var(--bg-primary));
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.12);
+}
+
+.badge-trophy-card.locked {
+  opacity: 0.55;
+  filter: grayscale(85%);
+}
+
+.trophy-icon {
+  font-size: 2rem;
+  line-height: 1;
+}
+
+.trophy-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.trophy-desc {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  line-height: 1.2;
+}
+
+.trophy-status {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 8px;
+  margin-top: 2px;
+}
+
+.trophy-status.unlocked {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.trophy-status.locked {
+  background: var(--border-color);
+  color: var(--text-muted);
+}
+
+
 

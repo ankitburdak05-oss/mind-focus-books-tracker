@@ -87,9 +87,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v1.3.0
-        name: "Mind Focus Books Tracker v1.3.0 - Kindle Sepia Mode"
-        body: "Permanent signed release APK v1.3.0 with Kindle Sepia Paper & Eye-Comfort Mode, Bottom Navigation Dock, and In-App 1-click update."
+        tag_name: v1.4.0
+        name: "Mind Focus Books Tracker v1.4.0 - 3D Cards, Ambience & Streaks"
+        body: "Permanent signed release APK v1.4.0 featuring Modern 3D Floating Book Cards, 100% Offline Ambience Sound Synthesizer (Rain, Forest, Cafe, Alpha Waves), and Daily Reading Streak Gamification with Achievement Badges."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

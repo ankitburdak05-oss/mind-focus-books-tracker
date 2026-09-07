@@ -92,6 +92,12 @@
           </div>
         </div>
 
+        <button class="streak-badge-btn" id="headerStreakBtn" onclick="openStreakModal()" title="Daily Reading Streak & Badges">
+          <span class="streak-flame-icon">🔥</span> <span id="headerStreakCount">1</span> Day
+        </button>
+        <button class="btn" id="ambienceHeaderBtn" title="Offline Focus Ambience Sounds" onclick="openAmbienceModal()">
+          🎧 <span id="ambienceHeaderBtnText">Ambience</span>
+        </button>
         <button class="btn" id="backupHubBtn" title="Auto-Backup & Safety Hub" onclick="openBackupModal()">
           💾 <span id="backupHubBtnText">Backup</span>
         </button>
@@ -176,6 +182,14 @@
         <div class="kpi-meta">
           <span class="kpi-label">HOURS INVESTED</span>
           <span class="kpi-value" id="kpiHoursInvested" style="color:#f472b6;">0 hrs</span>
+        </div>
+      </div>
+      <div class="kpi-card kpi-roi-card" style="cursor:pointer;" onclick="openStreakModal()" title="Click to view Streak & Achievement Badges">
+        <div class="kpi-icon-wrap" style="background:rgba(245, 158, 11, 0.18); color:#f59e0b;">🔥</div>
+        <div class="kpi-meta">
+          <span class="kpi-label">DAILY STREAK</span>
+          <span class="kpi-value" id="kpiStreakValue" style="color:#f59e0b;">1 Day</span>
+          <span style="font-size:0.72rem; color:var(--text-muted); font-weight:600;">Tap for Badges 🏆</span>
         </div>
       </div>
     </section>
@@ -857,9 +871,13 @@
       <span class="dock-icon">📚</span>
       <span class="dock-label">Bookshelf</span>
     </button>
-    <button type="button" class="dock-item" id="dockLentBtn" onclick="switchBottomTab('lent')">
-      <span class="dock-icon">👥</span>
-      <span class="dock-label">Lent Out</span>
+    <button type="button" class="dock-item" id="dockAmbienceBtn" onclick="openAmbienceModal()">
+      <span class="dock-icon">🎧</span>
+      <span class="dock-label">Ambience</span>
+    </button>
+    <button type="button" class="dock-item" id="dockStreakBtn" onclick="openStreakModal()">
+      <span class="dock-icon">🔥</span>
+      <span class="dock-label">Streak</span>
     </button>
     <button type="button" class="dock-item" id="dockRouletteBtn" onclick="openPickBookModal()">
       <span class="dock-icon">🎲</span>
@@ -883,7 +901,7 @@
         <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:10px; padding:1rem; display:flex; justify-content:space-between; align-items:center;">
           <div>
             <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Books Tracker</div>
-            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 1.3 (Kindle Sepia & Eye Comfort)</div>
+            <div style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.2rem;" id="appCurrentVersionText">Version 1.4 (3D Floating Cards, Offline Ambience & Daily Streaks)</div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn">
             🔄 Check Update
@@ -992,6 +1010,121 @@
         <button type="button" class="btn btn-primary" id="updateModalActionBtn" style="display:none; background:#10b981; border-color:#10b981; font-weight:700;">
           ⚡ Update Now
         </button>
+      </div>
+    </div>
+  <!-- Offline Ambience Sound Player Modal -->
+  <div class="modal-overlay" id="ambienceModalOverlay">
+    <div class="modal-content" style="max-width:480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🎧 Offline Focus Ambience Sounds</h3>
+        <button class="modal-close" onclick="closeAmbienceModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:1rem;">
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">
+          Play soothing background ambient sounds to block distractions and read with deep focus. 100% offline synthesis.
+        </p>
+
+        <!-- Sound Choices Grid -->
+        <div class="ambience-sound-grid">
+          <div class="ambience-card active" id="ambienceRainCard" onclick="selectAmbienceTrack('rain')">
+            <span class="ambience-icon">🌧️</span>
+            <span class="ambience-name">Gentle Rain</span>
+            <span class="ambience-desc">Calming raindrops</span>
+            <div class="ambience-playing-indicator">
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+            </div>
+          </div>
+
+          <div class="ambience-card" id="ambienceForestCard" onclick="selectAmbienceTrack('forest')">
+            <span class="ambience-icon">🌲</span>
+            <span class="ambience-name">Forest Breeze</span>
+            <span class="ambience-desc">Rustling trees & wind</span>
+            <div class="ambience-playing-indicator">
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+            </div>
+          </div>
+
+          <div class="ambience-card" id="ambienceWavesCard" onclick="selectAmbienceTrack('waves')">
+            <span class="ambience-icon">🌊</span>
+            <span class="ambience-name">Alpha Waves</span>
+            <span class="ambience-desc">432Hz deep focus</span>
+            <div class="ambience-playing-indicator">
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+            </div>
+          </div>
+
+          <div class="ambience-card" id="ambienceCafeCard" onclick="selectAmbienceTrack('cafe')">
+            <span class="ambience-icon">☕</span>
+            <span class="ambience-name">Cozy Cafe</span>
+            <span class="ambience-desc">Warm ambient chatter</span>
+            <div class="ambience-playing-indicator">
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+              <span class="sound-bar"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Volume Controller -->
+        <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:10px; padding:0.85rem 1rem;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+            <span style="font-size:0.85rem; font-weight:700; color:var(--text-primary);">🔊 Volume Level:</span>
+            <span id="ambienceVolumeLabel" style="font-size:0.85rem; font-weight:700; color:#10b981;">60%</span>
+          </div>
+          <input type="range" class="ambience-volume-slider" id="ambienceVolumeSlider" min="0" max="100" value="60" oninput="setAmbienceVolume(this.value)">
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn" onclick="closeAmbienceModal()">Close</button>
+        <button type="button" class="btn btn-primary" id="ambienceTogglePlayBtn" onclick="toggleAmbiencePlayback()" style="background:#10b981; border-color:#10b981; font-weight:700;">
+          ▶️ Play Rain
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Daily Reading Streak & Badges Modal -->
+  <div class="modal-overlay" id="streakModalOverlay">
+    <div class="modal-content" style="max-width:520px;">
+      <div class="modal-header">
+        <h3 class="modal-title">🔥 Reading Streak & Badges</h3>
+        <button class="modal-close" onclick="closeStreakModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:1rem;">
+        <!-- Hero Flame Card -->
+        <div class="streak-hero-card">
+          <div class="streak-flame-large">🔥</div>
+          <div class="streak-count-title" id="streakModalCountTitle">1 Day Reading Streak!</div>
+          <div class="streak-subtitle" id="streakModalSubtitle">Awesome start! Read everyday to build an unbreakable reading habit.</div>
+          
+          <div class="streak-days-track" id="streakDaysTrack">
+            <!-- Rendered dynamically by JS -->
+          </div>
+        </div>
+
+        <!-- Trophy Cabinet / Milestone Badges -->
+        <div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <div style="font-weight:800; font-size:0.95rem; color:var(--text-primary);">🏆 Achievement Trophies</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);" id="trophiesUnlockedCount">0 / 6 Unlocked</div>
+          </div>
+          <div class="badges-cabinet-grid" id="badgesCabinetGrid">
+            <!-- Rendered dynamically by JS -->
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn" onclick="closeStreakModal()">Close</button>
       </div>
     </div>
   </div>

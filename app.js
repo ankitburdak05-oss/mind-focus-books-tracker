@@ -38,6 +38,7 @@ const ICONS = {
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
   initPrivacyLock();
+  initStreak();
   loadData();
   populateCategoryDropdown();
   setupEventListeners();
@@ -259,6 +260,7 @@ function onStatusChange(index, newStatus) {
     book.end_date = '';
     book.count_days = calculateDaysDifference(book.start_date, today);
     showToast('Started reading: "' + book.title + '"!', 'success');
+    if (typeof recordReadingActivity === 'function') recordReadingActivity();
   } else if (newStatus === 'DONE') {
     if (!book.start_date) {
       book.start_date = today;
@@ -268,6 +270,7 @@ function onStatusChange(index, newStatus) {
     }
     book.count_days = calculateDaysDifference(book.start_date, book.end_date);
     showToast('Completed book: "' + book.title + '"! 🎉', 'success');
+    if (typeof recordReadingActivity === 'function') recordReadingActivity();
     // Feature 4: Open Completion Card
     setTimeout(() => {
       openCompletionCard(index);
@@ -453,6 +456,10 @@ function renderStatistics() {
   const lentCount = state.books.filter(b => b.lent_to && b.lent_to.trim().length > 0).length;
   const cLentEl = document.getElementById('countLent');
   if (cLentEl) cLentEl.innerText = lentCount;
+
+  if (typeof updateStreakUI === 'function') {
+    updateStreakUI();
+  }
 }
 
 function renderCategoryPills() {
@@ -583,6 +590,8 @@ function renderGridView(container, books) {
     const origIdx = b.originalIndex;
     const days = getBookEffectiveDays(b);
     const isReading = b.status === 'READING';
+    const isDone = b.status === 'DONE';
+    const statusCardClass = isReading ? 'status-reading-card' : (isDone ? 'status-done-card' : 'status-pending-card');
     const endDateDisplay = isReading 
       ? '<span class="badge" style="background:rgba(59,130,246,0.18); color:var(--status-reading-text); border:1px solid var(--status-reading-border); font-size:0.75rem; font-weight:600;">' + getTodayString() + ' (Today)</span>'
       : (b.end_date || '-');
@@ -595,12 +604,24 @@ function renderGridView(container, books) {
       starsHtml += '<span class="' + (s <= ratingNum ? 'filled' : '') + '" onclick="onRatingChange(' + origIdx + ', ' + s + ')">★</span>';
     }
 
-    html += '<div class="book-card">' +
+    // Cover image or stylish 3D book placeholder
+    let coverHtml = '';
+    if (b.cover_image) {
+      coverHtml = '<img src="' + b.cover_image + '" alt="cover" style="width:48px; height:68px; object-fit:cover; border-radius:6px; flex-shrink:0; box-shadow:0 4px 10px rgba(0,0,0,0.35);">';
+    } else {
+      const catColor = isReading ? '#3b82f6' : (isDone ? '#10b981' : '#f59e0b');
+      coverHtml = '<div style="width:48px; height:68px; border-radius:6px; flex-shrink:0; background:linear-gradient(135deg, ' + catColor + '22, ' + catColor + '44); border:1px solid ' + catColor + '55; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:0 4px 8px rgba(0,0,0,0.15); font-size:1.3rem;">' +
+        '<span>' + (isReading ? '📖' : (isDone ? '✅' : '📚')) + '</span>' +
+        '<span style="font-size:0.6rem; font-weight:800; color:var(--text-muted); margin-top:2px;">#' + escapeHtml(b.no) + '</span>' +
+        '</div>';
+    }
+
+    html += '<div class="book-card ' + statusCardClass + '">' +
       '<div class="book-card-header" style="display:flex; gap:0.75rem; align-items:flex-start;">' +
-      (b.cover_image ? '<img src="' + b.cover_image + '" alt="cover" style="width:44px; height:62px; object-fit:cover; border-radius:4px; flex-shrink:0; box-shadow:0 2px 5px rgba(0,0,0,0.35);">' : '') +
-      '<div style="flex:1;">' +
-      '<div class="book-card-no">' + escapeHtml(b.no) + '</div>' +
-      '<div class="book-card-title">' + escapeHtml(b.title) + '</div>' +
+      coverHtml +
+      '<div style="flex:1; min-width:0;">' +
+      '<div class="book-card-no">BOOK #' + escapeHtml(b.no) + '</div>' +
+      '<div class="book-card-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis;" title="' + escapeHtml(b.title) + '">' + escapeHtml(b.title) + '</div>' +
       '<div class="book-card-author">by ' + escapeHtml(b.author) + ' • ' + escapeHtml(b.language || 'HINDI') + '</div></div>' +
       '<select class="status-select status-' + (b.status || 'PENDING') + '" onchange="onStatusChange(' + origIdx + ', this.value)">' +
       '<option value="PENDING" ' + (b.status === 'PENDING' ? 'selected' : '') + '>⏳ PENDING</option>' +
@@ -1046,6 +1067,7 @@ function saveTakeawayModal() {
     saveData();
     closeTakeawayModal();
     renderBookList();
+    if (typeof recordReadingActivity === 'function') recordReadingActivity();
     showToast('Key takeaways saved successfully!', 'success');
   }
 }
@@ -2397,11 +2419,15 @@ function handleShortcutIntentActions() {
 function switchBottomTab(tab) {
   const dockHome = document.getElementById('dockHomeBtn');
   const dockBookshelf = document.getElementById('dockBookshelfBtn');
+  const dockAmbience = document.getElementById('dockAmbienceBtn');
+  const dockStreak = document.getElementById('dockStreakBtn');
   const dockLent = document.getElementById('dockLentBtn');
   const dockSettings = document.getElementById('dockSettingsBtn');
 
   if (dockHome) dockHome.classList.toggle('active', tab === 'home');
   if (dockBookshelf) dockBookshelf.classList.toggle('active', tab === 'bookshelf');
+  if (dockAmbience) dockAmbience.classList.toggle('active', tab === 'ambience');
+  if (dockStreak) dockStreak.classList.toggle('active', tab === 'streak');
   if (dockLent) dockLent.classList.toggle('active', tab === 'lent');
   if (dockSettings) dockSettings.classList.toggle('active', tab === 'settings');
 
@@ -2415,6 +2441,10 @@ function switchBottomTab(tab) {
     renderApp();
   } else if (tab === 'bookshelf') {
     setViewMode('bookshelf');
+  } else if (tab === 'ambience') {
+    openAmbienceModal();
+  } else if (tab === 'streak') {
+    openStreakModal();
   } else if (tab === 'lent') {
     setViewMode('table');
     document.querySelectorAll('.tab-pill').forEach(p => {
@@ -2429,7 +2459,7 @@ function switchBottomTab(tab) {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v1.3.0';
+const CURRENT_APP_VERSION = 'v1.4.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -2467,7 +2497,7 @@ async function checkForAppUpdates(showFeedback = true) {
     const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
     if (!res.ok) throw new Error('Could not contact update server');
     const data = await res.json();
-    const tagName = data.tag_name || 'v1.3.0';
+    const tagName = data.tag_name || 'v1.4.0';
     const releaseName = data.name || ('Mind Focus Books Tracker ' + tagName);
 
     let apkUrl = 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/' + tagName + '/MindFocusBooks-Native.apk';
@@ -2481,7 +2511,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
     if (icon) icon.innerText = '🎉';
     if (title) title.innerText = 'New Version Available: ' + tagName;
-    if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>Kindle Sepia Paper & Eye-Comfort Mode is ready to install!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero uninstall needed.</small>';
+    if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>3D Floating Book Cards, Offline Ambience Sound Player & Daily Streak Gamification are ready to install!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero uninstall needed.</small>';
     if (actionBtn) {
       actionBtn.style.display = 'inline-flex';
       actionBtn.innerText = '⚡ Install ' + tagName + ' Now';
@@ -2513,6 +2543,451 @@ function triggerInAppUpdate(apkUrl) {
     showToast('Downloading update APK file...', 'success');
   }
 }
+
+/* ==========================================================
+   FEATURE 1: DAILY READING STREAK & ACHIEVEMENT BADGES
+   ========================================================== */
+const STREAK_KEY = 'mind_focus_streak_v1';
+
+let streakState = {
+  currentStreak: 1,
+  highestStreak: 1,
+  lastReadDate: '',
+  activeDays: []
+};
+
+function initStreak() {
+  const saved = localStorage.getItem(STREAK_KEY);
+  const today = getTodayString();
+  if (saved) {
+    try {
+      streakState = JSON.parse(saved);
+      if (!Array.isArray(streakState.activeDays)) streakState.activeDays = [];
+    } catch (e) {
+      streakState = { currentStreak: 1, highestStreak: 1, lastReadDate: today, activeDays: [today] };
+    }
+  } else {
+    streakState = { currentStreak: 1, highestStreak: 1, lastReadDate: today, activeDays: [today] };
+  }
+
+  // Verify streak gap
+  if (streakState.lastReadDate && streakState.lastReadDate !== today) {
+    const diff = calculateDaysDifference(streakState.lastReadDate, today);
+    if (diff > 1) {
+      // Missed more than 1 day
+      streakState.currentStreak = 1;
+    }
+  }
+  saveStreak();
+}
+
+function saveStreak() {
+  localStorage.setItem(STREAK_KEY, JSON.stringify(streakState));
+}
+
+function recordReadingActivity() {
+  const today = getTodayString();
+  if (!Array.isArray(streakState.activeDays)) {
+    streakState.activeDays = [];
+  }
+  if (!streakState.activeDays.includes(today)) {
+    streakState.activeDays.push(today);
+  }
+
+  if (streakState.lastReadDate !== today) {
+    if (streakState.lastReadDate) {
+      const diff = calculateDaysDifference(streakState.lastReadDate, today);
+      if (diff === 1) {
+        streakState.currentStreak = (streakState.currentStreak || 1) + 1;
+      } else if (diff > 1) {
+        streakState.currentStreak = 1;
+      }
+    } else {
+      streakState.currentStreak = 1;
+    }
+
+    if (streakState.currentStreak > (streakState.highestStreak || 1)) {
+      streakState.highestStreak = streakState.currentStreak;
+    }
+    streakState.lastReadDate = today;
+    saveStreak();
+  }
+
+  // Check night owl trigger
+  const hour = new Date().getHours();
+  if (hour >= 22 || hour < 5) {
+    localStorage.setItem('mind_focus_night_owl', 'true');
+  }
+
+  updateStreakUI();
+}
+
+function updateStreakUI() {
+  const count = Math.max(1, streakState.currentStreak || 1);
+  const headerCount = document.getElementById('headerStreakCount');
+  if (headerCount) headerCount.innerText = count;
+
+  const kpiVal = document.getElementById('kpiStreakValue');
+  if (kpiVal) kpiVal.innerText = count + ' Day' + (count > 1 ? 's' : '');
+
+  const titleEl = document.getElementById('streakModalCountTitle');
+  if (titleEl) titleEl.innerText = count + ' Day' + (count > 1 ? 's' : '') + ' Reading Streak! 🔥';
+
+  const subEl = document.getElementById('streakModalSubtitle');
+  if (subEl) {
+    if (count >= 7) {
+      subEl.innerText = 'Legendary habit! You have read consistently for over a full week! 👑';
+    } else if (count >= 3) {
+      subEl.innerText = 'Awesome momentum! Your reading muscle is getting stronger every day.';
+    } else {
+      subEl.innerText = 'Great start! Open the app and read daily to build an unbreakable reading habit.';
+    }
+  }
+
+  renderStreakDots();
+  renderBadgesGrid();
+}
+
+function renderStreakDots() {
+  const container = document.getElementById('streakDaysTrack');
+  if (!container) return;
+
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+  const today = new Date();
+  const currentDayOfWeek = today.getDay(); // 0-6
+
+  let html = '';
+  for (let i = 0; i < 7; i++) {
+    const isToday = i === currentDayOfWeek;
+    const isPastOrToday = i <= currentDayOfWeek;
+    const isActive = isPastOrToday && (streakState.currentStreak >= (currentDayOfWeek - i + 1));
+
+    html += '<div class="streak-day-dot ' + (isActive ? 'active' : '') + '" title="' + dayNames[i] + '">' +
+      dayNames[i][0] +
+      '</div>';
+  }
+  container.innerHTML = html;
+}
+
+const BADGES_CONFIG = [
+  {
+    id: 'first_finish',
+    icon: '🏆',
+    title: 'First Finisher',
+    desc: 'Finish your 1st book',
+    check: () => state.books.some(b => b.status === 'DONE')
+  },
+  {
+    id: 'streak_3',
+    icon: '🔥',
+    title: '3-Day Fire',
+    desc: 'Reach a 3-day streak',
+    check: () => ((streakState.currentStreak || 1) >= 3 || (streakState.highestStreak || 1) >= 3)
+  },
+  {
+    id: 'streak_7',
+    icon: '⚔️',
+    title: 'Habit Warrior',
+    desc: 'Hit a 7-day streak',
+    check: () => ((streakState.currentStreak || 1) >= 7 || (streakState.highestStreak || 1) >= 7)
+  },
+  {
+    id: 'night_owl',
+    icon: '🌙',
+    title: 'Midnight Reader',
+    desc: 'Read past 10:00 PM',
+    check: () => {
+      const hr = new Date().getHours();
+      return (hr >= 22 || hr < 5) || localStorage.getItem('mind_focus_night_owl') === 'true';
+    }
+  },
+  {
+    id: 'collector',
+    icon: '📚',
+    title: 'Library Builder',
+    desc: 'Own 10+ books in app',
+    check: () => state.books.length >= 10
+  },
+  {
+    id: 'notes_master',
+    icon: '💡',
+    title: 'Wisdom Keeper',
+    desc: 'Save notes on 3+ books',
+    check: () => state.books.filter(b => b.takeaway && b.takeaway.trim().length > 0).length >= 3
+  }
+];
+
+function renderBadgesGrid() {
+  const container = document.getElementById('badgesCabinetGrid');
+  const countEl = document.getElementById('trophiesUnlockedCount');
+  if (!container) return;
+
+  let unlockedCount = 0;
+  let html = '';
+
+  BADGES_CONFIG.forEach(badge => {
+    const isUnlocked = badge.check();
+    if (isUnlocked) unlockedCount++;
+
+    html += '<div class="badge-trophy-card ' + (isUnlocked ? 'unlocked' : 'locked') + '">' +
+      '<div class="trophy-icon">' + badge.icon + '</div>' +
+      '<div class="trophy-title">' + badge.title + '</div>' +
+      '<div class="trophy-desc">' + badge.desc + '</div>' +
+      '<div class="trophy-status ' + (isUnlocked ? 'unlocked' : 'locked') + '">' +
+      (isUnlocked ? 'UNLOCKED' : 'LOCKED') +
+      '</div>' +
+      '</div>';
+  });
+
+  container.innerHTML = html;
+  if (countEl) {
+    countEl.innerText = unlockedCount + ' / ' + BADGES_CONFIG.length + ' Unlocked';
+  }
+}
+
+function openStreakModal() {
+  updateStreakUI();
+  const overlay = document.getElementById('streakModalOverlay');
+  if (overlay) overlay.classList.add('active');
+}
+
+function closeStreakModal() {
+  const overlay = document.getElementById('streakModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+/* ==========================================================
+   FEATURE 2: OFFLINE AMBIENCE SOUND SYNTHESIZER (WEB AUDIO)
+   ========================================================== */
+let audioCtx = null;
+let currentAmbienceTrack = 'rain';
+let isAmbiencePlaying = false;
+let ambienceMasterGain = null;
+let activeAudioNodes = [];
+
+function getOrCreateAudioContext() {
+  if (!audioCtx) {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (AudioContextClass) {
+      audioCtx = new AudioContextClass();
+    }
+  }
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
+  return audioCtx;
+}
+
+function stopAmbienceAudio() {
+  activeAudioNodes.forEach(node => {
+    try {
+      if (node.stop) node.stop();
+      if (node.disconnect) node.disconnect();
+    } catch (e) {}
+  });
+  activeAudioNodes = [];
+  isAmbiencePlaying = false;
+  updateAmbienceUI();
+}
+
+function startAmbienceAudio(track) {
+  const ctx = getOrCreateAudioContext();
+  if (!ctx) {
+    showToast('Audio is not supported on this device', 'error');
+    return;
+  }
+  stopAmbienceAudio();
+
+  // Master Gain for volume
+  ambienceMasterGain = ctx.createGain();
+  const rawVol = parseInt(document.getElementById('ambienceVolumeSlider')?.value || 60);
+  const vol = (rawVol / 100) * 0.45;
+  ambienceMasterGain.gain.setValueAtTime(vol, ctx.currentTime);
+  ambienceMasterGain.connect(ctx.destination);
+  activeAudioNodes.push(ambienceMasterGain);
+
+  if (track === 'rain') {
+    // Pink noise rain generation
+    const bufferSize = ctx.sampleRate * 2;
+    const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.12;
+      b6 = white * 0.115926;
+    }
+    const whiteNoise = ctx.createBufferSource();
+    whiteNoise.buffer = noiseBuffer;
+    whiteNoise.loop = true;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(750, ctx.currentTime);
+
+    whiteNoise.connect(filter);
+    filter.connect(ambienceMasterGain);
+    whiteNoise.start();
+    activeAudioNodes.push(whiteNoise, filter);
+  } else if (track === 'waves') {
+    // 432Hz Alpha Focus Tone with 8Hz binaural pulse
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(432, ctx.currentTime);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(440, ctx.currentTime);
+
+    const lfo = ctx.createOscillator();
+    lfo.frequency.setValueAtTime(0.2, ctx.currentTime);
+    const lfoGain = ctx.createGain();
+    lfoGain.gain.setValueAtTime(0.12, ctx.currentTime);
+    lfo.connect(lfoGain.gain);
+
+    osc1.connect(ambienceMasterGain);
+    osc2.connect(ambienceMasterGain);
+    osc1.start();
+    osc2.start();
+    lfo.start();
+    activeAudioNodes.push(osc1, osc2, lfo, lfoGain);
+  } else if (track === 'forest') {
+    // Forest Breeze modulation
+    const bufferSize = ctx.sampleRate * 2;
+    const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = (Math.random() * 2 - 1) * 0.2;
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = noiseBuffer;
+    noise.loop = true;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(420, ctx.currentTime);
+    filter.Q.setValueAtTime(2.5, ctx.currentTime);
+
+    const lfo = ctx.createOscillator();
+    lfo.frequency.setValueAtTime(0.25, ctx.currentTime);
+    const lfoGain = ctx.createGain();
+    lfoGain.gain.setValueAtTime(220, ctx.currentTime);
+    lfo.connect(filter.frequency);
+
+    noise.connect(filter);
+    filter.connect(ambienceMasterGain);
+    noise.start();
+    lfo.start();
+    activeAudioNodes.push(noise, filter, lfo, lfoGain);
+  } else if (track === 'cafe') {
+    // Cozy Cafe gentle hum
+    const osc1 = ctx.createOscillator();
+    const osc2 = ctx.createOscillator();
+    osc1.type = 'triangle';
+    osc1.frequency.setValueAtTime(130, ctx.currentTime);
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(195, ctx.currentTime);
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.setValueAtTime(300, ctx.currentTime);
+
+    osc1.connect(filter);
+    osc2.connect(filter);
+    filter.connect(ambienceMasterGain);
+    osc1.start();
+    osc2.start();
+    activeAudioNodes.push(osc1, osc2, filter);
+  }
+
+  isAmbiencePlaying = true;
+  updateAmbienceUI();
+}
+
+function selectAmbienceTrack(track) {
+  currentAmbienceTrack = track;
+  const cards = {
+    rain: document.getElementById('ambienceRainCard'),
+    forest: document.getElementById('ambienceForestCard'),
+    waves: document.getElementById('ambienceWavesCard'),
+    cafe: document.getElementById('ambienceCafeCard')
+  };
+
+  Object.keys(cards).forEach(key => {
+    if (cards[key]) cards[key].classList.toggle('active', key === track);
+  });
+
+  if (isAmbiencePlaying) {
+    startAmbienceAudio(track);
+  } else {
+    updateAmbienceUI();
+  }
+}
+
+function toggleAmbiencePlayback() {
+  if (isAmbiencePlaying) {
+    stopAmbienceAudio();
+    showToast('Ambience audio paused', 'info');
+  } else {
+    startAmbienceAudio(currentAmbienceTrack);
+    showToast('Playing ' + currentAmbienceTrack.toUpperCase() + ' soundscape 🎧', 'success');
+  }
+}
+
+function setAmbienceVolume(val) {
+  const lbl = document.getElementById('ambienceVolumeLabel');
+  if (lbl) lbl.innerText = val + '%';
+  if (ambienceMasterGain && audioCtx) {
+    const vol = (parseInt(val) / 100) * 0.45;
+    ambienceMasterGain.gain.setValueAtTime(vol, audioCtx.currentTime);
+  }
+}
+
+function updateAmbienceUI() {
+  const toggleBtn = document.getElementById('ambienceTogglePlayBtn');
+  const headerBtnText = document.getElementById('ambienceHeaderBtnText');
+
+  const trackNames = {
+    rain: 'Rain',
+    forest: 'Forest',
+    waves: 'Alpha Waves',
+    cafe: 'Cafe'
+  };
+  const name = trackNames[currentAmbienceTrack] || 'Ambience';
+
+  if (toggleBtn) {
+    if (isAmbiencePlaying) {
+      toggleBtn.innerText = '⏸️ Pause ' + name;
+      toggleBtn.style.background = '#ef4444';
+      toggleBtn.style.borderColor = '#ef4444';
+    } else {
+      toggleBtn.innerText = '▶️ Play ' + name;
+      toggleBtn.style.background = '#10b981';
+      toggleBtn.style.borderColor = '#10b981';
+    }
+  }
+
+  if (headerBtnText) {
+    headerBtnText.innerText = isAmbiencePlaying ? ('🎧 ' + name) : 'Ambience';
+  }
+}
+
+function openAmbienceModal() {
+  updateAmbienceUI();
+  const overlay = document.getElementById('ambienceModalOverlay');
+  if (overlay) overlay.classList.add('active');
+}
+
+function closeAmbienceModal() {
+  const overlay = document.getElementById('ambienceModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
 
 
 
