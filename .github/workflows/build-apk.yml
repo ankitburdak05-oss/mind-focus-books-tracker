@@ -87,9 +87,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v1.8.1
-        name: "Mind Focus Books Tracker v1.8.1 - Instant Clean Books View"
-        body: "Release v1.8.1: Removed bulky In-Progress hero banner and carousels, completely eliminating the vertical scrolling gap. Library books now appear immediately at the top without heavy scrolling, with 1-tap filter chips on the compact KPI strip."
+        tag_name: v1.8.2
+        name: "Mind Focus Books Tracker v1.8.2 - Luxury Focus & Page Tracker Edition"
+        body: "Release v1.8.2: Restored Top Now Reading Hero Spotlight with interactive page tracker, 3D curated cover, compact KPI strip, 1-tap detail sheet, and rich notes formatting chips."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
