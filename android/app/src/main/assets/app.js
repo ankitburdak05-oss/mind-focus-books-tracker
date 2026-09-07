@@ -4345,7 +4345,7 @@ async function checkRemoteBroadcastNotice() {
     currentBroadcastNoticeId = data.id || 'notice-default';
     const lastDismissed = localStorage.getItem('mindfocus_dismissed_notice_id');
 
-    if (data.forceShow || lastDismissed !== currentBroadcastNoticeId) {
+    if (lastDismissed !== currentBroadcastNoticeId) {
       showInAppNoticePopup(data);
     }
   } catch (e) {
