@@ -893,9 +893,9 @@ function setupEventListeners() {
     renderBookList();
   });
 
-  document.getElementById('themeToggleBtn').addEventListener('click', toggleTheme);
+  const themeToggleBtn = document.getElementById('themeToggleBtn');
+  if (themeToggleBtn) themeToggleBtn.addEventListener('click', toggleTheme);
 
-  
   const updateBtn = document.getElementById('headerUpdateBtn');
   if (updateBtn) updateBtn.addEventListener('click', handleUpdateClick);
 
@@ -917,7 +917,8 @@ function setupEventListeners() {
     });
   }
 
-  document.getElementById('addBookBtn').addEventListener('click', openAddModal);
+  const addBookBtn = document.getElementById('addBookBtn');
+  if (addBookBtn) addBookBtn.addEventListener('click', openAddModal);
 
   const pickNextBookBtn = document.getElementById('pickNextBookBtn');
   if (pickNextBookBtn) {
@@ -952,12 +953,16 @@ function setupEventListeners() {
   if (importFileBtn) {
     importFileBtn.addEventListener('click', () => {
       if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
-      document.getElementById('importFileInput').click();
+      const fi = document.getElementById('importFileInput');
+      if (fi) fi.click();
     });
   }
 
-  document.getElementById('importFileInput').addEventListener('change', handleFileImport);
-  document.getElementById('resetDataBtn').addEventListener('click', confirmResetData);
+  const importFileInput = document.getElementById('importFileInput');
+  if (importFileInput) importFileInput.addEventListener('change', handleFileImport);
+
+  const resetDataBtn = document.getElementById('resetDataBtn');
+  if (resetDataBtn) resetDataBtn.addEventListener('click', confirmResetData);
 
   const startDateInput = document.getElementById('editStartDate');
   const endDateInput = document.getElementById('editEndDate');
@@ -3150,6 +3155,122 @@ function closeAmbienceModal() {
   const overlay = document.getElementById('ambienceModalOverlay');
   if (overlay) overlay.classList.remove('active');
 }
+
+/* ==========================================================
+   FEATURE: POMODORO FOCUS READING TIMER
+   ========================================================== */
+let pomodoroDuration = 25 * 60; // 25 mins default
+let pomodoroRemaining = 25 * 60;
+let pomodoroTimerInterval = null;
+let isPomodoroRunning = false;
+
+function openPomodoroModal() {
+  updatePomodoroDisplay();
+  const overlay = document.getElementById('pomodoroTimerModalOverlay');
+  if (overlay) overlay.classList.add('active');
+}
+
+function closePomodoroModal() {
+  const overlay = document.getElementById('pomodoroTimerModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+function updatePomodoroDisplay() {
+  const minutes = Math.floor(pomodoroRemaining / 60);
+  const seconds = pomodoroRemaining % 60;
+  const timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
+  
+  const displayEl = document.getElementById('pomodoroTimeDisplay');
+  if (displayEl) displayEl.innerText = timeStr;
+
+  const headerText = document.getElementById('headerPomodoroText');
+  if (headerText) {
+    headerText.innerText = isPomodoroRunning ? timeStr : 'Focus Timer';
+  }
+
+  const toggleBtn = document.getElementById('pomodoroToggleBtn');
+  if (toggleBtn) {
+    if (isPomodoroRunning) {
+      toggleBtn.innerText = '⏸️ Pause';
+      toggleBtn.style.background = '#f59e0b';
+      toggleBtn.style.borderColor = '#f59e0b';
+    } else {
+      toggleBtn.innerText = '▶ Start Focus';
+      toggleBtn.style.background = '#ef4444';
+      toggleBtn.style.borderColor = '#ef4444';
+    }
+  }
+}
+
+function togglePomodoroTimer() {
+  if (isPomodoroRunning) {
+    clearInterval(pomodoroTimerInterval);
+    isPomodoroRunning = false;
+    updatePomodoroDisplay();
+    showToast('Focus timer paused', 'info');
+  } else {
+    isPomodoroRunning = true;
+    updatePomodoroDisplay();
+    showToast('Focus session started! Deep reading time 📖', 'success');
+    if (typeof recordReadingActivity === 'function') recordReadingActivity();
+
+    pomodoroTimerInterval = setInterval(() => {
+      if (pomodoroRemaining > 0) {
+        pomodoroRemaining--;
+        updatePomodoroDisplay();
+      } else {
+        clearInterval(pomodoroTimerInterval);
+        isPomodoroRunning = false;
+        updatePomodoroDisplay();
+        playPomodoroBell();
+        showToast('🎉 25 Min Focus Session Completed! Great reading!', 'success');
+      }
+    }, 1000);
+  }
+}
+
+function resetPomodoroTimer() {
+  clearInterval(pomodoroTimerInterval);
+  isPomodoroRunning = false;
+  pomodoroRemaining = pomodoroDuration;
+  updatePomodoroDisplay();
+  showToast('Timer reset to ' + Math.round(pomodoroDuration / 60) + ' mins', 'info');
+}
+
+function setPomodoroDuration(mins) {
+  clearInterval(pomodoroTimerInterval);
+  isPomodoroRunning = false;
+  pomodoroDuration = mins * 60;
+  pomodoroRemaining = pomodoroDuration;
+  updatePomodoroDisplay();
+  showToast('Set focus timer to ' + mins + ' minutes', 'success');
+}
+
+function playPomodoroBell() {
+  const ctx = getOrCreateAudioContext();
+  if (!ctx) return;
+  try {
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5 pleasant bell
+    gain.gain.setValueAtTime(0.35, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.5);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start();
+    osc.stop(ctx.currentTime + 2.5);
+  } catch (e) {}
+}
+
+// Global window bindings for 100% reliable modal opening
+window.openAmbienceModal = openAmbienceModal;
+window.closeAmbienceModal = closeAmbienceModal;
+window.openStreakModal = openStreakModal;
+window.closeStreakModal = closeStreakModal;
+window.openPomodoroModal = openPomodoroModal;
+window.closePomodoroModal = closePomodoroModal;
+
 
 
 
