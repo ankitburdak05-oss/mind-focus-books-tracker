@@ -4317,6 +4317,8 @@ window.updateSearchDrawerFilterBadge = updateSearchDrawerFilterBadge;
 let currentBroadcastNoticeId = '';
 let broadcastNoticeInterval = null;
 
+let dismissedNoticeIds = {};
+
 async function checkRemoteBroadcastNotice() {
   try {
     const remoteUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?t=' + Date.now();
@@ -4343,11 +4345,19 @@ async function checkRemoteBroadcastNotice() {
     }
 
     currentBroadcastNoticeId = data.id || 'notice-default';
-    const lastDismissed = localStorage.getItem('mindfocus_dismissed_notice_id');
+    let lastDismissed = null;
+    try {
+      lastDismissed = localStorage.getItem('mindfocus_dismissed_notice_id');
+    } catch (e) {}
 
-    if (lastDismissed !== currentBroadcastNoticeId) {
-      showInAppNoticePopup(data);
+    if (dismissedNoticeIds[currentBroadcastNoticeId] || lastDismissed === currentBroadcastNoticeId) {
+      if (overlay && overlay.classList.contains('active')) {
+        overlay.classList.remove('active');
+      }
+      return;
     }
+
+    showInAppNoticePopup(data);
   } catch (e) {
     console.warn('Notice check error:', e);
   }
@@ -4371,9 +4381,12 @@ function showInAppNoticePopup(data) {
 }
 
 function dismissInAppNotice() {
-  if (currentBroadcastNoticeId) {
-    localStorage.setItem('mindfocus_dismissed_notice_id', currentBroadcastNoticeId);
-  }
+  const idToDismiss = currentBroadcastNoticeId || 'notice-2026-09-07-reset-live';
+  try {
+    localStorage.setItem('mindfocus_dismissed_notice_id', idToDismiss);
+  } catch (e) {}
+  dismissedNoticeIds[idToDismiss] = true;
+
   const overlay = document.getElementById('inAppNoticeModalOverlay');
   if (overlay) overlay.classList.remove('active');
 }
