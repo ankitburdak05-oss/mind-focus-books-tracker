@@ -1,10 +1,10 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  id: "notice-2026-09-08-card2-3d-model-01",
-  active: true,
-  card: "card2",
-  icon: "💎",
-  title: "Card 2 • 3D Spatial Edition",
-  message: "Ye Card 2 ka naya 3D Model popup hai! 3D spinning crystal cube aur animations ke saath! 🔥",
-  btnText": "I Am Ready 🏆",
-  timestamp: "2026-09-08T14:26:00Z"
+ id: \notice-2026-09-08-c2-feedback-01\,
+ active: true,
+ card: \card2\,
+ icon: \💎\,
+ title: \Card 2 • 3D Model\,
+ message: \kesa laga new card\,
+ btnText: \Mast Hai 🔥\,
+ timestamp: \2026-09-08T14:38:00Z\
 };
