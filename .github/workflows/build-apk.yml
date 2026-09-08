@@ -33,6 +33,7 @@ jobs:
         cp app.js android/app/src/main/assets/
         cp books-data.js android/app/src/main/assets/
         cp broadcast-notice.json android/app/src/main/assets/ || true
+        cp broadcast-notice.js android/app/src/main/assets/ || true
         cp icon-192.png android/app/src/main/assets/
         cp icon-512.png android/app/src/main/assets/
         cp jspdf.umd.min.js android/app/src/main/assets/

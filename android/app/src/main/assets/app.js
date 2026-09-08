@@ -4515,6 +4515,26 @@ function createNoticeQuantumBurst(originX, originY) {
   }
 }
 
+function fetchNoticeViaScript(url) {
+  return new Promise((resolve) => {
+    try {
+      const s = document.createElement('script');
+      s.src = url;
+      s.onload = () => {
+        resolve(window.__REMOTE_BROADCAST_NOTICE__ || null);
+        s.remove();
+      };
+      s.onerror = () => {
+        resolve(null);
+        s.remove();
+      };
+      document.head.appendChild(s);
+    } catch (e) {
+      resolve(null);
+    }
+  });
+}
+
 async function checkRemoteBroadcastNotice() {
   try {
     const cb = Date.now() + '_' + Math.floor(Math.random() * 100000);
@@ -4551,6 +4571,17 @@ async function checkRemoteBroadcastNotice() {
         const localRes = await fetch('broadcast-notice.json?cb=' + cb, { cache: 'no-store' });
         if (localRes.ok) data = await localRes.json();
       } catch (e) {}
+    }
+
+    // 5. Script-Tag CORS Bypass (Works 100% on file:/// in Chrome/Edge on laptop)
+    if (!data) {
+      data = await fetchNoticeViaScript('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.js?cb=' + cb);
+    }
+    if (!data) {
+      data = await fetchNoticeViaScript('https://ankitburdak05-oss.github.io/mind-focus-books-tracker/broadcast-notice.js?cb=' + cb);
+    }
+    if (!data) {
+      data = await fetchNoticeViaScript('broadcast-notice.js?cb=' + cb);
     }
 
     const overlay = document.getElementById('inAppNoticeModalOverlay');
