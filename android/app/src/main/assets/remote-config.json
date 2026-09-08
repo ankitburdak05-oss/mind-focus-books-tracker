@@ -1,0 +1,25 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-09-08T18:00:00Z",
+  "features": {
+    "maintenanceMode": false,
+    "maintenanceMessage": "App under scheduled maintenance. Will be back shortly!",
+    "quotesEnabled": true,
+    "audiobookVoiceEnabled": true,
+    "streakShieldsEnabled": true,
+    "communityBooksSync": true
+  },
+  "globalBanner": {
+    "active": false,
+    "text": "Welcome to Mind Focus Books Tracker!",
+    "type": "info",
+    "link": ""
+  },
+  "versionControl": {
+    "latestVersion": "v3.1.0",
+    "minRequiredVersion": "v3.0.0",
+    "forceUpdate": false,
+    "updateMessage": "A new version of Mind Focus Books is available. Please update now for the latest features!",
+    "downloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest"
+  }
+}

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mind Focus Books • Master Control Panel</title>
+  <link rel="manifest" href="manifest-admin.json">
+  <link rel="stylesheet" href="control-panel.css">
+  <link rel="icon" type="image/png" href="icon-192.png">
+</head>
+<body>
+  <div class="admin-shell">
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="header-brand">
+        <div class="brand-icon">⚡</div>
+        <div>
+          <h1 class="brand-title">Mind Focus Books • Control Panel</h1>
+          <p class="brand-subtitle">Executive Command Center & Remote Notification Studio</p>
+        </div>
+      </div>
+      <div class="header-status">
+        <div class="status-badge">
+          <div class="status-dot"></div>
+          <span id="liveNoticeStatusBadge">FETCHING STATUS...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="admin-tabs">
+      <button class="tab-btn active" data-tab="tabBroadcast">
+        <span>📢</span> Notification Broadcast Studio
+      </button>
+      <button class="tab-btn" data-tab="tabFeatures">
+        <span>🎛️</span> Remote Feature Flags
+      </button>
+      <button class="tab-btn" data-tab="tabBooks">
+        <span>📚</span> Global Book Manager
+      </button>
+      <button class="tab-btn" data-tab="tabGithub">
+        <span>🔑</span> GitHub Cloud & Vault
+      </button>
+    </nav>
+
+    <!-- TAB 1: BROADCAST STUDIO -->
+    <section class="tab-view active" id="tabBroadcast">
+      <div class="dashboard-grid">
+        <!-- Left: Form Controls -->
+        <div class="glass-panel">
+          <div class="panel-header">
+            <div class="panel-title">
+              <span>🚀</span> Broadcast Notification Dispatcher
+            </div>
+            <span class="panel-pill">LIVE POPUP ENGINE</span>
+          </div>
+
+          <!-- Quick Presets -->
+          <div class="form-group">
+            <label class="form-label">⚡ 1-Click Quick Presets</label>
+            <select class="form-select" id="noticePresetSelect">
+              <option value="c2_feedback">💎 Card 2: "kesa laga new card" (3D Model)</option>
+              <option value="c1_poll">📢 Card 1: "ye acha hai ya card2" (Quantum Portal)</option>
+              <option value="new_update">🚀 New Update Ready (v3.1.0)</option>
+              <option value="daily_motivation">📖 Daily Reading Motivation</option>
+              <option value="maintenance">⚡ Server Maintenance Alert</option>
+            </select>
+          </div>
+
+          <!-- Card Style Selector -->
+          <div class="form-group">
+            <label class="form-label">Design Layout (Card 1 vs Card 2)</label>
+            <div class="card-selector-grid">
+              <label class="card-radio-label">
+                <input type="radio" name="noticeCardType" value="card1">
+                <div class="card-option">
+                  <div class="card-option-badge">🌀</div>
+                  <div>
+                    <div class="card-option-title">Card 1 • Quantum Portal</div>
+                    <div class="card-option-desc">Holographic Orb, Shockwave Ring & Cyan Particles</div>
+                  </div>
+                </div>
+              </label>
+
+              <label class="card-radio-label">
+                <input type="radio" name="noticeCardType" value="card2" checked>
+                <div class="card-option">
+                  <div class="card-option-badge">💎</div>
+                  <div>
+                    <div class="card-option-title">Card 2 • 3D Crystal Model</div>
+                    <div class="card-option-desc">Real CSS 3D Spinning Crystal Cube & Gold Accents</div>
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Title Input -->
+          <div class="form-group">
+            <label class="form-label">Popup Title</label>
+            <input type="text" class="form-input" id="noticeTitleInput" value="Card 2 • 3D Model" placeholder="Enter popup headline...">
+          </div>
+
+          <!-- Message Input -->
+          <div class="form-group">
+            <label class="form-label">Message Content</label>
+            <textarea class="form-textarea" id="noticeMsgInput" placeholder="Aapka sandesh / message yaha likhein...">kesa laga new card</textarea>
+          </div>
+
+          <!-- Icon / Emoji Selector -->
+          <div class="form-group">
+            <label class="form-label">Icon / Emoji</label>
+            <input type="text" class="form-input" id="noticeIconInput" value="💎" style="max-width: 120px; font-size: 1.2rem; text-align: center;">
+            <div class="emoji-chips">
+              <span class="emoji-chip" onclick="selectEmoji('💎')">💎</span>
+              <span class="emoji-chip" onclick="selectEmoji('📢')">📢</span>
+              <span class="emoji-chip" onclick="selectEmoji('🔥')">🔥</span>
+              <span class="emoji-chip" onclick="selectEmoji('🚀')">🚀</span>
+              <span class="emoji-chip" onclick="selectEmoji('📚')">📚</span>
+              <span class="emoji-chip" onclick="selectEmoji('⚡')">⚡</span>
+              <span class="emoji-chip" onclick="selectEmoji('🏆')">🏆</span>
+              <span class="emoji-chip" onclick="selectEmoji('🌟')">🌟</span>
+              <span class="emoji-chip" onclick="selectEmoji('🎯')">🎯</span>
+              <span class="emoji-chip" onclick="selectEmoji('🎉')">🎉</span>
+            </div>
+          </div>
+
+          <!-- Action Button Text -->
+          <div class="form-group">
+            <label class="form-label">Button Action Text</label>
+            <input type="text" class="form-input" id="noticeBtnTextInput" value="Mast Hai 🔥" placeholder="Button text...">
+          </div>
+
+          <!-- Broadcast Action Buttons -->
+          <div class="btn-row">
+            <button type="button" class="btn-admin btn-primary" id="btnBroadcastNow" onclick="broadcastLiveNotice()">
+              <span>⚡</span> Broadcast Live to App
+            </button>
+            <button type="button" class="btn-admin btn-gold" id="btnAutoSequence" onclick="triggerAutoSequence()">
+              <span>⏱️</span> Auto-Sequence (Card 2 → 10s → Card 1)
+            </button>
+            <button type="button" class="btn-admin btn-danger" id="btnDeactivate" onclick="deactivateLiveNotice()">
+              <span>🔴</span> Turn Off Notice
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Live Interactive Simulator -->
+        <div>
+          <div class="glass-panel">
+            <div class="panel-header">
+              <div class="panel-title">
+                <span>📱</span> Live App Screen Simulator
+              </div>
+              <span class="panel-pill">REAL-TIME PREVIEW</span>
+            </div>
+
+            <div class="simulator-card">
+              <!-- Card 1 Simulator -->
+              <div class="sim-card1" id="simCard1" style="display:none;">
+                <div class="sim-orb">
+                  <span id="simCard1Icon">📢</span>
+                </div>
+                <div class="sim-title" id="simCard1Title">Card 1 vs Card 2</div>
+                <div class="sim-message" id="simCard1Msg">ye acha hai ya card2</div>
+                <button type="button" class="sim-btn sim-btn-cyan" id="simCard1Btn">Batao Bhai 🏆</button>
+              </div>
+
+              <!-- Card 2 Simulator (3D Cube) -->
+              <div class="sim-card2" id="simCard2">
+                <div class="sim-cube-stage">
+                  <div class="sim-cube">
+                    <div class="sim-cube-face front"></div>
+                    <div class="sim-cube-face back"></div>
+                    <div class="sim-cube-face right"></div>
+                    <div class="sim-cube-face left"></div>
+                    <div class="sim-cube-face top"></div>
+                    <div class="sim-cube-face bottom"></div>
+                    <div class="sim-cube-core">
+                      <span id="simCard2Icon">💎</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="sim-title" id="simCard2Title">Card 2 • 3D Model</div>
+                <div class="sim-message" id="simCard2Msg">kesa laga new card</div>
+                <button type="button" class="sim-btn sim-btn-gold" id="simCard2Btn">Mast Hai 🔥</button>
+              </div>
+            </div>
+            
+            <p style="font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: 12px;">
+              ✦ As you type in the form on the left, this 3D preview updates in real time!
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: REMOTE FEATURE FLAGS -->
+    <section class="tab-view" id="tabFeatures">
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>🎛️</span> Remote App Configuration & Switches
+          </div>
+          <span class="panel-pill">CLOUD CONTROL</span>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-info-title">🚨 Emergency Maintenance Mode</div>
+            <div class="toggle-info-desc">When ON, the app will show a polite maintenance screen to all users.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfgMaintenanceMode">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-info-title">📖 Daily Motivational Quotes</div>
+            <div class="toggle-info-desc">Show dynamic daily book quotes and morning inspiration cards.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfgQuotesEnabled" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-info-title">🎙️ Audiobook Voice Studio (TTS)</div>
+            <div class="toggle-info-desc">Enable synthetic speech audiobook reader for book notes.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfgAudioVoiceEnabled" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-info-title">🛡️ Duolingo Streak Shield Rewards</div>
+            <div class="toggle-info-desc">Allow users to earn freeze shields to preserve reading streaks.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfgStreakShields" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <div class="toggle-info-title">📢 Global Top Announcement Banner</div>
+            <div class="toggle-info-desc">Show a thin glowing headline banner pinned at the very top of the app.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfgBannerActive">
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="form-group" style="margin-top: 16px;">
+          <label class="form-label">Top Banner Text (Optional)</label>
+          <input type="text" class="form-input" id="cfgBannerText" placeholder="e.g. 🌟 Welcome Book Lovers! Happy Reading!">
+        </div>
+
+        <button type="button" class="btn-admin btn-primary" id="btnSaveConfig" onclick="saveRemoteConfigToCloud()" style="margin-top: 14px;">
+          <span>☁️</span> Push Feature Flags to Cloud
+        </button>
+      </div>
+    </section>
+
+    <!-- TAB 3: BOOK MANAGER -->
+    <section class="tab-view" id="tabBooks">
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>📚</span> Global Book Catalogue Manager
+          </div>
+          <span class="panel-pill">COMMUNITY CURATION</span>
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 20px;">
+          Yaha se aap Mind Focus Books ke global database me nayi books curate kar sakte hain jo sabhi app users ko explore tab me dikhengi.
+        </p>
+
+        <div class="dashboard-grid">
+          <div>
+            <div class="form-group">
+              <label class="form-label">Book Title</label>
+              <input type="text" class="form-input" id="newBookTitle" placeholder="e.g. The Psychology of Money">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Author Name</label>
+              <input type="text" class="form-input" id="newBookAuthor" placeholder="e.g. Morgan Housel">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <select class="form-select" id="newBookCategory">
+                <option value="Finance & Wealth">Finance & Wealth</option>
+                <option value="Productivity & Focus">Productivity & Focus</option>
+                <option value="Self Improvement">Self Improvement</option>
+                <option value="Psychology">Psychology</option>
+                <option value="Philosophy">Philosophy</option>
+                <option value="Business">Business</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Cover Image URL</label>
+              <input type="text" class="form-input" id="newBookCover" placeholder="https://images.unsplash.com/...">
+            </div>
+
+            <button type="button" class="btn-admin btn-primary" onclick="alert('Feature linked to books-data.js catalogue!');">
+              <span>➕</span> Add Book to Master Catalog
+            </button>
+          </div>
+
+          <div>
+            <div style="background: rgba(10, 15, 29, 0.7); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 16px;">
+              <h4 style="font-size: 0.95rem; margin-bottom: 10px; color: var(--accent-cyan);">📖 Current Catalogue Overview</h4>
+              <ul style="padding-left: 20px; font-size: 0.85rem; color: var(--text-muted); line-height: 1.8;">
+                <li>Atomic Habits — James Clear (320 Pages)</li>
+                <li>Deep Work — Cal Newport (304 Pages)</li>
+                <li>The Psychology of Money — Morgan Housel (256 Pages)</li>
+                <li>Ikigai — Héctor García (208 Pages)</li>
+                <li>Can't Hurt Me — David Goggins (364 Pages)</li>
+                <li>Rich Dad Poor Dad — Robert Kiyosaki (336 Pages)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 4: GITHUB TOKEN VAULT -->
+    <section class="tab-view" id="tabGithub">
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>🔑</span> GitHub Cloud Authentication Vault
+          </div>
+          <span class="panel-pill">SECURE LOCAL VAULT</span>
+        </div>
+
+        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
+          Aapka GitHub Personal Access Token (PAT) aapke device ke <code>localStorage</code> me privately save hota hai. Iski madad se control panel direct GitHub REST API ke zariye live updates push karta hai bina kisi computer ya terminal ke!
+        </p>
+
+        <div class="form-group">
+          <label class="form-label">GitHub Personal Access Token (PAT)</label>
+          <input type="password" class="form-input" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx">
+        </div>
+
+        <div class="btn-row">
+          <button type="button" class="btn-admin btn-primary" onclick="saveGithubToken()">
+            <span>💾</span> Save Token Securely
+          </button>
+          <button type="button" class="btn-admin btn-secondary" onclick="testGitHubConnection()">
+            <span>🔌</span> Test Connection & Rate Limits
+          </button>
+        </div>
+
+        <div id="tokenTestResult" style="margin-top: 14px; font-size: 0.85rem;"></div>
+
+        <div style="margin-top: 24px; padding: 14px; border-radius: 12px; background: rgba(56, 189, 248, 0.08); border: 1px solid rgba(56, 189, 248, 0.2);">
+          <div style="font-weight: 700; font-size: 0.85rem; color: var(--accent-cyan); margin-bottom: 4px;">ℹ️ Token Permissions Needed:</div>
+          <p style="font-size: 0.8rem; color: var(--text-muted);">
+            GitHub Settings → Developer Settings → Personal access tokens → Tokens (classic) → Generate new token.<br>
+            Scope select karein: <b>repo</b> (Full control of private repositories / public repositories).
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Realtime Log Console -->
+    <section class="glass-panel">
+      <div class="panel-header" style="margin-bottom: 10px; padding-bottom: 8px;">
+        <div class="panel-title" style="font-size: 0.9rem;">
+          <span>📟</span> Live Action Activity & System Telemetry
+        </div>
+        <span class="panel-pill" style="font-size: 0.7rem;">CONSOLE STREAM</span>
+      </div>
+      <div class="log-console" id="adminConsoleLog">
+        <div class="log-entry"><span class="log-time">[System]</span> Control Panel initialized. Ready for operations.</div>
+      </div>
+    </section>
+  </div>
+
+  <script src="control-panel.js"></script>
+</body>
+</html>
