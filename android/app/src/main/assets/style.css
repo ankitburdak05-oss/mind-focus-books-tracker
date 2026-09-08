@@ -4861,6 +4861,349 @@ body {
   will-change: transform, opacity;
 }
 
+/* ==========================================================
+   CARD 2: 3D MODEL SPATIAL OBSIDIAN & GOLD PRISM MODAL
+   ========================================================== */
+.cyber-3d-notice-card {
+  position: relative;
+  background: radial-gradient(circle at 50% 0%, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 60%, rgba(2, 6, 23, 1) 100%);
+  border: 2px solid rgba(245, 158, 11, 0.55);
+  border-radius: 32px;
+  padding: 2.2rem 1.85rem 1.85rem;
+  max-width: 440px;
+  width: min(92vw, 440px);
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.85),
+    0 0 50px rgba(245, 158, 11, 0.22),
+    inset 0 1.5px 2px rgba(255, 255, 255, 0.4),
+    inset 0 -2px 6px rgba(0, 0, 0, 0.6);
+  transform-style: preserve-3d;
+  perspective: 1200px;
+  will-change: transform, opacity;
+  display: block;
+}
+
+.holo-portal-overlay.active .cyber-3d-notice-card {
+  animation: cyber3dCardIn 0.72s cubic-bezier(0.16, 1.15, 0.3, 1) forwards;
+}
+
+.cyber-3d-notice-card.closing {
+  animation: cyber3dCardOut 0.36s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+@keyframes cyber3dCardIn {
+  0% {
+    opacity: 0;
+    transform: perspective(1200px) rotateX(32deg) rotateY(-25deg) translateY(-80px) scale(0.65);
+    filter: blur(16px) brightness(2);
+  }
+  60% {
+    opacity: 1;
+    filter: blur(0px) brightness(1.15);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1);
+    filter: blur(0px) brightness(1);
+  }
+}
+
+@keyframes cyber3dCardOut {
+  0% {
+    opacity: 1;
+    transform: perspective(1200px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 0;
+    transform: perspective(1200px) rotateX(-20deg) rotateY(15deg) translateY(60px) scale(0.7);
+    filter: blur(14px) brightness(0.4);
+  }
+}
+
+.cyber-3d-sheen-sweep {
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent 20%, rgba(254, 240, 138, 0.15) 45%, rgba(255, 255, 255, 0.35) 50%, transparent 60%);
+  transform: skewX(-25deg);
+  animation: sweep3dFoil 4.5s infinite ease-in-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes sweep3dFoil {
+  0% { left: -150%; }
+  35% { left: 160%; }
+  100% { left: 160%; }
+}
+
+/* Card 2 Top Status Pill */
+.cyber-3d-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 999px;
+  padding: 0.35rem 0.85rem;
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+}
+
+.cyber-3d-status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b, 0 0 18px #f59e0b;
+  animation: pulseDot 1.6s infinite ease-in-out;
+}
+
+.cyber-3d-status-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: #fef08a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.cyber-3d-status-chip {
+  background: #f59e0b;
+  color: #0f172a;
+  font-size: 0.6rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 6px;
+  letter-spacing: 0.04em;
+}
+
+/* REAL 3D SPINNING CRYSTAL CUBE MODEL */
+.cube-3d-stage {
+  width: 100px;
+  height: 100px;
+  margin: 0.6rem auto 1.4rem;
+  position: relative;
+  perspective: 800px;
+  transform-style: preserve-3d;
+}
+
+.cube-3d-spinner {
+  width: 72px;
+  height: 72px;
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  transform-style: preserve-3d;
+  animation: spin3dCubeModel 9s infinite linear;
+  will-change: transform;
+}
+
+@keyframes spin3dCubeModel {
+  0% { transform: rotateX(20deg) rotateY(0deg) rotateZ(0deg); }
+  50% { transform: rotateX(-15deg) rotateY(180deg) rotateZ(10deg); }
+  100% { transform: rotateX(20deg) rotateY(360deg) rotateZ(0deg); }
+}
+
+.cube-face {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border: 1.5px solid rgba(254, 240, 138, 0.7);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.22) 0%, rgba(234, 88, 12, 0.12) 100%);
+  box-shadow: inset 0 0 16px rgba(245, 158, 11, 0.45);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border-radius: 12px;
+}
+
+.cube-face.front  { transform: translateZ(36px); }
+.cube-face.back   { transform: rotateY(180deg) translateZ(36px); }
+.cube-face.right  { transform: rotateY(90deg) translateZ(36px); }
+.cube-face.left   { transform: rotateY(-90deg) translateZ(36px); }
+.cube-face.top    { transform: rotateX(90deg) translateZ(36px); }
+.cube-face.bottom { transform: rotateX(-90deg) translateZ(36px); }
+
+.cube-3d-core {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  transform: translateZ(0px);
+  animation: counterRotateCore 9s infinite linear;
+  filter: drop-shadow(0 0 18px rgba(245, 158, 11, 0.8));
+}
+
+@keyframes counterRotateCore {
+  0% { transform: rotateZ(0deg) rotateY(0deg); }
+  100% { transform: rotateZ(-360deg) rotateY(-360deg); }
+}
+
+.cube-3d-ground-ring {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%) rotateX(75deg);
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  border: 2px dashed rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.45);
+  animation: groundRingPulse 3s infinite ease-in-out;
+}
+
+@keyframes groundRingPulse {
+  0%, 100% { transform: translateX(-50%) rotateX(75deg) scale(0.9); opacity: 0.5; }
+  50% { transform: translateX(-50%) rotateX(75deg) scale(1.15); opacity: 1; border-color: #fef08a; }
+}
+
+.cube-3d-shadow {
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, rgba(0, 0, 0, 0.75) 0%, transparent 70%);
+}
+
+/* Card 2 3D Typography */
+.cyber-3d-title {
+  font-size: 1.4rem;
+  font-weight: 900;
+  line-height: 1.25;
+  margin-bottom: 0.85rem;
+  background: linear-gradient(135deg, #ffffff 0%, #fef08a 45%, #f59e0b 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 4px 20px rgba(245, 158, 11, 0.4);
+  letter-spacing: -0.01em;
+}
+
+/* Card 2 Message Capsule */
+.cyber-3d-message-vault {
+  position: relative;
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 20px;
+  padding: 1.2rem 1.25rem;
+  margin-bottom: 1.4rem;
+  box-shadow: inset 0 2px 14px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+}
+
+.cyber-3d-corner-accent {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: #f59e0b;
+}
+.cyber-3d-corner-accent.c-tl { top: 6px; left: 6px; border-top: 2px solid; border-left: 2px solid; }
+.cyber-3d-corner-accent.c-tr { top: 6px; right: 6px; border-top: 2px solid; border-right: 2px solid; }
+.cyber-3d-corner-accent.c-bl { bottom: 6px; left: 6px; border-bottom: 2px solid; border-left: 2px solid; }
+.cyber-3d-corner-accent.c-br { bottom: 6px; right: 6px; border-bottom: 2px solid; border-right: 2px solid; }
+
+.cyber-3d-watermark {
+  font-size: 0.64rem;
+  font-weight: 800;
+  color: rgba(254, 240, 138, 0.4);
+  letter-spacing: 0.12em;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.cyber-3d-message-text {
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1.55;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8), 0 0 16px rgba(245, 158, 11, 0.4);
+  word-break: break-word;
+}
+
+/* Card 2 Footer & 3D Action Button */
+.cyber-3d-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.cyber-3d-meta-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.cyber-3d-meta-tag {
+  font-size: 0.66rem;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.06em;
+}
+
+.cyber-3d-action-btn {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 50%, #dc2626 100%);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 28px;
+  padding: 0.9rem 1.8rem;
+  color: #ffffff;
+  font-size: 1.02rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  box-shadow: 0 8px 30px rgba(245, 158, 11, 0.45), 0 2px 10px rgba(0, 0, 0, 0.5);
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.cyber-3d-action-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 12px 40px rgba(245, 158, 11, 0.65), 0 0 25px rgba(234, 88, 12, 0.5);
+  border-color: #fff;
+}
+
+.cyber-3d-action-btn:active {
+  transform: translateY(1px) scale(0.97);
+  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+}
+
+.cyber-3d-btn-glow {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+  transform: skewX(-22deg);
+  animation: buttonFoilSheen 3.2s infinite;
+  pointer-events: none;
+}
+
+.cyber-3d-btn-icon {
+  font-size: 1.1rem;
+  transition: transform 0.2s ease;
+}
+
+.cyber-3d-action-btn:hover .cyber-3d-btn-icon {
+  transform: scale(1.25) rotate(-12deg);
+}
+
 /* ==========================================================================
    4D LIVING SPATIAL SANCTUARY APP STYLES (v3.0.0)
    ========================================================================== */

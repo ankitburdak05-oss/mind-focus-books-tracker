@@ -1,9 +1,10 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  id: "notice-2026-09-08-legend-focus-06",
+  id: "notice-2026-09-08-card2-3d-model-01",
   active: true,
-  icon: "⚡",
-  title: "Power Mode On",
-  message: "Success requires focus, discipline, and daily reading! 🔥",
-  btnText: "I Am Ready 🏆",
-  timestamp: "2026-09-08T07:49:30Z"
+  card: "card2",
+  icon: "💎",
+  title: "Card 2 • 3D Spatial Edition",
+  message: "Ye Card 2 ka naya 3D Model popup hai! 3D spinning crystal cube aur animations ke saath! 🔥",
+  btnText": "I Am Ready 🏆",
+  timestamp: "2026-09-08T14:26:00Z"
 };

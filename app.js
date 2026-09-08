@@ -2948,7 +2948,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.0.9';
+const CURRENT_APP_VERSION = 'v3.1.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -4594,6 +4594,39 @@ function bindHoloNoticeTilt() {
   holoTiltBound = true;
 }
 
+let cyber3dTiltBound = false;
+function bindCyber3dNoticeTilt() {
+  if (cyber3dTiltBound) return;
+  const overlay = document.getElementById('inAppNoticeModalOverlay');
+  const card = document.getElementById('cyber3dNoticeCard');
+  if (!overlay || !card) return;
+
+  const handleMove = (clientX, clientY) => {
+    if (!overlay.classList.contains('active') || card.style.display === 'none') return;
+    const rect = card.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const deltaX = clientX - centerX;
+    const deltaY = clientY - centerY;
+
+    const rotY = (deltaX / (window.innerWidth / 2)) * 18;
+    const rotX = -(deltaY / (window.innerHeight / 2)) * 18;
+
+    card.style.transform = 'perspective(1200px) rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg) scale3d(1.025, 1.025, 1.025)';
+  };
+
+  overlay.addEventListener('pointermove', (e) => {
+    handleMove(e.clientX, e.clientY);
+  });
+
+  overlay.addEventListener('pointerleave', () => {
+    card.style.transform = '';
+  });
+
+  cyber3dTiltBound = true;
+}
+
 // Celebratory Quantum Burst Confetti on Dismiss
 function createNoticeQuantumBurst(originX, originY) {
   const x = originX || (window.innerWidth / 2);
@@ -4723,34 +4756,64 @@ async function checkRemoteBroadcastNotice() {
 
 function showInAppNoticePopup(data) {
   const overlay = document.getElementById('inAppNoticeModalOverlay');
-  const card = document.getElementById('holoNoticeCard');
   if (!overlay) return;
 
-  const iconEl = document.getElementById('inAppNoticeIcon');
-  const titleEl = document.getElementById('inAppNoticeTitle');
-  const msgEl = document.getElementById('inAppNoticeMessage');
-  const btnTextEl = document.getElementById('inAppNoticeBtnText');
+  const card1 = document.getElementById('holoNoticeCard');
+  const card2 = document.getElementById('cyber3dNoticeCard');
 
-  if (iconEl && data.icon) iconEl.innerText = data.icon;
-  if (titleEl && data.title) titleEl.innerText = data.title;
-  if (msgEl && data.message) msgEl.innerText = data.message;
-  if (btnTextEl && data.btnText) btnTextEl.innerText = data.btnText;
+  // Determine card style: "card1" (default) or "card2"
+  const isCard2 = data.card === 'card2' || data.card === 'card 2' || data.card === 2 || data.type === 'card2';
 
-  if (card) {
-    card.classList.remove('closing');
-    card.style.transform = '';
+  if (isCard2) {
+    if (card1) card1.style.display = 'none';
+    if (card2) {
+      card2.style.display = 'block';
+      card2.classList.remove('closing');
+      card2.style.transform = '';
+    }
+
+    const iconEl2 = document.getElementById('inAppNoticeIcon2');
+    const titleEl2 = document.getElementById('inAppNoticeTitle2');
+    const msgEl2 = document.getElementById('inAppNoticeMessage2');
+    const btnTextEl2 = document.getElementById('inAppNoticeBtnText2');
+
+    if (iconEl2 && data.icon) iconEl2.innerText = data.icon;
+    if (titleEl2 && data.title) titleEl2.innerText = data.title;
+    if (msgEl2 && data.message) msgEl2.innerText = data.message;
+    if (btnTextEl2 && data.btnText) btnTextEl2.innerText = data.btnText;
+
+    bindCyber3dNoticeTilt();
+  } else {
+    // Card 1: Quantum Holographic Beacon
+    if (card2) card2.style.display = 'none';
+    if (card1) {
+      card1.style.display = 'block';
+      card1.classList.remove('closing');
+      card1.style.transform = '';
+    }
+
+    const iconEl = document.getElementById('inAppNoticeIcon');
+    const titleEl = document.getElementById('inAppNoticeTitle');
+    const msgEl = document.getElementById('inAppNoticeMessage');
+    const btnTextEl = document.getElementById('inAppNoticeBtnText');
+
+    if (iconEl && data.icon) iconEl.innerText = data.icon;
+    if (titleEl && data.title) titleEl.innerText = data.title;
+    if (msgEl && data.message) msgEl.innerText = data.message;
+    if (btnTextEl && data.btnText) btnTextEl.innerText = data.btnText;
+
+    bindHoloNoticeTilt();
   }
 
   overlay.classList.add('active');
 
-  // Trigger cosmic particles, harmonic crystal chime & 3D tilt
+  // Trigger cosmic particles & chime
   initHoloNoticeParticles();
   playNoticeHoloChime();
-  bindHoloNoticeTilt();
 }
 
 function dismissInAppNotice(event) {
-  const idToDismiss = currentBroadcastNoticeId || 'notice-2026-09-07-soja-bhai-02';
+  const idToDismiss = currentBroadcastNoticeId || 'notice-default';
   try {
     localStorage.setItem('mindfocus_dismissed_notice_id', idToDismiss);
   } catch (e) {}
@@ -4765,18 +4828,22 @@ function dismissInAppNotice(event) {
   createNoticeQuantumBurst(clickX, clickY);
   playNoticeDismissChime();
 
-  const card = document.getElementById('holoNoticeCard');
+  const card1 = document.getElementById('holoNoticeCard');
+  const card2 = document.getElementById('cyber3dNoticeCard');
   const overlay = document.getElementById('inAppNoticeModalOverlay');
 
-  if (card) {
-    card.classList.add('closing');
-  }
+  if (card1 && card1.style.display !== 'none') card1.classList.add('closing');
+  if (card2 && card2.style.display !== 'none') card2.classList.add('closing');
 
   setTimeout(() => {
     if (overlay) overlay.classList.remove('active');
-    if (card) {
-      card.classList.remove('closing');
-      card.style.transform = '';
+    if (card1) {
+      card1.classList.remove('closing');
+      card1.style.transform = '';
+    }
+    if (card2) {
+      card2.classList.remove('closing');
+      card2.style.transform = '';
     }
     if (holoNoticeParticleAnim) {
       cancelAnimationFrame(holoNoticeParticleAnim);
@@ -4801,6 +4868,7 @@ window.showInAppNoticePopup = showInAppNoticePopup;
 window.dismissInAppNotice = dismissInAppNotice;
 window.startLiveNoticeListener = startLiveNoticeListener;
 window.playNoticeHoloChime = playNoticeHoloChime;
+window.bindCyber3dNoticeTilt = bindCyber3dNoticeTilt;
 window.createNoticeQuantumBurst = createNoticeQuantumBurst;
 
 // ==========================================================================

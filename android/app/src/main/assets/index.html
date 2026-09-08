@@ -957,7 +957,7 @@
             </div>
             <div>
               <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Tracker</div>
-              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700;" id="appCurrentVersionText">v3.0.9 Cyber Studio Edition</div>
+              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700;" id="appCurrentVersionText">v3.1.0 Dual Broadcast Edition</div>
             </div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn" style="border-radius:12px; padding:0.45rem 0.85rem; font-weight:800;">
@@ -1575,47 +1575,102 @@
     <div class="holo-laser-beam"></div>
     <div class="holo-plasma-border-wrap">
       <div class="holo-plasma-glow-bg"></div>
-      <div class="holo-notice-card" id="holoNoticeCard">
-        <div class="holo-card-sheen"></div>
-        <div class="holo-telemetry-badge">
-          <span class="holo-live-dot"></span>
-          <span class="holo-telemetry-text">QUANTUM BEACON • LIVE TRANSMISSION</span>
-        </div>
+        <!-- Card 1: Quantum Holographic Beacon (Original) -->
+        <div class="holo-notice-card" id="holoNoticeCard">
+          <div class="holo-card-sheen"></div>
+          <div class="holo-telemetry-badge">
+            <span class="holo-live-dot"></span>
+            <span class="holo-telemetry-text">CARD 1 • QUANTUM BEACON TRANSMISSION</span>
+          </div>
 
-        <div class="holo-reactor-orb-container">
-          <div class="shockwave-ring ring-1"></div>
-          <div class="shockwave-ring ring-2"></div>
-          <div class="shockwave-ring ring-3"></div>
-          <div class="holo-reactor-orb">
-            <span id="inAppNoticeIcon">📢</span>
+          <div class="holo-reactor-orb-container">
+            <div class="shockwave-ring ring-1"></div>
+            <div class="shockwave-ring ring-2"></div>
+            <div class="shockwave-ring ring-3"></div>
+            <div class="holo-reactor-orb">
+              <span id="inAppNoticeIcon">📢</span>
+            </div>
+          </div>
+
+          <h3 class="holo-notice-title" id="inAppNoticeTitle">Notice</h3>
+
+          <div class="holo-message-capsule">
+            <div class="holo-corner-accents">
+              <span class="corner tl">⌜</span>
+              <span class="corner tr">⌝</span>
+              <span class="corner bl">⌞</span>
+              <span class="corner br">⌟</span>
+            </div>
+            <div class="holo-message-watermark">MINDFOCUS • CARD 1 TRANSMISSION</div>
+            <div class="holo-message-text" id="inAppNoticeMessage">
+              soja bhai
+            </div>
+          </div>
+
+          <div class="holo-notice-footer">
+            <div class="holo-footer-meta">
+              <span class="holo-signal-icon">⚡</span>
+              <span>CARD 1 • ENCRYPTED END-TO-END</span>
+            </div>
+            <button type="button" class="holo-dismiss-btn" id="inAppNoticeDismissBtn" onclick="dismissInAppNotice(event)">
+              <span class="btn-sheen"></span>
+              <span class="btn-text" id="inAppNoticeBtnText">OK, Samajh Gaya</span>
+              <span class="btn-arrow">✦</span>
+            </button>
           </div>
         </div>
 
-        <h3 class="holo-notice-title" id="inAppNoticeTitle">Notice</h3>
+        <!-- Card 2: 3D Model Cyber Obsidian & Luminescent Gold Spatial Card (New) -->
+        <div class="cyber-3d-notice-card" id="cyber3dNoticeCard" style="display:none;">
+          <div class="cyber-3d-sheen-sweep"></div>
+          
+          <div class="cyber-3d-status-pill">
+            <div class="cyber-3d-status-dot"></div>
+            <span class="cyber-3d-status-tag">CARD 2 • 3D SPATIAL DIMENSION</span>
+            <span class="cyber-3d-status-chip">3D MODEL</span>
+          </div>
 
-        <div class="holo-message-capsule">
-          <div class="holo-corner-accents">
-            <span class="corner tl">⌜</span>
-            <span class="corner tr">⌝</span>
-            <span class="corner bl">⌞</span>
-            <span class="corner br">⌟</span>
+          <!-- Real 3D Spinning Crystal Cube Model -->
+          <div class="cube-3d-stage">
+            <div class="cube-3d-spinner" id="cube3dSpinner">
+              <div class="cube-face front"></div>
+              <div class="cube-face back"></div>
+              <div class="cube-face right"></div>
+              <div class="cube-face left"></div>
+              <div class="cube-face top"></div>
+              <div class="cube-face bottom"></div>
+              <div class="cube-3d-core">
+                <span id="inAppNoticeIcon2">💎</span>
+              </div>
+            </div>
+            <div class="cube-3d-ground-ring"></div>
+            <div class="cube-3d-shadow"></div>
           </div>
-          <div class="holo-message-watermark">MINDFOCUS • CLOUD TRANSMISSION</div>
-          <div class="holo-message-text" id="inAppNoticeMessage">
-            soja bhai
-          </div>
-        </div>
 
-        <div class="holo-notice-footer">
-          <div class="holo-footer-meta">
-            <span class="holo-signal-icon">⚡</span>
-            <span>100% SIGNAL • ENCRYPTED END-TO-END</span>
+          <h3 class="cyber-3d-title" id="inAppNoticeTitle2">3D Power Alert</h3>
+
+          <div class="cyber-3d-message-vault">
+            <div class="cyber-3d-corner-accent c-tl"></div>
+            <div class="cyber-3d-corner-accent c-tr"></div>
+            <div class="cyber-3d-corner-accent c-bl"></div>
+            <div class="cyber-3d-corner-accent c-br"></div>
+            <div class="cyber-3d-watermark">CARD 2 • SPATIAL 3D ENGINE</div>
+            <div class="cyber-3d-message-text" id="inAppNoticeMessage2">
+              Card 2 Spatial Alert
+            </div>
           </div>
-          <button type="button" class="holo-dismiss-btn" id="inAppNoticeDismissBtn" onclick="dismissInAppNotice(event)">
-            <span class="btn-sheen"></span>
-            <span class="btn-text" id="inAppNoticeBtnText">OK, Samajh Gaya</span>
-            <span class="btn-arrow">✦</span>
-          </button>
+
+          <div class="cyber-3d-footer">
+            <div class="cyber-3d-meta-row">
+              <span class="cyber-3d-meta-tag">💎 3D MODEL ROTATION</span>
+              <span class="cyber-3d-meta-tag">✨ REALTIME DEPTH</span>
+            </div>
+            <button type="button" class="cyber-3d-action-btn" id="cyber3dDismissBtn" onclick="dismissInAppNotice(event)">
+              <span class="cyber-3d-btn-glow"></span>
+              <span class="cyber-3d-btn-text" id="inAppNoticeBtnText2">I Am Ready 🏆</span>
+              <span class="cyber-3d-btn-icon">🚀</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

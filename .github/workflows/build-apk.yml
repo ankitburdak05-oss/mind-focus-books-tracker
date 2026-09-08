@@ -89,9 +89,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v3.0.9
-        name: "Mind Focus Books Tracker v3.0.9 - Book Click Fix & Full Scrolling Detail Sheet"
-        body: "Release v3.0.9: Fixed book click reference bug, restoring instant tap-to-open book detail sheet with full touch scrolling, compact reading progress, and accessible action buttons."
+        tag_name: v3.1.0
+        name: "Mind Focus Books Tracker v3.1.0 - Dual Broadcast Studio (Card 1 Quantum & Card 2 3D Model)"
+        body: "Release v3.1.0: Dual Broadcast Notification Engine! Supports Card 1 (Original Quantum Holographic Portal) and Card 2 (New 3D Spinning Crystal Cube Model & Obsidian Gold Spatial Card). Seamlessly configurable via broadcast-notice.json."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
