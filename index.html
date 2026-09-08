@@ -912,29 +912,6 @@
     </div>
   </div>
 
-  <!-- 4D Floating Dynamic Mini-Reading Sticky Capsule (Spotify-style) -->
-  <div class="floating-mini-reading-capsule" id="floatingMiniCapsule" onclick="handleMiniCapsuleClick(event)">
-    <div class="mini-capsule-cover-wrap">
-      <img id="miniCapsuleCoverImg" src="icon-192.png" alt="Cover" class="mini-capsule-cover">
-      <div class="mini-capsule-pulse-ring"></div>
-    </div>
-    <div class="mini-capsule-meta">
-      <div class="mini-capsule-now">NOW READING</div>
-      <div class="mini-capsule-title" id="miniCapsuleTitle">Select a book to track</div>
-      <div class="mini-capsule-progress-bar">
-        <div class="mini-capsule-progress-fill" id="miniCapsuleProgressFill" style="width: 0%;"></div>
-      </div>
-    </div>
-    <div class="mini-capsule-actions">
-      <button type="button" class="mini-capsule-step-btn" onclick="event.stopPropagation(); quickStepActiveBook(1)" title="Quick +1 Page Read">
-        +1p
-      </button>
-      <button type="button" class="mini-capsule-expand-btn" onclick="event.stopPropagation(); openActiveBookSheet()" title="Expand Book Sheet">
-        📖
-      </button>
-    </div>
-  </div>
-
   <!-- Bottom Navigation Dock (One-Hand Thumb Controls with 4D Sliding Pill) -->
   <nav class="bottom-nav-dock" id="bottomNavDock">
     <div class="dock-sliding-pill" id="dockSlidingPill"></div>
@@ -1104,27 +1081,78 @@
     </div>
   </div>
 
-  <!-- In-App Update Modal -->
+  <!-- Next-Gen Holographic Cyber-Scan Update Center Modal -->
   <div class="modal-overlay" id="updateCheckerModalOverlay">
-    <div class="modal-content" style="max-width:440px; text-align:center;">
-      <div class="modal-header">
-        <h3 class="modal-title">🔄 App Update</h3>
+    <div class="modal-content update-modal-content" style="max-width:480px; text-align:center;">
+      <div class="modal-header" style="justify-content:space-between; align-items:center;">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.2rem;">⚡</span>
+          <h3 class="modal-title" style="margin:0;">OTA Quantum Update Center</h3>
+        </div>
         <button class="modal-close" onclick="closeUpdateCheckerModal()">&times;</button>
       </div>
-      <div class="modal-body" style="gap:1rem; padding:1.5rem 1.25rem;">
-        <div id="updateModalIcon" style="font-size:2.8rem;">🚀</div>
-        <div id="updateModalTitle" style="font-size:1.15rem; font-weight:800; color:var(--text-primary);">Checking for Updates...</div>
-        <div id="updateModalDesc" style="font-size:0.85rem; color:var(--text-secondary); line-height:1.5;">
-          Checking GitHub for the latest release...
+      <div class="modal-body" style="gap:1.2rem; padding:1.25rem 1.4rem;">
+        <!-- Cyber Radar Scanner Visual -->
+        <div class="update-radar-container" id="updateRadarContainer">
+          <div class="update-radar-ring ring-1"></div>
+          <div class="update-radar-ring ring-2"></div>
+          <div class="update-radar-ring ring-3"></div>
+          <div class="update-radar-sweep" id="updateRadarSweep"></div>
+          <div class="update-center-orb" id="updateCenterOrb">
+            <span id="updateModalIcon">🛰️</span>
+          </div>
         </div>
-        <div id="updateModalProgress" style="display:none; width:100%; height:6px; background:var(--border-color); border-radius:3px; overflow:hidden;">
-          <div style="width:100%; height:100%; background:linear-gradient(90deg, #3b82f6, #10b981); animation: pulse 1.5s infinite;"></div>
+
+        <!-- Version Comparison Tracker HUD -->
+        <div class="update-version-diff-card">
+          <div class="version-diff-col">
+            <span class="version-diff-label">YOUR APP</span>
+            <span class="version-diff-pill current" id="updateCurrentVersionBadge">v2.0.3</span>
+          </div>
+          <div class="version-diff-arrow">➔</div>
+          <div class="version-diff-col">
+            <span class="version-diff-label">LATEST CLOUD</span>
+            <span class="version-diff-pill latest" id="updateTargetVersionBadge">Checking...</span>
+          </div>
+        </div>
+
+        <div id="updateModalTitle" style="font-size:1.1rem; font-weight:800; color:var(--text-primary);">Scanning GitHub Cloud Releases...</div>
+        <div id="updateModalDesc" style="font-size:0.82rem; color:var(--text-secondary); line-height:1.5;">
+          Connecting to GitHub repository to check for seamless over-the-air updates...
+        </div>
+
+        <!-- Changelog Showcase Card -->
+        <div class="update-changelog-card" id="updateChangelogCard" style="display:none;">
+          <div class="changelog-header">
+            <span>🚀 WHAT'S NEW IN THIS VERSION</span>
+            <span class="changelog-tag" id="updateChangelogTag">v3.0.0</span>
+          </div>
+          <ul class="changelog-list" id="updateChangelogList">
+            <li>📳 <b>Hardware Haptic Feedback:</b> Physical vibration on touch</li>
+            <li>🌊 <b>Liquid Dock Pill:</b> Smooth spring pill under tabs</li>
+            <li>🔄 <b>Pull-to-Refresh:</b> Rubber-band pull with Golden Light Sweep</li>
+            <li>🗂️ <b>Category Chips Track:</b> 1-Tap horizontal filter carousel</li>
+            <li>📜 <b>3D Paper Curl &amp; Rustle:</b> Real procedural audio page turns</li>
+            <li>⭕ <b>Apple-Watch 3-Rings:</b> Daily Pages, Focus Mins, Habit Streak</li>
+            <li>🎧 <b>4-Track Spatial DJ Mixer:</b> Rain, Fire, Waves, Forest + EQ</li>
+          </ul>
+        </div>
+
+        <!-- Animated Download Progress Bar -->
+        <div class="update-progress-container" id="updateModalProgress" style="display:none;">
+          <div class="update-progress-info">
+            <span id="updateProgressText">Downloading Signed APK...</span>
+            <span id="updateProgressPct">0%</span>
+          </div>
+          <div class="update-progress-track">
+            <div class="update-progress-fill" id="updateProgressFill"></div>
+          </div>
         </div>
       </div>
       <div class="modal-footer" style="justify-content:center; gap:0.75rem;">
         <button type="button" class="btn" onclick="closeUpdateCheckerModal()">Close</button>
-        <button type="button" class="btn btn-primary" id="updateModalActionBtn" style="display:none; background:#10b981; border-color:#10b981; font-weight:700;">
-          ⚡ Update Now
+        <button type="button" class="btn btn-primary" id="updateModalActionBtn" style="display:none; background:linear-gradient(135deg, #10b981, #059669); border:none; font-weight:800; box-shadow:0 4px 18px rgba(16,185,129,0.45);">
+          ⚡ Download &amp; Install Update
         </button>
       </div>
     </div>

@@ -4680,153 +4680,218 @@ body {
   transform: scale(1.04);
 }
 
-/* 3. Floating Mini Reading Capsule */
-.floating-mini-reading-capsule {
-  position: fixed;
-  bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-  left: 14px;
-  right: 14px;
-  max-width: 480px;
-  margin: 0 auto;
-  z-index: 870;
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-radius: 20px;
-  padding: 0.55rem 0.85rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.55), 0 0 20px rgba(99, 102, 241, 0.25);
-  cursor: pointer;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, opacity 0.3s ease;
-  animation: miniCapsuleFloat 4s ease-in-out infinite alternate;
-}
-
-@keyframes miniCapsuleFloat {
-  0% { transform: translateY(0); }
-  100% { transform: translateY(-3px); }
-}
-
-.floating-mini-reading-capsule:hover {
-  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.65), 0 0 30px rgba(99, 102, 241, 0.45);
-  border-color: rgba(168, 85, 247, 0.5);
-}
-
-.mini-capsule-cover-wrap {
+/* 3. Cyber-Radar Quantum Update Center Styles */
+.update-radar-container {
   position: relative;
-  width: 36px;
-  height: 48px;
-  border-radius: 6px;
-  overflow: hidden;
-  flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-}
-
-.mini-capsule-cover-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.mini-capsule-pulse-dot {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 8px #10b981;
-  animation: pulseDotGlow 1.8s infinite;
-}
-
-@keyframes pulseDotGlow {
-  0%, 100% { transform: scale(1); opacity: 1; }
-  50% { transform: scale(1.4); opacity: 0.5; }
-}
-
-.mini-capsule-meta {
-  flex: 1;
-  min-width: 0;
-}
-
-.mini-capsule-now {
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.8px;
-  color: #38bdf8;
-  text-transform: uppercase;
-}
-
-.mini-capsule-title {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 0.1rem 0 0.3rem;
-}
-
-.mini-capsule-progress-bar {
-  width: 100%;
-  height: 4px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 999px;
-  overflow: hidden;
-}
-
-.mini-capsule-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #38bdf8, #818cf8, #c084fc);
-  border-radius: 999px;
-  transition: width 0.3s ease;
-}
-
-.mini-capsule-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  flex-shrink: 0;
-}
-
-.mini-capsule-step-btn {
-  background: linear-gradient(135deg, #10b981, #059669);
-  color: #ffffff;
-  border: none;
-  font-size: 0.75rem;
-  font-weight: 800;
-  padding: 0.35rem 0.65rem;
-  border-radius: 999px;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
-}
-
-.mini-capsule-step-btn:active {
-  transform: scale(0.92);
-}
-
-.mini-capsule-expand-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: var(--text-primary);
-  font-size: 0.85rem;
-  width: 28px;
-  height: 28px;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
 }
 
-.mini-capsule-expand-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.08);
+.update-radar-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+}
+
+.update-radar-ring.ring-1 {
+  inset: 15px;
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.update-radar-ring.ring-2 {
+  inset: 32px;
+  border-color: rgba(168, 85, 247, 0.5);
+}
+
+.update-radar-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, transparent 60%, rgba(99, 102, 241, 0.35) 90%, rgba(56, 189, 248, 0.7) 100%);
+  animation: radarSweepSpin 2s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes radarSweepSpin {
+  100% { transform: rotate(360deg); }
+}
+
+.update-center-orb {
+  position: relative;
+  z-index: 2;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95), rgba(15, 23, 42, 0.95));
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(99, 102, 241, 0.5);
+  animation: orbPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes orbPulse {
+  0% { transform: scale(0.96); box-shadow: 0 0 12px rgba(99, 102, 241, 0.4); }
+  100% { transform: scale(1.06); box-shadow: 0 0 25px rgba(56, 189, 248, 0.7); }
+}
+
+/* Version Comparison Diff Card */
+.update-version-diff-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 0.75rem 1.25rem;
+}
+
+.version-diff-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.version-diff-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+}
+
+.version-diff-pill {
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+}
+
+.version-diff-pill.current {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-secondary);
+}
+
+.version-diff-pill.latest {
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.45);
+  color: #34d399;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+.version-diff-arrow {
+  color: #818cf8;
+  font-size: 1.1rem;
+  font-weight: 900;
+  animation: arrowNudge 1.5s infinite;
+}
+
+@keyframes arrowNudge {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(4px); }
+}
+
+/* Changelog Showcase Card */
+.update-changelog-card {
+  text-align: left;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(99, 102, 241, 0.35);
+  border-radius: 14px;
+  padding: 0.9rem 1.1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.changelog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #38bdf8;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 0.45rem;
+  margin-bottom: 0.5rem;
+}
+
+.changelog-tag {
+  background: rgba(99, 102, 241, 0.25);
+  border: 1px solid rgba(99, 102, 241, 0.45);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  color: #c084fc;
+}
+
+.changelog-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  max-height: 180px;
+  overflow-y: auto;
+}
+
+.changelog-list li {
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.changelog-list li b {
+  color: #818cf8;
+}
+
+/* Download Progress Bar */
+.update-progress-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  width: 100%;
+}
+
+.update-progress-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.update-progress-track {
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+
+.update-progress-fill {
+  width: 0%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #38bdf8, #818cf8, #10b981);
+  background-size: 200% 100%;
+  animation: shimmerBar 1.5s infinite linear;
+  transition: width 0.25s ease;
+}
+
+@keyframes shimmerBar {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
 /* 4. Bottom Nav Dock Sliding Liquid Pill */

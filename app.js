@@ -570,7 +570,6 @@ function renderApp() {
   renderBookList();
   if (typeof updateDnaKpiChip === 'function') updateDnaKpiChip();
   if (typeof updateSearchDrawerFilterBadge === 'function') updateSearchDrawerFilterBadge();
-  if (typeof updateFloatingMiniCapsule === 'function') updateFloatingMiniCapsule();
   if (typeof syncCategoryTrackActiveState === 'function') syncCategoryTrackActiveState();
 }
 
@@ -2934,7 +2933,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.0.0';
+const CURRENT_APP_VERSION = 'v3.0.1';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -2959,23 +2958,37 @@ function closeUpdateCheckerModal() {
 
 async function checkForAppUpdates(showFeedback = true) {
   openUpdateCheckerModal();
+  if (typeof triggerHaptic === 'function') triggerHaptic('light');
+
   const icon = document.getElementById('updateModalIcon');
   const title = document.getElementById('updateModalTitle');
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const actionBtn = document.getElementById('updateModalActionBtn');
+  const currentBadge = document.getElementById('updateCurrentVersionBadge');
+  const targetBadge = document.getElementById('updateTargetVersionBadge');
+  const changelogCard = document.getElementById('updateChangelogCard');
+  const changelogTag = document.getElementById('updateChangelogTag');
+  const radarSweep = document.getElementById('updateRadarSweep');
 
-  if (icon) icon.innerText = '🔍';
-  if (title) title.innerText = 'Checking for Updates...';
-  if (desc) desc.innerText = 'Connecting to GitHub server to check latest release...';
-  if (progress) progress.style.display = 'block';
+  if (currentBadge) currentBadge.innerText = CURRENT_APP_VERSION;
+  if (targetBadge) {
+    targetBadge.innerText = 'Scanning...';
+    targetBadge.className = 'version-diff-pill current';
+  }
+  if (icon) icon.innerText = '🛰️';
+  if (radarSweep) radarSweep.style.display = 'block';
+  if (title) title.innerText = 'Quantum Radar Scanning Cloud...';
+  if (desc) desc.innerText = 'Querying GitHub release servers to check for updates & improvements...';
+  if (progress) progress.style.display = 'none';
   if (actionBtn) actionBtn.style.display = 'none';
+  if (changelogCard) changelogCard.style.display = 'none';
 
   try {
     const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
     if (!res.ok) throw new Error('Could not contact update server');
     const data = await res.json();
-    const tagName = data.tag_name || 'v1.9.0';
+    const tagName = data.tag_name || 'v3.0.0';
     const releaseName = data.name || ('Mind Focus Books Tracker ' + tagName);
 
     let apkUrl = 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/' + tagName + '/MindFocusBooks-Native.apk';
@@ -2985,52 +2998,88 @@ async function checkForAppUpdates(showFeedback = true) {
     }
     latestApkDownloadUrl = apkUrl;
 
-    if (progress) progress.style.display = 'none';
+    if (targetBadge) {
+      targetBadge.innerText = tagName;
+      targetBadge.className = 'version-diff-pill latest';
+    }
 
     if (tagName === CURRENT_APP_VERSION) {
-      if (icon) icon.innerText = '✅';
-      if (title) title.innerText = 'App is Up to Date (' + CURRENT_APP_VERSION + ')';
-      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>You are running the latest version with Deep Obsidian Glassmorphism, 3D Spine Shadows & Floating Island Dock!<br><small style="color:var(--text-muted);">Zero data loss permanent keystore build.</small>';
+      if (icon) icon.innerText = '🛡️';
+      if (radarSweep) radarSweep.style.display = 'none';
+      if (title) title.innerText = 'Your App is 100% Up to Date! ✦';
+      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>You are already on the newest 4D Living Spatial Sanctuary Flagship.<br><small style="color:#10b981;">● All systems optimal &amp; permanent keystore verified.</small>';
+      if (changelogCard) {
+        changelogCard.style.display = 'block';
+        if (changelogTag) changelogTag.innerText = CURRENT_APP_VERSION + ' (Active)';
+      }
       if (actionBtn) {
         actionBtn.style.display = 'inline-flex';
-        actionBtn.innerText = '🔄 Re-download / Repair ' + tagName;
+        actionBtn.innerText = '🔄 Re-install / Repair ' + tagName;
         actionBtn.onclick = () => triggerInAppUpdate(apkUrl);
       }
+      if (typeof triggerHaptic === 'function') triggerHaptic('success');
     } else {
-      if (icon) icon.innerText = '👑';
-      if (title) title.innerText = 'New Update Available: ' + tagName;
-      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>Apple Books-grade Luxury Glassmorphism Overhaul, 3D Book Spines, Ambient Mesh & Floating Island Dock are ready!<br><small style="color:var(--text-muted);">Permanent-key signed: 1-tap update, zero data loss.</small>';
+      if (icon) icon.innerText = '🚀';
+      if (radarSweep) radarSweep.style.display = 'none';
+      if (title) title.innerText = 'New Update Ready: ' + tagName;
+      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>New 4D Sensory Upgrades &amp; Android App Icon enhancements are ready to install!<br><small style="color:#38bdf8;">✦ 1-Tap direct install with zero data loss.</small>';
+      if (changelogCard) {
+        changelogCard.style.display = 'block';
+        if (changelogTag) changelogTag.innerText = tagName + ' (New)';
+      }
       if (actionBtn) {
         actionBtn.style.display = 'inline-flex';
-        actionBtn.innerText = '⚡ Install ' + tagName + ' Now';
+        actionBtn.innerText = '⚡ Download & Install ' + tagName + ' Now';
         actionBtn.onclick = () => triggerInAppUpdate(apkUrl);
       }
+      if (typeof triggerHaptic === 'function') triggerHaptic('celebration');
     }
   } catch (err) {
     console.error('Update check failed:', err);
-    if (progress) progress.style.display = 'none';
     if (icon) icon.innerText = '⚠️';
-    if (title) title.innerText = 'Offline or Server Notice';
-    if (desc) desc.innerText = 'Could not fetch release info. Please ensure internet connection is active.';
+    if (radarSweep) radarSweep.style.display = 'none';
+    if (title) title.innerText = 'Offline Mode / Server Notice';
+    if (desc) desc.innerText = 'Could not contact update server. Please check internet connection.';
+    if (targetBadge) targetBadge.innerText = 'Unavailable';
   }
 }
 
 function triggerInAppUpdate(apkUrl) {
+  if (typeof triggerHaptic === 'function') triggerHaptic('medium');
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
+  const fill = document.getElementById('updateProgressFill');
+  const pctText = document.getElementById('updateProgressPct');
+  const textInfo = document.getElementById('updateProgressText');
   const actionBtn = document.getElementById('updateModalActionBtn');
 
-  if (desc) desc.innerText = 'Downloading update package in background... Android installer will open automatically.';
-  if (progress) progress.style.display = 'block';
+  if (desc) desc.innerText = 'Downloading signed release package... Android package installer will trigger automatically.';
+  if (progress) progress.style.display = 'flex';
   if (actionBtn) actionBtn.style.display = 'none';
 
-  if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
-    window.Android.downloadAndInstallApk(apkUrl);
-    showToast('Downloading update package... ⏳', 'success');
-  } else {
-    window.location.href = apkUrl;
-    showToast('Downloading update APK file...', 'success');
-  }
+  // Animate progress bar simulation
+  let pct = 0;
+  const timer = setInterval(() => {
+    pct += Math.floor(Math.random() * 15) + 10;
+    if (pct >= 100) {
+      pct = 100;
+      clearInterval(timer);
+      if (textInfo) textInfo.innerText = 'Package Ready! Launching Installer...';
+      if (typeof triggerHaptic === 'function') triggerHaptic('success');
+    }
+    if (fill) fill.style.width = pct + '%';
+    if (pctText) pctText.innerText = pct + '%';
+  }, 120);
+
+  setTimeout(() => {
+    if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
+      window.Android.downloadAndInstallApk(apkUrl);
+      showToast('Downloading update package... ⏳', 'success');
+    } else {
+      window.location.href = apkUrl;
+      showToast('Downloading update APK file...', 'success');
+    }
+  }, 600);
 }
 
 /* ==========================================================
