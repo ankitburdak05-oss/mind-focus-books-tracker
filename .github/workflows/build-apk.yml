@@ -89,9 +89,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v3.0.1
-        name: "Mind Focus Books Tracker v3.0.1 - Android App Icon & Cyber Radar Update Edition"
-        body: "Release v3.0.1: High-res Android Launcher Mipmap App Icons (mdpi, hdpi, xhdpi, xxhdpi, xxxhdpi), Next-Gen Holographic Cyber-Radar OTA Update Center with Version Comparison Tracker & Changelog Card, and Bottom Navigation Bar fix (removed blocking now-reading capsule)."
+        tag_name: v3.0.2
+        name: "Mind Focus Books Tracker v3.0.2 - Fixed Floating Navigation Dock Edition"
+        body: "Release v3.0.2: Fixes bottom navigation bar placement to remain permanently fixed/pinned at screen bottom (fixed position: fixed override), High-Res Android App Icons in all densities, and Cyber-Radar OTA Update Center."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

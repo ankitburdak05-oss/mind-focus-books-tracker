@@ -2222,7 +2222,7 @@ textarea.form-control {
 }
 
 body {
-  padding-bottom: 92px;
+  padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px));
 }
 
 @keyframes pulse {
@@ -4896,7 +4896,14 @@ body {
 
 /* 4. Bottom Nav Dock Sliding Liquid Pill */
 .bottom-nav-dock {
-  position: relative;
+  position: fixed !important;
+  bottom: calc(14px + env(safe-area-inset-bottom, 0px)) !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 24px) !important;
+  max-width: 480px !important;
+  height: 66px !important;
+  z-index: 9999 !important;
   overflow: hidden;
 }
 
@@ -4904,6 +4911,7 @@ body {
   position: absolute;
   top: 7px;
   bottom: 7px;
+  left: 0;
   border-radius: 16px;
   background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(168, 85, 247, 0.25));
   border: 1px solid rgba(168, 85, 247, 0.45);
