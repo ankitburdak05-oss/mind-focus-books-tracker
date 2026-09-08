@@ -4517,19 +4517,40 @@ function createNoticeQuantumBurst(originX, originY) {
 
 async function checkRemoteBroadcastNotice() {
   try {
-    const remoteUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?t=' + Date.now();
+    const cb = Date.now() + '_' + Math.floor(Math.random() * 100000);
     let data = null;
 
+    // 1. Primary: GitHub Raw with aggressive cache-busting
     try {
-      const res = await fetch(remoteUrl, { cache: 'no-store' });
+      const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?cb=' + cb;
+      const res = await fetch(rawUrl, { cache: 'no-store' });
       if (res.ok) data = await res.json();
-    } catch (netErr) {}
+    } catch (e) {}
 
+    // 2. Secondary: GitHub Pages live endpoint
     if (!data) {
       try {
-        const localRes = await fetch('broadcast-notice.json?t=' + Date.now(), { cache: 'no-store' });
+        const ghPagesUrl = 'https://ankitburdak05-oss.github.io/mind-focus-books-tracker/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(ghPagesUrl, { cache: 'no-store' });
+        if (res.ok) data = await res.json();
+      } catch (e) {}
+    }
+
+    // 3. Instant Fallback: GitHub API (Zero CDN delay)
+    if (!data) {
+      try {
+        const apiUrl = 'https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(apiUrl, { cache: 'no-store', headers: { 'Accept': 'application/vnd.github.v3.raw' } });
+        if (res.ok) data = await res.json();
+      } catch (e) {}
+    }
+
+    // 4. Local asset fallback
+    if (!data) {
+      try {
+        const localRes = await fetch('broadcast-notice.json?cb=' + cb, { cache: 'no-store' });
         if (localRes.ok) data = await localRes.json();
-      } catch (locErr) {}
+      } catch (e) {}
     }
 
     const overlay = document.getElementById('inAppNoticeModalOverlay');
