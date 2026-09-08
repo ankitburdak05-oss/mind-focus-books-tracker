@@ -89,9 +89,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v3.0.5
-        name: "Mind Focus Books Tracker v3.0.5 - Apple iOS 18 Settings Hub & Flagship Upgrade"
-        body: "Release v3.0.5: Flagship Experience Upgrade! Apple iOS 18 Glass Grouped Settings Studio, 5 Neon Accent Colors (Electric Violet, Cyber Emerald, Royal Gold, Sunset Coral, Neon Cyan), Reader Font Studio (Modern Sans, Kindle Serif, Tech Mono), Duolingo Streak Freeze Shields, Reading Pace & Time Left AI Estimator, Social Quote Poster Generator for WhatsApp/Instagram, and Offline Audio Takeaways TTS Voice Reader."
+        tag_name: v3.0.6
+        name: "Mind Focus Books Tracker v3.0.6 - Animated Cyber Glass Settings Studio Overhaul"
+        body: "Release v3.0.6: Animated Cyber Glass Settings Studio overhaul! Fixed touch responsiveness with native button action rows, 44px glowing neon gradient icon orbs, animated staggered card slide-ins, pulsing accent selection rings, and seamless in-place APK upgrade."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
