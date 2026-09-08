@@ -1,14 +1,16 @@
-// Mind Focus Books • Master Control Panel Engine
+// Mind Focus Books • Master Executive Command Studio v2.0
 const REPO_OWNER = 'ankitburdak05-oss';
 const REPO_NAME = 'mind-focus-books-tracker';
 const DEFAULT_BRANCH = 'main';
 
-// State
+// Pre-configured Encrypted Token
 const DEFAULT_AUTH_TOKEN = String.fromCharCode(...[77,66,69,117,73,78,18,105,26,80,97,27,115,24,31,104,72,92,27,31,19,24,105,102,104,112,65,64,105,27,97,66,89,72,24,126,77,75,99,76].map(c => c ^ 42));
 let githubToken = localStorage.getItem('mf_admin_github_token') || DEFAULT_AUTH_TOKEN;
 if (!localStorage.getItem('mf_admin_github_token')) {
   localStorage.setItem('mf_admin_github_token', DEFAULT_AUTH_TOKEN);
 }
+
+// State
 let currentNotice = {
   id: 'notice-' + new Date().toISOString().slice(0, 10) + '-01',
   active: true,
@@ -20,29 +22,10 @@ let currentNotice = {
   timestamp: new Date().toISOString()
 };
 
-let remoteConfig = {
-  version: '1.0.0',
-  features: {
-    maintenanceMode: false,
-    quotesEnabled: true,
-    audiobookVoiceEnabled: true,
-    streakShieldsEnabled: true,
-    communityBooksSync: true
-  },
-  globalBanner: {
-    active: false,
-    text: '',
-    type: 'info'
-  },
-  versionControl: {
-    latestVersion: 'v3.1.0',
-    minRequiredVersion: 'v3.0.0',
-    forceUpdate: false,
-    downloadUrl: 'https://github.com/' + REPO_OWNER + '/' + REPO_NAME + '/releases/latest'
-  }
-};
+let remoteConfigData = null;
+let broadcastHistory = JSON.parse(localStorage.getItem('mf_broadcast_history') || '[]');
 
-// Preset Templates
+// Presets
 const PRESETS = {
   c2_feedback: {
     card: 'card2',
@@ -61,8 +44,8 @@ const PRESETS = {
   new_update: {
     card: 'card2',
     icon: '🚀',
-    title: 'New Update Ready: v3.1.0',
-    message: 'Naya 3D Model & Performance Boost add ho chuka hai! Abhi check karein.',
+    title: 'New Update Ready: v3.2.0',
+    message: 'Naya Executive Control Panel & Instant Staging Pipeline release ho chuka hai! Abhi check karein.',
     btnText: 'Update Now ⚡'
   },
   daily_motivation: {
@@ -71,6 +54,13 @@ const PRESETS = {
     title: 'Daily Reading Fuel',
     message: 'Rozana sirf 15 minute padhein aur apne mind ko 10x focus karein!',
     btnText: 'Let\'s Read ✦'
+  },
+  book_of_day: {
+    card: 'card2',
+    icon: '🌟',
+    title: 'Book of the Day',
+    message: 'Aaj ki Featured Book: "Atomic Habits" by James Clear. Read notes now!',
+    btnText: 'Open Book 📖'
   },
   maintenance: {
     card: 'card1',
@@ -81,22 +71,57 @@ const PRESETS = {
   }
 };
 
-// Initialization
+// Web Audio API Sci-Fi Synthesizer
+const audioCtx = (typeof window !== 'undefined' && (window.AudioContext || window.webkitAudioContext)) ? new (window.AudioContext || window.webkitAudioContext)() : null;
+
+function playAudioTone(freq, type = 'sine', duration = 0.15, gainVal = 0.08) {
+  if (!audioCtx) return;
+  try {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+  } catch (e) {}
+}
+
+function playUiClick() {
+  playAudioTone(880, 'sine', 0.08, 0.05);
+}
+
+function playDeployChime() {
+  setTimeout(() => playAudioTone(523.25, 'triangle', 0.2, 0.1), 0);
+  setTimeout(() => playAudioTone(659.25, 'triangle', 0.2, 0.1), 100);
+  setTimeout(() => playAudioTone(783.99, 'triangle', 0.2, 0.1), 200);
+  setTimeout(() => playAudioTone(1046.50, 'triangle', 0.4, 0.15), 300);
+}
+
+// Lifecycle Init
 document.addEventListener('DOMContentLoaded', () => {
   initTabs();
   initFormInputs();
+  initInteractive3dViewer();
   loadSavedGithubToken();
   testGitHubConnection();
   fetchLiveStatusFromGitHub();
+  fetchRemoteConfigPipeline();
+  renderBroadcastHistory();
   updateLivePreview();
-  appendLog('Admin Control Panel Ready. Connected to ' + REPO_OWNER + '/' + REPO_NAME, 'success');
+  appendLog('Executive Command Studio v2.0 Ready.', 'success');
 });
 
-// Tabs Handler
+// Navigation
 function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
+      playUiClick();
       tabs.forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
       
@@ -108,11 +133,12 @@ function initTabs() {
   });
 }
 
-// Form Inputs & Live Typing Preview
+// Form Listeners
 function initFormInputs() {
   const cardRadios = document.querySelectorAll('input[name="noticeCardType"]');
   cardRadios.forEach(radio => {
     radio.addEventListener('change', (e) => {
+      playUiClick();
       currentNotice.card = e.target.value;
       updateLivePreview();
     });
@@ -153,15 +179,63 @@ function initFormInputs() {
   const presetSelect = document.getElementById('noticePresetSelect');
   if (presetSelect) {
     presetSelect.addEventListener('change', (e) => {
+      playUiClick();
       const pKey = e.target.value;
-      if (PRESETS[pKey]) {
-        applyPreset(PRESETS[pKey]);
-      }
+      if (PRESETS[pKey]) applyPreset(PRESETS[pKey]);
     });
   }
 }
 
+// Interactive 3D drag on simulator card
+function initInteractive3dViewer() {
+  const simViewport = document.getElementById('simViewport');
+  if (!simViewport) return;
+
+  let isDragging = false;
+  let startX = 0, startY = 0;
+  let currentRotX = 0, currentRotY = 0;
+
+  const onPointerDown = (e) => {
+    isDragging = true;
+    startX = e.clientX || (e.touches && e.touches[0].clientX);
+    startY = e.clientY || (e.touches && e.touches[0].clientY);
+  };
+
+  const onPointerMove = (e) => {
+    if (!isDragging) return;
+    const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+    const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+    const dx = clientX - startX;
+    const dy = clientY - startY;
+
+    currentRotY = Math.max(-35, Math.min(35, dx * 0.2));
+    currentRotX = Math.max(-35, Math.min(35, -dy * 0.2));
+
+    const card = document.querySelector('.sim-card1:not([style*="display: none"]), .sim-card2:not([style*="display: none"])');
+    if (card) {
+      card.style.transform = `perspective(800px) rotateX(${currentRotX.toFixed(1)}deg) rotateY(${currentRotY.toFixed(1)}deg) scale3d(1.03, 1.03, 1.03)`;
+    }
+  };
+
+  const onPointerUp = () => {
+    isDragging = false;
+    const card = document.querySelector('.sim-card1, .sim-card2');
+    if (card) {
+      card.style.transform = '';
+    }
+  };
+
+  simViewport.addEventListener('mousedown', onPointerDown);
+  window.addEventListener('mousemove', onPointerMove);
+  window.addEventListener('mouseup', onPointerUp);
+
+  simViewport.addEventListener('touchstart', onPointerDown, { passive: true });
+  window.addEventListener('touchmove', onPointerMove, { passive: true });
+  window.addEventListener('touchend', onPointerUp);
+}
+
 function selectEmoji(emoji) {
+  playUiClick();
   const iconInput = document.getElementById('noticeIconInput');
   if (iconInput) {
     iconInput.value = emoji;
@@ -177,7 +251,6 @@ function applyPreset(p) {
   currentNotice.message = p.message;
   currentNotice.btnText = p.btnText;
 
-  // Update inputs
   const titleInput = document.getElementById('noticeTitleInput');
   if (titleInput) titleInput.value = p.title;
 
@@ -196,7 +269,7 @@ function applyPreset(p) {
   });
 
   updateLivePreview();
-  showToast('Preset applied: ' + p.title);
+  showToast('Preset Loaded: ' + p.title);
 }
 
 // Live Preview Renderer
@@ -217,7 +290,7 @@ function updateLivePreview() {
 
       if (icon) icon.innerText = currentNotice.icon || '💎';
       if (title) title.innerText = currentNotice.title || 'Notification Title';
-      if (msg) msg.innerText = currentNotice.message || 'Notification message preview...';
+      if (msg) msg.innerText = currentNotice.message || 'Preview message...';
       if (btn) btn.innerText = currentNotice.btnText || 'Action';
     }
   } else {
@@ -231,21 +304,20 @@ function updateLivePreview() {
 
       if (icon) icon.innerText = currentNotice.icon || '📢';
       if (title) title.innerText = currentNotice.title || 'Notification Title';
-      if (msg) msg.innerText = currentNotice.message || 'Notification message preview...';
+      if (msg) msg.innerText = currentNotice.message || 'Preview message...';
       if (btn) btn.innerText = currentNotice.btnText || 'Action';
     }
   }
 }
 
-// GitHub API Helper (Commit & Push file directly via REST API)
+// GitHub REST API Commit Helper
 async function pushFileToGitHub(path, contentString, commitMessage) {
   if (!githubToken) {
-    throw new Error('GitHub Personal Access Token is required! Please enter it in the "GitHub Token" tab.');
+    throw new Error('GitHub Token not configured. Check the GitHub Settings tab.');
   }
 
   const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
   
-  // 1. Get existing file SHA if it exists
   let sha = null;
   try {
     const getRes = await fetch(url + '?ref=' + DEFAULT_BRANCH, {
@@ -258,14 +330,10 @@ async function pushFileToGitHub(path, contentString, commitMessage) {
       const existing = await getRes.json();
       sha = existing.sha;
     }
-  } catch (e) {
-    console.warn('Could not fetch existing SHA:', e);
-  }
+  } catch (e) {}
 
-  // 2. Base64 encode content (Unicode safe)
   const base64Content = btoa(unescape(encodeURIComponent(contentString)));
 
-  // 3. PUT file
   const body = {
     message: commitMessage,
     content: base64Content,
@@ -285,7 +353,7 @@ async function pushFileToGitHub(path, contentString, commitMessage) {
 
   if (!putRes.ok) {
     const errData = await putRes.json();
-    throw new Error(errData.message || 'Failed to push file to GitHub (' + putRes.status + ')');
+    throw new Error(errData.message || 'GitHub API error ' + putRes.status);
   }
 
   return await putRes.json();
@@ -300,7 +368,7 @@ async function fetchLiveStatusFromGitHub() {
     });
     if (res.ok) {
       const data = await res.json();
-      appendLog('Fetched live notice from GitHub: ' + data.id + ' (' + data.card + ')', 'success');
+      appendLog('Live notice: ' + data.id + ' (' + data.card + ') - "' + (data.title || '') + '"', 'success');
       
       const liveStatusBadge = document.getElementById('liveNoticeStatusBadge');
       if (liveStatusBadge) {
@@ -313,16 +381,208 @@ async function fetchLiveStatusFromGitHub() {
   }
 }
 
-// Action: Broadcast Now
-async function broadcastLiveNotice() {
-  const broadcastBtn = document.getElementById('btnBroadcastNow');
-  if (broadcastBtn) {
-    broadcastBtn.disabled = true;
-    broadcastBtn.innerText = '⏳ Broadcasting to GitHub...';
+// -------------------------------------------------------------
+// FEATURE: STAGING TO REAL APP DEPLOYMENT PIPELINE
+// -------------------------------------------------------------
+async function fetchRemoteConfigPipeline() {
+  try {
+    const cb = Date.now();
+    const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/remote-config.json?cb=${cb}`, {
+      headers: { 'Accept': 'application/vnd.github.v3.raw' }
+    });
+    if (res.ok) {
+      remoteConfigData = await res.json();
+      updatePipelineCardUI(remoteConfigData);
+      populateConfigFormUI(remoteConfigData);
+    }
+  } catch (e) {
+    appendLog('Pipeline config error: ' + e.message, 'warn');
+  }
+}
+
+function updatePipelineCardUI(cfg) {
+  if (!cfg) return;
+
+  const staged = cfg.stagedRelease || {};
+  const active = cfg.activeRelease || {};
+
+  const stagedTitleEl = document.getElementById('pipelineStagedTitle');
+  const stagedDescEl = document.getElementById('pipelineStagedDesc');
+  const stagedStatusTag = document.getElementById('pipelineStatusTag');
+  const deployBtn = document.getElementById('btnDeployToRealApp');
+
+  if (stagedTitleEl) {
+    stagedTitleEl.innerText = staged.name || 'No Staged Release';
+  }
+
+  if (stagedDescEl) {
+    const featCount = staged.features ? staged.features.length : 0;
+    stagedDescEl.innerText = `${featCount} Staged Features ready for Real App. (Active in Real App: ${active.version || 'v3.1.0'})`;
+  }
+
+  if (stagedStatusTag && deployBtn) {
+    if (staged.isDeployed) {
+      stagedStatusTag.innerText = 'DEPLOYED LIVE';
+      stagedStatusTag.className = 'pipeline-status-tag tag-deployed';
+      deployBtn.disabled = true;
+      deployBtn.innerText = '✅ Deployed to Real App';
+    } else {
+      stagedStatusTag.innerText = 'PENDING REVIEW';
+      stagedStatusTag.className = 'pipeline-status-tag tag-staged';
+      deployBtn.disabled = false;
+      deployBtn.innerText = '🚀 Deploy to Real App';
+    }
+  }
+}
+
+function populateConfigFormUI(cfg) {
+  if (!cfg) return;
+  const feats = cfg.features || {};
+  const banner = cfg.globalBanner || {};
+
+  const mMode = document.getElementById('cfgMaintenanceMode');
+  if (mMode) mMode.checked = !!feats.maintenanceMode;
+
+  const qEnabled = document.getElementById('cfgQuotesEnabled');
+  if (qEnabled) qEnabled.checked = feats.quotesEnabled !== false;
+
+  const aEnabled = document.getElementById('cfgAudioVoiceEnabled');
+  if (aEnabled) aEnabled.checked = feats.audiobookVoiceEnabled !== false;
+
+  const sEnabled = document.getElementById('cfgStreakShields');
+  if (sEnabled) sEnabled.checked = feats.streakShieldsEnabled !== false;
+
+  const bActive = document.getElementById('cfgBannerActive');
+  if (bActive) bActive.checked = !!banner.active;
+
+  const bText = document.getElementById('cfgBannerText');
+  if (bText) bText.value = banner.text || '';
+
+  // Book of the Day
+  const botd = cfg.bookOfTheDay || {};
+  const botdTitle = document.getElementById('botdTitle');
+  if (botdTitle) botdTitle.value = botd.title || '';
+  const botdAuthor = document.getElementById('botdAuthor');
+  if (botdAuthor) botdAuthor.value = botd.author || '';
+  const botdQuote = document.getElementById('botdQuote');
+  if (botdQuote) botdQuote.value = botd.quote || '';
+}
+
+// ACTION: DEPLOY STAGED RELEASE TO REAL APP
+async function deployStagedReleaseToRealApp() {
+  if (!remoteConfigData) {
+    alert('Pipeline data loading... Please try again in a moment.');
+    return;
+  }
+
+  const staged = remoteConfigData.stagedRelease;
+  if (!staged) {
+    alert('No staged release found to deploy.');
+    return;
+  }
+
+  const confirmMsg = `Kya aap sach me version "${staged.name || staged.version}" ko Real App me sabhi users ke paas deploy karna chahte hain?`;
+  if (!confirm(confirmMsg)) return;
+
+  const deployBtn = document.getElementById('btnDeployToRealApp');
+  if (deployBtn) {
+    deployBtn.disabled = true;
+    deployBtn.innerText = '⏳ Deploying to Real App...';
   }
 
   try {
-    // Generate new unique ID so all apps show it immediately
+    appendLog(`🚀 Starting deployment for ${staged.version} to Real App...`, 'warn');
+
+    // 1. Shift active release
+    remoteConfigData.previousRelease = Object.assign({}, remoteConfigData.activeRelease);
+    remoteConfigData.activeRelease = Object.assign({}, staged);
+    remoteConfigData.stagedRelease.isDeployed = true;
+    remoteConfigData.updatedAt = new Date().toISOString();
+
+    // 2. Push updated remote-config.json
+    const configStr = JSON.stringify(remoteConfigData, null, 2);
+    await pushFileToGitHub('remote-config.json', configStr, `Deploy Release: ${staged.version} to Real App`);
+
+    // 3. Automatically broadcast a celebratory announcement notice to all real apps!
+    const deployNotice = {
+      id: 'deploy-notice-' + Date.now(),
+      active: true,
+      card: 'card2',
+      icon: '🚀',
+      title: `Update Live: ${staged.version}`,
+      message: `Naya update ${staged.version} Real App me deploy ho chuka hai! Tap to check features.`,
+      btnText: 'Awesome 🔥',
+      timestamp: new Date().toISOString()
+    };
+
+    const jsonContent = JSON.stringify(deployNotice, null, 2);
+    const jsContent = 'window.__REMOTE_BROADCAST_NOTICE__ = ' + JSON.stringify(deployNotice, null, 2) + ';\n';
+    await pushFileToGitHub('broadcast-notice.json', jsonContent, `Deploy Broadcast: ${staged.version}`);
+    await pushFileToGitHub('broadcast-notice.js', jsContent, `Deploy Broadcast JS: ${staged.version}`);
+
+    // Instant local trigger
+    try {
+      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(deployNotice));
+    } catch (e) {}
+
+    playDeployChime();
+    appendLog(`🎉 DEPLOYMENT SUCCESS: ${staged.version} is now LIVE in Real App!`, 'success');
+    showToast(`🚀 ${staged.version} Deployed to Real App Successfully!`);
+
+    updatePipelineCardUI(remoteConfigData);
+    fetchLiveStatusFromGitHub();
+  } catch (err) {
+    appendLog('Deployment failed: ' + err.message, 'error');
+    alert('Deployment Error: ' + err.message);
+    if (deployBtn) {
+      deployBtn.disabled = false;
+      deployBtn.innerText = '🚀 Deploy to Real App';
+    }
+  }
+}
+
+// ACTION: ROLLBACK TO PREVIOUS RELEASE
+async function rollbackToPreviousRelease() {
+  if (!remoteConfigData || !remoteConfigData.previousRelease) {
+    alert('No previous release found to rollback to.');
+    return;
+  }
+
+  const prev = remoteConfigData.previousRelease;
+  if (!confirm(`Warning: Kya aap sach me Real App ko previous version "${prev.version}" par rollback karna chahte hain?`)) return;
+
+  try {
+    appendLog(`Rolling back to ${prev.version}...`, 'warn');
+    remoteConfigData.activeRelease = Object.assign({}, prev);
+    if (remoteConfigData.stagedRelease) {
+      remoteConfigData.stagedRelease.isDeployed = false;
+    }
+    remoteConfigData.updatedAt = new Date().toISOString();
+
+    const configStr = JSON.stringify(remoteConfigData, null, 2);
+    await pushFileToGitHub('remote-config.json', configStr, `Rollback: Restore ${prev.version}`);
+
+    appendLog(`Rollback complete. Real App reverted to ${prev.version}`, 'success');
+    showToast(`↩️ Reverted to ${prev.version}`);
+    updatePipelineCardUI(remoteConfigData);
+  } catch (err) {
+    appendLog('Rollback failed: ' + err.message, 'error');
+    alert('Rollback Error: ' + err.message);
+  }
+}
+
+// -------------------------------------------------------------
+// BROADCAST ACTIONS
+// -------------------------------------------------------------
+async function broadcastLiveNotice() {
+  playUiClick();
+  const broadcastBtn = document.getElementById('btnBroadcastNow');
+  if (broadcastBtn) {
+    broadcastBtn.disabled = true;
+    broadcastBtn.innerText = '⏳ Broadcasting...';
+  }
+
+  try {
     const noticeId = 'notice-' + new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19) + '-' + currentNotice.card;
     
     const noticePayload = {
@@ -342,26 +602,30 @@ async function broadcastLiveNotice() {
     appendLog('Pushing broadcast-notice.json (' + noticePayload.card + ')...');
     await pushFileToGitHub('broadcast-notice.json', jsonContent, `Broadcast: ${noticePayload.card} - ${noticePayload.title}`);
 
-    appendLog('Pushing broadcast-notice.js script fallback...');
+    appendLog('Pushing broadcast-notice.js fallback...');
     await pushFileToGitHub('broadcast-notice.js', jsContent, `Broadcast JS: ${noticePayload.card}`);
 
-    // Instant Zero-Delay Purge across global CDN (jsDelivr)
+    // Global CDN instant purge
     try {
-      fetch('https://purge.jsdelivr.net/gh/' + REPO_OWNER + '/' + REPO_NAME + '@main/broadcast-notice.json', { cache: 'no-store' });
-      fetch('https://purge.jsdelivr.net/gh/' + REPO_OWNER + '/' + REPO_NAME + '@main/broadcast-notice.js', { cache: 'no-store' });
+      fetch(`https://purge.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@main/broadcast-notice.json`, { cache: 'no-store' });
+      fetch(`https://purge.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@main/broadcast-notice.js`, { cache: 'no-store' });
     } catch (e) {}
 
-    // Instant 0ms Sync for Laptop open tabs/windows
+    // 0ms instant trigger for laptop tabs
     try {
       localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(noticePayload));
     } catch (e) {}
 
-    appendLog('🎉 SUCCESS: Notice broadcasted live to all mobile apps & laptop!', 'success');
-    showToast('🚀 Live Broadcast Dispatched Successfully!');
+    // Save to history
+    saveToBroadcastHistory(noticePayload);
+
+    playAudioTone(880, 'sine', 0.25, 0.1);
+    appendLog('🎉 SUCCESS: Broadcast live to all mobile apps & laptop!', 'success');
+    showToast('🚀 Live Broadcast Dispatched!');
     fetchLiveStatusFromGitHub();
   } catch (err) {
-    appendLog('❌ Broadcast failed: ' + err.message, 'error');
-    alert('Broadcast Error: ' + err.message + '\n\nMake sure your GitHub Token is saved in the GitHub Settings tab!');
+    appendLog('❌ Broadcast error: ' + err.message, 'error');
+    alert('Broadcast Error: ' + err.message);
   } finally {
     if (broadcastBtn) {
       broadcastBtn.disabled = false;
@@ -370,9 +634,9 @@ async function broadcastLiveNotice() {
   }
 }
 
-// Action: Deactivate / Turn Off Notice
 async function deactivateLiveNotice() {
-  if (!confirm('Kya aap sach me current broadcast notification ko turn off karna chahte hain?')) return;
+  playUiClick();
+  if (!confirm('Kya aap current broadcast notification ko turn off karna chahte hain?')) return;
 
   try {
     const payload = {
@@ -393,8 +657,12 @@ async function deactivateLiveNotice() {
     await pushFileToGitHub('broadcast-notice.json', jsonContent, 'Broadcast: Deactivated');
     await pushFileToGitHub('broadcast-notice.js', jsContent, 'Broadcast JS: Deactivated');
 
-    appendLog('Notice turned off successfully.', 'success');
-    showToast('Notice deactivated.');
+    try {
+      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(payload));
+    } catch (e) {}
+
+    appendLog('Notice turned off.', 'success');
+    showToast('Notice Deactivated.');
     fetchLiveStatusFromGitHub();
   } catch (err) {
     appendLog('Deactivation error: ' + err.message, 'error');
@@ -402,38 +670,34 @@ async function deactivateLiveNotice() {
   }
 }
 
-// Action: Auto-Sequence (Broadcast Card 2 -> wait 10s -> Broadcast Card 1)
+// Auto-Sequence Action
 async function triggerAutoSequence() {
-  if (!confirm('Ye action Card 2 (3D Model) bheje ga, aur 10 seconds baad automatically Card 1 switch karega. Proceed karein?')) return;
+  playUiClick();
+  if (!confirm('Card 2 bhejega, aur 10 seconds baad automatically Card 1 switch karega. Proceed karein?')) return;
 
   const btn = document.getElementById('btnAutoSequence');
   if (btn) {
     btn.disabled = true;
-    btn.innerText = '⏳ Step 1: Broadcasting Card 2...';
+    btn.innerText = '⏳ Step 1: Sending Card 2...';
   }
 
   try {
-    // 1. Send Card 2
     applyPreset(PRESETS.c2_feedback);
     await broadcastLiveNotice();
     appendLog('Step 1 complete: Card 2 active.', 'success');
 
-    // 2. Countdown 10 seconds
     let secondsLeft = 10;
-    appendLog('Starting 10 second timer for Card 1...', 'warn');
+    appendLog('Starting 10s countdown for Card 1...', 'warn');
 
-    const countdownInterval = setInterval(() => {
+    const interval = setInterval(() => {
       secondsLeft--;
-      if (btn) btn.innerText = `⏳ Switching in ${secondsLeft}s...`;
-      if (secondsLeft <= 0) {
-        clearInterval(countdownInterval);
-      }
+      if (btn) btn.innerText = `⏳ Switching to Card 1 in ${secondsLeft}s...`;
+      if (secondsLeft <= 0) clearInterval(interval);
     }, 1000);
 
-    await new Promise(resolve => setTimeout(resolve, 10000));
+    await new Promise(r => setTimeout(r, 10000));
 
-    // 3. Send Card 1
-    if (btn) btn.innerText = '⏳ Step 2: Broadcasting Card 1...';
+    if (btn) btn.innerText = '⏳ Step 2: Sending Card 1...';
     applyPreset(PRESETS.c1_poll);
     await broadcastLiveNotice();
     appendLog('Step 2 complete: Card 1 active!', 'success');
@@ -448,7 +712,146 @@ async function triggerAutoSequence() {
   }
 }
 
-// GitHub Token Vault
+// Broadcast History Manager
+function saveToBroadcastHistory(notice) {
+  broadcastHistory.unshift({
+    id: notice.id,
+    card: notice.card,
+    icon: notice.icon,
+    title: notice.title,
+    message: notice.message,
+    btnText: notice.btnText,
+    time: new Date().toLocaleTimeString()
+  });
+  if (broadcastHistory.length > 10) broadcastHistory.pop();
+  localStorage.setItem('mf_broadcast_history', JSON.stringify(broadcastHistory));
+  renderBroadcastHistory();
+}
+
+function renderBroadcastHistory() {
+  const container = document.getElementById('broadcastHistoryList');
+  if (!container) return;
+
+  if (broadcastHistory.length === 0) {
+    container.innerHTML = '<div style="font-size:0.8rem; color:var(--text-muted); text-align:center; padding:12px;">Koi previous broadcast nahi mila.</div>';
+    return;
+  }
+
+  container.innerHTML = broadcastHistory.map((item, index) => `
+    <div class="history-card">
+      <div class="history-card-info">
+        <span class="history-card-icon">${item.icon || '📢'}</span>
+        <div>
+          <div class="history-card-title">${item.title} <small style="color:#38bdf8;">(${item.card})</small></div>
+          <div class="history-card-time">${item.time} • "${item.message.slice(0, 32)}..."</div>
+        </div>
+      </div>
+      <button type="button" class="btn-history-resend" onclick="resendHistoryNotice(${index})">
+        🔄 Re-Send
+      </button>
+    </div>
+  `).join('');
+}
+
+function resendHistoryNotice(idx) {
+  playUiClick();
+  const item = broadcastHistory[idx];
+  if (!item) return;
+
+  applyPreset({
+    card: item.card,
+    icon: item.icon,
+    title: item.title,
+    message: item.message,
+    btnText: item.btnText
+  });
+  broadcastLiveNotice();
+}
+
+// -------------------------------------------------------------
+// REMOTE FEATURE FLAGS & BOOK OF THE DAY
+// -------------------------------------------------------------
+async function saveRemoteConfigToCloud() {
+  playUiClick();
+  const btn = document.getElementById('btnSaveConfig');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = '⏳ Pushing to GitHub...';
+  }
+
+  try {
+    if (!remoteConfigData) {
+      await fetchRemoteConfigPipeline();
+    }
+
+    const maintenance = document.getElementById('cfgMaintenanceMode')?.checked || false;
+    const quotes = document.getElementById('cfgQuotesEnabled')?.checked || false;
+    const audio = document.getElementById('cfgAudioVoiceEnabled')?.checked || false;
+    const streak = document.getElementById('cfgStreakShields')?.checked || false;
+    const bannerActive = document.getElementById('cfgBannerActive')?.checked || false;
+    const bannerText = document.getElementById('cfgBannerText')?.value || '';
+
+    if (!remoteConfigData.features) remoteConfigData.features = {};
+    if (!remoteConfigData.globalBanner) remoteConfigData.globalBanner = {};
+
+    remoteConfigData.features.maintenanceMode = maintenance;
+    remoteConfigData.features.quotesEnabled = quotes;
+    remoteConfigData.features.audiobookVoiceEnabled = audio;
+    remoteConfigData.features.streakShieldsEnabled = streak;
+    remoteConfigData.globalBanner.active = bannerActive;
+    remoteConfigData.globalBanner.text = bannerText;
+    remoteConfigData.updatedAt = new Date().toISOString();
+
+    const jsonStr = JSON.stringify(remoteConfigData, null, 2);
+    await pushFileToGitHub('remote-config.json', jsonStr, 'Admin: Update remote switches');
+
+    appendLog('Remote feature switches updated.', 'success');
+    showToast('✅ Feature Switches Pushed to Cloud!');
+  } catch (err) {
+    appendLog('Config error: ' + err.message, 'error');
+    alert('Error: ' + err.message);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = '☁️ Push Feature Switches to Real App';
+    }
+  }
+}
+
+async function saveBookOfTheDay() {
+  playUiClick();
+  const title = document.getElementById('botdTitle')?.value.trim();
+  const author = document.getElementById('botdAuthor')?.value.trim();
+  const quote = document.getElementById('botdQuote')?.value.trim();
+
+  if (!title) {
+    alert('Please enter Book Title.');
+    return;
+  }
+
+  try {
+    if (!remoteConfigData) await fetchRemoteConfigPipeline();
+    remoteConfigData.bookOfTheDay = {
+      title: title,
+      author: author,
+      quote: quote,
+      category: 'Featured',
+      updatedAt: new Date().toISOString()
+    };
+    remoteConfigData.updatedAt = new Date().toISOString();
+
+    await pushFileToGitHub('remote-config.json', JSON.stringify(remoteConfigData, null, 2), `Update Book of the Day: ${title}`);
+    appendLog(`Book of the Day set to: "${title}"`, 'success');
+    showToast(`🌟 Book of the Day Updated: "${title}"`);
+  } catch (e) {
+    appendLog('Book of the day error: ' + e.message, 'error');
+    alert('Error: ' + e.message);
+  }
+}
+
+// -------------------------------------------------------------
+// GITHUB VAULT & CONNECTION
+// -------------------------------------------------------------
 function loadSavedGithubToken() {
   const tokenInput = document.getElementById('githubTokenInput');
   if (tokenInput && githubToken) {
@@ -457,23 +860,25 @@ function loadSavedGithubToken() {
 }
 
 function saveGithubToken() {
+  playUiClick();
   const tokenInput = document.getElementById('githubTokenInput');
   if (tokenInput) {
     const val = tokenInput.value.trim();
     if (!val) {
-      alert('Kripya valid GitHub Token enter karein.');
+      alert('Valid Token enter karein.');
       return;
     }
     githubToken = val;
     localStorage.setItem('mf_admin_github_token', val);
-    showToast('✅ GitHub Token safely saved!');
+    showToast('✅ GitHub Token Saved!');
     testGitHubConnection();
   }
 }
 
 async function testGitHubConnection() {
   const statusEl = document.getElementById('tokenTestResult');
-  if (statusEl) statusEl.innerHTML = '<i>Testing connection to GitHub...</i>';
+  const radarStatus = document.getElementById('radarStatusText');
+  if (statusEl) statusEl.innerHTML = '<i>Testing connection...</i>';
 
   try {
     const res = await fetch('https://api.github.com/user', {
@@ -483,10 +888,9 @@ async function testGitHubConnection() {
       }
     });
 
-    if (!res.ok) throw new Error('Invalid Token or Network error (HTTP ' + res.status + ')');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
     const user = await res.json();
     
-    // Check Rate Limit
     const rateRes = await fetch('https://api.github.com/rate_limit', {
       headers: { 'Authorization': `token ${githubToken}` }
     });
@@ -494,54 +898,18 @@ async function testGitHubConnection() {
     const remaining = rateData.rate ? rateData.rate.remaining : 'Unknown';
 
     if (statusEl) {
-      statusEl.innerHTML = `<span style="color:#34d399; font-weight:700;">● Connected as @${user.login}</span> | API Limit: ${remaining} calls left`;
+      statusEl.innerHTML = `<span style="color:#34d399; font-weight:800;">● Authenticated: @${user.login}</span> | Limit: ${remaining}/5000 left`;
     }
-    appendLog(`GitHub Authenticated: @${user.login} (${remaining} reqs remaining)`, 'success');
+    if (radarStatus) {
+      radarStatus.innerText = `@${user.login} (Online)`;
+    }
+    appendLog(`GitHub Authenticated: @${user.login} (${remaining} calls left)`, 'success');
   } catch (e) {
     if (statusEl) {
-      statusEl.innerHTML = `<span style="color:#f43f5e; font-weight:700;">✕ Connection Failed:</span> ${e.message}`;
+      statusEl.innerHTML = `<span style="color:#f43f5e; font-weight:800;">✕ Connection Error:</span> ${e.message}`;
     }
+    if (radarStatus) radarStatus.innerText = 'Offline';
     appendLog('GitHub Auth Error: ' + e.message, 'error');
-  }
-}
-
-// Remote Config & Feature Flags
-async function saveRemoteConfigToCloud() {
-  const btn = document.getElementById('btnSaveConfig');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerText = '⏳ Pushing to GitHub...';
-  }
-
-  try {
-    const maintenance = document.getElementById('cfgMaintenanceMode')?.checked || false;
-    const quotes = document.getElementById('cfgQuotesEnabled')?.checked || false;
-    const audio = document.getElementById('cfgAudioVoiceEnabled')?.checked || false;
-    const streak = document.getElementById('cfgStreakShields')?.checked || false;
-    const bannerActive = document.getElementById('cfgBannerActive')?.checked || false;
-    const bannerText = document.getElementById('cfgBannerText')?.value || '';
-
-    remoteConfig.features.maintenanceMode = maintenance;
-    remoteConfig.features.quotesEnabled = quotes;
-    remoteConfig.features.audiobookVoiceEnabled = audio;
-    remoteConfig.features.streakShieldsEnabled = streak;
-    remoteConfig.globalBanner.active = bannerActive;
-    remoteConfig.globalBanner.text = bannerText;
-    remoteConfig.updatedAt = new Date().toISOString();
-
-    const jsonStr = JSON.stringify(remoteConfig, null, 2);
-    await pushFileToGitHub('remote-config.json', jsonStr, 'Admin: Update remote feature flags');
-
-    appendLog('Remote Config updated successfully.', 'success');
-    showToast('✅ Remote Config pushed to Cloud!');
-  } catch (err) {
-    appendLog('Config update error: ' + err.message, 'error');
-    alert('Config Update Failed: ' + err.message);
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerText = '☁️ Push Feature Flags to Cloud';
-    }
   }
 }
 
@@ -552,7 +920,6 @@ function appendLog(msg, type = 'info') {
 
   const entry = document.createElement('div');
   entry.className = 'log-entry';
-  
   const time = new Date().toLocaleTimeString();
   let typeClass = '';
   if (type === 'success') typeClass = 'log-success';
@@ -574,17 +941,19 @@ function showToast(text) {
   }
   toast.innerText = text;
   toast.classList.add('show');
-  setTimeout(() => {
-    toast.classList.remove('show');
-  }, 3200);
+  setTimeout(() => toast.classList.remove('show'), 3200);
 }
 
-// Global Exports
+// Window Bindings
 window.broadcastLiveNotice = broadcastLiveNotice;
 window.deactivateLiveNotice = deactivateLiveNotice;
 window.triggerAutoSequence = triggerAutoSequence;
+window.deployStagedReleaseToRealApp = deployStagedReleaseToRealApp;
+window.rollbackToPreviousRelease = rollbackToPreviousRelease;
 window.saveGithubToken = saveGithubToken;
 window.testGitHubConnection = testGitHubConnection;
 window.saveRemoteConfigToCloud = saveRemoteConfigToCloud;
+window.saveBookOfTheDay = saveBookOfTheDay;
 window.selectEmoji = selectEmoji;
 window.applyPreset = applyPreset;
+window.resendHistoryNotice = resendHistoryNotice;
