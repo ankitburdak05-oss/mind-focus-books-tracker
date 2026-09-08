@@ -4666,15 +4666,16 @@ function fetchNoticeViaScript(url) {
     try {
       const s = document.createElement('script');
       s.src = url;
+      s.async = true;
       s.onload = () => {
         resolve(window.__REMOTE_BROADCAST_NOTICE__ || null);
-        s.remove();
+        try { s.remove(); } catch (e) {}
       };
       s.onerror = () => {
         resolve(null);
-        s.remove();
+        try { s.remove(); } catch (e) {}
       };
-      document.head.appendChild(s);
+      (document.head || document.documentElement).appendChild(s);
     } catch (e) {
       resolve(null);
     }
@@ -4686,44 +4687,48 @@ async function checkRemoteBroadcastNotice() {
     const cb = Date.now() + '_' + Math.floor(Math.random() * 100000);
     let data = null;
 
-    // 1. Primary: GitHub Raw with aggressive cache-busting
+    // 1. PRIMARY: GitHub API with zero CDN cache delay (Instant Delivery < 1s)
     try {
-      const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?cb=' + cb;
-      const res = await fetch(rawUrl, { cache: 'no-store' });
+      const apiUrl = 'https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/broadcast-notice.json?cb=' + cb;
+      const res = await fetch(apiUrl, {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
       if (res.ok) data = await res.json();
     } catch (e) {}
 
-    // 2. Secondary: GitHub Pages live endpoint
+    // 2. SECONDARY: jsDelivr fast endpoint with cache-busting
     if (!data) {
       try {
-        const ghPagesUrl = 'https://ankitburdak05-oss.github.io/mind-focus-books-tracker/broadcast-notice.json?cb=' + cb;
-        const res = await fetch(ghPagesUrl, { cache: 'no-store' });
+        const jsdUrl = 'https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(jsdUrl, { cache: 'no-store' });
         if (res.ok) data = await res.json();
       } catch (e) {}
     }
 
-    // 3. Instant Fallback: GitHub API (Zero CDN delay)
+    // 3. TERTIARY: GitHub Raw with cache-busting
     if (!data) {
       try {
-        const apiUrl = 'https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/broadcast-notice.json?cb=' + cb;
-        const res = await fetch(apiUrl, { cache: 'no-store', headers: { 'Accept': 'application/vnd.github.v3.raw' } });
+        const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(rawUrl, { cache: 'no-store' });
         if (res.ok) data = await res.json();
       } catch (e) {}
     }
 
-    // 4. Local asset fallback
+    // 4. SCRIPT-TAG FALLBACK (For Laptop running on file:/// in Chrome/Edge)
+    // Uses jsDelivr which returns application/javascript MIME type without nosniff error!
+    if (!data) {
+      data = await fetchNoticeViaScript('https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/broadcast-notice.js?cb=' + cb);
+    }
+
+    // 5. LOCAL ASSET FALLBACK
     if (!data) {
       try {
         const localRes = await fetch('broadcast-notice.json?cb=' + cb, { cache: 'no-store' });
         if (localRes.ok) data = await localRes.json();
       } catch (e) {}
     }
-
-    // 5. Script-Tag CORS Bypass (ONLY needed on file:/// protocol in Chrome/Edge on laptop)
-    if (!data && window.location.protocol === 'file:') {
-      data = await fetchNoticeViaScript('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.js?cb=' + cb);
-    }
-    if (!data && window.location.protocol === 'file:') {
+    if (!data) {
       data = await fetchNoticeViaScript('broadcast-notice.js?cb=' + cb);
     }
 
@@ -4735,19 +4740,18 @@ async function checkRemoteBroadcastNotice() {
       return;
     }
 
-    currentBroadcastNoticeId = data.id || 'notice-default';
+    const newId = data.id || 'notice-default';
     let lastDismissed = null;
     try {
       lastDismissed = localStorage.getItem('mindfocus_dismissed_notice_id');
     } catch (e) {}
 
-    if (dismissedNoticeIds[currentBroadcastNoticeId] || lastDismissed === currentBroadcastNoticeId) {
-      if (overlay && overlay.classList.contains('active')) {
-        overlay.classList.remove('active');
-      }
+    // Do not show if dismissed
+    if (dismissedNoticeIds[newId] || lastDismissed === newId) {
       return;
     }
 
+    currentBroadcastNoticeId = newId;
     showInAppNoticePopup(data);
   } catch (e) {
     console.warn('Notice check error:', e);
@@ -4854,13 +4858,40 @@ function dismissInAppNotice(event) {
 
 function startLiveNoticeListener() {
   if (broadcastNoticeInterval) clearInterval(broadcastNoticeInterval);
-  setTimeout(checkRemoteBroadcastNotice, 1200);
-  // Relaxed background check every 45 seconds (prevents CPU thread freezing)
-  broadcastNoticeInterval = setInterval(checkRemoteBroadcastNotice, 45000);
+  
+  // Instant check on open: 300ms, 1.5s, then every 5 seconds!
+  setTimeout(checkRemoteBroadcastNotice, 300);
+  setTimeout(checkRemoteBroadcastNotice, 1500);
+
+  // Fast 5-second polling so broadcast arrives in real time!
+  broadcastNoticeInterval = setInterval(checkRemoteBroadcastNotice, 5000);
+
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') checkRemoteBroadcastNotice();
   });
   window.addEventListener('focus', checkRemoteBroadcastNotice);
+
+  // Laptop Multi-Tab Realtime Instant Sync via localStorage event
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'mindfocus_local_broadcast_trigger' && e.newValue) {
+      try {
+        const payload = JSON.parse(e.newValue);
+        if (payload && payload.active && payload.message) {
+          currentBroadcastNoticeId = payload.id;
+          showInAppNoticePopup(payload);
+        }
+      } catch (err) {}
+    }
+  });
+
+  // Check on user interaction (throttled)
+  document.addEventListener('click', () => {
+    const now = Date.now();
+    if (!window._lastNoticeCheck || now - window._lastNoticeCheck > 5000) {
+      window._lastNoticeCheck = now;
+      checkRemoteBroadcastNotice();
+    }
+  }, { passive: true });
 }
 
 window.checkRemoteBroadcastNotice = checkRemoteBroadcastNotice;

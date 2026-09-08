@@ -345,7 +345,18 @@ async function broadcastLiveNotice() {
     appendLog('Pushing broadcast-notice.js script fallback...');
     await pushFileToGitHub('broadcast-notice.js', jsContent, `Broadcast JS: ${noticePayload.card}`);
 
-    appendLog('🎉 SUCCESS: Notice broadcasted live to all mobile apps!', 'success');
+    // Instant Zero-Delay Purge across global CDN (jsDelivr)
+    try {
+      fetch('https://purge.jsdelivr.net/gh/' + REPO_OWNER + '/' + REPO_NAME + '@main/broadcast-notice.json', { cache: 'no-store' });
+      fetch('https://purge.jsdelivr.net/gh/' + REPO_OWNER + '/' + REPO_NAME + '@main/broadcast-notice.js', { cache: 'no-store' });
+    } catch (e) {}
+
+    // Instant 0ms Sync for Laptop open tabs/windows
+    try {
+      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(noticePayload));
+    } catch (e) {}
+
+    appendLog('🎉 SUCCESS: Notice broadcasted live to all mobile apps & laptop!', 'success');
     showToast('🚀 Live Broadcast Dispatched Successfully!');
     fetchLiveStatusFromGitHub();
   } catch (err) {
