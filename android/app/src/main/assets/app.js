@@ -2933,7 +2933,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.0.3';
+const CURRENT_APP_VERSION = 'v3.0.4';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3538,6 +3538,11 @@ function updateAmbienceUI() {
     sanctuaryAmbBtn.style.background = isAmbiencePlaying ? '#10b981' : 'rgba(255, 255, 255, 0.08)';
     sanctuaryAmbBtn.style.color = isAmbiencePlaying ? '#fff' : 'var(--text-primary)';
   }
+
+  // Update EQ visualizer if modal is active
+  if (typeof startSpatialEqVisualizer === 'function') {
+    startSpatialEqVisualizer();
+  }
 }
 
 function openAmbienceModal() {
@@ -3549,6 +3554,10 @@ function openAmbienceModal() {
 }
 
 function closeAmbienceModal() {
+  if (typeof spatialEqAnimId !== 'undefined' && spatialEqAnimId) {
+    cancelAnimationFrame(spatialEqAnimId);
+    spatialEqAnimId = null;
+  }
   const overlay = document.getElementById('ambienceModalOverlay');
   if (overlay) overlay.classList.remove('active');
   restoreDockActiveTab();
@@ -4244,6 +4253,14 @@ function renderReadingDnaGalaxy() {
 
   let step = 0;
   function animate() {
+    const overlay = document.getElementById('readingDnaModalOverlay');
+    if (!overlay || !overlay.classList.contains('active')) {
+      if (dnaAnimFrame) {
+        cancelAnimationFrame(dnaAnimFrame);
+        dnaAnimFrame = null;
+      }
+      return;
+    }
     ctx.clearRect(0, 0, W, H);
 
     const grad = ctx.createRadialGradient(W / 2, H / 2, 20, W / 2, H / 2, W / 1.8);
@@ -5300,14 +5317,26 @@ function startSpatialEqVisualizer() {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  if (spatialEqAnimId) cancelAnimationFrame(spatialEqAnimId);
+  if (spatialEqAnimId) {
+    cancelAnimationFrame(spatialEqAnimId);
+    spatialEqAnimId = null;
+  }
 
   const bars = 28;
   const barWidth = Math.floor(canvas.width / bars) - 2;
 
   function renderEq() {
+    const overlay = document.getElementById('ambienceModalOverlay');
+    if (!overlay || !overlay.classList.contains('active')) {
+      if (spatialEqAnimId) {
+        cancelAnimationFrame(spatialEqAnimId);
+        spatialEqAnimId = null;
+      }
+      return;
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    const active = isAmbiencePlaying;
+    const active = typeof isAmbiencePlaying !== 'undefined' && isAmbiencePlaying;
 
     for (let i = 0; i < bars; i++) {
       let height = 4;
@@ -5331,7 +5360,12 @@ function startSpatialEqVisualizer() {
       ctx.roundRect(x, y, barWidth, height, [3, 3, 0, 0]);
       ctx.fill();
     }
-    spatialEqAnimId = requestAnimationFrame(renderEq);
+
+    if (active) {
+      spatialEqAnimId = requestAnimationFrame(renderEq);
+    } else {
+      spatialEqAnimId = null;
+    }
   }
   renderEq();
 }

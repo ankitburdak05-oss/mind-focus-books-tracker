@@ -3253,79 +3253,34 @@ body {
   --aurora-glow-opacity: 0.18;
 }
 
-/* 1. DYNAMIC CHROMATIC AURORA BACKGROUND */
+/* 1. DYNAMIC CHROMATIC AURORA BACKGROUND (HARDWARE ACCELERATED MESH GRADIENT - 120FPS) */
 .ambient-aurora-bg {
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: -1;
   overflow: hidden;
+  background: 
+    radial-gradient(circle at 18% 12%, rgba(99, 102, 241, 0.16) 0%, transparent 48%),
+    radial-gradient(circle at 86% 28%, rgba(236, 72, 153, 0.12) 0%, transparent 46%),
+    radial-gradient(circle at 22% 82%, rgba(16, 185, 129, 0.10) 0%, transparent 48%);
   opacity: 0.95;
+  contain: strict;
+  transform: translateZ(0);
   transition: opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .aurora-blob {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(85px);
-  mix-blend-mode: screen;
-  will-change: transform, background;
-  transition: background 1.5s ease;
+  display: none !important;
 }
 
-.aurora-blob-1 {
-  top: -10%;
-  left: 20%;
-  width: 550px;
-  height: 550px;
-  background: radial-gradient(circle, var(--aurora-1) 0%, transparent 70%);
-  opacity: var(--aurora-glow-opacity);
-  animation: auroraFloat1 18s ease-in-out infinite alternate;
-}
-
-.aurora-blob-2 {
-  top: 30%;
-  right: -5%;
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, var(--aurora-2) 0%, transparent 70%);
-  opacity: calc(var(--aurora-glow-opacity) * 0.85);
-  animation: auroraFloat2 22s ease-in-out infinite alternate;
-}
-
-.aurora-blob-3 {
-  bottom: 5%;
-  left: 5%;
-  width: 500px;
-  height: 500px;
-  background: radial-gradient(circle, var(--aurora-3) 0%, transparent 70%);
-  opacity: calc(var(--aurora-glow-opacity) * 0.65);
-  animation: auroraFloat3 26s ease-in-out infinite alternate;
-}
-
-@keyframes auroraFloat1 {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(60px, 40px) scale(1.12); }
-  100% { transform: translate(-40px, 70px) scale(0.92); }
-}
-@keyframes auroraFloat2 {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-50px, -30px) scale(1.18); }
-  100% { transform: translate(40px, 50px) scale(0.9); }
-}
-@keyframes auroraFloat3 {
-  0% { transform: translate(0, 0) scale(0.95); }
-  50% { transform: translate(70px, -50px) scale(1.1); }
-  100% { transform: translate(-30px, 30px) scale(1.05); }
-}
-
-/* 2. 3D HOLOGRAPHIC TILT & FOIL SHEEN */
+/* 2. 3D HOLOGRAPHIC TILT & FOIL SHEEN (OPTIMIZED FOR MOBILE FLUIDITY) */
 .book-card {
-  perspective: 1200px;
-  transform-style: preserve-3d;
-  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s ease;
   position: relative;
   overflow: hidden;
+  contain: content;
+  transform: translateZ(0);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .book-card:hover {
