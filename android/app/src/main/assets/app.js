@@ -4856,15 +4856,75 @@ function dismissInAppNotice(event) {
   }, 360);
 }
 
+async function checkRemoteConfig() {
+  try {
+    const cb = Date.now();
+    let cfg = null;
+    try {
+      const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
+      if (res.ok) cfg = await res.json();
+    } catch (e) {}
+
+    if (!cfg) {
+      try {
+        const res = await fetch('https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/remote-config.json?cb=' + cb, { cache: 'no-store' });
+        if (res.ok) cfg = await res.json();
+      } catch (e) {}
+    }
+
+    if (!cfg) return;
+
+    // 1. Maintenance Mode
+    const maintenanceOverlay = document.getElementById('appMaintenanceOverlay');
+    if (cfg.features && cfg.features.maintenanceMode) {
+      if (!maintenanceOverlay) {
+        const m = document.createElement('div');
+        m.id = 'appMaintenanceOverlay';
+        m.style.cssText = 'position:fixed; inset:0; z-index:999999; background:rgba(5,8,17,0.98); backdrop-filter:blur(24px); display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; color:#fff;';
+        m.innerHTML = `
+          <div style="font-size:64px; margin-bottom:16px;">🚨</div>
+          <h2 style="font-size:1.6rem; font-weight:900; margin-bottom:10px; background:linear-gradient(135deg, #f59e0b, #ef4444); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">Scheduled Maintenance</h2>
+          <p style="font-size:0.95rem; color:#94a3b8; max-width:440px; line-height:1.6; margin-bottom:24px;">${cfg.features.maintenanceMessage || 'App is under scheduled maintenance. Will be back shortly!'}</p>
+          <div style="font-size:0.8rem; color:#38bdf8;">✦ Mind Focus Books Engineering Team</div>
+        `;
+        document.body.appendChild(m);
+      }
+    } else {
+      if (maintenanceOverlay) maintenanceOverlay.remove();
+    }
+
+    // 2. Global Top Banner
+    let topBanner = document.getElementById('globalTopBanner');
+    if (cfg.globalBanner && cfg.globalBanner.active && cfg.globalBanner.text) {
+      if (!topBanner) {
+        topBanner = document.createElement('div');
+        topBanner.id = 'globalTopBanner';
+        topBanner.style.cssText = 'background:linear-gradient(90deg, #0284c7, #6366f1); color:#fff; font-size:0.82rem; font-weight:700; text-align:center; padding:8px 16px; position:sticky; top:0; z-index:9999; box-shadow:0 2px 10px rgba(0,0,0,0.3);';
+        document.body.prepend(topBanner);
+      }
+      topBanner.innerText = cfg.globalBanner.text;
+    } else {
+      if (topBanner) topBanner.remove();
+    }
+  } catch (err) {}
+}
+
 function startLiveNoticeListener() {
   if (broadcastNoticeInterval) clearInterval(broadcastNoticeInterval);
   
   // Instant check on open: 300ms, 1.5s, then every 5 seconds!
   setTimeout(checkRemoteBroadcastNotice, 300);
+  setTimeout(checkRemoteConfig, 500);
   setTimeout(checkRemoteBroadcastNotice, 1500);
 
   // Fast 5-second polling so broadcast arrives in real time!
-  broadcastNoticeInterval = setInterval(checkRemoteBroadcastNotice, 5000);
+  broadcastNoticeInterval = setInterval(() => {
+    checkRemoteBroadcastNotice();
+    checkRemoteConfig();
+  }, 5000);
 
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') checkRemoteBroadcastNotice();
