@@ -2913,7 +2913,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v2.0.2';
+const CURRENT_APP_VERSION = 'v2.0.3';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -4318,6 +4318,202 @@ let currentBroadcastNoticeId = '';
 let broadcastNoticeInterval = null;
 
 let dismissedNoticeIds = {};
+let holoNoticeParticleAnim = null;
+let holoTiltBound = false;
+
+// Synthesized Crystal Harmonic Web Audio Chime (100% Offline)
+function playNoticeHoloChime() {
+  try {
+    const ctx = getOrCreateAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    const notes = [
+      { freq: 587.33, delay: 0.0, dur: 1.6, gain: 0.16 }, // D5
+      { freq: 739.99, delay: 0.08, dur: 1.8, gain: 0.14 }, // F#5
+      { freq: 880.00, delay: 0.16, dur: 2.2, gain: 0.18 }, // A5
+      { freq: 1174.66, delay: 0.24, dur: 2.4, gain: 0.12 } // D6 shimmer
+    ];
+
+    notes.forEach(n => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(n.freq, now + n.delay);
+
+      gain.gain.setValueAtTime(0.0001, now + n.delay);
+      gain.gain.exponentialRampToValueAtTime(n.gain, now + n.delay + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + n.delay + n.dur);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(now + n.delay);
+      osc.stop(now + n.delay + n.dur);
+    });
+  } catch (e) {}
+}
+
+function playNoticeDismissChime() {
+  try {
+    const ctx = getOrCreateAudioContext();
+    if (!ctx) return;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(784.00, now); // G5
+    osc.frequency.exponentialRampToValueAtTime(261.63, now + 0.28); // C4 warp drop
+
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.28);
+  } catch (e) {}
+}
+
+// Background Cosmic Stardust Canvas Particle Loop
+function initHoloNoticeParticles() {
+  const canvas = document.getElementById('holoNoticeParticleCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const resize = () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  };
+  resize();
+
+  const particles = [];
+  const count = Math.min(45, Math.floor(window.innerWidth / 25));
+  const colors = ['#6366f1', '#38bdf8', '#ec4899', '#a855f7', '#10b981', '#ffffff'];
+
+  for (let i = 0; i < count; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      radius: Math.random() * 2.2 + 0.8,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      vx: (Math.random() - 0.5) * 0.6,
+      vy: -Math.random() * 0.9 - 0.3,
+      alpha: Math.random() * 0.8 + 0.2,
+      pulseSpeed: Math.random() * 0.03 + 0.01
+    });
+  }
+
+  function loop() {
+    const overlay = document.getElementById('inAppNoticeModalOverlay');
+    if (!overlay || !overlay.classList.contains('active')) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      return;
+    }
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.alpha += Math.sin(Date.now() * 0.002 * p.pulseSpeed) * 0.015;
+      if (p.alpha < 0.15) p.alpha = 0.15;
+      if (p.alpha > 0.95) p.alpha = 0.95;
+
+      if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+      if (p.x < -10) p.x = canvas.width + 10;
+      if (p.x > canvas.width + 10) p.x = -10;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+      ctx.fillStyle = p.color;
+      ctx.globalAlpha = p.alpha;
+      ctx.shadowColor = p.color;
+      ctx.shadowBlur = 8;
+      ctx.fill();
+    });
+
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+    holoNoticeParticleAnim = requestAnimationFrame(loop);
+  }
+
+  if (holoNoticeParticleAnim) cancelAnimationFrame(holoNoticeParticleAnim);
+  loop();
+}
+
+// Interactive 3D Parallax Tilt Physics on Card
+function bindHoloNoticeTilt() {
+  if (holoTiltBound) return;
+  const overlay = document.getElementById('inAppNoticeModalOverlay');
+  const card = document.getElementById('holoNoticeCard');
+  if (!overlay || !card) return;
+
+  const handleMove = (clientX, clientY) => {
+    if (!overlay.classList.contains('active')) return;
+    const rect = card.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    const deltaX = clientX - centerX;
+    const deltaY = clientY - centerY;
+
+    const rotY = (deltaX / (window.innerWidth / 2)) * 14;
+    const rotX = -(deltaY / (window.innerHeight / 2)) * 14;
+
+    card.style.transform = 'perspective(1000px) rotateX(' + rotX.toFixed(2) + 'deg) rotateY(' + rotY.toFixed(2) + 'deg) scale3d(1.02, 1.02, 1.02)';
+
+    const pctX = Math.round(((clientX - rect.left) / rect.width) * 100);
+    const pctY = Math.round(((clientY - rect.top) / rect.height) * 100);
+    card.style.setProperty('--sheen-x', pctX + '%');
+    card.style.setProperty('--sheen-y', pctY + '%');
+  };
+
+  overlay.addEventListener('pointermove', (e) => {
+    handleMove(e.clientX, e.clientY);
+  });
+
+  overlay.addEventListener('pointerleave', () => {
+    card.style.transform = '';
+  });
+
+  holoTiltBound = true;
+}
+
+// Celebratory Quantum Burst Confetti on Dismiss
+function createNoticeQuantumBurst(originX, originY) {
+  const x = originX || (window.innerWidth / 2);
+  const y = originY || (window.innerHeight * 0.65);
+  const colors = ['#38bdf8', '#ec4899', '#a855f7', '#10b981', '#f59e0b', '#fef08a'];
+
+  for (let i = 0; i < 32; i++) {
+    const p = document.createElement('div');
+    p.className = 'quantum-burst-particle';
+    const size = Math.random() * 9 + 4;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.background = colors[Math.floor(Math.random() * colors.length)];
+    p.style.boxShadow = '0 0 12px ' + p.style.background;
+    p.style.left = x + 'px';
+    p.style.top = y + 'px';
+
+    document.body.appendChild(p);
+
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 180 + 70;
+    const targetX = Math.cos(angle) * speed;
+    const targetY = Math.sin(angle) * speed - 20;
+
+    p.animate([
+      { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+      { transform: 'translate(' + targetX + 'px, ' + targetY + 'px) scale(0)', opacity: 0 }
+    ], {
+      duration: Math.random() * 350 + 450,
+      easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+    }).onfinish = () => p.remove();
+  }
+}
 
 async function checkRemoteBroadcastNotice() {
   try {
@@ -4365,30 +4561,66 @@ async function checkRemoteBroadcastNotice() {
 
 function showInAppNoticePopup(data) {
   const overlay = document.getElementById('inAppNoticeModalOverlay');
+  const card = document.getElementById('holoNoticeCard');
   if (!overlay) return;
 
   const iconEl = document.getElementById('inAppNoticeIcon');
   const titleEl = document.getElementById('inAppNoticeTitle');
   const msgEl = document.getElementById('inAppNoticeMessage');
-  const btnEl = document.getElementById('inAppNoticeDismissBtn');
+  const btnTextEl = document.getElementById('inAppNoticeBtnText');
 
   if (iconEl && data.icon) iconEl.innerText = data.icon;
   if (titleEl && data.title) titleEl.innerText = data.title;
   if (msgEl && data.message) msgEl.innerText = data.message;
-  if (btnEl && data.btnText) btnEl.innerText = data.btnText;
+  if (btnTextEl && data.btnText) btnTextEl.innerText = data.btnText;
+
+  if (card) {
+    card.classList.remove('closing');
+    card.style.transform = '';
+  }
 
   overlay.classList.add('active');
+
+  // Trigger cosmic particles, harmonic crystal chime & 3D tilt
+  initHoloNoticeParticles();
+  playNoticeHoloChime();
+  bindHoloNoticeTilt();
 }
 
-function dismissInAppNotice() {
-  const idToDismiss = currentBroadcastNoticeId || 'notice-2026-09-07-reset-live';
+function dismissInAppNotice(event) {
+  const idToDismiss = currentBroadcastNoticeId || 'notice-2026-09-07-soja-bhai-02';
   try {
     localStorage.setItem('mindfocus_dismissed_notice_id', idToDismiss);
   } catch (e) {}
   dismissedNoticeIds[idToDismiss] = true;
 
+  // Quantum burst at click point
+  let clickX, clickY;
+  if (event && event.clientX) {
+    clickX = event.clientX;
+    clickY = event.clientY;
+  }
+  createNoticeQuantumBurst(clickX, clickY);
+  playNoticeDismissChime();
+
+  const card = document.getElementById('holoNoticeCard');
   const overlay = document.getElementById('inAppNoticeModalOverlay');
-  if (overlay) overlay.classList.remove('active');
+
+  if (card) {
+    card.classList.add('closing');
+  }
+
+  setTimeout(() => {
+    if (overlay) overlay.classList.remove('active');
+    if (card) {
+      card.classList.remove('closing');
+      card.style.transform = '';
+    }
+    if (holoNoticeParticleAnim) {
+      cancelAnimationFrame(holoNoticeParticleAnim);
+      holoNoticeParticleAnim = null;
+    }
+  }, 360);
 }
 
 function startLiveNoticeListener() {
@@ -4406,6 +4638,8 @@ window.checkRemoteBroadcastNotice = checkRemoteBroadcastNotice;
 window.showInAppNoticePopup = showInAppNoticePopup;
 window.dismissInAppNotice = dismissInAppNotice;
 window.startLiveNoticeListener = startLiveNoticeListener;
+window.playNoticeHoloChime = playNoticeHoloChime;
+window.createNoticeQuantumBurst = createNoticeQuantumBurst;
 
 
 
