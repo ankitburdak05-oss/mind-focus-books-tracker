@@ -89,9 +89,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v3.0.6
-        name: "Mind Focus Books Tracker v3.0.6 - Animated Cyber Glass Settings Studio Overhaul"
-        body: "Release v3.0.6: Animated Cyber Glass Settings Studio overhaul! Fixed touch responsiveness with native button action rows, 44px glowing neon gradient icon orbs, animated staggered card slide-ins, pulsing accent selection rings, and seamless in-place APK upgrade."
+        tag_name: v3.0.7
+        name: "Mind Focus Books Tracker v3.0.7 - Settings Cards Layout & Full Icon Visibility Fix"
+        body: "Release v3.0.7: Fixed settings cards collapsing issue! Converted modal scroll body to robust block layout with visible overflowing icons, 48px glowing icon badges, responsive theme studio, and guaranteed touch targets."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

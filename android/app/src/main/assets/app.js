@@ -2950,7 +2950,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.0.6';
+const CURRENT_APP_VERSION = 'v3.0.7';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
