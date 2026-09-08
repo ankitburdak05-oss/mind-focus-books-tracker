@@ -92,7 +92,18 @@
   </header>
 
   <!-- Main Container -->
-  <main class="main-container">
+  <main class="main-container" id="mainContainer">
+
+    <!-- 4D Elastic Pull-to-Refresh Indicator -->
+    <div class="pull-to-refresh-indicator" id="pullToRefreshIndicator">
+      <div class="ptr-spinner-orb">
+        <span class="ptr-compass-icon">🧭</span>
+      </div>
+      <span class="ptr-label" id="ptrLabel">Pull down to refresh library...</span>
+    </div>
+
+    <!-- Golden Light Sweep Beam Overlay -->
+    <div class="golden-sweep-overlay" id="goldenSweepOverlay"></div>
 
     <!-- Luxury Showcase: Now Reading Hero Spotlight -->
     <section id="nowReadingHeroSection"></section>
@@ -175,6 +186,33 @@
           <span class="sdt-label">⚙️ Filter &amp; View Options</span>
           <span class="sdt-arrow" id="sdtArrowIcon">▼</span>
         </button>
+      </div>
+
+      <!-- 4D Horizontal Swipeable Category Carousel -->
+      <div class="swipeable-category-track-wrap">
+        <div class="swipeable-category-track" id="swipeableCategoryTrack">
+          <button type="button" class="category-pill-chip active" data-cat="ALL" onclick="selectCategoryChip('ALL', this)">
+            <span class="chip-emoji">✨</span> All Books
+          </button>
+          <button type="button" class="category-pill-chip" data-cat="Focus" onclick="selectCategoryChip('Focus', this)">
+            <span class="chip-emoji">⚡</span> Focus &amp; Mind
+          </button>
+          <button type="button" class="category-pill-chip" data-cat="Habits" onclick="selectCategoryChip('Habits', this)">
+            <span class="chip-emoji">🔥</span> Habits &amp; Routine
+          </button>
+          <button type="button" class="category-pill-chip" data-cat="Wealth" onclick="selectCategoryChip('Wealth', this)">
+            <span class="chip-emoji">💰</span> Wealth &amp; Money
+          </button>
+          <button type="button" class="category-pill-chip" data-cat="Psychology" onclick="selectCategoryChip('Psychology', this)">
+            <span class="chip-emoji">🧠</span> Psychology
+          </button>
+          <button type="button" class="category-pill-chip" data-cat="Philosophy" onclick="selectCategoryChip('Philosophy', this)">
+            <span class="chip-emoji">🏛️</span> Philosophy &amp; Stoic
+          </button>
+          <button type="button" class="category-pill-chip" data-cat="Biographies" onclick="selectCategoryChip('Biographies', this)">
+            <span class="chip-emoji">👑</span> Biographies
+          </button>
+        </div>
       </div>
 
       <!-- Collapsible Options Drawer -->
@@ -874,8 +912,32 @@
     </div>
   </div>
 
-  <!-- Bottom Navigation Dock (One-Hand Thumb Controls) -->
+  <!-- 4D Floating Dynamic Mini-Reading Sticky Capsule (Spotify-style) -->
+  <div class="floating-mini-reading-capsule" id="floatingMiniCapsule" onclick="handleMiniCapsuleClick(event)">
+    <div class="mini-capsule-cover-wrap">
+      <img id="miniCapsuleCoverImg" src="icon-192.png" alt="Cover" class="mini-capsule-cover">
+      <div class="mini-capsule-pulse-ring"></div>
+    </div>
+    <div class="mini-capsule-meta">
+      <div class="mini-capsule-now">NOW READING</div>
+      <div class="mini-capsule-title" id="miniCapsuleTitle">Select a book to track</div>
+      <div class="mini-capsule-progress-bar">
+        <div class="mini-capsule-progress-fill" id="miniCapsuleProgressFill" style="width: 0%;"></div>
+      </div>
+    </div>
+    <div class="mini-capsule-actions">
+      <button type="button" class="mini-capsule-step-btn" onclick="event.stopPropagation(); quickStepActiveBook(1)" title="Quick +1 Page Read">
+        +1p
+      </button>
+      <button type="button" class="mini-capsule-expand-btn" onclick="event.stopPropagation(); openActiveBookSheet()" title="Expand Book Sheet">
+        📖
+      </button>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Dock (One-Hand Thumb Controls with 4D Sliding Pill) -->
   <nav class="bottom-nav-dock" id="bottomNavDock">
+    <div class="dock-sliding-pill" id="dockSlidingPill"></div>
     <button type="button" class="dock-item active" id="dockHomeBtn" onclick="switchBottomTab('home')">
       <span class="dock-icon">🏠</span>
       <span class="dock-label">Library</span>
@@ -1080,70 +1142,95 @@
           Play soothing background ambient sounds to block distractions and read with deep focus. 100% offline synthesis.
         </p>
 
-        <!-- Sound Choices Grid -->
-        <div class="ambience-sound-grid">
-          <div class="ambience-card active" id="ambienceRainCard" onclick="selectAmbienceTrack('rain')">
-            <span class="ambience-icon">🌧️</span>
-            <span class="ambience-name">Gentle Rain</span>
-            <span class="ambience-desc">Calming raindrops</span>
-            <div class="ambience-playing-indicator">
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
+        <!-- 4D Spatial Soundscape Mixer & Presets -->
+        <div class="spatial-mixer-console">
+          <!-- Real-Time Waveform / EQ Visualizer -->
+          <div class="spatial-eq-card">
+            <div class="spatial-eq-header">
+              <span class="spatial-eq-tag">🎧 4D SPATIAL SOUND ENGINE</span>
+              <span class="spatial-eq-status" id="spatialEqStatus">OFFLINE SYNTHESIS</span>
+            </div>
+            <canvas id="spatialEqCanvas" class="spatial-eq-canvas" width="440" height="64"></canvas>
+          </div>
+
+          <!-- Master Controls -->
+          <div class="mixer-master-bar">
+            <div class="master-vol-info">
+              <span class="master-label">Master Volume</span>
+              <span class="master-val" id="masterVolumeLabel">65%</span>
+            </div>
+            <input type="range" class="mixer-fader master-fader" id="masterVolumeSlider" min="0" max="100" value="65" oninput="setMasterAmbienceVolume(this.value)">
+          </div>
+
+          <!-- 4-Track DJ Multi-Channel Mixer Faders -->
+          <div class="mixer-channels-grid">
+            <!-- Channel 1: Rain -->
+            <div class="mixer-channel-card" id="channelCardRain">
+              <div class="channel-header">
+                <span class="channel-icon">🌧️</span>
+                <span class="channel-name">Rainfall</span>
+                <span class="channel-val" id="chanValRain">50%</span>
+              </div>
+              <div class="channel-fader-wrap">
+                <input type="range" class="mixer-fader" id="channelRainSlider" min="0" max="100" value="50" oninput="setChannelVolume('rain', this.value)">
+              </div>
+              <button type="button" class="channel-mute-btn" id="muteBtnRain" onclick="toggleChannelMute('rain')">Mute</button>
+            </div>
+
+            <!-- Channel 2: Fireplace -->
+            <div class="mixer-channel-card" id="channelCardFire">
+              <div class="channel-header">
+                <span class="channel-icon">🔥</span>
+                <span class="channel-name">Fireplace</span>
+                <span class="channel-val" id="chanValFire">30%</span>
+              </div>
+              <div class="channel-fader-wrap">
+                <input type="range" class="mixer-fader" id="channelFireSlider" min="0" max="100" value="30" oninput="setChannelVolume('fire', this.value)">
+              </div>
+              <button type="button" class="channel-mute-btn" id="muteBtnFire" onclick="toggleChannelMute('fire')">Mute</button>
+            </div>
+
+            <!-- Channel 3: Ocean Waves -->
+            <div class="mixer-channel-card" id="channelCardWaves">
+              <div class="channel-header">
+                <span class="channel-icon">🌊</span>
+                <span class="channel-name">Waves</span>
+                <span class="channel-val" id="chanValWaves">20%</span>
+              </div>
+              <div class="channel-fader-wrap">
+                <input type="range" class="mixer-fader" id="channelWavesSlider" min="0" max="100" value="20" oninput="setChannelVolume('waves', this.value)">
+              </div>
+              <button type="button" class="channel-mute-btn" id="muteBtnWaves" onclick="toggleChannelMute('waves')">Mute</button>
+            </div>
+
+            <!-- Channel 4: Pine Forest -->
+            <div class="mixer-channel-card" id="channelCardForest">
+              <div class="channel-header">
+                <span class="channel-icon">🌲</span>
+                <span class="channel-name">Forest</span>
+                <span class="channel-val" id="chanValForest">0%</span>
+              </div>
+              <div class="channel-fader-wrap">
+                <input type="range" class="mixer-fader" id="channelForestSlider" min="0" max="100" value="0" oninput="setChannelVolume('forest', this.value)">
+              </div>
+              <button type="button" class="channel-mute-btn" id="muteBtnForest" onclick="toggleChannelMute('forest')">Mute</button>
             </div>
           </div>
 
-          <div class="ambience-card" id="ambienceForestCard" onclick="selectAmbienceTrack('forest')">
-            <span class="ambience-icon">🌲</span>
-            <span class="ambience-name">Forest Breeze</span>
-            <span class="ambience-desc">Rustling trees & wind</span>
-            <div class="ambience-playing-indicator">
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-            </div>
+          <!-- Quick Presets -->
+          <div class="mixer-presets-row">
+            <span class="preset-label">Quick 4D Scenes:</span>
+            <button type="button" class="preset-chip active" onclick="applyMixerPreset('rain_storm')">⛈️ Thunder Storm</button>
+            <button type="button" class="preset-chip" onclick="applyMixerPreset('cozy_cabin')">🏡 Cozy Fire Cabin</button>
+            <button type="button" class="preset-chip" onclick="applyMixerPreset('coastal_zen')">🌅 Coastal Zen</button>
+            <button type="button" class="preset-chip" onclick="applyMixerPreset('deep_forest')">🍃 Deep Woods</button>
           </div>
-
-          <div class="ambience-card" id="ambienceWavesCard" onclick="selectAmbienceTrack('waves')">
-            <span class="ambience-icon">🌊</span>
-            <span class="ambience-name">Alpha Waves</span>
-            <span class="ambience-desc">432Hz deep focus</span>
-            <div class="ambience-playing-indicator">
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-            </div>
-          </div>
-
-          <div class="ambience-card" id="ambienceCafeCard" onclick="selectAmbienceTrack('cafe')">
-            <span class="ambience-icon">☕</span>
-            <span class="ambience-name">Cozy Cafe</span>
-            <span class="ambience-desc">Warm ambient chatter</span>
-            <div class="ambience-playing-indicator">
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-              <span class="sound-bar"></span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Volume Controller -->
-        <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:10px; padding:0.85rem 1rem;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
-            <span style="font-size:0.85rem; font-weight:700; color:var(--text-primary);">🔊 Volume Level:</span>
-            <span id="ambienceVolumeLabel" style="font-size:0.85rem; font-weight:700; color:#10b981;">60%</span>
-          </div>
-          <input type="range" class="ambience-volume-slider" id="ambienceVolumeSlider" min="0" max="100" value="60" oninput="setAmbienceVolume(this.value)">
         </div>
       </div>
       <div class="modal-footer" style="justify-content:space-between;">
         <button type="button" class="btn" onclick="closeAmbienceModal()">Close</button>
         <button type="button" class="btn btn-primary" id="ambienceTogglePlayBtn" onclick="toggleAmbiencePlayback()" style="background:#10b981; border-color:#10b981; font-weight:700;">
-          ▶️ Play Rain
+          ▶️ Play 4D Ambience
         </button>
       </div>
     </div>
@@ -1153,13 +1240,50 @@
   <div class="modal-overlay" id="streakModalOverlay">
     <div class="modal-content" style="max-width:520px;">
       <div class="modal-header">
-        <h3 class="modal-title">🔥 Reading Streak & Badges</h3>
+        <h3 class="modal-title">🔥 4D Reading Rings &amp; Streak Sanctuary</h3>
         <button class="modal-close" onclick="closeStreakModal()">&times;</button>
       </div>
-      <div class="modal-body" style="gap:1rem;">
+      <div class="modal-body" style="gap:1.25rem;">
+        <!-- Apple Watch Style 3-Ring Activity Section -->
+        <div class="activity-rings-card">
+          <div class="rings-canvas-wrapper">
+            <canvas id="activityRingsCanvas" width="180" height="180"></canvas>
+            <div class="rings-center-stat">
+              <span class="rings-flame-icon">🔥</span>
+              <span class="rings-center-val" id="ringsStreakCountText">1d</span>
+            </div>
+          </div>
+          <div class="rings-legend-list">
+            <div class="ring-legend-item ring-pages">
+              <span class="legend-dot dot-coral"></span>
+              <div class="legend-info">
+                <span class="legend-title">Daily Pages</span>
+                <span class="legend-sub" id="ringPagesStat">15 / 25 pages</span>
+              </div>
+              <span class="legend-pct" id="ringPagesPct">60%</span>
+            </div>
+            <div class="ring-legend-item ring-minutes">
+              <span class="legend-dot dot-emerald"></span>
+              <div class="legend-info">
+                <span class="legend-title">Focus Time</span>
+                <span class="legend-sub" id="ringMinutesStat">25 / 30 mins</span>
+              </div>
+              <span class="legend-pct" id="ringMinutesPct">83%</span>
+            </div>
+            <div class="ring-legend-item ring-habit">
+              <span class="legend-dot dot-cyan"></span>
+              <div class="legend-info">
+                <span class="legend-title">Habit Consistency</span>
+                <span class="legend-sub" id="ringHabitStat">5 / 7 days</span>
+              </div>
+              <span class="legend-pct" id="ringHabitPct">71%</span>
+            </div>
+          </div>
+        </div>
+
         <!-- Hero Flame Card -->
         <div class="streak-hero-card">
-          <div class="streak-flame-large">🔥</div>
+          <div class="streak-flame-large" id="streakHeroFlame">🔥</div>
           <div class="streak-count-title" id="streakModalCountTitle">1 Day Reading Streak!</div>
           <div class="streak-subtitle" id="streakModalSubtitle">Awesome start! Read everyday to build an unbreakable reading habit.</div>
           

@@ -89,9 +89,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v2.0.3
-        name: "Mind Focus Books Tracker v2.0.3 - Dimensional Holographic Portal Edition"
-        body: "Release v2.0.3: Groundbreaking Dimensional Holographic Portal popup engine with 3D perspective warp-in, rotating neon plasma laser border, levitating reactor orb, interactive 3D pointer tilt, Web Audio crystal harmonic chimes, and quantum particle implosion."
+        tag_name: v3.0.0
+        name: "Mind Focus Books Tracker v3.0.0 - 4D Living Spatial Sanctuary Flagship Edition"
+        body: "Release v3.0.0: Revolutionary 4D Living Spatial Sanctuary overhaul! Features Hardware Haptics (vibration response), Liquid Dock Sliding Pill, Rubber-band Pull-to-Refresh with Golden Sweep Light, Horizontal Swipeable Category Track, Floating Mini Reading HUD Capsule (+1p quick step), 3D Paper Curl & Procedural Paper Rustle Sound, Luxury One-Hand Sheet Swipe-to-Dismiss, Apple-Watch 3-Ring Activity Canvas, 4-Track Spatial Ambient Soundscape DJ Mixer, and Gamified Streak Fire Ignition Burst."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

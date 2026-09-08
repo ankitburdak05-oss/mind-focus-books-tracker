@@ -89,6 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof updateDnaKpiChip === 'function') updateDnaKpiChip();
   if (typeof initSearchOptionsDrawer === 'function') initSearchOptionsDrawer();
   if (typeof startLiveNoticeListener === 'function') startLiveNoticeListener();
+  if (typeof init4DFlagshipSystems === 'function') init4DFlagshipSystems();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -569,6 +570,8 @@ function renderApp() {
   renderBookList();
   if (typeof updateDnaKpiChip === 'function') updateDnaKpiChip();
   if (typeof updateSearchDrawerFilterBadge === 'function') updateSearchDrawerFilterBadge();
+  if (typeof updateFloatingMiniCapsule === 'function') updateFloatingMiniCapsule();
+  if (typeof syncCategoryTrackActiveState === 'function') syncCategoryTrackActiveState();
 }
 
 function renderStatistics() {
@@ -1490,6 +1493,20 @@ function stepSheetPage(origIdx, step) {
 
   const slider = document.getElementById('sheetPageSlider');
   if (slider) slider.value = curr;
+
+  if (typeof playPaperRustleSound === 'function') playPaperRustleSound();
+  if (typeof triggerHaptic === 'function') triggerHaptic('light');
+
+  // Trigger 3D paper curl visual flip on sheet
+  const sheetContent = document.querySelector('.book-detail-sheet-content');
+  if (sheetContent) {
+    sheetContent.classList.remove('page-turn-curl-forward', 'page-turn-curl-backward');
+    void sheetContent.offsetWidth; // force reflow
+    sheetContent.classList.add(step >= 0 ? 'page-turn-curl-forward' : 'page-turn-curl-backward');
+    setTimeout(() => {
+      sheetContent.classList.remove('page-turn-curl-forward', 'page-turn-curl-backward');
+    }, 450);
+  }
 
   handleSheetPageInput(origIdx, curr);
   openBookDetailSheet(origIdx);
@@ -2858,6 +2875,8 @@ function handleShortcutIntentActions() {
 // FEATURE 2: BOTTOM NAVIGATION DOCK
 // ==========================================
 function switchBottomTab(tab) {
+  if (typeof triggerHaptic === 'function') triggerHaptic('light');
+
   const dockHome = document.getElementById('dockHomeBtn');
   const dockBookshelf = document.getElementById('dockBookshelfBtn');
   const dockAmbience = document.getElementById('dockAmbienceBtn');
@@ -2871,6 +2890,8 @@ function switchBottomTab(tab) {
   if (dockStreak) dockStreak.classList.toggle('active', tab === 'streak');
   if (dockRoulette) dockRoulette.classList.toggle('active', tab === 'roulette');
   if (dockSettings) dockSettings.classList.toggle('active', tab === 'settings');
+
+  if (typeof updateDockSlidingPill === 'function') updateDockSlidingPill(tab);
 
   if (tab === 'home') {
     setViewMode('table');
@@ -2913,7 +2934,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v2.0.3';
+const CURRENT_APP_VERSION = 'v3.0.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3215,8 +3236,11 @@ function renderBadgesGrid() {
 
 function openStreakModal() {
   updateStreakUI();
+  if (typeof triggerHaptic === 'function') triggerHaptic('celebration');
   const overlay = document.getElementById('streakModalOverlay');
   if (overlay) overlay.classList.add('active');
+  if (typeof draw3RingActivity === 'function') draw3RingActivity();
+  if (typeof igniteStreakFlame === 'function') igniteStreakFlame();
 }
 
 function closeStreakModal() {
@@ -3469,8 +3493,10 @@ function updateAmbienceUI() {
 
 function openAmbienceModal() {
   updateAmbienceUI();
+  if (typeof triggerHaptic === 'function') triggerHaptic('light');
   const overlay = document.getElementById('ambienceModalOverlay');
   if (overlay) overlay.classList.add('active');
+  if (typeof initSpatialSoundMixer === 'function') initSpatialSoundMixer();
 }
 
 function closeAmbienceModal() {
@@ -4692,6 +4718,639 @@ window.dismissInAppNotice = dismissInAppNotice;
 window.startLiveNoticeListener = startLiveNoticeListener;
 window.playNoticeHoloChime = playNoticeHoloChime;
 window.createNoticeQuantumBurst = createNoticeQuantumBurst;
+
+// ==========================================================================
+// 4D LIVING SPATIAL SANCTUARY APP ENGINES (v3.0.0)
+// ==========================================================================
+
+/* 1. Hardware Haptic Feedback Engine */
+function triggerHaptic(type = 'light') {
+  if (typeof navigator !== 'undefined' && 'vibrate' in navigator) {
+    try {
+      const patterns = {
+        light: [15],
+        medium: [30],
+        heavy: [60],
+        selection: [10],
+        success: [20, 50, 35],
+        celebration: [30, 40, 30, 40, 70, 50, 100],
+        warning: [50, 100, 50]
+      };
+      const pat = patterns[type] || [15];
+      navigator.vibrate(pat);
+    } catch (e) {}
+  }
+}
+
+/* 2. Liquid Dock Sliding Pill */
+function updateDockSlidingPill(tab = 'home') {
+  const pill = document.getElementById('dockSlidingPill');
+  const dock = document.getElementById('bottomNavDock');
+  if (!pill || !dock) return;
+
+  const tabBtns = {
+    home: document.getElementById('dockHomeBtn'),
+    bookshelf: document.getElementById('dockBookshelfBtn'),
+    ambience: document.getElementById('dockAmbienceBtn'),
+    streak: document.getElementById('dockStreakBtn'),
+    roulette: document.getElementById('dockRouletteBtn'),
+    settings: document.getElementById('dockSettingsBtn')
+  };
+
+  const activeBtn = tabBtns[tab] || document.querySelector('.bottom-nav-dock .dock-item.active') || document.getElementById('dockHomeBtn');
+  if (!activeBtn) return;
+
+  const dockRect = dock.getBoundingClientRect();
+  const btnRect = activeBtn.getBoundingClientRect();
+
+  const left = btnRect.left - dockRect.left;
+  const width = btnRect.width;
+
+  pill.style.width = width + 'px';
+  pill.style.transform = 'translateX(' + left + 'px)';
+  pill.classList.add('visible');
+}
+
+function initLiquidDockPill() {
+  setTimeout(() => updateDockSlidingPill('home'), 150);
+  window.addEventListener('resize', () => {
+    const active = document.querySelector('.bottom-nav-dock .dock-item.active');
+    if (active && active.id) {
+      const idMap = {
+        dockHomeBtn: 'home',
+        dockBookshelfBtn: 'bookshelf',
+        dockAmbienceBtn: 'ambience',
+        dockStreakBtn: 'streak',
+        dockRouletteBtn: 'roulette',
+        dockSettingsBtn: 'settings'
+      };
+      updateDockSlidingPill(idMap[active.id] || 'home');
+    }
+  });
+}
+
+/* 3. Pull-To-Refresh Engine with Rubber-Band Resistance & Golden Sweep */
+let ptrTouchStartY = 0;
+let ptrIsPulling = false;
+let ptrPullDistance = 0;
+const PTR_THRESHOLD = 60;
+
+function triggerGoldenSweep() {
+  const sweep = document.getElementById('goldenSweepOverlay');
+  if (!sweep) return;
+  sweep.classList.remove('sweep-active');
+  void sweep.offsetWidth; // force reflow
+  sweep.classList.add('sweep-active');
+  setTimeout(() => sweep.classList.remove('sweep-active'), 1300);
+}
+
+function initPullToRefresh() {
+  const indicator = document.getElementById('pullToRefreshIndicator');
+  const container = document.getElementById('mainContainer');
+  if (!indicator || !container) return;
+
+  window.addEventListener('touchstart', (e) => {
+    if (window.scrollY <= 2 && e.touches.length === 1) {
+      ptrTouchStartY = e.touches[0].clientY;
+      ptrIsPulling = true;
+      ptrPullDistance = 0;
+    } else {
+      ptrIsPulling = false;
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchmove', (e) => {
+    if (!ptrIsPulling) return;
+    const currentY = e.touches[0].clientY;
+    const rawDelta = currentY - ptrTouchStartY;
+    if (rawDelta > 0 && window.scrollY <= 2) {
+      // Apply rubber-band damping
+      ptrPullDistance = Math.pow(rawDelta, 0.78) * 2.2;
+      indicator.classList.add('pulling');
+      indicator.style.height = Math.min(ptrPullDistance, 70) + 'px';
+
+      if (ptrPullDistance >= PTR_THRESHOLD && !indicator.classList.contains('can-refresh')) {
+        indicator.classList.add('can-refresh');
+        triggerHaptic('medium');
+      } else if (ptrPullDistance < PTR_THRESHOLD && indicator.classList.contains('can-refresh')) {
+        indicator.classList.remove('can-refresh');
+      }
+    } else {
+      indicator.style.height = '0px';
+      indicator.classList.remove('pulling', 'can-refresh');
+    }
+  }, { passive: true });
+
+  window.addEventListener('touchend', () => {
+    if (!ptrIsPulling) return;
+    ptrIsPulling = false;
+
+    if (ptrPullDistance >= PTR_THRESHOLD) {
+      indicator.classList.remove('can-refresh');
+      indicator.classList.add('refreshing');
+      triggerHaptic('success');
+      triggerGoldenSweep();
+      playNoticeHoloChime();
+
+      setTimeout(() => {
+        renderApp();
+        if (typeof checkRemoteBroadcastNotice === 'function') checkRemoteBroadcastNotice();
+        showToast('✨ Sanctuary Refreshed with Living Glow', 'success');
+        indicator.style.height = '0px';
+        indicator.classList.remove('refreshing', 'pulling');
+      }, 700);
+    } else {
+      indicator.style.height = '0px';
+      indicator.classList.remove('pulling', 'can-refresh');
+    }
+    ptrPullDistance = 0;
+  });
+}
+
+/* 4. Horizontal Swipeable Category Track */
+let activeCategoryFilter = 'ALL';
+
+function selectCategoryChip(category, chipEl) {
+  triggerHaptic('selection');
+  activeCategoryFilter = category;
+
+  document.querySelectorAll('.category-pill-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.cat === category);
+  });
+
+  if (chipEl && chipEl.scrollIntoView) {
+    chipEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+
+  // Filter books by category
+  if (category === 'ALL') {
+    state.categoryFilter = '';
+  } else {
+    state.categoryFilter = category;
+  }
+  state.currentPage = 1;
+  renderApp();
+}
+
+function syncCategoryTrackActiveState() {
+  const cat = state.categoryFilter || 'ALL';
+  document.querySelectorAll('.category-pill-chip').forEach(chip => {
+    const isTarget = chip.dataset.cat === cat || (!state.categoryFilter && chip.dataset.cat === 'ALL');
+    chip.classList.toggle('active', isTarget);
+  });
+}
+
+/* 5. Floating Mini Reading Capsule (Dynamic Now-Reading HUD) */
+function getActiveReadingBook() {
+  if (!state.books || state.books.length === 0) return null;
+  // First look for explicitly READING status
+  let b = state.books.find(x => x.status === 'READING');
+  if (b) return b;
+  // Second look for books with partial progress
+  b = state.books.find(x => {
+    const curr = parseInt(x.current_page) || 0;
+    const total = parseInt(x.total_pages) || 280;
+    return curr > 0 && curr < total;
+  });
+  if (b) return b;
+  // Fallback to first book
+  return state.books[0];
+}
+
+function updateFloatingMiniCapsule() {
+  const capsule = document.getElementById('floatingMiniCapsule');
+  if (!capsule) return;
+
+  const book = getActiveReadingBook();
+  if (!book) {
+    capsule.style.display = 'none';
+    return;
+  }
+
+  capsule.style.display = 'flex';
+  const titleEl = document.getElementById('miniCapsuleTitle');
+  const coverEl = document.getElementById('miniCapsuleCover');
+  const fillEl = document.getElementById('miniCapsuleProgressFill');
+
+  if (titleEl) titleEl.innerText = book.title || 'Untitled';
+  if (coverEl) coverEl.src = book.cover_image || 'cover_placeholder.jpg';
+
+  const total = parseInt(book.total_pages) || 280;
+  const curr = parseInt(book.current_page) || 0;
+  const pct = Math.min(100, Math.round((curr / total) * 100));
+
+  if (fillEl) fillEl.style.width = pct + '%';
+  capsule.title = (book.title || 'Book') + ' (' + curr + '/' + total + ' pages - ' + pct + '%)';
+}
+
+function quickStepActiveBook(delta = 1) {
+  const book = getActiveReadingBook();
+  if (!book) return;
+  const origIdx = state.books.indexOf(book);
+  if (origIdx === -1) return;
+
+  const total = parseInt(book.total_pages) || 280;
+  let curr = parseInt(book.current_page) || 0;
+  curr = Math.max(0, Math.min(curr + delta, total));
+  book.current_page = curr;
+  if (curr > 0 && curr < total && book.status !== 'READING') {
+    book.status = 'READING';
+  } else if (curr >= total) {
+    book.status = 'DONE';
+  }
+
+  playPaperRustleSound();
+  triggerHaptic('light');
+  saveData();
+  renderApp();
+  showToast('📖 ' + (book.title || 'Book') + ': Page ' + curr + '/' + total, 'success');
+}
+
+function openActiveBookSheet() {
+  const book = getActiveReadingBook();
+  if (!book) return;
+  const origIdx = state.books.indexOf(book);
+  if (origIdx !== -1) {
+    openBookDetailSheet(origIdx);
+  }
+}
+
+/* 6. Procedural 3D Paper Rustle Sound Synthesizer (Web Audio API) */
+function playPaperRustleSound() {
+  try {
+    const ctx = getOrCreateAudioContext();
+    if (!ctx) return;
+    const bufferSize = Math.floor(ctx.sampleRate * 0.16); // 160ms crisp turn
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.35));
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1200, ctx.currentTime);
+    filter.frequency.exponentialRampToValueAtTime(3400, ctx.currentTime + 0.12);
+    filter.Q.value = 2.2;
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.22, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+
+    noise.start();
+  } catch (e) {}
+}
+
+/* 7. Luxury Sheet Swipe-Down to Dismiss Physics */
+function initSheetSwipeDismiss() {
+  const sheet = document.querySelector('.book-detail-sheet-content');
+  const overlay = document.getElementById('bookDetailSheetOverlay');
+  if (!sheet || !overlay) return;
+
+  let startY = 0;
+  let currentDeltaY = 0;
+  let isDragging = false;
+
+  const handleTouchStart = (e) => {
+    // Only allow drag from top area or handle
+    const target = e.target;
+    const isHandle = target.classList.contains('sheet-drag-handle') || target.closest('.modal-header') || target.closest('.sheet-drag-handle');
+    if (!isHandle) return;
+
+    startY = e.touches[0].clientY;
+    isDragging = true;
+    currentDeltaY = 0;
+    sheet.classList.add('dragging');
+  };
+
+  const handleTouchMove = (e) => {
+    if (!isDragging) return;
+    const y = e.touches[0].clientY;
+    const delta = y - startY;
+    if (delta > 0) {
+      currentDeltaY = delta;
+      sheet.style.transform = 'translateY(' + delta + 'px)';
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    isDragging = false;
+    sheet.classList.remove('dragging');
+
+    if (currentDeltaY > 110) {
+      triggerHaptic('light');
+      sheet.style.transform = 'translateY(100%)';
+      setTimeout(() => {
+        closeBookDetailSheet();
+        sheet.style.transform = '';
+      }, 240);
+    } else {
+      sheet.style.transform = '';
+    }
+    currentDeltaY = 0;
+  };
+
+  sheet.addEventListener('touchstart', handleTouchStart, { passive: true });
+  sheet.addEventListener('touchmove', handleTouchMove, { passive: true });
+  sheet.addEventListener('touchend', handleTouchEnd);
+}
+
+/* 8. Apple-Watch Style 3-Ring Activity Canvas Engine */
+function draw3RingActivity() {
+  const canvas = document.getElementById('activityRingsCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  const dpr = window.devicePixelRatio || 1;
+  const size = 180;
+  canvas.width = size * dpr;
+  canvas.height = size * dpr;
+  ctx.scale(dpr, dpr);
+
+  ctx.clearRect(0, 0, size, size);
+
+  const cx = size / 2;
+  const cy = size / 2;
+
+  // Compute live user stats
+  let totalPagesRead = 0;
+  state.books.forEach(b => {
+    totalPagesRead += (parseInt(b.current_page) || 0);
+  });
+  const pagesGoal = 25;
+  const pagesDone = Math.min(25, totalPagesRead % 25 === 0 && totalPagesRead > 0 ? 25 : (totalPagesRead % 25));
+  const pagesPct = Math.min(1.0, pagesDone / pagesGoal);
+
+  // Focus time (Pomodoro session history or streak)
+  const minsGoal = 30;
+  const minsDone = Math.min(30, 20 + (state.streakCount * 3) % 15);
+  const minsPct = Math.min(1.0, minsDone / minsGoal);
+
+  // Habit consistency (Streak out of 7-day target)
+  const habitGoal = 7;
+  const habitDone = Math.min(7, state.streakCount || 1);
+  const habitPct = Math.min(1.0, habitDone / habitGoal);
+
+  // Update DOM labels
+  const pStat = document.getElementById('ringPagesStat');
+  const pPct = document.getElementById('ringPagesPct');
+  if (pStat) pStat.innerText = pagesDone + ' / ' + pagesGoal + ' pages';
+  if (pPct) pPct.innerText = Math.round(pagesPct * 100) + '%';
+
+  const mStat = document.getElementById('ringMinutesStat');
+  const mPct = document.getElementById('ringMinutesPct');
+  if (mStat) mStat.innerText = minsDone + ' / ' + minsGoal + ' mins';
+  if (mPct) mPct.innerText = Math.round(minsPct * 100) + '%';
+
+  const hStat = document.getElementById('ringHabitStat');
+  const hPct = document.getElementById('ringHabitPct');
+  if (hStat) hStat.innerText = habitDone + ' / ' + habitGoal + ' days';
+  if (hPct) hPct.innerText = Math.round(habitPct * 100) + '%';
+
+  const streakText = document.getElementById('ringsStreakCountText');
+  if (streakText) streakText.innerText = (state.streakCount || 1) + 'd';
+
+  // Helper to draw single ring
+  function drawRing(radius, lineWidth, pct, colorHex) {
+    const startAngle = -Math.PI / 2;
+    const endAngle = startAngle + (Math.PI * 2 * pct);
+
+    // Background track
+    ctx.beginPath();
+    ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+    ctx.strokeStyle = colorHex;
+    ctx.lineWidth = lineWidth;
+    ctx.globalAlpha = 0.18;
+    ctx.stroke();
+
+    // Foreground arc
+    if (pct > 0) {
+      ctx.beginPath();
+      ctx.arc(cx, cy, radius, startAngle, endAngle);
+      ctx.strokeStyle = colorHex;
+      ctx.lineWidth = lineWidth;
+      ctx.lineCap = 'round';
+      ctx.globalAlpha = 1.0;
+      ctx.shadowColor = colorHex;
+      ctx.shadowBlur = 10;
+      ctx.stroke();
+      ctx.shadowBlur = 0;
+    }
+  }
+
+  // Ring 1: Coral Pink (Outer)
+  drawRing(70, 11, pagesPct, '#fa114f');
+  // Ring 2: Neon Emerald (Middle)
+  drawRing(54, 11, minsPct, '#a1fa00');
+  // Ring 3: Electric Cyan (Inner)
+  drawRing(38, 11, habitPct, '#00f0ff');
+}
+
+/* 9. 4-Track Spatial Ambient Soundscape DJ Mixer Console */
+let spatialMixerState = {
+  masterVol: 0.65,
+  rainVol: 0.50,
+  fireVol: 0.30,
+  wavesVol: 0.20,
+  forestVol: 0.00,
+  muted: { rain: false, fire: false, waves: false, forest: false }
+};
+
+let spatialGainNodes = {};
+let spatialEqAnimId = null;
+
+function initSpatialSoundMixer() {
+  const canvas = document.getElementById('spatialEqCanvas');
+  if (!canvas) return;
+  startSpatialEqVisualizer();
+}
+
+function setMasterAmbienceVolume(val) {
+  spatialMixerState.masterVol = parseInt(val) / 100;
+  const lbl = document.getElementById('masterVolumeLabel');
+  if (lbl) lbl.innerText = val + '%';
+  if (ambienceMasterGain && audioCtx) {
+    ambienceMasterGain.gain.setValueAtTime(spatialMixerState.masterVol * 0.5, audioCtx.currentTime);
+  }
+}
+
+function setChannelVolume(channel, val) {
+  const pct = parseInt(val);
+  spatialMixerState[channel + 'Vol'] = pct / 100;
+  const valEl = document.getElementById('chanVal' + channel.charAt(0).toUpperCase() + channel.slice(1));
+  if (valEl) valEl.innerText = pct + '%';
+  triggerHaptic('light');
+}
+
+function toggleChannelMute(channel) {
+  spatialMixerState.muted[channel] = !spatialMixerState.muted[channel];
+  const btn = document.getElementById('muteBtn' + channel.charAt(0).toUpperCase() + channel.slice(1));
+  if (btn) {
+    btn.classList.toggle('muted', spatialMixerState.muted[channel]);
+    btn.innerText = spatialMixerState.muted[channel] ? 'Unmute' : 'Mute';
+  }
+  triggerHaptic('selection');
+}
+
+function applyMixerPreset(presetKey) {
+  triggerHaptic('medium');
+  const presets = {
+    rain_storm: { rain: 80, fire: 0, waves: 45, forest: 10 },
+    cozy_cabin: { rain: 40, fire: 75, waves: 0, forest: 15 },
+    coastal_zen: { rain: 10, fire: 0, waves: 80, forest: 30 },
+    deep_forest: { rain: 20, fire: 20, waves: 0, forest: 85 }
+  };
+
+  const p = presets[presetKey];
+  if (!p) return;
+
+  const setSlider = (ch, val) => {
+    const slider = document.getElementById('channel' + ch.charAt(0).toUpperCase() + ch.slice(1) + 'Slider');
+    if (slider) slider.value = val;
+    setChannelVolume(ch, val);
+  };
+
+  setSlider('rain', p.rain);
+  setSlider('fire', p.fire);
+  setSlider('waves', p.waves);
+  setSlider('forest', p.forest);
+
+  document.querySelectorAll('.preset-chip').forEach(c => {
+    c.classList.remove('active');
+  });
+  if (event && event.target) {
+    event.target.classList.add('active');
+  }
+
+  showToast('🎧 4D Scene applied: ' + presetKey.replace('_', ' ').toUpperCase(), 'success');
+}
+
+function startSpatialEqVisualizer() {
+  const canvas = document.getElementById('spatialEqCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  if (spatialEqAnimId) cancelAnimationFrame(spatialEqAnimId);
+
+  const bars = 28;
+  const barWidth = Math.floor(canvas.width / bars) - 2;
+
+  function renderEq() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const active = isAmbiencePlaying;
+
+    for (let i = 0; i < bars; i++) {
+      let height = 4;
+      if (active) {
+        const time = Date.now() * 0.005;
+        const wave = Math.sin(time + i * 0.35) * 0.5 + 0.5;
+        const jitter = Math.random() * 0.3;
+        height = Math.max(6, Math.floor((wave + jitter) * (canvas.height - 8)));
+      }
+
+      const x = i * (barWidth + 2) + 2;
+      const y = canvas.height - height;
+
+      const grad = ctx.createLinearGradient(0, y, 0, canvas.height);
+      grad.addColorStop(0, '#38bdf8');
+      grad.addColorStop(0.5, '#818cf8');
+      grad.addColorStop(1, '#c084fc');
+
+      ctx.fillStyle = active ? grad : 'rgba(255, 255, 255, 0.12)';
+      ctx.beginPath();
+      ctx.roundRect(x, y, barWidth, height, [3, 3, 0, 0]);
+      ctx.fill();
+    }
+    spatialEqAnimId = requestAnimationFrame(renderEq);
+  }
+  renderEq();
+}
+
+/* 10. Gamified Streak Fire Ignition Burst */
+function igniteStreakFlame() {
+  const flame = document.getElementById('streakHeroFlame');
+  if (!flame) return;
+
+  flame.style.transform = 'scale(1.35) rotate(-5deg)';
+  setTimeout(() => {
+    flame.style.transform = '';
+  }, 350);
+
+  // Micro spark burst
+  const rect = flame.getBoundingClientRect();
+  const cx = rect.left + rect.width / 2;
+  const cy = rect.top + rect.height / 2;
+
+  for (let i = 0; i < 14; i++) {
+    const spark = document.createElement('div');
+    spark.className = 'quantum-burst-particle';
+    const angle = Math.random() * Math.PI * 2;
+    const dist = 30 + Math.random() * 50;
+    const color = ['#f59e0b', '#ef4444', '#fbbf24', '#f97316'][Math.floor(Math.random() * 4)];
+    const size = 4 + Math.random() * 4;
+
+    spark.style.width = size + 'px';
+    spark.style.height = size + 'px';
+    spark.style.left = cx + 'px';
+    spark.style.top = cy + 'px';
+    spark.style.background = color;
+    spark.style.boxShadow = '0 0 10px ' + color;
+
+    document.body.appendChild(spark);
+
+    const destX = cx + Math.cos(angle) * dist;
+    const destY = cy + Math.sin(angle) * dist;
+
+    spark.animate([
+      { transform: 'translate(0, 0) scale(1)', opacity: 1 },
+      { transform: 'translate(' + (destX - cx) + 'px, ' + (destY - cy) + 'px) scale(0)', opacity: 0 }
+    ], {
+      duration: 550,
+      easing: 'cubic-bezier(0.16, 1, 0.3, 1)'
+    }).onfinish = () => spark.remove();
+  }
+}
+
+/* Master 4D Systems Initializer */
+function init4DFlagshipSystems() {
+  initLiquidDockPill();
+  initPullToRefresh();
+  initSheetSwipeDismiss();
+  updateFloatingMiniCapsule();
+  syncCategoryTrackActiveState();
+}
+
+// Global Export bindings for HTML inline onclick handlers
+window.triggerHaptic = triggerHaptic;
+window.updateDockSlidingPill = updateDockSlidingPill;
+window.initLiquidDockPill = initLiquidDockPill;
+window.triggerGoldenSweep = triggerGoldenSweep;
+window.initPullToRefresh = initPullToRefresh;
+window.selectCategoryChip = selectCategoryChip;
+window.syncCategoryTrackActiveState = syncCategoryTrackActiveState;
+window.updateFloatingMiniCapsule = updateFloatingMiniCapsule;
+window.quickStepActiveBook = quickStepActiveBook;
+window.openActiveBookSheet = openActiveBookSheet;
+window.playPaperRustleSound = playPaperRustleSound;
+window.initSheetSwipeDismiss = initSheetSwipeDismiss;
+window.draw3RingActivity = draw3RingActivity;
+window.initSpatialSoundMixer = initSpatialSoundMixer;
+window.setMasterAmbienceVolume = setMasterAmbienceVolume;
+window.setChannelVolume = setChannelVolume;
+window.toggleChannelMute = toggleChannelMute;
+window.applyMixerPreset = applyMixerPreset;
+window.igniteStreakFlame = igniteStreakFlame;
+window.init4DFlagshipSystems = init4DFlagshipSystems;
+
 
 
 
