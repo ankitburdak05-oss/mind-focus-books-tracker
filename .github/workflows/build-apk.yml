@@ -89,9 +89,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v3.0.8
-        name: "Mind Focus Books Tracker v3.0.8 - Book Detail Sheet Scroll & Compact Progress Fix"
-        body: "Release v3.0.8: Added full touch scroll to 1-Tap Book Detail Sheet so all action buttons (Full Edit, Notes, Lend, Trophy, Delete) are 100% accessible. Streamlined Reading Progress card into a compact sleek card."
+        tag_name: v3.0.9
+        name: "Mind Focus Books Tracker v3.0.9 - Book Click Fix & Full Scrolling Detail Sheet"
+        body: "Release v3.0.9: Fixed book click reference bug, restoring instant tap-to-open book detail sheet with full touch scrolling, compact reading progress, and accessible action buttons."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

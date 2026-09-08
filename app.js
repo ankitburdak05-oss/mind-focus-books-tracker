@@ -1398,7 +1398,12 @@ function openBookDetailSheet(origIdx) {
   html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 25)">+25</button>';
   html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 50)">+50</button>';
   html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 9999)" style="background:rgba(16,185,129,0.18); color:#10b981; border-color:#10b981;">Finish 🏁</button>';
-  html += '  </div>';
+  // Smart Reading Pace & Time Left AI Estimator
+  const pagesLeft = Math.max(0, pages.total - pages.current);
+  const estMins = Math.round(pagesLeft * 1.4);
+  const hLeft = Math.floor(estMins / 60);
+  const mLeft = estMins % 60;
+  const timeStr = pagesLeft === 0 ? 'Completed 🎉' : (hLeft > 0 ? ('~' + hLeft + 'h ' + mLeft + 'm remaining') : ('~' + mLeft + ' mins remaining'));
   html += '  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem; padding-top:0.35rem; border-top:1px dashed var(--border-color); font-size:0.72rem;">';
   html += '    <span style="color:var(--text-muted);">⏱️ Reading Pace:</span>';
   html += '    <span style="color:var(--accent-primary); font-weight:800;">' + timeStr + ' (' + pagesLeft + ' pgs left)</span>';
@@ -2943,7 +2948,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.0.8';
+const CURRENT_APP_VERSION = 'v3.0.9';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
