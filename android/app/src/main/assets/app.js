@@ -1399,6 +1399,17 @@ function openBookDetailSheet(origIdx) {
   html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 50)">+50 p</button>';
   html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 9999)" style="background:rgba(16,185,129,0.18); color:#10b981; border-color:#10b981;">Finish 🏁</button>';
   html += '  </div>';
+
+  // Smart Reading Pace & Time Left AI Estimator
+  const pagesLeft = Math.max(0, pages.total - pages.current);
+  const estMins = Math.round(pagesLeft * 1.4);
+  const hLeft = Math.floor(estMins / 60);
+  const mLeft = estMins % 60;
+  const timeStr = pagesLeft === 0 ? 'Completed 🎉' : (hLeft > 0 ? ('~' + hLeft + 'h ' + mLeft + 'm remaining') : ('~' + mLeft + ' mins remaining'));
+  html += '  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem; padding-top:0.5rem; border-top:1px dashed var(--border-color); font-size:0.75rem;">';
+  html += '    <span style="color:var(--text-muted);">⏱️ Reading Pace:</span>';
+  html += '    <span style="color:var(--accent-primary); font-weight:800;">' + timeStr + ' (' + pagesLeft + ' pgs left)</span>';
+  html += '  </div>';
   html += '</div>';
 
   // Lending Banner if Lent
@@ -1409,8 +1420,14 @@ function openBookDetailSheet(origIdx) {
     html += '</div>';
   }
 
-  // Quick Action Buttons
+  // Quick Action Buttons (Enhanced with Social Poster & Voice Audio)
   html += '<div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:0.6rem; margin-top:0.25rem;">';
+  html += '  <button type="button" class="btn" onclick="openQuotePosterModal(' + origIdx + ');" style="font-weight:700; font-size:0.85rem; justify-content:center; background:linear-gradient(135deg, rgba(99,102,241,0.18), rgba(168,85,247,0.18)); border-color:var(--accent-primary); color:var(--text-primary);">';
+  html += '    📸 Share Poster';
+  html += '  </button>';
+  html += '  <button type="button" class="btn" onclick="speakBookTakeaway(' + origIdx + ');" style="font-weight:700; font-size:0.85rem; justify-content:center; background:rgba(6,182,212,0.12); border-color:rgba(6,182,212,0.35); color:#38bdf8;">';
+  html += '    🔊 Read Aloud';
+  html += '  </button>';
   html += '  <button type="button" class="btn" onclick="closeBookDetailSheet(); openTakeawayModal(' + origIdx + ');" style="font-weight:700; font-size:0.85rem; justify-content:center;">';
   html += '    💡 ' + (b.takeaway ? 'Edit Notes' : 'Add Notes');
   html += '  </button>';
@@ -1419,7 +1436,7 @@ function openBookDetailSheet(origIdx) {
   html += '  </button>';
   if (!b.lent_to) {
     html += '  <button type="button" class="btn" onclick="closeBookDetailSheet(); openLendModal(' + origIdx + ');" style="font-weight:700; font-size:0.85rem; justify-content:center;">';
-    html += '    🤝 Lend to Friend';
+    html += '    🤝 Lend Out';
     html += '  </button>';
   }
   if (isDone) {
@@ -2933,11 +2950,12 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.0.4';
+const CURRENT_APP_VERSION = 'v3.0.5';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
+  if (typeof syncSettingsFlagshipControls === 'function') syncSettingsFlagshipControls();
   const overlay = document.getElementById('appSettingsModalOverlay');
   if (overlay) overlay.classList.add('active');
 }
@@ -5415,6 +5433,234 @@ function igniteStreakFlame() {
   }
 }
 
+/* ==========================================================
+   FLAGSHIP UPGRADES (v3.0.5): THEME STUDIO, HAPTICS, SOCIAL POSTER, TTS
+   ========================================================== */
+
+let currentQuotePosterIdx = null;
+
+// 1. Dynamic Accent Palette Engine
+function setAppAccent(accent) {
+  document.documentElement.setAttribute('data-accent', accent);
+  localStorage.setItem('mindfocus_accent', accent);
+  triggerHaptic('medium');
+
+  document.querySelectorAll('.accent-color-circle').forEach(c => {
+    c.classList.toggle('active', c.id === ('accent' + accent.charAt(0).toUpperCase() + accent.slice(1)));
+  });
+
+  const names = {
+    violet: 'Electric Violet 🟣',
+    emerald: 'Cyber Emerald 🟢',
+    gold: 'Royal Gold 🟡',
+    coral: 'Sunset Coral 🔴',
+    cyan: 'Neon Cyan 🔵'
+  };
+  showToast('🎨 Accent applied: ' + (names[accent] || accent), 'success');
+}
+
+// 2. Reader Typography Font Studio
+function setAppFont(font) {
+  document.documentElement.setAttribute('data-font', font);
+  localStorage.setItem('mindfocus_font', font);
+  triggerHaptic('selection');
+
+  const btnMap = { sans: 'fontSansBtn', serif: 'fontSerifBtn', mono: 'fontMonoBtn' };
+  document.querySelectorAll('.font-choice-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(btnMap[font]);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  const names = { sans: 'Modern Sans', serif: 'Kindle Bookerly Serif', mono: 'Tech Mono' };
+  showToast('🔤 Reader Font: ' + (names[font] || font), 'success');
+}
+
+// 3. Daily Reading Target Manager
+function promptDailyTarget() {
+  triggerHaptic('light');
+  const targets = [15, 25, 35, 50];
+  let curr = state.dailyPageTarget || 25;
+  let idx = targets.indexOf(curr);
+  let next = targets[(idx + 1) % targets.length];
+  state.dailyPageTarget = next;
+  saveData();
+
+  syncSettingsFlagshipControls();
+  if (typeof draw3RingActivity === 'function') draw3RingActivity();
+  showToast('🎯 Daily Reading Target set to ' + next + ' pages/day', 'success');
+}
+
+// 4. Duolingo Streak Freeze & Shield System
+function toggleStreakFreeze() {
+  triggerHaptic('success');
+  if (typeof state.streakFreezes === 'undefined') state.streakFreezes = 2;
+  
+  if (state.streakFreezes > 0) {
+    state.streakFreezes = Math.min(3, state.streakFreezes + 1);
+    showToast('🛡️ Streak Freeze Shield active! Your reading streak is 100% protected.', 'success');
+  } else {
+    state.streakFreezes = 2;
+    showToast('🛡️ 2 Streak Freeze Shields restored!', 'success');
+  }
+  saveData();
+  syncSettingsFlagshipControls();
+}
+
+// 5. Tactile Haptic Vibration Intensity Controller
+let hapticIntensityLevel = localStorage.getItem('mindfocus_haptic_level') || 'crisp';
+function cycleHapticMode() {
+  const levels = ['off', 'subtle', 'crisp', 'firm'];
+  let idx = levels.indexOf(hapticIntensityLevel);
+  hapticIntensityLevel = levels[(idx + 1) % levels.length];
+  localStorage.setItem('mindfocus_haptic_level', hapticIntensityLevel);
+
+  triggerHaptic('heavy');
+  syncSettingsFlagshipControls();
+  showToast('📳 Haptic Mode: ' + hapticIntensityLevel.toUpperCase(), 'success');
+}
+
+// 6. 1-Tap Instant Backup
+function downloadInstantJsonBackup() {
+  triggerHaptic('medium');
+  if (typeof downloadBackupFile === 'function') {
+    downloadBackupFile();
+  }
+}
+
+// 7. Social Shareable Quote Poster Card (WhatsApp / Instagram Status Ready)
+function openQuotePosterModal(origIdx) {
+  triggerHaptic('light');
+  const b = state.books[origIdx];
+  if (!b) return;
+  currentQuotePosterIdx = origIdx;
+
+  const overlay = document.getElementById('quotePosterOverlay');
+  const coverImg = document.getElementById('quotePosterCoverImg');
+  const quoteText = document.getElementById('quotePosterQuoteText');
+  const titleEl = document.getElementById('quotePosterBookTitle');
+  const authorEl = document.getElementById('quotePosterBookAuthor');
+  const ratingEl = document.getElementById('quotePosterRating');
+
+  if (titleEl) titleEl.innerText = b.title || 'Untitled Book';
+  if (authorEl) authorEl.innerText = 'by ' + (b.author || 'Mind Focus Library');
+  
+  const quote = b.takeaway ? ('"' + b.takeaway.slice(0, 180) + (b.takeaway.length > 180 ? '...' : '') + '"') : '"Reading is to the mind what exercise is to the body."';
+  if (quoteText) quoteText.innerText = quote;
+
+  const coverUrl = getBookCover(b);
+  if (coverImg) {
+    if (coverUrl) {
+      coverImg.src = coverUrl;
+      coverImg.style.display = 'block';
+    } else {
+      coverImg.style.display = 'none';
+    }
+  }
+
+  const ratingNum = parseInt(b.rating) || 5;
+  let stars = '';
+  for (let i = 0; i < ratingNum; i++) stars += '★';
+  if (ratingEl) ratingEl.innerText = stars + ' • ' + (b.category || 'Mind Focus');
+
+  if (overlay) overlay.classList.add('active');
+}
+
+function closeQuotePosterModal() {
+  const overlay = document.getElementById('quotePosterOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+function downloadQuotePosterImage() {
+  triggerHaptic('success');
+  const node = document.getElementById('quotePosterCardNode');
+  if (!node || typeof html2canvas !== 'function') {
+    showToast('Snapshot engine not ready', 'error');
+    return;
+  }
+
+  showToast('Rendering Ultra-HD Poster...', 'info');
+  html2canvas(node, {
+    scale: 3,
+    useCORS: true,
+    backgroundColor: '#030712'
+  }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'MindFocus-Quote-Poster.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+    showToast('🎉 Quote Poster downloaded to phone gallery!', 'success');
+  }).catch(() => {
+    showToast('Could not save image', 'error');
+  });
+}
+
+// 8. Offline Audio Text-to-Speech (TTS Reader)
+function speakBookTakeaway(origIdx) {
+  triggerHaptic('medium');
+  const b = state.books[origIdx];
+  if (!b) return;
+
+  if (!('speechSynthesis' in window)) {
+    showToast('Speech engine not supported on this device', 'error');
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  const text = (b.takeaway && b.takeaway.trim().length > 0)
+    ? (b.title + ' by ' + b.author + '. Key takeaway: ' + b.takeaway)
+    : (b.title + ' by ' + b.author + '. Category: ' + (b.category || 'General') + '. Currently on page ' + (b.current_page || 0) + ' of ' + (b.total_pages || 280) + '.');
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = 0.95;
+  utter.pitch = 1.0;
+
+  const voices = window.speechSynthesis.getVoices();
+  const targetVoice = voices.find(v => v.lang.includes('en-IN') || v.lang.includes('hi-IN')) || voices[0];
+  if (targetVoice) utter.voice = targetVoice;
+
+  utter.onstart = () => showToast('🔊 Playing Audiobook Takeaway...', 'info');
+  utter.onend = () => showToast('✅ Takeaway audio playback finished', 'success');
+
+  window.speechSynthesis.speak(utter);
+}
+
+// 9. Synchronize Settings UI with Active State
+function syncSettingsFlagshipControls() {
+  const target = state.dailyPageTarget || 25;
+  const targetVal = document.getElementById('settingsDailyTargetVal');
+  const targetSub = document.getElementById('settingsDailyTargetSub');
+  if (targetVal) targetVal.innerText = target + ' pgs ›';
+  if (targetSub) targetSub.innerText = 'Target: ' + target + ' pages/day';
+
+  const shields = typeof state.streakFreezes !== 'undefined' ? state.streakFreezes : 2;
+  const shieldVal = document.getElementById('settingsStreakFreezeVal');
+  if (shieldVal) shieldVal.innerText = shields + ' Shields Ready ›';
+
+  const hapticVal = document.getElementById('settingsHapticModeVal');
+  if (hapticVal) hapticVal.innerText = (hapticIntensityLevel || 'crisp').toUpperCase() + ' ›';
+
+  const savedAccent = localStorage.getItem('mindfocus_accent') || 'violet';
+  document.querySelectorAll('.accent-color-circle').forEach(c => {
+    c.classList.toggle('active', c.id === ('accent' + savedAccent.charAt(0).toUpperCase() + savedAccent.slice(1)));
+  });
+
+  const savedFont = localStorage.getItem('mindfocus_font') || 'sans';
+  const btnMap = { sans: 'fontSansBtn', serif: 'fontSerifBtn', mono: 'fontMonoBtn' };
+  document.querySelectorAll('.font-choice-btn').forEach(btn => btn.classList.remove('active'));
+  const activeBtn = document.getElementById(btnMap[savedFont]);
+  if (activeBtn) activeBtn.classList.add('active');
+}
+
+// 10. Startup Auto-Restoration of Customizations
+function initFlagshipEngines() {
+  const savedAccent = localStorage.getItem('mindfocus_accent');
+  if (savedAccent) document.documentElement.setAttribute('data-accent', savedAccent);
+
+  const savedFont = localStorage.getItem('mindfocus_font');
+  if (savedFont) document.documentElement.setAttribute('data-font', savedFont);
+
+  syncSettingsFlagshipControls();
+}
+
 /* Master 4D Systems Initializer */
 function init4DFlagshipSystems() {
   initLiquidDockPill();
@@ -5422,6 +5668,7 @@ function init4DFlagshipSystems() {
   initSheetSwipeDismiss();
   updateFloatingMiniCapsule();
   syncCategoryTrackActiveState();
+  initFlagshipEngines();
 }
 
 // Global Export bindings for HTML inline onclick handlers
@@ -5445,6 +5692,20 @@ window.toggleChannelMute = toggleChannelMute;
 window.applyMixerPreset = applyMixerPreset;
 window.igniteStreakFlame = igniteStreakFlame;
 window.init4DFlagshipSystems = init4DFlagshipSystems;
+
+// Flagship 3.0.5 exports
+window.setAppAccent = setAppAccent;
+window.setAppFont = setAppFont;
+window.promptDailyTarget = promptDailyTarget;
+window.toggleStreakFreeze = toggleStreakFreeze;
+window.cycleHapticMode = cycleHapticMode;
+window.downloadInstantJsonBackup = downloadInstantJsonBackup;
+window.openQuotePosterModal = openQuotePosterModal;
+window.closeQuotePosterModal = closeQuotePosterModal;
+window.downloadQuotePosterImage = downloadQuotePosterImage;
+window.speakBookTakeaway = speakBookTakeaway;
+window.syncSettingsFlagshipControls = syncSettingsFlagshipControls;
+window.initFlagshipEngines = initFlagshipEngines;
 
 
 

@@ -89,9 +89,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v3.0.4
-        name: "Mind Focus Books Tracker v3.0.4 - Zero Lag 120fps Phone Engine Optimization"
-        body: "Release v3.0.4: Complete Mobile Lag Elimination! Replaced GPU-crippling filter blur(85px) aurora blobs with zero-overhead native CSS mesh radial gradients, eliminated continuous uncancelled requestAnimationFrame loops in audio equalizer & DNA modals, purged preserve-3d overhead on book cards with hardware translateZ and contain:content."
+        tag_name: v3.0.5
+        name: "Mind Focus Books Tracker v3.0.5 - Apple iOS 18 Settings Hub & Flagship Upgrade"
+        body: "Release v3.0.5: Flagship Experience Upgrade! Apple iOS 18 Glass Grouped Settings Studio, 5 Neon Accent Colors (Electric Violet, Cyber Emerald, Royal Gold, Sunset Coral, Neon Cyan), Reader Font Studio (Modern Sans, Kindle Serif, Tech Mono), Duolingo Streak Freeze Shields, Reading Pace & Time Left AI Estimator, Social Quote Poster Generator for WhatsApp/Instagram, and Offline Audio Takeaways TTS Voice Reader."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

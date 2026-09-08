@@ -178,6 +178,210 @@
   color: var(--text-muted);
 }
 
+/* ==========================================================
+   DYNAMIC ACCENT PALETTES & FONT STUDIO TOKENS (v3.0.5)
+   ========================================================== */
+[data-accent="emerald"] {
+  --accent-primary: #10b981 !important;
+  --accent-primary-hover: #059669 !important;
+  --accent-glow: rgba(16, 185, 129, 0.35) !important;
+}
+[data-accent="gold"] {
+  --accent-primary: #f59e0b !important;
+  --accent-primary-hover: #d97706 !important;
+  --accent-glow: rgba(245, 158, 11, 0.35) !important;
+}
+[data-accent="coral"] {
+  --accent-primary: #f43f5e !important;
+  --accent-primary-hover: #e11d48 !important;
+  --accent-glow: rgba(244, 63, 94, 0.35) !important;
+}
+[data-accent="cyan"] {
+  --accent-primary: #06b6d4 !important;
+  --accent-primary-hover: #0891b2 !important;
+  --accent-glow: rgba(6, 182, 212, 0.35) !important;
+}
+[data-accent="violet"] {
+  --accent-primary: #8b5cf6 !important;
+  --accent-primary-hover: #7c3aed !important;
+  --accent-glow: rgba(139, 92, 246, 0.35) !important;
+}
+
+/* Typography Font Switcher */
+[data-font="serif"] body, [data-font="serif"] .sheet-book-title, [data-font="serif"] .book-card-title {
+  font-family: 'Bookerly', Georgia, 'Times New Roman', serif !important;
+}
+[data-font="mono"] body, [data-font="mono"] .sheet-book-title, [data-font="mono"] .book-card-title {
+  font-family: 'JetBrains Mono', Consolas, 'Courier New', monospace !important;
+}
+
+/* Apple iOS 18 Glass Grouped Settings Cards */
+.settings-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+  overflow: hidden;
+  margin-bottom: 0.85rem;
+}
+.settings-group-header {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 0.65rem 0.9rem 0.25rem;
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0.9rem;
+  border-bottom: 1px solid var(--border-color);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+.settings-row:last-child {
+  border-bottom: none;
+}
+.settings-row:active {
+  background: var(--bg-hover);
+}
+.settings-row-left {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.settings-icon-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  flex-shrink: 0;
+}
+.settings-row-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.settings-row-sub {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+.accent-palette-picker {
+  display: flex;
+  gap: 0.55rem;
+  padding: 0.6rem 0.9rem 0.8rem;
+}
+.accent-color-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.accent-color-circle:hover, .accent-color-circle.active {
+  transform: scale(1.18);
+  border-color: #ffffff;
+  box-shadow: 0 0 12px currentColor;
+}
+.font-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+  padding: 0.5rem 0.9rem 0.8rem;
+}
+.font-choice-btn {
+  padding: 0.5rem 0.3rem;
+  border-radius: 10px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+.font-choice-btn.active {
+  background: var(--accent-primary);
+  color: #fff;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* Social Shareable Quote Poster Card */
+.quote-poster-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(16px);
+  z-index: 999999;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+.quote-poster-overlay.active {
+  display: flex;
+}
+.quote-poster-container {
+  width: 320px;
+  background: linear-gradient(155deg, #111827 0%, #030712 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  padding: 1.6rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85), 0 0 35px var(--accent-glow);
+  position: relative;
+  overflow: hidden;
+}
+.quote-poster-watermark {
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  color: var(--accent-primary);
+  margin-bottom: 0.85rem;
+  text-transform: uppercase;
+}
+.quote-poster-cover {
+  width: 76px;
+  height: 110px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.6);
+  border: 1px solid rgba(255,255,255,0.2);
+  margin-bottom: 0.85rem;
+}
+.quote-poster-quote {
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #f8fafc;
+  font-weight: 600;
+  font-style: italic;
+  margin-bottom: 1rem;
+}
+.quote-poster-meta {
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding-top: 0.75rem;
+  width: 100%;
+}
+.quote-poster-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+.quote-poster-author {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
