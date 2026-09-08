@@ -3403,7 +3403,24 @@ body {
   box-shadow: 0 -8px 36px rgba(0, 0, 0, 0.45);
   animation: sheetSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  overflow: hidden;
+  overflow: hidden !important;
+  max-height: 90vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+#bookDetailSheetBody {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch !important;
+  flex: 1 1 auto !important;
+  min-height: 0 !important;
+  max-height: 76vh !important;
+  padding: 0.6rem 1.25rem 2.8rem !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.75rem !important;
 }
 
 @keyframes sheetSlideUp {
@@ -3434,17 +3451,17 @@ body {
 
 .sheet-hero-row {
   display: flex;
-  gap: 1.25rem;
+  gap: 0.95rem;
   align-items: flex-start;
 }
 
 .sheet-cover-wrap {
-  width: 110px;
-  height: 160px;
+  width: 86px;
+  height: 126px;
   flex-shrink: 0;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
   background: #1e293b;
   position: relative;
 }
@@ -3457,33 +3474,38 @@ body {
 
 .sheet-meta {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.2rem;
 }
 
 .sheet-book-title {
-  font-size: 1.2rem;
+  font-size: 1.05rem;
   font-weight: 800;
   color: var(--text-primary);
-  line-height: 1.3;
+  line-height: 1.25;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .sheet-book-author {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: var(--text-secondary);
   font-weight: 600;
 }
 
-/* Interactive Page Slider Section in Sheet */
+/* Interactive Page Slider Section in Sheet (Compact & Clean) */
 .sheet-page-tracker-card {
   background: var(--bg-primary);
   border: 1px solid var(--border-color);
   border-radius: 14px;
-  padding: 1rem;
+  padding: 0.65rem 0.85rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 0.45rem;
 }
 
 .sheet-page-header {
@@ -3493,41 +3515,44 @@ body {
 }
 
 .sheet-page-current {
-  font-size: 1.15rem;
-  font-weight: 900;
+  font-size: 0.98rem;
+  font-weight: 800;
   color: #10b981;
 }
 
 .sheet-page-pct {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-muted);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #3b82f6;
 }
 
 .sheet-page-slider {
   width: 100%;
   -webkit-appearance: none;
-  height: 8px;
-  border-radius: 4px;
-  background: rgba(255, 255, 255, 0.1);
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.12);
   outline: none;
   accent-color: #10b981;
+  margin: 0.1rem 0;
 }
 
 .sheet-page-quick-buttons {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.4rem;
   justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .page-step-btn {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 6px;
   color: var(--text-primary);
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  padding: 0.35rem 0.65rem;
+  padding: 0.25rem 0.55rem;
   cursor: pointer;
   transition: all 0.15s ease;
 }

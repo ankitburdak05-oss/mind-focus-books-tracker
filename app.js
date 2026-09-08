@@ -1382,31 +1382,24 @@ function openBookDetailSheet(origIdx) {
   html += '  <button type="button" class="btn btn-sm" onclick="setSheetStatus(' + origIdx + ', \'DONE\')" style="flex:1; border-radius:8px; font-weight:700; ' + (isDone ? 'background:#10b981; color:#fff; border:none;' : 'background:transparent; color:var(--text-muted); border:none;') + '">✅ Done</button>';
   html += '</div>';
 
-  // Interactive Page Progress Card
+  // Interactive Page Progress Card (Compact & Clean)
   html += '<div class="sheet-page-tracker-card">';
-  html += '  <div class="sheet-page-header">';
-  html += '    <div>';
-  html += '      <span style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:700; letter-spacing:0.04em;">Reading Progress</span>';
-  html += '      <div class="sheet-page-current">Page <span id="sheetPageDisplay">' + pages.current + '</span> of ' + pages.total + '</div>';
+  html += '  <div class="sheet-page-header" style="margin-bottom:0.15rem;">';
+  html += '    <div style="display:flex; align-items:baseline; gap:0.4rem;">';
+  html += '      <span style="font-size:0.72rem; text-transform:uppercase; color:var(--text-muted); font-weight:800; letter-spacing:0.04em;">Progress:</span>';
+  html += '      <div class="sheet-page-current" style="font-size:0.98rem; font-weight:800;">Page <span id="sheetPageDisplay">' + pages.current + '</span> / ' + pages.total + '</div>';
   html += '    </div>';
-  html += '    <div class="sheet-page-pct" id="sheetPctDisplay" style="color:' + (pages.pct >= 100 ? '#10b981' : '#3b82f6') + '; font-size:1.1rem; font-weight:900;">' + pages.pct + '%</div>';
+  html += '    <div class="sheet-page-pct" id="sheetPctDisplay" style="color:' + (pages.pct >= 100 ? '#10b981' : '#3b82f6') + '; font-size:0.95rem; font-weight:900;">' + pages.pct + '%</div>';
   html += '  </div>';
   html += '  <input type="range" class="sheet-page-slider" id="sheetPageSlider" min="0" max="' + pages.total + '" value="' + pages.current + '" oninput="handleSheetPageInput(' + origIdx + ', this.value)">';
-  html += '  <div class="sheet-page-quick-buttons">';
-  html += '    <span style="font-size:0.75rem; color:var(--text-muted); margin-right:auto; align-self:center;">Quick Progress:</span>';
-  html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 10)">+10 p</button>';
-  html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 25)">+25 p</button>';
-  html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 50)">+50 p</button>';
+  html += '  <div class="sheet-page-quick-buttons" style="margin-top:0.15rem;">';
+  html += '    <span style="font-size:0.7rem; color:var(--text-muted); margin-right:auto; align-self:center;">Quick:</span>';
+  html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 10)">+10</button>';
+  html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 25)">+25</button>';
+  html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 50)">+50</button>';
   html += '    <button type="button" class="page-step-btn" onclick="stepSheetPage(' + origIdx + ', 9999)" style="background:rgba(16,185,129,0.18); color:#10b981; border-color:#10b981;">Finish 🏁</button>';
   html += '  </div>';
-
-  // Smart Reading Pace & Time Left AI Estimator
-  const pagesLeft = Math.max(0, pages.total - pages.current);
-  const estMins = Math.round(pagesLeft * 1.4);
-  const hLeft = Math.floor(estMins / 60);
-  const mLeft = estMins % 60;
-  const timeStr = pagesLeft === 0 ? 'Completed 🎉' : (hLeft > 0 ? ('~' + hLeft + 'h ' + mLeft + 'm remaining') : ('~' + mLeft + ' mins remaining'));
-  html += '  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.6rem; padding-top:0.5rem; border-top:1px dashed var(--border-color); font-size:0.75rem;">';
+  html += '  <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem; padding-top:0.35rem; border-top:1px dashed var(--border-color); font-size:0.72rem;">';
   html += '    <span style="color:var(--text-muted);">⏱️ Reading Pace:</span>';
   html += '    <span style="color:var(--accent-primary); font-weight:800;">' + timeStr + ' (' + pagesLeft + ' pgs left)</span>';
   html += '  </div>';
@@ -1414,14 +1407,14 @@ function openBookDetailSheet(origIdx) {
 
   // Lending Banner if Lent
   if (b.lent_to) {
-    html += '<div class="card-lent-banner" style="display:flex; justify-content:space-between; align-items:center; padding:0.6rem 0.85rem; border-radius:10px;">';
+    html += '<div class="card-lent-banner" style="display:flex; justify-content:space-between; align-items:center; padding:0.55rem 0.8rem; border-radius:10px;">';
     html += '  <span>🤝 Currently lent to: <strong>' + escapeHtml(b.lent_to) + '</strong> (' + (b.lent_date || 'Date N/A') + ')</span>';
     html += '  <button class="btn btn-sm" onclick="returnBook(' + origIdx + '); openBookDetailSheet(' + origIdx + ');" style="background:#10b981; color:#fff; border:none; padding:4px 10px;">Mark Returned</button>';
     html += '</div>';
   }
 
   // Quick Action Buttons (Enhanced with Social Poster & Voice Audio)
-  html += '<div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:0.6rem; margin-top:0.25rem;">';
+  html += '<div style="display:grid; grid-template-columns:repeat(2, 1fr); gap:0.55rem; margin-top:0.25rem; margin-bottom:2rem;">';
   html += '  <button type="button" class="btn" onclick="openQuotePosterModal(' + origIdx + ');" style="font-weight:700; font-size:0.85rem; justify-content:center; background:linear-gradient(135deg, rgba(99,102,241,0.18), rgba(168,85,247,0.18)); border-color:var(--accent-primary); color:var(--text-primary);">';
   html += '    📸 Share Poster';
   html += '  </button>';
@@ -2950,7 +2943,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.0.7';
+const CURRENT_APP_VERSION = 'v3.0.8';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
