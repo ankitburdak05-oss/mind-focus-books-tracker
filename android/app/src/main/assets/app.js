@@ -2933,7 +2933,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.0.2';
+const CURRENT_APP_VERSION = 'v3.0.3';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3728,6 +3728,11 @@ function initDynamicAurora() {
 
 // --- 2. 3D HOLOGRAPHIC CARD PHYSICS & FOIL SHEEN ---
 function init3DCardPhysics() {
+  // Only enable 3D perspective tilt on desktop with precise mouse cursor.
+  // On touch devices (phones), disabling this gives 120fps ultra-smooth silky scrolling!
+  if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+    return;
+  }
   document.addEventListener('pointermove', (e) => {
     const card = e.target.closest('.book-card, .now-reading-hero, .sanctuary-cover-wrap');
     if (!card) return;
@@ -4648,14 +4653,11 @@ async function checkRemoteBroadcastNotice() {
       } catch (e) {}
     }
 
-    // 5. Script-Tag CORS Bypass (Works 100% on file:/// in Chrome/Edge on laptop)
-    if (!data) {
+    // 5. Script-Tag CORS Bypass (ONLY needed on file:/// protocol in Chrome/Edge on laptop)
+    if (!data && window.location.protocol === 'file:') {
       data = await fetchNoticeViaScript('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.js?cb=' + cb);
     }
-    if (!data) {
-      data = await fetchNoticeViaScript('https://ankitburdak05-oss.github.io/mind-focus-books-tracker/broadcast-notice.js?cb=' + cb);
-    }
-    if (!data) {
+    if (!data && window.location.protocol === 'file:') {
       data = await fetchNoticeViaScript('broadcast-notice.js?cb=' + cb);
     }
 
@@ -4752,9 +4754,9 @@ function dismissInAppNotice(event) {
 
 function startLiveNoticeListener() {
   if (broadcastNoticeInterval) clearInterval(broadcastNoticeInterval);
-  checkRemoteBroadcastNotice();
-  // Poll every 3 seconds for instant real-time broadcast delivery without refreshing
-  broadcastNoticeInterval = setInterval(checkRemoteBroadcastNotice, 3000);
+  setTimeout(checkRemoteBroadcastNotice, 1200);
+  // Relaxed background check every 45 seconds (prevents CPU thread freezing)
+  broadcastNoticeInterval = setInterval(checkRemoteBroadcastNotice, 45000);
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') checkRemoteBroadcastNotice();
   });
@@ -4858,6 +4860,8 @@ function initPullToRefresh() {
   const container = document.getElementById('mainContainer');
   if (!indicator || !container) return;
 
+  let rafId = null;
+
   window.addEventListener('touchstart', (e) => {
     if (window.scrollY <= 2 && e.touches.length === 1) {
       ptrTouchStartY = e.touches[0].clientY;
@@ -4873,16 +4877,20 @@ function initPullToRefresh() {
     const currentY = e.touches[0].clientY;
     const rawDelta = currentY - ptrTouchStartY;
     if (rawDelta > 0 && window.scrollY <= 2) {
-      // Apply rubber-band damping
       ptrPullDistance = Math.pow(rawDelta, 0.78) * 2.2;
-      indicator.classList.add('pulling');
-      indicator.style.height = Math.min(ptrPullDistance, 70) + 'px';
+      if (!rafId) {
+        rafId = requestAnimationFrame(() => {
+          rafId = null;
+          indicator.classList.add('pulling');
+          indicator.style.height = Math.min(ptrPullDistance, 70) + 'px';
 
-      if (ptrPullDistance >= PTR_THRESHOLD && !indicator.classList.contains('can-refresh')) {
-        indicator.classList.add('can-refresh');
-        triggerHaptic('medium');
-      } else if (ptrPullDistance < PTR_THRESHOLD && indicator.classList.contains('can-refresh')) {
-        indicator.classList.remove('can-refresh');
+          if (ptrPullDistance >= PTR_THRESHOLD && !indicator.classList.contains('can-refresh')) {
+            indicator.classList.add('can-refresh');
+            triggerHaptic('medium');
+          } else if (ptrPullDistance < PTR_THRESHOLD && indicator.classList.contains('can-refresh')) {
+            indicator.classList.remove('can-refresh');
+          }
+        });
       }
     } else {
       indicator.style.height = '0px';
@@ -4891,6 +4899,10 @@ function initPullToRefresh() {
   }, { passive: true });
 
   window.addEventListener('touchend', () => {
+    if (rafId) {
+      cancelAnimationFrame(rafId);
+      rafId = null;
+    }
     if (!ptrIsPulling) return;
     ptrIsPulling = false;
 
@@ -4913,7 +4925,7 @@ function initPullToRefresh() {
       indicator.classList.remove('pulling', 'can-refresh');
     }
     ptrPullDistance = 0;
-  });
+  }, { passive: true });
 }
 
 /* 4. Horizontal Swipeable Category Track */

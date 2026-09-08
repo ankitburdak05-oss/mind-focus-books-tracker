@@ -89,9 +89,9 @@ jobs:
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v3.0.2
-        name: "Mind Focus Books Tracker v3.0.2 - Fixed Floating Navigation Dock Edition"
-        body: "Release v3.0.2: Fixes bottom navigation bar placement to remain permanently fixed/pinned at screen bottom (fixed position: fixed override), High-Res Android App Icons in all densities, and Cyber-Radar OTA Update Center."
+        tag_name: v3.0.3
+        name: "Mind Focus Books Tracker v3.0.3 - 120fps Silky Smooth Performance Overhaul"
+        body: "Release v3.0.3: Major Performance & Smoothness Optimization! Eliminates touch jank by disabling pointermove layout recalculations on mobile, removes heavy backdrop-filter blurs from list cards (added hardware translateZ), uses requestAnimationFrame & passive touch listeners on pull-to-refresh, and optimizes broadcast notice polling."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
