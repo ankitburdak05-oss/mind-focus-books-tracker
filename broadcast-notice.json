@@ -1,12 +1,19 @@
 {
-  "id": "deploy-notice-v350",
-  "active": true,
+  "id": "fc-drop-1788974461038",
+  "type": "flashcard_drop",
+  "isFlashcardDrop": true,
   "card": "card2",
-  "icon": "❄️",
-  "title": "Update Live: v3.5.0",
-  "message": "Naya update v3.5.0 ready! Phone heating permanent fix & re-update engine. Tap karke turant install karein.",
-  "btnText": "Install Update ⚡",
-  "action": "update",
-  "version": "v3.5.0",
-  "timestamp": "2026-09-09T16:40:00.000Z"
+  "active": true,
+  "icon": "🎴",
+  "title": "🎴 Today's 5 Target Words Challenge!",
+  "btnText": "🎴 Practice Flashcards Now",
+  "message": "Aapke liye 5 naye 3D smart flashcards unlock ho chuke hain! Tap karke Leitner memory challenge shuru karein.",
+  "words": [
+    "Abandon",
+    "Benevolent",
+    "Cognizant",
+    "Diligent",
+    "Empirical"
+  ],
+  "timestamp": "2026-09-09T17:21:01.038Z"
 }
