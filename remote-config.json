@@ -4,7 +4,7 @@
   "activeRelease": {
     "version": "v3.4.0",
     "name": "Mind Focus Books v3.4.0 (Mystery Golden Gift Box & Audio Fix Release)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.4.0/MindFocusBooks-Native.apk",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
       "🎁 Mystery Golden Gift Box Engine (Admin can drop 3D flying golden boxes with confetti & crackers)",
       "🔇 Tunu-Tunu Sound Bug Fixed (Pull-to-refresh repeated chime sound completely muted on phones)",
@@ -18,7 +18,7 @@
   "stagedRelease": {
     "version": "v3.4.0",
     "name": "Mind Focus Books v3.4.0 (Mystery Golden Gift Box & Audio Fix Release)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.4.0/MindFocusBooks-Native.apk",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
       "🎁 Mystery Golden Gift Box Engine (Admin can drop 3D flying golden boxes with confetti & crackers)",
       "🔇 Tunu-Tunu Sound Bug Fixed (Pull-to-refresh repeated chime sound completely muted on phones)",

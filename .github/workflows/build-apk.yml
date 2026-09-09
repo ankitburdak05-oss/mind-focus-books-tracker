@@ -90,12 +90,28 @@ jobs:
         name: MindFocusBooks-Native-APK
         path: MindFocusBooks-Native.apk
 
+    - name: Commit Latest APK to Main
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add MindFocusBooks-Native.apk
+        git commit -m "Update standalone release APK binary [skip ci]" || true
+        git push origin main || true
+
+    - name: Determine Release Tag and Title
+      id: get_tag
+      run: |
+        TAG=$(node -e "const c = require('./remote-config.json'); console.log((c.activeRelease && c.activeRelease.version) || (c.stagedRelease && c.stagedRelease.version) || 'v3.4.0');")
+        NAME=$(node -e "const c = require('./remote-config.json'); console.log((c.activeRelease && c.activeRelease.name) || (c.stagedRelease && c.stagedRelease.name) || ('Mind Focus Books ' + '$TAG'));")
+        echo "tag=$TAG" >> $GITHUB_OUTPUT
+        echo "name=$NAME" >> $GITHUB_OUTPUT
+
     - name: Create or Update GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: v3.3.0
-        name: "Mind Focus Books Tracker v3.3.0 - A-Z English-Hindi 3D Dictionary Book Release"
-        body: "Release v3.3.0: Introducing Book #0 (A-Z English-Hindi Focus Vocabulary Lexicon) with Real 3D Book Layout, ASMR Paper Page Turning Physics, Voice Audio Pronunciation, and Dual Staging/OTA Version Manager."
+        tag_name: ${{ steps.get_tag.outputs.tag }}
+        name: ${{ steps.get_tag.outputs.name }}
+        body: "Mind Focus Books Native Android Release. Includes 3D Dictionary, Mystery Golden Gift Box, and In-App Update Engine."
         files: MindFocusBooks-Native.apk
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
