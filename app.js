@@ -3080,20 +3080,47 @@ async function checkForAppUpdates(showFeedback = true) {
     let cloudRelease = null;
     const cb = Date.now();
 
-    // 1. Try remote-config.json first (Fast & configured via Panel)
+    // 1. Try raw.githubusercontent.com first (CORS open, no 60/hr rate limit)
     try {
-      const cfgRes = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
-        cache: 'no-store',
-        headers: { 'Accept': 'application/vnd.github.v3.raw' }
-      });
-      if (cfgRes.ok) {
-        const cfg = await cfgRes.json();
+      const rawRes = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?cb=' + cb, { cache: 'no-store' });
+      if (rawRes.ok) {
+        const cfg = await rawRes.json();
         if (cfg.activeRelease && cfg.activeRelease.version) {
           cloudRelease = cfg.activeRelease;
         }
       }
     } catch (e) {}
 
+    // 2. Try GitHub Pages
+    if (!cloudRelease) {
+      try {
+        const ghpRes = await fetch('https://ankitburdak05-oss.github.io/mind-focus-books-tracker/remote-config.json?cb=' + cb, { cache: 'no-store' });
+        if (ghpRes.ok) {
+          const cfg = await ghpRes.json();
+          if (cfg.activeRelease && cfg.activeRelease.version) {
+            cloudRelease = cfg.activeRelease;
+          }
+        }
+      } catch (e) {}
+    }
+
+    // 3. Try GitHub API
+    if (!cloudRelease) {
+      try {
+        const cfgRes = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
+          cache: 'no-store',
+          headers: { 'Accept': 'application/vnd.github.v3.raw' }
+        });
+        if (cfgRes.ok) {
+          const cfg = await cfgRes.json();
+          if (cfg.activeRelease && cfg.activeRelease.version) {
+            cloudRelease = cfg.activeRelease;
+          }
+        }
+      } catch (e) {}
+    }
+
+    // 4. Try jsDelivr fallback
     if (!cloudRelease) {
       try {
         const cfgRes = await fetch('https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/remote-config.json?cb=' + cb, { cache: 'no-store' });
@@ -5035,14 +5062,33 @@ async function checkRemoteConfig() {
   try {
     const cb = Date.now();
     let cfg = null;
+
+    // 1. PRIMARY: GitHub Raw (CORS open, no rate limit)
     try {
-      const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
-        cache: 'no-store',
-        headers: { 'Accept': 'application/vnd.github.v3.raw' }
-      });
+      const res = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?cb=' + cb, { cache: 'no-store' });
       if (res.ok) cfg = await res.json();
     } catch (e) {}
 
+    // 2. SECONDARY: GitHub Pages
+    if (!cfg) {
+      try {
+        const res = await fetch('https://ankitburdak05-oss.github.io/mind-focus-books-tracker/remote-config.json?cb=' + cb, { cache: 'no-store' });
+        if (res.ok) cfg = await res.json();
+      } catch (e) {}
+    }
+
+    // 3. TERTIARY: GitHub API
+    if (!cfg) {
+      try {
+        const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
+          cache: 'no-store',
+          headers: { 'Accept': 'application/vnd.github.v3.raw' }
+        });
+        if (res.ok) cfg = await res.json();
+      } catch (e) {}
+    }
+
+    // 4. QUATERNARY: jsDelivr fallback
     if (!cfg) {
       try {
         const res = await fetch('https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/remote-config.json?cb=' + cb, { cache: 'no-store' });
