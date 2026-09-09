@@ -4608,58 +4608,15 @@ let dismissedNoticeIds = {};
 let holoNoticeParticleAnim = null;
 let holoTiltBound = false;
 
-// Synthesized Crystal Harmonic Web Audio Chime (100% Offline)
+// Synthesized Crystal Harmonic Web Audio Chime (100% Offline) - Silenced per user request
 function playNoticeHoloChime() {
-  try {
-    const ctx = getOrCreateAudioContext();
-    if (!ctx) return;
-    const now = ctx.currentTime;
-
-    const notes = [
-      { freq: 587.33, delay: 0.0, dur: 1.6, gain: 0.16 }, // D5
-      { freq: 739.99, delay: 0.08, dur: 1.8, gain: 0.14 }, // F#5
-      { freq: 880.00, delay: 0.16, dur: 2.2, gain: 0.18 }, // A5
-      { freq: 1174.66, delay: 0.24, dur: 2.4, gain: 0.12 } // D6 shimmer
-    ];
-
-    notes.forEach(n => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(n.freq, now + n.delay);
-
-      gain.gain.setValueAtTime(0.0001, now + n.delay);
-      gain.gain.exponentialRampToValueAtTime(n.gain, now + n.delay + 0.02);
-      gain.gain.exponentialRampToValueAtTime(0.0001, now + n.delay + n.dur);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(now + n.delay);
-      osc.stop(now + n.delay + n.dur);
-    });
-  } catch (e) {}
+  // Silenced: no unsolicited tunu-tunu chime sound
+  return;
 }
 
 function playNoticeDismissChime() {
-  try {
-    const ctx = getOrCreateAudioContext();
-    if (!ctx) return;
-    const now = ctx.currentTime;
-
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(784.00, now); // G5
-    osc.frequency.exponentialRampToValueAtTime(261.63, now + 0.28); // C4 warp drop
-
-    gain.gain.setValueAtTime(0.2, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.28);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(now);
-    osc.stop(now + 0.28);
-  } catch (e) {}
+  // Silenced: no dismiss audio sound
+  return;
 }
 
 // Background Cosmic Stardust Canvas Particle Loop
@@ -6487,44 +6444,8 @@ function initMysteryGiftEngine() {
 }
 
 function playGiftFallSound() {
-  const ctx = getOrCreateAudioContext();
-  if (!ctx) return;
-  try {
-    const now = ctx.currentTime;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(800, now);
-    osc.frequency.exponentialRampToValueAtTime(180, now + 0.85);
-
-    gain.setValueAtTime(0.12, now);
-    gain.exponentialRampToValueAtTime(0.001, now + 0.85);
-
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.85);
-
-    // Subtle landing thud
-    setTimeout(() => {
-      try {
-        const thudOsc = ctx.createOscillator();
-        const thudGain = ctx.createGain();
-        const thudTime = ctx.currentTime;
-        thudOsc.type = 'triangle';
-        thudOsc.frequency.setValueAtTime(95, thudTime);
-        thudOsc.frequency.exponentialRampToValueAtTime(30, thudTime + 0.25);
-        thudGain.setValueAtTime(0.2, thudTime);
-        thudGain.exponentialRampToValueAtTime(0.001, thudTime + 0.25);
-        thudOsc.connect(thudGain);
-        thudGain.connect(ctx.destination);
-        thudOsc.start(thudTime);
-        thudOsc.stop(thudTime + 0.25);
-      } catch (e) {}
-    }, 700);
-  } catch (e) {}
+  // Silenced per user request: peaceful silent entrance
+  return;
 }
 
 function playGiftCrackersFanfare() {
