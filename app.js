@@ -173,6 +173,20 @@ function loadData() {
     state.books = (typeof DEFAULT_BOOKS !== 'undefined') ? [...DEFAULT_BOOKS] : [];
   }
 
+  // Guarantee Book 0 (Dictionary Book) is always at index 0 before Book 1
+  if (typeof DEFAULT_BOOKS !== 'undefined' && DEFAULT_BOOKS.length > 0) {
+    const dictBook = DEFAULT_BOOKS.find(b => b.isDictionary || b.no === 'book 0');
+    if (dictBook) {
+      const existingIdx = state.books.findIndex(b => b.isDictionary || b.no === 'book 0');
+      if (existingIdx === -1) {
+        state.books.unshift(dictBook);
+      } else if (existingIdx > 0) {
+        const [found] = state.books.splice(existingIdx, 1);
+        state.books.unshift(found);
+      }
+    }
+  }
+
   // Live recalculate days for reading books
   state.books.forEach(b => {
     if (b.status === 'READING' && b.start_date) {
@@ -817,36 +831,42 @@ function renderGridView(container, books) {
         '</div>';
     }
 
+    const isDict = b.isDictionary || b.no === 'book 0';
+    const dictCardClass = isDict ? ' book-card-dictionary' : '';
     const ratingNum = parseInt(b.rating) || 0;
     const starSnippet = ratingNum > 0 ? ('<span style="color:#f59e0b; font-size:0.75rem; font-weight:700;">★ ' + ratingNum + '</span>') : '';
     const statusText = isDone ? 'Done' : (isReading ? 'Reading' : 'Pending');
     const statusBg = isDone ? 'rgba(16,185,129,0.22)' : (isReading ? 'rgba(59,130,246,0.22)' : 'rgba(255,255,255,0.06)');
     const statusColor = isDone ? '#34d399' : (isReading ? '#60a5fa' : 'var(--text-muted)');
     const statusBorder = isDone ? 'rgba(16,185,129,0.45)' : (isReading ? 'rgba(59,130,246,0.45)' : 'rgba(255,255,255,0.12)');
+    const statusPill = isDict 
+      ? '<span class="badge" style="background:rgba(245,158,11,0.22); color:#fbbf24; border:1px solid rgba(245,158,11,0.55); font-size:0.72rem; font-weight:800; border-radius:14px; padding:3px 9px; flex-shrink:0;">✨ 3D PAGES</span>'
+      : '<span class="badge" style="background:' + statusBg + '; color:' + statusColor + '; border:1px solid ' + statusBorder + '; font-size:0.72rem; font-weight:800; border-radius:14px; padding:3px 9px; flex-shrink:0;">' + statusText + '</span>';
 
-    html += '<div class="book-card ' + statusCardClass + '" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;" title="' + escapeHtml(b.title) + ' - Tap to view & update progress">' +
+    html += '<div class="book-card ' + statusCardClass + dictCardClass + '" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;" title="' + escapeHtml(b.title) + (isDict ? ' - Click to Open Real 3D Pages Book' : ' - Tap to view & update progress') + '">' +
       '<div class="foil-sheen"></div>' +
       '<div class="book-card-header" style="display:flex; gap:0.85rem; align-items:flex-start;">' +
       coverHtml +
       '<div style="flex:1; min-width:0;">' +
-      '<div class="book-card-no" style="letter-spacing:0.04em;">BOOK #' + escapeHtml(b.no) + '</div>' +
+      '<div class="book-card-no" style="letter-spacing:0.04em;' + (isDict ? 'color:#f59e0b; font-weight:800;' : '') + '">' + (isDict ? '📖 REAL 3D BOOK' : ('BOOK #' + escapeHtml(b.no))) + '</div>' +
       '<div class="book-card-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:800; font-size:1rem; letter-spacing:-0.01em; margin:1px 0;" title="' + escapeHtml(b.title) + '">' + escapeHtml(b.title) + '</div>' +
       '<div class="book-card-author" style="font-size:0.82rem; color:var(--text-secondary);">by ' + escapeHtml(b.author) + '</div>' +
       '<div style="display:flex; gap:0.4rem; align-items:center; margin-top:0.35rem;">' +
-      '<span class="badge badge-cat" style="border-radius:12px; font-size:0.7rem;">' + escapeHtml(b.category || 'General') + '</span>' +
+      '<span class="badge badge-cat" style="border-radius:12px; font-size:0.7rem;' + (isDict ? 'background:rgba(245,158,11,0.15); color:#f59e0b;' : '') + '">' + escapeHtml(b.category || 'General') + '</span>' +
       starSnippet +
       '</div>' +
       '</div>' +
-      '<span class="badge" style="background:' + statusBg + '; color:' + statusColor + '; border:1px solid ' + statusBorder + '; font-size:0.72rem; font-weight:800; border-radius:14px; padding:3px 9px; flex-shrink:0;">' + statusText + '</span>' +
+      statusPill +
       '</div>' +
 
       // Sleek Mini Page Progress Bar
       '<div class="card-page-progress">' +
       '<div class="card-page-text">' +
-      '<span>Page ' + pages.current + ' / ' + pages.total + '</span>' +
-      '<span style="color:' + (pages.pct >= 100 ? '#10b981' : 'var(--text-secondary)') + ';">' + pages.pct + '%</span>' +
+      (isDict 
+        ? '<span>A-Z Real Flipping Pages</span><span style="color:#f59e0b; font-weight:700;">Open Book 📖</span>'
+        : ('<span>Page ' + pages.current + ' / ' + pages.total + '</span><span style="color:' + (pages.pct >= 100 ? '#10b981' : 'var(--text-secondary)') + ';">' + pages.pct + '%</span>')) +
       '</div>' +
-      '<div class="page-progress-bar"><div class="page-progress-fill" style="width:' + pages.pct + '%;"></div></div>' +
+      '<div class="page-progress-bar"><div class="page-progress-fill" style="width:' + (isDict ? 100 : pages.pct) + '%;' + (isDict ? 'background:linear-gradient(90deg, #f59e0b, #38bdf8);' : '') + '"></div></div>' +
       '</div>' +
 
       (b.lent_to ? '<div class="card-lent-banner" style="margin-top:0.4rem;"><span>🤝 Lent to: <strong>' + escapeHtml(b.lent_to) + '</strong></span></div>' : '') +
@@ -1334,6 +1354,12 @@ function insertNoteTemplate(type) {
 function openBookDetailSheet(origIdx) {
   const b = state.books[origIdx];
   if (!b) return;
+
+  // Intercept Book 0 (Dictionary Book) to open real flipping book reader
+  if (b.isDictionary || b.no === 'book 0') {
+    openDictionaryBookReader();
+    return;
+  }
 
   const badgeEl = document.getElementById('sheetCategoryBadge');
   if (badgeEl) badgeEl.innerText = (b.category || 'General').toUpperCase();
@@ -5864,6 +5890,352 @@ window.speakBookTakeaway = speakBookTakeaway;
 window.syncSettingsFlagshipControls = syncSettingsFlagshipControls;
 window.initFlagshipEngines = initFlagshipEngines;
 
+/* ==========================================================================
+   FEATURE: 3D REAL PAGES DICTIONARY BOOK ENGINE (A-Z ENGLISH-HINDI LEXICON)
+   ========================================================================== */
+let dictState = {
+  activeSpread: 1,
+  currentLetter: 'ALL',
+  searchQuery: ''
+};
 
+const DICT_WORDS_PER_PAGE = 3;
 
+function playPaperTurnAudio() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const bufferSize = Math.floor(ctx.sampleRate * 0.12);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.25));
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1400, ctx.currentTime);
+    filter.Q.setValueAtTime(1.5, ctx.currentTime);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.22, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    noise.start();
+  } catch (e) {
+    // Audio Context not permitted or unsupported
+  }
+}
 
+function speakDictWord(word) {
+  if (!('speechSynthesis' in window)) {
+    if (typeof showToast === 'function') showToast('Speech synthesis not supported in this browser', 'info');
+    return;
+  }
+  try {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.85;
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+  } catch (e) {
+    console.warn('Speech synthesis error:', e);
+  }
+}
+
+function getDictActiveList() {
+  const allWords = window.DICTIONARY_WORDS || [];
+  if (dictState.searchQuery.trim()) {
+    const q = dictState.searchQuery.toLowerCase().trim();
+    return allWords.filter(w => 
+      (w.word && w.word.toLowerCase().includes(q)) ||
+      (w.hindi && w.hindi.toLowerCase().includes(q)) ||
+      (w.definition && w.definition.toLowerCase().includes(q)) ||
+      (w.phonetic && w.phonetic.includes(q)) ||
+      (w.syn && w.syn.toLowerCase().includes(q))
+    );
+  }
+  if (dictState.currentLetter !== 'ALL') {
+    return allWords.filter(w => 
+      (w.word || '').toUpperCase().startsWith(dictState.currentLetter)
+    );
+  }
+  return allWords;
+}
+
+function openDictionaryBookReader(startLetter) {
+  const overlay = document.getElementById('dictionaryBookModalOverlay');
+  if (!overlay) return;
+
+  if (startLetter && typeof startLetter === 'string') {
+    dictState.currentLetter = startLetter.toUpperCase();
+  } else {
+    dictState.currentLetter = 'ALL';
+  }
+  dictState.searchQuery = '';
+  dictState.activeSpread = 1;
+
+  const searchInput = document.getElementById('dictSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('dictSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  playPaperTurnAudio();
+  renderDictAlphabetStrip();
+  renderDictBookSpread();
+
+  // Attach keyboard navigation
+  window.addEventListener('keydown', handleDictKeyNavigation);
+}
+
+function closeDictionaryBookReader() {
+  const overlay = document.getElementById('dictionaryBookModalOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+  if ('speechSynthesis' in window) {
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
+  window.removeEventListener('keydown', handleDictKeyNavigation);
+}
+
+function handleDictOverlayClick(event) {
+  if (event.target.id === 'dictionaryBookModalOverlay') {
+    closeDictionaryBookReader();
+  }
+}
+
+function handleDictKeyNavigation(event) {
+  const overlay = document.getElementById('dictionaryBookModalOverlay');
+  if (!overlay || !overlay.classList.contains('active')) return;
+  if (event.key === 'ArrowLeft') {
+    turnDictPage(-1);
+  } else if (event.key === 'ArrowRight') {
+    turnDictPage(1);
+  } else if (event.key === 'Escape') {
+    closeDictionaryBookReader();
+  }
+}
+
+function renderDictAlphabetStrip() {
+  const strip = document.getElementById('dictAlphabetStrip');
+  if (!strip) return;
+
+  const letters = ['ALL', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  let html = '';
+  letters.forEach(lettr => {
+    const isActive = dictState.currentLetter === lettr;
+    html += '<button type="button" class="dict-letter-tab ' + (isActive ? 'active' : '') + '" onclick="jumpToDictLetter(\'' + lettr + '\')">' + escapeHtml(lettr) + '</button>';
+  });
+  strip.innerHTML = html;
+}
+
+function jumpToDictLetter(letter) {
+  dictState.currentLetter = letter;
+  dictState.searchQuery = '';
+  dictState.activeSpread = 1;
+
+  const searchInput = document.getElementById('dictSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('dictSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+
+  playPaperTurnAudio();
+  renderDictAlphabetStrip();
+  renderDictBookSpread();
+}
+
+function onDictSearchInput(val) {
+  dictState.searchQuery = val || '';
+  dictState.activeSpread = 1;
+  const clearBtn = document.getElementById('dictSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = dictState.searchQuery ? 'block' : 'none';
+
+  if (dictState.searchQuery) {
+    dictState.currentLetter = 'ALL';
+    renderDictAlphabetStrip();
+  }
+  renderDictBookSpread();
+}
+
+function clearDictSearch() {
+  const input = document.getElementById('dictSearchInput');
+  if (input) input.value = '';
+  onDictSearchInput('');
+}
+
+function turnDictPage(delta) {
+  const list = getDictActiveList();
+  const totalPages = Math.max(1, Math.ceil(list.length / DICT_WORDS_PER_PAGE));
+  const totalSpreads = Math.max(1, Math.ceil(totalPages / 2));
+
+  const targetSpread = dictState.activeSpread + delta;
+  if (targetSpread < 1 || targetSpread > totalSpreads) return;
+
+  dictState.activeSpread = targetSpread;
+  playPaperTurnAudio();
+
+  const spreadEl = document.getElementById('dictBookSpread');
+  if (spreadEl) {
+    spreadEl.style.opacity = '0.7';
+    spreadEl.style.transform = delta > 0 ? 'perspective(1400px) rotateY(-1.2deg)' : 'perspective(1400px) rotateY(1.2deg)';
+    setTimeout(() => {
+      spreadEl.style.opacity = '1';
+      spreadEl.style.transform = 'none';
+    }, 180);
+  }
+
+  renderDictBookSpread();
+}
+
+function onDictSliderChange(val) {
+  dictState.activeSpread = parseInt(val) || 1;
+  playPaperTurnAudio();
+  renderDictBookSpread();
+}
+
+function renderDictBookSpread() {
+  const list = getDictActiveList();
+  const totalWords = list.length;
+  const totalPages = Math.max(1, Math.ceil(totalWords / DICT_WORDS_PER_PAGE));
+  const totalSpreads = Math.max(1, Math.ceil(totalPages / 2));
+
+  if (dictState.activeSpread > totalSpreads) {
+    dictState.activeSpread = totalSpreads;
+  }
+  if (dictState.activeSpread < 1) {
+    dictState.activeSpread = 1;
+  }
+
+  const leftPageNum = (dictState.activeSpread - 1) * 2 + 1;
+  const rightPageNum = leftPageNum + 1;
+
+  const leftStartIdx = (leftPageNum - 1) * DICT_WORDS_PER_PAGE;
+  const leftWords = list.slice(leftStartIdx, leftStartIdx + DICT_WORDS_PER_PAGE);
+
+  const rightStartIdx = (rightPageNum - 1) * DICT_WORDS_PER_PAGE;
+  const rightWords = list.slice(rightStartIdx, rightStartIdx + DICT_WORDS_PER_PAGE);
+
+  const leftPageEl = document.getElementById('dictPageLeft');
+  const rightPageEl = document.getElementById('dictPageRight');
+
+  if (leftPageEl) {
+    leftPageEl.innerHTML = buildDictPageHtml(leftWords, leftPageNum, totalPages, false);
+  }
+  if (rightPageEl) {
+    rightPageEl.innerHTML = buildDictPageHtml(rightWords, rightPageNum, totalPages, true);
+  }
+
+  // Update controls
+  const prevBtn = document.getElementById('dictPrevBtn');
+  const nextBtn = document.getElementById('dictNextBtn');
+  if (prevBtn) prevBtn.disabled = (dictState.activeSpread <= 1);
+  if (nextBtn) nextBtn.disabled = (dictState.activeSpread >= totalSpreads);
+
+  const indicator = document.getElementById('dictPageIndicator');
+  if (indicator) {
+    if (dictState.searchQuery) {
+      indicator.innerHTML = '🔍 Found <strong>' + totalWords + '</strong> words • Pages ' + leftPageNum + '-' + Math.min(rightPageNum, totalPages) + ' of ' + totalPages;
+    } else {
+      indicator.innerHTML = '📖 Pages <strong>' + leftPageNum + '-' + Math.min(rightPageNum, totalPages) + '</strong> of ' + totalPages;
+    }
+  }
+
+  const slider = document.getElementById('dictPageSlider');
+  if (slider) {
+    slider.min = 1;
+    slider.max = totalSpreads;
+    slider.value = dictState.activeSpread;
+  }
+}
+
+function buildDictPageHtml(words, pageNum, totalPages, isRightPage) {
+  if (pageNum > totalPages && words.length === 0) {
+    return '<div class="dict-page-header">' +
+      '<span class="dict-header-letter">✨</span>' +
+      '<span class="dict-header-running-head">NOTES &amp; REFLECTIONS</span>' +
+      '<span class="dict-page-num">ENDPAPER</span>' +
+      '</div>' +
+      '<div class="dict-page-content" style="align-items:center; justify-content:center; text-align:center; color:#94a3b8; padding:30px;">' +
+      '<div style="font-size:3rem; margin-bottom:12px;">🌟</div>' +
+      '<h3 style="font-family:serif; color:#334155; margin-bottom:6px;">Vocabulary Mastery</h3>' +
+      '<p style="font-size:0.85rem; line-height:1.5; color:#64748b;">"Words are the clothing of ideas. Expand your vocabulary, expand your universe."</p>' +
+      '<div style="margin-top:20px; font-size:0.8rem; font-style:italic; color:#94a3b8;">Mind &amp; Focus Books • Oxford Lexicon</div>' +
+      '</div>' +
+      '<div class="dict-page-footer">Daily Mind Expansion • Page ' + pageNum + '</div>';
+  }
+
+  if (words.length === 0) {
+    return '<div class="dict-page-header">' +
+      '<span class="dict-header-letter">⚠️</span>' +
+      '<span class="dict-header-running-head">SEARCH RESULTS</span>' +
+      '<span class="dict-page-num">PAGE ' + pageNum + '</span>' +
+      '</div>' +
+      '<div class="dict-page-content" style="align-items:center; justify-content:center; text-align:center; color:#94a3b8; padding:40px 20px;">' +
+      '<div style="font-size:3rem; margin-bottom:12px;">🔍</div>' +
+      '<h3 style="font-family:serif; color:#334155;">No Words Found</h3>' +
+      '<p style="font-size:0.85rem; color:#64748b; margin-top:6px;">Try another English word, Hindi meaning, or reset filter.</p>' +
+      '<button type="button" class="dict-nav-btn primary" onclick="clearDictSearch()" style="margin-top:16px; padding:6px 16px; font-size:0.8rem;">Clear Search</button>' +
+      '</div>' +
+      '<div class="dict-page-footer">Mind &amp; Focus Books • Search Lexicon</div>';
+  }
+
+  const firstLetter = (words[0].word || 'A').charAt(0).toUpperCase();
+
+  let cardsHtml = '';
+  words.forEach(item => {
+    cardsHtml += '<div class="dict-entry-card">' +
+      '<div class="dict-entry-top">' +
+      '<span class="dict-entry-word">' + escapeHtml(item.word) + '</span>' +
+      (item.phonetic ? '<span class="dict-entry-phonetic">[' + escapeHtml(item.phonetic) + ']</span>' : '') +
+      (item.type ? '<span class="dict-entry-type">' + escapeHtml(item.type) + '</span>' : '') +
+      '<button type="button" class="dict-listen-btn" onclick="speakDictWord(\'' + escapeHtml(item.word).replace(/'/g, "\\'") + '\')" title="Listen to English Pronunciation">' +
+      '🔊 Pronounce' +
+      '</button>' +
+      '</div>' +
+
+      // Hindi Meaning
+      '<div class="dict-hindi-pill">अर्थ: ' + escapeHtml(item.hindi) + '</div>' +
+
+      // Definition
+      '<div class="dict-entry-def">' + escapeHtml(item.definition) + '</div>' +
+
+      // Example sentences
+      (item.example ? '<div class="dict-entry-example">"' + escapeHtml(item.example) + '"' +
+        (item.exampleHindi ? '<div class="dict-entry-example-hindi">हिन्दी: ' + escapeHtml(item.exampleHindi) + '</div>' : '') +
+        '</div>' : '') +
+
+      // Synonyms
+      (item.syn ? '<div class="dict-synonyms-row"><strong>समानार्थक (Synonyms):</strong> ' + escapeHtml(item.syn) + '</div>' : '') +
+      '</div>';
+  });
+
+  return '<div class="dict-page-header">' +
+    '<span class="dict-header-letter">' + escapeHtml(firstLetter) + '</span>' +
+    '<span class="dict-header-running-head">FOCUS VOCABULARY</span>' +
+    '<span class="dict-page-num">PAGE ' + pageNum + '</span>' +
+    '</div>' +
+    '<div class="dict-page-content">' +
+    cardsHtml +
+    '</div>' +
+    '<div class="dict-page-footer">Mind &amp; Focus Books • Daily Vocabulary Builder</div>';
+}
+
+// Window bindings
+window.openDictionaryBookReader = openDictionaryBookReader;
+window.closeDictionaryBookReader = closeDictionaryBookReader;
+window.handleDictOverlayClick = handleDictOverlayClick;
+window.jumpToDictLetter = jumpToDictLetter;
+window.turnDictPage = turnDictPage;
+window.onDictSliderChange = onDictSliderChange;
+window.onDictSearchInput = onDictSearchInput;
+window.clearDictSearch = clearDictSearch;
+window.speakDictWord = speakDictWord;
+window.playPaperTurnAudio = playPaperTurnAudio;

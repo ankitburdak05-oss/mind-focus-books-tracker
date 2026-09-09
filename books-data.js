@@ -1,5 +1,22 @@
 const DEFAULT_BOOKS = [
   {
+    "no": "book 0",
+    "title": "A-Z English-Hindi Focus Vocabulary Lexicon",
+    "author": "Oxford Focus Lexicon",
+    "language": "ENG / HIN",
+    "status": "READING",
+    "start_date": "2026-09-08",
+    "end_date": "",
+    "count_days": 1,
+    "rating": "5",
+    "category": "Vocabulary & Language",
+    "takeaway": "Real 3D Interactive Flipping Pages Dictionary with English words, Hindi meanings, pronunciations, audio speech, and examples.",
+    "availability": "AVAILABLE",
+    "isDictionary": true,
+    "price": 0,
+    "cover_url": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80"
+  },
+  {
     "no": "book 1",
     "title": "Hyperfocus",
     "author": "Chris Bailey",
@@ -2100,3 +2117,7 @@ const DEFAULT_BOOKS = [
     "availability": "UNAVAILABLE"
   }
 ];
+
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { DEFAULT_BOOKS };
+}

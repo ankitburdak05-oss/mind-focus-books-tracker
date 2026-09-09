@@ -1689,6 +1689,68 @@
     </div>
   </div>
 
+  <!-- ==========================================================================
+       FEATURE: 3D REAL PAGES DICTIONARY BOOK (A-Z ENGLISH-HINDI FOCUS LEXICON)
+       ========================================================================== -->
+  <div id="dictionaryBookModalOverlay" class="dictionary-modal-overlay" onclick="handleDictOverlayClick(event)">
+    <div class="dict-book-outer-wrapper" onclick="event.stopPropagation()">
+      <!-- Top Bar -->
+      <div class="dict-book-top-bar">
+        <div class="dict-book-header-left">
+          <span class="dict-book-badge">📖 REAL 3D BOOK</span>
+          <h2 class="dict-book-header-title">A-Z English-Hindi Focus Vocabulary Lexicon</h2>
+        </div>
+        <div class="dict-book-header-right">
+          <div class="dict-search-box">
+            <span class="dict-search-icon">🔍</span>
+            <input type="text" id="dictSearchInput" placeholder="Search English or Hindi word..." oninput="onDictSearchInput(this.value)">
+            <button type="button" class="dict-search-clear" id="dictSearchClearBtn" onclick="clearDictSearch()" style="display:none;">✕</button>
+          </div>
+          <button type="button" class="dict-close-btn" onclick="closeDictionaryBookReader()" title="Close Book (Esc)">✕</button>
+        </div>
+      </div>
+
+      <!-- A-Z Alphabet Strip -->
+      <div class="dict-alphabet-strip" id="dictAlphabetStrip">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- 3D Realistic Open Book Stage -->
+      <div class="dict-3d-book-stage">
+        <div class="dict-book-hardcover" id="dictHardcover">
+          <!-- Ribbon Bookmark -->
+          <div class="dict-ribbon-bookmark"></div>
+
+          <!-- Book Spread -->
+          <div class="dict-book-spread" id="dictBookSpread">
+            <!-- Left Page -->
+            <div class="dict-page dict-page-left" id="dictPageLeft"></div>
+
+            <!-- Realistic Center Spine Shadow -->
+            <div class="dict-center-spine"></div>
+
+            <!-- Right Page -->
+            <div class="dict-page dict-page-right" id="dictPageRight"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Controls Bar -->
+      <div class="dict-book-controls-bar">
+        <button type="button" class="dict-nav-btn" id="dictPrevBtn" onclick="turnDictPage(-1)">
+          ‹ Turn Prev Page
+        </button>
+        <div class="dict-page-indicator-wrap">
+          <input type="range" class="dict-page-slider" id="dictPageSlider" min="1" max="1" value="1" oninput="onDictSliderChange(this.value)">
+          <span class="dict-page-indicator-text" id="dictPageIndicator">Pages 1-2 of 38</span>
+        </div>
+        <button type="button" class="dict-nav-btn primary" id="dictNextBtn" onclick="turnDictPage(1)">
+          Turn Next Page ›
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Hidden File Input for Import -->
   <input type="file" id="importFileInput" accept=".json" style="display:none;">
 
@@ -1697,6 +1759,7 @@
   <script src="jspdf.umd.min.js"></script>
   <script src="jspdf.plugin.autotable.min.js"></script>
   <script src="tesseract.min.js"></script>
+  <script src="dictionary-data.js"></script>
   <script src="books-data.js"></script>
   <script src="app.js"></script>
 </body>

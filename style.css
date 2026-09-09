@@ -5993,10 +5993,514 @@ body {
   background: rgba(255, 255, 255, 0.5);
   width: 52px;
 }
+/* ==========================================================================
+   FEATURE: 3D REAL PAGES DICTIONARY BOOK (A-Z ENGLISH-HINDI FOCUS LEXICON)
+   ========================================================================== */
+.dictionary-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100000;
+  background: rgba(3, 6, 14, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
 
+.dictionary-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
 
+.dict-book-outer-wrapper {
+  width: 100%;
+  max-width: 1220px;
+  max-height: 96vh;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
+/* Top Bar */
+.dict-book-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(13, 20, 38, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 18px;
+  padding: 12px 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  flex-wrap: wrap;
+  gap: 10px;
+}
 
+.dict-book-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
+.dict-book-badge {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  color: #000;
+  font-weight: 900;
+  font-size: 0.72rem;
+  padding: 4px 10px;
+  border-radius: 999px;
+  letter-spacing: 0.5px;
+}
+
+.dict-book-header-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.dict-book-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dict-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dict-search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 0.9rem;
+  color: #94a3b8;
+}
+
+#dictSearchInput {
+  background: rgba(8, 12, 24, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 12px;
+  padding: 8px 32px 8px 34px;
+  color: #fff;
+  font-size: 0.88rem;
+  outline: none;
+  min-width: 260px;
+  transition: all 0.2s ease;
+}
+
+#dictSearchInput:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+}
+
+.dict-search-clear {
+  position: absolute;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.dict-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dict-close-btn:hover {
+  background: #f43f5e;
+  border-color: #f43f5e;
+}
+
+/* A-Z Alphabet Strip */
+.dict-alphabet-strip {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  padding: 6px 12px;
+  background: rgba(10, 15, 30, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  scrollbar-width: none;
+}
+
+.dict-alphabet-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.dict-letter-tab {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.88rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dict-letter-tab:hover {
+  background: rgba(56, 189, 248, 0.18);
+  color: #fff;
+  border-color: #38bdf8;
+}
+
+.dict-letter-tab.active {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #000;
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+/* 3D Realistic Open Book Stage */
+.dict-3d-book-stage {
+  perspective: 1800px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 480px;
+  max-height: 72vh;
+}
+
+.dict-book-hardcover {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 480px;
+  background: linear-gradient(145deg, #1e1b18 0%, #12100e 100%);
+  border: 4px solid #3d342a;
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.85),
+    inset 0 0 20px rgba(0, 0, 0, 0.8),
+    0 0 35px rgba(245, 158, 11, 0.15);
+  display: flex;
+}
+
+/* Silk Ribbon Bookmark */
+.dict-ribbon-bookmark {
+  position: absolute;
+  top: -4px;
+  right: 50%;
+  transform: translateX(18px);
+  width: 18px;
+  height: 110px;
+  background: linear-gradient(180deg, #b91c1c, #ef4444);
+  z-index: 25;
+  box-shadow: 2px 5px 12px rgba(0, 0, 0, 0.5);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 88%, 0 100%);
+  pointer-events: none;
+}
+
+/* Book Spread (Left + Right Pages) */
+.dict-book-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background: #fdfbf7;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.12);
+}
+
+@media (max-width: 768px) {
+  .dict-book-spread {
+    grid-template-columns: 1fr;
+  }
+  .dict-page-right {
+    display: none !important;
+  }
+}
+
+/* Real Paper Page */
+.dict-page {
+  background: #fdfbf7;
+  background-image: radial-gradient(circle at 50% 0%, rgba(245, 235, 220, 0.4) 0%, transparent 70%);
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  color: #1e293b;
+  font-family: "Georgia", "Merriweather", serif;
+  overflow-y: auto;
+}
+
+.dict-page-left {
+  border-right: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.dict-page-right {
+  border-left: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Realistic Center Spine Shadow */
+.dict-center-spine {
+  position: absolute;
+  top: 0; bottom: 0;
+  left: 50%;
+  width: 32px;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.02) 40%, rgba(0,0,0,0.02) 60%, rgba(0,0,0,0.18) 100%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+@media (max-width: 768px) {
+  .dict-center-spine {
+    display: none;
+  }
+}
+
+/* Page Headers & Footers */
+.dict-page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #334155;
+  margin-bottom: 14px;
+}
+
+.dict-header-letter {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #0f172a;
+}
+
+.dict-header-running-head {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: #64748b;
+  text-transform: uppercase;
+}
+
+.dict-page-num {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.dict-page-footer {
+  text-align: center;
+  padding-top: 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 0.68rem;
+  font-style: italic;
+  color: #94a3b8;
+  margin-top: 10px;
+}
+
+/* Dictionary Word Entry */
+.dict-page-content {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+}
+
+.dict-entry-card {
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.15);
+}
+
+.dict-entry-card:last-child {
+  border-bottom: none;
+}
+
+.dict-entry-top {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.dict-entry-word {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.2px;
+}
+
+.dict-entry-phonetic {
+  font-size: 0.8rem;
+  color: #64748b;
+  background: rgba(0, 0, 0, 0.04);
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.dict-entry-type {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: #0284c7;
+  font-weight: 600;
+}
+
+.dict-listen-btn {
+  background: rgba(2, 132, 199, 0.1);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  color: #0284c7;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.15s ease;
+}
+
+.dict-listen-btn:hover {
+  background: #0284c7;
+  color: #fff;
+}
+
+/* Hindi Meaning Highlight */
+.dict-hindi-pill {
+  display: inline-block;
+  background: linear-gradient(135deg, #fffbeb, #fef3c7);
+  border: 1px solid #f59e0b;
+  color: #b45309;
+  font-size: 0.95rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 8px;
+  margin: 4px 0 6px 0;
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.15);
+}
+
+.dict-entry-def {
+  font-size: 0.85rem;
+  color: #334155;
+  line-height: 1.4;
+  margin-bottom: 4px;
+}
+
+.dict-entry-example {
+  font-size: 0.82rem;
+  color: #1e293b;
+  font-style: italic;
+  background: rgba(0, 0, 0, 0.025);
+  padding: 4px 8px;
+  border-left: 3px solid #38bdf8;
+  border-radius: 0 6px 6px 0;
+  margin-top: 4px;
+}
+
+.dict-entry-example-hindi {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-style: normal;
+  margin-top: 2px;
+}
+
+.dict-synonyms-row {
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* Bottom Controls Bar */
+.dict-book-controls-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(13, 20, 38, 0.9);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 18px;
+  padding: 10px 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dict-nav-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.dict-nav-btn:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: #38bdf8;
+}
+
+.dict-nav-btn.primary {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #000;
+  border: none;
+  font-weight: 900;
+}
+
+.dict-page-indicator-wrap {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  max-width: 320px;
+}
+
+.dict-page-slider {
+  flex: 1;
+  accent-color: #38bdf8;
+}
+
+.dict-page-indicator-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent-cyan);
+  white-space: nowrap;
+}
+
+/* Special Book 0 Card VIP Glow in Grid */
+.book-card-dictionary {
+  background: linear-gradient(145deg, rgba(26, 20, 14, 0.95), rgba(12, 10, 8, 0.98)) !important;
+  border: 2px solid rgba(245, 158, 11, 0.55) !important;
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.2), inset 0 0 20px rgba(245, 158, 11, 0.08) !important;
+}
+
+.book-card-dictionary .book-card-title {
+  background: linear-gradient(135deg, #ffffff 40%, #f59e0b) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
 
 
