@@ -6,6 +6,7 @@
   <title>Mind Focus Books • Executive Command Studio</title>
   <link rel="manifest" href="manifest-admin.json">
   <link rel="stylesheet" href="control-panel.css">
+  <link rel="stylesheet" href="style.css">
   <link rel="icon" type="image/png" href="icon-192.png">
 </head>
 <body>
@@ -37,16 +38,16 @@
         <div class="pipeline-badge-icon">🚀</div>
         <div>
           <div class="pipeline-title">
-            <span id="pipelineStagedTitle">Mind Focus Books v3.2.0</span>
+            <span id="pipelineStagedTitle">Mind Focus Books v3.3.0</span>
             <span class="pipeline-status-tag tag-staged" id="pipelineStatusTag">PENDING REVIEW</span>
           </div>
           <div class="pipeline-desc" id="pipelineStagedDesc">
-            Staged Release ready in Control Panel. Review features and click Deploy to push live to all Real App users!
+            Staged Release ready in Control Panel: A-Z 3D Dictionary Book. Review features and click Deploy to push live to Phone App!
           </div>
         </div>
       </div>
       <div class="pipeline-actions">
-        <button type="button" class="btn-admin btn-emerald" id="btnDeployToRealApp" onclick="deployStagedReleaseToRealApp()">
+        <button type="button" class="btn-admin btn-emerald" id="btnDeployToRealAppBanner" onclick="deployStagedReleaseToRealApp()">
           <span>⚡</span> Deploy to Real App
         </button>
         <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()" style="min-width:130px; font-size:0.82rem;">
@@ -90,6 +91,7 @@
           <div class="form-group">
             <label class="form-label">⚡ 1-Click Quick Presets</label>
             <select class="form-select" id="noticePresetSelect">
+              <option value="dictionary_release">📖 Card 2: "v3.3.0 A-Z Dictionary Book Live!" (3D Model)</option>
               <option value="c2_feedback">💎 Card 2: "kesa laga new card" (3D Model)</option>
               <option value="c1_poll">📢 Card 1: "ye acha hai ya card2" (Quantum Portal)</option>
               <option value="new_update">🚀 New Update Ready: v3.2.0</option>
@@ -254,19 +256,33 @@
           Jab bhi koi naya feature ya update banta hai, wo sabse pehle yaha <b>Staging Hub</b> me aata hai. Aap yaha features verify kar sakte hain aur fir <b>"Deploy to Real App"</b> button dabakar sabhi users ke phone me live launch kar sakte hain!
         </p>
 
-        <div style="background:rgba(10,15,29,0.7); border:1px solid var(--border-subtle); border-radius:16px; padding:20px; margin-bottom:20px;">
-          <h3 style="font-size:1.1rem; color:var(--accent-cyan); margin-bottom:12px;">📦 Staged Release: Mind Focus Books v3.2.0</h3>
+        <div style="background:rgba(10,15,29,0.7); border:1px solid rgba(245,158,11,0.35); border-radius:16px; padding:20px; margin-bottom:20px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+            <h3 style="font-size:1.2rem; color:#f59e0b; margin:0;">📦 Staged Release: Mind Focus Books v3.3.0</h3>
+            <span class="pipeline-status-tag tag-staged" id="pipelineStagedTagBadge">PENDING REVIEW</span>
+          </div>
+          <p style="font-size:0.86rem; color:#94a3b8; margin-bottom:12px;">
+            <b>Feature Highlights:</b> Real 3D Flipping Pages Dictionary Book (Book #0) with English to Hindi meanings, speech pronunciation audio, and example sentences.
+          </p>
           <ul style="padding-left:22px; font-size:0.88rem; color:var(--text-secondary); line-height:2;">
-            <li>✦ <b>Ultra-Fast Real-Time Broadcast Engine:</b> GitHub API direct 0-second cache delay &amp; 5s fast polling.</li>
-            <li>✦ <b>Laptop 0ms Multi-Window Sync:</b> Instant broadcast reception on laptop and native app.</li>
-            <li>✦ <b>Executive Command Studio:</b> VIP Cyber Obsidian dashboard with 3D model viewport.</li>
-            <li>✦ <b>Book of the Day Remote Curator:</b> Remote spotlight book recommendations for users.</li>
+            <li>✦ <b>Book #0 Dictionary Lexicon:</b> Placed right before Book 1 as the first book in the entire app.</li>
+            <li>✦ <b>Real 3D Book Page Flip:</b> Leather hardcover, red ribbon bookmark, dual-page spread with center spine shadow.</li>
+            <li>✦ <b>ASMR Paper Turn Audio:</b> Web Audio API realistic crisp paper flipping sound.</li>
+            <li>✦ <b>Audio Pronunciation &amp; Hindi Meanings:</b> Native speech pronunciation with Hindi arth and sentences.</li>
+            <li>✦ <b>A-Z Alphabet Strip &amp; Fast Search:</b> Jump to any letter or search word instantly.</li>
           </ul>
+
+          <div style="margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08); display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+            <button type="button" class="btn-admin btn-primary" onclick="openDictionaryBookReader()" style="background:linear-gradient(135deg, #b45309, #f59e0b); border:none; font-weight:800; padding:10px 20px;">
+              <span>📖</span> Test 3D Dictionary in Panel (Live Preview)
+            </button>
+            <span style="font-size:0.82rem; color:var(--text-muted);">Click to flip real pages &amp; test speech pronunciation right here in the panel!</span>
+          </div>
         </div>
 
         <div class="btn-row">
-          <button type="button" class="btn-admin btn-emerald" onclick="deployStagedReleaseToRealApp()">
-            <span>🚀</span> Confirm &amp; Deploy v3.2.0 to Real App
+          <button type="button" class="btn-admin btn-emerald" id="btnDeployToRealApp" onclick="deployStagedReleaseToRealApp()">
+            <span>🚀</span> Confirm &amp; Deploy v3.3.0 &amp; Dictionary to Real App
           </button>
           <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()">
             <span>↩️</span> Revert to Previous Release
@@ -283,6 +299,18 @@
             <span>🎛️</span> Remote "God Mode" Switches (Real App Controls)
           </div>
           <span class="panel-pill">INSTANT CLOUD TOGGLES</span>
+        </div>
+
+        <!-- 3D Dictionary Book Master Switch -->
+        <div class="toggle-row" style="background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.25); border-radius:12px; padding:14px; margin-bottom:12px;">
+          <div>
+            <div class="toggle-info-title" style="color:#fbbf24;">📖 3D Dictionary Book (Book #0 Lexicon)</div>
+            <div class="toggle-info-desc">Enable/disable Book 0 A-Z English-Hindi 3D Dictionary Book in the Phone App. When OFF, it is hidden from app users.</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="cfgDictionaryEnabled">
+            <span class="slider"></span>
+          </label>
         </div>
 
         <div class="toggle-row">
@@ -432,6 +460,67 @@
     </section>
   </div>
 
+  <!-- 3D Real Pages Dictionary Book Reader Preview Modal in Control Panel -->
+  <div id="dictionaryBookModalOverlay" class="dictionary-modal-overlay" onclick="handleDictOverlayClick(event)">
+    <div class="dict-book-outer-wrapper" onclick="event.stopPropagation()">
+      <!-- Top Bar -->
+      <div class="dict-book-top-bar">
+        <div class="dict-book-header-left">
+          <span class="dict-book-badge">📖 PANEL 3D PREVIEW</span>
+          <h2 class="dict-book-header-title">A-Z English-Hindi Focus Vocabulary Lexicon</h2>
+        </div>
+        <div class="dict-book-header-right">
+          <div class="dict-search-box">
+            <span class="dict-search-icon">🔍</span>
+            <input type="text" id="dictSearchInput" placeholder="Search English or Hindi word..." oninput="onDictSearchInput(this.value)">
+            <button type="button" class="dict-search-clear" id="dictSearchClearBtn" onclick="clearDictSearch()" style="display:none;">✕</button>
+          </div>
+          <button type="button" class="dict-close-btn" onclick="closeDictionaryBookReader()" title="Close Book (Esc)">✕</button>
+        </div>
+      </div>
+
+      <!-- A-Z Alphabet Strip -->
+      <div class="dict-alphabet-strip" id="dictAlphabetStrip">
+        <!-- Rendered via JS -->
+      </div>
+
+      <!-- 3D Realistic Open Book Stage -->
+      <div class="dict-3d-book-stage">
+        <div class="dict-book-hardcover" id="dictHardcover">
+          <!-- Ribbon Bookmark -->
+          <div class="dict-ribbon-bookmark"></div>
+
+          <!-- Book Spread -->
+          <div class="dict-book-spread" id="dictBookSpread">
+            <!-- Left Page -->
+            <div class="dict-page dict-page-left" id="dictPageLeft"></div>
+
+            <!-- Realistic Center Spine Shadow -->
+            <div class="dict-center-spine"></div>
+
+            <!-- Right Page -->
+            <div class="dict-page dict-page-right" id="dictPageRight"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Controls Bar -->
+      <div class="dict-book-controls-bar">
+        <button type="button" class="dict-nav-btn" id="dictPrevBtn" onclick="turnDictPage(-1)">
+          ‹ Turn Prev Page
+        </button>
+        <div class="dict-page-indicator-wrap">
+          <input type="range" class="dict-page-slider" id="dictPageSlider" min="1" max="1" value="1" oninput="onDictSliderChange(this.value)">
+          <span class="dict-page-indicator-text" id="dictPageIndicator">Pages 1-2 of 38</span>
+        </div>
+        <button type="button" class="dict-nav-btn primary" id="dictNextBtn" onclick="turnDictPage(1)">
+          Turn Next Page ›
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="dictionary-data.js"></script>
   <script src="control-panel.js"></script>
 </body>
 </html>

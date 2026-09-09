@@ -17,7 +17,8 @@ let state = {
   currentEditingCoverImage: '',
   currentLendIndex: -1,
   pinLocked: false,
-  enteredPin: ''
+  enteredPin: '',
+  dictionaryEnabled: localStorage.getItem('mf_dictionary_enabled') === 'true'
 };
 
 const ICONS = {
@@ -173,17 +174,26 @@ function loadData() {
     state.books = (typeof DEFAULT_BOOKS !== 'undefined') ? [...DEFAULT_BOOKS] : [];
   }
 
-  // Guarantee Book 0 (Dictionary Book) is always at index 0 before Book 1
-  if (typeof DEFAULT_BOOKS !== 'undefined' && DEFAULT_BOOKS.length > 0) {
-    const dictBook = DEFAULT_BOOKS.find(b => b.isDictionary || b.no === 'book 0');
-    if (dictBook) {
-      const existingIdx = state.books.findIndex(b => b.isDictionary || b.no === 'book 0');
-      if (existingIdx === -1) {
-        state.books.unshift(dictBook);
-      } else if (existingIdx > 0) {
-        const [found] = state.books.splice(existingIdx, 1);
-        state.books.unshift(found);
+  // Control Book 0 (Dictionary Book) presence based on panel feature flag
+  const isDictEnabled = state.dictionaryEnabled === true;
+  const existingIdx = state.books.findIndex(b => b.isDictionary || b.no === 'book 0');
+
+  if (isDictEnabled) {
+    if (typeof DEFAULT_BOOKS !== 'undefined' && DEFAULT_BOOKS.length > 0) {
+      const dictBook = DEFAULT_BOOKS.find(b => b.isDictionary || b.no === 'book 0');
+      if (dictBook) {
+        if (existingIdx === -1) {
+          state.books.unshift(dictBook);
+        } else if (existingIdx > 0) {
+          const [found] = state.books.splice(existingIdx, 1);
+          state.books.unshift(found);
+        }
       }
+    }
+  } else {
+    // Hidden until deployed or enabled from control panel
+    if (existingIdx !== -1) {
+      state.books.splice(existingIdx, 1);
     }
   }
 
@@ -4934,6 +4944,19 @@ async function checkRemoteConfig() {
       topBanner.innerText = cfg.globalBanner.text;
     } else {
       if (topBanner) topBanner.remove();
+    }
+
+    // 3. Remote Feature Flags (Dictionary Book, Quotes, etc.)
+    if (cfg.features && typeof cfg.features.dictionaryBookEnabled === 'boolean') {
+      const isDictActive = cfg.features.dictionaryBookEnabled === true || 
+        (cfg.stagedRelease && cfg.stagedRelease.version === 'v3.3.0' && cfg.stagedRelease.isDeployed === true);
+      
+      if (state.dictionaryEnabled !== isDictActive) {
+        state.dictionaryEnabled = isDictActive;
+        localStorage.setItem('mf_dictionary_enabled', isDictActive ? 'true' : 'false');
+        loadData();
+        if (typeof renderAll === 'function') renderAll();
+      }
     }
   } catch (err) {}
 }

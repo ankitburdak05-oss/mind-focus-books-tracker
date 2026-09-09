@@ -1,18 +1,11 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-08T20:25:00Z",
+  "updatedAt": "2026-09-09T09:15:00.000Z",
   "activeRelease": {
-    "version": "v3.1.0",
-    "name": "Mind Focus Books v3.1.0 (Dual Broadcast & 3D Spatial Edition)",
-    "releaseDate": "2026-09-08",
-    "changelog": "Dual Broadcast Engine with Card 1 Quantum Portal and Card 2 3D Model Crystal Cube, Instant Live Sync Engine.",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest"
-  },
-  "stagedRelease": {
     "version": "v3.2.0",
     "name": "Mind Focus Books v3.2.0 (Executive Staging Release)",
     "stagedAt": "2026-09-08T20:20:00Z",
-    "isDeployed": false,
+    "isDeployed": true,
     "features": [
       "Staging to Real App Deployment Pipeline",
       "Executive Control Panel Hub with Live 3D Viewport",
@@ -21,10 +14,27 @@
     ],
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.2.0/MindFocusBooks-Native.apk"
   },
+  "stagedRelease": {
+    "version": "v3.3.0",
+    "name": "Mind Focus Books v3.3.0 (A-Z English-Hindi 3D Dictionary Book Release)",
+    "stagedAt": "2026-09-09T09:15:00Z",
+    "isDeployed": false,
+    "features": [
+      "Book #0: A-Z English-Hindi Focus Vocabulary Lexicon (101+ Core Words)",
+      "Real 3D Book Experience: Leather Hardcover, Silk Ribbon Bookmark, Dual-Page Spread",
+      "ASMR Paper Turn Sound & 3D Page Flip Physics",
+      "Native Voice Speech Engine (Web Speech API) for English word pronunciation",
+      "Complete Hindi Meanings, Translations, Examples & Synonyms",
+      "Instant A-Z Alphabet Strip Navigation & Live Search Filter"
+    ],
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.3.0/MindFocusBooks-Native.apk"
+  },
   "previousRelease": {
-    "version": "v3.0.9",
-    "name": "Mind Focus Books v3.0.9",
-    "releaseDate": "2026-09-08"
+    "version": "v3.1.0",
+    "name": "Mind Focus Books v3.1.0 (Dual Broadcast & 3D Spatial Edition)",
+    "releaseDate": "2026-09-08",
+    "changelog": "Dual Broadcast Engine with Card 1 Quantum Portal and Card 2 3D Model Crystal Cube, Instant Live Sync Engine.",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest"
   },
   "features": {
     "maintenanceMode": false,
@@ -32,7 +42,8 @@
     "quotesEnabled": true,
     "audiobookVoiceEnabled": true,
     "streakShieldsEnabled": true,
-    "communityBooksSync": true
+    "communityBooksSync": true,
+    "dictionaryBookEnabled": false
   },
   "globalBanner": {
     "active": false,

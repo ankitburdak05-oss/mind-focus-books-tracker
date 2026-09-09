@@ -27,6 +27,13 @@ let broadcastHistory = JSON.parse(localStorage.getItem('mf_broadcast_history') |
 
 // Presets
 const PRESETS = {
+  dictionary_release: {
+    card: 'card2',
+    icon: '📖',
+    title: 'v3.3.0 Dictionary Book Live!',
+    message: 'Book 1 se pehle A-Z English-Hindi 3D Dictionary Book add ho chuki hai! Tap karke real pages padhein.',
+    btnText: 'Open Dictionary 📖'
+  },
   c2_feedback: {
     card: 'card2',
     icon: '💎',
@@ -420,18 +427,31 @@ function updatePipelineCardUI(cfg) {
     stagedDescEl.innerText = `${featCount} Staged Features ready for Real App. (Active in Real App: ${active.version || 'v3.1.0'})`;
   }
 
-  if (stagedStatusTag && deployBtn) {
-    if (staged.isDeployed) {
-      stagedStatusTag.innerText = 'DEPLOYED LIVE';
-      stagedStatusTag.className = 'pipeline-status-tag tag-deployed';
-      deployBtn.disabled = true;
-      deployBtn.innerText = '✅ Deployed to Real App';
-    } else {
-      stagedStatusTag.innerText = 'PENDING REVIEW';
-      stagedStatusTag.className = 'pipeline-status-tag tag-staged';
-      deployBtn.disabled = false;
-      deployBtn.innerText = '🚀 Deploy to Real App';
-    }
+  if (stagedStatusTag) {
+    const deployBtn = document.getElementById('btnDeployToRealApp');
+    const deployBtnBanner = document.getElementById('btnDeployToRealAppBanner');
+    const badge = document.getElementById('pipelineStagedTagBadge');
+    [stagedStatusTag, badge].forEach(tag => {
+      if (!tag) return;
+      if (staged.isDeployed) {
+        tag.innerText = 'DEPLOYED LIVE';
+        tag.className = 'pipeline-status-tag tag-deployed';
+      } else {
+        tag.innerText = 'PENDING REVIEW';
+        tag.className = 'pipeline-status-tag tag-staged';
+      }
+    });
+
+    [deployBtn, deployBtnBanner].forEach(btn => {
+      if (!btn) return;
+      if (staged.isDeployed) {
+        btn.disabled = true;
+        btn.innerText = '✅ Deployed to Real App';
+      } else {
+        btn.disabled = false;
+        btn.innerText = '🚀 Deploy to Real App';
+      }
+    });
   }
 }
 
@@ -439,6 +459,9 @@ function populateConfigFormUI(cfg) {
   if (!cfg) return;
   const feats = cfg.features || {};
   const banner = cfg.globalBanner || {};
+
+  const dEnabled = document.getElementById('cfgDictionaryEnabled');
+  if (dEnabled) dEnabled.checked = !!feats.dictionaryBookEnabled;
 
   const mMode = document.getElementById('cfgMaintenanceMode');
   if (mMode) mMode.checked = !!feats.maintenanceMode;
@@ -485,18 +508,22 @@ async function deployStagedReleaseToRealApp() {
   if (!confirm(confirmMsg)) return;
 
   const deployBtn = document.getElementById('btnDeployToRealApp');
-  if (deployBtn) {
-    deployBtn.disabled = true;
-    deployBtn.innerText = '⏳ Deploying to Real App...';
-  }
+  const deployBtnBanner = document.getElementById('btnDeployToRealAppBanner');
+  [deployBtn, deployBtnBanner].forEach(btn => {
+    if (!btn) return;
+    btn.disabled = true;
+    btn.innerText = '⏳ Deploying to Real App...';
+  });
 
   try {
     appendLog(`🚀 Starting deployment for ${staged.version} to Real App...`, 'warn');
 
-    // 1. Shift active release
+    // 1. Shift active release & enable dictionary book feature
     remoteConfigData.previousRelease = Object.assign({}, remoteConfigData.activeRelease);
     remoteConfigData.activeRelease = Object.assign({}, staged);
     remoteConfigData.stagedRelease.isDeployed = true;
+    if (!remoteConfigData.features) remoteConfigData.features = {};
+    remoteConfigData.features.dictionaryBookEnabled = true;
     remoteConfigData.updatedAt = new Date().toISOString();
 
     // 2. Push updated remote-config.json
@@ -508,10 +535,10 @@ async function deployStagedReleaseToRealApp() {
       id: 'deploy-notice-' + Date.now(),
       active: true,
       card: 'card2',
-      icon: '🚀',
+      icon: '📖',
       title: `Update Live: ${staged.version}`,
-      message: `Naya update ${staged.version} Real App me deploy ho chuka hai! Tap to check features.`,
-      btnText: 'Awesome 🔥',
+      message: `Book 1 se pehle A-Z English-Hindi 3D Dictionary Book add ho chuki hai! Real pages aur audio pronunciation abhi padhein.`,
+      btnText: 'Open Dictionary 📖',
       timestamp: new Date().toISOString()
     };
 
@@ -530,14 +557,16 @@ async function deployStagedReleaseToRealApp() {
     showToast(`🚀 ${staged.version} Deployed to Real App Successfully!`);
 
     updatePipelineCardUI(remoteConfigData);
+    populateConfigFormUI(remoteConfigData);
     fetchLiveStatusFromGitHub();
   } catch (err) {
     appendLog('Deployment failed: ' + err.message, 'error');
     alert('Deployment Error: ' + err.message);
-    if (deployBtn) {
-      deployBtn.disabled = false;
-      deployBtn.innerText = '🚀 Deploy to Real App';
-    }
+    [deployBtn, deployBtnBanner].forEach(btn => {
+      if (!btn) return;
+      btn.disabled = false;
+      btn.innerText = '🚀 Deploy to Real App';
+    });
   }
 }
 
@@ -784,6 +813,7 @@ async function saveRemoteConfigToCloud() {
       await fetchRemoteConfigPipeline();
     }
 
+    const dict = document.getElementById('cfgDictionaryEnabled')?.checked || false;
     const maintenance = document.getElementById('cfgMaintenanceMode')?.checked || false;
     const quotes = document.getElementById('cfgQuotesEnabled')?.checked || false;
     const audio = document.getElementById('cfgAudioVoiceEnabled')?.checked || false;
@@ -794,6 +824,7 @@ async function saveRemoteConfigToCloud() {
     if (!remoteConfigData.features) remoteConfigData.features = {};
     if (!remoteConfigData.globalBanner) remoteConfigData.globalBanner = {};
 
+    remoteConfigData.features.dictionaryBookEnabled = dict;
     remoteConfigData.features.maintenanceMode = maintenance;
     remoteConfigData.features.quotesEnabled = quotes;
     remoteConfigData.features.audiobookVoiceEnabled = audio;
@@ -957,3 +988,350 @@ window.saveBookOfTheDay = saveBookOfTheDay;
 window.selectEmoji = selectEmoji;
 window.applyPreset = applyPreset;
 window.resendHistoryNotice = resendHistoryNotice;
+
+/* ==========================================================================
+   FEATURE: 3D REAL PAGES DICTIONARY BOOK PREVIEW ENGINE IN CONTROL PANEL
+   ========================================================================== */
+let dictState = {
+  activeSpread: 1,
+  currentLetter: 'ALL',
+  searchQuery: ''
+};
+
+const DICT_WORDS_PER_PAGE = 3;
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function playPaperTurnAudio() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const bufferSize = Math.floor(ctx.sampleRate * 0.12);
+    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.exp(-i / (bufferSize * 0.25));
+    }
+    const noise = ctx.createBufferSource();
+    noise.buffer = buffer;
+    const filter = ctx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.setValueAtTime(1400, ctx.currentTime);
+    filter.Q.setValueAtTime(1.5, ctx.currentTime);
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.22, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.12);
+    noise.connect(filter);
+    filter.connect(gain);
+    gain.connect(ctx.destination);
+    noise.start();
+  } catch (e) {}
+}
+
+function speakDictWord(word) {
+  if (!('speechSynthesis' in window)) {
+    showToast('Speech synthesis not supported in this browser');
+    return;
+  }
+  try {
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(word);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.85;
+    utterance.pitch = 1.0;
+    window.speechSynthesis.speak(utterance);
+  } catch (e) {
+    console.warn('Speech synthesis error:', e);
+  }
+}
+
+function getDictActiveList() {
+  const allWords = window.DICTIONARY_WORDS || [];
+  if (dictState.searchQuery.trim()) {
+    const q = dictState.searchQuery.toLowerCase().trim();
+    return allWords.filter(w => 
+      (w.word && w.word.toLowerCase().includes(q)) ||
+      (w.hindi && w.hindi.toLowerCase().includes(q)) ||
+      (w.definition && w.definition.toLowerCase().includes(q)) ||
+      (w.phonetic && w.phonetic.includes(q)) ||
+      (w.syn && w.syn.toLowerCase().includes(q))
+    );
+  }
+  if (dictState.currentLetter !== 'ALL') {
+    return allWords.filter(w => 
+      (w.word || '').toUpperCase().startsWith(dictState.currentLetter)
+    );
+  }
+  return allWords;
+}
+
+function openDictionaryBookReader(startLetter) {
+  const overlay = document.getElementById('dictionaryBookModalOverlay');
+  if (!overlay) return;
+
+  if (startLetter && typeof startLetter === 'string') {
+    dictState.currentLetter = startLetter.toUpperCase();
+  } else {
+    dictState.currentLetter = 'ALL';
+  }
+  dictState.searchQuery = '';
+  dictState.activeSpread = 1;
+
+  const searchInput = document.getElementById('dictSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('dictSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  playPaperTurnAudio();
+  renderDictAlphabetStrip();
+  renderDictBookSpread();
+
+  window.addEventListener('keydown', handleDictKeyNavigation);
+}
+
+function closeDictionaryBookReader() {
+  const overlay = document.getElementById('dictionaryBookModalOverlay');
+  if (!overlay) return;
+  overlay.classList.remove('active');
+  document.body.style.overflow = '';
+  if ('speechSynthesis' in window) {
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
+  window.removeEventListener('keydown', handleDictKeyNavigation);
+}
+
+function handleDictOverlayClick(event) {
+  if (event.target.id === 'dictionaryBookModalOverlay') {
+    closeDictionaryBookReader();
+  }
+}
+
+function handleDictKeyNavigation(event) {
+  const overlay = document.getElementById('dictionaryBookModalOverlay');
+  if (!overlay || !overlay.classList.contains('active')) return;
+  if (event.key === 'ArrowLeft') {
+    turnDictPage(-1);
+  } else if (event.key === 'ArrowRight') {
+    turnDictPage(1);
+  } else if (event.key === 'Escape') {
+    closeDictionaryBookReader();
+  }
+}
+
+function renderDictAlphabetStrip() {
+  const strip = document.getElementById('dictAlphabetStrip');
+  if (!strip) return;
+
+  const letters = ['ALL', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+  let html = '';
+  letters.forEach(lettr => {
+    const isActive = dictState.currentLetter === lettr;
+    html += '<button type="button" class="dict-letter-tab ' + (isActive ? 'active' : '') + '" onclick="jumpToDictLetter(\'' + lettr + '\')">' + escapeHtml(lettr) + '</button>';
+  });
+  strip.innerHTML = html;
+}
+
+function jumpToDictLetter(letter) {
+  dictState.currentLetter = letter;
+  dictState.searchQuery = '';
+  dictState.activeSpread = 1;
+
+  const searchInput = document.getElementById('dictSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('dictSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+
+  playPaperTurnAudio();
+  renderDictAlphabetStrip();
+  renderDictBookSpread();
+}
+
+function onDictSearchInput(val) {
+  dictState.searchQuery = val || '';
+  dictState.activeSpread = 1;
+  const clearBtn = document.getElementById('dictSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = dictState.searchQuery ? 'block' : 'none';
+
+  if (dictState.searchQuery) {
+    dictState.currentLetter = 'ALL';
+    renderDictAlphabetStrip();
+  }
+  renderDictBookSpread();
+}
+
+function clearDictSearch() {
+  const input = document.getElementById('dictSearchInput');
+  if (input) input.value = '';
+  onDictSearchInput('');
+}
+
+function turnDictPage(delta) {
+  const list = getDictActiveList();
+  const totalPages = Math.max(1, Math.ceil(list.length / DICT_WORDS_PER_PAGE));
+  const totalSpreads = Math.max(1, Math.ceil(totalPages / 2));
+
+  const targetSpread = dictState.activeSpread + delta;
+  if (targetSpread < 1 || targetSpread > totalSpreads) return;
+
+  dictState.activeSpread = targetSpread;
+  playPaperTurnAudio();
+
+  const spreadEl = document.getElementById('dictBookSpread');
+  if (spreadEl) {
+    spreadEl.style.opacity = '0.7';
+    spreadEl.style.transform = delta > 0 ? 'perspective(1400px) rotateY(-1.2deg)' : 'perspective(1400px) rotateY(1.2deg)';
+    setTimeout(() => {
+      spreadEl.style.opacity = '1';
+      spreadEl.style.transform = 'none';
+    }, 180);
+  }
+
+  renderDictBookSpread();
+}
+
+function onDictSliderChange(val) {
+  dictState.activeSpread = parseInt(val) || 1;
+  playPaperTurnAudio();
+  renderDictBookSpread();
+}
+
+function renderDictBookSpread() {
+  const list = getDictActiveList();
+  const totalWords = list.length;
+  const totalPages = Math.max(1, Math.ceil(totalWords / DICT_WORDS_PER_PAGE));
+  const totalSpreads = Math.max(1, Math.ceil(totalPages / 2));
+
+  if (dictState.activeSpread > totalSpreads) {
+    dictState.activeSpread = totalSpreads;
+  }
+  if (dictState.activeSpread < 1) {
+    dictState.activeSpread = 1;
+  }
+
+  const leftPageNum = (dictState.activeSpread - 1) * 2 + 1;
+  const rightPageNum = leftPageNum + 1;
+
+  const leftStartIdx = (leftPageNum - 1) * DICT_WORDS_PER_PAGE;
+  const leftWords = list.slice(leftStartIdx, leftStartIdx + DICT_WORDS_PER_PAGE);
+
+  const rightStartIdx = (rightPageNum - 1) * DICT_WORDS_PER_PAGE;
+  const rightWords = list.slice(rightStartIdx, rightStartIdx + DICT_WORDS_PER_PAGE);
+
+  const leftPageEl = document.getElementById('dictPageLeft');
+  const rightPageEl = document.getElementById('dictPageRight');
+
+  if (leftPageEl) {
+    leftPageEl.innerHTML = buildDictPageHtml(leftWords, leftPageNum, totalPages, false);
+  }
+  if (rightPageEl) {
+    rightPageEl.innerHTML = buildDictPageHtml(rightWords, rightPageNum, totalPages, true);
+  }
+
+  const prevBtn = document.getElementById('dictPrevBtn');
+  const nextBtn = document.getElementById('dictNextBtn');
+  if (prevBtn) prevBtn.disabled = (dictState.activeSpread <= 1);
+  if (nextBtn) nextBtn.disabled = (dictState.activeSpread >= totalSpreads);
+
+  const indicator = document.getElementById('dictPageIndicator');
+  if (indicator) {
+    if (dictState.searchQuery) {
+      indicator.innerHTML = '🔍 Found <strong>' + totalWords + '</strong> words • Pages ' + leftPageNum + '-' + Math.min(rightPageNum, totalPages) + ' of ' + totalPages;
+    } else {
+      indicator.innerHTML = '📖 Pages <strong>' + leftPageNum + '-' + Math.min(rightPageNum, totalPages) + '</strong> of ' + totalPages;
+    }
+  }
+
+  const slider = document.getElementById('dictPageSlider');
+  if (slider) {
+    slider.min = 1;
+    slider.max = totalSpreads;
+    slider.value = dictState.activeSpread;
+  }
+}
+
+function buildDictPageHtml(words, pageNum, totalPages, isRightPage) {
+  if (pageNum > totalPages && words.length === 0) {
+    return '<div class="dict-page-header">' +
+      '<span class="dict-header-letter">✨</span>' +
+      '<span class="dict-header-running-head">NOTES &amp; REFLECTIONS</span>' +
+      '<span class="dict-page-num">ENDPAPER</span>' +
+      '</div>' +
+      '<div class="dict-page-content" style="align-items:center; justify-content:center; text-align:center; color:#94a3b8; padding:30px;">' +
+      '<div style="font-size:3rem; margin-bottom:12px;">🌟</div>' +
+      '<h3 style="font-family:serif; color:#334155; margin-bottom:6px;">Vocabulary Mastery</h3>' +
+      '<p style="font-size:0.85rem; line-height:1.5; color:#64748b;">"Words are the clothing of ideas. Expand your vocabulary, expand your universe."</p>' +
+      '<div style="margin-top:20px; font-size:0.8rem; font-style:italic; color:#94a3b8;">Mind &amp; Focus Books • Oxford Lexicon</div>' +
+      '</div>' +
+      '<div class="dict-page-footer">Daily Mind Expansion • Page ' + pageNum + '</div>';
+  }
+
+  if (words.length === 0) {
+    return '<div class="dict-page-header">' +
+      '<span class="dict-header-letter">⚠️</span>' +
+      '<span class="dict-header-running-head">SEARCH RESULTS</span>' +
+      '<span class="dict-page-num">PAGE ' + pageNum + '</span>' +
+      '</div>' +
+      '<div class="dict-page-content" style="align-items:center; justify-content:center; text-align:center; color:#94a3b8; padding:40px 20px;">' +
+      '<div style="font-size:3rem; margin-bottom:12px;">🔍</div>' +
+      '<h3 style="font-family:serif; color:#334155;">No Words Found</h3>' +
+      '<p style="font-size:0.85rem; color:#64748b; margin-top:6px;">Try another English word, Hindi meaning, or reset filter.</p>' +
+      '<button type="button" class="dict-nav-btn primary" onclick="clearDictSearch()" style="margin-top:16px; padding:6px 16px; font-size:0.8rem;">Clear Search</button>' +
+      '</div>' +
+      '<div class="dict-page-footer">Mind &amp; Focus Books • Search Lexicon</div>';
+  }
+
+  const firstLetter = (words[0].word || 'A').charAt(0).toUpperCase();
+
+  let cardsHtml = '';
+  words.forEach(item => {
+    cardsHtml += '<div class="dict-entry-card">' +
+      '<div class="dict-entry-top">' +
+      '<span class="dict-entry-word">' + escapeHtml(item.word) + '</span>' +
+      (item.phonetic ? '<span class="dict-entry-phonetic">[' + escapeHtml(item.phonetic) + ']</span>' : '') +
+      (item.type ? '<span class="dict-entry-type">' + escapeHtml(item.type) + '</span>' : '') +
+      '<button type="button" class="dict-listen-btn" onclick="speakDictWord(\'' + escapeHtml(item.word).replace(/'/g, "\\'") + '\')" title="Listen to English Pronunciation">' +
+      '🔊 Pronounce' +
+      '</button>' +
+      '</div>' +
+      '<div class="dict-hindi-pill">अर्थ: ' + escapeHtml(item.hindi) + '</div>' +
+      '<div class="dict-entry-def">' + escapeHtml(item.definition) + '</div>' +
+      (item.example ? '<div class="dict-entry-example">"' + escapeHtml(item.example) + '"' +
+        (item.exampleHindi ? '<div class="dict-entry-example-hindi">हिन्दी: ' + escapeHtml(item.exampleHindi) + '</div>' : '') +
+        '</div>' : '') +
+      (item.syn ? '<div class="dict-synonyms-row"><strong>समानार्थक (Synonyms):</strong> ' + escapeHtml(item.syn) + '</div>' : '') +
+      '</div>';
+  });
+
+  return '<div class="dict-page-header">' +
+    '<span class="dict-header-letter">' + escapeHtml(firstLetter) + '</span>' +
+    '<span class="dict-header-running-head">FOCUS VOCABULARY</span>' +
+    '<span class="dict-page-num">PAGE ' + pageNum + '</span>' +
+    '</div>' +
+    '<div class="dict-page-content">' +
+    cardsHtml +
+    '</div>' +
+    '<div class="dict-page-footer">Mind &amp; Focus Books • Daily Vocabulary Builder</div>';
+}
+
+window.openDictionaryBookReader = openDictionaryBookReader;
+window.closeDictionaryBookReader = closeDictionaryBookReader;
+window.handleDictOverlayClick = handleDictOverlayClick;
+window.jumpToDictLetter = jumpToDictLetter;
+window.turnDictPage = turnDictPage;
+window.onDictSliderChange = onDictSliderChange;
+window.onDictSearchInput = onDictSearchInput;
+window.clearDictSearch = clearDictSearch;
+window.speakDictWord = speakDictWord;
+window.playPaperTurnAudio = playPaperTurnAudio;
