@@ -64,6 +64,9 @@
       <button class="tab-btn" data-tab="tabPipeline">
         <span>🚀</span> Version Release Manager (App Updates)
       </button>
+      <button class="tab-btn" data-tab="tabMysteryGift">
+        <span>🎁</span> Mystery Gift Drop
+      </button>
       <button class="tab-btn" data-tab="tabFeatures">
         <span>🎛️</span> Remote Feature Switches
       </button>
@@ -342,6 +345,101 @@ Instant A-Z Alphabet Strip Navigation & Live Search Filter</textarea>
       </div>
     </section>
 
+    <!-- TAB: MYSTERY GOLDEN GIFT BOX STUDIO (Surprise Reward Engine) -->
+    <section class="tab-view" id="tabMysteryGift">
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>🎁</span> Mystery Golden Gift Box Studio &amp; Surprise Drop Engine
+          </div>
+          <span class="panel-pill" style="background:rgba(245,158,11,0.18); border-color:#f59e0b; color:#fbbf24;">SURPRISE REWARD ENGINE</span>
+        </div>
+
+        <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:18px; line-height:1.6;">
+          Yaha se aap sabhi users ke phone screen par aasmaan se ek <b>3D Golden Gift Box</b> drop kar sakte hain! Jab user box par tap karega, to 3D box khulega, celebratory confetti aur crackers phootenge, aur unhe special reward milega!
+        </p>
+
+        <!-- Reward Type Selector Grid -->
+        <div class="form-group">
+          <label class="form-label">Select Reward Type to Put Inside Gift Box</label>
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px; margin-top:8px;">
+            <label class="card-radio-label" style="margin:0;">
+              <input type="radio" name="giftRewardType" value="vip_badge" checked>
+              <div class="card-option">
+                <div class="card-option-badge">👑</div>
+                <div>
+                  <div class="card-option-title">VIP Crown Reader Badge</div>
+                  <div class="card-option-desc">Permanent glowing golden crown in user's app header + VIP status</div>
+                </div>
+              </div>
+            </label>
+
+            <label class="card-radio-label" style="margin:0;">
+              <input type="radio" name="giftRewardType" value="secret_book">
+              <div class="card-option">
+                <div class="card-option-badge">🔮</div>
+                <div>
+                  <div class="card-option-title">Secret Bonus Focus Book</div>
+                  <div class="card-option-desc">Unlocks 'The Secret Law of Focus' masterclass book directly in library</div>
+                </div>
+              </div>
+            </label>
+
+            <label class="card-radio-label" style="margin:0;">
+              <input type="radio" name="giftRewardType" value="golden_notes">
+              <div class="card-option">
+                <div class="card-option-badge">📜</div>
+                <div>
+                  <div class="card-option-title">10 Billionaire Mental Models</div>
+                  <div class="card-option-desc">Unlocks exclusive mental frameworks cheat-sheet in notes vault</div>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Gift Details -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px;">
+          <div class="form-group">
+            <label class="form-label">Gift Box Headline / Title</label>
+            <input type="text" class="form-input" id="giftTitleInput" value="👑 Special VIP Surprise From Mind Focus!" placeholder="Title...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Reward Display Name</label>
+            <input type="text" class="form-input" id="giftRewardNameInput" value="VIP Golden Reader Badge" placeholder="Reward Name...">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Surprise Message (Shown to User Inside Gift)</label>
+          <textarea class="form-textarea" id="giftMessageInput" rows="3" placeholder="Message...">Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai! Tap karke apna reward claim karein.</textarea>
+        </div>
+
+        <!-- Simulation & Action Buttons -->
+        <div style="background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.25); border-radius:14px; padding:16px; margin:20px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+          <div>
+            <div style="font-weight:800; color:#fbbf24; font-size:0.95rem;">👁️ Test Live 3D Simulation in Panel First</div>
+            <div style="font-size:0.82rem; color:var(--text-muted); margin-top:2px;">
+              Pehle panel ke andar hi 3D Golden Box ka aasmaan se girna, crackers sound, confetti explosion aur reward khulna test karein!
+            </div>
+          </div>
+          <button type="button" class="btn-admin" onclick="testGiftDropInPanel()" style="background:linear-gradient(135deg, #b45309, #f59e0b); color:#000; font-weight:800; padding:10px 20px;">
+            <span>👁️</span> Test Gift Drop (Live Preview)
+          </button>
+        </div>
+
+        <!-- Master Dispatch Button -->
+        <div class="btn-row">
+          <button type="button" class="btn-admin" id="btnDropGiftToAllPhones" onclick="dispatchGiftDropToAllPhones()" style="flex:1; font-size:1.05rem; padding:16px 28px; background:linear-gradient(135deg, #d97706, #f59e0b 50%, #fbbf24); color:#050814; font-weight:900; box-shadow:0 10px 30px rgba(245,158,11,0.5);">
+            <span>🎁</span> Drop Golden Gift Box to All Phones
+          </button>
+          <button type="button" class="btn-admin btn-danger" onclick="deactivateGiftDrop()" style="min-width:140px;">
+            <span>🛑</span> Stop Gift Drop
+          </button>
+        </div>
+      </div>
+    </section>
+
     <!-- TAB 3: REMOTE FEATURE SWITCHES -->
     <section class="tab-view" id="tabFeatures">
       <div class="glass-panel">
@@ -566,6 +664,83 @@ Instant A-Z Alphabet Strip Navigation & Live Search Filter</textarea>
         </div>
         <button type="button" class="dict-nav-btn primary" id="dictNextBtn" onclick="turnDictPage(1)">
           Turn Next Page ›
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🎁 MYSTERY GOLDEN GIFT BOX DROP OVERLAY (In-Panel Simulator) -->
+  <div class="mystery-gift-overlay" id="mysteryGiftOverlay">
+    <canvas id="giftConfettiCanvas" class="gift-confetti-canvas"></canvas>
+    <div class="gift-sky-glow" id="giftSkyGlow"></div>
+
+    <div class="gift-box-stage" id="giftBoxStage" onclick="openGoldenGiftBox(event)">
+      <div class="gift-aura-halo"></div>
+      <div class="gift-shockwave-ring sw-1"></div>
+      <div class="gift-shockwave-ring sw-2"></div>
+
+      <div class="gift-box-3d" id="giftBox3D">
+        <div class="gift-lid" id="giftLid">
+          <div class="gift-lid-bow">
+            <div class="bow-loop bow-left"></div>
+            <div class="bow-loop bow-right"></div>
+            <div class="bow-ribbon ribbon-left"></div>
+            <div class="bow-ribbon ribbon-right"></div>
+            <div class="bow-knot">✦</div>
+          </div>
+          <div class="gift-lid-top"></div>
+          <div class="gift-lid-side lid-front"></div>
+          <div class="gift-lid-side lid-back"></div>
+          <div class="gift-lid-side lid-left"></div>
+          <div class="gift-lid-side lid-right"></div>
+        </div>
+
+        <div class="gift-body" id="giftBody">
+          <div class="gift-face face-front">
+            <div class="ribbon-vertical"></div>
+            <div class="ribbon-horizontal"></div>
+            <div class="gift-seal">👑</div>
+          </div>
+          <div class="gift-face face-back"><div class="ribbon-vertical"></div><div class="ribbon-horizontal"></div></div>
+          <div class="gift-face face-left"><div class="ribbon-vertical"></div><div class="ribbon-horizontal"></div></div>
+          <div class="gift-face face-right"><div class="ribbon-vertical"></div><div class="ribbon-horizontal"></div></div>
+          <div class="gift-face face-top"><div class="gift-inner-glow"></div></div>
+          <div class="gift-face face-bottom"></div>
+        </div>
+      </div>
+
+      <div class="gift-tap-prompt" id="giftTapPrompt">
+        <span class="prompt-icon">👆</span>
+        <span class="prompt-text">TAP TO OPEN SURPRISE REWARD!</span>
+        <span class="prompt-sparkle">✨</span>
+      </div>
+    </div>
+
+    <div class="gift-reward-modal" id="giftRewardModal">
+      <div class="gift-reward-sheen"></div>
+      <div class="gift-reward-header">
+        <div class="reward-crown-wrap">
+          <span class="reward-crown-icon" id="rewardCrownIcon">👑</span>
+        </div>
+        <span class="reward-pill" id="rewardPillText">SURPRISE REWARD UNLOCKED</span>
+      </div>
+
+      <h2 class="reward-title" id="rewardTitleText">VIP Golden Reader Badge</h2>
+      <div class="reward-badge-preview" id="rewardBadgePreview">
+        <div class="badge-emblem" id="rewardEmblem">🏆</div>
+        <div class="badge-glow-ring"></div>
+      </div>
+
+      <p class="reward-desc" id="rewardDescText">
+        Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!
+      </p>
+
+      <div class="reward-perk-box" id="rewardPerkBox"></div>
+
+      <div class="reward-actions">
+        <button type="button" class="btn-claim-reward" id="btnClaimReward" onclick="claimSurpriseReward()">
+          <span>⚡ Claim Reward Now (Preview Mode)</span>
+          <span class="claim-arrow">→</span>
         </button>
       </div>
     </div>

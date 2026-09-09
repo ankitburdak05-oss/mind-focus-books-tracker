@@ -6503,4 +6503,564 @@ body {
   -webkit-text-fill-color: transparent !important;
 }
 
+/* =========================================================
+   🎁 3D MYSTERY GOLDEN GIFT BOX DROP (SURPRISE REWARD ENGINE)
+   ========================================================= */
+
+/* Header VIP Crown Badge */
+.vip-crown-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.35));
+  border: 1px solid rgba(245, 158, 11, 0.65);
+  color: #fbbf24;
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  padding: 2px 8px;
+  border-radius: 20px;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  animation: vipPulseGlow 2.5s ease-in-out infinite alternate;
+  vertical-align: middle;
+}
+
+@keyframes vipPulseGlow {
+  0% { box-shadow: 0 0 8px rgba(245, 158, 11, 0.3); transform: scale(1); }
+  100% { box-shadow: 0 0 18px rgba(245, 158, 11, 0.7); transform: scale(1.04); }
+}
+
+/* Main Overlay */
+.mystery-gift-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  background: rgba(3, 6, 15, 0.88);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.5s;
+  overflow: hidden;
+  perspective: 1200px;
+}
+
+.mystery-gift-overlay.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+/* Fullscreen Confetti Canvas */
+.gift-confetti-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 1000002;
+}
+
+/* Ambient Starlight & Sky Glow */
+.gift-sky-glow {
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(217, 119, 6, 0.08) 50%, transparent 75%);
+  pointer-events: none;
+  border-radius: 50%;
+  animation: skyGlowPulse 4s ease-in-out infinite alternate;
+}
+
+@keyframes skyGlowPulse {
+  0% { opacity: 0.5; transform: translateX(-50%) scale(0.9); }
+  100% { opacity: 1; transform: translateX(-50%) scale(1.15); }
+}
+
+/* 3D Box Stage & Fall Animation */
+.gift-box-stage {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  transform-style: preserve-3d;
+  cursor: pointer;
+  z-index: 1000001;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-120vh) rotateX(55deg) rotateY(-40deg) scale(0.5);
+  transition: transform 0.25s ease;
+}
+
+.mystery-gift-overlay.active .gift-box-stage {
+  animation: giftBoxDrop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards,
+             giftBoxFloat 3.5s ease-in-out 1.2s infinite alternate;
+}
+
+.gift-box-stage:hover {
+  filter: drop-shadow(0 0 35px rgba(245, 158, 11, 0.9));
+}
+
+@keyframes giftBoxDrop {
+  0% {
+    transform: translateY(-120vh) rotateX(60deg) rotateY(-70deg) scale(0.4);
+    opacity: 0;
+  }
+  60% {
+    transform: translateY(20px) rotateX(-15deg) rotateY(15deg) scale(1.08);
+    opacity: 1;
+  }
+  80% {
+    transform: translateY(-12px) rotateX(10deg) rotateY(-8deg) scale(0.96);
+  }
+  100% {
+    transform: translateY(0) rotateX(14deg) rotateY(-22deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes giftBoxFloat {
+  0% {
+    transform: translateY(0) rotateX(14deg) rotateY(-22deg) rotateZ(0deg);
+  }
+  50% {
+    transform: translateY(-16px) rotateX(18deg) rotateY(-14deg) rotateZ(2deg);
+  }
+  100% {
+    transform: translateY(4px) rotateX(10deg) rotateY(-28deg) rotateZ(-2deg);
+  }
+}
+
+/* Pulsing Auras & Shockwave Rings */
+.gift-aura-halo {
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, rgba(251, 191, 36, 0.12) 40%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: auraPulse 2s ease-in-out infinite alternate;
+}
+
+@keyframes auraPulse {
+  0% { transform: scale(0.85); opacity: 0.6; }
+  100% { transform: scale(1.2); opacity: 1; }
+}
+
+.gift-shockwave-ring {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 2px solid rgba(245, 158, 11, 0.6);
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+  pointer-events: none;
+  animation: shockwaveExpand 2.8s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+.gift-shockwave-ring.sw-2 {
+  animation-delay: 1.4s;
+}
+
+@keyframes shockwaveExpand {
+  0% { transform: scale(0.8); opacity: 0.9; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* 3D Box Architecture */
+.gift-box-3d {
+  position: relative;
+  width: 140px;
+  height: 140px;
+  transform-style: preserve-3d;
+}
+
+/* The Box Body */
+.gift-body {
+  position: absolute;
+  width: 140px;
+  height: 130px;
+  transform-style: preserve-3d;
+  bottom: 0;
+}
+
+.gift-face {
+  position: absolute;
+  width: 140px;
+  height: 130px;
+  background: linear-gradient(135deg, #f59e0b, #d97706 45%, #92400e 85%, #b45309);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.gift-face.face-front  { transform: translateZ(70px); }
+.gift-face.face-back   { transform: rotateY(180deg) translateZ(70px); background: linear-gradient(135deg, #b45309, #78350f); }
+.gift-face.face-left   { transform: rotateY(-90deg) translateZ(70px); background: linear-gradient(135deg, #d97706, #92400e); }
+.gift-face.face-right  { transform: rotateY(90deg) translateZ(70px); background: linear-gradient(135deg, #fbbf24, #d97706); }
+.gift-face.face-bottom { width: 140px; height: 140px; transform: rotateX(-90deg) translateZ(65px); background: #451a03; box-shadow: 0 20px 40px rgba(0,0,0,0.8); }
+.gift-face.face-top    { width: 140px; height: 140px; transform: rotateX(90deg) translateZ(65px); background: #78350f; }
+
+.gift-inner-glow {
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle, #fef08a, #f59e0b, transparent);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+/* Ruby Silk Ribbons Across Box */
+.ribbon-vertical {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 100%;
+  background: linear-gradient(90deg, #991b1b, #ef4444 40%, #f87171 50%, #dc2626 60%, #7f1d1d);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6), inset 0 0 4px rgba(0,0,0,0.4);
+}
+
+.ribbon-horizontal {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  height: 28px;
+  background: linear-gradient(180deg, #991b1b, #ef4444 40%, #f87171 50%, #dc2626 60%, #7f1d1d);
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.6), inset 0 0 4px rgba(0,0,0,0.4);
+}
+
+.gift-seal {
+  position: relative;
+  z-index: 5;
+  font-size: 1.8rem;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+  animation: sealPulse 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes sealPulse {
+  0% { transform: scale(0.92); }
+  100% { transform: scale(1.12); filter: drop-shadow(0 0 12px rgba(251, 191, 36, 0.9)); }
+}
+
+/* 3D Box Lid Architecture */
+.gift-lid {
+  position: absolute;
+  top: -15px;
+  left: -7px;
+  width: 154px;
+  height: 38px;
+  transform-style: preserve-3d;
+  transform-origin: top center;
+  transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s;
+  z-index: 10;
+}
+
+.gift-lid-top {
+  position: absolute;
+  width: 154px;
+  height: 154px;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b 50%, #b45309);
+  transform: rotateX(90deg) translateZ(19px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.3);
+}
+
+.gift-lid-side {
+  position: absolute;
+  height: 36px;
+  background: linear-gradient(135deg, #d97706, #92400e);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.gift-lid-side.lid-front  { width: 154px; transform: translateZ(77px); background: linear-gradient(135deg, #fbbf24, #d97706); }
+.gift-lid-side.lid-back   { width: 154px; transform: rotateY(180deg) translateZ(77px); }
+.gift-lid-side.lid-left   { width: 154px; transform: rotateY(-90deg) translateZ(77px); }
+.gift-lid-side.lid-right  { width: 154px; transform: rotateY(90deg) translateZ(77px); }
+
+/* Decorative Bow on Lid */
+.gift-lid-bow {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%) rotateX(-20deg);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bow-loop {
+  width: 44px;
+  height: 30px;
+  border-radius: 50% 50% 10% 50%;
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  border: 2px solid #fca5a5;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.6);
+}
+
+.bow-loop.bow-left { transform: rotate(-30deg); margin-right: -10px; }
+.bow-loop.bow-right { transform: rotate(30deg) scaleX(-1); margin-left: -10px; }
+
+.bow-knot {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  background: linear-gradient(135deg, #f87171, #991b1b);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #fff;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.9);
+}
+
+/* LID EXPLOSION ON OPEN */
+.gift-box-stage.opened .gift-lid {
+  transform: translateY(-240px) rotateX(-115deg) rotateZ(35deg) scale(1.1);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.gift-box-stage.opened .gift-inner-glow {
+  opacity: 1;
+}
+
+.gift-box-stage.opened .gift-tap-prompt {
+  display: none !important;
+}
+
+/* Tap Prompt Floating Under Box */
+.gift-tap-prompt {
+  position: absolute;
+  bottom: -65px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  padding: 8px 18px;
+  border-radius: 30px;
+  color: #fbbf24;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.6), 0 0 15px rgba(245, 158, 11, 0.3);
+  animation: promptBob 1.6s ease-in-out infinite alternate;
+  white-space: nowrap;
+}
+
+@keyframes promptBob {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(6px); }
+}
+
+/* Revealed Reward Modal Dialog */
+.gift-reward-modal {
+  position: relative;
+  width: 90%;
+  max-width: 440px;
+  background: linear-gradient(145deg, rgba(17, 24, 39, 0.96), rgba(8, 12, 22, 0.98));
+  border: 1.5px solid rgba(245, 158, 11, 0.55);
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(245, 158, 11, 0.35);
+  border-radius: 24px;
+  padding: 26px 22px;
+  text-align: center;
+  z-index: 1000003;
+  overflow: hidden;
+  transform: translateY(100px) scale(0.85);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gift-reward-modal.active {
+  transform: translateY(0) scale(1);
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.gift-reward-sheen {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  animation: rewardSheen 3.5s infinite;
+  pointer-events: none;
+}
+
+@keyframes rewardSheen {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(100%); }
+}
+
+.gift-reward-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.reward-crown-wrap {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.3), rgba(217, 119, 6, 0.1));
+  border: 1.5px solid rgba(245, 158, 11, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+}
+
+.reward-crown-icon {
+  font-size: 1.8rem;
+  animation: crownBounce 2s ease-in-out infinite;
+}
+
+@keyframes crownBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px) scale(1.1); }
+}
+
+.reward-pill {
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 1.2px;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  padding: 3px 12px;
+  border-radius: 20px;
+}
+
+.reward-title {
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: #fff;
+  margin: 8px 0 12px;
+  background: linear-gradient(135deg, #ffffff, #fbbf24 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.reward-badge-preview {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  margin: 0 auto 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.badge-emblem {
+  font-size: 3.2rem;
+  z-index: 2;
+  filter: drop-shadow(0 6px 16px rgba(245, 158, 11, 0.8));
+  animation: emblemRotate 4s ease-in-out infinite alternate;
+}
+
+@keyframes emblemRotate {
+  0% { transform: rotate(-5deg) scale(0.95); }
+  100% { transform: rotate(5deg) scale(1.08); }
+}
+
+.badge-glow-ring {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(245, 158, 11, 0.6);
+  animation: ringSpin 12s linear infinite;
+}
+
+@keyframes ringSpin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.reward-desc {
+  font-size: 0.9rem;
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.reward-perk-box {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.reward-perk-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+.reward-perk-item:last-child {
+  margin-bottom: 0;
+}
+
+.reward-perk-icon {
+  font-size: 1rem;
+  color: #38bdf8;
+}
+
+.btn-claim-reward {
+  width: 100%;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #d97706, #f59e0b 50%, #fbbf24);
+  color: #050814;
+  border: none;
+  border-radius: 14px;
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  transition: all 0.25s ease;
+}
+
+.btn-claim-reward:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px rgba(245, 158, 11, 0.6);
+}
+
+.btn-claim-reward:active {
+  transform: translateY(1px);
+}
+
+
 

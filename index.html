@@ -64,6 +64,7 @@
           <div class="brand-title">
             <span>MIND & FOCUS BOOKS TRACKER</span>
             <span class="brand-badge">OFFLINE APP</span>
+            <span class="vip-crown-badge" id="headerVipBadge" style="display:none;" title="VIP Master Reader Active">👑 VIP</span>
           </div>
           <div class="brand-subtitle">150 Curated Books Reading System • Zero Internet Required</div>
         </div>
@@ -1746,6 +1747,104 @@
         </div>
         <button type="button" class="dict-nav-btn primary" id="dictNextBtn" onclick="turnDictPage(1)">
           Turn Next Page ›
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🎁 MYSTERY GOLDEN GIFT BOX DROP OVERLAY (Surprise Reward Engine) -->
+  <div class="mystery-gift-overlay" id="mysteryGiftOverlay">
+    <!-- Full-screen Canvas for Confetti & Crackers -->
+    <canvas id="giftConfettiCanvas" class="gift-confetti-canvas"></canvas>
+
+    <!-- Sky Clouds & Golden Starlight Dust -->
+    <div class="gift-sky-glow" id="giftSkyGlow"></div>
+
+    <!-- The 3D Falling & Floating Golden Gift Box -->
+    <div class="gift-box-stage" id="giftBoxStage" onclick="openGoldenGiftBox(event)">
+      <!-- Pulsing Aura & Shockwave Rings -->
+      <div class="gift-aura-halo"></div>
+      <div class="gift-shockwave-ring sw-1"></div>
+      <div class="gift-shockwave-ring sw-2"></div>
+
+      <!-- 3D Box Container -->
+      <div class="gift-box-3d" id="giftBox3D">
+        <!-- Box Lid (Flies open on click) -->
+        <div class="gift-lid" id="giftLid">
+          <div class="gift-lid-bow">
+            <div class="bow-loop bow-left"></div>
+            <div class="bow-loop bow-right"></div>
+            <div class="bow-ribbon ribbon-left"></div>
+            <div class="bow-ribbon ribbon-right"></div>
+            <div class="bow-knot">✦</div>
+          </div>
+          <div class="gift-lid-top"></div>
+          <div class="gift-lid-side lid-front"></div>
+          <div class="gift-lid-side lid-back"></div>
+          <div class="gift-lid-side lid-left"></div>
+          <div class="gift-lid-side lid-right"></div>
+        </div>
+
+        <!-- Box Body -->
+        <div class="gift-body" id="giftBody">
+          <div class="gift-face face-front">
+            <div class="ribbon-vertical"></div>
+            <div class="ribbon-horizontal"></div>
+            <div class="gift-seal">👑</div>
+          </div>
+          <div class="gift-face face-back">
+            <div class="ribbon-vertical"></div>
+            <div class="ribbon-horizontal"></div>
+          </div>
+          <div class="gift-face face-left">
+            <div class="ribbon-vertical"></div>
+            <div class="ribbon-horizontal"></div>
+          </div>
+          <div class="gift-face face-right">
+            <div class="ribbon-vertical"></div>
+            <div class="ribbon-horizontal"></div>
+          </div>
+          <div class="gift-face face-top">
+            <div class="gift-inner-glow"></div>
+          </div>
+          <div class="gift-face face-bottom"></div>
+        </div>
+      </div>
+
+      <!-- Tap Indicator Prompt -->
+      <div class="gift-tap-prompt" id="giftTapPrompt">
+        <span class="prompt-icon">👆</span>
+        <span class="prompt-text">TAP TO OPEN SURPRISE REWARD!</span>
+        <span class="prompt-sparkle">✨</span>
+      </div>
+    </div>
+
+    <!-- Revealed Reward Modal Dialog -->
+    <div class="gift-reward-modal" id="giftRewardModal">
+      <div class="gift-reward-sheen"></div>
+      <div class="gift-reward-header">
+        <div class="reward-crown-wrap">
+          <span class="reward-crown-icon" id="rewardCrownIcon">👑</span>
+        </div>
+        <span class="reward-pill" id="rewardPillText">SURPRISE REWARD UNLOCKED</span>
+      </div>
+
+      <h2 class="reward-title" id="rewardTitleText">VIP Golden Reader Badge</h2>
+      <div class="reward-badge-preview" id="rewardBadgePreview">
+        <div class="badge-emblem" id="rewardEmblem">🏆</div>
+        <div class="badge-glow-ring"></div>
+      </div>
+
+      <p class="reward-desc" id="rewardDescText">
+        Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!
+      </p>
+
+      <div class="reward-perk-box" id="rewardPerkBox"></div>
+
+      <div class="reward-actions">
+        <button type="button" class="btn-claim-reward" id="btnClaimReward" onclick="claimSurpriseReward()">
+          <span>⚡ Claim Reward Now</span>
+          <span class="claim-arrow">→</span>
         </button>
       </div>
     </div>

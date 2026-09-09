@@ -91,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof initSearchOptionsDrawer === 'function') initSearchOptionsDrawer();
   if (typeof startLiveNoticeListener === 'function') startLiveNoticeListener();
   if (typeof init4DFlagshipSystems === 'function') init4DFlagshipSystems();
+  if (typeof initMysteryGiftEngine === 'function') initMysteryGiftEngine();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -4905,6 +4906,20 @@ async function checkRemoteBroadcastNotice() {
       data = await fetchNoticeViaScript('broadcast-notice.js?cb=' + cb);
     }
 
+    // Special: Mystery Golden Gift Box Drop (Surprise Reward Engine)
+    if (data && data.active && (data.type === 'mystery_gift' || data.isMysteryGift)) {
+      const giftId = data.id || 'gift-default';
+      const isClaimed = localStorage.getItem('mf_claimed_gift_' + giftId) === 'true';
+      const isDismissed = dismissedNoticeIds[giftId] || localStorage.getItem('mindfocus_dismissed_notice_id') === giftId;
+      if (!isClaimed && !isDismissed && !activeGiftBoxOpen) {
+        currentBroadcastNoticeId = giftId;
+        if (typeof triggerFallingGoldenGiftBox === 'function') {
+          triggerFallingGoldenGiftBox(data);
+        }
+      }
+      return;
+    }
+
     const overlay = document.getElementById('inAppNoticeModalOverlay');
     if (!data || !data.active || !data.message) {
       if (overlay && overlay.classList.contains('active')) {
@@ -6443,3 +6458,395 @@ window.onDictSearchInput = onDictSearchInput;
 window.clearDictSearch = clearDictSearch;
 window.speakDictWord = speakDictWord;
 window.playPaperTurnAudio = playPaperTurnAudio;
+
+// =========================================================================
+// 🎁 3D MYSTERY GOLDEN GIFT BOX ENGINE (SURPRISE REWARD ENGINE)
+// =========================================================================
+
+let activeGiftBoxOpen = false;
+let currentActiveGiftData = null;
+let confettiAnimFrame = null;
+
+function initMysteryGiftEngine() {
+  try {
+    const isVip = localStorage.getItem('mf_vip_crown') === 'true';
+    const vipBadge = document.getElementById('headerVipBadge');
+    if (vipBadge) {
+      vipBadge.style.display = isVip ? 'inline-flex' : 'none';
+    }
+  } catch (e) {}
+
+  // Handle window resize for confetti canvas
+  window.addEventListener('resize', () => {
+    const canvas = document.getElementById('giftConfettiCanvas');
+    if (canvas && canvas.offsetParent !== null) {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+  });
+}
+
+function playGiftFallSound() {
+  const ctx = getOrCreateAudioContext();
+  if (!ctx) return;
+  try {
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, now);
+    osc.frequency.exponentialRampToValueAtTime(180, now + 0.85);
+
+    gain.setValueAtTime(0.12, now);
+    gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.85);
+
+    // Subtle landing thud
+    setTimeout(() => {
+      try {
+        const thudOsc = ctx.createOscillator();
+        const thudGain = ctx.createGain();
+        const thudTime = ctx.currentTime;
+        thudOsc.type = 'triangle';
+        thudOsc.frequency.setValueAtTime(95, thudTime);
+        thudOsc.frequency.exponentialRampToValueAtTime(30, thudTime + 0.25);
+        thudGain.setValueAtTime(0.2, thudTime);
+        thudGain.exponentialRampToValueAtTime(0.001, thudTime + 0.25);
+        thudOsc.connect(thudGain);
+        thudGain.connect(ctx.destination);
+        thudOsc.start(thudTime);
+        thudOsc.stop(thudTime + 0.25);
+      } catch (e) {}
+    }, 700);
+  } catch (e) {}
+}
+
+function playGiftCrackersFanfare() {
+  const ctx = getOrCreateAudioContext();
+  if (!ctx) return;
+  try {
+    const now = ctx.currentTime;
+
+    // 1. Crackers Popping Sounds (Rapid Firework Burst)
+    for (let i = 0; i < 7; i++) {
+      const burstDelay = now + (i * 0.07) + (Math.random() * 0.04);
+      const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let j = 0; j < noiseBuffer.length; j++) {
+        output[j] = (Math.random() * 2 - 1) * Math.exp(-j / (ctx.sampleRate * 0.02));
+      }
+      const whiteNoise = ctx.createBufferSource();
+      whiteNoise.buffer = noiseBuffer;
+      const filter = ctx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 1200 + Math.random() * 800;
+
+      const popGain = ctx.createGain();
+      popGain.gain.setValueAtTime(0.25, burstDelay);
+      popGain.gain.exponentialRampToValueAtTime(0.001, burstDelay + 0.08);
+
+      whiteNoise.connect(filter);
+      filter.connect(popGain);
+      popGain.connect(ctx.destination);
+
+      whiteNoise.start(burstDelay);
+      whiteNoise.stop(burstDelay + 0.09);
+    }
+
+    // 2. Victorious Fanfare Arpeggio (C5 -> E5 -> G5 -> C6)
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    notes.forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const noteTime = now + 0.15 + (idx * 0.12);
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, noteTime);
+
+      gain.setValueAtTime(0.18, noteTime);
+      gain.exponentialRampToValueAtTime(0.001, noteTime + 0.55);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start(noteTime);
+      osc.stop(noteTime + 0.55);
+    });
+  } catch (e) {}
+}
+
+function playGiftClaimChime() {
+  const ctx = getOrCreateAudioContext();
+  if (!ctx) return;
+  try {
+    const now = ctx.currentTime;
+    [659.25, 830.61, 987.77, 1318.51].forEach((f, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t = now + (i * 0.09);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(f, t);
+      gain.setValueAtTime(0.14, t);
+      gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.65);
+    });
+  } catch (e) {}
+}
+
+function triggerFallingGoldenGiftBox(giftData = {}) {
+  currentActiveGiftData = Object.assign({
+    id: 'gift-' + Date.now(),
+    rewardType: 'vip_badge',
+    title: 'Surprise Golden Gift Box',
+    message: 'Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!',
+    rewardName: 'VIP Golden Reader Badge',
+    rewardEmblem: '👑'
+  }, giftData);
+
+  activeGiftBoxOpen = false;
+
+  const overlay = document.getElementById('mysteryGiftOverlay');
+  const stage = document.getElementById('giftBoxStage');
+  const rewardModal = document.getElementById('giftRewardModal');
+  const tapPrompt = document.getElementById('giftTapPrompt');
+
+  if (!overlay || !stage) return;
+
+  // Reset stage classes
+  stage.classList.remove('opened');
+  if (rewardModal) rewardModal.classList.remove('active');
+  if (tapPrompt) tapPrompt.style.display = 'flex';
+
+  // Setup reward modal text
+  const rType = currentActiveGiftData.rewardType;
+  const crownIcon = document.getElementById('rewardCrownIcon');
+  const pillText = document.getElementById('rewardPillText');
+  const titleText = document.getElementById('rewardTitleText');
+  const emblem = document.getElementById('rewardEmblem');
+  const descText = document.getElementById('rewardDescText');
+  const perkBox = document.getElementById('rewardPerkBox');
+
+  if (rType === 'secret_book') {
+    if (crownIcon) crownIcon.innerText = '📖';
+    if (pillText) pillText.innerText = 'SECRET BOOK UNLOCKED';
+    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || 'Secret Focus Masterclass Book';
+    if (emblem) emblem.innerText = '🔮';
+    if (descText) descText.innerText = currentActiveGiftData.message || 'You unlocked an exclusive secret masterclass book in your bookshelf!';
+    if (perkBox) {
+      perkBox.innerHTML = `
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Permanent access to Secret Bonus Book in library</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Full summary, Hindi notes &amp; key insights included</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Read anytime offline with zero limits</span></div>
+      `;
+    }
+  } else if (rType === 'golden_notes') {
+    if (crownIcon) crownIcon.innerText = '📜';
+    if (pillText) pillText.innerText = 'EXCLUSIVE WISDOM SCROLL';
+    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || '10 Billionaire Mental Models';
+    if (emblem) emblem.innerText = '⚡';
+    if (descText) descText.innerText = currentActiveGiftData.message || 'Exclusive mental models of Elon Musk, Warren Buffett & Marcus Aurelius unlocked!';
+    if (perkBox) {
+      perkBox.innerHTML = `
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>First-Principles Thinking &amp; Inversion Framework</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Unlocked in your Book Notes Vault</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Daily actionable mental models guide</span></div>
+      `;
+    }
+  } else {
+    // Default: VIP Crown Reader Badge
+    if (crownIcon) crownIcon.innerText = '👑';
+    if (pillText) pillText.innerText = 'VIP MASTER READER AWARD';
+    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || 'VIP Golden Reader Badge';
+    if (emblem) emblem.innerText = currentActiveGiftData.rewardEmblem || '👑';
+    if (descText) descText.innerText = currentActiveGiftData.message || 'Aapko Mind Focus Books Tracker ki taraf se permanent VIP Master Reader recognition mili hai!';
+    if (perkBox) {
+      perkBox.innerHTML = `
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Permanent glowing Golden Crown Badge in App Header</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>VIP Priority on all new book releases &amp; updates</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Reading Streak Protection &amp; Golden Shield</span></div>
+      `;
+    }
+  }
+
+  // Show overlay and start falling
+  overlay.classList.add('active');
+  playGiftFallSound();
+
+  if (typeof triggerHaptic === 'function') triggerHaptic('light');
+}
+
+function openGoldenGiftBox(event) {
+  if (activeGiftBoxOpen) return;
+  activeGiftBoxOpen = true;
+
+  if (event) event.stopPropagation();
+
+  const stage = document.getElementById('giftBoxStage');
+  const rewardModal = document.getElementById('giftRewardModal');
+
+  if (stage) stage.classList.add('opened');
+
+  // Play crackers sound and fanfare
+  playGiftCrackersFanfare();
+  if (typeof triggerHaptic === 'function') triggerHaptic('celebration');
+
+  // Launch fireworks confetti on canvas
+  startConfettiCrackersBurst();
+
+  // Slide up reward card after brief lid burst delay
+  setTimeout(() => {
+    if (rewardModal) rewardModal.classList.add('active');
+  }, 650);
+}
+
+function startConfettiCrackersBurst() {
+  const canvas = document.getElementById('giftConfettiCanvas');
+  if (!canvas) return;
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  if (confettiAnimFrame) {
+    cancelAnimationFrame(confettiAnimFrame);
+    confettiAnimFrame = null;
+  }
+
+  const particles = [];
+  const colors = [
+    '#fbbf24', '#f59e0b', '#d97706', // Gold & Amber
+    '#ef4444', '#dc2626',             // Ruby Red
+    '#10b981', '#34d399',             // Emerald
+    '#38bdf8', '#0284c7',             // Cyan
+    '#f8fafc', '#e2e8f0'              // Silver
+  ];
+
+  const originX = canvas.width / 2;
+  const originY = canvas.height / 2;
+
+  // 180 Particles
+  for (let i = 0; i < 180; i++) {
+    const angle = (Math.random() * Math.PI * 2);
+    const speed = 6 + Math.random() * 16;
+    particles.push({
+      x: originX,
+      y: originY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - (Math.random() * 6 + 4), // Initial upward pop
+      size: Math.random() * 8 + 5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 14,
+      shape: Math.random() > 0.4 ? 'rect' : (Math.random() > 0.5 ? 'circle' : 'ribbon'),
+      ribbonLen: Math.random() * 18 + 10,
+      opacity: 1,
+      decay: Math.random() * 0.008 + 0.005
+    });
+  }
+
+  const startTime = Date.now();
+
+  function renderConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let activeCount = 0;
+    particles.forEach(p => {
+      if (p.opacity <= 0) return;
+      activeCount++;
+
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.28; // Gravity
+      p.vx *= 0.985; // Air drag
+      p.rotation += p.rotSpeed;
+      p.opacity -= p.decay;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+
+      if (p.shape === 'rect') {
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
+      } else if (p.shape === 'ribbon') {
+        ctx.fillRect(-p.size / 4, -p.ribbonLen / 2, p.size / 2, p.ribbonLen);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    });
+
+    if (activeCount > 0 && (Date.now() - startTime) < 4500) {
+      confettiAnimFrame = requestAnimationFrame(renderConfetti);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiAnimFrame = null;
+    }
+  }
+
+  confettiAnimFrame = requestAnimationFrame(renderConfetti);
+}
+
+function claimSurpriseReward() {
+  playGiftClaimChime();
+  if (typeof triggerHaptic === 'function') triggerHaptic('success');
+
+  const overlay = document.getElementById('mysteryGiftOverlay');
+  const rewardModal = document.getElementById('giftRewardModal');
+
+  // Save to localStorage
+  if (currentActiveGiftData && currentActiveGiftData.id) {
+    try {
+      localStorage.setItem('mf_claimed_gift_' + currentActiveGiftData.id, 'true');
+    } catch (e) {}
+  }
+
+  const rType = currentActiveGiftData ? currentActiveGiftData.rewardType : 'vip_badge';
+
+  if (rType === 'vip_badge') {
+    try {
+      localStorage.setItem('mf_vip_crown', 'true');
+    } catch (e) {}
+    const vipBadge = document.getElementById('headerVipBadge');
+    if (vipBadge) vipBadge.style.display = 'inline-flex';
+    showToast('👑 VIP Master Reader Badge Activated!');
+  } else if (rType === 'secret_book') {
+    try {
+      localStorage.setItem('mf_secret_book_unlocked', 'true');
+    } catch (e) {}
+    showToast('📖 Secret Bonus Book Added to Library!');
+  } else {
+    try {
+      localStorage.setItem('mf_golden_notes_unlocked', 'true');
+    } catch (e) {}
+    showToast('📜 10 Billionaire Mental Models Unlocked!');
+  }
+
+  // Close overlay with animation
+  if (rewardModal) rewardModal.classList.remove('active');
+  setTimeout(() => {
+    if (overlay) overlay.classList.remove('active');
+    activeGiftBoxOpen = false;
+  }, 400);
+}
+
+// Window bindings for Surprise Mystery Gift
+window.triggerFallingGoldenGiftBox = triggerFallingGoldenGiftBox;
+window.openGoldenGiftBox = openGoldenGiftBox;
+window.claimSurpriseReward = claimSurpriseReward;
+window.startConfettiCrackersBurst = startConfettiCrackersBurst;
+

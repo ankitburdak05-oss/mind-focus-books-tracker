@@ -1379,3 +1379,408 @@ window.onDictSearchInput = onDictSearchInput;
 window.clearDictSearch = clearDictSearch;
 window.speakDictWord = speakDictWord;
 window.playPaperTurnAudio = playPaperTurnAudio;
+
+// =========================================================================
+// 🎁 MYSTERY GOLDEN GIFT BOX CONTROLLER (CONTROL PANEL DISPATCHER)
+// =========================================================================
+
+let activeGiftBoxOpen = false;
+let currentActiveGiftData = null;
+let confettiAnimFrame = null;
+
+function getSelectedGiftRewardType() {
+  const selected = document.querySelector('input[name="giftRewardType"]:checked');
+  return selected ? selected.value : 'vip_badge';
+}
+
+function testGiftDropInPanel() {
+  const rType = getSelectedGiftRewardType();
+  const title = document.getElementById('giftTitleInput')?.value || '👑 Special VIP Surprise From Mind Focus!';
+  const rewardName = document.getElementById('giftRewardNameInput')?.value || 'VIP Golden Reader Badge';
+  const message = document.getElementById('giftMessageInput')?.value || 'Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!';
+
+  const giftPayload = {
+    id: 'test-gift-' + Date.now(),
+    type: 'mystery_gift',
+    isMysteryGift: true,
+    active: true,
+    rewardType: rType,
+    title: title,
+    rewardName: rewardName,
+    message: message
+  };
+
+  appendLog(`🎁 Testing 3D Gift Box Drop in Panel (Reward: ${rType})...`, 'info');
+  triggerFallingGoldenGiftBox(giftPayload);
+}
+
+async function dispatchGiftDropToAllPhones() {
+  const rType = getSelectedGiftRewardType();
+  const title = document.getElementById('giftTitleInput')?.value.trim() || '👑 Special VIP Surprise From Mind Focus!';
+  const rewardName = document.getElementById('giftRewardNameInput')?.value.trim() || 'VIP Golden Reader Badge';
+  const message = document.getElementById('giftMessageInput')?.value.trim() || 'Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai! Tap to open your mystery box.';
+
+  const confirmMsg = `Kya aap sach me sabhi users ke phone par Golden Gift Box "${rewardName}" drop karna chahte hain?`;
+  if (!confirm(confirmMsg)) return;
+
+  const btn = document.getElementById('btnDropGiftToAllPhones');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = '⏳ Dropping Gift Box to Cloud...';
+  }
+
+  try {
+    const giftId = 'gift-drop-' + Date.now();
+    const giftPayload = {
+      id: giftId,
+      type: 'mystery_gift',
+      isMysteryGift: true,
+      active: true,
+      rewardType: rType,
+      title: title,
+      rewardName: rewardName,
+      message: message,
+      timestamp: new Date().toISOString()
+    };
+
+    const jsonContent = JSON.stringify(giftPayload, null, 2);
+    const jsContent = 'window.__REMOTE_BROADCAST_NOTICE__ = ' + JSON.stringify(giftPayload, null, 2) + ';\n';
+
+    appendLog(`🎁 Transmitting Golden Gift Box to all connected phones...`, 'warn');
+
+    await pushFileToGitHub('broadcast-notice.json', jsonContent, `Drop Gift Box: ${rewardName}`);
+    await pushFileToGitHub('broadcast-notice.js', jsContent, `Drop Gift Box JS: ${rewardName}`);
+
+    // Instant local broadcast for multi-tab testing
+    try {
+      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(giftPayload));
+    } catch (e) {}
+
+    playDeployChime();
+    appendLog(`🎉 SUCCESS: 3D Golden Gift Box dropped to all active phones! (ID: ${giftId})`, 'success');
+    showToast(`🎁 Golden Gift Box Dropped to All Phones!`);
+  } catch (err) {
+    appendLog(`Failed to drop gift box: ${err.message}`, 'error');
+    alert(`Gift Drop Error: ${err.message}`);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>🎁</span> Drop Golden Gift Box to All Phones';
+    }
+  }
+}
+
+async function deactivateGiftDrop() {
+  if (!confirm('Kya aap sabhi phones se active gift drop hatana chahte hain?')) return;
+  try {
+    const offPayload = {
+      id: 'gift-off-' + Date.now(),
+      active: false,
+      message: ''
+    };
+    const jsonContent = JSON.stringify(offPayload, null, 2);
+    const jsContent = 'window.__REMOTE_BROADCAST_NOTICE__ = ' + JSON.stringify(offPayload, null, 2) + ';\n';
+
+    await pushFileToGitHub('broadcast-notice.json', jsonContent, 'Deactivate Gift Box Drop');
+    await pushFileToGitHub('broadcast-notice.js', jsContent, 'Deactivate Gift Box Drop JS');
+
+    appendLog('🛑 Golden Gift Box Drop deactivated.', 'info');
+    showToast('🛑 Gift Drop Turned Off');
+  } catch (err) {
+    alert('Error: ' + err.message);
+  }
+}
+
+// In-Panel Audio Synthesizers for 3D Gift Box
+function playGiftFallSound() {
+  if (!audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, now);
+    osc.frequency.exponentialRampToValueAtTime(180, now + 0.85);
+
+    gain.setValueAtTime(0.12, now);
+    gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.85);
+  } catch (e) {}
+}
+
+function playGiftCrackersFanfare() {
+  if (!audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+
+    // Pop sounds
+    for (let i = 0; i < 7; i++) {
+      const burstDelay = now + (i * 0.07) + (Math.random() * 0.04);
+      const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.08, audioCtx.sampleRate);
+      const output = noiseBuffer.getChannelData(0);
+      for (let j = 0; j < noiseBuffer.length; j++) {
+        output[j] = (Math.random() * 2 - 1) * Math.exp(-j / (audioCtx.sampleRate * 0.02));
+      }
+      const whiteNoise = audioCtx.createBufferSource();
+      whiteNoise.buffer = noiseBuffer;
+      const filter = audioCtx.createBiquadFilter();
+      filter.type = 'bandpass';
+      filter.frequency.value = 1200 + Math.random() * 800;
+
+      const popGain = audioCtx.createGain();
+      popGain.gain.setValueAtTime(0.25, burstDelay);
+      popGain.gain.exponentialRampToValueAtTime(0.001, burstDelay + 0.08);
+
+      whiteNoise.connect(filter);
+      filter.connect(popGain);
+      popGain.connect(audioCtx.destination);
+
+      whiteNoise.start(burstDelay);
+      whiteNoise.stop(burstDelay + 0.09);
+    }
+
+    // Victory fanfare arpeggio
+    const notes = [523.25, 659.25, 783.99, 1046.50];
+    notes.forEach((freq, idx) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const noteTime = now + 0.15 + (idx * 0.12);
+
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, noteTime);
+
+      gain.setValueAtTime(0.18, noteTime);
+      gain.exponentialRampToValueAtTime(0.001, noteTime + 0.55);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start(noteTime);
+      osc.stop(noteTime + 0.55);
+    });
+  } catch (e) {}
+}
+
+function playGiftClaimChime() {
+  if (!audioCtx) return;
+  try {
+    const now = audioCtx.currentTime;
+    [659.25, 830.61, 987.77, 1318.51].forEach((f, i) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      const t = now + (i * 0.09);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(f, t);
+      gain.setValueAtTime(0.14, t);
+      gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(t);
+      osc.stop(t + 0.65);
+    });
+  } catch (e) {}
+}
+
+function triggerFallingGoldenGiftBox(giftData = {}) {
+  currentActiveGiftData = Object.assign({
+    id: 'gift-' + Date.now(),
+    rewardType: 'vip_badge',
+    title: 'Surprise Golden Gift Box',
+    message: 'Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!',
+    rewardName: 'VIP Golden Reader Badge',
+    rewardEmblem: '👑'
+  }, giftData);
+
+  activeGiftBoxOpen = false;
+
+  const overlay = document.getElementById('mysteryGiftOverlay');
+  const stage = document.getElementById('giftBoxStage');
+  const rewardModal = document.getElementById('giftRewardModal');
+  const tapPrompt = document.getElementById('giftTapPrompt');
+
+  if (!overlay || !stage) return;
+
+  stage.classList.remove('opened');
+  if (rewardModal) rewardModal.classList.remove('active');
+  if (tapPrompt) tapPrompt.style.display = 'flex';
+
+  const rType = currentActiveGiftData.rewardType;
+  const crownIcon = document.getElementById('rewardCrownIcon');
+  const pillText = document.getElementById('rewardPillText');
+  const titleText = document.getElementById('rewardTitleText');
+  const emblem = document.getElementById('rewardEmblem');
+  const descText = document.getElementById('rewardDescText');
+  const perkBox = document.getElementById('rewardPerkBox');
+
+  if (rType === 'secret_book') {
+    if (crownIcon) crownIcon.innerText = '📖';
+    if (pillText) pillText.innerText = 'SECRET BOOK UNLOCKED';
+    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || 'Secret Focus Masterclass Book';
+    if (emblem) emblem.innerText = '🔮';
+    if (descText) descText.innerText = currentActiveGiftData.message || 'You unlocked an exclusive secret masterclass book in your bookshelf!';
+    if (perkBox) {
+      perkBox.innerHTML = `
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Permanent access to Secret Bonus Book in library</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Full summary, Hindi notes &amp; key insights included</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Read anytime offline with zero limits</span></div>
+      `;
+    }
+  } else if (rType === 'golden_notes') {
+    if (crownIcon) crownIcon.innerText = '📜';
+    if (pillText) pillText.innerText = 'EXCLUSIVE WISDOM SCROLL';
+    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || '10 Billionaire Mental Models';
+    if (emblem) emblem.innerText = '⚡';
+    if (descText) descText.innerText = currentActiveGiftData.message || 'Exclusive mental models of Elon Musk, Warren Buffett & Marcus Aurelius unlocked!';
+    if (perkBox) {
+      perkBox.innerHTML = `
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>First-Principles Thinking &amp; Inversion Framework</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Unlocked in your Book Notes Vault</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Daily actionable mental models guide</span></div>
+      `;
+    }
+  } else {
+    if (crownIcon) crownIcon.innerText = '👑';
+    if (pillText) pillText.innerText = 'VIP MASTER READER AWARD';
+    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || 'VIP Golden Reader Badge';
+    if (emblem) emblem.innerText = currentActiveGiftData.rewardEmblem || '👑';
+    if (descText) descText.innerText = currentActiveGiftData.message || 'Aapko Mind Focus Books Tracker ki taraf se permanent VIP Master Reader recognition mili hai!';
+    if (perkBox) {
+      perkBox.innerHTML = `
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Permanent glowing Golden Crown Badge in App Header</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>VIP Priority on all new book releases &amp; updates</span></div>
+        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Reading Streak Protection &amp; Golden Shield</span></div>
+      `;
+    }
+  }
+
+  overlay.classList.add('active');
+  playGiftFallSound();
+}
+
+function openGoldenGiftBox(event) {
+  if (activeGiftBoxOpen) return;
+  activeGiftBoxOpen = true;
+  if (event) event.stopPropagation();
+
+  const stage = document.getElementById('giftBoxStage');
+  const rewardModal = document.getElementById('giftRewardModal');
+
+  if (stage) stage.classList.add('opened');
+
+  playGiftCrackersFanfare();
+  startConfettiCrackersBurst();
+
+  setTimeout(() => {
+    if (rewardModal) rewardModal.classList.add('active');
+  }, 650);
+}
+
+function startConfettiCrackersBurst() {
+  const canvas = document.getElementById('giftConfettiCanvas');
+  if (!canvas) return;
+
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+
+  if (confettiAnimFrame) {
+    cancelAnimationFrame(confettiAnimFrame);
+    confettiAnimFrame = null;
+  }
+
+  const particles = [];
+  const colors = ['#fbbf24', '#f59e0b', '#d97706', '#ef4444', '#dc2626', '#10b981', '#34d399', '#38bdf8', '#f8fafc'];
+  const originX = canvas.width / 2;
+  const originY = canvas.height / 2;
+
+  for (let i = 0; i < 180; i++) {
+    const angle = (Math.random() * Math.PI * 2);
+    const speed = 6 + Math.random() * 16;
+    particles.push({
+      x: originX,
+      y: originY,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - (Math.random() * 6 + 4),
+      size: Math.random() * 8 + 5,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rotation: Math.random() * 360,
+      rotSpeed: (Math.random() - 0.5) * 14,
+      shape: Math.random() > 0.4 ? 'rect' : 'circle',
+      opacity: 1,
+      decay: Math.random() * 0.008 + 0.005
+    });
+  }
+
+  const startTime = Date.now();
+
+  function renderConfetti() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    let activeCount = 0;
+    particles.forEach(p => {
+      if (p.opacity <= 0) return;
+      activeCount++;
+
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.28;
+      p.vx *= 0.985;
+      p.rotation += p.rotSpeed;
+      p.opacity -= p.decay;
+
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.translate(p.x, p.y);
+      ctx.rotate((p.rotation * Math.PI) / 180);
+      ctx.fillStyle = p.color;
+
+      if (p.shape === 'rect') {
+        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.restore();
+    });
+
+    if (activeCount > 0 && (Date.now() - startTime) < 4500) {
+      confettiAnimFrame = requestAnimationFrame(renderConfetti);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiAnimFrame = null;
+    }
+  }
+
+  confettiAnimFrame = requestAnimationFrame(renderConfetti);
+}
+
+function claimSurpriseReward() {
+  playGiftClaimChime();
+  const overlay = document.getElementById('mysteryGiftOverlay');
+  const rewardModal = document.getElementById('giftRewardModal');
+
+  showToast('🎉 Reward Claimed in Simulation Preview!');
+
+  if (rewardModal) rewardModal.classList.remove('active');
+  setTimeout(() => {
+    if (overlay) overlay.classList.remove('active');
+    activeGiftBoxOpen = false;
+  }, 400);
+}
+
+// Window bindings for control panel
+window.testGiftDropInPanel = testGiftDropInPanel;
+window.dispatchGiftDropToAllPhones = dispatchGiftDropToAllPhones;
+window.deactivateGiftDrop = deactivateGiftDrop;
+window.openGoldenGiftBox = openGoldenGiftBox;
+window.claimSurpriseReward = claimSurpriseReward;
+
