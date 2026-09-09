@@ -1,10 +1,10 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "deploy-notice-1788879741944",
+  "id": "notice-2026-09-09T02-57-37-card2",
   "active": true,
   "card": "card2",
-  "icon": "🚀",
-  "title": "Update Live: v3.2.0",
-  "message": "Naya update v3.2.0 Real App me deploy ho chuka hai! Tap to check features.",
-  "btnText": "Awesome 🔥",
-  "timestamp": "2026-09-08T15:02:21.944Z"
+  "icon": "💎",
+  "title": "Card 2 • 3D Model",
+  "message": "manisha laldi kesi hai",
+  "btnText": "Mast Hai 🔥",
+  "timestamp": "2026-09-09T02:57:37.672Z"
 };
