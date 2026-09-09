@@ -77,6 +77,28 @@
 
     <!-- TAB 1: BROADCAST STUDIO -->
     <section class="tab-view active" id="tabBroadcast">
+
+      <!-- Direct Version Release Launcher Banner (Always Visible) -->
+      <div style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.12)); border:1.5px solid rgba(16,185,129,0.45); border-radius:14px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+        <div>
+          <div style="font-weight:900; color:#34d399; font-size:1.05rem; display:flex; align-items:center; gap:8px;">
+            <span>🚀</span> <span>App Version Release Manager (v3.3.0 Staged)</span>
+            <span class="pipeline-status-tag tag-staged" style="font-size:0.7rem; padding:2px 8px;">READY TO PUSH</span>
+          </div>
+          <div style="font-size:0.84rem; color:var(--text-secondary); margin-top:4px;">
+            Real App Version Update sabhi phones me bhejna hai? Niche button dabate hi Phone App me direct Update Dialog khulega!
+          </div>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn-admin btn-secondary" onclick="switchTab('tabPipeline')" style="font-size:0.85rem; padding:8px 16px;">
+            <span>🔍</span> Review Features in Tab 2
+          </button>
+          <button type="button" class="btn-admin btn-emerald" onclick="deployStagedReleaseToRealApp()" style="font-size:0.9rem; padding:10px 20px; font-weight:800; background:linear-gradient(135deg, #059669, #10b981);">
+            <span>🚀</span> Push Version Update to All Phones
+          </button>
+        </div>
+      </div>
+
       <div class="dashboard-grid">
         <!-- Left Column: Broadcast Form -->
         <div class="glass-panel">

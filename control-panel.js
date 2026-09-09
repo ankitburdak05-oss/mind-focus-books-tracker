@@ -124,18 +124,28 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Navigation
+function switchTab(viewId) {
+  playUiClick();
+  const tabs = document.querySelectorAll('.tab-btn');
+  tabs.forEach(t => {
+    if (t.getAttribute('data-tab') === viewId) t.classList.add('active');
+    else t.classList.remove('active');
+  });
+  document.querySelectorAll('.tab-view').forEach(v => {
+    if (v.id === viewId) v.classList.add('active');
+    else v.classList.remove('active');
+  });
+  const targetEl = document.getElementById(viewId);
+  if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+}
+window.switchTab = switchTab;
+
 function initTabs() {
   const tabs = document.querySelectorAll('.tab-btn');
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
-      playUiClick();
-      tabs.forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
-      
-      tab.classList.add('active');
       const viewId = tab.getAttribute('data-tab');
-      const view = document.getElementById(viewId);
-      if (view) view.classList.add('active');
+      switchTab(viewId);
     });
   });
 }
@@ -461,12 +471,13 @@ function updatePipelineCardUI(cfg) {
 
     [deployBtn, deployBtnBanner].forEach(btn => {
       if (!btn) return;
-      if (staged.isDeployed) {
-        btn.disabled = true;
-        btn.innerText = '✅ Deployed to Real App';
+      btn.disabled = false;
+      if (btn.id === 'btnDeployToRealApp') {
+        btn.innerHTML = staged.isDeployed
+          ? '<span>🚀</span> Push Version Update to All Phones (Trigger In-App Update Dialog)'
+          : '<span>🚀</span> Push Version Update to All Phones (Trigger In-App Update Dialog)';
       } else {
-        btn.disabled = false;
-        btn.innerText = '🚀 Push Version Update to All Phones';
+        btn.innerHTML = staged.isDeployed ? '<span>⚡</span> Re-deploy to Real App' : '<span>⚡</span> Deploy to Real App';
       }
     });
   }

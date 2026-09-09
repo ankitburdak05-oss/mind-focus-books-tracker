@@ -4931,7 +4931,10 @@ async function checkRemoteBroadcastNotice() {
   }
 }
 
+let currentBroadcastNoticeData = null;
+
 function showInAppNoticePopup(data) {
+  currentBroadcastNoticeData = data;
   const overlay = document.getElementById('inAppNoticeModalOverlay');
   if (!overlay) return;
 
@@ -4996,6 +4999,13 @@ function dismissInAppNotice(event) {
   } catch (e) {}
   dismissedNoticeIds[idToDismiss] = true;
 
+  const isActionBtn = event && event.target && (
+    event.target.id === 'inAppNoticeDismissBtn' || 
+    event.target.id === 'cyber3dDismissBtn' || 
+    event.target.closest('#inAppNoticeDismissBtn') || 
+    event.target.closest('#cyber3dDismissBtn')
+  );
+
   // Quantum burst at click point
   let clickX, clickY;
   if (event && event.clientX) {
@@ -5025,6 +5035,16 @@ function dismissInAppNotice(event) {
     if (holoNoticeParticleAnim) {
       cancelAnimationFrame(holoNoticeParticleAnim);
       holoNoticeParticleAnim = null;
+    }
+
+    if (isActionBtn && currentBroadcastNoticeData) {
+      const text = (currentBroadcastNoticeData.btnText || '').toLowerCase();
+      const title = (currentBroadcastNoticeData.title || '').toLowerCase();
+      if (text.includes('update') || text.includes('install') || title.includes('update') || currentBroadcastNoticeData.action === 'update') {
+        if (typeof checkForAppUpdates === 'function') {
+          checkForAppUpdates(true);
+        }
+      }
     }
   }, 360);
 }
