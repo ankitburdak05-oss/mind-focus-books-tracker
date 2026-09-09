@@ -1,19 +1,30 @@
-const CACHE_NAME = 'books-tracker-v6';
+const CACHE_NAME = 'books-tracker-v7';
 const ASSETS = [
   './',
   './index.html',
   './style.css',
   './books-data.js',
+  './dictionary-data.js',
   './app.js',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './html2canvas.min.js',
+  './jspdf.umd.min.js',
+  './jspdf.plugin.autotable.min.js',
+  './tesseract.min.js'
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(ASSETS);
+      return Promise.allSettled(
+        ASSETS.map((url) =>
+          cache.add(url).catch((err) => {
+            // Silently swallow individual asset failure so cache installation never breaks
+          })
+        )
+      );
     })
   );
   self.skipWaiting();

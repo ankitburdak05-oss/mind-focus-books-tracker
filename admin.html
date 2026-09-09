@@ -393,24 +393,27 @@
           <div class="panel-title">
             <span>🔑</span> GitHub Cloud Authentication Vault
           </div>
-          <span class="panel-pill">AUTO-CONFIGURED</span>
+          <span class="panel-pill" style="background:rgba(239,68,68,0.2); color:#fca5a5; border:1px solid #ef4444;">SECURED &amp; PRIVATE</span>
         </div>
 
         <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
-          Aapka GitHub Personal Access Token (PAT) already pre-configured hai. Control Panel bina kisi terminal ya password mangne ke direct GitHub REST API ke zariye live updates bhejta hai!
+          Apna GitHub Personal Access Token (PAT with <code>repo</code> scope) yahan enter karein. Token aapke browser ke private local storage me rehta hai aur source code me kabhi store ya leak nahi hota.
         </p>
 
         <div class="form-group">
-          <label class="form-label">GitHub Personal Access Token (Auto-Loaded)</label>
-          <input type="password" class="form-input" id="githubTokenInput" placeholder="Auto-configured &amp; secured">
+          <label class="form-label">GitHub Personal Access Token (Classic or Fine-grained with repo access)</label>
+          <input type="password" class="form-input" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
         </div>
 
-        <div class="btn-row">
+        <div class="btn-row" style="flex-wrap:wrap; gap:8px;">
           <button type="button" class="btn-admin btn-primary" onclick="saveGithubToken()">
             <span>💾</span> Save / Update Token
           </button>
           <button type="button" class="btn-admin btn-secondary" onclick="testGitHubConnection()">
             <span>🔌</span> Test Connection &amp; Rate Limits
+          </button>
+          <button type="button" class="btn-admin" onclick="clearGithubToken()" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#f87171;">
+            <span>🔒</span> Logout / Clear Token
           </button>
         </div>
 

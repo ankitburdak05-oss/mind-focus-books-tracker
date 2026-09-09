@@ -295,9 +295,7 @@ function handleUpdateClick() {
 
   // If running inside desktop app (pywebview), save directly to disk books-data.js as well
   if (window.pywebview && window.pywebview.api && window.pywebview.api.save_books) {
-    window.pywebview.api.save_books(JSON.stringify(state.books)).then(() => {
-      console.log('Saved to books-data.js file on disk!');
-    }).catch(e => console.log('Disk save note:', e));
+    window.pywebview.api.save_books(JSON.stringify(state.books)).catch(() => {});
   }
 
   const btn = document.getElementById('headerUpdateBtn');
@@ -2131,9 +2129,7 @@ let barcodeDetector = null;
 if ('BarcodeDetector' in window) {
   try {
     barcodeDetector = new BarcodeDetector({ formats: ['ean_13', 'ean_8', 'upc_a', 'upc_e', 'code_128', 'qr_code'] });
-  } catch (e) {
-    console.log('BarcodeDetector init error:', e);
-  }
+  } catch (e) {}
 }
 
 function openBarcodeScanner() {
@@ -2288,9 +2284,7 @@ async function fetchBookByIsbn(isbn) {
         };
       }
     }
-  } catch (e) {
-    console.log('OpenLibrary fetch failed:', e);
-  }
+  } catch (e) {}
 
   // 2. Try Google Books API if Open Library had missing data
   if (!foundData || !foundData.title) {
@@ -2309,9 +2303,7 @@ async function fetchBookByIsbn(isbn) {
           };
         }
       }
-    } catch (e) {
-      console.log('Google Books fetch failed:', e);
-    }
+    } catch (e) {}
   }
 
   if (foundData && foundData.title) {
@@ -2744,9 +2736,7 @@ function triggerAutoSnapshot() {
       lastSaved: new Date().toLocaleString('en-IN'),
       booksCount: state.books.length
     }));
-  } catch (e) {
-    console.log('Snapshot storage notice:', e);
-  }
+  } catch (e) {}
 }
 
 function openBackupModal() {
@@ -2822,11 +2812,7 @@ async function shareBackupToCloud() {
         return;
       }
     } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.log('File share error, falling back to download:', err);
-      } else {
-        return;
-      }
+      if (err.name === 'AbortError') return;
     }
   }
 
@@ -2917,9 +2903,7 @@ function handleShortcutIntentActions() {
         switchBottomTab('bookshelf');
       }, 400);
     }
-  } catch (e) {
-    console.log('Shortcut action check notice:', e);
-  }
+  } catch (e) {}
 }
 
 // ==========================================

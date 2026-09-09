@@ -1853,11 +1853,11 @@
   <!-- Hidden File Input for Import -->
   <input type="file" id="importFileInput" accept=".json" style="display:none;">
 
-  <!-- Standalone Offline Scripts -->
-  <script src="html2canvas.min.js"></script>
-  <script src="jspdf.umd.min.js"></script>
-  <script src="jspdf.plugin.autotable.min.js"></script>
-  <script src="tesseract.min.js"></script>
+  <!-- Standalone Offline Scripts with CDN Fallbacks -->
+  <script src="html2canvas.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'"></script>
+  <script src="jspdf.umd.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'"></script>
+  <script src="jspdf.plugin.autotable.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js'"></script>
+  <script src="tesseract.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js'"></script>
   <script src="dictionary-data.js"></script>
   <script src="books-data.js"></script>
   <script src="app.js"></script>

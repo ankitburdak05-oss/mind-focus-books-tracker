@@ -3,12 +3,8 @@ const REPO_OWNER = 'ankitburdak05-oss';
 const REPO_NAME = 'mind-focus-books-tracker';
 const DEFAULT_BRANCH = 'main';
 
-// Pre-configured Encrypted Token
-const DEFAULT_AUTH_TOKEN = String.fromCharCode(...[77,66,69,117,73,78,18,105,26,80,97,27,115,24,31,104,72,92,27,31,19,24,105,102,104,112,65,64,105,27,97,66,89,72,24,126,77,75,99,76].map(c => c ^ 42));
-let githubToken = localStorage.getItem('mf_admin_github_token') || DEFAULT_AUTH_TOKEN;
-if (!localStorage.getItem('mf_admin_github_token')) {
-  localStorage.setItem('mf_admin_github_token', DEFAULT_AUTH_TOKEN);
-}
+// Secure GitHub Authentication Token (Stored strictly in client-side storage, never hardcoded)
+let githubToken = sessionStorage.getItem('mf_admin_github_token') || localStorage.getItem('mf_admin_github_token') || '';
 
 // State
 let currentNotice = {
@@ -950,9 +946,33 @@ function saveGithubToken() {
   }
 }
 
+function clearGithubToken() {
+  playUiClick();
+  if (confirm('Kya aap saved GitHub Token remove/logout karna chahte hain?')) {
+    githubToken = '';
+    localStorage.removeItem('mf_admin_github_token');
+    sessionStorage.removeItem('mf_admin_github_token');
+    const tokenInput = document.getElementById('githubTokenInput');
+    if (tokenInput) tokenInput.value = '';
+    const statusEl = document.getElementById('tokenTestResult');
+    if (statusEl) statusEl.innerHTML = '<span style="color:#94a3b8;">🔒 Token removed. Enter a new token to connect.</span>';
+    const radarStatus = document.getElementById('radarStatusText');
+    if (radarStatus) radarStatus.innerText = 'Offline (No Token)';
+    appendLog('GitHub Token cleared / Logged out.', 'warn');
+    showToast('🔒 GitHub Token Cleared');
+  }
+}
+
 async function testGitHubConnection() {
   const statusEl = document.getElementById('tokenTestResult');
   const radarStatus = document.getElementById('radarStatusText');
+  if (!githubToken) {
+    if (statusEl) {
+      statusEl.innerHTML = '<span style="color:#f59e0b; font-weight:700;">⚠️ No GitHub Token Configured.</span> Enter a Personal Access Token below to enable push access.';
+    }
+    if (radarStatus) radarStatus.innerText = 'No Token';
+    return;
+  }
   if (statusEl) statusEl.innerHTML = '<i>Testing connection...</i>';
 
   try {
@@ -1026,6 +1046,7 @@ window.triggerAutoSequence = triggerAutoSequence;
 window.deployStagedReleaseToRealApp = deployStagedReleaseToRealApp;
 window.rollbackToPreviousRelease = rollbackToPreviousRelease;
 window.saveGithubToken = saveGithubToken;
+window.clearGithubToken = clearGithubToken;
 window.testGitHubConnection = testGitHubConnection;
 window.saveRemoteConfigToCloud = saveRemoteConfigToCloud;
 window.saveBookOfTheDay = saveBookOfTheDay;

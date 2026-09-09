@@ -1,11 +1,10 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-09T05:01:28.684Z",
+  "updatedAt": "2026-09-09T05:34:03.200Z",
   "activeRelease": {
     "version": "v3.3.0",
     "name": "Mind Focus Books v3.3.0 (A-Z English-Hindi 3D Dictionary Book Release)",
-    "stagedAt": "2026-09-09T09:15:00Z",
-    "isDeployed": false,
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.3.0/MindFocusBooks-Native.apk",
     "features": [
       "Book #0: A-Z English-Hindi Focus Vocabulary Lexicon (101+ Core Words)",
       "Real 3D Book Experience: Leather Hardcover, Silk Ribbon Bookmark, Dual-Page Spread",
@@ -14,13 +13,13 @@
       "Complete Hindi Meanings, Translations, Examples & Synonyms",
       "Instant A-Z Alphabet Strip Navigation & Live Search Filter"
     ],
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.3.0/MindFocusBooks-Native.apk"
+    "stagedAt": "2026-09-09T05:34:03.200Z",
+    "isDeployed": true
   },
   "stagedRelease": {
     "version": "v3.3.0",
     "name": "Mind Focus Books v3.3.0 (A-Z English-Hindi 3D Dictionary Book Release)",
-    "stagedAt": "2026-09-09T09:15:00Z",
-    "isDeployed": true,
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.3.0/MindFocusBooks-Native.apk",
     "features": [
       "Book #0: A-Z English-Hindi Focus Vocabulary Lexicon (101+ Core Words)",
       "Real 3D Book Experience: Leather Hardcover, Silk Ribbon Bookmark, Dual-Page Spread",
@@ -29,20 +28,20 @@
       "Complete Hindi Meanings, Translations, Examples & Synonyms",
       "Instant A-Z Alphabet Strip Navigation & Live Search Filter"
     ],
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.3.0/MindFocusBooks-Native.apk"
+    "stagedAt": "2026-09-09T05:34:03.200Z",
+    "isDeployed": true
   },
   "previousRelease": {
     "version": "v3.2.0",
-    "name": "Mind Focus Books v3.2.0 (Executive Staging Release)",
-    "stagedAt": "2026-09-08T20:20:00Z",
-    "isDeployed": true,
+    "name": "Mind Focus Books v3.2.0 (Audio Reader & 3D Interactive Release)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.2.0/MindFocusBooks-Native.apk",
     "features": [
-      "Staging to Real App Deployment Pipeline",
-      "Executive Control Panel Hub with Live 3D Viewport",
-      "0ms Multi-Window Live Sync",
-      "Global Books Curator & Spotlight Book of the Day"
+      "Real-time Text-to-Speech Audio Book Narration Engine",
+      "Interactive 3D Book Experience & Real-time Reading Progress",
+      "Daily Habit Streaks & Anti-distraction Focus Mode"
     ],
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.2.0/MindFocusBooks-Native.apk"
+    "stagedAt": "2026-09-08T14:30:00.000Z",
+    "isDeployed": true
   },
   "features": {
     "maintenanceMode": false,

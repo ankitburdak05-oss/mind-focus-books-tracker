@@ -32,18 +32,15 @@
     "isDeployed": true
   },
   "previousRelease": {
-    "version": "v3.3.0",
-    "name": "Mind Focus Books v3.3.0 (A-Z English-Hindi 3D Dictionary Book Release)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.3.0/MindFocusBooks-Native.apk",
+    "version": "v3.2.0",
+    "name": "Mind Focus Books v3.2.0 (Audio Reader & 3D Interactive Release)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.2.0/MindFocusBooks-Native.apk",
     "features": [
-      "Book #0: A-Z English-Hindi Focus Vocabulary Lexicon (101+ Core Words)",
-      "Real 3D Book Experience: Leather Hardcover, Silk Ribbon Bookmark, Dual-Page Spread",
-      "ASMR Paper Turn Sound & 3D Page Flip Physics",
-      "Native Voice Speech Engine (Web Speech API) for English word pronunciation",
-      "Complete Hindi Meanings, Translations, Examples & Synonyms",
-      "Instant A-Z Alphabet Strip Navigation & Live Search Filter"
+      "Real-time Text-to-Speech Audio Book Narration Engine",
+      "Interactive 3D Book Experience & Real-time Reading Progress",
+      "Daily Habit Streaks & Anti-distraction Focus Mode"
     ],
-    "stagedAt": "2026-09-09T05:33:40.553Z",
+    "stagedAt": "2026-09-08T14:30:00.000Z",
     "isDeployed": true
   },
   "features": {
