@@ -116,6 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
   fetchRemoteConfigPipeline();
   renderBroadcastHistory();
   updateLivePreview();
+  if (typeof updateFlashcardPreview === 'function') updateFlashcardPreview();
   appendLog('Executive Command Studio v2.0 Ready.', 'success');
 });
 
@@ -1812,4 +1813,149 @@ window.dispatchGiftDropToAllPhones = dispatchGiftDropToAllPhones;
 window.deactivateGiftDrop = deactivateGiftDrop;
 window.openGoldenGiftBox = openGoldenGiftBox;
 window.claimSurpriseReward = claimSurpriseReward;
+
+// ==========================================
+// 3D SMART FLASHCARDS STUDIO ENGINE
+// ==========================================
+function updateFlashcardPreview() {
+  const dict = window.DICTIONARY_WORDS || [];
+  for (let i = 1; i <= 5; i++) {
+    const input = document.getElementById(`fcTargetWord${i}`);
+    const preview = document.getElementById(`fcSlotPreview${i}`);
+    if (!input || !preview) continue;
+    const val = input.value.trim().toLowerCase();
+    if (!val) {
+      preview.textContent = 'Empty slot';
+      preview.style.color = 'var(--text-muted)';
+      continue;
+    }
+    const found = dict.find(w => w.word.toLowerCase() === val);
+    if (found) {
+      preview.textContent = `${found.type || 'word'} • ${found.hindi || 'अर्थ'}`;
+      preview.style.color = '#34d399';
+    } else {
+      preview.textContent = `custom word (manual)`;
+      preview.style.color = '#fbbf24';
+    }
+  }
+}
+
+function shuffle5TargetWords() {
+  playUiClick();
+  const dict = window.DICTIONARY_WORDS || [];
+  if (dict.length < 5) {
+    showToast('⚠️ Dictionary words not loaded');
+    return;
+  }
+  const shuffled = [...dict].sort(() => Math.random() - 0.5);
+  for (let i = 1; i <= 5; i++) {
+    const input = document.getElementById(`fcTargetWord${i}`);
+    if (input && shuffled[i - 1]) {
+      input.value = shuffled[i - 1].word;
+    }
+  }
+  updateFlashcardPreview();
+  showToast('🎲 5 Target Words Shuffled from Dictionary!');
+}
+
+async function dispatchFlashcardsDropToAllPhones() {
+  const words = [];
+  for (let i = 1; i <= 5; i++) {
+    const input = document.getElementById(`fcTargetWord${i}`);
+    const val = input ? input.value.trim() : '';
+    if (val) words.push(val);
+  }
+
+  if (words.length === 0) {
+    alert('Kripya kam se kam 1 word target select karein!');
+    return;
+  }
+
+  const title = document.getElementById('fcChallengeTitle')?.value.trim() || "🎴 Today's 5 Target Words Challenge!";
+  const btnText = document.getElementById('fcChallengeBtnText')?.value.trim() || "🎴 Practice Flashcards Now";
+  const message = document.getElementById('fcChallengeMessage')?.value.trim() || "Aapke liye 5 naye 3D smart flashcards unlock ho chuke hain! Tap karke test karein.";
+
+  const confirmMsg = `Kya aap sach me ye 5 target words sabhi users ke phone par push karna chahte hain?\n\nWords: ${words.join(', ')}`;
+  if (!confirm(confirmMsg)) return;
+
+  const btn = document.getElementById('btnPushDailyFlashcards');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span> Transmitting Flashcards to Cloud...';
+  }
+
+  try {
+    const dropId = 'fc-drop-' + Date.now();
+    const payload = {
+      id: dropId,
+      type: 'flashcard_drop',
+      isFlashcardDrop: true,
+      card: 'card2',
+      active: true,
+      icon: '🎴',
+      title: title,
+      btnText: btnText,
+      message: message,
+      words: words,
+      timestamp: new Date().toISOString()
+    };
+
+    const jsonContent = JSON.stringify(payload, null, 2);
+    const jsContent = 'window.__REMOTE_BROADCAST_NOTICE__ = ' + JSON.stringify(payload, null, 2) + ';\n';
+
+    appendLog(`🎴 Transmitting 5 Target Words to all active phones... (${words.join(', ')})`, 'warn');
+
+    await pushFileToGitHub('broadcast-notice.json', jsonContent, `Push Flashcards Challenge: ${words.slice(0, 3).join(', ')}`);
+    await pushFileToGitHub('broadcast-notice.js', jsContent, `Push Flashcards Challenge JS: ${words.slice(0, 3).join(', ')}`);
+
+    try {
+      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(payload));
+      localStorage.setItem('mindfocus_current_live_notice', JSON.stringify(payload));
+    } catch (e) {}
+
+    playDeployChime();
+    appendLog(`🎉 SUCCESS: Today's 5 Target Words pushed to all connected phones! (ID: ${dropId})`, 'success');
+    showToast(`🎴 5 Flashcards Challenge Pushed to All Phones!`);
+  } catch (err) {
+    appendLog(`Failed to push flashcards: ${err.message}`, 'error');
+    alert(`Flashcards Push Error: ${err.message}`);
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = "<span>🎴</span> Push Today's 5 Target Words to All Phones";
+    }
+  }
+}
+
+async function deactivateFlashcardsDrop() {
+  if (!confirm('Kya aap active flashcard challenge ko sabhi phones se hatana chahte hain?')) return;
+  try {
+    const offPayload = {
+      id: 'fc-off-' + Date.now(),
+      active: false,
+      message: ''
+    };
+    const jsonContent = JSON.stringify(offPayload, null, 2);
+    const jsContent = 'window.__REMOTE_BROADCAST_NOTICE__ = ' + JSON.stringify(offPayload, null, 2) + ';\n';
+
+    await pushFileToGitHub('broadcast-notice.json', jsonContent, 'Deactivate Flashcards Challenge');
+    await pushFileToGitHub('broadcast-notice.js', jsContent, 'Deactivate Flashcards Challenge JS');
+
+    try {
+      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(offPayload));
+      localStorage.removeItem('mindfocus_current_live_notice');
+    } catch (e) {}
+
+    appendLog('🛑 Flashcard Challenge deactivated.', 'info');
+    showToast('🛑 Flashcard Challenge Stopped');
+  } catch (err) {
+    alert('Error: ' + err.message);
+  }
+}
+
+window.updateFlashcardPreview = updateFlashcardPreview;
+window.shuffle5TargetWords = shuffle5TargetWords;
+window.dispatchFlashcardsDropToAllPhones = dispatchFlashcardsDropToAllPhones;
+window.deactivateFlashcardsDrop = deactivateFlashcardsDrop;
+
 

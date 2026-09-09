@@ -67,6 +67,9 @@
       <button class="tab-btn" data-tab="tabMysteryGift">
         <span>🎁</span> Mystery Gift Drop
       </button>
+      <button class="tab-btn" data-tab="tabFlashcards">
+        <span>🎴</span> 3D Smart Flashcards
+      </button>
       <button class="tab-btn" data-tab="tabFeatures">
         <span>🎛️</span> Remote Feature Switches
       </button>
@@ -434,6 +437,98 @@
           </button>
           <button type="button" class="btn-admin btn-danger" onclick="deactivateGiftDrop()" style="min-width:140px;">
             <span>🛑</span> Stop Gift Drop
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB: 3D SMART FLASHCARDS STUDIO -->
+    <section class="tab-view" id="tabFlashcards">
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>🎴</span> 3D Smart Flashcards Studio &amp; Daily Target Words Dispatcher
+          </div>
+          <span class="panel-pill" style="background:rgba(236,72,153,0.18); border-color:#ec4899; color:#f472b6;">LEITNER REPETITION ENGINE</span>
+        </div>
+
+        <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:18px; line-height:1.6;">
+          Yaha se aap sabhi users ke phone screen par <b>3D Smart Flashcards</b> ka target challenge bhej sakte hain. User card ko 360° flip karenge, audio pronunciation sunenge, aur Swipe Right (Mastered) ya Swipe Left (Review Later) karke Leitner Box system se vocabulary yaad karenge.
+        </p>
+
+        <!-- 5 Target Words Selection Grid -->
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+            <label class="form-label" style="margin:0;">Select 5 Target Words For Today's Challenge</label>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn-admin btn-secondary" onclick="shuffle5TargetWords()" style="font-size:0.8rem; padding:6px 14px;">
+                <span>🎲</span> Shuffle 5 Random Words
+              </button>
+            </div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-top:10px;">
+            <!-- Slot 1 -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
+              <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #1</div>
+              <input type="text" class="form-input fc-target-word-input" id="fcTargetWord1" value="Abandon" placeholder="Word 1" oninput="updateFlashcardPreview()">
+              <div class="fc-slot-preview" id="fcSlotPreview1" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">verb • त्याग देना</div>
+            </div>
+
+            <!-- Slot 2 -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
+              <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #2</div>
+              <input type="text" class="form-input fc-target-word-input" id="fcTargetWord2" value="Benevolent" placeholder="Word 2" oninput="updateFlashcardPreview()">
+              <div class="fc-slot-preview" id="fcSlotPreview2" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">adj • दयालु, परोपकारी</div>
+            </div>
+
+            <!-- Slot 3 -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
+              <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #3</div>
+              <input type="text" class="form-input fc-target-word-input" id="fcTargetWord3" value="Cognizant" placeholder="Word 3" oninput="updateFlashcardPreview()">
+              <div class="fc-slot-preview" id="fcSlotPreview3" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">adj • अवगत, जानकार</div>
+            </div>
+
+            <!-- Slot 4 -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
+              <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #4</div>
+              <input type="text" class="form-input fc-target-word-input" id="fcTargetWord4" value="Diligent" placeholder="Word 4" oninput="updateFlashcardPreview()">
+              <div class="fc-slot-preview" id="fcSlotPreview4" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">adj • परिश्रमी, लगनशील</div>
+            </div>
+
+            <!-- Slot 5 -->
+            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
+              <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #5</div>
+              <input type="text" class="form-input fc-target-word-input" id="fcTargetWord5" value="Empirical" placeholder="Word 5" oninput="updateFlashcardPreview()">
+              <div class="fc-slot-preview" id="fcSlotPreview5" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">adj • अनुभवजन्य</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Notice Text -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px;">
+          <div class="form-group">
+            <label class="form-label">Challenge Title</label>
+            <input type="text" class="form-input" id="fcChallengeTitle" value="🎴 Today's 5 Target Words Challenge!" placeholder="Title...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Challenge Button Text</label>
+            <input type="text" class="form-input" id="fcChallengeBtnText" value="🎴 Practice Flashcards Now" placeholder="Button Text...">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Challenge Message (Subtitle)</label>
+          <textarea class="form-textarea" id="fcChallengeMessage" rows="2" placeholder="Message...">Aapke liye 5 naye 3D smart flashcards unlock ho chuke hain! Tap karke Leitner memory challenge shuru karein.</textarea>
+        </div>
+
+        <!-- Master Dispatch Button -->
+        <div class="btn-row" style="margin-top:24px;">
+          <button type="button" class="btn-admin" id="btnPushDailyFlashcards" onclick="dispatchFlashcardsDropToAllPhones()" style="flex:1; font-size:1.05rem; padding:16px 28px; background:linear-gradient(135deg, #ec4899, #8b5cf6 60%, #3b82f6); color:#fff; font-weight:900; box-shadow:0 10px 30px rgba(236,72,153,0.45);">
+            <span>🎴</span> Push Today's 5 Target Words to All Phones
+          </button>
+          <button type="button" class="btn-admin btn-danger" onclick="deactivateFlashcardsDrop()" style="min-width:140px;">
+            <span>🛑</span> Stop Challenge
           </button>
         </div>
       </div>

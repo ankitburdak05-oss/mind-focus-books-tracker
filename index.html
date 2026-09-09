@@ -85,6 +85,9 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           + Add Book
         </button>
+        <button class="btn" id="headerFlashcardsBtn" onclick="openFlashcardTrainer()" title="3D Smart Flashcards (Leitner Memory Box)" style="background:linear-gradient(135deg, rgba(236,72,153,0.18), rgba(168,85,247,0.18)); border-color:rgba(236,72,153,0.35); color:#f472b6; font-weight:700;">
+          🎴 <span class="desktop-only-txt">Flashcards</span>
+        </button>
         <button class="btn" id="headerPomodoroBtn" onclick="openPomodoroModal()" title="25-Min Focus Reading Timer" style="background:rgba(239, 68, 68, 0.15); border-color:rgba(239, 68, 68, 0.35); color:#ef4444; font-weight:700;">
           ⏱️ <span id="headerPomodoroText">Focus Timer</span>
         </button>
@@ -155,6 +158,11 @@
           <span class="chip-icon">🌌</span>
           <span class="chip-val" id="kpiDnaStars">0 ★</span>
           <span class="chip-lbl">DNA Galaxy</span>
+        </div>
+        <div class="kpi-chip" onclick="openFlashcardTrainer()" style="cursor:pointer; background:linear-gradient(135deg, rgba(236,72,153,0.16), rgba(168,85,247,0.16)); border-color:rgba(236,72,153,0.35);" title="Open 3D Flashcards Leitner Trainer">
+          <span class="chip-icon">🎴</span>
+          <span class="chip-val" id="kpiFlashcardsCount">5 Due</span>
+          <span class="chip-lbl">Flashcards</span>
         </div>
       </div>
 
@@ -1707,6 +1715,9 @@
             <input type="text" id="dictSearchInput" placeholder="Search English or Hindi word..." oninput="onDictSearchInput(this.value)">
             <button type="button" class="dict-search-clear" id="dictSearchClearBtn" onclick="clearDictSearch()" style="display:none;">✕</button>
           </div>
+          <button type="button" class="btn btn-sm" onclick="openFlashcardTrainer()" style="background:linear-gradient(135deg, #ec4899, #8b5cf6); color:#fff; border:none; font-weight:800; border-radius:10px; padding:6px 12px; margin-right:8px; display:inline-flex; align-items:center; gap:4px; font-size:0.8rem; box-shadow:0 4px 12px rgba(236,72,153,0.35);" title="Practice 3D Flashcards">
+            🎴 <span>Flashcards</span>
+          </button>
           <button type="button" class="dict-close-btn" onclick="closeDictionaryBookReader()" title="Close Book (Esc)">✕</button>
         </div>
       </div>
@@ -1846,6 +1857,151 @@
           <span>⚡ Claim Reward Now</span>
           <span class="claim-arrow">→</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       FEATURE: 3D SMART FLASHCARD TRAINER (LEITNER SPACED REPETITION BOX)
+       ========================================================================== -->
+  <div class="modal-overlay" id="flashcardModalOverlay" onclick="handleFlashcardOverlayClick(event)">
+    <div class="flashcard-deck-modal" onclick="event.stopPropagation()">
+      <!-- Deck Top Bar -->
+      <div class="flashcard-deck-header">
+        <div class="deck-header-left">
+          <span class="deck-badge">🎴 3D FLASHCARDS</span>
+          <div class="leitner-boxes-strip">
+            <span class="box-chip chip-box1" id="box1Chip" title="Box 1: Review Today">Box 1: <b id="box1Count">0</b></span>
+            <span class="box-chip chip-box2" id="box2Chip" title="Box 2: Learning">Box 2: <b id="box2Count">0</b></span>
+            <span class="box-chip chip-box3" id="box3Chip" title="Box 3: Mastered">Box 3: <b id="box3Count">0</b></span>
+          </div>
+        </div>
+        <div class="deck-header-right">
+          <span class="deck-progress-indicator" id="deckProgressIndicator">Card 1 of 5</span>
+          <button type="button" class="modal-close" onclick="closeFlashcardTrainer()" title="Close Trainer (Esc)">&times;</button>
+        </div>
+      </div>
+
+      <!-- Main Deck Viewport -->
+      <div id="flashcardActiveDeckView">
+        <!-- 3D Card Arena -->
+        <div class="flashcard-3d-arena" id="flashcard3dArena">
+          <div class="flashcard-3d-card" id="flashcard3dCard" onclick="toggleFlashcardFlip()">
+            <!-- Front Face -->
+            <div class="flashcard-face flashcard-front">
+              <div class="card-ornament top-left">✦</div>
+              <div class="card-ornament top-right">✦</div>
+              <div class="card-top-tag">
+                <span class="card-type-tag" id="fcTypeTag">NOUN</span>
+                <button type="button" class="card-audio-btn" id="fcAudioBtn" onclick="event.stopPropagation(); speakFlashcardWord();" title="Speak Word Pronunciation">
+                  🔊
+                </button>
+              </div>
+              
+              <div class="card-front-center">
+                <h1 class="card-word-title" id="fcWordTitle">Abandon</h1>
+                <div class="card-phonetic-badge" id="fcPhoneticBadge">अबैंडन</div>
+              </div>
+
+              <div class="card-flip-prompt">
+                <span>👆 Tap card to flip &amp; reveal Hindi meaning</span>
+                <span class="flip-hint-icon">🔄</span>
+              </div>
+            </div>
+
+            <!-- Back Face -->
+            <div class="flashcard-face flashcard-back">
+              <div class="card-ornament top-left">✦</div>
+              <div class="card-ornament top-right">✦</div>
+              <div class="card-back-header">
+                <span class="card-back-word" id="fcBackWord">Abandon</span>
+                <span class="card-back-type" id="fcBackType">verb</span>
+              </div>
+
+              <div class="card-meaning-box">
+                <div class="card-hindi-meaning" id="fcHindiMeaning">त्याग देना, छोड़ देना</div>
+                <div class="card-english-def" id="fcEnglishDef">To give up completely; desert or leave behind.</div>
+              </div>
+
+              <div class="card-example-box">
+                <div class="card-example-en" id="fcExampleEn">"Never abandon your reading habits."</div>
+                <div class="card-example-hi" id="fcExampleHi">"अपनी पढ़ने की आदतों को कभी मत छोड़ो।"</div>
+              </div>
+
+              <div class="card-synonyms" id="fcSynonyms">
+                <b>Synonyms:</b> <span id="fcSynList">Desert, Discard, Renounce</span>
+              </div>
+
+              <div class="card-back-tap-hint">
+                <span>👆 Tap to flip back</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gesture Visual Stamps -->
+          <div class="swipe-stamp stamp-review" id="swipeStampReview">🔁 REVIEW LATER</div>
+          <div class="swipe-stamp stamp-mastered" id="swipeStampMastered">✅ MASTERED!</div>
+        </div>
+
+        <!-- Swipe Tip Guide -->
+        <div class="flashcard-swipe-hint">
+          <span class="hint-left">👈 Swipe Left: Review Later</span>
+          <span class="hint-center">• Tap to Flip •</span>
+          <span class="hint-right">Swipe Right: Mastered 👉</span>
+        </div>
+
+        <!-- Bottom Action Dock -->
+        <div class="flashcard-action-dock">
+          <button type="button" class="btn-card-action btn-review" onclick="handleCardAction('review')" title="Swipe Left or click: Review Later">
+            <span class="action-icon">🔁</span>
+            <div class="action-meta">
+              <span class="action-title">Review Later</span>
+              <span class="action-sub">Box 1</span>
+            </div>
+          </button>
+
+          <button type="button" class="btn-card-action btn-flip" onclick="toggleFlashcardFlip()" title="Flip Card (Tap)">
+            <span class="action-icon">🔄</span>
+            <span class="action-title">Flip Card</span>
+          </button>
+
+          <button type="button" class="btn-card-action btn-master" onclick="handleCardAction('mastered')" title="Swipe Right or click: Mastered">
+            <span class="action-icon">✅</span>
+            <div class="action-meta">
+              <span class="action-title">Mastered</span>
+              <span class="action-sub">Box 2/3</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Completion Celebration Screen -->
+      <div class="flashcard-completion-view" id="flashcardCompletionView" style="display:none;">
+        <div class="completion-trophy">🏆</div>
+        <h2 class="completion-title">Daily Flashcards Completed!</h2>
+        <p class="completion-desc">Aapne aaj ke saare target words review kar liye hain! Mastery score increase ho gaya hai.</p>
+        <div class="completion-stats-grid">
+          <div class="completion-stat-card">
+            <div class="stat-num" id="compReviewedCount">5</div>
+            <div class="stat-lbl">Cards Practiced</div>
+          </div>
+          <div class="completion-stat-card">
+            <div class="stat-num" id="compMasteredCount">4</div>
+            <div class="stat-lbl">Mastered Today</div>
+          </div>
+          <div class="completion-stat-card">
+            <div class="stat-num" id="compTotalPoints">+100</div>
+            <div class="stat-lbl">Focus XP Earned</div>
+          </div>
+        </div>
+        <div class="completion-actions">
+          <button type="button" class="btn btn-primary" onclick="restartFlashcardsDeck(5)" style="padding:12px 24px; font-weight:800; border-radius:12px; background:linear-gradient(135deg, #ec4899, #8b5cf6); border:none; color:#fff;">
+            🎴 Practice 5 More Words
+          </button>
+          <button type="button" class="btn" onclick="closeFlashcardTrainer()" style="padding:12px 24px; font-weight:700; border-radius:12px;">
+            Close Trainer
+          </button>
+        </div>
       </div>
     </div>
   </div>

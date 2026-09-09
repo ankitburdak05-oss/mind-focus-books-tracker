@@ -92,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof startLiveNoticeListener === 'function') startLiveNoticeListener();
   if (typeof init4DFlagshipSystems === 'function') init4DFlagshipSystems();
   if (typeof initMysteryGiftEngine === 'function') initMysteryGiftEngine();
+  if (typeof initFlashcardTrainerEngine === 'function') initFlashcardTrainerEngine();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -4912,6 +4913,14 @@ async function checkRemoteBroadcastNotice() {
       return;
     }
 
+    // Special: Flashcard Challenge Drop (3D Card Trainer Challenge)
+    if (data.type === 'flashcard_drop' || data.isFlashcardDrop) {
+      data.card = data.card || 'card2';
+      data.icon = data.icon || '🎴';
+      data.btnText = data.btnText || '🎴 Practice Flashcards Now';
+      data.action = 'flashcard_drop';
+    }
+
     if (!data.message && !data.title) {
       return;
     }
@@ -5056,6 +5065,10 @@ function dismissInAppNotice(event) {
       if (text.includes('update') || text.includes('install') || title.includes('update') || currentBroadcastNoticeData.action === 'update') {
         if (typeof checkForAppUpdates === 'function') {
           checkForAppUpdates(true);
+        }
+      } else if (currentBroadcastNoticeData.type === 'flashcard_drop' || currentBroadcastNoticeData.isFlashcardDrop || currentBroadcastNoticeData.action === 'flashcard_drop') {
+        if (typeof openFlashcardTrainer === 'function') {
+          openFlashcardTrainer(currentBroadcastNoticeData.words);
         }
       }
     }
@@ -6847,4 +6860,572 @@ window.triggerFallingGoldenGiftBox = triggerFallingGoldenGiftBox;
 window.openGoldenGiftBox = openGoldenGiftBox;
 window.claimSurpriseReward = claimSurpriseReward;
 window.startConfettiCrackersBurst = startConfettiCrackersBurst;
+
+// ==========================================
+// 3D SMART FLASHCARD TRAINER (LEITNER BOX)
+// ==========================================
+const LEITNER_STORAGE_KEY = 'mf_flashcard_leitner_v1';
+
+let fcState = {
+  deck: [],
+  currentIndex: 0,
+  isFlipped: false,
+  sessionMastered: 0,
+  sessionReviewed: 0,
+  isDragging: false,
+  startX: 0,
+  startY: 0,
+  currentX: 0,
+  currentY: 0,
+  isAnimatingAction: false
+};
+
+function loadLeitnerBoxes() {
+  try {
+    const raw = localStorage.getItem(LEITNER_STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed && Array.isArray(parsed.box1) && Array.isArray(parsed.box2) && Array.isArray(parsed.box3)) {
+        return parsed;
+      }
+    }
+  } catch (e) {}
+  return { box1: [], box2: [], box3: [] };
+}
+
+function saveLeitnerBoxes(boxes) {
+  try {
+    localStorage.setItem(LEITNER_STORAGE_KEY, JSON.stringify(boxes));
+  } catch (e) {}
+}
+
+function updateLeitnerChips() {
+  const boxes = loadLeitnerBoxes();
+  const b1 = document.getElementById('box1Count');
+  const b2 = document.getElementById('box2Count');
+  const b3 = document.getElementById('box3Count');
+  if (b1) b1.textContent = boxes.box1.length;
+  if (b2) b2.textContent = boxes.box2.length;
+  if (b3) b3.textContent = boxes.box3.length;
+
+  const kpiChip = document.getElementById('kpiFlashcardsCount');
+  if (kpiChip) {
+    const totalMastered = boxes.box3.length;
+    kpiChip.innerHTML = `🎴 Flashcards: <b>${totalMastered}</b> Mastered`;
+  }
+}
+
+// Web Audio Sound FX for Flashcards
+function playFlashcardFlipSound() {
+  const ctx = getOrCreateAudioContext();
+  if (!ctx) return;
+  try {
+    const now = ctx.currentTime;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(320, now);
+    osc.frequency.exponentialRampToValueAtTime(560, now + 0.08);
+    gain.setValueAtTime(0.08, now);
+    gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.09);
+  } catch (e) {}
+}
+
+function playFlashcardMasterSound() {
+  const ctx = getOrCreateAudioContext();
+  if (!ctx) return;
+  try {
+    const now = ctx.currentTime;
+    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t = now + (idx * 0.07);
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(freq, t);
+      gain.setValueAtTime(0.12, t);
+      gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.4);
+    });
+  } catch (e) {}
+}
+
+function playFlashcardReviewSound() {
+  const ctx = getOrCreateAudioContext();
+  if (!ctx) return;
+  try {
+    const now = ctx.currentTime;
+    [440, 369.99].forEach((freq, idx) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      const t = now + (idx * 0.09);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, t);
+      gain.setValueAtTime(0.1, t);
+      gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.32);
+    });
+  } catch (e) {}
+}
+
+function speakFlashcardWord() {
+  if (!fcState.deck || !fcState.deck[fcState.currentIndex]) return;
+  const wordObj = fcState.deck[fcState.currentIndex];
+  const word = wordObj.word || '';
+  if (!word) return;
+
+  if (typeof playDictionaryWordSpeech === 'function') {
+    playDictionaryWordSpeech(word);
+    return;
+  }
+
+  if ('speechSynthesis' in window) {
+    try {
+      window.speechSynthesis.cancel();
+      const utter = new SpeechSynthesisUtterance(word);
+      utter.lang = 'en-US';
+      utter.rate = 0.85;
+      utter.pitch = 1.0;
+      window.speechSynthesis.speak(utter);
+    } catch (e) {}
+  }
+}
+
+function openFlashcardTrainer(customWordList = null) {
+  const overlay = document.getElementById('flashcardModalOverlay');
+  if (!overlay) return;
+
+  const allWords = window.DICTIONARY_WORDS || [];
+  const boxes = loadLeitnerBoxes();
+
+  let targetDeck = [];
+
+  if (Array.isArray(customWordList) && customWordList.length > 0) {
+    customWordList.forEach(item => {
+      if (typeof item === 'string') {
+        const found = allWords.find(w => w.word.toLowerCase() === item.toLowerCase());
+        if (found) targetDeck.push(found);
+        else targetDeck.push({ word: item, phonetic: '', type: 'WORD', hindi: 'अर्थ', definition: item, example: '', syn: '' });
+      } else if (item && item.word) {
+        targetDeck.push(item);
+      }
+    });
+  }
+
+  if (targetDeck.length === 0) {
+    // Leitner Spaced Repetition Priority:
+    // 1. First pick words from Box 1 (Need Review)
+    const b1Candidates = boxes.box1
+      .map(bw => allWords.find(w => w.word.toLowerCase() === bw.toLowerCase()))
+      .filter(Boolean);
+    const shuffledB1 = b1Candidates.sort(() => Math.random() - 0.5);
+    targetDeck.push(...shuffledB1.slice(0, 2));
+
+    // 2. Then pick from Box 2 (Learning)
+    if (targetDeck.length < 5) {
+      const b2Candidates = boxes.box2
+        .map(bw => allWords.find(w => w.word.toLowerCase() === bw.toLowerCase()))
+        .filter(Boolean);
+      const shuffledB2 = b2Candidates.sort(() => Math.random() - 0.5);
+      const needed = 5 - targetDeck.length;
+      targetDeck.push(...shuffledB2.slice(0, needed));
+    }
+
+    // 3. Fill with unseen words (not in box 1, 2, or 3)
+    if (targetDeck.length < 5) {
+      const usedWords = new Set(targetDeck.map(w => w.word.toLowerCase()));
+      const masteredWords = new Set(boxes.box3.map(w => w.toLowerCase()));
+      const unseen = allWords.filter(w => !usedWords.has(w.word.toLowerCase()) && !masteredWords.has(w.word.toLowerCase()));
+      const shuffledUnseen = unseen.sort(() => Math.random() - 0.5);
+      const needed = 5 - targetDeck.length;
+      targetDeck.push(...shuffledUnseen.slice(0, needed));
+    }
+
+    // 4. Fallback: pick any random words
+    if (targetDeck.length < 5 && allWords.length > 0) {
+      const usedWords = new Set(targetDeck.map(w => w.word.toLowerCase()));
+      const pool = allWords.filter(w => !usedWords.has(w.word.toLowerCase()));
+      const shuffledPool = pool.sort(() => Math.random() - 0.5);
+      const needed = 5 - targetDeck.length;
+      targetDeck.push(...shuffledPool.slice(0, needed));
+    }
+  }
+
+  // Absolute fallback if dictionary is not loaded
+  if (targetDeck.length === 0) {
+    targetDeck = [
+      { word: 'Abandon', phonetic: 'अबैंडन', type: 'verb', hindi: 'त्याग देना, छोड़ देना', definition: 'To give up completely; desert or leave behind.', example: 'Never abandon your reading habits.', exampleHindi: 'अपनी पढ़ने की आदतों को कभी मत छोड़ो।', syn: 'Desert, Discard, Renounce' },
+      { word: 'Benevolent', phonetic: 'बेनेवोलेंट', type: 'adjective', hindi: 'दयालु, परोपकारी', definition: 'Well meaning and kindly.', example: 'A benevolent leader inspires trust.', exampleHindi: 'एक दयालु नेता विश्वास जगाता है।', syn: 'Kind, Generous, Compassionate' },
+      { word: 'Cognizant', phonetic: 'कॉग्निज़ैंट', type: 'adjective', hindi: 'अवगत, जानकार', definition: 'Having knowledge or being aware of.', example: 'Be cognizant of your daily habits.', exampleHindi: 'अपनी दैनिक आदतों से अवगत रहें।', syn: 'Aware, Conscious, Mindful' },
+      { word: 'Diligent', phonetic: 'डिलिजेंट', type: 'adjective', hindi: 'परिश्रमी, लगनशील', definition: 'Having or showing care and conscientiousness.', example: 'Diligent effort creates mastery.', exampleHindi: 'लगनशील प्रयास से महारत हासिल होती है।', syn: 'Hardworking, Assiduous, Industrious' },
+      { word: 'Empirical', phonetic: 'एम्पिरिकल', type: 'adjective', hindi: 'अनुभवजन्य, प्रायोगिक', definition: 'Based on observation or experience rather than theory.', example: 'Books provide empirical wisdom.', exampleHindi: 'किताबें अनुभवजन्य ज्ञान प्रदान करती हैं।', syn: 'Observed, Experiential, Practical' }
+    ];
+  }
+
+  fcState = {
+    deck: targetDeck,
+    currentIndex: 0,
+    isFlipped: false,
+    sessionMastered: 0,
+    sessionReviewed: 0,
+    isDragging: false,
+    startX: 0,
+    startY: 0,
+    currentX: 0,
+    currentY: 0,
+    isAnimatingAction: false
+  };
+
+  updateLeitnerChips();
+
+  const deckView = document.getElementById('flashcardActiveDeckView');
+  const compView = document.getElementById('flashcardCompletionView');
+  if (deckView) deckView.style.display = 'block';
+  if (compView) compView.style.display = 'none';
+
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  renderCurrentFlashcard();
+}
+
+function renderCurrentFlashcard() {
+  const card = document.getElementById('flashcard3dCard');
+  if (!card) return;
+
+  // Reset transform and flip state
+  card.className = 'flashcard-3d-card';
+  card.style.transform = '';
+  card.style.opacity = '1';
+  card.style.transition = 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)';
+  fcState.isFlipped = false;
+  fcState.isAnimatingAction = false;
+
+  const stampR = document.getElementById('swipeStampReview');
+  const stampM = document.getElementById('swipeStampMastered');
+  if (stampR) stampR.style.opacity = '0';
+  if (stampM) stampM.style.opacity = '0';
+
+  if (!fcState.deck || fcState.currentIndex >= fcState.deck.length) {
+    showFlashcardCompletion();
+    return;
+  }
+
+  const wordObj = fcState.deck[fcState.currentIndex];
+
+  const prog = document.getElementById('deckProgressIndicator');
+  if (prog) prog.textContent = `Card ${fcState.currentIndex + 1} of ${fcState.deck.length}`;
+
+  const typeTag = document.getElementById('fcTypeTag');
+  if (typeTag) typeTag.textContent = (wordObj.type || 'WORD').toUpperCase();
+
+  const wordTitle = document.getElementById('fcWordTitle');
+  if (wordTitle) wordTitle.textContent = wordObj.word || '';
+
+  const phoneticBadge = document.getElementById('fcPhoneticBadge');
+  if (phoneticBadge) {
+    if (wordObj.phonetic) {
+      phoneticBadge.textContent = wordObj.phonetic;
+      phoneticBadge.style.display = 'inline-block';
+    } else {
+      phoneticBadge.style.display = 'none';
+    }
+  }
+
+  const backWord = document.getElementById('fcBackWord');
+  if (backWord) backWord.textContent = wordObj.word || '';
+
+  const backType = document.getElementById('fcBackType');
+  if (backType) backType.textContent = wordObj.type || '';
+
+  const hindiMeaning = document.getElementById('fcHindiMeaning');
+  if (hindiMeaning) hindiMeaning.textContent = wordObj.hindi || 'अर्थ उपलब्ध नहीं';
+
+  const englishDef = document.getElementById('fcEnglishDef');
+  if (englishDef) englishDef.textContent = wordObj.definition || '';
+
+  const exampleEn = document.getElementById('fcExampleEn');
+  if (exampleEn) {
+    if (wordObj.example) {
+      exampleEn.textContent = `"${wordObj.example}"`;
+      exampleEn.style.display = 'block';
+    } else {
+      exampleEn.style.display = 'none';
+    }
+  }
+
+  const exampleHi = document.getElementById('fcExampleHi');
+  if (exampleHi) {
+    if (wordObj.exampleHindi) {
+      exampleHi.textContent = `"${wordObj.exampleHindi}"`;
+      exampleHi.style.display = 'block';
+    } else {
+      exampleHi.style.display = 'none';
+    }
+  }
+
+  const synList = document.getElementById('fcSynList');
+  if (synList) synList.textContent = wordObj.syn || 'None listed';
+}
+
+function toggleFlashcardFlip() {
+  if (fcState.isAnimatingAction || fcState.isDragging) return;
+  const card = document.getElementById('flashcard3dCard');
+  if (!card) return;
+
+  fcState.isFlipped = !fcState.isFlipped;
+  card.classList.toggle('is-flipped', fcState.isFlipped);
+  playFlashcardFlipSound();
+  if (typeof triggerHaptic === 'function') triggerHaptic('selection');
+}
+
+function handleCardAction(action) {
+  if (fcState.isAnimatingAction) return;
+  if (!fcState.deck || fcState.currentIndex >= fcState.deck.length) return;
+
+  fcState.isAnimatingAction = true;
+  const currentWord = fcState.deck[fcState.currentIndex].word;
+  const card = document.getElementById('flashcard3dCard');
+  const stampR = document.getElementById('swipeStampReview');
+  const stampM = document.getElementById('swipeStampMastered');
+
+  const boxes = loadLeitnerBoxes();
+  boxes.box1 = boxes.box1.filter(w => w.toLowerCase() !== currentWord.toLowerCase());
+  boxes.box2 = boxes.box2.filter(w => w.toLowerCase() !== currentWord.toLowerCase());
+  boxes.box3 = boxes.box3.filter(w => w.toLowerCase() !== currentWord.toLowerCase());
+
+  if (action === 'mastered') {
+    boxes.box3.push(currentWord);
+    fcState.sessionMastered++;
+    playFlashcardMasterSound();
+    if (typeof triggerHaptic === 'function') triggerHaptic('success');
+    if (stampM) stampM.style.opacity = '1';
+
+    if (card) {
+      card.style.transition = 'transform 0.38s ease-in, opacity 0.38s ease-in';
+      card.style.transform = 'translate3d(120vw, 40px, 0) rotate(24deg)';
+      card.style.opacity = '0';
+    }
+  } else {
+    boxes.box1.push(currentWord);
+    fcState.sessionReviewed++;
+    playFlashcardReviewSound();
+    if (typeof triggerHaptic === 'function') triggerHaptic('warning');
+    if (stampR) stampR.style.opacity = '1';
+
+    if (card) {
+      card.style.transition = 'transform 0.38s ease-in, opacity 0.38s ease-in';
+      card.style.transform = 'translate3d(-120vw, 40px, 0) rotate(-24deg)';
+      card.style.opacity = '0';
+    }
+  }
+
+  saveLeitnerBoxes(boxes);
+  updateLeitnerChips();
+
+  setTimeout(() => {
+    fcState.currentIndex++;
+    if (fcState.currentIndex < fcState.deck.length) {
+      renderCurrentFlashcard();
+    } else {
+      showFlashcardCompletion();
+    }
+  }, 340);
+}
+
+function showFlashcardCompletion() {
+  const deckView = document.getElementById('flashcardActiveDeckView');
+  const compView = document.getElementById('flashcardCompletionView');
+  if (deckView) deckView.style.display = 'none';
+  if (compView) compView.style.display = 'flex';
+
+  const revEl = document.getElementById('compReviewedCount');
+  const mastEl = document.getElementById('compMasteredCount');
+  const ptsEl = document.getElementById('compTotalPoints');
+
+  const total = fcState.deck.length;
+  const mastered = fcState.sessionMastered;
+  const pts = (mastered * 25) + (fcState.sessionReviewed * 10);
+
+  if (revEl) revEl.textContent = total;
+  if (mastEl) mastEl.textContent = mastered;
+  if (ptsEl) ptsEl.textContent = `+${pts} XP`;
+
+  if (typeof startConfettiCrackersBurst === 'function') {
+    startConfettiCrackersBurst();
+  }
+  if (typeof playGiftCrackersFanfare === 'function') {
+    playGiftCrackersFanfare();
+  }
+  if (typeof triggerHaptic === 'function') triggerHaptic('success');
+}
+
+function restartFlashcardsDeck(count = 5) {
+  openFlashcardTrainer();
+}
+
+function closeFlashcardTrainer() {
+  const overlay = document.getElementById('flashcardModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+  document.body.style.overflow = '';
+  if ('speechSynthesis' in window) {
+    try { window.speechSynthesis.cancel(); } catch (e) {}
+  }
+}
+
+function handleFlashcardOverlayClick(event) {
+  if (event.target && event.target.id === 'flashcardModalOverlay') {
+    closeFlashcardTrainer();
+  }
+}
+
+function initFlashcardTrainerEngine() {
+  updateLeitnerChips();
+
+  // Arena Swipe & Touch Gestures
+  const arena = document.getElementById('flashcard3dArena');
+  const card = document.getElementById('flashcard3dCard');
+  if (arena && card) {
+    let startX = 0;
+    let startY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isDragging = false;
+    let pointerId = null;
+
+    const stampR = document.getElementById('swipeStampReview');
+    const stampM = document.getElementById('swipeStampMastered');
+
+    arena.addEventListener('pointerdown', (e) => {
+      if (fcState.isAnimatingAction) return;
+      if (e.target.closest('#fcAudioBtn')) return;
+
+      isDragging = true;
+      pointerId = e.pointerId;
+      startX = e.clientX;
+      startY = e.clientY;
+      currentX = startX;
+      currentY = startY;
+
+      card.style.transition = 'none';
+      try { arena.setPointerCapture(e.pointerId); } catch (err) {}
+    });
+
+    arena.addEventListener('pointermove', (e) => {
+      if (!isDragging || pointerId !== e.pointerId || fcState.isAnimatingAction) return;
+
+      currentX = e.clientX;
+      currentY = e.clientY;
+      const deltaX = currentX - startX;
+      const deltaY = currentY - startY;
+
+      const rotZ = deltaX * 0.08;
+      const flipRot = fcState.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+      card.style.transform = `translate3d(${deltaX}px, ${deltaY * 0.25}px, 0) rotateZ(${rotZ}deg) ${flipRot}`;
+
+      if (deltaX > 35) {
+        const p = Math.min(1, (deltaX - 35) / 60);
+        if (stampM) stampM.style.opacity = p.toString();
+        if (stampR) stampR.style.opacity = '0';
+      } else if (deltaX < -35) {
+        const p = Math.min(1, (-deltaX - 35) / 60);
+        if (stampR) stampR.style.opacity = p.toString();
+        if (stampM) stampM.style.opacity = '0';
+      } else {
+        if (stampM) stampM.style.opacity = '0';
+        if (stampR) stampR.style.opacity = '0';
+      }
+    });
+
+    const endDrag = (e) => {
+      if (!isDragging || (pointerId !== null && pointerId !== e.pointerId)) return;
+      isDragging = false;
+      try { arena.releasePointerCapture(pointerId); } catch (err) {}
+      pointerId = null;
+
+      if (stampR) stampR.style.opacity = '0';
+      if (stampM) stampM.style.opacity = '0';
+
+      const deltaX = currentX - startX;
+      const deltaY = currentY - startY;
+      const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+      if (dist < 10) {
+        toggleFlashcardFlip();
+        return;
+      }
+
+      if (deltaX > 80) {
+        handleCardAction('mastered');
+      } else if (deltaX < -80) {
+        handleCardAction('review');
+      } else {
+        card.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        const flipRot = fcState.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
+        card.style.transform = `translate3d(0, 0, 0) rotateZ(0deg) ${flipRot}`;
+      }
+    };
+
+    arena.addEventListener('pointerup', endDrag);
+    arena.addEventListener('pointercancel', endDrag);
+  }
+
+  // Keyboard Navigation
+  window.addEventListener('keydown', (e) => {
+    const overlay = document.getElementById('flashcardModalOverlay');
+    if (!overlay || !overlay.classList.contains('active')) return;
+
+    if (e.key === 'Escape') {
+      closeFlashcardTrainer();
+    } else if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      toggleFlashcardFlip();
+    } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
+      e.preventDefault();
+      handleCardAction('mastered');
+    } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
+      e.preventDefault();
+      handleCardAction('review');
+    }
+  });
+
+  // Attach launcher buttons
+  const headerBtn = document.getElementById('headerFlashcardsBtn');
+  if (headerBtn) {
+    headerBtn.addEventListener('click', () => openFlashcardTrainer());
+  }
+
+  const kpiChip = document.getElementById('kpiFlashcardsCount');
+  if (kpiChip) {
+    kpiChip.addEventListener('click', () => openFlashcardTrainer());
+  }
+
+  const dictBtn = document.getElementById('dictFlashcardsBtn');
+  if (dictBtn) {
+    dictBtn.addEventListener('click', () => {
+      closeDictionaryBookReader();
+      setTimeout(() => openFlashcardTrainer(), 200);
+    });
+  }
+}
+
+// Global window bindings
+window.openFlashcardTrainer = openFlashcardTrainer;
+window.closeFlashcardTrainer = closeFlashcardTrainer;
+window.toggleFlashcardFlip = toggleFlashcardFlip;
+window.handleCardAction = handleCardAction;
+window.speakFlashcardWord = speakFlashcardWord;
+window.restartFlashcardsDeck = restartFlashcardsDeck;
+window.handleFlashcardOverlayClick = handleFlashcardOverlayClick;
+window.initFlashcardTrainerEngine = initFlashcardTrainerEngine;
+
 

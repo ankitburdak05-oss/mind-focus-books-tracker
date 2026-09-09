@@ -7062,5 +7062,489 @@ body {
   transform: translateY(1px);
 }
 
+/* ==========================================================================
+   FEATURE: 3D SMART FLASHCARD TRAINER (LEITNER SPACED REPETITION ENGINE)
+   ========================================================================== */
+.flashcard-deck-modal {
+  position: relative;
+  width: 95%;
+  max-width: 440px;
+  background: radial-gradient(circle at top, rgba(30, 27, 75, 0.95), rgba(10, 15, 29, 0.98));
+  border: 1.5px solid rgba(236, 72, 153, 0.35);
+  border-radius: 26px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(236, 72, 153, 0.2);
+  backdrop-filter: blur(24px);
+  padding: 18px 20px;
+  color: #fff;
+  overflow: hidden;
+  z-index: 10000;
+  animation: fcModalEntrance 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes fcModalEntrance {
+  0% { opacity: 0; transform: scale(0.92) translateY(30px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.flashcard-deck-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.deck-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.deck-badge {
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.25), rgba(168, 85, 247, 0.25));
+  border: 1px solid rgba(236, 72, 153, 0.5);
+  color: #f472b6;
+  padding: 4px 10px;
+  border-radius: 12px;
+}
+
+.leitner-boxes-strip {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.box-chip {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  background: rgba(15, 23, 42, 0.6);
+}
+
+.chip-box1 b { color: #f59e0b; }
+.chip-box2 b { color: #38bdf8; }
+.chip-box3 b { color: #34d399; }
+
+.deck-header-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.deck-progress-indicator {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #a5b4fc;
+  background: rgba(99, 102, 241, 0.15);
+  padding: 3px 8px;
+  border-radius: 8px;
+}
+
+/* 3D Card Arena */
+.flashcard-3d-arena {
+  position: relative;
+  width: 100%;
+  height: 360px;
+  perspective: 1200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  touch-action: none;
+}
+
+.flashcard-3d-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.flashcard-3d-card.flipped {
+  transform: rotateY(180deg);
+}
+
+/* Card Faces */
+.flashcard-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  padding: 22px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  box-sizing: border-box;
+}
+
+/* Front Face */
+.flashcard-front {
+  background: linear-gradient(145deg, #161b2e 0%, #0d1222 60%, #17112c 100%);
+  border: 2px solid rgba(236, 72, 153, 0.45);
+}
+
+.card-ornament {
+  position: absolute;
+  font-size: 0.9rem;
+  color: rgba(236, 72, 153, 0.4);
+}
+.card-ornament.top-left { top: 12px; left: 14px; }
+.card-ornament.top-right { top: 12px; right: 14px; }
+
+.card-top-tag {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.card-type-tag {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #f472b6;
+  background: rgba(236, 72, 153, 0.15);
+  border: 1px solid rgba(236, 72, 153, 0.3);
+  padding: 3px 10px;
+  border-radius: 10px;
+}
+
+.card-audio-btn {
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  color: #38bdf8;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: all 0.2s ease;
+}
+
+.card-audio-btn:hover {
+  transform: scale(1.12);
+  background: rgba(56, 189, 248, 0.3);
+}
+
+.card-front-center {
+  text-align: center;
+  margin: auto 0;
+}
+
+.card-word-title {
+  font-size: 2.2rem;
+  font-weight: 900;
+  letter-spacing: -0.5px;
+  background: linear-gradient(135deg, #ffffff 30%, #f472b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 10px 0;
+  text-shadow: 0 4px 20px rgba(236, 72, 153, 0.3);
+}
+
+.card-phonetic-badge {
+  display: inline-block;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 4px 14px;
+  border-radius: 20px;
+}
+
+.card-flip-prompt {
+  text-align: center;
+  font-size: 0.78rem;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.flip-hint-icon {
+  animation: spinSlow 4s linear infinite;
+}
+@keyframes spinSlow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Back Face */
+.flashcard-back {
+  background: linear-gradient(145deg, #111a33 0%, #0a1124 60%, #151b38 100%);
+  border: 2px solid rgba(56, 189, 248, 0.45);
+  transform: rotateY(180deg);
+}
+
+.card-back-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.card-back-word {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #38bdf8;
+}
+
+.card-back-type {
+  font-size: 0.72rem;
+  color: #94a3b8;
+  font-style: italic;
+}
+
+.card-meaning-box {
+  margin: 8px 0;
+}
+
+.card-hindi-meaning {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #34d399;
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+
+.card-english-def {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.card-example-box {
+  background: rgba(15, 23, 42, 0.6);
+  border-left: 3px solid #fbbf24;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin: 6px 0;
+}
+
+.card-example-en {
+  font-size: 0.8rem;
+  color: #f1f5f9;
+  font-style: italic;
+  line-height: 1.35;
+  margin-bottom: 3px;
+}
+
+.card-example-hi {
+  font-size: 0.75rem;
+  color: #fbbf24;
+  line-height: 1.35;
+}
+
+.card-synonyms {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  margin-top: 4px;
+}
+.card-synonyms b { color: #a5b4fc; }
+
+.card-back-tap-hint {
+  text-align: center;
+  font-size: 0.72rem;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+/* Rubber Stamp Overlays for Swipe Feedback */
+.swipe-stamp {
+  position: absolute;
+  top: 40px;
+  padding: 8px 16px;
+  font-size: 1.1rem;
+  font-weight: 900;
+  letter-spacing: 1px;
+  border-radius: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  z-index: 50;
+}
+
+.stamp-review {
+  left: 20px;
+  color: #f59e0b;
+  border: 3px solid #f59e0b;
+  transform: rotate(-15deg) scale(0.9);
+}
+
+.stamp-mastered {
+  right: 20px;
+  color: #10b981;
+  border: 3px solid #10b981;
+  transform: rotate(15deg) scale(0.9);
+}
+
+/* Hint strip */
+.flashcard-swipe-hint {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #64748b;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+.hint-left { color: #f59e0b; }
+.hint-right { color: #34d399; }
+
+/* Bottom Action Dock */
+.flashcard-action-dock {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.btn-card-action {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.8);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-card-action:active {
+  transform: scale(0.95);
+}
+
+.btn-card-action .action-icon {
+  font-size: 1.15rem;
+}
+
+.btn-card-action .action-meta {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.btn-card-action .action-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.btn-card-action .action-sub {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.btn-review:hover {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.15);
+}
+.btn-review .action-title { color: #f59e0b; }
+
+.btn-flip {
+  flex: 0.85;
+  background: rgba(99, 102, 241, 0.15);
+  border-color: rgba(99, 102, 241, 0.35);
+}
+.btn-flip:hover {
+  background: rgba(99, 102, 241, 0.25);
+}
+
+.btn-master:hover {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.15);
+}
+.btn-master .action-title { color: #34d399; }
+
+/* Completion Screen */
+.flashcard-completion-view {
+  text-align: center;
+  padding: 24px 10px;
+}
+
+.completion-trophy {
+  font-size: 4rem;
+  margin-bottom: 12px;
+  animation: bounceTrophy 1.5s ease infinite;
+}
+@keyframes bounceTrophy {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-10px) scale(1.08); }
+}
+
+.completion-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #34d399;
+  margin: 0 0 8px 0;
+}
+
+.completion-desc {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  line-height: 1.5;
+  max-width: 360px;
+  margin: 0 auto 20px auto;
+}
+
+.completion-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.completion-stat-card {
+  background: rgba(15, 23, 42, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 8px;
+}
+
+.completion-stat-card .stat-num {
+  font-size: 1.4rem;
+  font-weight: 900;
+  color: #38bdf8;
+}
+
+.completion-stat-card .stat-lbl {
+  font-size: 0.7rem;
+  color: #64748b;
+  margin-top: 4px;
+}
+
+.completion-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+
 
 
