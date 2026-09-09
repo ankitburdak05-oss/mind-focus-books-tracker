@@ -1,10 +1,10 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-2026-09-09T02-57-37-card2",
+  "id": "deploy-notice-1788926955508",
   "active": true,
   "card": "card2",
-  "icon": "💎",
-  "title": "Card 2 • 3D Model",
-  "message": "manisha laldi kesi hai",
-  "btnText": "Mast Hai 🔥",
-  "timestamp": "2026-09-09T02:57:37.672Z"
+  "icon": "📖",
+  "title": "Update Live: v3.3.0",
+  "message": "Book 1 se pehle A-Z English-Hindi 3D Dictionary Book add ho chuki hai! Real pages aur audio pronunciation abhi padhein.",
+  "btnText": "Open Dictionary 📖",
+  "timestamp": "2026-09-09T04:09:15.509Z"
 };
