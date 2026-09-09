@@ -1,10 +1,10 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "deploy-notice-1788931978608",
+  "id": "deploy-notice-1788932045827",
   "active": true,
   "card": "card2",
   "icon": "🚀",
   "title": "Update Live: v3.3.0",
   "message": "Naya update v3.3.0 Real App me deploy ho chuka hai! Tap karke turant install karein.",
   "btnText": "Install Update ⚡",
-  "timestamp": "2026-09-09T05:32:58.608Z"
+  "timestamp": "2026-09-09T05:34:05.827Z"
 };
