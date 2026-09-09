@@ -1,10 +1,10 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-2026-09-09T05-00-16-card2",
+  "id": "deploy-notice-1788931978608",
   "active": true,
   "card": "card2",
-  "icon": "💎",
-  "title": "Card 2 • 3D Model",
-  "message": "kesa laga new card",
-  "btnText": "Mast Hai 🔥",
-  "timestamp": "2026-09-09T05:00:16.620Z"
+  "icon": "🚀",
+  "title": "Update Live: v3.3.0",
+  "message": "Naya update v3.3.0 Real App me deploy ho chuka hai! Tap karke turant install karein.",
+  "btnText": "Install Update ⚡",
+  "timestamp": "2026-09-09T05:32:58.608Z"
 };
