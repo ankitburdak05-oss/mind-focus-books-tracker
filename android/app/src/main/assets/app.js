@@ -3000,12 +3000,66 @@ function closeSettingsModal() {
   restoreDockActiveTab();
 }
 
+let latestDetectedRelease = null;
+
 function openUpdateCheckerModal() {
-  document.getElementById('updateCheckerModalOverlay').classList.add('active');
+  const overlay = document.getElementById('updateCheckerModalOverlay');
+  if (overlay) overlay.classList.add('active');
 }
 
 function closeUpdateCheckerModal() {
-  document.getElementById('updateCheckerModalOverlay').classList.remove('active');
+  const overlay = document.getElementById('updateCheckerModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+  if (latestDetectedRelease && latestDetectedRelease.version) {
+    sessionStorage.setItem('mf_update_dismissed_' + latestDetectedRelease.version, 'true');
+  }
+}
+
+function showInAppVersionUpdateModal(rel) {
+  if (!rel || !rel.version) return;
+  latestDetectedRelease = rel;
+
+  const icon = document.getElementById('updateModalIcon');
+  const title = document.getElementById('updateModalTitle');
+  const desc = document.getElementById('updateModalDesc');
+  const progress = document.getElementById('updateModalProgress');
+  const actionBtn = document.getElementById('updateModalActionBtn');
+  const currentBadge = document.getElementById('updateCurrentVersionBadge');
+  const targetBadge = document.getElementById('updateTargetVersionBadge');
+  const changelogCard = document.getElementById('updateChangelogCard');
+  const changelogTag = document.getElementById('updateChangelogTag');
+  const changelogList = document.getElementById('updateChangelogList');
+  const radarSweep = document.getElementById('updateRadarSweep');
+
+  if (currentBadge) currentBadge.innerText = CURRENT_APP_VERSION;
+  if (targetBadge) {
+    targetBadge.innerText = rel.version;
+    targetBadge.className = 'version-diff-pill latest';
+  }
+  if (radarSweep) radarSweep.style.display = 'none';
+  if (icon) icon.innerText = '🚀';
+  if (title) title.innerText = 'New Version Update Ready: ' + rel.version;
+  if (desc) desc.innerHTML = '<b>' + escapeHtml(rel.name || rel.version) + '</b><br>Naya app version live ho chuka hai! Tap karke turant install karein.<br><small style="color:#10b981;">● Zero data loss • Direct in-place upgrade</small>';
+
+  if (changelogCard) {
+    changelogCard.style.display = 'block';
+    if (changelogTag) changelogTag.innerText = rel.version + ' (New)';
+    if (changelogList && rel.features && rel.features.length > 0) {
+      changelogList.innerHTML = rel.features.map(f => '<li>✦ ' + escapeHtml(f) + '</li>').join('');
+    }
+  }
+
+  const apkUrl = rel.apkDownloadUrl || ('https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/' + rel.version + '/MindFocusBooks-Native.apk');
+  latestApkDownloadUrl = apkUrl;
+
+  if (actionBtn) {
+    actionBtn.style.display = 'inline-flex';
+    actionBtn.innerText = '⚡ Download & Install ' + rel.version + ' Now';
+    actionBtn.onclick = () => triggerInAppUpdate(apkUrl);
+  }
+
+  openUpdateCheckerModal();
+  if (typeof triggerHaptic === 'function') triggerHaptic('celebration');
 }
 
 async function checkForAppUpdates(showFeedback = true) {
@@ -3021,6 +3075,7 @@ async function checkForAppUpdates(showFeedback = true) {
   const targetBadge = document.getElementById('updateTargetVersionBadge');
   const changelogCard = document.getElementById('updateChangelogCard');
   const changelogTag = document.getElementById('updateChangelogTag');
+  const changelogList = document.getElementById('updateChangelogList');
   const radarSweep = document.getElementById('updateRadarSweep');
 
   if (currentBadge) currentBadge.innerText = CURRENT_APP_VERSION;
@@ -3030,13 +3085,95 @@ async function checkForAppUpdates(showFeedback = true) {
   }
   if (icon) icon.innerText = '🛰️';
   if (radarSweep) radarSweep.style.display = 'block';
-  if (title) title.innerText = 'Quantum Radar Scanning Cloud...';
-  if (desc) desc.innerText = 'Querying GitHub release servers to check for updates & improvements...';
+  if (title) title.innerText = 'Scanning Cloud Version Server...';
+  if (desc) desc.innerText = 'Checking remote configuration & GitHub releases for app updates...';
   if (progress) progress.style.display = 'none';
   if (actionBtn) actionBtn.style.display = 'none';
   if (changelogCard) changelogCard.style.display = 'none';
 
   try {
+    let cloudRelease = null;
+    const cb = Date.now();
+
+    // 1. Try remote-config.json first (Fast & configured via Panel)
+    try {
+      const cfgRes = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
+      if (cfgRes.ok) {
+        const cfg = await cfgRes.json();
+        if (cfg.activeRelease && cfg.activeRelease.version) {
+          cloudRelease = cfg.activeRelease;
+        }
+      }
+    } catch (e) {}
+
+    if (!cloudRelease) {
+      try {
+        const cfgRes = await fetch('https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/remote-config.json?cb=' + cb, { cache: 'no-store' });
+        if (cfgRes.ok) {
+          const cfg = await cfgRes.json();
+          if (cfg.activeRelease && cfg.activeRelease.version) {
+            cloudRelease = cfg.activeRelease;
+          }
+        }
+      } catch (e) {}
+    }
+
+    if (cloudRelease) {
+      const tagName = cloudRelease.version;
+      const releaseName = cloudRelease.name || ('Mind Focus Books Tracker ' + tagName);
+      const apkUrl = cloudRelease.apkDownloadUrl || ('https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/' + tagName + '/MindFocusBooks-Native.apk');
+      latestApkDownloadUrl = apkUrl;
+      latestDetectedRelease = cloudRelease;
+
+      if (targetBadge) {
+        targetBadge.innerText = tagName;
+        targetBadge.className = 'version-diff-pill ' + (tagName === CURRENT_APP_VERSION ? 'current' : 'latest');
+      }
+
+      if (tagName === CURRENT_APP_VERSION) {
+        if (icon) icon.innerText = '🛡️';
+        if (radarSweep) radarSweep.style.display = 'none';
+        if (title) title.innerText = 'Your App is 100% Up to Date! ✦';
+        if (desc) desc.innerHTML = '<b>' + escapeHtml(releaseName) + '</b><br>You are on the latest version.<br><small style="color:#10b981;">● All systems optimal.</small>';
+        if (changelogCard) {
+          changelogCard.style.display = 'block';
+          if (changelogTag) changelogTag.innerText = CURRENT_APP_VERSION + ' (Active)';
+          if (changelogList && cloudRelease.features) {
+            changelogList.innerHTML = cloudRelease.features.map(f => '<li>✦ ' + escapeHtml(f) + '</li>').join('');
+          }
+        }
+        if (actionBtn) {
+          actionBtn.style.display = 'inline-flex';
+          actionBtn.innerText = '🔄 Re-install / Repair ' + tagName;
+          actionBtn.onclick = () => triggerInAppUpdate(apkUrl);
+        }
+        if (typeof triggerHaptic === 'function') triggerHaptic('success');
+      } else {
+        if (icon) icon.innerText = '🚀';
+        if (radarSweep) radarSweep.style.display = 'none';
+        if (title) title.innerText = 'New Version Update Ready: ' + tagName;
+        if (desc) desc.innerHTML = '<b>' + escapeHtml(releaseName) + '</b><br>Naya app version live ho chuka hai! Tap karke turant install karein.<br><small style="color:#10b981;">● Zero data loss • Direct 1-tap update</small>';
+        if (changelogCard) {
+          changelogCard.style.display = 'block';
+          if (changelogTag) changelogTag.innerText = tagName + ' (New)';
+          if (changelogList && cloudRelease.features) {
+            changelogList.innerHTML = cloudRelease.features.map(f => '<li>✦ ' + escapeHtml(f) + '</li>').join('');
+          }
+        }
+        if (actionBtn) {
+          actionBtn.style.display = 'inline-flex';
+          actionBtn.innerText = '⚡ Download & Install ' + tagName + ' Now';
+          actionBtn.onclick = () => triggerInAppUpdate(apkUrl);
+        }
+        if (typeof triggerHaptic === 'function') triggerHaptic('celebration');
+      }
+      return;
+    }
+
+    // 2. Fallback to GitHub Releases API
     const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
     if (!res.ok) throw new Error('Could not contact update server');
     const data = await res.json();
@@ -3052,14 +3189,14 @@ async function checkForAppUpdates(showFeedback = true) {
 
     if (targetBadge) {
       targetBadge.innerText = tagName;
-      targetBadge.className = 'version-diff-pill latest';
+      targetBadge.className = 'version-diff-pill ' + (tagName === CURRENT_APP_VERSION ? 'current' : 'latest');
     }
 
     if (tagName === CURRENT_APP_VERSION) {
       if (icon) icon.innerText = '🛡️';
       if (radarSweep) radarSweep.style.display = 'none';
       if (title) title.innerText = 'Your App is 100% Up to Date! ✦';
-      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>You are already on the newest 4D Living Spatial Sanctuary Flagship.<br><small style="color:#10b981;">● All systems optimal &amp; permanent keystore verified.</small>';
+      if (desc) desc.innerHTML = '<b>' + escapeHtml(releaseName) + '</b><br>You are on the latest version.<br><small style="color:#10b981;">● All systems optimal.</small>';
       if (changelogCard) {
         changelogCard.style.display = 'block';
         if (changelogTag) changelogTag.innerText = CURRENT_APP_VERSION + ' (Active)';
@@ -3074,7 +3211,7 @@ async function checkForAppUpdates(showFeedback = true) {
       if (icon) icon.innerText = '🚀';
       if (radarSweep) radarSweep.style.display = 'none';
       if (title) title.innerText = 'New Update Ready: ' + tagName;
-      if (desc) desc.innerHTML = '<b>' + releaseName + '</b><br>New 4D Sensory Upgrades &amp; Android App Icon enhancements are ready to install!<br><small style="color:#38bdf8;">✦ 1-Tap direct install with zero data loss.</small>';
+      if (desc) desc.innerHTML = '<b>' + escapeHtml(releaseName) + '</b><br>New updates are ready to install!<br><small style="color:#38bdf8;">✦ 1-Tap direct install with zero data loss.</small>';
       if (changelogCard) {
         changelogCard.style.display = 'block';
         if (changelogTag) changelogTag.innerText = tagName + ' (New)';
@@ -4956,6 +5093,30 @@ async function checkRemoteConfig() {
         localStorage.setItem('mf_dictionary_enabled', isDictActive ? 'true' : 'false');
         loadData();
         if (typeof renderAll === 'function') renderAll();
+      }
+    }
+
+    // 4. In-App Version Update Trigger (OTA Updates)
+    if (cfg.activeRelease && cfg.activeRelease.version) {
+      const activeRel = cfg.activeRelease;
+      const isNew = (activeRel.version !== CURRENT_APP_VERSION);
+
+      const headerUpdateBtn = document.getElementById('headerUpdateBtn');
+      if (headerUpdateBtn) {
+        if (isNew) {
+          headerUpdateBtn.style.display = 'inline-flex';
+          headerUpdateBtn.innerHTML = '⚡ Update ' + escapeHtml(activeRel.version) + ' Ready';
+          headerUpdateBtn.onclick = () => showInAppVersionUpdateModal(activeRel);
+        } else {
+          headerUpdateBtn.style.display = 'none';
+        }
+      }
+
+      if (isNew) {
+        const dismissKey = 'mf_update_dismissed_' + activeRel.version;
+        if (!sessionStorage.getItem(dismissKey)) {
+          showInAppVersionUpdateModal(activeRel);
+        }
       }
     }
   } catch (err) {}

@@ -242,50 +242,79 @@
       </div>
     </section>
 
-    <!-- TAB 2: STAGING PIPELINE -->
+    <!-- TAB 2: APP VERSION RELEASE MANAGER (OTA UPDATER) -->
     <section class="tab-view" id="tabPipeline">
       <div class="glass-panel">
         <div class="panel-header">
           <div class="panel-title">
-            <span>🚀</span> Feature Staging to Production Pipeline
+            <span>🚀</span> App Version Release Manager &amp; In-App Updater
           </div>
-          <span class="panel-pill">STAGE-FIRST DEPLOYMENT</span>
+          <span class="panel-pill" style="background:rgba(16,185,129,0.18); border-color:#10b981; color:#34d399;">REAL VERSION UPDATER</span>
         </div>
 
-        <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:20px; line-height:1.6;">
-          Jab bhi koi naya feature ya update banta hai, wo sabse pehle yaha <b>Staging Hub</b> me aata hai. Aap yaha features verify kar sakte hain aur fir <b>"Deploy to Real App"</b> button dabakar sabhi users ke phone me live launch kar sakte hain!
+        <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:16px; line-height:1.6;">
+          Yaha se aap <b>Real App Version Update</b> sabhi users ke phone me bhej sakte hain. Jab aap yaha se version push karenge to sabhi phones me direct <b>"New Version Update Available"</b> dialog open hoga jisme naye features aur direct <b>Download &amp; Install APK</b> button aayega!
         </p>
 
-        <div style="background:rgba(10,15,29,0.7); border:1px solid rgba(245,158,11,0.35); border-radius:16px; padding:20px; margin-bottom:20px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
-            <h3 style="font-size:1.2rem; color:#f59e0b; margin:0;">📦 Staged Release: Mind Focus Books v3.3.0</h3>
-            <span class="pipeline-status-tag tag-staged" id="pipelineStagedTagBadge">PENDING REVIEW</span>
+        <!-- Current Production Status Card -->
+        <div style="background:rgba(10,15,29,0.85); border:1px solid rgba(56,189,248,0.25); border-radius:16px; padding:18px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+          <div>
+            <div style="font-size:0.75rem; color:var(--text-muted); font-weight:800; letter-spacing:1px; text-transform:uppercase;">ACTIVE PRODUCTION VERSION IN PHONES</div>
+            <div style="font-size:1.4rem; font-weight:900; color:#38bdf8; margin-top:2px;" id="pipelineActiveVersionText">v3.2.0</div>
+            <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:2px;" id="pipelineActiveNameText">Mind Focus Books Live Edition</div>
           </div>
-          <p style="font-size:0.86rem; color:#94a3b8; margin-bottom:12px;">
-            <b>Feature Highlights:</b> Real 3D Flipping Pages Dictionary Book (Book #0) with English to Hindi meanings, speech pronunciation audio, and example sentences.
-          </p>
-          <ul style="padding-left:22px; font-size:0.88rem; color:var(--text-secondary); line-height:2;">
-            <li>✦ <b>Book #0 Dictionary Lexicon:</b> Placed right before Book 1 as the first book in the entire app.</li>
-            <li>✦ <b>Real 3D Book Page Flip:</b> Leather hardcover, red ribbon bookmark, dual-page spread with center spine shadow.</li>
-            <li>✦ <b>ASMR Paper Turn Audio:</b> Web Audio API realistic crisp paper flipping sound.</li>
-            <li>✦ <b>Audio Pronunciation &amp; Hindi Meanings:</b> Native speech pronunciation with Hindi arth and sentences.</li>
-            <li>✦ <b>A-Z Alphabet Strip &amp; Fast Search:</b> Jump to any letter or search word instantly.</li>
-          </ul>
+          <div style="text-align:right;">
+            <span class="pipeline-status-tag tag-deployed" id="pipelineStatusTag">LIVE IN PHONES</span>
+          </div>
+        </div>
+
+        <!-- Target Staged Version Form -->
+        <div style="background:rgba(10,15,29,0.7); border:1px solid rgba(245,158,11,0.35); border-radius:16px; padding:20px; margin-bottom:20px; box-shadow:0 10px 30px rgba(0,0,0,0.5);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; flex-wrap:wrap; gap:8px;">
+            <h3 style="font-size:1.2rem; color:#f59e0b; margin:0;">📦 Next Version Release to Deploy:</h3>
+            <span class="pipeline-status-tag tag-staged" id="pipelineStagedTagBadge">READY TO PUSH</span>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 2fr; gap:14px; margin-bottom:14px;">
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Version Tag</label>
+              <input type="text" class="form-input" id="targetVersionTag" value="v3.3.0" placeholder="e.g. v3.3.0">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label class="form-label">Release Name / Title</label>
+              <input type="text" class="form-input" id="targetReleaseName" value="Mind Focus Books v3.3.0 (A-Z English-Hindi 3D Dictionary Book Release)">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Signed APK Download URL</label>
+            <input type="text" class="form-input" id="targetApkUrl" value="https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.3.0/MindFocusBooks-Native.apk">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">What's New Points / Changelog (1 feature per line)</label>
+            <textarea class="form-textarea" id="targetReleaseFeatures" rows="5" placeholder="Enter new features...">Book #0: A-Z English-Hindi Focus Vocabulary Lexicon (101+ Core Words)
+Real 3D Book Experience: Leather Hardcover, Silk Ribbon Bookmark, Dual-Page Spread
+ASMR Paper Turn Sound & 3D Page Flip Physics
+Native Voice Speech Engine (Web Speech API) for English word pronunciation
+Complete Hindi Meanings, Translations, Examples & Synonyms
+Instant A-Z Alphabet Strip Navigation & Live Search Filter</textarea>
+          </div>
 
           <div style="margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08); display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
             <button type="button" class="btn-admin btn-primary" onclick="openDictionaryBookReader()" style="background:linear-gradient(135deg, #b45309, #f59e0b); border:none; font-weight:800; padding:10px 20px;">
               <span>📖</span> Test 3D Dictionary in Panel (Live Preview)
             </button>
-            <span style="font-size:0.82rem; color:var(--text-muted);">Click to flip real pages &amp; test speech pronunciation right here in the panel!</span>
+            <span style="font-size:0.82rem; color:var(--text-muted);">Click to flip real pages &amp; test speech pronunciation right here in the panel before releasing!</span>
           </div>
         </div>
 
-        <div class="btn-row">
-          <button type="button" class="btn-admin btn-emerald" id="btnDeployToRealApp" onclick="deployStagedReleaseToRealApp()">
-            <span>🚀</span> Confirm &amp; Deploy v3.3.0 &amp; Dictionary to Real App
+        <div class="btn-row" style="gap:12px;">
+          <button type="button" class="btn-admin btn-emerald" id="btnDeployToRealApp" onclick="deployStagedReleaseToRealApp()" style="flex:1; font-size:1rem; padding:14px 24px;">
+            <span>🚀</span> Push Version Update to All Phones (Trigger In-App Update Dialog)
           </button>
-          <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()">
-            <span>↩️</span> Revert to Previous Release
+          <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()" style="min-width:140px;">
+            <span>↩️</span> Revert Release
           </button>
         </div>
       </div>

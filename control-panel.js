@@ -417,6 +417,11 @@ function updatePipelineCardUI(cfg) {
   const stagedDescEl = document.getElementById('pipelineStagedDesc');
   const stagedStatusTag = document.getElementById('pipelineStatusTag');
   const deployBtn = document.getElementById('btnDeployToRealApp');
+  const activeVerEl = document.getElementById('pipelineActiveVersionText');
+  const activeNameEl = document.getElementById('pipelineActiveNameText');
+
+  if (activeVerEl && active.version) activeVerEl.innerText = active.version;
+  if (activeNameEl && active.name) activeNameEl.innerText = active.name;
 
   if (stagedTitleEl) {
     stagedTitleEl.innerText = staged.name || 'No Staged Release';
@@ -425,6 +430,18 @@ function updatePipelineCardUI(cfg) {
   if (stagedDescEl) {
     const featCount = staged.features ? staged.features.length : 0;
     stagedDescEl.innerText = `${featCount} Staged Features ready for Real App. (Active in Real App: ${active.version || 'v3.1.0'})`;
+  }
+
+  const targetVerInput = document.getElementById('targetVersionTag');
+  const targetNameInput = document.getElementById('targetReleaseName');
+  const targetApkInput = document.getElementById('targetApkUrl');
+  const targetFeatsInput = document.getElementById('targetReleaseFeatures');
+
+  if (targetVerInput && staged.version) targetVerInput.value = staged.version;
+  if (targetNameInput && staged.name) targetNameInput.value = staged.name;
+  if (targetApkInput && staged.apkDownloadUrl) targetApkInput.value = staged.apkDownloadUrl;
+  if (targetFeatsInput && staged.features && staged.features.length > 0) {
+    targetFeatsInput.value = staged.features.join('\n');
   }
 
   if (stagedStatusTag) {
@@ -449,7 +466,7 @@ function updatePipelineCardUI(cfg) {
         btn.innerText = '✅ Deployed to Real App';
       } else {
         btn.disabled = false;
-        btn.innerText = '🚀 Deploy to Real App';
+        btn.innerText = '🚀 Push Version Update to All Phones';
       }
     });
   }
@@ -504,7 +521,14 @@ async function deployStagedReleaseToRealApp() {
     return;
   }
 
-  const confirmMsg = `Kya aap sach me version "${staged.name || staged.version}" ko Real App me sabhi users ke paas deploy karna chahte hain?`;
+  // Read customized values from the form inputs
+  const verInput = document.getElementById('targetVersionTag')?.value.trim() || staged.version || 'v3.3.0';
+  const nameInput = document.getElementById('targetReleaseName')?.value.trim() || staged.name || `Mind Focus Books ${verInput}`;
+  const apkInput = document.getElementById('targetApkUrl')?.value.trim() || staged.apkDownloadUrl || '';
+  const featsRaw = document.getElementById('targetReleaseFeatures')?.value || '';
+  const featsList = featsRaw.split('\n').map(l => l.replace(/^[✦•\-\*]\s*/, '').trim()).filter(Boolean);
+
+  const confirmMsg = `Kya aap sach me version "${nameInput}" ko Real App me sabhi users ke paas deploy karna chahte hain?`;
   if (!confirm(confirmMsg)) return;
 
   const deployBtn = document.getElementById('btnDeployToRealApp');
@@ -516,36 +540,45 @@ async function deployStagedReleaseToRealApp() {
   });
 
   try {
-    appendLog(`🚀 Starting deployment for ${staged.version} to Real App...`, 'warn');
+    appendLog(`🚀 Starting deployment for ${verInput} to Real App...`, 'warn');
+
+    const newReleasePayload = {
+      version: verInput,
+      name: nameInput,
+      apkDownloadUrl: apkInput,
+      features: featsList.length > 0 ? featsList : (staged.features || []),
+      stagedAt: new Date().toISOString(),
+      isDeployed: true
+    };
 
     // 1. Shift active release & enable dictionary book feature
     remoteConfigData.previousRelease = Object.assign({}, remoteConfigData.activeRelease);
-    remoteConfigData.activeRelease = Object.assign({}, staged);
-    remoteConfigData.stagedRelease.isDeployed = true;
+    remoteConfigData.activeRelease = newReleasePayload;
+    remoteConfigData.stagedRelease = Object.assign({}, newReleasePayload);
     if (!remoteConfigData.features) remoteConfigData.features = {};
     remoteConfigData.features.dictionaryBookEnabled = true;
     remoteConfigData.updatedAt = new Date().toISOString();
 
     // 2. Push updated remote-config.json
     const configStr = JSON.stringify(remoteConfigData, null, 2);
-    await pushFileToGitHub('remote-config.json', configStr, `Deploy Release: ${staged.version} to Real App`);
+    await pushFileToGitHub('remote-config.json', configStr, `Deploy Release: ${verInput} to Real App`);
 
     // 3. Automatically broadcast a celebratory announcement notice to all real apps!
     const deployNotice = {
       id: 'deploy-notice-' + Date.now(),
       active: true,
       card: 'card2',
-      icon: '📖',
-      title: `Update Live: ${staged.version}`,
-      message: `Book 1 se pehle A-Z English-Hindi 3D Dictionary Book add ho chuki hai! Real pages aur audio pronunciation abhi padhein.`,
-      btnText: 'Open Dictionary 📖',
+      icon: '🚀',
+      title: `Update Live: ${verInput}`,
+      message: `Naya update ${verInput} Real App me deploy ho chuka hai! Tap karke turant install karein.`,
+      btnText: 'Install Update ⚡',
       timestamp: new Date().toISOString()
     };
 
     const jsonContent = JSON.stringify(deployNotice, null, 2);
     const jsContent = 'window.__REMOTE_BROADCAST_NOTICE__ = ' + JSON.stringify(deployNotice, null, 2) + ';\n';
-    await pushFileToGitHub('broadcast-notice.json', jsonContent, `Deploy Broadcast: ${staged.version}`);
-    await pushFileToGitHub('broadcast-notice.js', jsContent, `Deploy Broadcast JS: ${staged.version}`);
+    await pushFileToGitHub('broadcast-notice.json', jsonContent, `Deploy Broadcast: ${verInput}`);
+    await pushFileToGitHub('broadcast-notice.js', jsContent, `Deploy Broadcast JS: ${verInput}`);
 
     // Instant local trigger
     try {
@@ -553,8 +586,8 @@ async function deployStagedReleaseToRealApp() {
     } catch (e) {}
 
     playDeployChime();
-    appendLog(`🎉 DEPLOYMENT SUCCESS: ${staged.version} is now LIVE in Real App!`, 'success');
-    showToast(`🚀 ${staged.version} Deployed to Real App Successfully!`);
+    appendLog(`🎉 DEPLOYMENT SUCCESS: ${verInput} is now LIVE in Real App!`, 'success');
+    showToast(`🚀 ${verInput} Deployed to Real App Successfully!`);
 
     updatePipelineCardUI(remoteConfigData);
     populateConfigFormUI(remoteConfigData);
@@ -565,7 +598,7 @@ async function deployStagedReleaseToRealApp() {
     [deployBtn, deployBtnBanner].forEach(btn => {
       if (!btn) return;
       btn.disabled = false;
-      btn.innerText = '🚀 Deploy to Real App';
+      btn.innerText = '🚀 Push Version Update to All Phones';
     });
   }
 }
