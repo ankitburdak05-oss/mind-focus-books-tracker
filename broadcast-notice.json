@@ -1,12 +1,10 @@
 {
-  "id": "deploy-notice-v330",
+  "id": "notice-1788968625475-card2",
   "active": true,
   "card": "card2",
-  "icon": "🚀",
-  "title": "Update Live: v3.3.0",
-  "message": "Naya update v3.3.0 Real App me deploy ho chuka hai! Tap karke turant install karein.",
-  "btnText": "Install Update ⚡",
-  "action": "update",
-  "version": "v3.3.0",
-  "timestamp": "2026-09-09T15:15:00.000Z"
+  "icon": "🔥",
+  "title": "Card 2 • 3D Model",
+  "message": "ai chutiya hota hai ",
+  "btnText": "Mast Hai 🔥",
+  "timestamp": "2026-09-09T15:43:45.475Z"
 }
