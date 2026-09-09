@@ -1,10 +1,10 @@
 {
-  "id": "notice-cleared",
-  "active": false,
+  "id": "notice-2026-09-09T14-11-25-card2",
+  "active": true,
   "card": "card2",
   "icon": "💎",
-  "title": "",
-  "message": "",
-  "btnText": "",
-  "timestamp": "2026-09-09T13:22:00.000Z"
+  "title": "Card 2 • 3D Model",
+  "message": "kesa laga new card",
+  "btnText": "Mast Hai 🔥",
+  "timestamp": "2026-09-09T14:11:25.394Z"
 }
