@@ -1,10 +1,11 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-2026-09-09T14-44-48-card2",
+  "id": "gift-drop-1788966418780",
+  "type": "mystery_gift",
+  "isMysteryGift": true,
   "active": true,
-  "card": "card2",
-  "icon": "💎",
-  "title": "Card 2 • 3D Model",
-  "message": "kesa laga new card",
-  "btnText": "Mast Hai 🔥",
-  "timestamp": "2026-09-09T14:44:48.089Z"
+  "rewardType": "vip_badge",
+  "title": "👑 Special VIP Surprise From Mind Focus!",
+  "rewardName": "VIP Golden Reader Badge",
+  "message": "Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai! Tap karke apna reward claim karein.",
+  "timestamp": "2026-09-09T15:06:58.780Z"
 };
