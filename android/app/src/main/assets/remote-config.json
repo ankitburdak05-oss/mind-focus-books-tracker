@@ -17,19 +17,18 @@
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.3.0",
-    "name": "Mind Focus Books v3.3.0 (A-Z English-Hindi 3D Dictionary Book Release)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.3.0/MindFocusBooks-Native.apk",
+    "version": "v3.4.0",
+    "name": "Mind Focus Books v3.4.0 (Mystery Golden Gift Box & Audio Fix Release)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.4.0/MindFocusBooks-Native.apk",
     "features": [
-      "Book #0: A-Z English-Hindi Focus Vocabulary Lexicon (101+ Core Words)",
-      "Real 3D Book Experience: Leather Hardcover, Silk Ribbon Bookmark, Dual-Page Spread",
-      "ASMR Paper Turn Sound & 3D Page Flip Physics",
-      "Native Voice Speech Engine (Web Speech API) for English word pronunciation",
-      "Complete Hindi Meanings, Translations, Examples & Synonyms",
-      "Instant A-Z Alphabet Strip Navigation & Live Search Filter"
+      "🎁 Mystery Golden Gift Box Engine (Admin can drop 3D flying golden boxes with confetti & crackers)",
+      "🔇 Tunu-Tunu Sound Bug Fixed (Pull-to-refresh repeated chime sound completely muted on phones)",
+      "⚡ Ultra-Fast In-App Notice Sync (Direct GitHub raw connection with zero API rate limit blocks)",
+      "🔒 Secure Admin Vault (PAT securely stored in client storage with zero hardcoded secret leaks)",
+      "📖 3D A-Z English-Hindi Focus Dictionary Book with real audio pronunciation"
     ],
-    "stagedAt": "2026-09-09T05:34:03.200Z",
-    "isDeployed": true
+    "stagedAt": "2026-09-09T15:45:00.000Z",
+    "isDeployed": false
   },
   "previousRelease": {
     "version": "v3.2.0",
