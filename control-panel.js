@@ -652,7 +652,7 @@ async function broadcastLiveNotice() {
   }
 
   try {
-    const noticeId = 'notice-' + new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19) + '-' + currentNotice.card;
+    const noticeId = 'notice-' + Date.now() + '-' + currentNotice.card;
     
     const noticePayload = {
       id: noticeId,
@@ -683,6 +683,7 @@ async function broadcastLiveNotice() {
     // 0ms instant trigger for laptop tabs
     try {
       localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(noticePayload));
+      localStorage.setItem('mindfocus_current_live_notice', JSON.stringify(noticePayload));
     } catch (e) {}
 
     // Save to history
@@ -728,6 +729,7 @@ async function deactivateLiveNotice() {
 
     try {
       localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(payload));
+      localStorage.removeItem('mindfocus_current_live_notice');
     } catch (e) {}
 
     appendLog('Notice turned off.', 'success');
@@ -1475,6 +1477,7 @@ async function dispatchGiftDropToAllPhones() {
     // Instant local broadcast for multi-tab testing
     try {
       localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(giftPayload));
+      localStorage.setItem('mindfocus_current_live_notice', JSON.stringify(giftPayload));
     } catch (e) {}
 
     playDeployChime();
@@ -1504,6 +1507,11 @@ async function deactivateGiftDrop() {
 
     await pushFileToGitHub('broadcast-notice.json', jsonContent, 'Deactivate Gift Box Drop');
     await pushFileToGitHub('broadcast-notice.js', jsContent, 'Deactivate Gift Box Drop JS');
+
+    try {
+      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(offPayload));
+      localStorage.removeItem('mindfocus_current_live_notice');
+    } catch (e) {}
 
     appendLog('🛑 Golden Gift Box Drop deactivated.', 'info');
     showToast('🛑 Gift Drop Turned Off');

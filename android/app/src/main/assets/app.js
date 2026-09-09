@@ -4802,53 +4802,73 @@ async function checkRemoteBroadcastNotice() {
     const cb = Date.now() + '_' + Math.floor(Math.random() * 100000);
     let data = null;
 
-    // 1. PRIMARY: GitHub API with zero CDN cache delay (Instant Delivery < 1s)
+    // 1. PRIMARY & FASTEST: GitHub Raw (CORS open *, no 60-call API rate limit, fresh with cb)
     try {
-      const apiUrl = 'https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/broadcast-notice.json?cb=' + cb;
-      const res = await fetch(apiUrl, {
-        cache: 'no-store',
-        headers: { 'Accept': 'application/vnd.github.v3.raw' }
-      });
+      const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?cb=' + cb;
+      const res = await fetch(rawUrl, { cache: 'no-store' });
       if (res.ok) data = await res.json();
     } catch (e) {}
 
-    // 2. SECONDARY: jsDelivr fast endpoint with cache-busting
+    // 2. SECONDARY: GitHub Pages (CORS open *, official live host)
     if (!data) {
       try {
-        const jsdUrl = 'https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/broadcast-notice.json?cb=' + cb;
-        const res = await fetch(jsdUrl, { cache: 'no-store' });
+        const ghPagesUrl = 'https://ankitburdak05-oss.github.io/mind-focus-books-tracker/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(ghPagesUrl, { cache: 'no-store' });
         if (res.ok) data = await res.json();
       } catch (e) {}
     }
 
-    // 3. TERTIARY: GitHub Raw with cache-busting
+    // 3. TERTIARY: GitHub API (Fallback with raw accept header)
     if (!data) {
       try {
-        const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?cb=' + cb;
-        const res = await fetch(rawUrl, { cache: 'no-store' });
+        const apiUrl = 'https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(apiUrl, {
+          cache: 'no-store',
+          headers: { 'Accept': 'application/vnd.github.v3.raw' }
+        });
         if (res.ok) data = await res.json();
       } catch (e) {}
     }
 
-    // 4. SCRIPT-TAG FALLBACK (For Laptop running on file:/// in Chrome/Edge)
-    // Uses jsDelivr which returns application/javascript MIME type without nosniff error!
+    // 4. SCRIPT-TAG FALLBACK (For environments blocking fetch)
     if (!data) {
       data = await fetchNoticeViaScript('https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/broadcast-notice.js?cb=' + cb);
     }
 
-    // 5. LOCAL ASSET FALLBACK
-    if (!data) {
+    // 5. LOCAL SAME-ORIGIN FALLBACK (When running on local server)
+    if (!data && window.location.protocol !== 'file:') {
       try {
         const localRes = await fetch('broadcast-notice.json?cb=' + cb, { cache: 'no-store' });
         if (localRes.ok) data = await localRes.json();
       } catch (e) {}
     }
+
+    // 6. LOCAL STORAGE FALLBACK (For instant laptop testing across tabs)
     if (!data) {
-      data = await fetchNoticeViaScript('broadcast-notice.js?cb=' + cb);
+      try {
+        const stored = localStorage.getItem('mindfocus_current_live_notice');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed && parsed.active) data = parsed;
+        }
+      } catch (e) {}
+    }
+
+    const overlay = document.getElementById('inAppNoticeModalOverlay');
+
+    // If notice is inactive or empty, hide any visible popup
+    if (!data || !data.active) {
+      if (overlay && overlay.classList.contains('active')) {
+        overlay.classList.remove('active');
+        overlay.style.display = 'none';
+        overlay.style.opacity = '0';
+        overlay.style.pointerEvents = 'none';
+      }
+      return;
     }
 
     // Special: Mystery Golden Gift Box Drop (Surprise Reward Engine)
-    if (data && data.active && (data.type === 'mystery_gift' || data.isMysteryGift)) {
+    if (data.type === 'mystery_gift' || data.isMysteryGift) {
       const giftId = data.id || 'gift-default';
       const isClaimed = localStorage.getItem('mf_claimed_gift_' + giftId) === 'true';
       const isDismissed = dismissedNoticeIds[giftId] || localStorage.getItem('mindfocus_dismissed_notice_id') === giftId;
@@ -4861,11 +4881,7 @@ async function checkRemoteBroadcastNotice() {
       return;
     }
 
-    const overlay = document.getElementById('inAppNoticeModalOverlay');
-    if (!data || !data.active || !data.message) {
-      if (overlay && overlay.classList.contains('active')) {
-        overlay.classList.remove('active');
-      }
+    if (!data.message && !data.title) {
       return;
     }
 
@@ -4875,76 +4891,79 @@ async function checkRemoteBroadcastNotice() {
       lastDismissed = localStorage.getItem('mindfocus_dismissed_notice_id');
     } catch (e) {}
 
-    // Do not show if dismissed
+    // Do not show if already dismissed
     if (dismissedNoticeIds[newId] || lastDismissed === newId) {
       return;
     }
 
     currentBroadcastNoticeId = newId;
     showInAppNoticePopup(data);
-  } catch (e) {
-    console.warn('Notice check error:', e);
-  }
+  } catch (e) {}
 }
 
 let currentBroadcastNoticeData = null;
 
 function showInAppNoticePopup(data) {
+  if (!data || !data.active) return;
   currentBroadcastNoticeData = data;
+  currentBroadcastNoticeId = data.id || 'notice-default';
+
   const overlay = document.getElementById('inAppNoticeModalOverlay');
   if (!overlay) return;
 
   const card1 = document.getElementById('holoNoticeCard');
   const card2 = document.getElementById('cyber3dNoticeCard');
 
-  // Determine card style: "card1" (default) or "card2"
-  const isCard2 = data.card === 'card2' || data.card === 'card 2' || data.card === 2 || data.type === 'card2';
+  // Determine card style: "card2" or fallback to "card1"
+  const isCard2 = (data.card === 'card2' || data.card === 'card 2' || data.card === 2 || data.type === 'card2');
 
-  if (isCard2) {
+  if (isCard2 && card2) {
     if (card1) card1.style.display = 'none';
-    if (card2) {
-      card2.style.display = 'block';
-      card2.classList.remove('closing');
-      card2.style.transform = '';
-    }
+    card2.style.display = 'block';
+    card2.classList.remove('closing');
+    card2.style.transform = '';
 
     const iconEl2 = document.getElementById('inAppNoticeIcon2');
     const titleEl2 = document.getElementById('inAppNoticeTitle2');
     const msgEl2 = document.getElementById('inAppNoticeMessage2');
     const btnTextEl2 = document.getElementById('inAppNoticeBtnText2');
 
-    if (iconEl2 && data.icon) iconEl2.innerText = data.icon;
-    if (titleEl2 && data.title) titleEl2.innerText = data.title;
-    if (msgEl2 && data.message) msgEl2.innerText = data.message;
-    if (btnTextEl2 && data.btnText) btnTextEl2.innerText = data.btnText;
+    if (iconEl2) iconEl2.innerText = data.icon || '💎';
+    if (titleEl2) titleEl2.innerText = data.title || 'Notice';
+    if (msgEl2) msgEl2.innerText = data.message || '';
+    if (btnTextEl2) btnTextEl2.innerText = data.btnText || 'OK';
 
-    bindCyber3dNoticeTilt();
+    if (typeof bindCyber3dNoticeTilt === 'function') bindCyber3dNoticeTilt();
   } else {
-    // Card 1: Quantum Holographic Beacon
+    // Card 1 fallback
     if (card2) card2.style.display = 'none';
     if (card1) {
       card1.style.display = 'block';
       card1.classList.remove('closing');
       card1.style.transform = '';
+
+      const iconEl = document.getElementById('inAppNoticeIcon');
+      const titleEl = document.getElementById('inAppNoticeTitle');
+      const msgEl = document.getElementById('inAppNoticeMessage');
+      const btnTextEl = document.getElementById('inAppNoticeBtnText');
+
+      if (iconEl) iconEl.innerText = data.icon || '📢';
+      if (titleEl) titleEl.innerText = data.title || 'Notice';
+      if (msgEl) msgEl.innerText = data.message || '';
+      if (btnTextEl) btnTextEl.innerText = data.btnText || 'OK';
+
+      if (typeof bindHoloNoticeTilt === 'function') bindHoloNoticeTilt();
     }
-
-    const iconEl = document.getElementById('inAppNoticeIcon');
-    const titleEl = document.getElementById('inAppNoticeTitle');
-    const msgEl = document.getElementById('inAppNoticeMessage');
-    const btnTextEl = document.getElementById('inAppNoticeBtnText');
-
-    if (iconEl && data.icon) iconEl.innerText = data.icon;
-    if (titleEl && data.title) titleEl.innerText = data.title;
-    if (msgEl && data.message) msgEl.innerText = data.message;
-    if (btnTextEl && data.btnText) btnTextEl.innerText = data.btnText;
-
-    bindHoloNoticeTilt();
   }
 
+  // Ensure 100% visibility on both phone and laptop screens
+  overlay.style.display = 'flex';
+  overlay.style.opacity = '1';
+  overlay.style.pointerEvents = 'auto';
   overlay.classList.add('active');
 
-  // Trigger cosmic particles & chime
-  initHoloNoticeParticles();
+  // Trigger cosmic particles & gentle tone
+  if (typeof initHoloNoticeParticles === 'function') initHoloNoticeParticles();
   playNoticeHoloChime();
 }
 
@@ -4968,7 +4987,9 @@ function dismissInAppNotice(event) {
     clickX = event.clientX;
     clickY = event.clientY;
   }
-  createNoticeQuantumBurst(clickX, clickY);
+  if (typeof createNoticeQuantumBurst === 'function') {
+    createNoticeQuantumBurst(clickX, clickY);
+  }
   playNoticeDismissChime();
 
   const card1 = document.getElementById('holoNoticeCard');
@@ -4979,7 +5000,12 @@ function dismissInAppNotice(event) {
   if (card2 && card2.style.display !== 'none') card2.classList.add('closing');
 
   setTimeout(() => {
-    if (overlay) overlay.classList.remove('active');
+    if (overlay) {
+      overlay.classList.remove('active');
+      overlay.style.display = 'none';
+      overlay.style.opacity = '0';
+      overlay.style.pointerEvents = 'none';
+    }
     if (card1) {
       card1.classList.remove('closing');
       card1.style.transform = '';
@@ -5002,7 +5028,7 @@ function dismissInAppNotice(event) {
         }
       }
     }
-  }, 360);
+  }, 300);
 }
 
 async function checkRemoteConfig() {
@@ -5101,39 +5127,57 @@ async function checkRemoteConfig() {
 function startLiveNoticeListener() {
   if (broadcastNoticeInterval) clearInterval(broadcastNoticeInterval);
   
-  // Instant check on open: 300ms, 1.5s, then every 5 seconds!
+  // Instant check on open: 300ms, 1.5s
   setTimeout(checkRemoteBroadcastNotice, 300);
   setTimeout(checkRemoteConfig, 500);
   setTimeout(checkRemoteBroadcastNotice, 1500);
 
-  // Fast 5-second polling so broadcast arrives in real time!
+  // Polite 20-second polling to ensure zero rate-limit blocks and smooth delivery
   broadcastNoticeInterval = setInterval(() => {
     checkRemoteBroadcastNotice();
     checkRemoteConfig();
-  }, 5000);
+  }, 20000);
 
   document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') checkRemoteBroadcastNotice();
+    if (document.visibilityState === 'visible') {
+      checkRemoteBroadcastNotice();
+      checkRemoteConfig();
+    }
   });
-  window.addEventListener('focus', checkRemoteBroadcastNotice);
+  window.addEventListener('focus', () => {
+    checkRemoteBroadcastNotice();
+  });
 
-  // Laptop Multi-Tab Realtime Instant Sync via localStorage event
+  // Laptop Multi-Tab Realtime Instant Sync via localStorage event (0ms instantaneous)
   window.addEventListener('storage', (e) => {
     if (e.key === 'mindfocus_local_broadcast_trigger' && e.newValue) {
       try {
         const payload = JSON.parse(e.newValue);
-        if (payload && payload.active && payload.message) {
-          currentBroadcastNoticeId = payload.id;
+        if (!payload || !payload.active) {
+          const overlay = document.getElementById('inAppNoticeModalOverlay');
+          if (overlay) {
+            overlay.classList.remove('active');
+            overlay.style.display = 'none';
+          }
+          return;
+        }
+
+        if (payload.type === 'mystery_gift' || payload.isMysteryGift) {
+          if (typeof triggerFallingGoldenGiftBox === 'function') {
+            triggerFallingGoldenGiftBox(payload);
+          }
+        } else if (payload.message || payload.title) {
+          currentBroadcastNoticeId = payload.id || 'notice-default';
           showInAppNoticePopup(payload);
         }
       } catch (err) {}
     }
   });
 
-  // Check on user interaction (throttled)
+  // Check on user interaction (throttled to 10s)
   document.addEventListener('click', () => {
     const now = Date.now();
-    if (!window._lastNoticeCheck || now - window._lastNoticeCheck > 5000) {
+    if (!window._lastNoticeCheck || now - window._lastNoticeCheck > 10000) {
       window._lastNoticeCheck = now;
       checkRemoteBroadcastNotice();
     }
@@ -5289,7 +5333,6 @@ function initPullToRefresh() {
       indicator.classList.add('refreshing');
       triggerHaptic('success');
       triggerGoldenSweep();
-      playNoticeHoloChime();
 
       setTimeout(() => {
         renderApp();
