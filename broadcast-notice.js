@@ -1,10 +1,10 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-2026-09-08T14-35-02-card2",
+  "id": "notice-2026-09-08T14-44-02-card2",
   "active": true,
   "card": "card2",
-  "icon": "💎",
+  "icon": "🚀",
   "title": "Card 2 • 3D Model",
-  "message": "hahahahaha\n\n",
-  "btnText": "Mast Hai 🔥",
-  "timestamp": "2026-09-08T14:35:02.575Z"
+  "message": "kya ankit kesa hai",
+  "btnText": "hatt",
+  "timestamp": "2026-09-08T14:44:02.915Z"
 };
