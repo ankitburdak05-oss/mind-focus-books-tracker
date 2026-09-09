@@ -1,11 +1,12 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "gift-drop-1788966418780",
-  "type": "mystery_gift",
-  "isMysteryGift": true,
+  "id": "deploy-notice-v330",
   "active": true,
-  "rewardType": "vip_badge",
-  "title": "👑 Special VIP Surprise From Mind Focus!",
-  "rewardName": "VIP Golden Reader Badge",
-  "message": "Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai! Tap karke apna reward claim karein.",
-  "timestamp": "2026-09-09T15:06:58.780Z"
+  "card": "card2",
+  "icon": "🚀",
+  "title": "Update Live: v3.3.0",
+  "message": "Naya update v3.3.0 Real App me deploy ho chuka hai! Tap karke turant install karein.",
+  "btnText": "Install Update ⚡",
+  "action": "update",
+  "version": "v3.3.0",
+  "timestamp": "2026-09-09T15:15:00.000Z"
 };
