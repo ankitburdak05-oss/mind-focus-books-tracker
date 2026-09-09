@@ -4825,6 +4825,10 @@ function fetchNoticeViaScript(url) {
 }
 
 async function checkRemoteBroadcastNotice() {
+  // Battery & Heat Guard: Never wake network when app is hidden or offline
+  if (typeof document !== 'undefined' && document.hidden) return;
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+
   try {
     const cb = Date.now() + '_' + Math.floor(Math.random() * 100000);
     let data = null;
@@ -5059,6 +5063,10 @@ function dismissInAppNotice(event) {
 }
 
 async function checkRemoteConfig() {
+  // Battery & Heat Guard: Never poll config when app is hidden or offline
+  if (typeof document !== 'undefined' && document.hidden) return;
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) return;
+
   try {
     const cb = Date.now();
     let cfg = null;
@@ -5173,17 +5181,22 @@ async function checkRemoteConfig() {
 function startLiveNoticeListener() {
   if (broadcastNoticeInterval) clearInterval(broadcastNoticeInterval);
   
-  // Instant check on open: 300ms, 1.5s
-  setTimeout(checkRemoteBroadcastNotice, 300);
-  setTimeout(checkRemoteConfig, 500);
-  setTimeout(checkRemoteBroadcastNotice, 1500);
-
-  // Polite 20-second polling to ensure zero rate-limit blocks and smooth delivery
-  broadcastNoticeInterval = setInterval(() => {
+  // Single polite check after UI has finished rendering
+  setTimeout(() => {
     checkRemoteBroadcastNotice();
     checkRemoteConfig();
-  }, 20000);
+  }, 1000);
 
+  // Battery-Saver Polling Loop: 90 seconds, only runs when app is actively visible on screen
+  broadcastNoticeInterval = setInterval(() => {
+    if (document.hidden || (typeof document.visibilityState !== 'undefined' && document.visibilityState !== 'visible')) {
+      return; // ZERO radio wake-ups when app is minimized, locked, or backgrounded!
+    }
+    checkRemoteBroadcastNotice();
+    checkRemoteConfig();
+  }, 90000);
+
+  // Instant refresh when user returns to app
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
       checkRemoteBroadcastNotice();
@@ -5219,15 +5232,6 @@ function startLiveNoticeListener() {
       } catch (err) {}
     }
   });
-
-  // Check on user interaction (throttled to 10s)
-  document.addEventListener('click', () => {
-    const now = Date.now();
-    if (!window._lastNoticeCheck || now - window._lastNoticeCheck > 10000) {
-      window._lastNoticeCheck = now;
-      checkRemoteBroadcastNotice();
-    }
-  }, { passive: true });
 }
 
 window.checkRemoteBroadcastNotice = checkRemoteBroadcastNotice;
