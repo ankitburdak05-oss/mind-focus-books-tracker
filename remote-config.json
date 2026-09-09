@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-09T05:32:52.734Z",
+  "updatedAt": "2026-09-09T05:34:03.200Z",
   "activeRelease": {
     "version": "v3.3.0",
     "name": "Mind Focus Books v3.3.0 (A-Z English-Hindi 3D Dictionary Book Release)",
@@ -13,7 +13,7 @@
       "Complete Hindi Meanings, Translations, Examples & Synonyms",
       "Instant A-Z Alphabet Strip Navigation & Live Search Filter"
     ],
-    "stagedAt": "2026-09-09T05:32:52.734Z",
+    "stagedAt": "2026-09-09T05:34:03.200Z",
     "isDeployed": true
   },
   "stagedRelease": {
@@ -28,14 +28,13 @@
       "Complete Hindi Meanings, Translations, Examples & Synonyms",
       "Instant A-Z Alphabet Strip Navigation & Live Search Filter"
     ],
-    "stagedAt": "2026-09-09T05:32:52.734Z",
+    "stagedAt": "2026-09-09T05:34:03.200Z",
     "isDeployed": true
   },
   "previousRelease": {
     "version": "v3.3.0",
     "name": "Mind Focus Books v3.3.0 (A-Z English-Hindi 3D Dictionary Book Release)",
-    "stagedAt": "2026-09-09T09:15:00Z",
-    "isDeployed": false,
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.3.0/MindFocusBooks-Native.apk",
     "features": [
       "Book #0: A-Z English-Hindi Focus Vocabulary Lexicon (101+ Core Words)",
       "Real 3D Book Experience: Leather Hardcover, Silk Ribbon Bookmark, Dual-Page Spread",
@@ -44,7 +43,8 @@
       "Complete Hindi Meanings, Translations, Examples & Synonyms",
       "Instant A-Z Alphabet Strip Navigation & Live Search Filter"
     ],
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.3.0/MindFocusBooks-Native.apk"
+    "stagedAt": "2026-09-09T05:33:40.553Z",
+    "isDeployed": true
   },
   "features": {
     "maintenanceMode": false,
