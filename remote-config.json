@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "features": {
-    "maintenanceMode": true,
+    "maintenanceMode": false,
     "quotesEnabled": true,
     "audiobookVoiceEnabled": true,
     "streakShieldsEnabled": true,
@@ -18,5 +18,5 @@
     "forceUpdate": false,
     "downloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest"
   },
-  "updatedAt": "2026-09-08T14:48:33.207Z"
+  "updatedAt": "2026-09-08T14:50:09.951Z"
 }
