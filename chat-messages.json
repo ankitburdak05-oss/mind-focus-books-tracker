@@ -1,16 +1,23 @@
 {
   "version": 1,
-  "lastUpdated": "2026-09-10T04:02:25.385Z",
+  "lastUpdated": "2026-09-10T04:46:23.238Z",
   "threads": {
     "user_welcome": {
       "userId": "user_welcome",
       "userName": "Reader Support Desk",
       "userDevice": "System Broadcast",
       "unreadByAdmin": 0,
-      "unreadByUser": 1,
-      "lastMessage": "Chat history cleared",
-      "lastTimestamp": "2026-09-10T04:01:15.037Z",
-      "messages": []
+      "unreadByUser": 2,
+      "lastMessage": "hii",
+      "lastTimestamp": "2026-09-10T04:46:23.200Z",
+      "messages": [
+        {
+          "id": "msg_admin_1789015583200",
+          "sender": "admin",
+          "text": "hii",
+          "timestamp": "2026-09-10T04:46:23.200Z"
+        }
+      ]
     }
   }
 }
