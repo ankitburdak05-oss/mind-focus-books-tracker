@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-09-10T05:44:17.374Z",
+  "lastUpdated": "2026-09-10T05:46:50.589Z",
   "threads": {
     "user_welcome": {
       "userId": "user_welcome",
@@ -29,10 +29,10 @@
       "userId": "reader_yyk12h",
       "userName": "Reader #K12H",
       "userDevice": "Web App",
-      "unreadByAdmin": 0,
+      "unreadByAdmin": 1,
       "unreadByUser": 2,
       "lastMessage": "hiii",
-      "lastTimestamp": "2026-09-10T05:44:16.348Z",
+      "lastTimestamp": "2026-09-10T05:44:57.754Z",
       "messages": [
         {
           "id": "msg_admin_1789017052549",
@@ -51,6 +51,29 @@
           "sender": "admin",
           "text": "hiii",
           "timestamp": "2026-09-10T05:44:16.348Z"
+        },
+        {
+          "id": "msg_user_reader_yyk12h_1789019097754",
+          "sender": "user",
+          "text": "hiii",
+          "timestamp": "2026-09-10T05:44:57.754Z"
+        }
+      ]
+    },
+    "reader_quu06r": {
+      "userId": "reader_quu06r",
+      "userName": "Reader #U06R",
+      "userDevice": "Android App",
+      "unreadByAdmin": 1,
+      "unreadByUser": 0,
+      "lastMessage": "Hii",
+      "lastTimestamp": "2026-09-10T05:46:49.276Z",
+      "messages": [
+        {
+          "id": "msg_user_reader_quu06r_1789019209276",
+          "sender": "user",
+          "text": "Hii",
+          "timestamp": "2026-09-10T05:46:49.276Z"
         }
       ]
     }
