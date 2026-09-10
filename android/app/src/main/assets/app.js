@@ -7541,11 +7541,16 @@ window.initFlashcardTrainerEngine = initFlashcardTrainerEngine;
 // 💬 LIVE IN-APP HELP DESK & CHAT CLIENT ENGINE (Zomato/Telegram Style)
 // ==========================================================================
 
+const HELPDESK_CLOUD_TOPIC = 'mf_helpdesk_ankitburdak05';
+const HELPDESK_RELAY_URL = 'https://ntfy.sh/' + HELPDESK_CLOUD_TOPIC;
+
 let userChatId = null;
 let userChatName = null;
 let userChatDevice = 'Android Reader';
 let userChatData = null;
 let userChatPollTimer = null;
+let userChatBroadcastChannel = null;
+let userChatEventSource = null;
 let lastKnownAdminMsgCount = 0;
 
 function initLiveHelpDeskEngine() {
@@ -7566,66 +7571,218 @@ function initLiveHelpDeskEngine() {
     if (ua.includes('Android')) userChatDevice = 'Android App';
     else if (ua.includes('iPhone') || ua.includes('iPad')) userChatDevice = 'iOS Device';
     else userChatDevice = 'Web App';
+
+    // 1. Instantly restore chat from local storage so messages NEVER disappear
+    const local = localStorage.getItem('mindfocus_chat_data');
+    if (local) {
+      try {
+        userChatData = JSON.parse(local);
+      } catch (e) {}
+    }
+    if (!userChatData) {
+      userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
+    }
+    if (!userChatData.threads) userChatData.threads = {};
+    if (!userChatData.threads[userChatId]) {
+      userChatData.threads[userChatId] = {
+        userId: userChatId,
+        userName: userChatName,
+        userDevice: userChatDevice,
+        unreadByAdmin: 0,
+        unreadByUser: 0,
+        lastMessage: '',
+        lastTimestamp: new Date().toISOString(),
+        messages: []
+      };
+    }
   } catch (e) {
     userChatId = 'reader_guest';
     userChatName = 'Reader';
   }
 
+  // 2. Setup Local Zero-Latency BroadcastChannel (0ms sync for same origin/device)
+  try {
+    if (typeof BroadcastChannel !== 'undefined') {
+      userChatBroadcastChannel = new BroadcastChannel('mindfocus_helpdesk_channel');
+      userChatBroadcastChannel.onmessage = (e) => {
+        if (e.data && e.data.type === 'helpdesk_chat_msg') {
+          handleIncomingHelpDeskDirectMessage(e.data);
+        }
+      };
+    }
+  } catch (bcErr) {}
+
+  // 3. LocalStorage storage event listener (cross-tab fallback)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'mindfocus_chat_last_event' && e.newValue) {
+      try {
+        const item = JSON.parse(e.newValue);
+        if (item && item.payload && item.payload.type === 'helpdesk_chat_msg') {
+          handleIncomingHelpDeskDirectMessage(item.payload);
+        }
+      } catch (err) {}
+    }
+  });
+
+  // 4. Connect to Cloud Relay via SSE (Instant live delivery from Control Panel)
+  connectCloudRelaySSE();
+
+  // 5. Initial UI render and background sync poll
+  checkUserChatNotifications();
+  renderUserChatStream();
+
   fetchAndSyncUserChat(false);
   if (!userChatPollTimer) {
-    userChatPollTimer = setInterval(() => fetchAndSyncUserChat(false), 5000);
+    userChatPollTimer = setInterval(() => {
+      if (document.hidden) return;
+      fetchAndSyncUserChat(false);
+    }, 4000);
   }
 }
 
-function playUserChatAudioChime(type = 'receive') {
+function connectCloudRelaySSE() {
+  if (typeof EventSource === 'undefined') return;
   try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    if (type === 'receive') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
-      osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16);
-      gain.gain.setValueAtTime(0.18, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.4);
-    } else {
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(440, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.12, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.15);
+    if (userChatEventSource) {
+      userChatEventSource.close();
     }
+    userChatEventSource = new EventSource(HELPDESK_RELAY_URL + '/sse');
+    userChatEventSource.onmessage = (e) => {
+      try {
+        const parsed = JSON.parse(e.data);
+        if (parsed && parsed.message) {
+          const payload = typeof parsed.message === 'string' ? JSON.parse(parsed.message) : parsed.message;
+          if (payload && payload.type === 'helpdesk_chat_msg') {
+            handleIncomingHelpDeskDirectMessage(payload);
+          }
+        }
+      } catch (err) {}
+    };
+    userChatEventSource.onerror = () => {};
   } catch (e) {}
 }
 
+function handleIncomingHelpDeskDirectMessage(payload) {
+  if (!payload || !payload.threadId || !payload.message) return;
+  if (payload.threadId !== userChatId) return;
+
+  const msg = payload.message;
+  if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
+  if (!userChatData.threads) userChatData.threads = {};
+  if (!userChatData.threads[userChatId]) {
+    userChatData.threads[userChatId] = {
+      userId: userChatId,
+      userName: userChatName,
+      userDevice: userChatDevice,
+      unreadByAdmin: 0,
+      unreadByUser: 0,
+      lastMessage: '',
+      lastTimestamp: new Date().toISOString(),
+      messages: []
+    };
+  }
+
+  const thread = userChatData.threads[userChatId];
+  if (!Array.isArray(thread.messages)) thread.messages = [];
+
+  const exists = thread.messages.some(m => m.id === msg.id || (m.timestamp === msg.timestamp && m.text === msg.text));
+  if (exists) return;
+
+  thread.messages.push(msg);
+  thread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+  thread.lastMessage = msg.text;
+  thread.lastTimestamp = msg.timestamp;
+
+  if (msg.sender === 'admin') {
+    const modal = document.getElementById('userHelpDeskModalOverlay');
+    const isModalOpen = modal && modal.classList.contains('active');
+    if (!isModalOpen) {
+      thread.unreadByUser = (thread.unreadByUser || 0) + 1;
+    }
+    playUserChatAudioChime('receive');
+    if (typeof showToastNotification === 'function') {
+      showToastNotification('👑 Developer/Admin: ' + (msg.text.length > 35 ? msg.text.substring(0, 32) + '...' : msg.text));
+    }
+  }
+
+  saveUserChatDataLocally();
+  checkUserChatNotifications();
+  renderUserChatStream();
+}
+
+function mergeIncomingChatData(data) {
+  if (!data || !data.threads) return;
+  if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
+  if (!userChatData.threads) userChatData.threads = {};
+
+  let updated = false;
+  const myThread = userChatData.threads[userChatId];
+  const remoteThread = data.threads[userChatId];
+
+  if (remoteThread && Array.isArray(remoteThread.messages)) {
+    if (!myThread) {
+      userChatData.threads[userChatId] = remoteThread;
+      updated = true;
+    } else {
+      if (!Array.isArray(myThread.messages)) myThread.messages = [];
+      const existingIds = new Set(myThread.messages.map(m => m.id));
+      remoteThread.messages.forEach(m => {
+        if (!existingIds.has(m.id)) {
+          myThread.messages.push(m);
+          existingIds.add(m.id);
+          updated = true;
+          if (m.sender === 'admin') {
+            playUserChatAudioChime('receive');
+          }
+        }
+      });
+      myThread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+      if (myThread.messages.length > 0) {
+        const last = myThread.messages[myThread.messages.length - 1];
+        myThread.lastMessage = last.text;
+        myThread.lastTimestamp = last.timestamp;
+      }
+    }
+  }
+
+  if (updated) {
+    saveUserChatDataLocally();
+    checkUserChatNotifications();
+    renderUserChatStream();
+  }
+}
+
 async function fetchAndSyncUserChat(isUserAction = false) {
+  // 1. Fetch from Cloud Relay ntfy.sh
+  try {
+    const pollRes = await fetch(HELPDESK_RELAY_URL + '/json?poll=1&since=5m');
+    if (pollRes.ok) {
+      const text = await pollRes.text();
+      const lines = text.trim().split('\n');
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        try {
+          const item = JSON.parse(line);
+          if (item && item.message) {
+            const payload = typeof item.message === 'string' ? JSON.parse(item.message) : item.message;
+            if (payload && payload.type === 'helpdesk_chat_msg') {
+              handleIncomingHelpDeskDirectMessage(payload);
+            }
+          }
+        } catch (e) {}
+      }
+    }
+  } catch (err) {}
+
+  // 2. Fetch from static/git repository chat-messages.json (non-destructive merge)
   const cb = Date.now();
   try {
-    const res = await fetch(`chat-messages.json?cb=${cb}`);
+    const res = await fetch(`chat-messages.json?cb=${cb}`, { cache: 'no-store' });
     if (res.ok) {
       const data = await res.json();
-      userChatData = data;
-      localStorage.setItem('mindfocus_chat_data', JSON.stringify(data));
-      checkUserChatNotifications();
-      renderUserChatStream();
+      mergeIncomingChatData(data);
     }
-  } catch (e) {
-    try {
-      const local = localStorage.getItem('mindfocus_chat_data');
-      if (local) {
-        userChatData = JSON.parse(local);
-        renderUserChatStream();
-      }
-    } catch (err) {}
-  }
+  } catch (e) {}
 }
 
 function checkUserChatNotifications() {
@@ -7805,7 +7962,7 @@ async function sendUserChatMessage() {
 
   const thread = userChatData.threads[userChatId];
   const newMsg = {
-    id: 'msg_user_' + Date.now(),
+    id: 'msg_user_' + userChatId + '_' + Date.now(),
     sender: 'user',
     text: text,
     timestamp: new Date().toISOString()
@@ -7818,16 +7975,48 @@ async function sendUserChatMessage() {
   thread.unreadByAdmin = (thread.unreadByAdmin || 0) + 1;
 
   input.value = '';
+  // Zero loss: Immediately commit to local memory and render
+  saveUserChatDataLocally();
   renderUserChatStream();
 
-  saveUserChatDataLocally();
+  const payload = {
+    type: 'helpdesk_chat_msg',
+    threadId: userChatId,
+    userName: userChatName,
+    userDevice: userChatDevice,
+    message: newMsg
+  };
 
+  // 1. Send via local BroadcastChannel (0ms sync for same device/browser)
   try {
-    localStorage.setItem('mindfocus_chat_data', JSON.stringify(userChatData));
+    if (userChatBroadcastChannel) {
+      userChatBroadcastChannel.postMessage(payload);
+    }
+  } catch (e) {}
+
+  // 2. Trigger localStorage cross-tab event
+  try {
+    localStorage.setItem('mindfocus_chat_last_event', JSON.stringify({
+      t: Date.now(),
+      payload: payload
+    }));
+  } catch (e) {}
+
+  // 3. Post to Cloud Relay (ntfy.sh) so Remote Control Panel receives it instantly
+  try {
+    fetch(HELPDESK_RELAY_URL, {
+      method: 'POST',
+      headers: {
+        'Title': 'Reader: ' + userChatName,
+        'Priority': 'high',
+        'Tags': 'speech_balloon'
+      },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
   } catch (e) {}
 
   if (typeof showToastNotification === 'function') {
-    showToastNotification('💬 Message Admin ko bhej diya gaya hai!');
+    showToastNotification('💬 Message sent to Developer / Admin!');
   }
 }
 

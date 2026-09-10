@@ -117,9 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
   renderBroadcastHistory();
   updateLivePreview();
   if (typeof updateFlashcardPreview === 'function') updateFlashcardPreview();
+  if (typeof initAdminHelpDeskListeners === 'function') initAdminHelpDeskListeners();
   if (typeof refreshAdminChatThreads === 'function') {
     refreshAdminChatThreads(false);
-    setInterval(refreshAdminChatThreads, 5000);
+    setInterval(refreshAdminChatThreads, 4000);
   }
   appendLog('Executive Command Studio v2.0 Ready.', 'success');
 });
@@ -2009,10 +2010,110 @@ window.deactivateFlashcardsDrop = deactivateFlashcardsDrop;
 // 💬 LIVE IN-APP HELP DESK & USER CHAT STUDIO
 // ==========================================================================
 
+const HELPDESK_CLOUD_TOPIC = 'mf_helpdesk_ankitburdak05';
+const HELPDESK_RELAY_URL = 'https://ntfy.sh/' + HELPDESK_CLOUD_TOPIC;
+
 let adminChatThreads = {};
 let activeChatUserId = null;
 let adminChatSoundEnabled = true;
 let lastKnownUserMsgCount = 0;
+let adminChatBroadcastChannel = null;
+let adminChatEventSource = null;
+
+function initAdminHelpDeskListeners() {
+  // 1. Zero-latency BroadcastChannel (0ms sync for same browser/origin)
+  try {
+    if (typeof BroadcastChannel !== 'undefined') {
+      adminChatBroadcastChannel = new BroadcastChannel('mindfocus_helpdesk_channel');
+      adminChatBroadcastChannel.onmessage = (e) => {
+        if (e.data && e.data.type === 'helpdesk_chat_msg') {
+          handleAdminIncomingHelpDeskDirectMessage(e.data);
+        }
+      };
+    }
+  } catch (e) {}
+
+  // 2. Storage event listener (cross-tab sync)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'mindfocus_chat_last_event' && e.newValue) {
+      try {
+        const item = JSON.parse(e.newValue);
+        if (item && item.payload && item.payload.type === 'helpdesk_chat_msg') {
+          handleAdminIncomingHelpDeskDirectMessage(item.payload);
+        }
+      } catch (err) {}
+    }
+  });
+
+  // 3. Connect to Cloud Relay via SSE (Instant live delivery from Remote Phone Apps)
+  connectAdminCloudRelaySSE();
+}
+
+function connectAdminCloudRelaySSE() {
+  if (typeof EventSource === 'undefined') return;
+  try {
+    if (adminChatEventSource) adminChatEventSource.close();
+    adminChatEventSource = new EventSource(HELPDESK_RELAY_URL + '/sse');
+    adminChatEventSource.onmessage = (e) => {
+      try {
+        const parsed = JSON.parse(e.data);
+        if (parsed && parsed.message) {
+          const payload = typeof parsed.message === 'string' ? JSON.parse(parsed.message) : parsed.message;
+          if (payload && payload.type === 'helpdesk_chat_msg') {
+            handleAdminIncomingHelpDeskDirectMessage(payload);
+          }
+        }
+      } catch (err) {}
+    };
+    adminChatEventSource.onerror = () => {};
+  } catch (e) {}
+}
+
+function handleAdminIncomingHelpDeskDirectMessage(payload) {
+  if (!payload || !payload.threadId || !payload.message) return;
+  const tid = payload.threadId;
+  const msg = payload.message;
+
+  if (!adminChatThreads) adminChatThreads = {};
+  if (!adminChatThreads[tid]) {
+    adminChatThreads[tid] = {
+      userId: tid,
+      userName: payload.userName || ('Reader #' + tid.slice(-4).toUpperCase()),
+      userDevice: payload.userDevice || 'Reader App',
+      unreadByAdmin: 0,
+      unreadByUser: 0,
+      lastMessage: '',
+      lastTimestamp: new Date().toISOString(),
+      messages: []
+    };
+  }
+
+  const thread = adminChatThreads[tid];
+  if (!Array.isArray(thread.messages)) thread.messages = [];
+
+  const exists = thread.messages.some(m => m.id === msg.id || (m.timestamp === msg.timestamp && m.text === msg.text));
+  if (exists) return;
+
+  thread.messages.push(msg);
+  thread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+  thread.lastMessage = msg.text;
+  thread.lastTimestamp = msg.timestamp;
+
+  if (msg.sender === 'user') {
+    if (activeChatUserId !== tid) {
+      thread.unreadByAdmin = (thread.unreadByAdmin || 0) + 1;
+    }
+    playChatAudioChime('receive');
+    showToast(`💬 ${thread.userName}: "${msg.text.length > 25 ? msg.text.substring(0, 22) + '...' : msg.text}"`);
+    appendLog(`💬 Incoming message from ${thread.userName} (${thread.userDevice}): "${msg.text}"`, 'info');
+  }
+
+  saveChatDataLocallyAndRemote();
+  renderChatThreadsList();
+  if (activeChatUserId === tid) {
+    renderActiveConversation(tid);
+  }
+}
 
 function playChatAudioChime(type = 'receive') {
   if (!adminChatSoundEnabled) return;
@@ -2056,25 +2157,81 @@ function toggleAdminChatSound() {
 }
 
 async function fetchChatMessagesData() {
-  const cb = Date.now();
-  let data = null;
-
+  // 1. First ensure we retain local threads so NOTHING is ever lost
+  let localData = null;
   try {
     const local = localStorage.getItem('mindfocus_chat_data');
-    if (local) data = JSON.parse(local);
+    if (local) localData = JSON.parse(local);
   } catch (e) {}
 
-  try {
-    const res = await fetch(`chat-messages.json?cb=${cb}`);
-    if (res.ok) {
-      data = await res.json();
-      localStorage.setItem('mindfocus_chat_data', JSON.stringify(data));
+  if (localData && localData.threads) {
+    for (const tid in localData.threads) {
+      if (!adminChatThreads[tid]) {
+        adminChatThreads[tid] = localData.threads[tid];
+      } else {
+        const myThread = adminChatThreads[tid];
+        const locThread = localData.threads[tid];
+        const existingIds = new Set((myThread.messages || []).map(m => m.id));
+        (locThread.messages || []).forEach(m => {
+          if (!existingIds.has(m.id)) {
+            myThread.messages.push(m);
+            existingIds.add(m.id);
+          }
+        });
+        myThread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+      }
     }
-  } catch (err) {
-    console.warn('Network fetch chat-messages error:', err);
   }
 
-  return data;
+  // 2. Poll Cloud Relay for any missed incoming events
+  try {
+    const pollRes = await fetch(HELPDESK_RELAY_URL + '/json?poll=1&since=5m');
+    if (pollRes.ok) {
+      const text = await pollRes.text();
+      const lines = text.trim().split('\n');
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        try {
+          const item = JSON.parse(line);
+          if (item && item.message) {
+            const payload = typeof item.message === 'string' ? JSON.parse(item.message) : item.message;
+            if (payload && payload.type === 'helpdesk_chat_msg') {
+              handleAdminIncomingHelpDeskDirectMessage(payload);
+            }
+          }
+        } catch (e) {}
+      }
+    }
+  } catch (err) {}
+
+  // 3. Non-destructive merge from chat-messages.json
+  const cb = Date.now();
+  try {
+    const res = await fetch(`chat-messages.json?cb=${cb}`, { cache: 'no-store' });
+    if (res.ok) {
+      const remoteData = await res.json();
+      if (remoteData && remoteData.threads) {
+        for (const tid in remoteData.threads) {
+          if (!adminChatThreads[tid]) {
+            adminChatThreads[tid] = remoteData.threads[tid];
+          } else {
+            const myThread = adminChatThreads[tid];
+            const remThread = remoteData.threads[tid];
+            const existingIds = new Set((myThread.messages || []).map(m => m.id));
+            (remThread.messages || []).forEach(m => {
+              if (!existingIds.has(m.id)) {
+                myThread.messages.push(m);
+                existingIds.add(m.id);
+              }
+            });
+            myThread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+          }
+        }
+      }
+    }
+  } catch (err) {}
+
+  return { threads: adminChatThreads };
 }
 
 async function refreshAdminChatThreads(manual = false) {
@@ -2292,6 +2449,42 @@ async function sendAdminChatReply() {
   renderChatThreadsList();
 
   appendLog(`💬 Reply sent to ${thread.userName}: "${text.slice(0, 30)}..."`, 'success');
+
+  const payload = {
+    type: 'helpdesk_chat_msg',
+    threadId: activeChatUserId,
+    userName: thread.userName,
+    userDevice: thread.userDevice,
+    message: newMsg
+  };
+
+  // 1. Zero-latency BroadcastChannel (0ms sync for same device/browser)
+  try {
+    if (adminChatBroadcastChannel) {
+      adminChatBroadcastChannel.postMessage(payload);
+    }
+  } catch (e) {}
+
+  // 2. Storage event cross-tab trigger
+  try {
+    localStorage.setItem('mindfocus_chat_last_event', JSON.stringify({
+      t: Date.now(),
+      payload: payload
+    }));
+  } catch (e) {}
+
+  // 3. Post to Cloud Relay (ntfy.sh) so user phone receives it anywhere in real-time
+  try {
+    fetch(HELPDESK_RELAY_URL, {
+      method: 'POST',
+      headers: {
+        'Title': '👑 Admin Reply to ' + thread.userName,
+        'Priority': 'high',
+        'Tags': 'crown,speech_balloon'
+      },
+      body: JSON.stringify(payload)
+    }).catch(() => {});
+  } catch (e) {}
 
   await saveChatDataLocallyAndRemote();
 }
