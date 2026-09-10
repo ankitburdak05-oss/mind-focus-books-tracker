@@ -624,6 +624,13 @@ async function deployStagedReleaseToRealApp() {
     await pushFileToGitHub('broadcast-notice.json', jsonContent, `Deploy Broadcast: ${verInput}`);
     await pushFileToGitHub('broadcast-notice.js', jsContent, `Deploy Broadcast JS: ${verInput}`);
 
+    // Global CDN instant purge
+    try {
+      fetch(`https://purge.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@main/remote-config.json`, { cache: 'no-store' });
+      fetch(`https://purge.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@main/broadcast-notice.json`, { cache: 'no-store' });
+      fetch(`https://purge.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@main/broadcast-notice.js`, { cache: 'no-store' });
+    } catch (e) {}
+
     // Instant local trigger
     try {
       localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(deployNotice));

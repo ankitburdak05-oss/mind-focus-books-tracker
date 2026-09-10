@@ -4916,30 +4916,30 @@ async function checkRemoteBroadcastNotice() {
     const cb = Date.now() + '_' + Math.floor(Math.random() * 100000);
     let data = null;
 
-    // 1. PRIMARY & FASTEST: GitHub Raw (CORS open *, no 60-call API rate limit, fresh with cb)
+    // 1. PRIMARY & ULTRA-FAST (0s delay): GitHub API Direct (Bypasses Fastly 60s cache delay completely)
     try {
-      const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?cb=' + cb;
-      const res = await fetch(rawUrl, { cache: 'no-store' });
-      if (res.ok) data = await res.json();
+      const apiUrl = 'https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/broadcast-notice.json?cb=' + cb;
+      const apiRes = await fetch(apiUrl, {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
+      if (apiRes.ok) data = await apiRes.json();
     } catch (e) {}
 
-    // 2. SECONDARY: GitHub Pages (CORS open *, official live host)
+    // 2. SECONDARY: GitHub Raw (Fallback if API limit hit)
     if (!data) {
       try {
-        const ghPagesUrl = 'https://ankitburdak05-oss.github.io/mind-focus-books-tracker/broadcast-notice.json?cb=' + cb;
-        const res = await fetch(ghPagesUrl, { cache: 'no-store' });
+        const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(rawUrl, { cache: 'no-store' });
         if (res.ok) data = await res.json();
       } catch (e) {}
     }
 
-    // 3. TERTIARY: GitHub API (Fallback with raw accept header)
+    // 3. TERTIARY: GitHub Pages (Official live host)
     if (!data) {
       try {
-        const apiUrl = 'https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/broadcast-notice.json?cb=' + cb;
-        const res = await fetch(apiUrl, {
-          cache: 'no-store',
-          headers: { 'Accept': 'application/vnd.github.v3.raw' }
-        });
+        const ghPagesUrl = 'https://ankitburdak05-oss.github.io/mind-focus-books-tracker/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(ghPagesUrl, { cache: 'no-store' });
         if (res.ok) data = await res.json();
       } catch (e) {}
     }
@@ -5166,27 +5166,27 @@ async function checkRemoteConfig() {
     const cb = Date.now();
     let cfg = null;
 
-    // 1. PRIMARY: GitHub Raw (CORS open, no rate limit)
+    // 1. PRIMARY & ULTRA-FAST (0s delay): GitHub API Direct (Bypasses Fastly 60s cache delay completely)
     try {
-      const res = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?cb=' + cb, { cache: 'no-store' });
-      if (res.ok) cfg = await res.json();
+      const apiRes = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
+      if (apiRes.ok) cfg = await apiRes.json();
     } catch (e) {}
 
-    // 2. SECONDARY: GitHub Pages
+    // 2. SECONDARY: GitHub Raw (Fallback if API limit reached)
     if (!cfg) {
       try {
-        const res = await fetch('https://ankitburdak05-oss.github.io/mind-focus-books-tracker/remote-config.json?cb=' + cb, { cache: 'no-store' });
+        const res = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?cb=' + cb, { cache: 'no-store' });
         if (res.ok) cfg = await res.json();
       } catch (e) {}
     }
 
-    // 3. TERTIARY: GitHub API
+    // 3. TERTIARY: GitHub Pages
     if (!cfg) {
       try {
-        const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
-          cache: 'no-store',
-          headers: { 'Accept': 'application/vnd.github.v3.raw' }
-        });
+        const res = await fetch('https://ankitburdak05-oss.github.io/mind-focus-books-tracker/remote-config.json?cb=' + cb, { cache: 'no-store' });
         if (res.ok) cfg = await res.json();
       } catch (e) {}
     }
@@ -5282,16 +5282,17 @@ function startLiveNoticeListener() {
     checkRemoteConfig();
   }, 1000);
 
-  // Battery-Saver Polling Loop: 90 seconds, only runs when app is actively visible on screen
+  // High-Speed Realtime Polling Loop: 5 seconds (Only runs when screen is ON & visible!)
+  // When app is minimized or phone is locked, document.hidden freezes 100% of network calls.
   broadcastNoticeInterval = setInterval(() => {
     if (document.hidden || (typeof document.visibilityState !== 'undefined' && document.visibilityState !== 'visible')) {
-      return; // ZERO radio wake-ups when app is minimized, locked, or backgrounded!
+      return; // ZERO network wake-ups when app is minimized, locked, or backgrounded!
     }
     checkRemoteBroadcastNotice();
     checkRemoteConfig();
-  }, 90000);
+  }, 5000);
 
-  // Instant refresh when user returns to app
+  // Instant refresh when user returns to or touches the app
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
       checkRemoteBroadcastNotice();
@@ -5300,7 +5301,19 @@ function startLiveNoticeListener() {
   });
   window.addEventListener('focus', () => {
     checkRemoteBroadcastNotice();
+    checkRemoteConfig();
   });
+
+  // Tap / Touch interaction speed trigger (Max once every 4 seconds)
+  let lastTouchCheck = 0;
+  window.addEventListener('pointerdown', () => {
+    const now = Date.now();
+    if (now - lastTouchCheck > 4000) {
+      lastTouchCheck = now;
+      checkRemoteBroadcastNotice();
+      checkRemoteConfig();
+    }
+  }, { passive: true });
 
   // Laptop Multi-Tab Realtime Instant Sync via localStorage event (0ms instantaneous)
   window.addEventListener('storage', (e) => {
