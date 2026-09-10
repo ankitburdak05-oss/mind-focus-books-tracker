@@ -1,4 +1,4 @@
-{
+window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-09-10T00:45:00.000Z",
   "activeRelease": {
@@ -29,7 +29,6 @@
     "stagedAt": "2026-09-10T00:45:00.000Z",
     "isDeployed": false
   },
-
   "previousRelease": {
     "version": "v3.4.0",
     "name": "Mind Focus Books v3.4.0 (Mystery Golden Gift Box & Audio Fix Release)",
@@ -65,4 +64,4 @@
     "cover": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80",
     "quote": "You do not rise to the level of your goals. You fall to the level of your systems."
   }
-}
+};

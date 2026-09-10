@@ -398,21 +398,50 @@ async function fetchLiveStatusFromGitHub() {
 // -------------------------------------------------------------
 // FEATURE: STAGING TO REAL APP DEPLOYMENT PIPELINE
 // -------------------------------------------------------------
+// -------------------------------------------------------------
 async function fetchRemoteConfigPipeline() {
+  // 1. INSTANT LOCAL DATA (Zero-delay render for v3.5.1)
+  if (typeof window !== 'undefined' && window.__DEFAULT_REMOTE_CONFIG__) {
+    remoteConfigData = JSON.parse(JSON.stringify(window.__DEFAULT_REMOTE_CONFIG__));
+    updatePipelineCardUI(remoteConfigData);
+    populateConfigFormUI(remoteConfigData);
+    appendLog('📁 Pipeline config v3.5.1 loaded instantly.', 'success');
+  }
+
+  // 2. Try fetching from GitHub if online
   try {
     const cb = Date.now();
     const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/remote-config.json?cb=${cb}`, {
       headers: { 'Accept': 'application/vnd.github.v3.raw' }
     });
     if (res.ok) {
-      remoteConfigData = await res.json();
-      updatePipelineCardUI(remoteConfigData);
-      populateConfigFormUI(remoteConfigData);
+      const ghData = await res.json();
+      if (ghData) {
+        remoteConfigData = ghData;
+        updatePipelineCardUI(remoteConfigData);
+        populateConfigFormUI(remoteConfigData);
+        appendLog('✅ Pipeline config synced with GitHub cloud.', 'success');
+        return;
+      }
     }
   } catch (e) {
-    appendLog('Pipeline config error: ' + e.message, 'warn');
+    // GitHub error or offline, fallback continues to use local config
+  }
+
+  // 3. Fallback: Local JSON fetch (when running on localhost)
+  if (!remoteConfigData) {
+    try {
+      const localRes = await fetch('./remote-config.json?cb=' + Date.now());
+      if (localRes.ok) {
+        remoteConfigData = await localRes.json();
+        updatePipelineCardUI(remoteConfigData);
+        populateConfigFormUI(remoteConfigData);
+      }
+    } catch (localErr) {}
   }
 }
+
+
 
 function updatePipelineCardUI(cfg) {
   if (!cfg) return;
@@ -431,13 +460,20 @@ function updatePipelineCardUI(cfg) {
   if (activeNameEl && active.name) activeNameEl.innerText = active.name;
 
   if (stagedTitleEl) {
-    stagedTitleEl.innerText = staged.name || 'No Staged Release';
+    // Version number prominently dikhao (e.g. "Mind Focus Books v3.5.1")
+    stagedTitleEl.innerText = (staged.version ? 'Mind Focus Books ' + staged.version : staged.name) || 'No Staged Release';
   }
 
   if (stagedDescEl) {
     const featCount = staged.features ? staged.features.length : 0;
-    stagedDescEl.innerText = `${featCount} Staged Features ready for Real App. (Active in Real App: ${active.version || 'v3.1.0'})`;
+    // Features list dikhao agar hai, warna count
+    if (staged.features && staged.features.length > 0) {
+      stagedDescEl.innerText = staged.features.join(' | ');
+    } else {
+      stagedDescEl.innerText = `${featCount} Staged Features ready for Real App. (Active in Real App: ${active.version || 'v3.1.0'})`;
+    }
   }
+
 
   const targetVerInput = document.getElementById('targetVersionTag');
   const targetNameInput = document.getElementById('targetReleaseName');

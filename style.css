@@ -2325,6 +2325,30 @@ textarea.form-control {
   40%, 80% { transform: translateX(10px); }
 }
 
+/* Fix 5: Forgot PIN button styling */
+.forgot-pin-btn {
+  margin-top: 1.2rem;
+  background: none;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: rgba(239, 68, 68, 0.75);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.45rem 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+.forgot-pin-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.55);
+  transform: scale(1.03);
+}
+.forgot-pin-btn:active {
+  transform: scale(0.97);
+}
+
 /* ===================================================
    FEATURE E: REALISTIC 3D WOODEN BOOKSHELF VIEW
    =================================================== */

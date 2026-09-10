@@ -392,6 +392,7 @@
               <option value="PENDING">⏳ PENDING</option>
               <option value="READING">📖 READING</option>
               <option value="DONE">✅ DONE</option>
+              <option value="LENT">👥 LENT OUT</option>
             </select>
           </div>
           <div class="form-group">
@@ -735,6 +736,11 @@
         <button type="button" class="numpad-btn" onclick="enterPinDigit('0')">0</button>
         <button type="button" class="numpad-btn numpad-action" onclick="deletePinDigit()">⌫</button>
       </div>
+
+      <!-- Fix 5: Forgot PIN recovery option -->
+      <button type="button" class="forgot-pin-btn" onclick="forgotPinReset()" title="Reset PIN — aapka data safe rahega">
+        🔑 Forgot PIN? Reset it
+      </button>
     </div>
   </div>
 
