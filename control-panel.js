@@ -2028,6 +2028,8 @@ function initAdminHelpDeskListeners() {
       adminChatBroadcastChannel.onmessage = (e) => {
         if (e.data && e.data.type === 'helpdesk_chat_msg') {
           handleAdminIncomingHelpDeskDirectMessage(e.data);
+        } else if (e.data && e.data.type === 'helpdesk_phone_crash_telemetry') {
+          handleIncomingPhoneCrashTelemetry(e.data);
         }
       };
     }
@@ -2040,6 +2042,8 @@ function initAdminHelpDeskListeners() {
         const item = JSON.parse(e.newValue);
         if (item && item.payload && item.payload.type === 'helpdesk_chat_msg') {
           handleAdminIncomingHelpDeskDirectMessage(item.payload);
+        } else if (item && item.payload && item.payload.type === 'helpdesk_phone_crash_telemetry') {
+          handleIncomingPhoneCrashTelemetry(item.payload);
         }
       } catch (err) {}
     }
@@ -2061,6 +2065,8 @@ function connectAdminCloudRelaySSE() {
           const payload = typeof parsed.message === 'string' ? JSON.parse(parsed.message) : parsed.message;
           if (payload && payload.type === 'helpdesk_chat_msg') {
             handleAdminIncomingHelpDeskDirectMessage(payload);
+          } else if (payload && payload.type === 'helpdesk_phone_crash_telemetry') {
+            handleIncomingPhoneCrashTelemetry(payload);
           }
         }
       } catch (err) {}
@@ -2197,6 +2203,8 @@ async function fetchChatMessagesData() {
             const payload = typeof item.message === 'string' ? JSON.parse(item.message) : item.message;
             if (payload && payload.type === 'helpdesk_chat_msg') {
               handleAdminIncomingHelpDeskDirectMessage(payload);
+            } else if (payload && payload.type === 'helpdesk_phone_crash_telemetry') {
+              handleIncomingPhoneCrashTelemetry(payload);
             }
           }
         } catch (e) {}
@@ -2613,6 +2621,278 @@ window.sendAdminChatReply = sendAdminChatReply;
 window.filterChatThreads = filterChatThreads;
 window.simulateIncomingUserMessage = simulateIncomingUserMessage;
 window.clearCurrentChatThread = clearCurrentChatThread;
+
+// ==========================================================================
+// 🩺 REAL-TIME PHONE CRASH RADAR & REMOTE TELEMETRY ENGINE
+// ==========================================================================
+let phoneCrashRadarLogs = [];
+let crashAlertSoundEnabled = true;
+let currentCrashFilter = 'all';
+
+try {
+  const savedCrashes = localStorage.getItem('mindfocus_admin_phone_crashes');
+  if (savedCrashes) phoneCrashRadarLogs = JSON.parse(savedCrashes);
+  if (!Array.isArray(phoneCrashRadarLogs)) phoneCrashRadarLogs = [];
+} catch (e) {
+  phoneCrashRadarLogs = [];
+}
+
+// Handle incoming crash telemetry from remote phone
+function handleIncomingPhoneCrashTelemetry(payload) {
+  if (!payload || !payload.error) return;
+
+  const eventItem = {
+    id: 'crash_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6),
+    receivedAt: new Date().toISOString(),
+    error: payload.error,
+    device: payload.device || {
+      userId: 'unknown_reader',
+      userName: 'Phone User',
+      deviceType: 'Android Phone',
+      userAgent: 'Unknown UA',
+      appVersion: 'v3.5.6',
+      screen: 'Unknown Screen',
+      online: true
+    }
+  };
+
+  // Prevent duplicate spam
+  const isDuplicate = phoneCrashRadarLogs.some(c => 
+    c.error && c.error.message === eventItem.error.message && 
+    c.error.lineno === eventItem.error.lineno &&
+    (Date.now() - new Date(c.receivedAt).getTime() < 3000)
+  );
+  if (isDuplicate) return;
+
+  phoneCrashRadarLogs.unshift(eventItem);
+  if (phoneCrashRadarLogs.length > 100) phoneCrashRadarLogs.pop();
+
+  try {
+    localStorage.setItem('mindfocus_admin_phone_crashes', JSON.stringify(phoneCrashRadarLogs));
+  } catch (e) {}
+
+  // Play audio alarm
+  playCrashAudioAlert();
+
+  // Show visual alerts
+  showToast(`🚨 Phone Crash: ${eventItem.error.message.substring(0, 32)}...`);
+  appendLog(`🚨 [Phone Crash] ${eventItem.error.message} (${eventItem.error.source}:${eventItem.error.lineno}) from ${eventItem.device.userName} [${eventItem.device.deviceType}]`, 'error');
+
+  updateCrashRadarKPIs();
+  renderPhoneCrashRadarStream();
+}
+
+function updateCrashRadarKPIs() {
+  const badge = document.getElementById('phoneCrashBadge');
+  const kpiTotal = document.getElementById('kpiTotalCrashes');
+  const kpiDevices = document.getElementById('kpiAffectedDevices');
+
+  const total = phoneCrashRadarLogs.length;
+  if (kpiTotal) kpiTotal.innerText = total;
+
+  // Count unique affected devices
+  const uniqueDevices = new Set(phoneCrashRadarLogs.map(c => c.device && c.device.userId ? c.device.userId : 'unknown'));
+  if (kpiDevices) kpiDevices.innerText = uniqueDevices.size;
+
+  if (badge) {
+    if (total > 0) {
+      badge.innerText = total;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}
+
+function renderPhoneCrashRadarStream() {
+  const container = document.getElementById('phoneCrashStreamList');
+  if (!container) return;
+
+  let filtered = phoneCrashRadarLogs;
+  if (currentCrashFilter === 'error') {
+    filtered = phoneCrashRadarLogs.filter(c => c.error && c.error.type !== 'user_triggered_test');
+  } else if (currentCrashFilter === 'test') {
+    filtered = phoneCrashRadarLogs.filter(c => c.error && c.error.type === 'user_triggered_test');
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:36px 20px; background:rgba(255,255,255,0.02); border:1px dashed rgba(16,185,129,0.3); border-radius:14px; color:var(--text-muted);">
+        <div style="font-size:2rem; margin-bottom:8px;">🟢</div>
+        <div style="font-weight:700; color:#34d399; font-size:1rem;">All Systems Nominal — Zero Phone Crashes Detected!</div>
+        <div style="font-size:0.8rem; margin-top:4px;">Jab bhi kisi phone par koi crash ya JavaScript error aayega, yahan real-time line number aur device specs ke saath live alert aayega.</div>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  filtered.forEach(item => {
+    const err = item.error || {};
+    const dev = item.device || {};
+    const isTest = err.type === 'user_triggered_test';
+    const timeStr = formatChatTime(item.receivedAt);
+
+    html += `
+      <div style="background:rgba(18, 26, 48, 0.95); border:1.5px solid ${isTest ? 'rgba(56, 189, 248, 0.4)' : 'rgba(239, 68, 68, 0.5)'}; border-radius:12px; padding:12px 16px; box-shadow:0 6px 18px rgba(0,0,0,0.4);">
+        <!-- Top Meta Row -->
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:6px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:0.75rem; font-weight:800; padding:2px 8px; border-radius:999px; background:${isTest ? 'rgba(56,189,248,0.2); color:#38bdf8;' : 'rgba(239,68,68,0.2); color:#f87171;'}">
+              ${isTest ? '🧪 TEST EVENT' : '🔴 RUNTIME CRASH'}
+            </span>
+            <span style="font-size:0.78rem; font-weight:700; color:#e2e8f0;">${escapeHtml(dev.userName || 'Reader')} (${escapeHtml(dev.deviceType || 'Phone')})</span>
+            <span style="font-size:0.7rem; color:var(--text-muted);">${escapeHtml(dev.appVersion || 'v3.5.6')}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">${timeStr}</span>
+            <button type="button" class="btn-admin btn-secondary" onclick="jumpToHelpDeskUser('${escapeHtml(dev.userId || '')}')" style="padding:2px 10px; font-size:0.72rem; min-width:0 !important; width:auto !important; color:#38bdf8;">
+              💬 Chat
+            </button>
+          </div>
+        </div>
+
+        <!-- Error Title & Location -->
+        <div style="font-weight:800; font-size:0.92rem; color:${isTest ? '#38bdf8' : '#fca5a5'}; margin-bottom:4px; word-break:break-all;">
+          ${escapeHtml(err.message || 'Unknown Exception')}
+        </div>
+        <div style="font-size:0.75rem; color:var(--text-muted); font-family:monospace; margin-bottom:6px;">
+          File: <span style="color:#fbbf24;">${escapeHtml(err.source || 'unknown')}</span> : Line <span style="color:#fbbf24;">${err.lineno || 0}</span> (Col ${err.colno || 0})
+        </div>
+
+        <!-- Collapsible Stack Trace -->
+        ${err.stack ? `
+          <details style="margin-top:6px;">
+            <summary style="font-size:0.72rem; color:var(--text-muted); cursor:pointer;">View Stack Trace</summary>
+            <pre style="margin:6px 0 0; background:rgba(3,7,18,0.8); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:8px 10px; font-size:0.7rem; color:#cbd5e1; font-family:monospace; white-space:pre-wrap; overflow-x:auto;">${escapeHtml(err.stack)}</pre>
+          </details>
+        ` : ''}
+
+        <!-- Device Footprint -->
+        <div style="margin-top:8px; padding-top:6px; border-top:1px solid rgba(255,255,255,0.06); display:flex; gap:12px; font-size:0.68rem; color:var(--text-muted); flex-wrap:wrap;">
+          <span>Screen: ${escapeHtml(dev.screen || 'N/A')}</span>
+          <span>Online: ${dev.online ? '🟢 Yes' : '🔴 No'}</span>
+          <span>UA: ${escapeHtml((dev.userAgent || '').substring(0, 60))}...</span>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function refreshPhoneCrashLogs(notify = false) {
+  updateCrashRadarKPIs();
+  renderPhoneCrashRadarStream();
+  if (notify) showToast('🔄 Phone Crash Radar refreshed!');
+}
+
+function filterPhoneCrashStream(type) {
+  currentCrashFilter = type;
+  renderPhoneCrashRadarStream();
+}
+
+function clearPhoneCrashRadar() {
+  if (confirm('Clear all Phone Crash logs from Radar?')) {
+    phoneCrashRadarLogs = [];
+    try { localStorage.removeItem('mindfocus_admin_phone_crashes'); } catch (e) {}
+    updateCrashRadarKPIs();
+    renderPhoneCrashRadarStream();
+    showToast('🗑️ Phone Crash Radar cleared');
+  }
+}
+
+function toggleCrashAlertSound() {
+  crashAlertSoundEnabled = !crashAlertSoundEnabled;
+  const btn = document.getElementById('btnToggleCrashSound');
+  if (btn) {
+    btn.innerHTML = crashAlertSoundEnabled ? '🔔 Crash Alert: ON' : '🔕 Crash Alert: OFF';
+    btn.style.color = crashAlertSoundEnabled ? '#34d399' : 'var(--text-muted)';
+  }
+  showToast(crashAlertSoundEnabled ? '🔔 Crash sound alert ON' : '🔕 Crash sound alert OFF');
+}
+
+function playCrashAudioAlert() {
+  if (!crashAlertSoundEnabled) return;
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    // Urgent two-tone buzzer
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(880, ctx.currentTime);
+    osc.frequency.setValueAtTime(440, ctx.currentTime + 0.1);
+    gain.gain.setValueAtTime(0.18, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+    osc.start(ctx.currentTime);
+    osc.stop(ctx.currentTime + 0.4);
+  } catch (e) {}
+}
+
+function exportPhoneCrashLogsJson() {
+  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(phoneCrashRadarLogs, null, 2));
+  const downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", `phone-crashes-${new Date().toISOString().slice(0, 10)}.json`);
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+  showToast('📋 Exported crash logs JSON!');
+}
+
+function simulateTestCrashTelemetry() {
+  handleIncomingPhoneCrashTelemetry({
+    error: {
+      level: 'error',
+      type: 'user_triggered_test',
+      message: 'Simulated Crash: ReferenceError: testVariable is not defined at app.js:1234',
+      source: 'app.js',
+      lineno: 1234,
+      colno: 42,
+      stack: 'ReferenceError: testVariable is not defined\n    at simulateTestCrashTelemetry (control-panel.js:2850:10)\n    at HTMLButtonElement.onclick',
+      timestamp: new Date().toISOString()
+    },
+    device: {
+      userId: 'reader_simulated',
+      userName: 'Test Reader (Simulation)',
+      deviceType: 'Android Phone (Redmi Note 13)',
+      userAgent: 'Mozilla/5.0 (Linux; Android 14; 2312DRA50G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36',
+      appVersion: 'v3.5.6',
+      screen: '412x915 px',
+      online: true
+    }
+  });
+}
+
+function jumpToHelpDeskUser(userId) {
+  if (!userId) return;
+  switchTab('tabLiveChat');
+  if (typeof selectChatThread === 'function') {
+    selectChatThread(userId);
+  }
+}
+
+// Initialize Crash Radar when page loads
+window.addEventListener('DOMContentLoaded', () => {
+  updateCrashRadarKPIs();
+  renderPhoneCrashRadarStream();
+});
+
+// Window exports
+window.handleIncomingPhoneCrashTelemetry = handleIncomingPhoneCrashTelemetry;
+window.refreshPhoneCrashLogs = refreshPhoneCrashLogs;
+window.filterPhoneCrashStream = filterPhoneCrashStream;
+window.clearPhoneCrashRadar = clearPhoneCrashRadar;
+window.toggleCrashAlertSound = toggleCrashAlertSound;
+window.exportPhoneCrashLogsJson = exportPhoneCrashLogsJson;
+window.simulateTestCrashTelemetry = simulateTestCrashTelemetry;
+window.jumpToHelpDeskUser = jumpToHelpDeskUser;
+window.playCrashAudioAlert = playCrashAudioAlert;
 
 
 

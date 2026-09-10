@@ -138,6 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof initMysteryGiftEngine === 'function') initMysteryGiftEngine();
   if (typeof initFlashcardTrainerEngine === 'function') initFlashcardTrainerEngine();
   if (typeof initLiveHelpDeskEngine === 'function') initLiveHelpDeskEngine();
+  if (typeof initMobileDevToolsEngine === 'function') initMobileDevToolsEngine();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -3037,14 +3038,18 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.5.5';
+const CURRENT_APP_VERSION = 'v3.5.6';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
   if (typeof syncSettingsFlagshipControls === 'function') syncSettingsFlagshipControls();
   const verText = document.getElementById('appCurrentVersionText');
-  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Help Desk Touch & Send Engine Edition';
+  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Live Crash Radar & Mobile DevTools Edition';
+  const devToolsCheckbox = document.getElementById('toggleDevToolsCheckbox');
+  if (devToolsCheckbox) {
+    devToolsCheckbox.checked = (localStorage.getItem('mindfocus_devtools_enabled') === 'true');
+  }
   const overlay = document.getElementById('appSettingsModalOverlay');
   if (overlay) overlay.classList.add('active');
 }
@@ -8176,6 +8181,589 @@ window.sendUserChatMessage = sendUserChatMessage;
 window.initLiveHelpDeskEngine = initLiveHelpDeskEngine;
 window.playUserChatAudioChime = playUserChatAudioChime;
 window.setupUserChatEventListeners = setupUserChatEventListeners;
+
+// ========================================================
+// 🩺 REAL-TIME PHONE CRASH TELEMETRY & MOBILE DEVTOOLS SUITE
+// ========================================================
+let phoneCrashLogsHistory = [];
+let capturedNetworkCalls = [];
+let devToolsErrorCount = 0;
+let secretVersionTapCount = 0;
+let secretVersionTapTimer = null;
+
+try {
+  const savedLogs = localStorage.getItem('mindfocus_phone_crash_logs');
+  if (savedLogs) phoneCrashLogsHistory = JSON.parse(savedLogs);
+  if (!Array.isArray(phoneCrashLogsHistory)) phoneCrashLogsHistory = [];
+} catch (e) {
+  phoneCrashLogsHistory = [];
+}
+
+// 1. GLOBAL UNCAUGHT RUNTIME ERROR INTERCEPTOR
+window.onerror = function(message, source, lineno, colno, error) {
+  const errObj = {
+    level: 'error',
+    type: 'uncaught_exception',
+    message: String(message || 'Unknown runtime error'),
+    source: (source || 'inline script').replace(/.*(\/|\\)/, ''),
+    fullSource: source || '',
+    lineno: lineno || 0,
+    colno: colno || 0,
+    stack: error && error.stack ? error.stack : '',
+    timestamp: new Date().toISOString()
+  };
+  recordAndDispatchPhoneError(errObj);
+  return false;
+};
+
+// 2. UNHANDLED PROMISE REJECTIONS
+window.addEventListener('unhandledrejection', function(event) {
+  const reason = event.reason;
+  const errObj = {
+    level: 'error',
+    type: 'unhandled_promise_rejection',
+    message: reason ? (reason.message || String(reason)) : 'Unhandled Promise Rejection',
+    source: (reason && reason.fileName ? reason.fileName : 'promise').replace(/.*(\/|\\)/, ''),
+    fullSource: reason && reason.fileName ? reason.fileName : '',
+    lineno: reason && reason.lineNumber ? reason.lineNumber : 0,
+    colno: reason && reason.columnNumber ? reason.columnNumber : 0,
+    stack: reason && reason.stack ? reason.stack : '',
+    timestamp: new Date().toISOString()
+  };
+  recordAndDispatchPhoneError(errObj);
+});
+
+// 3. CONSOLE.ERROR PROXY (Captures trapped library/framework errors)
+const _originalConsoleError = console.error;
+console.error = function(...args) {
+  try {
+    const formatted = args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ');
+    if (!formatted.includes('Remote Telemetry Dispatch') && !formatted.includes('Relay post warning')) {
+      const errObj = {
+        level: 'error',
+        type: 'console_error',
+        message: formatted,
+        source: 'console.error',
+        fullSource: 'console.error',
+        lineno: 0,
+        colno: 0,
+        stack: (new Error()).stack || '',
+        timestamp: new Date().toISOString()
+      };
+      recordAndDispatchPhoneError(errObj, false);
+    }
+  } catch (e) {}
+  _originalConsoleError.apply(console, args);
+};
+
+// 4. NETWORK CALL INTERCEPTOR
+const _originalFetch = window.fetch;
+window.fetch = async function(...args) {
+  const startTime = Date.now();
+  const url = typeof args[0] === 'string' ? args[0] : (args[0] && args[0].url ? args[0].url : 'unknown');
+  const method = (args[1] && args[1].method ? args[1].method : 'GET').toUpperCase();
+  
+  try {
+    const response = await _originalFetch.apply(this, args);
+    const duration = Date.now() - startTime;
+    recordNetworkCall({
+      url: url,
+      method: method,
+      status: response.status,
+      statusText: response.statusText,
+      duration: duration,
+      timestamp: new Date().toISOString(),
+      ok: response.ok
+    });
+    return response;
+  } catch (fetchErr) {
+    const duration = Date.now() - startTime;
+    recordNetworkCall({
+      url: url,
+      method: method,
+      status: 'FAILED',
+      statusText: fetchErr.message || 'Network Error',
+      duration: duration,
+      timestamp: new Date().toISOString(),
+      ok: false
+    });
+    throw fetchErr;
+  }
+};
+
+function recordNetworkCall(net) {
+  capturedNetworkCalls.unshift(net);
+  if (capturedNetworkCalls.length > 30) capturedNetworkCalls.pop();
+  renderDevToolsNetwork();
+}
+
+// 5. RECORD & DISPATCH TELEMETRY (To Control Panel & Local UI)
+function recordAndDispatchPhoneError(errObj, logToDevConsole = true) {
+  phoneCrashLogsHistory.unshift(errObj);
+  if (phoneCrashLogsHistory.length > 50) phoneCrashLogsHistory.pop();
+  try {
+    localStorage.setItem('mindfocus_phone_crash_logs', JSON.stringify(phoneCrashLogsHistory));
+  } catch (e) {}
+
+  devToolsErrorCount++;
+  updateDevToolsBadgeCount();
+
+  if (logToDevConsole) {
+    appendDevToolsConsoleLog(errObj);
+  }
+
+  const deviceContext = {
+    userId: userChatId || localStorage.getItem('mindfocus_chat_user_id') || 'reader_phone',
+    userName: userChatName || localStorage.getItem('mindfocus_chat_user_name') || 'Phone User',
+    deviceType: userChatDevice || 'Android Phone',
+    userAgent: navigator.userAgent || '',
+    appVersion: CURRENT_APP_VERSION,
+    screen: `${window.innerWidth}x${window.innerHeight} (Screen: ${screen.width}x${screen.height})`,
+    online: navigator.onLine,
+    url: window.location.href
+  };
+
+  const telemetryPayload = {
+    type: 'helpdesk_phone_crash_telemetry',
+    timestamp: errObj.timestamp,
+    error: errObj,
+    device: deviceContext
+  };
+
+  // 1. Broadcast via local BroadcastChannel
+  try {
+    if (userChatBroadcastChannel) {
+      userChatBroadcastChannel.postMessage(telemetryPayload);
+    }
+  } catch (e) {}
+
+  // 2. Broadcast via localStorage event
+  try {
+    localStorage.setItem('mindfocus_chat_last_event', JSON.stringify({
+      t: Date.now(),
+      payload: telemetryPayload
+    }));
+  } catch (e) {}
+
+  // 3. Dispatch to Cloud Relay (ntfy.sh) so Admin Control Panel receives it instantly
+  try {
+    fetch(HELPDESK_RELAY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(telemetryPayload)
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+function updateDevToolsBadgeCount() {
+  const pill = document.getElementById('mobileDevToolsPill');
+  const badge = document.getElementById('pillErrorBadge');
+  const consoleBadge = document.getElementById('devConsoleErrorCountBadge');
+
+  if (badge) {
+    if (devToolsErrorCount > 0) {
+      badge.innerText = devToolsErrorCount;
+      badge.style.display = 'inline-block';
+      if (pill) pill.classList.add('has-errors');
+    } else {
+      badge.style.display = 'none';
+      if (pill) pill.classList.remove('has-errors');
+    }
+  }
+  if (consoleBadge) {
+    if (devToolsErrorCount > 0) {
+      consoleBadge.innerText = devToolsErrorCount;
+      consoleBadge.style.display = 'inline-block';
+    } else {
+      consoleBadge.style.display = 'none';
+    }
+  }
+}
+
+// 6. DEVTOOLS CONTROLLER & UI FUNCTIONS
+function initMobileDevToolsEngine() {
+  const isEnabled = localStorage.getItem('mindfocus_devtools_enabled') === 'true';
+  const pill = document.getElementById('mobileDevToolsPill');
+  if (pill) {
+    pill.style.display = isEnabled ? 'flex' : 'none';
+    makeElementDraggable(pill);
+  }
+
+  renderDevToolsDeviceHealth();
+  refreshDevToolsStorage();
+
+  if (phoneCrashLogsHistory.length > 0) {
+    phoneCrashLogsHistory.slice().reverse().forEach(err => appendDevToolsConsoleLog(err));
+  }
+}
+
+function toggleMobileDevToolsPillSetting() {
+  const isEnabled = localStorage.getItem('mindfocus_devtools_enabled') === 'true';
+  const newState = !isEnabled;
+  localStorage.setItem('mindfocus_devtools_enabled', newState ? 'true' : 'false');
+  
+  const checkbox = document.getElementById('toggleDevToolsCheckbox');
+  if (checkbox) checkbox.checked = newState;
+
+  const pill = document.getElementById('mobileDevToolsPill');
+  if (pill) pill.style.display = newState ? 'flex' : 'none';
+
+  if (typeof showToastNotification === 'function') {
+    showToastNotification(newState ? '🛠️ Mobile DevTools Console Enabled!' : '🛠️ Mobile DevTools Console Hidden');
+  }
+}
+
+function handleVersionSecretTap() {
+  secretVersionTapCount++;
+  clearTimeout(secretVersionTapTimer);
+  secretVersionTapTimer = setTimeout(() => {
+    secretVersionTapCount = 0;
+  }, 3000);
+
+  if (secretVersionTapCount >= 5) {
+    secretVersionTapCount = 0;
+    localStorage.setItem('mindfocus_devtools_enabled', 'true');
+    const pill = document.getElementById('mobileDevToolsPill');
+    if (pill) pill.style.display = 'flex';
+    const checkbox = document.getElementById('toggleDevToolsCheckbox');
+    if (checkbox) checkbox.checked = true;
+    if (typeof showToastNotification === 'function') {
+      showToastNotification('🎉 Developer Mode Unlocked! Floating 🛠️ Dev button is now visible.');
+    }
+    openMobileDevToolsModal();
+  }
+}
+
+function openMobileDevToolsModal() {
+  const overlay = document.getElementById('mobileDevToolsModalOverlay');
+  if (overlay) overlay.classList.add('active');
+  renderDevToolsDeviceHealth();
+  refreshDevToolsStorage();
+  renderDevToolsNetwork();
+}
+
+function closeMobileDevToolsModal() {
+  const overlay = document.getElementById('mobileDevToolsModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+function handleDevToolsOverlayClick(e) {
+  if (e.target && e.target.id === 'mobileDevToolsModalOverlay') {
+    closeMobileDevToolsModal();
+  }
+}
+
+function switchDevToolsTab(tabId) {
+  document.querySelectorAll('.devtools-tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.devtools-tab-content').forEach(tab => tab.classList.remove('active'));
+
+  const targetTab = document.getElementById(tabId);
+  if (targetTab) targetTab.classList.add('active');
+
+  const btnMap = {
+    'devTabConsole': 'btnDevTabConsole',
+    'devTabNetwork': 'btnDevTabNetwork',
+    'devTabStorage': 'btnDevTabStorage',
+    'devTabDevice': 'btnDevTabDevice',
+    'devTabUsb': 'btnDevTabUsb'
+  };
+  const btn = document.getElementById(btnMap[tabId]);
+  if (btn) btn.classList.add('active');
+
+  if (tabId === 'devTabStorage') refreshDevToolsStorage();
+  if (tabId === 'devTabDevice') renderDevToolsDeviceHealth();
+  if (tabId === 'devTabNetwork') renderDevToolsNetwork();
+}
+
+function appendDevToolsConsoleLog(errObj) {
+  const stream = document.getElementById('devtoolsConsoleStream');
+  if (!stream) return;
+
+  const entry = document.createElement('div');
+  entry.className = 'devtools-log-entry ' + (errObj.level || 'info');
+  const timeStr = formatUserChatTime(errObj.timestamp);
+  
+  entry.innerHTML = `
+    <div class="devtools-log-meta">
+      <b>[${(errObj.type || 'LOG').toUpperCase()}]</b> ${timeStr} • ${escapeHtmlText(errObj.source)}:${errObj.lineno}
+    </div>
+    <div style="font-weight:700; margin-bottom:2px;">${escapeHtmlText(errObj.message)}</div>
+    ${errObj.stack ? `<details style="margin-top:4px;"><summary style="cursor:pointer; opacity:0.8;">Stack trace</summary><pre style="margin:4px 0 0; font-size:0.7rem; white-space:pre-wrap; opacity:0.75;">${escapeHtmlText(errObj.stack)}</pre></details>` : ''}
+  `;
+
+  stream.appendChild(entry);
+  stream.scrollTop = stream.scrollHeight;
+
+  const countText = document.getElementById('devLogsCountText');
+  if (countText) countText.innerText = `${stream.children.length} entries`;
+}
+
+function clearDevToolsConsole() {
+  const stream = document.getElementById('devtoolsConsoleStream');
+  if (stream) {
+    stream.innerHTML = '<div class="devtools-log-entry info"><div class="devtools-log-meta">[System]</div><div>Console logs cleared.</div></div>';
+  }
+  devToolsErrorCount = 0;
+  updateDevToolsBadgeCount();
+  phoneCrashLogsHistory = [];
+  try { localStorage.removeItem('mindfocus_phone_crash_logs'); } catch (e) {}
+}
+
+function copyDevToolsLogs() {
+  const stream = document.getElementById('devtoolsConsoleStream');
+  if (!stream) return;
+  const text = stream.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    if (typeof showToastNotification === 'function') showToastNotification('📋 Console logs copied to clipboard!');
+  }).catch(() => {
+    alert('Log text: \n' + text);
+  });
+}
+
+function triggerTestCrashTelemetry() {
+  try {
+    throw new Error('Test Crash Telemetry triggered by User from Mobile DevTools!');
+  } catch (err) {
+    recordAndDispatchPhoneError({
+      level: 'error',
+      type: 'user_triggered_test',
+      message: err.message,
+      source: 'app.js:test_suite',
+      lineno: 1,
+      colno: 1,
+      stack: err.stack,
+      timestamp: new Date().toISOString()
+    });
+    if (typeof showToastNotification === 'function') {
+      showToastNotification('🧪 Test crash dispatched! Check Control Panel "Phone Crash Radar" tab.');
+    }
+  }
+}
+
+function runDevReplCode() {
+  const input = document.getElementById('devReplInput');
+  if (!input) return;
+  const code = (input.value || '').trim();
+  if (!code) return;
+
+  const stream = document.getElementById('devtoolsConsoleStream');
+  if (stream) {
+    const userCmd = document.createElement('div');
+    userCmd.className = 'devtools-log-entry info';
+    userCmd.innerHTML = `<div class="devtools-log-meta">[EVAL &gt;]</div><code>${escapeHtmlText(code)}</code>`;
+    stream.appendChild(userCmd);
+  }
+
+  try {
+    const result = window.eval(code);
+    const resultEntry = document.createElement('div');
+    resultEntry.className = 'devtools-log-entry success';
+    resultEntry.innerHTML = `<div class="devtools-log-meta">[RESULT &lt;]</div><pre style="margin:0;">${escapeHtmlText(typeof result === 'object' ? JSON.stringify(result, null, 2) : String(result))}</pre>`;
+    if (stream) {
+      stream.appendChild(resultEntry);
+      stream.scrollTop = stream.scrollHeight;
+    }
+  } catch (err) {
+    const errEntry = document.createElement('div');
+    errEntry.className = 'devtools-log-entry error';
+    errEntry.innerHTML = `<div class="devtools-log-meta">[ERROR]</div><div>${escapeHtmlText(err.message)}</div>`;
+    if (stream) {
+      stream.appendChild(errEntry);
+      stream.scrollTop = stream.scrollHeight;
+    }
+  }
+
+  input.value = '';
+}
+
+function handleDevReplKeydown(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    runDevReplCode();
+  }
+}
+
+function renderDevToolsNetwork() {
+  const stream = document.getElementById('devtoolsNetworkStream');
+  if (!stream) return;
+
+  if (capturedNetworkCalls.length === 0) {
+    stream.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:20px;">No network calls captured yet.</div>';
+    return;
+  }
+
+  let html = '';
+  capturedNetworkCalls.forEach(n => {
+    const isOk = n.ok || (typeof n.status === 'number' && n.status < 400);
+    html += `
+      <div class="devtools-log-entry ${isOk ? 'success' : 'error'}">
+        <div class="devtools-log-meta">
+          <span style="font-weight:800; color:${isOk ? '#34d399' : '#f87171'}">${n.method} [${n.status}]</span>
+          • ${n.duration}ms • ${formatUserChatTime(n.timestamp)}
+        </div>
+        <div style="font-family:monospace; font-size:0.75rem; word-break:break-all;">${escapeHtmlText(n.url)}</div>
+      </div>
+    `;
+  });
+  stream.innerHTML = html;
+}
+
+function clearDevToolsNetwork() {
+  capturedNetworkCalls = [];
+  renderDevToolsNetwork();
+}
+
+function refreshDevToolsStorage() {
+  const stream = document.getElementById('devtoolsStorageStream');
+  if (!stream) return;
+
+  try {
+    const keys = Object.keys(localStorage);
+    if (keys.length === 0) {
+      stream.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:20px;">localStorage is empty.</div>';
+      return;
+    }
+
+    let html = '';
+    keys.sort().forEach(k => {
+      const val = localStorage.getItem(k) || '';
+      const sizeKb = (val.length / 1024).toFixed(1);
+      html += `
+        <div class="devtools-log-entry info" style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+          <div style="flex:1; min-width:0;">
+            <div style="font-weight:800; color:#38bdf8;">${escapeHtmlText(k)} <span style="font-size:0.68rem; opacity:0.75;">(${sizeKb} KB)</span></div>
+            <div style="font-size:0.72rem; color:var(--text-secondary); max-height:40px; overflow:hidden; text-overflow:ellipsis;">${escapeHtmlText(val.substring(0, 100))}${val.length > 100 ? '...' : ''}</div>
+          </div>
+          <button type="button" class="btn-devtools-sm" onclick="deleteDevStorageKey('${escapeHtmlText(k)}')" style="padding:2px 8px; font-size:0.68rem; color:#f87171;">Del</button>
+        </div>
+      `;
+    });
+    stream.innerHTML = html;
+  } catch (e) {
+    stream.innerHTML = '<div style="color:#ef4444; padding:10px;">Storage read error: ' + e.message + '</div>';
+  }
+}
+
+function deleteDevStorageKey(key) {
+  if (confirm(`Delete "${key}" from localStorage?`)) {
+    localStorage.removeItem(key);
+    refreshDevToolsStorage();
+  }
+}
+
+function renderDevToolsDeviceHealth() {
+  const table = document.getElementById('devtoolsDeviceTable');
+  if (!table) return;
+
+  const ua = navigator.userAgent || 'Unknown';
+  let os = 'Unknown OS';
+  if (ua.includes('Android')) os = 'Android OS';
+  else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+  else if (ua.includes('Windows')) os = 'Windows PC';
+  else if (ua.includes('Macintosh')) os = 'macOS';
+
+  const rows = [
+    ['App Version', CURRENT_APP_VERSION],
+    ['Operating System', os],
+    ['Viewport Size', `${window.innerWidth} x ${window.innerHeight} px`],
+    ['Physical Screen', `${screen.width} x ${screen.height} px (DPR: ${window.devicePixelRatio || 1})`],
+    ['Network Status', navigator.onLine ? '🟢 Online' : '🔴 Offline'],
+    ['User Agent', ua],
+    ['Local Time', new Date().toLocaleTimeString()],
+    ['Local User ID', userChatId || 'reader_unknown'],
+    ['AudioContext Support', (window.AudioContext || window.webkitAudioContext) ? '✅ Supported' : '❌ None'],
+    ['BroadcastChannel', typeof BroadcastChannel !== 'undefined' ? '✅ Supported' : '❌ None']
+  ];
+
+  let html = '';
+  rows.forEach(([k, v]) => {
+    html += `<tr><td>${k}</td><td>${v}</td></tr>`;
+  });
+  table.innerHTML = html;
+}
+
+function makeElementDraggable(elmnt) {
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  let hasMoved = false;
+
+  elmnt.onmousedown = dragMouseDown;
+  elmnt.ontouchstart = dragTouchStart;
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    hasMoved = false;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    hasMoved = true;
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    elmnt.style.bottom = 'auto';
+  }
+
+  function closeDragElement() {
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+
+  function dragTouchStart(e) {
+    if (!e.touches || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    pos3 = touch.clientX;
+    pos4 = touch.clientY;
+    hasMoved = false;
+    document.ontouchend = closeTouchDrag;
+    document.ontouchmove = touchDrag;
+  }
+
+  function touchDrag(e) {
+    if (!e.touches || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    hasMoved = true;
+    pos1 = pos3 - touch.clientX;
+    pos2 = pos4 - touch.clientY;
+    pos3 = touch.clientX;
+    pos4 = touch.clientY;
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    elmnt.style.bottom = 'auto';
+  }
+
+  function closeTouchDrag() {
+    document.ontouchend = null;
+    document.ontouchmove = null;
+  }
+}
+
+// Global window exports
+window.initMobileDevToolsEngine = initMobileDevToolsEngine;
+window.toggleMobileDevToolsPillSetting = toggleMobileDevToolsPillSetting;
+window.handleVersionSecretTap = handleVersionSecretTap;
+window.openMobileDevToolsModal = openMobileDevToolsModal;
+window.closeMobileDevToolsModal = closeMobileDevToolsModal;
+window.handleDevToolsOverlayClick = handleDevToolsOverlayClick;
+window.switchDevToolsTab = switchDevToolsTab;
+window.clearDevToolsConsole = clearDevToolsConsole;
+window.copyDevToolsLogs = copyDevToolsLogs;
+window.triggerTestCrashTelemetry = triggerTestCrashTelemetry;
+window.runDevReplCode = runDevReplCode;
+window.handleDevReplKeydown = handleDevReplKeydown;
+window.clearDevToolsNetwork = clearDevToolsNetwork;
+window.refreshDevToolsStorage = refreshDevToolsStorage;
+window.deleteDevStorageKey = deleteDevStorageKey;
+window.renderDevToolsDeviceHealth = renderDevToolsDeviceHealth;
+window.reportPhoneErrorTelemetry = recordAndDispatchPhoneError;
 
 
 

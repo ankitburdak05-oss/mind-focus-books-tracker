@@ -1,35 +1,35 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-10T05:35:00.000Z",
+  "updatedAt": "2026-09-10T13:45:00.000Z",
   "activeRelease": {
-    "version": "v3.5.5",
-    "name": "Mind Focus Books v3.5.5 — Help Desk Touch & Send Engine Fix",
+    "version": "v3.5.6",
+    "name": "Mind Focus Books v3.5.6 — Live Phone Crash Radar & Mobile DevTools",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
-      "✈️ Phone Help Desk Send Button 100% Fixed & Tested: Mobile screen touch & keyboard submit seamlessly working",
-      "🛡️ Zero-Error Audio Chime Engine: Safe synthesized notification alerts without runtime exceptions",
-      "⚡ Instant 2-Way Live Sync: Messages deliver from phone to control panel in <1 second",
-      "👑 Enhanced Virtual Keyboard Handling: Chat input stays visible & pinned even when keyboard opens"
+      "📡 Live Phone Crash Radar: Phone par aane wala koi bhi error seedha Control Panel me live alert bhejega",
+      "🛠️ In-App Mobile DevTools: Phone screen par floating F12 developer console, network monitor aur storage viewer",
+      "🩺 360° Phone Diagnostics: Real-time hardware specs, screen resolution, online status aur stack traces",
+      "🔌 USB Remote Inspect Guide: Computer Chrome se live phone inspect karne ka built-in workflow"
     ],
-    "stagedAt": "2026-09-10T05:35:00.000Z",
+    "stagedAt": "2026-09-10T13:45:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.5.5",
-    "name": "Mind Focus Books v3.5.5 — Help Desk Touch & Send Engine Fix",
+    "version": "v3.5.6",
+    "name": "Mind Focus Books v3.5.6 — Live Phone Crash Radar & Mobile DevTools",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
-      "✈️ Phone Help Desk Send Button 100% Fixed & Tested: Mobile screen touch & keyboard submit seamlessly working",
-      "🛡️ Zero-Error Audio Chime Engine: Safe synthesized notification alerts without runtime exceptions",
-      "⚡ Instant 2-Way Live Sync: Messages deliver from phone to control panel in <1 second",
-      "👑 Enhanced Virtual Keyboard Handling: Chat input stays visible & pinned even when keyboard opens"
+      "📡 Live Phone Crash Radar: Phone par aane wala koi bhi error seedha Control Panel me live alert bhejega",
+      "🛠️ In-App Mobile DevTools: Phone screen par floating F12 developer console, network monitor aur storage viewer",
+      "🩺 360° Phone Diagnostics: Real-time hardware specs, screen resolution, online status aur stack traces",
+      "🔌 USB Remote Inspect Guide: Computer Chrome se live phone inspect karne ka built-in workflow"
     ],
-    "stagedAt": "2026-09-10T05:35:00.000Z",
+    "stagedAt": "2026-09-10T13:45:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {
-    "version": "v3.5.4",
-    "name": "Mind Focus Books v3.5.4 — 2-Way Live Help Desk & Phone-to-Panel Sync",
+    "version": "v3.5.5",
+    "name": "Mind Focus Books v3.5.5 — Help Desk Touch & Send Engine Fix",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
       "💬 Live In-App Help Desk: User phone mein floating chat bubble se direct Admin se live baatchit",

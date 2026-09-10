@@ -966,7 +966,7 @@
             </div>
             <div>
               <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Tracker</div>
-              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700;" id="appCurrentVersionText">v3.5.5 Live Help Desk</div>
+              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.5.6 Live Crash Radar</div>
             </div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn" style="border-radius:12px; padding:0.45rem 0.85rem; font-weight:800;">
@@ -1148,7 +1148,36 @@
             </div>
             <span class="settings-row-chevron" style="color:#ef4444;">›</span>
           </button>
-        <!-- Group 6: ⚡ Master Admin Control Panel -->
+        </div>
+
+        <!-- Group 6: 🛠️ Phone Developer & Crash Diagnostics -->
+        <div class="settings-group">
+          <div class="settings-group-header">Developer &amp; Diagnostics</div>
+          <div class="settings-action-row" style="cursor:pointer;" onclick="toggleMobileDevToolsPillSetting()">
+            <div class="settings-row-left">
+              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; box-shadow:0 6px 18px rgba(16,185,129,0.4);">🛠️</div>
+              <div class="settings-row-info">
+                <div class="settings-row-title">Mobile DevTools Console</div>
+                <div class="settings-row-sub">Floating on-screen F12 debugger &amp; error radar</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center;">
+              <input type="checkbox" id="toggleDevToolsCheckbox" style="transform:scale(1.3); cursor:pointer;" onclick="event.stopPropagation(); toggleMobileDevToolsPillSetting();">
+            </div>
+          </div>
+          <button type="button" class="settings-action-row" onclick="openMobileDevToolsModal()">
+            <div class="settings-row-left">
+              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #6366f1, #4f46e5); color:#fff; box-shadow:0 6px 18px rgba(99,102,241,0.4);">🩺</div>
+              <div class="settings-row-info">
+                <div class="settings-row-title">Open In-App Debug Console</div>
+                <div class="settings-row-sub">Live error logs, network monitor &amp; system health</div>
+              </div>
+            </div>
+            <span class="settings-row-chevron" style="color:#6366f1; font-weight:bold;">Inspect ›</span>
+          </button>
+        </div>
+
+        <!-- Group 7: ⚡ Master Admin Control Panel -->
         <div class="settings-group">
           <div class="settings-group-header">Administrator Command</div>
           <a href="control-panel.html" class="settings-action-row" style="text-decoration:none;">
@@ -2069,6 +2098,120 @@
           <span>✈️ Send</span>
         </button>
       </form>
+    </div>
+  </div>
+
+  <!-- Floating Mobile DevTools Button -->
+  <button type="button" id="mobileDevToolsPill" class="mobile-devtools-pill" onclick="openMobileDevToolsModal()" style="display:none;" title="Mobile DevTools">
+    <span>🛠️ Dev</span>
+    <span class="pill-error-badge" id="pillErrorBadge" style="display:none;">0</span>
+  </button>
+
+  <!-- Mobile DevTools & Crash Diagnostics Modal -->
+  <div class="mobile-devtools-overlay" id="mobileDevToolsModalOverlay" onclick="handleDevToolsOverlayClick(event)">
+    <div class="mobile-devtools-dialog" onclick="event.stopPropagation()">
+      <!-- Header -->
+      <div class="devtools-header">
+        <div class="devtools-title">
+          <span>🛠️</span>
+          <span>Mobile DevTools &amp; Crash Radar</span>
+        </div>
+        <button type="button" class="btn-close-modal" onclick="closeMobileDevToolsModal()" style="font-size:1.4rem; color:var(--text-muted); background:none; border:none; cursor:pointer;">&times;</button>
+      </div>
+
+      <!-- Tabs Bar -->
+      <div class="devtools-tabs-bar">
+        <button type="button" class="devtools-tab-btn active" id="btnDevTabConsole" onclick="switchDevToolsTab('devTabConsole')">
+          <span>📟 Console</span>
+          <span class="pill-error-badge" id="devConsoleErrorCountBadge" style="display:none;">0</span>
+        </button>
+        <button type="button" class="devtools-tab-btn" id="btnDevTabNetwork" onclick="switchDevToolsTab('devTabNetwork')">
+          <span>🌐 Network</span>
+        </button>
+        <button type="button" class="devtools-tab-btn" id="btnDevTabStorage" onclick="switchDevToolsTab('devTabStorage')">
+          <span>💾 Storage</span>
+        </button>
+        <button type="button" class="devtools-tab-btn" id="btnDevTabDevice" onclick="switchDevToolsTab('devTabDevice')">
+          <span>📱 Device</span>
+        </button>
+        <button type="button" class="devtools-tab-btn" id="btnDevTabUsb" onclick="switchDevToolsTab('devTabUsb')">
+          <span>🔌 USB Inspect</span>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="devtools-body">
+        <!-- Tab 1: Console -->
+        <div class="devtools-tab-content active" id="devTabConsole">
+          <div class="devtools-actions-row">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button type="button" class="btn-devtools-sm" onclick="clearDevToolsConsole()">🗑️ Clear</button>
+              <button type="button" class="btn-devtools-sm" onclick="copyDevToolsLogs()">📋 Copy Logs</button>
+              <button type="button" class="btn-devtools-sm" onclick="triggerTestCrashTelemetry()">🧪 Test Crash</button>
+            </div>
+            <span style="font-size:0.72rem; color:var(--text-muted);" id="devLogsCountText">0 entries</span>
+          </div>
+          <div class="devtools-console-stream" id="devtoolsConsoleStream">
+            <div class="devtools-log-entry info">
+              <div class="devtools-log-meta">[System] Mobile DevTools Engine initialized</div>
+              <div>Ready to capture runtime errors, unhandled rejections, and network calls.</div>
+            </div>
+          </div>
+          <!-- REPL Command Line -->
+          <div class="devtools-repl-bar">
+            <input type="text" id="devReplInput" class="devtools-repl-input" placeholder="Run JavaScript on phone... (e.g. alert('Hello!'))" onkeydown="handleDevReplKeydown(event)">
+            <button type="button" class="btn-devtools-sm primary" onclick="runDevReplCode()">Run ›</button>
+          </div>
+        </div>
+
+        <!-- Tab 2: Network -->
+        <div class="devtools-tab-content" id="devTabNetwork">
+          <div class="devtools-actions-row">
+            <span style="font-size:0.8rem; color:#38bdf8; font-weight:700;">Recent Network &amp; Cloud Relay Calls</span>
+            <button type="button" class="btn-devtools-sm" onclick="clearDevToolsNetwork()">🗑️ Clear</button>
+          </div>
+          <div class="devtools-console-stream" id="devtoolsNetworkStream">
+            <div style="color:var(--text-muted); text-align:center; padding:20px;">No network calls captured yet.</div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Storage -->
+        <div class="devtools-tab-content" id="devTabStorage">
+          <div class="devtools-actions-row">
+            <span style="font-size:0.8rem; color:#f59e0b; font-weight:700;">localStorage Keys &amp; Values</span>
+            <button type="button" class="btn-devtools-sm" onclick="refreshDevToolsStorage()">🔄 Refresh</button>
+          </div>
+          <div class="devtools-console-stream" id="devtoolsStorageStream">
+            <div style="color:var(--text-muted); text-align:center; padding:20px;">Loading storage...</div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Device Health -->
+        <div class="devtools-tab-content" id="devTabDevice">
+          <div style="font-size:0.82rem; color:#34d399; font-weight:700; margin-bottom:8px;">📱 Real-Time Phone Hardware &amp; WebView Specs</div>
+          <table class="devtools-info-table" id="devtoolsDeviceTable">
+            <!-- Populated via JavaScript -->
+          </table>
+        </div>
+
+        <!-- Tab 5: USB Remote Inspect -->
+        <div class="devtools-tab-content" id="devTabUsb">
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px; line-height:1.5;">
+            <div style="font-weight:800; color:#38bdf8; margin-bottom:6px; font-size:0.9rem;">🔌 Connect to PC Chrome (Remote F12)</div>
+            <p style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:10px;">
+              Phone ko USB cable se PC se jodh kar poora Google Chrome DevTools kholne ke steps:
+            </p>
+            <ol style="font-size:0.78rem; color:var(--text-primary); padding-left:18px; display:flex; flex-direction:column; gap:6px;">
+              <li>Phone Settings me <b>Developer Options</b> ON karein aur <b>USB Debugging</b> allow karein.</li>
+              <li>Phone ko USB data cable se Computer se connect karein.</li>
+              <li>Computer ke Chrome browser me ye link open karein:<br>
+                <code style="background:rgba(56,189,248,0.15); color:#38bdf8; padding:3px 8px; border-radius:6px; display:inline-block; margin-top:4px;">chrome://inspect/#devices</code>
+              </li>
+              <li>Waha aapko <b>Mind Focus Books</b> app dikhega, samne <b>Inspect</b> dabate hi computer screen par live phone inspect khul jayega!</li>
+            </ol>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
