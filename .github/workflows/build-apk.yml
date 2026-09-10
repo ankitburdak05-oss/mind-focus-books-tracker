@@ -34,6 +34,7 @@ jobs:
         cp books-data.js android/app/src/main/assets/
         cp dictionary-data.js android/app/src/main/assets/ || true
         cp remote-config.json android/app/src/main/assets/ || true
+        cp remote-config.js android/app/src/main/assets/ || true
         cp broadcast-notice.json android/app/src/main/assets/ || true
         cp broadcast-notice.js android/app/src/main/assets/ || true
         cp control-panel.html android/app/src/main/assets/ || true

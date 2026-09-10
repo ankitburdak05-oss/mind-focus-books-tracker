@@ -392,6 +392,7 @@
               <option value="PENDING">⏳ PENDING</option>
               <option value="READING">📖 READING</option>
               <option value="DONE">✅ DONE</option>
+              <option value="LENT">👥 LENT OUT</option>
             </select>
           </div>
           <div class="form-group">
@@ -735,6 +736,11 @@
         <button type="button" class="numpad-btn" onclick="enterPinDigit('0')">0</button>
         <button type="button" class="numpad-btn numpad-action" onclick="deletePinDigit()">⌫</button>
       </div>
+
+      <!-- Fix 5: Forgot PIN recovery option -->
+      <button type="button" class="forgot-pin-btn" onclick="forgotPinReset()" title="Reset PIN — aapka data safe rahega">
+        🔑 Forgot PIN? Reset it
+      </button>
     </div>
   </div>
 
@@ -966,7 +972,7 @@
             </div>
             <div>
               <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Tracker</div>
-              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700;" id="appCurrentVersionText">v3.1.0 Dual Broadcast Edition</div>
+              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700;" id="appCurrentVersionText">v3.5.1 Focus Edition</div>
             </div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn" style="border-radius:12px; padding:0.45rem 0.85rem; font-weight:800;">

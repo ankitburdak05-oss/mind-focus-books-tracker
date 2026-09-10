@@ -3052,12 +3052,14 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.5.0';
+const CURRENT_APP_VERSION = 'v3.5.1';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
   if (typeof syncSettingsFlagshipControls === 'function') syncSettingsFlagshipControls();
+  const verText = document.getElementById('appCurrentVersionText');
+  if (verText) verText.innerText = CURRENT_APP_VERSION + ' Focus Edition';
   const overlay = document.getElementById('appSettingsModalOverlay');
   if (overlay) overlay.classList.add('active');
 }

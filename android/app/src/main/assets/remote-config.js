@@ -1,0 +1,67 @@
+window.__DEFAULT_REMOTE_CONFIG__ = {
+  "version": "1.0.0",
+  "updatedAt": "2026-09-10T00:45:00.000Z",
+  "activeRelease": {
+    "version": "v3.5.0",
+    "name": "Mind Focus Books v3.5.0 (Phone Heat & Battery Fix + Re-Update Release)",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
+    "features": [
+      "❄️ Phone Overheating Fixed: Android WebView & JS timers now freeze 100% on minimize/lock",
+      "🔋 90s Battery-Saver Polling: Zero radio wake-ups when app is backgrounded",
+      "🔄 In-App Re-Update & Repair: Now properly displays 100% Up to Date status",
+      "🎁 Mystery Golden Gift Box: 3D sky falling box drop with crackers & confetti",
+      "📖 3D A-Z English-Hindi Focus Vocabulary Lexicon Book with voice pronunciation"
+    ],
+    "stagedAt": "2026-09-09T16:40:00.000Z",
+    "isDeployed": true
+  },
+  "stagedRelease": {
+    "version": "v3.5.1",
+    "name": "Mind Focus Books v3.5.1 — Bug Fix & Polish Release",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
+    "features": [
+      "🖼️ Book Covers 100% Offline — external internet URLs hataye, sabhi 150 books ke liye gradient placeholders",
+      "👥 LENT Status Edit Modal mein add hua — ab book lend karna aur track karna easy hai",
+      "📄 Page Progress Fix — fake auto-45% hataya, sirf real data dikhega",
+      "🔗 Category Filter Sync Fix — carousel chip aur dropdown ab ek saath sync hote hain",
+      "🔑 PIN Forgot/Reset Button — lock screen pe 'Forgot PIN? Reset it' option add hua, data safe"
+    ],
+    "stagedAt": "2026-09-10T00:45:00.000Z",
+    "isDeployed": false
+  },
+  "previousRelease": {
+    "version": "v3.4.0",
+    "name": "Mind Focus Books v3.4.0 (Mystery Golden Gift Box & Audio Fix Release)",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
+    "features": [
+      "🎁 Mystery Golden Gift Box Engine (Admin can drop 3D flying golden boxes with confetti & crackers)",
+      "🔇 Tunu-Tunu Sound Bug Fixed (Pull-to-refresh repeated chime sound completely muted on phones)",
+      "⚡ Ultra-Fast In-App Notice Sync (Direct GitHub raw connection with zero API rate limit blocks)",
+      "🔒 Secure Admin Vault (PAT securely stored in client storage with zero hardcoded secret leaks)"
+    ],
+    "stagedAt": "2026-09-09T15:55:36.801Z",
+    "isDeployed": true
+  },
+  "features": {
+    "maintenanceMode": false,
+    "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
+    "quotesEnabled": true,
+    "audiobookVoiceEnabled": true,
+    "streakShieldsEnabled": true,
+    "communityBooksSync": true,
+    "dictionaryBookEnabled": true
+  },
+  "globalBanner": {
+    "active": false,
+    "text": "✨ Welcome to Mind Focus Books Tracker! Read distraction-free.",
+    "type": "info",
+    "link": ""
+  },
+  "bookOfTheDay": {
+    "title": "Atomic Habits",
+    "author": "James Clear",
+    "category": "Self Improvement",
+    "cover": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80",
+    "quote": "You do not rise to the level of your goals. You fall to the level of your systems."
+  }
+};

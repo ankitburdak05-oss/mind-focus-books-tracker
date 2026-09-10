@@ -36,43 +36,87 @@ const ICONS = {
   note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>'
 };
 
-const CURATED_BOOK_COVERS = {
-  "hyperfocus": "https://covers.openlibrary.org/b/id/10524458-M.jpg",
-  "the power of your subconscious mind": "https://covers.openlibrary.org/b/id/8231996-M.jpg",
-  "limitless": "https://covers.openlibrary.org/b/id/10414441-M.jpg",
-  "thinking, fast and slow": "https://covers.openlibrary.org/b/id/7288636-M.jpg",
-  "deep work": "https://covers.openlibrary.org/b/id/8302306-M.jpg",
-  "atomic habits": "https://covers.openlibrary.org/b/id/12741544-M.jpg",
-  "the psychology of money": "https://covers.openlibrary.org/b/id/10595166-M.jpg",
-  "rich dad poor dad": "https://covers.openlibrary.org/b/id/8282367-M.jpg",
-  "ikigai": "https://covers.openlibrary.org/b/id/9255566-M.jpg",
-  "can't hurt me": "https://covers.openlibrary.org/b/id/10283416-M.jpg",
-  "meditations": "https://covers.openlibrary.org/b/id/8235116-M.jpg",
-  "start with why": "https://covers.openlibrary.org/b/id/8231856-M.jpg",
-  "the 7 habits of highly effective people": "https://covers.openlibrary.org/b/id/8231946-M.jpg",
-  "ego is the enemy": "https://covers.openlibrary.org/b/id/8235086-M.jpg",
-  "make time": "https://covers.openlibrary.org/b/id/8824156-M.jpg"
+// Fix 1: Sab external internet URLs remove kar diye — 100% offline
+// Pehle user-uploaded cover check hoga, baaki sab offline gradient placeholder
+const CATEGORY_COVER_GRADIENTS = {
+  'Focus':       [['#1e3a5f', '#3b82f6', '#06b6d4'], '⚡'],
+  'Habits':      [['#1c1917', '#d97706', '#f59e0b'], '🔥'],
+  'Wealth':      [['#052e16', '#16a34a', '#34d399'], '💰'],
+  'Psychology':  [['#2e1065', '#7c3aed', '#a78bfa'], '🧠'],
+  'Philosophy':  [['#1c1917', '#78716c', '#d6d3d1'], '🏛️'],
+  'Biographies': [['#1e1b4b', '#4338ca', '#818cf8'], '👑'],
+  'Memory':      [['#042f2e', '#0d9488', '#5eead4'], '🧩'],
+  'Mindset':     [['#450a0a', '#dc2626', '#fca5a5'], '💪'],
+  'Leadership':  [['#1a1a2e', '#6366f1', '#c7d2fe'], '🎯'],
+  'Science':     [['#0c1445', '#2563eb', '#93c5fd'], '🔬'],
+  'default':     [['#0f172a', '#334155', '#64748b'], '📖'],
 };
 
-function getBookCover(book) {
-  if (book.cover_image && book.cover_image.trim().length > 0) return book.cover_image;
-  const key = (book.title || '').toLowerCase().trim();
-  for (let k of Object.keys(CURATED_BOOK_COVERS)) {
-    if (key.includes(k)) return CURATED_BOOK_COVERS[k];
+function getOfflineCoverGradient(book) {
+  const cat = (book.category || 'default');
+  let match = null;
+  for (const key of Object.keys(CATEGORY_COVER_GRADIENTS)) {
+    if (cat.toLowerCase().includes(key.toLowerCase())) {
+      match = CATEGORY_COVER_GRADIENTS[key];
+      break;
+    }
   }
+  if (!match) match = CATEGORY_COVER_GRADIENTS['default'];
+  // Book number se unique hue shift generate karo
+  const num = parseInt((book.no || '').replace(/\D/g, '')) || 0;
+  const hueShift = (num * 17) % 60; // 0-59 degree shift for variety
+  const [colors, emoji] = match;
+  return { colors, emoji, hueShift };
+}
+
+function getBookCover(book) {
+  // Sirf user-uploaded cover URL use karo — koi internet URL nahi
+  if (book.cover_image && book.cover_image.trim().length > 0) {
+    // Agar ye ek external http URL hai aur user ne khud upload nahi kiya (base64 nahi)
+    // toh bhi use karo — user ne manually add kiya hoga
+    return book.cover_image;
+  }
+  // Koi external internet cover nahi — null return karo, placeholder render hoga
   return null;
 }
 
+// Offline gradient cover HTML banana (koi img tag nahi, zero internet)
+function buildOfflineCoverHtml(book, sizeClass) {
+  const { colors, emoji } = getOfflineCoverGradient(book);
+  const bookNum = (book.no || '').replace(/\D/g, '') || '?';
+  const shortTitle = (book.title || '').substring(0, 18) + ((book.title || '').length > 18 ? '…' : '');
+  const gradient = `linear-gradient(160deg, ${colors[0]} 0%, ${colors[1]} 55%, ${colors[2]} 100%)`;
+  const isSmall = sizeClass === 'small';
+  return `<div class="offline-book-cover ${sizeClass || ''}" style="background:${gradient}; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; border-radius:6px; padding:6px; box-sizing:border-box; position:relative; overflow:hidden;">
+    <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 12px); pointer-events:none;"></div>
+    <div style="font-size:${isSmall ? '1.4rem' : '2rem'}; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5)); margin-bottom:2px;">${emoji}</div>
+    <div style="font-size:${isSmall ? '0.55rem' : '0.65rem'}; font-weight:900; color:rgba(255,255,255,0.95); text-align:center; letter-spacing:0.5px; line-height:1.2; word-break:break-word; text-shadow:0 1px 3px rgba(0,0,0,0.6);">${escapeHtml(shortTitle)}</div>
+    <div style="margin-top:auto; font-size:${isSmall ? '0.5rem' : '0.6rem'}; font-weight:700; color:rgba(255,255,255,0.6); background:rgba(0,0,0,0.35); border-radius:3px; padding:1px 4px;">#${bookNum}</div>
+  </div>`;
+}
+
 function getBookPages(book) {
-  const total = parseInt(book.total_pages) || 280;
+  // Fix 3: Auto-45% HATAYA — sirf real data dikhao
+  // Agar total_pages set nahi hai toh 0 return karo (unknown)
+  const total = parseInt(book.total_pages) || 0;
   let curr = parseInt(book.current_page);
+
   if (isNaN(curr)) {
-    curr = book.status === 'DONE' ? total : (book.status === 'READING' ? Math.round(total * 0.45) : 0);
+    // Pages enter nahi kiye — DONE ho toh total, baaki 0
+    curr = (book.status === 'DONE' && total > 0) ? total : 0;
+    // READING mein kabhi fake estimate nahi: 0 dikhao
   }
+
+  if (total === 0) {
+    // Pages set hi nahi kiye — meaningful data nahi hai
+    return { current: curr, total: 0, pct: (book.status === 'DONE' ? 100 : 0), unknown: true };
+  }
+
   curr = Math.max(0, Math.min(curr, total));
   const pct = Math.round((curr / total) * 100);
-  return { current: curr, total: total, pct: pct };
+  return { current: curr, total: total, pct: pct, unknown: false };
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
@@ -348,12 +392,19 @@ function onStatusChange(index, newStatus) {
   } else if (newStatus === 'PENDING') {
     book.end_date = '';
     showToast('Marked "' + book.title + '" as Pending.', '');
+  } else if (newStatus === 'LENT') {
+    // Fix 2: LENT status — lend tracker modal automatically open karo
+    showToast('Marked "' + book.title + '" as Lent Out. Please enter borrower details.', 'info');
+    setTimeout(() => {
+      if (typeof openLendModal === 'function') openLendModal(index);
+    }, 400);
   }
 
   markChange();
   saveData();
   renderApp();
 }
+
 
 function onRatingChange(index, rating) {
   if (state.books[index]) {
@@ -477,12 +528,12 @@ function renderNowReadingHero() {
   if (coverUrl) {
     coverHtml = '<img src="' + coverUrl + '" alt="cover" class="hero-3d-book">';
   } else {
-    coverHtml = '<div class="hero-book-placeholder">' +
-      '<div style="font-size:2.2rem; margin-bottom:0.25rem;">📖</div>' +
-      '<div style="font-size:0.75rem; font-weight:800; opacity:0.95;">#' + escapeHtml(currentBook.no) + '</div>' +
-      '<div style="font-size:0.65rem; opacity:0.75; margin-top:2px;">' + escapeHtml(currentBook.category || 'Focus') + '</div>' +
+    // Offline gradient cover — internet nahi chahiye
+    coverHtml = '<div class="hero-book-placeholder" style="overflow:hidden; border-radius:8px;">' +
+      buildOfflineCoverHtml(currentBook, 'hero') +
       '</div>';
   }
+
 
   const isAudioActive = typeof isAmbiencePlaying !== 'undefined' && isAmbiencePlaying;
   const wrappedCover = '<div style="position:relative; display:inline-block;">' +
@@ -500,14 +551,20 @@ function renderNowReadingHero() {
     '<h2 class="hero-title" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;">' + escapeHtml(currentBook.title) + '</h2>' +
     '<div class="hero-author">by ' + escapeHtml(currentBook.author) + ' • <span style="color:#10b981; font-weight:700;">' + escapeHtml(currentBook.category || 'General') + '</span></div>' +
 
-    // Mini Page Progress Bar inside Hero Card
-    '<div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:10px; padding:0.5rem 0.85rem; margin:0.4rem 0; max-width:420px;">' +
-    '<div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:700; color:var(--text-primary); margin-bottom:0.3rem;">' +
-    '<span>Page ' + pages.current + ' of ' + pages.total + '</span>' +
-    '<span style="color:#10b981;">' + pages.pct + '% Completed</span>' +
-    '</div>' +
-    '<div class="page-progress-bar"><div class="page-progress-fill" style="width:' + pages.pct + '%;"></div></div>' +
-    '</div>' +
+    // Mini Page Progress Bar inside Hero Card (Fix 3: real data only)
+    (pages.unknown ?
+      '<div style="background:var(--bg-primary); border:1px dashed rgba(99,102,241,0.4); border-radius:10px; padding:0.5rem 0.85rem; margin:0.4rem 0; max-width:420px; text-align:center;">' +
+      '<span style="font-size:0.78rem; color:var(--text-muted);">📄 Pages not set — <a href="#" onclick="event.preventDefault(); openEditModal(' + origIdx + ')" style="color:#6366f1; font-weight:700;">Add in Edit ⚙️</a> to track progress</span>' +
+      '</div>'
+      :
+      '<div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:10px; padding:0.5rem 0.85rem; margin:0.4rem 0; max-width:420px;">' +
+      '<div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:700; color:var(--text-primary); margin-bottom:0.3rem;">' +
+      '<span>Page ' + pages.current + ' of ' + pages.total + '</span>' +
+      '<span style="color:#10b981;">' + pages.pct + '% Completed</span>' +
+      '</div>' +
+      '<div class="page-progress-bar"><div class="page-progress-fill" style="width:' + pages.pct + '%;"></div></div>' +
+      '</div>'
+    ) +
 
     (hasNotes ? '<div class="hero-quote-snippet">💡 "' + escapeHtml(currentBook.takeaway) + '"</div>' : '') +
     '<div class="hero-actions-row">' +
@@ -562,13 +619,11 @@ function renderMiniShelfCard(b) {
   if (b.cover_image) {
     cover = '<img src="' + b.cover_image + '" alt="cover" class="mini-card-cover">';
   } else {
-    const isReading = b.status === 'READING';
-    const bg = isReading ? 'linear-gradient(135deg, #1e3a8a, #3b82f6)' : 'linear-gradient(135deg, #1e293b, #334155)';
-    cover = '<div class="mini-card-placeholder" style="background:' + bg + ';">' +
-      '<span style="font-size:1.8rem;">' + (isReading ? '📖' : '📚') + '</span>' +
-      '<span style="font-size:0.65rem; font-weight:800; color:#cbd5e1;">#' + escapeHtml(b.no) + '</span>' +
+    cover = '<div class="mini-card-placeholder" style="overflow:hidden;">' +
+      buildOfflineCoverHtml(b, 'small') +
       '</div>';
   }
+
 
   return '<div class="mini-shelf-card" onclick="openTakeawayModal(' + origIdx + ')" title="' + escapeHtml(b.title) + '">' +
     '<div class="mini-card-cover-wrap">' + cover + '</div>' +
@@ -944,10 +999,10 @@ function setupEventListeners() {
   });
 
   document.getElementById('categoryFilter').addEventListener('change', (e) => {
-    state.categoryFilter = e.target.value;
-    state.currentPage = 1;
-    renderApp();
+    // Fix 4: setCategoryFilter use karo — carousel chip bhi sync ho jayega
+    setCategoryFilter(e.target.value === 'ALL' ? 'ALL' : e.target.value);
   });
+
 
   document.getElementById('availabilityFilter').addEventListener('change', (e) => {
     state.availabilityFilter = e.target.value;
@@ -2503,6 +2558,33 @@ function removePrivacyPin() {
   }
 }
 
+// Fix 5: PIN bhool gaye? Reset karo — data safe rahega
+function forgotPinReset() {
+  const confirmed = confirm(
+    '🔑 PIN Reset\n\n' +
+    'Kya aap PIN reset karna chahte hain?\n\n' +
+    '✅ Aapka POORA data safe rahega\n' +
+    '✅ Books, progress, notes — kuch nahi mitega\n' +
+    '❌ Sirf PIN lock remove hoga\n\n' +
+    '"OK" dabao PIN reset karne ke liye.'
+  );
+  if (!confirmed) return;
+
+  // Double confirm for safety
+  const confirmed2 = confirm(
+    '⚠️ Last Confirmation\n\nPIN permanently remove ho jayega.\n\nData bilkul safe hai — confirm karo?'
+  );
+  if (!confirmed2) return;
+
+  localStorage.removeItem(PIN_KEY);
+  state.pinLocked = false;
+  hidePinLockScreen();
+  updatePrivacyBtnHeader(false);
+  clearEnteredPin();
+  showToast('✅ PIN reset ho gaya! Library unlock hai. New PIN set kar sakte ho.', 'success');
+}
+
+
 // ==========================================
 // FEATURE: 3D REALISTIC WOODEN BOOKSHELF VIEW
 // ==========================================
@@ -2970,12 +3052,14 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.5.0';
+const CURRENT_APP_VERSION = 'v3.5.1';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
   if (typeof syncSettingsFlagshipControls === 'function') syncSettingsFlagshipControls();
+  const verText = document.getElementById('appCurrentVersionText');
+  if (verText) verText.innerText = CURRENT_APP_VERSION + ' Focus Edition';
   const overlay = document.getElementById('appSettingsModalOverlay');
   if (overlay) overlay.classList.add('active');
 }
@@ -4834,30 +4918,30 @@ async function checkRemoteBroadcastNotice() {
     const cb = Date.now() + '_' + Math.floor(Math.random() * 100000);
     let data = null;
 
-    // 1. PRIMARY & FASTEST: GitHub Raw (CORS open *, no 60-call API rate limit, fresh with cb)
+    // 1. PRIMARY & ULTRA-FAST (0s delay): GitHub API Direct (Bypasses Fastly 60s cache delay completely)
     try {
-      const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?cb=' + cb;
-      const res = await fetch(rawUrl, { cache: 'no-store' });
-      if (res.ok) data = await res.json();
+      const apiUrl = 'https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/broadcast-notice.json?cb=' + cb;
+      const apiRes = await fetch(apiUrl, {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
+      if (apiRes.ok) data = await apiRes.json();
     } catch (e) {}
 
-    // 2. SECONDARY: GitHub Pages (CORS open *, official live host)
+    // 2. SECONDARY: GitHub Raw (Fallback if API limit hit)
     if (!data) {
       try {
-        const ghPagesUrl = 'https://ankitburdak05-oss.github.io/mind-focus-books-tracker/broadcast-notice.json?cb=' + cb;
-        const res = await fetch(ghPagesUrl, { cache: 'no-store' });
+        const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(rawUrl, { cache: 'no-store' });
         if (res.ok) data = await res.json();
       } catch (e) {}
     }
 
-    // 3. TERTIARY: GitHub API (Fallback with raw accept header)
+    // 3. TERTIARY: GitHub Pages (Official live host)
     if (!data) {
       try {
-        const apiUrl = 'https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/broadcast-notice.json?cb=' + cb;
-        const res = await fetch(apiUrl, {
-          cache: 'no-store',
-          headers: { 'Accept': 'application/vnd.github.v3.raw' }
-        });
+        const ghPagesUrl = 'https://ankitburdak05-oss.github.io/mind-focus-books-tracker/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(ghPagesUrl, { cache: 'no-store' });
         if (res.ok) data = await res.json();
       } catch (e) {}
     }
@@ -5084,27 +5168,27 @@ async function checkRemoteConfig() {
     const cb = Date.now();
     let cfg = null;
 
-    // 1. PRIMARY: GitHub Raw (CORS open, no rate limit)
+    // 1. PRIMARY & ULTRA-FAST (0s delay): GitHub API Direct (Bypasses Fastly 60s cache delay completely)
     try {
-      const res = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?cb=' + cb, { cache: 'no-store' });
-      if (res.ok) cfg = await res.json();
+      const apiRes = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
+        cache: 'no-store',
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
+      if (apiRes.ok) cfg = await apiRes.json();
     } catch (e) {}
 
-    // 2. SECONDARY: GitHub Pages
+    // 2. SECONDARY: GitHub Raw (Fallback if API limit reached)
     if (!cfg) {
       try {
-        const res = await fetch('https://ankitburdak05-oss.github.io/mind-focus-books-tracker/remote-config.json?cb=' + cb, { cache: 'no-store' });
+        const res = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?cb=' + cb, { cache: 'no-store' });
         if (res.ok) cfg = await res.json();
       } catch (e) {}
     }
 
-    // 3. TERTIARY: GitHub API
+    // 3. TERTIARY: GitHub Pages
     if (!cfg) {
       try {
-        const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
-          cache: 'no-store',
-          headers: { 'Accept': 'application/vnd.github.v3.raw' }
-        });
+        const res = await fetch('https://ankitburdak05-oss.github.io/mind-focus-books-tracker/remote-config.json?cb=' + cb, { cache: 'no-store' });
         if (res.ok) cfg = await res.json();
       } catch (e) {}
     }
@@ -5200,16 +5284,17 @@ function startLiveNoticeListener() {
     checkRemoteConfig();
   }, 1000);
 
-  // Battery-Saver Polling Loop: 90 seconds, only runs when app is actively visible on screen
+  // High-Speed Realtime Polling Loop: 5 seconds (Only runs when screen is ON & visible!)
+  // When app is minimized or phone is locked, document.hidden freezes 100% of network calls.
   broadcastNoticeInterval = setInterval(() => {
     if (document.hidden || (typeof document.visibilityState !== 'undefined' && document.visibilityState !== 'visible')) {
-      return; // ZERO radio wake-ups when app is minimized, locked, or backgrounded!
+      return; // ZERO network wake-ups when app is minimized, locked, or backgrounded!
     }
     checkRemoteBroadcastNotice();
     checkRemoteConfig();
-  }, 90000);
+  }, 5000);
 
-  // Instant refresh when user returns to app
+  // Instant refresh when user returns to or touches the app
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
       checkRemoteBroadcastNotice();
@@ -5218,7 +5303,19 @@ function startLiveNoticeListener() {
   });
   window.addEventListener('focus', () => {
     checkRemoteBroadcastNotice();
+    checkRemoteConfig();
   });
+
+  // Tap / Touch interaction speed trigger (Max once every 4 seconds)
+  let lastTouchCheck = 0;
+  window.addEventListener('pointerdown', () => {
+    const now = Date.now();
+    if (now - lastTouchCheck > 4000) {
+      lastTouchCheck = now;
+      checkRemoteBroadcastNotice();
+      checkRemoteConfig();
+    }
+  }, { passive: true });
 
   // Laptop Multi-Tab Realtime Instant Sync via localStorage event (0ms instantaneous)
   window.addEventListener('storage', (e) => {
@@ -5415,26 +5512,42 @@ function initPullToRefresh() {
 /* 4. Horizontal Swipeable Category Track */
 let activeCategoryFilter = 'ALL';
 
-function selectCategoryChip(category, chipEl) {
-  triggerHaptic('selection');
+// Fix 4: Shared category setter — dono (chip carousel + dropdown) ek saath sync hote hain
+function setCategoryFilter(category) {
   activeCategoryFilter = category;
-
-  document.querySelectorAll('.category-pill-chip').forEach(chip => {
-    chip.classList.toggle('active', chip.dataset.cat === category);
-  });
-
-  if (chipEl && chipEl.scrollIntoView) {
-    chipEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-  }
-
-  // Filter books by category
-  if (category === 'ALL') {
+  if (category === 'ALL' || !category) {
     state.categoryFilter = '';
   } else {
     state.categoryFilter = category;
   }
   state.currentPage = 1;
+
+  // Swipeable category carousel chips sync karo
+  document.querySelectorAll('.category-pill-chip').forEach(chip => {
+    const isActive = category === 'ALL'
+      ? (chip.dataset.cat === 'ALL')
+      : (chip.dataset.cat === category);
+    chip.classList.toggle('active', isActive);
+  });
+
+  // Dropdown (categoryFilter select) bhi sync karo
+  const dropdown = document.getElementById('categoryFilter');
+  if (dropdown) {
+    const val = category === 'ALL' ? 'ALL' : category;
+    // Option milega toh set karo, nahi toh ALL pe rakho
+    const found = Array.from(dropdown.options).some(o => o.value === val);
+    dropdown.value = found ? val : 'ALL';
+  }
+
   renderApp();
+}
+
+function selectCategoryChip(category, chipEl) {
+  triggerHaptic('selection');
+  if (chipEl && chipEl.scrollIntoView) {
+    chipEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+  setCategoryFilter(category);
 }
 
 function syncCategoryTrackActiveState() {
@@ -5443,7 +5556,14 @@ function syncCategoryTrackActiveState() {
     const isTarget = chip.dataset.cat === cat || (!state.categoryFilter && chip.dataset.cat === 'ALL');
     chip.classList.toggle('active', isTarget);
   });
+  // Also sync dropdown
+  const dropdown = document.getElementById('categoryFilter');
+  if (dropdown) {
+    const found = Array.from(dropdown.options).some(o => o.value === cat);
+    dropdown.value = found ? cat : 'ALL';
+  }
 }
+
 
 /* 5. Floating Mini Reading Capsule (Dynamic Now-Reading HUD) */
 function getActiveReadingBook() {
