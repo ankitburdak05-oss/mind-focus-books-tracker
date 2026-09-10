@@ -1,11 +1,11 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v3-5-4-release",
+  "id": "notice-v3-5-5-release",
   "active": true,
   "card": "card2",
-  "icon": "💬",
-  "title": "Update Live: v3.5.4",
-  "message": "💬 2-Way Live Help Desk Sync Fix! Ab Phone App se bheja gaya message Control Panel par turant pahunchega bina kisi rukawat ke. Tap karke turant update karein.",
-  "btnText": "Update Now v3.5.4 🚀",
-  "timestamp": "2026-09-10T05:25:00.000Z",
-  "version": "v3.5.4"
+  "icon": "✈️",
+  "title": "Update Live: v3.5.5",
+  "message": "💬 Help Desk Mobile Touch & Send Button 100% Fixed! Phone app se live message bhejna ab bilkul smoothly kaam kar raha hai. Tap karke turant update karein.",
+  "btnText": "Update Now v3.5.5 🚀",
+  "timestamp": "2026-09-10T05:35:00.000Z",
+  "version": "v3.5.5"
 };

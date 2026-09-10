@@ -966,7 +966,7 @@
             </div>
             <div>
               <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Tracker</div>
-              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700;" id="appCurrentVersionText">v3.5.4 2-Way Live Help Desk</div>
+              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700;" id="appCurrentVersionText">v3.5.5 Live Help Desk</div>
             </div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn" style="border-radius:12px; padding:0.45rem 0.85rem; font-weight:800;">
@@ -2063,12 +2063,12 @@
       </div>
 
       <!-- Message Input Bar -->
-      <div class="help-desk-footer">
-        <input type="text" id="userChatInputText" class="user-chat-input" placeholder="Type message to Admin... (e.g. Bhai naya...)" onkeydown="handleUserChatKeydown(event)">
-        <button type="button" class="btn-user-chat-send" id="btnUserSendChat" onclick="sendUserChatMessage()">
+      <form id="userChatForm" class="help-desk-footer" onsubmit="event.preventDefault(); sendUserChatMessage(); return false;">
+        <input type="text" id="userChatInputText" class="user-chat-input" placeholder="Type message to Admin... (e.g. Bhai naya...)" autocomplete="off" autocorrect="on" autocapitalize="sentences" onkeydown="handleUserChatKeydown(event)">
+        <button type="submit" class="btn-user-chat-send" id="btnUserSendChat" onclick="event.preventDefault(); sendUserChatMessage();">
           <span>✈️ Send</span>
         </button>
-      </div>
+      </form>
     </div>
   </div>
 

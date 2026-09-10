@@ -3037,14 +3037,14 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.5.4';
+const CURRENT_APP_VERSION = 'v3.5.5';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
   if (typeof syncSettingsFlagshipControls === 'function') syncSettingsFlagshipControls();
   const verText = document.getElementById('appCurrentVersionText');
-  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • 2-Way Live Help Desk Edition';
+  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Help Desk Touch & Send Engine Edition';
   const overlay = document.getElementById('appSettingsModalOverlay');
   if (overlay) overlay.classList.add('active');
 }
@@ -7630,6 +7630,7 @@ function initLiveHelpDeskEngine() {
   // 5. Initial UI render and background sync poll
   checkUserChatNotifications();
   renderUserChatStream();
+  if (typeof setupUserChatEventListeners === 'function') setupUserChatEventListeners();
 
   fetchAndSyncUserChat(false);
   if (!userChatPollTimer) {
@@ -7829,6 +7830,8 @@ function openUserHelpDeskModal() {
     modal.style.display = 'flex';
   }
 
+  if (typeof setupUserChatEventListeners === 'function') setupUserChatEventListeners();
+
   if (userChatData && userChatData.threads && userChatData.threads[userChatId]) {
     userChatData.threads[userChatId].unreadByUser = 0;
     saveUserChatDataLocally();
@@ -7858,6 +7861,78 @@ function closeUserHelpDeskModal() {
 function handleHelpDeskOverlayClick(e) {
   if (e.target && e.target.id === 'userHelpDeskModalOverlay') {
     closeUserHelpDeskModal();
+  }
+}
+
+function playUserChatAudioChime(type = 'receive') {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'receive') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.35);
+    } else {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.14, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.15);
+    }
+  } catch (e) {
+    // Audio contexts can require user gesture or be unsupported on older webviews
+  }
+}
+
+function setupUserChatEventListeners() {
+  try {
+    const form = document.getElementById('userChatForm');
+    const btn = document.getElementById('btnUserSendChat');
+    const input = document.getElementById('userChatInputText');
+
+    if (form && !form._bound) {
+      form._bound = true;
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        sendUserChatMessage();
+      });
+    }
+
+    if (btn && !btn._bound) {
+      btn._bound = true;
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        sendUserChatMessage();
+      });
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        sendUserChatMessage();
+      }, { passive: false });
+    }
+
+    if (input && !input._bound) {
+      input._bound = true;
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          sendUserChatMessage();
+        }
+      });
+    }
+  } catch (e) {
+    console.warn('Error setting up user chat listeners:', e);
   }
 }
 
@@ -7935,98 +8010,132 @@ function renderUserChatStream() {
   stream.scrollTop = stream.scrollHeight;
 }
 
+let isSendingUserChat = false;
 async function sendUserChatMessage() {
+  if (isSendingUserChat) return;
+
   const input = document.getElementById('userChatInputText');
   if (!input) return;
 
-  const text = input.value.trim();
-  if (!text) return;
-
-  playUserChatAudioChime('send');
-
-  // Hardened ID and Name resolution
-  if (!userChatId) {
-    userChatId = localStorage.getItem('mindfocus_chat_user_id') || ('reader_' + Math.random().toString(36).substring(2, 8));
-    localStorage.setItem('mindfocus_chat_user_id', userChatId);
-  }
-  if (!userChatName) {
-    userChatName = localStorage.getItem('mindfocus_chat_user_name') || ('Reader #' + userChatId.slice(-4).toUpperCase());
-    localStorage.setItem('mindfocus_chat_user_name', userChatName);
+  const text = (input.value || '').trim();
+  if (!text) {
+    input.focus();
+    return;
   }
 
-  if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
-  if (!userChatData.threads) userChatData.threads = {};
+  isSendingUserChat = true;
 
-  if (!userChatData.threads[userChatId]) {
-    userChatData.threads[userChatId] = {
-      userId: userChatId,
+  // Immediate visual feedback on the send button
+  const sendBtn = document.getElementById('btnUserSendChat');
+  let originalBtnHtml = '';
+  if (sendBtn) {
+    originalBtnHtml = sendBtn.innerHTML;
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = '<span>⏳ Sending...</span>';
+    sendBtn.style.opacity = '0.85';
+  }
+
+  try {
+    try {
+      playUserChatAudioChime('send');
+    } catch (audioErr) {}
+
+    // Hardened ID and Name resolution
+    if (!userChatId) {
+      userChatId = localStorage.getItem('mindfocus_chat_user_id') || ('reader_' + Math.random().toString(36).substring(2, 8));
+      localStorage.setItem('mindfocus_chat_user_id', userChatId);
+    }
+    if (!userChatName) {
+      userChatName = localStorage.getItem('mindfocus_chat_user_name') || ('Reader #' + userChatId.slice(-4).toUpperCase());
+      localStorage.setItem('mindfocus_chat_user_name', userChatName);
+    }
+
+    if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
+    if (!userChatData.threads) userChatData.threads = {};
+
+    if (!userChatData.threads[userChatId]) {
+      userChatData.threads[userChatId] = {
+        userId: userChatId,
+        userName: userChatName,
+        userDevice: userChatDevice,
+        unreadByAdmin: 0,
+        unreadByUser: 0,
+        lastMessage: '',
+        lastTimestamp: new Date().toISOString(),
+        messages: []
+      };
+    }
+
+    const thread = userChatData.threads[userChatId];
+    const newMsg = {
+      id: 'msg_user_' + userChatId + '_' + Date.now(),
+      sender: 'user',
+      text: text,
+      timestamp: new Date().toISOString()
+    };
+
+    if (!Array.isArray(thread.messages)) thread.messages = [];
+    thread.messages.push(newMsg);
+    thread.lastMessage = text;
+    thread.lastTimestamp = newMsg.timestamp;
+    thread.unreadByAdmin = (thread.unreadByAdmin || 0) + 1;
+
+    // Clear input immediately and render locally so user sees message right away!
+    input.value = '';
+    saveUserChatDataLocally();
+    renderUserChatStream();
+
+    const payload = {
+      type: 'helpdesk_chat_msg',
+      threadId: userChatId,
       userName: userChatName,
       userDevice: userChatDevice,
-      unreadByAdmin: 0,
-      unreadByUser: 0,
-      lastMessage: '',
-      lastTimestamp: new Date().toISOString(),
-      messages: []
+      message: newMsg
     };
-  }
 
-  const thread = userChatData.threads[userChatId];
-  const newMsg = {
-    id: 'msg_user_' + userChatId + '_' + Date.now(),
-    sender: 'user',
-    text: text,
-    timestamp: new Date().toISOString()
-  };
+    // 1. Send via local BroadcastChannel (0ms sync for same device/browser)
+    try {
+      if (userChatBroadcastChannel) {
+        userChatBroadcastChannel.postMessage(payload);
+      }
+    } catch (e) {}
 
-  if (!Array.isArray(thread.messages)) thread.messages = [];
-  thread.messages.push(newMsg);
-  thread.lastMessage = text;
-  thread.lastTimestamp = newMsg.timestamp;
-  thread.unreadByAdmin = (thread.unreadByAdmin || 0) + 1;
+    // 2. Trigger localStorage cross-tab event
+    try {
+      localStorage.setItem('mindfocus_chat_last_event', JSON.stringify({
+        t: Date.now(),
+        payload: payload
+      }));
+    } catch (e) {}
 
-  input.value = '';
-  // Zero loss: Immediately commit to local memory and render
-  saveUserChatDataLocally();
-  renderUserChatStream();
+    // 3. Post to Cloud Relay (ntfy.sh) using text/plain (CORS safelisted - NO preflight roundtrip)
+    try {
+      fetch(HELPDESK_RELAY_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        body: JSON.stringify(payload)
+      }).catch(err => {
+        console.warn('Relay post warning:', err);
+      });
+    } catch (e) {}
 
-  const payload = {
-    type: 'helpdesk_chat_msg',
-    threadId: userChatId,
-    userName: userChatName,
-    userDevice: userChatDevice,
-    message: newMsg
-  };
-
-  // 1. Send via local BroadcastChannel (0ms sync for same device/browser)
-  try {
-    if (userChatBroadcastChannel) {
-      userChatBroadcastChannel.postMessage(payload);
+    if (typeof showToastNotification === 'function') {
+      showToastNotification('💬 Message sent to Developer / Admin!');
     }
-  } catch (e) {}
-
-  // 2. Trigger localStorage cross-tab event
-  try {
-    localStorage.setItem('mindfocus_chat_last_event', JSON.stringify({
-      t: Date.now(),
-      payload: payload
-    }));
-  } catch (e) {}
-
-  // 3. Post to Cloud Relay (ntfy.sh) using text/plain (CORS safelisted - NO preflight roundtrip)
-  try {
-    fetch(HELPDESK_RELAY_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain'
-      },
-      body: JSON.stringify(payload)
-    }).catch(err => {
-      console.warn('Relay post error:', err);
-    });
-  } catch (e) {}
-
-  if (typeof showToastNotification === 'function') {
-    showToastNotification('💬 Message sent to Developer / Admin!');
+  } catch (err) {
+    console.error('Error in sendUserChatMessage:', err);
+  } finally {
+    isSendingUserChat = false;
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = originalBtnHtml || '<span>✈️ Send</span>';
+      sendBtn.style.opacity = '1';
+    }
+    setTimeout(() => {
+      if (input) input.focus();
+    }, 60);
   }
 }
 
@@ -8065,6 +8174,8 @@ window.insertUserPrompt = insertUserPrompt;
 window.handleUserChatKeydown = handleUserChatKeydown;
 window.sendUserChatMessage = sendUserChatMessage;
 window.initLiveHelpDeskEngine = initLiveHelpDeskEngine;
+window.playUserChatAudioChime = playUserChatAudioChime;
+window.setupUserChatEventListeners = setupUserChatEventListeners;
 
 
 

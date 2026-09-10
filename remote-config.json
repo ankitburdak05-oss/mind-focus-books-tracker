@@ -1,37 +1,35 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-10T05:25:00.000Z",
+  "updatedAt": "2026-09-10T05:35:00.000Z",
   "activeRelease": {
-    "version": "v3.5.4",
-    "name": "Mind Focus Books v3.5.4 — 2-Way Live Help Desk & Phone-to-Panel Sync",
+    "version": "v3.5.5",
+    "name": "Mind Focus Books v3.5.5 — Help Desk Touch & Send Engine Fix",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
-      "💬 2-Way Live Help Desk: Real phone se message ab turant Control Panel me deliver hota hai",
-      "🛡️ Zero Message Loss: Bheje gaye messages kabhi gayab nahi hote, safe local merge engine",
-      "⚡ High-Speed Cloud Relay (0ms local, <1s remote phone delivery)",
-      "🔔 Dual-tone audio chime alerts on receiving Admin replies",
-      "👑 Verified VIP Support channel with seamless 1-tap update"
+      "✈️ Phone Help Desk Send Button 100% Fixed & Tested: Mobile screen touch & keyboard submit seamlessly working",
+      "🛡️ Zero-Error Audio Chime Engine: Safe synthesized notification alerts without runtime exceptions",
+      "⚡ Instant 2-Way Live Sync: Messages deliver from phone to control panel in <1 second",
+      "👑 Enhanced Virtual Keyboard Handling: Chat input stays visible & pinned even when keyboard opens"
     ],
-    "stagedAt": "2026-09-10T05:25:00.000Z",
+    "stagedAt": "2026-09-10T05:35:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.5.4",
-    "name": "Mind Focus Books v3.5.4 — 2-Way Live Help Desk & Phone-to-Panel Sync",
+    "version": "v3.5.5",
+    "name": "Mind Focus Books v3.5.5 — Help Desk Touch & Send Engine Fix",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
-      "💬 2-Way Live Help Desk: Real phone se message ab turant Control Panel me deliver hota hai",
-      "🛡️ Zero Message Loss: Bheje gaye messages kabhi gayab nahi hote, safe local merge engine",
-      "⚡ High-Speed Cloud Relay (0ms local, <1s remote phone delivery)",
-      "🔔 Dual-tone audio chime alerts on receiving Admin replies",
-      "👑 Verified VIP Support channel with seamless 1-tap update"
+      "✈️ Phone Help Desk Send Button 100% Fixed & Tested: Mobile screen touch & keyboard submit seamlessly working",
+      "🛡️ Zero-Error Audio Chime Engine: Safe synthesized notification alerts without runtime exceptions",
+      "⚡ Instant 2-Way Live Sync: Messages deliver from phone to control panel in <1 second",
+      "👑 Enhanced Virtual Keyboard Handling: Chat input stays visible & pinned even when keyboard opens"
     ],
-    "stagedAt": "2026-09-10T05:25:00.000Z",
+    "stagedAt": "2026-09-10T05:35:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {
-    "version": "v3.5.3",
-    "name": "Mind Focus Books v3.5.3 — Live In-App Help Desk & Chat Studio",
+    "version": "v3.5.4",
+    "name": "Mind Focus Books v3.5.4 — 2-Way Live Help Desk & Phone-to-Panel Sync",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
       "💬 Live In-App Help Desk: User phone mein floating chat bubble se direct Admin se live baatchit",
