@@ -38,7 +38,9 @@ jobs:
         cp broadcast-notice.json android/app/src/main/assets/ || true
         cp broadcast-notice.js android/app/src/main/assets/ || true
         cp control-panel.html android/app/src/main/assets/ || true
+        cp control-panel.css android/app/src/main/assets/ || true
         cp control-panel.js android/app/src/main/assets/ || true
+        cp chat-messages.json android/app/src/main/assets/ || true
         cp icon-192.png android/app/src/main/assets/
         cp icon-512.png android/app/src/main/assets/
         cp jspdf.umd.min.js android/app/src/main/assets/

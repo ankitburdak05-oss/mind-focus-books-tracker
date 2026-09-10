@@ -1,10 +1,11 @@
 {
-  "id": "notice-1789006162691-card2",
+  "id": "notice-v3-5-3-release",
   "active": true,
   "card": "card2",
-  "icon": "💎",
-  "title": "Card 2 • 3D Model",
-  "message": "kese ho",
-  "btnText": "Mast Hai 🔥",
-  "timestamp": "2026-09-10T02:09:22.691Z"
+  "icon": "💬",
+  "title": "Update Live: v3.5.3",
+  "message": "💬 Live In-App Help Desk launch ho gaya hai! Ab direct Admin se live chat karein aur instant replies paayein. Tap karke turant update karein.",
+  "btnText": "Update Now v3.5.3 🚀",
+  "timestamp": "2026-09-10T04:15:00.000Z",
+  "version": "v3.5.3"
 }

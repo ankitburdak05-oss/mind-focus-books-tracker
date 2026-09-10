@@ -1,12 +1,11 @@
 {
-  "id": "deploy-notice-v350",
+  "id": "notice-v3-5-3-release",
   "active": true,
   "card": "card2",
-  "icon": "❄️",
-  "title": "Update Live: v3.5.0",
-  "message": "Naya update v3.5.0 ready! Phone heating permanent fix & re-update engine. Tap karke turant install karein.",
-  "btnText": "Install Update ⚡",
-  "action": "update",
-  "version": "v3.5.0",
-  "timestamp": "2026-09-09T16:40:00.000Z"
+  "icon": "💬",
+  "title": "Update Live: v3.5.3",
+  "message": "💬 Live In-App Help Desk launch ho gaya hai! Ab direct Admin se live chat karein aur instant replies paayein. Tap karke turant update karein.",
+  "btnText": "Update Now v3.5.3 🚀",
+  "timestamp": "2026-09-10T04:15:00.000Z",
+  "version": "v3.5.3"
 }

@@ -1,32 +1,32 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-10T02:55:00.000Z",
+  "updatedAt": "2026-09-10T04:15:00.000Z",
   "activeRelease": {
-    "version": "v3.5.2",
-    "name": "Mind Focus Books v3.5.2 — Clean Architecture & Performance Release",
+    "version": "v3.5.3",
+    "name": "Mind Focus Books v3.5.3 — Live In-App Help Desk & Chat Studio",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
-      "🗑️ Dead Code Purged: 134 lines of legacy hidden code & unused dropdown listeners removed",
-      "🖼️ Cover Photo System Fixed: Live photo upload & remove now 100% working in Edit modal",
-      "💰 Interactive Knowledge Value: 1-tap financial breakdown of your entire reading library",
-      "🎯 Progress Ring Quick Filter: 1-tap direct access to finished books without wrong modal",
-      "⚡ 5s Ultra-Fast Update Delivery: Cloud sync runs in 5 seconds with zero battery waste"
+      "💬 Live In-App Help Desk: User phone mein floating chat bubble se direct Admin se live baatchit",
+      "🎛️ Help Desk Control Cockpit: Control panel mein WhatsApp jaisa live reader chat studio",
+      "📱 Mobile Responsive Control Panel: Mobile screens par 100% fluid edge-to-edge layout without side-scroll",
+      "🔔 Dual-tone audio chime alerts for incoming messages",
+      "⚡ 1-Tap Quick Action response chips for instant answers & questions"
     ],
-    "stagedAt": "2026-09-10T02:55:00.000Z",
+    "stagedAt": "2026-09-10T04:15:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.5.2",
-    "name": "Mind Focus Books v3.5.2 — Clean Architecture & Performance Release",
+    "version": "v3.5.3",
+    "name": "Mind Focus Books v3.5.3 — Live In-App Help Desk & Chat Studio",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
-      "🗑️ Dead Code Purged: 134 lines of legacy hidden code & unused dropdown listeners removed",
-      "🖼️ Cover Photo System Fixed: Live photo upload & remove now 100% working in Edit modal",
-      "💰 Interactive Knowledge Value: 1-tap financial breakdown of your entire reading library",
-      "🎯 Progress Ring Quick Filter: 1-tap direct access to finished books without wrong modal",
-      "⚡ 5s Ultra-Fast Update Delivery: Cloud sync runs in 5 seconds with zero battery waste"
+      "💬 Live In-App Help Desk: User phone mein floating chat bubble se direct Admin se live baatchit",
+      "🎛️ Help Desk Control Cockpit: Control panel mein WhatsApp jaisa live reader chat studio",
+      "📱 Mobile Responsive Control Panel: Mobile screens par 100% fluid edge-to-edge layout without side-scroll",
+      "🔔 Dual-tone audio chime alerts for incoming messages",
+      "⚡ 1-Tap Quick Action response chips for instant answers & questions"
     ],
-    "stagedAt": "2026-09-10T02:55:00.000Z",
+    "stagedAt": "2026-09-10T04:15:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {
