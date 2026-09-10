@@ -1027,24 +1027,6 @@ function setupEventListeners() {
   const updateBtn = document.getElementById('headerUpdateBtn');
   if (updateBtn) updateBtn.addEventListener('click', handleUpdateClick);
 
-  // Download Dropdown Toggle
-  const downloadDropdown = document.getElementById('downloadDropdown');
-  const downloadDropdownBtn = document.getElementById('downloadDropdownBtn');
-  const downloadDropdownMenu = document.getElementById('downloadDropdownMenu');
-
-  if (downloadDropdownBtn && downloadDropdownMenu) {
-    downloadDropdownBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      downloadDropdownMenu.classList.toggle('show');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!downloadDropdown.contains(e.target)) {
-        downloadDropdownMenu.classList.remove('show');
-      }
-    });
-  }
-
   const addBookBtn = document.getElementById('addBookBtn');
   if (addBookBtn) addBookBtn.addEventListener('click', openAddModal);
 
@@ -1053,38 +1035,6 @@ function setupEventListeners() {
     pickNextBookBtn.addEventListener('click', openPickBookModal);
   }
 
-  const exportCsvBtn = document.getElementById('exportCsvBtn');
-  if (exportCsvBtn) {
-    exportCsvBtn.addEventListener('click', () => {
-      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
-      exportToCsv();
-    });
-  }
-
-  const exportPdfBtn = document.getElementById('exportPdfBtn');
-  if (exportPdfBtn) {
-    exportPdfBtn.addEventListener('click', () => {
-      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
-      exportToPdf();
-    });
-  }
-
-  const exportJsonBtn = document.getElementById('exportJsonBtn');
-  if (exportJsonBtn) {
-    exportJsonBtn.addEventListener('click', () => {
-      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
-      exportToJson();
-    });
-  }
-
-  const importFileBtn = document.getElementById('importFileBtn');
-  if (importFileBtn) {
-    importFileBtn.addEventListener('click', () => {
-      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
-      const fi = document.getElementById('importFileInput');
-      if (fi) fi.click();
-    });
-  }
 
   const importFileInput = document.getElementById('importFileInput');
   if (importFileInput) importFileInput.addEventListener('change', handleFileImport);
@@ -1241,8 +1191,42 @@ function handleCoverImageUpload(input) {
 
 function removeCoverPhoto() {
   state.currentEditingCoverImage = '';
+  const urlInput = document.getElementById('editBookCover');
+  if (urlInput) urlInput.value = '';
+  updateCoverPreview();
+  showToast('Cover photo removed', 'info');
+}
+
+function onEditBookCoverUrlInput(url) {
+  state.currentEditingCoverImage = (url || '').trim();
   updateCoverPreview();
 }
+
+window.removeCoverPhoto = removeCoverPhoto;
+window.removeBookCoverPhoto = removeCoverPhoto;
+window.handleCoverPhotoUpload = handleCoverImageUpload;
+window.onEditBookCoverUrlInput = onEditBookCoverUrlInput;
+
+function showKnowledgeValueBreakdown() {
+  const done = state.books.filter(b => b.status === 'DONE').length;
+  const total = state.books.length;
+  let customTotal = 0;
+  state.books.forEach(b => {
+    const p = parseFloat(b.price);
+    if (!isNaN(p) && p > 0) customTotal += p;
+  });
+
+  const displayVal = customTotal > 0 ? customTotal : (done * 399);
+  alert(
+    '💰 Knowledge Value Breakdown\n\n' +
+    '• Finished Books: ' + done + ' of ' + total + '\n' +
+    '• Estimated Completed Value: ₹' + displayVal.toLocaleString('en-IN') + '\n' +
+    '• Total Library Potential: ₹' + (total * 399).toLocaleString('en-IN') + '\n\n' +
+    '💡 Tip: Har book ke "Edit" me jakar aap uski actual purchase price set kar sakte hain!'
+  );
+}
+window.showKnowledgeValueBreakdown = showKnowledgeValueBreakdown;
+
 
 function openAddModal() {
   state.editingBookIndex = -1;
@@ -4208,8 +4192,12 @@ function renderSpotlightResults(q) {
           title: b.title,
           sub: 'by ' + b.author + ' • ' + (b.category || 'General'),
           icon: b.status === 'DONE' ? '✅' : (b.status === 'READING' ? '📖' : '📚'),
-          status: b.status || 'PENDING',
-          fn: () => { closeSpotlightModal(); openBookDetailSheet(idx); }
+          fn: () => {
+            closeSpotlightModal();
+            if (typeof setCategoryFilter === 'function') setCategoryFilter('ALL');
+            if (typeof filterByStatus === 'function') filterByStatus('ALL');
+            openBookDetailSheet(idx);
+          }
         });
       }
     });

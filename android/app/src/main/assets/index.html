@@ -114,7 +114,7 @@
 
     <!-- Compact Luxury KPI & Progress Strip (Ultra-Clean & De-cluttered) -->
     <section class="compact-kpi-strip">
-      <div class="kpi-strip-item kpi-progress-item" onclick="openStreakModal()" title="Overall Reading Progress & Streak">
+      <div class="kpi-strip-item kpi-progress-item" onclick="filterByStatus('DONE')" style="cursor:pointer;" title="Tap to view Finished Books">
         <div class="kpi-ring-wrap">
           <svg viewBox="0 0 36 36" class="circular-chart">
             <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
@@ -149,7 +149,7 @@
           <span class="chip-val" id="kpiTotalBooks">150</span>
           <span class="chip-lbl">Total</span>
         </div>
-        <div class="kpi-chip" title="Knowledge Value">
+        <div class="kpi-chip" onclick="showKnowledgeValueBreakdown()" style="cursor:pointer;" title="Tap to view Library Value Breakdown">
           <span class="chip-icon">💰</span>
           <span class="chip-val" id="kpiMoneySaved">₹0</span>
           <span class="chip-lbl">Value</span>
@@ -164,16 +164,6 @@
           <span class="chip-val" id="kpiFlashcardsCount">5 Due</span>
           <span class="chip-lbl">Flashcards</span>
         </div>
-      </div>
-
-      <!-- Hidden elements preserved for JS backward compatibility -->
-      <div style="display:none;">
-        <div id="progressBarFill" style="width:0%;"></div>
-        <span id="kpiTotalDays">0</span>
-        <span id="kpiAvgDays">0.0</span>
-        <span id="kpiHoursInvested">0 hrs</span>
-        <span id="kpiMoneySubtext"></span>
-        <div id="curatedShelvesSection"></div>
       </div>
     </section>
 
@@ -371,13 +361,13 @@
               <img id="coverPreviewImg" src="" alt="Cover" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:4px;">
             </div>
             <div style="display:flex; flex-direction:column; gap:0.5rem; flex:1;">
-              <input type="text" id="editBookCover" class="form-control" placeholder="Paste Image URL or choose file below">
+              <input type="text" id="editBookCover" class="form-control" placeholder="Paste Image URL or choose file below" oninput="onEditBookCoverUrlInput(this.value)">
               <div style="display:flex; gap:0.5rem; align-items:center;">
                 <label class="btn btn-sm" style="cursor:pointer; margin:0;">
                   📁 Upload Photo
-                  <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverPhotoUpload(this)">
+                  <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverImageUpload(this)">
                 </label>
-                <button type="button" class="btn btn-sm btn-danger" id="removeCoverBtn" onclick="removeBookCoverPhoto()" style="display:none;">
+                <button type="button" class="btn btn-sm btn-danger" id="removeCoverBtn" onclick="removeCoverPhoto()" style="display:none;">
                   Remove
                 </button>
               </div>
