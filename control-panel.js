@@ -382,9 +382,12 @@ async function pushFileToGitHub(path, contentString, commitMessage) {
 async function fetchLiveStatusFromGitHub() {
   try {
     const cb = Date.now();
-    const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/broadcast-notice.json?cb=${cb}`, {
-      headers: { 'Accept': 'application/vnd.github.v3.raw' }
-    });
+    let res = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/broadcast-notice.json?cb=${cb}`, { cache: 'no-store' });
+    if (!res.ok) {
+      res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/broadcast-notice.json?cb=${cb}`, {
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
+    }
     if (res.ok) {
       const data = await res.json();
       appendLog('Live notice: ' + data.id + ' (' + data.card + ') - "' + (data.title || '') + '"', 'success');
@@ -405,20 +408,23 @@ async function fetchLiveStatusFromGitHub() {
 // -------------------------------------------------------------
 // -------------------------------------------------------------
 async function fetchRemoteConfigPipeline() {
-  // 1. INSTANT LOCAL DATA (Zero-delay render for v3.5.1)
+  // 1. INSTANT LOCAL DATA (Zero-delay render for v3.5.7)
   if (typeof window !== 'undefined' && window.__DEFAULT_REMOTE_CONFIG__) {
     remoteConfigData = JSON.parse(JSON.stringify(window.__DEFAULT_REMOTE_CONFIG__));
     updatePipelineCardUI(remoteConfigData);
     populateConfigFormUI(remoteConfigData);
-    appendLog('📁 Pipeline config v3.5.1 loaded instantly.', 'success');
+    appendLog('📁 Pipeline config v3.5.7 loaded instantly.', 'success');
   }
 
   // 2. Try fetching from GitHub if online
   try {
     const cb = Date.now();
-    const res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/remote-config.json?cb=${cb}`, {
-      headers: { 'Accept': 'application/vnd.github.v3.raw' }
-    });
+    let res = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/remote-config.json?cb=${cb}`, { cache: 'no-store' });
+    if (!res.ok) {
+      res = await fetch(`https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/remote-config.json?cb=${cb}`, {
+        headers: { 'Accept': 'application/vnd.github.v3.raw' }
+      });
+    }
     if (res.ok) {
       const ghData = await res.json();
       if (ghData) {
@@ -2215,8 +2221,15 @@ async function fetchChatMessagesData() {
   // 3. Non-destructive merge from chat-messages.json
   const cb = Date.now();
   try {
-    const res = await fetch(`chat-messages.json?cb=${cb}`, { cache: 'no-store' });
-    if (res.ok) {
+    let chatUrl = `chat-messages.json?cb=${cb}`;
+    if (typeof window !== 'undefined' && (window.location.protocol === 'file:' || !window.location.host)) {
+      chatUrl = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/chat-messages.json?cb=${cb}`;
+    }
+    let res = await fetch(chatUrl, { cache: 'no-store' });
+    if (!res.ok && chatUrl.startsWith('chat-messages.json')) {
+      res = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/chat-messages.json?cb=${cb}`, { cache: 'no-store' });
+    }
+    if (res && res.ok) {
       const remoteData = await res.json();
       if (remoteData && remoteData.threads) {
         for (const tid in remoteData.threads) {
@@ -2650,7 +2663,7 @@ function handleIncomingPhoneCrashTelemetry(payload) {
       userName: 'Phone User',
       deviceType: 'Android Phone',
       userAgent: 'Unknown UA',
-      appVersion: 'v3.5.6',
+      appVersion: 'v3.5.7',
       screen: 'Unknown Screen',
       online: true
     }
@@ -2742,7 +2755,7 @@ function renderPhoneCrashRadarStream() {
               ${isTest ? '🧪 TEST EVENT' : '🔴 RUNTIME CRASH'}
             </span>
             <span style="font-size:0.78rem; font-weight:700; color:#e2e8f0;">${escapeHtml(dev.userName || 'Reader')} (${escapeHtml(dev.deviceType || 'Phone')})</span>
-            <span style="font-size:0.7rem; color:var(--text-muted);">${escapeHtml(dev.appVersion || 'v3.5.6')}</span>
+            <span style="font-size:0.7rem; color:var(--text-muted);">${escapeHtml(dev.appVersion || 'v3.5.7')}</span>
           </div>
           <div style="display:flex; align-items:center; gap:10px;">
             <span style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">${timeStr}</span>
@@ -2862,7 +2875,7 @@ function simulateTestCrashTelemetry() {
       userName: 'Test Reader (Simulation)',
       deviceType: 'Android Phone (Redmi Note 13)',
       userAgent: 'Mozilla/5.0 (Linux; Android 14; 2312DRA50G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36',
-      appVersion: 'v3.5.6',
+      appVersion: 'v3.5.7',
       screen: '412x915 px',
       online: true
     }

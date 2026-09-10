@@ -1,11 +1,11 @@
 {
-  "id": "notice-v3-5-6-release",
+  "id": "notice-v3-5-7-release",
   "active": true,
   "card": "card2",
-  "icon": "🩺",
-  "title": "Update Live: v3.5.6",
-  "message": "🩺 Live Phone Crash Radar & Mobile DevTools! Phone par koi bhi error ya bug aate hi Control Panel me live alert pahunchega. Tap karke turant update karein.",
-  "btnText": "Update Now v3.5.6 🚀",
-  "timestamp": "2026-09-10T13:45:00.000Z",
-  "version": "v3.5.6"
+  "icon": "⚡",
+  "title": "Update Live: v3.5.7",
+  "message": "⚡ Mind Focus Books v3.5.7: Zero-Error Telemetry Engine & Direct CDN! Touch issues fix aur high-speed network performance. Tap karke update karein.",
+  "btnText": "Update Now v3.5.7 🚀",
+  "timestamp": "2026-09-10T14:35:00.000Z",
+  "version": "v3.5.7"
 }
