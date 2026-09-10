@@ -236,6 +236,7 @@ public class MainActivity extends AppCompatActivity {
                     File cacheDir = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "updates");
                     if (!cacheDir.exists()) cacheDir.mkdirs();
                     File apkFile = new File(cacheDir, "MindFocusBooks-Update.apk");
+                    if (apkFile.exists()) apkFile.delete();
 
                     try (java.io.InputStream in = connection.getInputStream();
                          FileOutputStream out = new FileOutputStream(apkFile)) {

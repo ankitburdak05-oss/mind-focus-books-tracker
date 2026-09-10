@@ -3331,12 +3331,13 @@ function triggerInAppUpdate(apkUrl) {
     if (pctText) pctText.innerText = pct + '%';
   }, 120);
 
+  const freshApkUrl = apkUrl + (apkUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
   setTimeout(() => {
     if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
-      window.Android.downloadAndInstallApk(apkUrl);
+      window.Android.downloadAndInstallApk(freshApkUrl);
       showToast('Downloading update package... ⏳', 'success');
     } else {
-      window.location.href = apkUrl;
+      window.location.href = freshApkUrl;
       showToast('Downloading update APK file...', 'success');
     }
   }, 600);
