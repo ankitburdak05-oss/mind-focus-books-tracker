@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-09-10T05:44:16.372Z",
+  "lastUpdated": "2026-09-10T05:44:17.374Z",
   "threads": {
     "user_welcome": {
       "userId": "user_welcome",
@@ -30,7 +30,7 @@
       "userName": "Reader #K12H",
       "userDevice": "Web App",
       "unreadByAdmin": 0,
-      "unreadByUser": 1,
+      "unreadByUser": 2,
       "lastMessage": "hiii",
       "lastTimestamp": "2026-09-10T05:44:16.348Z",
       "messages": [
