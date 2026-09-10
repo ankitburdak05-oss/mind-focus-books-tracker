@@ -1,0 +1,23 @@
+﻿{
+  "version": 1,
+  "lastUpdated": "2026-09-10T09:16:00.000Z",
+  "threads": {
+    "user_welcome": {
+      "userId": "user_welcome",
+      "userName": "Reader Support Desk",
+      "userDevice": "System Broadcast",
+      "unreadByAdmin": 0,
+      "unreadByUser": 0,
+      "lastMessage": "Welcome to Mind Focus Live Support! Ask anything anytime.",
+      "lastTimestamp": "2026-09-10T09:16:00.000Z",
+      "messages": [
+        {
+          "id": "msg_init_1",
+          "sender": "admin",
+          "text": "Namaste! Mind Focus Executive Help Desk me aapka swagat hai. Agar aapko koi naya feature chahiye ya koi issue hai, to yahan message bhejein! 🙏",
+          "timestamp": "2026-09-10T09:16:00.000Z"
+        }
+      ]
+    }
+  }
+}

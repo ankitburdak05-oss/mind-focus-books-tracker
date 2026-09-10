@@ -79,6 +79,9 @@
       <button class="tab-btn" data-tab="tabGithub">
         <span>🔑</span> GitHub Vault &amp; Radar
       </button>
+      <button class="tab-btn" data-tab="tabLiveChat">
+        <span>💬</span> Live Help Desk <span class="badge-chat-unread" id="adminChatUnreadBadge" style="display:none;">0</span>
+      </button>
     </nav>
 
     <!-- TAB 1: BROADCAST STUDIO -->
@@ -689,6 +692,109 @@
         </div>
 
         <div id="tokenTestResult" style="margin-top: 14px; font-size: 0.88rem;"></div>
+      </div>
+    </section>
+
+    <!-- TAB 6: LIVE USER HELP DESK & CHAT STUDIO -->
+    <section class="tab-view" id="tabLiveChat">
+      <div class="glass-panel" style="padding: 18px 20px;">
+        <div class="panel-header" style="margin-bottom: 14px; padding-bottom: 12px; flex-wrap:wrap; gap:10px;">
+          <div class="panel-title">
+            <span>💬</span> Live In-App Help Desk &amp; User Chat Studio
+          </div>
+          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+            <span class="panel-pill" id="chatConnectionStatusBadge" style="background:rgba(16,185,129,0.18); color:#34d399; border:1px solid #10b981;">
+              ● RADAR ACTIVE
+            </span>
+            <button type="button" class="btn-admin btn-secondary" onclick="refreshAdminChatThreads(true)" style="padding:5px 14px; font-size:0.78rem; border-radius:8px; min-width:0 !important; width:auto !important;">
+              🔄 Refresh
+            </button>
+            <button type="button" class="btn-admin btn-secondary" id="btnToggleChatAudio" onclick="toggleAdminChatSound()" style="padding:5px 14px; font-size:0.78rem; border-radius:8px; min-width:0 !important; width:auto !important;">
+              🔔 Sound: ON
+            </button>
+          </div>
+        </div>
+
+        <!-- Chat Workspace Grid -->
+        <div class="chat-workspace-grid">
+          <!-- Left Column: User Thread List -->
+          <div class="chat-threads-sidebar">
+            <div class="chat-search-bar">
+              <span style="font-size:0.9rem;">🔍</span>
+              <input type="text" id="chatUserSearchInput" class="form-input" placeholder="Search readers or messages..." oninput="filterChatThreads(this.value)" style="padding:8px 12px; font-size:0.85rem; border-radius:10px;">
+            </div>
+
+            <div class="chat-threads-list" id="chatThreadsList">
+              <div style="text-align:center; padding:24px; color:var(--text-muted); font-size:0.85rem;">
+                Loading conversations...
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column: Active Conversation Pane -->
+          <div class="chat-conversation-pane" id="chatConversationPane">
+            <!-- Active Header -->
+            <div class="chat-active-header">
+              <div class="chat-user-profile-meta">
+                <div class="chat-user-avatar" id="chatActiveUserAvatar">👤</div>
+                <div>
+                  <div class="chat-user-title-row">
+                    <span class="chat-user-display-name" id="chatActiveUserName">Select a conversation</span>
+                    <span class="chat-user-device-tag" id="chatActiveUserDevice">No user selected</span>
+                  </div>
+                  <div class="chat-user-status-text" id="chatActiveUserStatus">Click on a user thread on the left to start live chat</div>
+                </div>
+              </div>
+              <div class="chat-header-actions">
+                <button type="button" class="btn-chat-action" onclick="simulateIncomingUserMessage()" title="Simulate incoming user message for testing">
+                  🧪 Test User Message
+                </button>
+                <button type="button" class="btn-chat-action danger" onclick="clearCurrentChatThread()" title="Clear this chat history">
+                  🗑️ Clear
+                </button>
+              </div>
+            </div>
+
+            <!-- Messages Stream -->
+            <div class="chat-messages-stream" id="chatMessagesStream">
+              <div class="chat-empty-state">
+                <div style="font-size:38px; margin-bottom:8px;">💬</div>
+                <div style="font-weight:700; color:var(--text-main);">Welcome to Live Help Desk</div>
+                <div style="font-size:0.82rem; color:var(--text-muted); margin-top:4px;">When a reader sends a message from the Phone App, it will appear here instantly!</div>
+              </div>
+            </div>
+
+            <!-- 1-Click Quick Response Chips -->
+            <div class="chat-quick-replies-bar">
+              <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">⚡ Quick:</span>
+              <div class="quick-reply-chips-scroll">
+                <button type="button" class="quick-reply-chip" onclick="insertQuickReply('Kal subah naya version update release ho raha hai! 🚀')">
+                  🚀 Kal naya update aa raha hai!
+                </button>
+                <button type="button" class="quick-reply-chip" onclick="insertQuickReply('Hum aapka issue check kar rahe hain, jald solve ho jayega! 🙏')">
+                  🙏 Check kar rahe hain, jald hoga!
+                </button>
+                <button type="button" class="quick-reply-chip" onclick="insertQuickReply('Feedback dene ke liye bohot-bohot shukriya! ❤️')">
+                  ❤️ Feedback ke liye shukriya!
+                </button>
+                <button type="button" class="quick-reply-chip" onclick="insertQuickReply('Aapke account me VIP bonus reward activate kar diya gaya hai! 👑')">
+                  👑 VIP reward active ho gaya!
+                </button>
+                <button type="button" class="quick-reply-chip" onclick="insertQuickReply('Mind Focus Books Tracker use karne ke liye thank you! Happy Reading! 📖')">
+                  📖 Happy Reading!
+                </button>
+              </div>
+            </div>
+
+            <!-- Message Input & Dispatch Bar -->
+            <div class="chat-input-bar">
+              <textarea id="adminChatInputText" class="chat-input-field" rows="1" placeholder="Type your reply here... (Press Enter to send)" onkeydown="handleAdminChatKeydown(event)"></textarea>
+              <button type="button" class="btn-chat-send" id="btnAdminSendChat" onclick="sendAdminChatReply()">
+                <span>✈️ Send</span>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 

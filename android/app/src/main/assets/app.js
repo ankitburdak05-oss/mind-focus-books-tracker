@@ -137,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof init4DFlagshipSystems === 'function') init4DFlagshipSystems();
   if (typeof initMysteryGiftEngine === 'function') initMysteryGiftEngine();
   if (typeof initFlashcardTrainerEngine === 'function') initFlashcardTrainerEngine();
+  if (typeof initLiveHelpDeskEngine === 'function') initLiveHelpDeskEngine();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -7535,5 +7536,336 @@ window.speakFlashcardWord = speakFlashcardWord;
 window.restartFlashcardsDeck = restartFlashcardsDeck;
 window.handleFlashcardOverlayClick = handleFlashcardOverlayClick;
 window.initFlashcardTrainerEngine = initFlashcardTrainerEngine;
+
+// ==========================================================================
+// 💬 LIVE IN-APP HELP DESK & CHAT CLIENT ENGINE (Zomato/Telegram Style)
+// ==========================================================================
+
+let userChatId = null;
+let userChatName = null;
+let userChatDevice = 'Android Reader';
+let userChatData = null;
+let userChatPollTimer = null;
+let lastKnownAdminMsgCount = 0;
+
+function initLiveHelpDeskEngine() {
+  try {
+    userChatId = localStorage.getItem('mindfocus_chat_user_id');
+    if (!userChatId) {
+      userChatId = 'reader_' + Math.random().toString(36).substring(2, 8);
+      localStorage.setItem('mindfocus_chat_user_id', userChatId);
+    }
+
+    userChatName = localStorage.getItem('mindfocus_chat_user_name');
+    if (!userChatName) {
+      userChatName = 'Reader #' + userChatId.slice(-4).toUpperCase();
+      localStorage.setItem('mindfocus_chat_user_name', userChatName);
+    }
+
+    const ua = navigator.userAgent || '';
+    if (ua.includes('Android')) userChatDevice = 'Android App';
+    else if (ua.includes('iPhone') || ua.includes('iPad')) userChatDevice = 'iOS Device';
+    else userChatDevice = 'Web App';
+  } catch (e) {
+    userChatId = 'reader_guest';
+    userChatName = 'Reader';
+  }
+
+  fetchAndSyncUserChat(false);
+  if (!userChatPollTimer) {
+    userChatPollTimer = setInterval(() => fetchAndSyncUserChat(false), 5000);
+  }
+}
+
+function playUserChatAudioChime(type = 'receive') {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'receive') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.08);
+      osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.16);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.4);
+    } else {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.12, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.15);
+    }
+  } catch (e) {}
+}
+
+async function fetchAndSyncUserChat(isUserAction = false) {
+  const cb = Date.now();
+  try {
+    const res = await fetch(`chat-messages.json?cb=${cb}`);
+    if (res.ok) {
+      const data = await res.json();
+      userChatData = data;
+      localStorage.setItem('mindfocus_chat_data', JSON.stringify(data));
+      checkUserChatNotifications();
+      renderUserChatStream();
+    }
+  } catch (e) {
+    try {
+      const local = localStorage.getItem('mindfocus_chat_data');
+      if (local) {
+        userChatData = JSON.parse(local);
+        renderUserChatStream();
+      }
+    } catch (err) {}
+  }
+}
+
+function checkUserChatNotifications() {
+  if (!userChatData || !userChatData.threads || !userChatId) return;
+  const thread = userChatData.threads[userChatId];
+  if (!thread) return;
+
+  const unreadCount = thread.unreadByUser || 0;
+  let adminMsgCount = 0;
+  if (Array.isArray(thread.messages)) {
+    thread.messages.forEach(m => {
+      if (m.sender === 'admin') adminMsgCount++;
+    });
+  }
+
+  const badge = document.getElementById('userChatUnreadBadge');
+  const dot = document.getElementById('headerChatDot');
+
+  if (unreadCount > 0) {
+    if (badge) {
+      badge.innerText = unreadCount;
+      badge.style.display = 'inline-block';
+    }
+    if (dot) dot.style.display = 'block';
+
+    if (adminMsgCount > lastKnownAdminMsgCount && lastKnownAdminMsgCount > 0) {
+      playUserChatAudioChime('receive');
+      if (typeof showToastNotification === 'function') {
+        showToastNotification('👑 Developer/Admin ne aapko reply kiya hai!');
+      }
+    }
+  } else {
+    if (badge) badge.style.display = 'none';
+    if (dot) dot.style.display = 'none';
+  }
+
+  lastKnownAdminMsgCount = adminMsgCount;
+}
+
+function openUserHelpDeskModal() {
+  const modal = document.getElementById('userHelpDeskModalOverlay');
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+  }
+
+  if (userChatData && userChatData.threads && userChatData.threads[userChatId]) {
+    userChatData.threads[userChatId].unreadByUser = 0;
+    saveUserChatDataLocally();
+    const badge = document.getElementById('userChatUnreadBadge');
+    const dot = document.getElementById('headerChatDot');
+    if (badge) badge.style.display = 'none';
+    if (dot) dot.style.display = 'none';
+  }
+
+  renderUserChatStream();
+  setTimeout(() => {
+    const input = document.getElementById('userChatInputText');
+    if (input) input.focus();
+  }, 250);
+}
+
+function closeUserHelpDeskModal() {
+  const modal = document.getElementById('userHelpDeskModalOverlay');
+  if (modal) {
+    modal.classList.remove('active');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 250);
+  }
+}
+
+function handleHelpDeskOverlayClick(e) {
+  if (e.target && e.target.id === 'userHelpDeskModalOverlay') {
+    closeUserHelpDeskModal();
+  }
+}
+
+function insertUserPrompt(text) {
+  const input = document.getElementById('userChatInputText');
+  if (input) {
+    input.value = text;
+    input.focus();
+  }
+}
+
+function handleUserChatKeydown(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    sendUserChatMessage();
+  }
+}
+
+function renderUserChatStream() {
+  const stream = document.getElementById('userChatMessagesStream');
+  if (!stream) return;
+
+  if (!userChatData || !userChatData.threads || !userChatData.threads[userChatId]) {
+    stream.innerHTML = `
+      <div class="user-chat-welcome-card">
+        <div style="font-size:36px; margin-bottom:8px;">💬</div>
+        <div style="font-weight:800; color:var(--text-primary); font-size:1.05rem;">Namaste Reader!</div>
+        <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;">
+          Aapko app me koi naya feature chahiye, koi bug report karna hai, ya koi sawaal puchna hai to direct message likhein. Hum live reply karenge! 🙏
+        </div>
+      </div>`;
+    return;
+  }
+
+  const thread = userChatData.threads[userChatId];
+  const messages = thread.messages || [];
+
+  if (messages.length === 0) {
+    stream.innerHTML = `
+      <div class="user-chat-welcome-card">
+        <div style="font-size:36px; margin-bottom:8px;">💬</div>
+        <div style="font-weight:800; color:var(--text-primary); font-size:1.05rem;">Namaste Reader!</div>
+        <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;">
+          Niche box me apna message likhein aur send karein! Hum seedha Control Panel se aapse connect honge.
+        </div>
+      </div>`;
+    return;
+  }
+
+  let html = `
+    <div style="text-align:center; margin-bottom:8px;">
+      <span style="font-size:0.68rem; color:var(--text-muted); background:rgba(255,255,255,0.06); padding:2px 10px; border-radius:999px;">
+        Encrypted Direct Help Desk Session
+      </span>
+    </div>`;
+
+  messages.forEach(m => {
+    const isMe = m.sender === 'user';
+    const timeStr = formatUserChatTime(m.timestamp);
+
+    html += `
+      <div class="user-msg-bubble-wrap ${isMe ? 'from-user' : 'from-admin'}">
+        <div class="user-bubble">
+          ${!isMe ? '<div style="font-size:0.72rem; color:#fbbf24; font-weight:800; margin-bottom:2px;">👑 Developer &bull; Admin</div>' : ''}
+          ${escapeHtmlText(m.text)}
+          <div class="user-bubble-meta">
+            <span>${timeStr}</span>
+            ${isMe ? '<span style="color:#a7f3d0;">✓</span>' : ''}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  stream.innerHTML = html;
+  stream.scrollTop = stream.scrollHeight;
+}
+
+async function sendUserChatMessage() {
+  const input = document.getElementById('userChatInputText');
+  if (!input) return;
+
+  const text = input.value.trim();
+  if (!text) return;
+
+  playUserChatAudioChime('send');
+
+  if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
+  if (!userChatData.threads) userChatData.threads = {};
+
+  if (!userChatData.threads[userChatId]) {
+    userChatData.threads[userChatId] = {
+      userId: userChatId,
+      userName: userChatName,
+      userDevice: userChatDevice,
+      unreadByAdmin: 0,
+      unreadByUser: 0,
+      lastMessage: '',
+      lastTimestamp: new Date().toISOString(),
+      messages: []
+    };
+  }
+
+  const thread = userChatData.threads[userChatId];
+  const newMsg = {
+    id: 'msg_user_' + Date.now(),
+    sender: 'user',
+    text: text,
+    timestamp: new Date().toISOString()
+  };
+
+  if (!Array.isArray(thread.messages)) thread.messages = [];
+  thread.messages.push(newMsg);
+  thread.lastMessage = text;
+  thread.lastTimestamp = newMsg.timestamp;
+  thread.unreadByAdmin = (thread.unreadByAdmin || 0) + 1;
+
+  input.value = '';
+  renderUserChatStream();
+
+  saveUserChatDataLocally();
+
+  try {
+    localStorage.setItem('mindfocus_chat_data', JSON.stringify(userChatData));
+  } catch (e) {}
+
+  if (typeof showToastNotification === 'function') {
+    showToastNotification('💬 Message Admin ko bhej diya gaya hai!');
+  }
+}
+
+function saveUserChatDataLocally() {
+  try {
+    localStorage.setItem('mindfocus_chat_data', JSON.stringify(userChatData));
+  } catch (e) {}
+}
+
+function formatUserChatTime(isoStr) {
+  if (!isoStr) return '';
+  try {
+    const d = new Date(isoStr);
+    let hours = d.getHours();
+    const mins = d.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    return `${hours}:${mins} ${ampm}`;
+  } catch (e) {
+    return '';
+  }
+}
+
+function escapeHtmlText(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+}
+
+window.openUserHelpDeskModal = openUserHelpDeskModal;
+window.closeUserHelpDeskModal = closeUserHelpDeskModal;
+window.handleHelpDeskOverlayClick = handleHelpDeskOverlayClick;
+window.insertUserPrompt = insertUserPrompt;
+window.handleUserChatKeydown = handleUserChatKeydown;
+window.sendUserChatMessage = sendUserChatMessage;
+window.initLiveHelpDeskEngine = initLiveHelpDeskEngine;
+
 
 

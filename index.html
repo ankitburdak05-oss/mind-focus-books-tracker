@@ -91,6 +91,10 @@
         <button class="btn" id="headerPomodoroBtn" onclick="openPomodoroModal()" title="25-Min Focus Reading Timer" style="background:rgba(239, 68, 68, 0.15); border-color:rgba(239, 68, 68, 0.35); color:#ef4444; font-weight:700;">
           ⏱️ <span id="headerPomodoroText">Focus Timer</span>
         </button>
+        <button type="button" class="btn" id="headerHelpDeskBtn" onclick="openUserHelpDeskModal()" title="Live Help Desk &amp; Chat with Admin" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.18)); border-color:rgba(16,185,129,0.35); color:#34d399; font-weight:700; position:relative;">
+          💬 <span class="desktop-only-txt">Help Desk</span>
+          <span class="chat-unread-dot" id="headerChatDot" style="display:none;"></span>
+        </button>
       </div>
     </div>
   </header>
@@ -1998,6 +2002,72 @@
             Close Trainer
           </button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 💬 FLOATING LIVE HELP DESK TRIGGER BUTTON -->
+  <div class="fab-chat-wrapper" id="fabChatWrapper">
+    <button type="button" class="fab-chat-btn" id="fabLiveHelpDeskBtn" onclick="openUserHelpDeskModal()" title="Live Help Desk • Chat with Admin">
+      <span class="fab-chat-icon">💬</span>
+      <span class="fab-chat-ping"></span>
+      <span class="fab-chat-badge" id="userChatUnreadBadge" style="display:none;">0</span>
+    </button>
+  </div>
+
+  <!-- 💬 LIVE IN-APP HELP DESK MODAL (Zomato/Telegram Style Live Support) -->
+  <div class="modal-overlay" id="userHelpDeskModalOverlay" onclick="handleHelpDeskOverlayClick(event)">
+    <div class="modal-content help-desk-modal-dialog" onclick="event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="help-desk-header">
+        <div class="help-desk-header-info">
+          <div class="help-desk-avatar">👑</div>
+          <div>
+            <div class="help-desk-title-row">
+              <h3 class="help-desk-title">Mind Focus Executive Help Desk</h3>
+              <span class="help-desk-online-badge">🟢 Online</span>
+            </div>
+            <div class="help-desk-subtitle">Direct line to Developer &amp; Admin &bull; Real-time answers</div>
+          </div>
+        </div>
+        <button type="button" class="modal-close" onclick="closeUserHelpDeskModal()">&times;</button>
+      </div>
+
+      <!-- Messages Container -->
+      <div class="help-desk-body" id="userHelpDeskBody">
+        <div class="user-chat-messages-stream" id="userChatMessagesStream">
+          <div class="user-chat-welcome-card">
+            <div style="font-size:36px; margin-bottom:8px;">💬</div>
+            <div style="font-weight:800; color:var(--text-primary); font-size:1.05rem;">Namaste Reader!</div>
+            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;">
+              Aapko app me koi naya feature chahiye, koi bug report karna hai, ya koi sawaal puchna hai to direct message likhein. Hum live reply karenge! 🙏
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Prompt Chips for User -->
+      <div class="user-chat-quick-prompts">
+        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Bhai naya feature kab aayega?')">
+          🚀 Naya feature kab aayega?
+        </button>
+        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Bhai ek nayi book request karni hai!')">
+          📚 Nayi book request
+        </button>
+        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('App me ek bug notice kiya hai.')">
+          🐛 Bug report karna hai
+        </button>
+        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Audio reader bohot mast chal raha hai, thank you! 🔥')">
+          🔥 Feedback
+        </button>
+      </div>
+
+      <!-- Message Input Bar -->
+      <div class="help-desk-footer">
+        <input type="text" id="userChatInputText" class="user-chat-input" placeholder="Type message to Admin... (e.g. Bhai naya...)" onkeydown="handleUserChatKeydown(event)">
+        <button type="button" class="btn-user-chat-send" id="btnUserSendChat" onclick="sendUserChatMessage()">
+          <span>✈️ Send</span>
+        </button>
       </div>
     </div>
   </div>

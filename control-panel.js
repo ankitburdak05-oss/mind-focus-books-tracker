@@ -117,6 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
   renderBroadcastHistory();
   updateLivePreview();
   if (typeof updateFlashcardPreview === 'function') updateFlashcardPreview();
+  if (typeof refreshAdminChatThreads === 'function') {
+    refreshAdminChatThreads(false);
+    setInterval(refreshAdminChatThreads, 5000);
+  }
   appendLog('Executive Command Studio v2.0 Ready.', 'success');
 });
 
@@ -2000,5 +2004,424 @@ window.updateFlashcardPreview = updateFlashcardPreview;
 window.shuffle5TargetWords = shuffle5TargetWords;
 window.dispatchFlashcardsDropToAllPhones = dispatchFlashcardsDropToAllPhones;
 window.deactivateFlashcardsDrop = deactivateFlashcardsDrop;
+
+// ==========================================================================
+// 💬 LIVE IN-APP HELP DESK & USER CHAT STUDIO
+// ==========================================================================
+
+let adminChatThreads = {};
+let activeChatUserId = null;
+let adminChatSoundEnabled = true;
+let lastKnownUserMsgCount = 0;
+
+function playChatAudioChime(type = 'receive') {
+  if (!adminChatSoundEnabled) return;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'receive') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.35);
+    } else {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.15);
+    }
+  } catch (e) {
+    console.warn('Audio chime error:', e);
+  }
+}
+
+function toggleAdminChatSound() {
+  adminChatSoundEnabled = !adminChatSoundEnabled;
+  const btn = document.getElementById('btnToggleChatAudio');
+  if (btn) {
+    btn.innerHTML = adminChatSoundEnabled ? '🔔 Sound: ON' : '🔕 Sound: OFF';
+    btn.style.color = adminChatSoundEnabled ? '#34d399' : '#94a3b8';
+  }
+  showToast(adminChatSoundEnabled ? '🔔 Chat Sound Enabled' : '🔕 Chat Sound Muted');
+}
+
+async function fetchChatMessagesData() {
+  const cb = Date.now();
+  let data = null;
+
+  try {
+    const local = localStorage.getItem('mindfocus_chat_data');
+    if (local) data = JSON.parse(local);
+  } catch (e) {}
+
+  try {
+    const res = await fetch(`chat-messages.json?cb=${cb}`);
+    if (res.ok) {
+      data = await res.json();
+      localStorage.setItem('mindfocus_chat_data', JSON.stringify(data));
+    }
+  } catch (err) {
+    console.warn('Network fetch chat-messages error:', err);
+  }
+
+  return data;
+}
+
+async function refreshAdminChatThreads(manual = false) {
+  try {
+    const data = await fetchChatMessagesData();
+    if (!data || !data.threads) return;
+
+    adminChatThreads = data.threads;
+
+    let totalUnread = 0;
+    let totalUserMsgs = 0;
+    Object.values(adminChatThreads).forEach(t => {
+      totalUnread += (t.unreadByAdmin || 0);
+      if (Array.isArray(t.messages)) {
+        t.messages.forEach(m => {
+          if (m.sender === 'user') totalUserMsgs++;
+        });
+      }
+    });
+
+    const badge = document.getElementById('adminChatUnreadBadge');
+    if (badge) {
+      if (totalUnread > 0) {
+        badge.innerText = totalUnread;
+        badge.style.display = 'inline-block';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    if (totalUserMsgs > lastKnownUserMsgCount && lastKnownUserMsgCount > 0) {
+      playChatAudioChime('receive');
+      showToast('💬 Naya User Message Aaya Hai!');
+    }
+    lastKnownUserMsgCount = totalUserMsgs;
+
+    renderChatThreadsList();
+
+    if (activeChatUserId && adminChatThreads[activeChatUserId]) {
+      renderActiveConversation(activeChatUserId);
+    }
+
+    if (manual) {
+      showToast('🔄 Chat Threads Updated');
+    }
+  } catch (e) {
+    console.error('refreshAdminChatThreads error:', e);
+  }
+}
+
+function renderChatThreadsList(filteredList = null) {
+  const container = document.getElementById('chatThreadsList');
+  if (!container) return;
+
+  const threads = filteredList || Object.values(adminChatThreads);
+
+  if (threads.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding:30px 14px; color:var(--text-muted); font-size:0.82rem;">
+        Koi active conversation nahi hai.<br>
+        <button type="button" class="btn-chat-action" onclick="simulateIncomingUserMessage()" style="margin-top:10px;">
+          🧪 Test Message Bhejo
+        </button>
+      </div>`;
+    return;
+  }
+
+  threads.sort((a, b) => new Date(b.lastTimestamp || 0) - new Date(a.lastTimestamp || 0));
+
+  let html = '';
+  threads.forEach(t => {
+    const isActive = t.userId === activeChatUserId;
+    const initial = (t.userName || 'R').charAt(0).toUpperCase();
+    const timeStr = formatChatTime(t.lastTimestamp);
+    const unread = t.unreadByAdmin || 0;
+
+    html += `
+      <div class="chat-thread-card ${isActive ? 'active' : ''}" onclick="selectChatThread('${t.userId}')">
+        <div class="chat-avatar-wrap">
+          <span>${initial}</span>
+          <div class="chat-avatar-dot"></div>
+        </div>
+        <div class="chat-thread-info">
+          <div class="chat-thread-name-row">
+            <span class="chat-thread-name">${escapeHtml(t.userName || 'Reader')}</span>
+            <span class="chat-thread-time">${timeStr}</span>
+          </div>
+          <div style="display:flex; align-items:center; justify-content:space-between;">
+            <span class="chat-thread-snippet">${escapeHtml(t.lastMessage || 'No messages')}</span>
+            ${unread > 0 ? `<span class="chat-thread-unread-pill">${unread}</span>` : ''}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+function selectChatThread(userId) {
+  playUiClick();
+  activeChatUserId = userId;
+  const thread = adminChatThreads[userId];
+  if (!thread) return;
+
+  if (thread.unreadByAdmin > 0) {
+    thread.unreadByAdmin = 0;
+    saveChatDataLocallyAndRemote();
+  }
+
+  renderChatThreadsList();
+  renderActiveConversation(userId);
+}
+
+function renderActiveConversation(userId) {
+  const thread = adminChatThreads[userId];
+  if (!thread) return;
+
+  const avatar = document.getElementById('chatActiveUserAvatar');
+  const nameEl = document.getElementById('chatActiveUserName');
+  const deviceEl = document.getElementById('chatActiveUserDevice');
+  const statusEl = document.getElementById('chatActiveUserStatus');
+  const streamEl = document.getElementById('chatMessagesStream');
+
+  if (avatar) avatar.innerText = (thread.userName || 'R').charAt(0).toUpperCase();
+  if (nameEl) nameEl.innerText = thread.userName || 'Reader';
+  if (deviceEl) deviceEl.innerText = thread.userDevice || 'Android';
+  if (statusEl) statusEl.innerHTML = '🟢 Reader Online &bull; Direct Session Active';
+
+  if (!streamEl) return;
+
+  const messages = thread.messages || [];
+  if (messages.length === 0) {
+    streamEl.innerHTML = `
+      <div class="chat-empty-state">
+        <div style="font-size:32px; margin-bottom:6px;">💬</div>
+        <div style="font-weight:700;">No messages yet</div>
+        <div style="font-size:0.8rem; color:var(--text-muted);">Reply below to start chatting with this reader!</div>
+      </div>`;
+    return;
+  }
+
+  let html = `
+    <div class="chat-date-divider">
+      <span class="chat-date-pill">Today &bull; Direct Help Desk Session</span>
+    </div>`;
+
+  messages.forEach(m => {
+    const isUser = m.sender === 'user';
+    const timeStr = formatChatTime(m.timestamp);
+
+    html += `
+      <div class="chat-msg-row ${isUser ? 'from-user' : 'from-admin'}">
+        <div class="chat-bubble">
+          ${escapeHtml(m.text)}
+          <div class="chat-bubble-meta">
+            <span>${timeStr}</span>
+            ${!isUser ? '<span style="color:#6ee7b7;">✓✓</span>' : ''}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  streamEl.innerHTML = html;
+  streamEl.scrollTop = streamEl.scrollHeight;
+}
+
+function handleAdminChatKeydown(event) {
+  if (event.key === 'Enter' && !event.shiftKey) {
+    event.preventDefault();
+    sendAdminChatReply();
+  }
+}
+
+function insertQuickReply(text) {
+  playUiClick();
+  const input = document.getElementById('adminChatInputText');
+  if (input) {
+    input.value = text;
+    input.focus();
+  }
+}
+
+async function sendAdminChatReply() {
+  const input = document.getElementById('adminChatInputText');
+  if (!input) return;
+
+  const text = input.value.trim();
+  if (!text) return;
+
+  if (!activeChatUserId) {
+    alert('Pehle left side se kisi reader ki conversation par click karein!');
+    return;
+  }
+
+  const thread = adminChatThreads[activeChatUserId];
+  if (!thread) return;
+
+  playChatAudioChime('send');
+
+  const newMsg = {
+    id: 'msg_admin_' + Date.now(),
+    sender: 'admin',
+    text: text,
+    timestamp: new Date().toISOString()
+  };
+
+  if (!Array.isArray(thread.messages)) thread.messages = [];
+  thread.messages.push(newMsg);
+  thread.lastMessage = text;
+  thread.lastTimestamp = newMsg.timestamp;
+  thread.unreadByUser = (thread.unreadByUser || 0) + 1;
+
+  input.value = '';
+  renderActiveConversation(activeChatUserId);
+  renderChatThreadsList();
+
+  appendLog(`💬 Reply sent to ${thread.userName}: "${text.slice(0, 30)}..."`, 'success');
+
+  await saveChatDataLocallyAndRemote();
+}
+
+async function saveChatDataLocallyAndRemote() {
+  const payload = {
+    version: 1,
+    lastUpdated: new Date().toISOString(),
+    threads: adminChatThreads
+  };
+
+  try {
+    localStorage.setItem('mindfocus_chat_data', JSON.stringify(payload));
+  } catch (e) {}
+
+  if (githubToken) {
+    try {
+      const jsonContent = JSON.stringify(payload, null, 2);
+      await pushFileToGitHub('chat-messages.json', jsonContent, 'Update Help Desk Chat Messages');
+      appendLog('☁️ Chat sync saved to Cloud Repository.', 'info');
+    } catch (err) {
+      console.warn('GitHub push chat error:', err.message);
+    }
+  }
+}
+
+function filterChatThreads(keyword) {
+  const q = (keyword || '').toLowerCase().trim();
+  if (!q) {
+    renderChatThreadsList();
+    return;
+  }
+
+  const filtered = Object.values(adminChatThreads).filter(t => {
+    return (t.userName && t.userName.toLowerCase().includes(q)) ||
+           (t.lastMessage && t.lastMessage.toLowerCase().includes(q)) ||
+           (t.userDevice && t.userDevice.toLowerCase().includes(q));
+  });
+
+  renderChatThreadsList(filtered);
+}
+
+function simulateIncomingUserMessage() {
+  playUiClick();
+  const sampleUsers = [
+    { id: 'user_rohit_24', name: 'Rohit Sharma', device: 'Android 14 • Galaxy S23', text: 'Bhai naya update kab release hoga? 3D Lexicon bohot mast laga!' },
+    { id: 'user_priya_09', name: 'Priya Verma', device: 'Android 13 • OnePlus 11R', text: 'Atomic Habits ki audio reader bohot smooth chal rahi hai, thank you sir!' },
+    { id: 'user_amit_88', name: 'Amit Kumar', device: 'Android 14 • Pixel 8', text: 'Bhai psychology of money book add kar do please next update me 🙏' }
+  ];
+
+  const randomChoice = sampleUsers[Math.floor(Math.random() * sampleUsers.length)];
+
+  if (!adminChatThreads[randomChoice.id]) {
+    adminChatThreads[randomChoice.id] = {
+      userId: randomChoice.id,
+      userName: randomChoice.name,
+      userDevice: randomChoice.device,
+      unreadByAdmin: 0,
+      unreadByUser: 0,
+      lastMessage: '',
+      lastTimestamp: new Date().toISOString(),
+      messages: []
+    };
+  }
+
+  const thread = adminChatThreads[randomChoice.id];
+  const newMsg = {
+    id: 'msg_user_' + Date.now(),
+    sender: 'user',
+    text: randomChoice.text,
+    timestamp: new Date().toISOString()
+  };
+
+  thread.messages.push(newMsg);
+  thread.lastMessage = randomChoice.text;
+  thread.lastTimestamp = newMsg.timestamp;
+  thread.unreadByAdmin = (thread.unreadByAdmin || 0) + 1;
+
+  activeChatUserId = randomChoice.id;
+
+  playChatAudioChime('receive');
+  showToast(`💬 Message from ${randomChoice.name}: "${randomChoice.text.slice(0, 25)}..."`);
+
+  renderChatThreadsList();
+  renderActiveConversation(activeChatUserId);
+  saveChatDataLocallyAndRemote();
+}
+
+function clearCurrentChatThread() {
+  if (!activeChatUserId) return;
+  if (!confirm('Kya aap is conversation ko clear karna chahte hain?')) return;
+
+  const thread = adminChatThreads[activeChatUserId];
+  if (thread) {
+    thread.messages = [];
+    thread.lastMessage = 'Chat history cleared';
+    thread.unreadByAdmin = 0;
+    renderActiveConversation(activeChatUserId);
+    renderChatThreadsList();
+    saveChatDataLocallyAndRemote();
+    showToast('🗑️ Conversation cleared');
+  }
+}
+
+function formatChatTime(isoStr) {
+  if (!isoStr) return '';
+  try {
+    const d = new Date(isoStr);
+    const now = new Date();
+    const isToday = d.toDateString() === now.toDateString();
+    let hours = d.getHours();
+    const mins = d.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    if (isToday) return `${hours}:${mins} ${ampm}`;
+    return `${d.getDate()}/${d.getMonth()+1} ${hours}:${mins} ${ampm}`;
+  } catch (e) {
+    return '';
+  }
+}
+
+window.toggleAdminChatSound = toggleAdminChatSound;
+window.refreshAdminChatThreads = refreshAdminChatThreads;
+window.selectChatThread = selectChatThread;
+window.handleAdminChatKeydown = handleAdminChatKeydown;
+window.insertQuickReply = insertQuickReply;
+window.sendAdminChatReply = sendAdminChatReply;
+window.filterChatThreads = filterChatThreads;
+window.simulateIncomingUserMessage = simulateIncomingUserMessage;
+window.clearCurrentChatThread = clearCurrentChatThread;
+
 
 
