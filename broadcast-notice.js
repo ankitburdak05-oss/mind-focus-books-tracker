@@ -1,11 +1,10 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v3-5-8-release",
+  "id": "deploy-notice-1789054572465",
   "active": true,
   "card": "card2",
-  "icon": "❄️",
+  "icon": "🚀",
   "title": "Update Live: v3.5.8",
-  "message": "❄️ Mind Focus Books v3.5.8: Thermal Cool Engine! Overheating & background battery drain 100% eliminated with Android lifecycle pause and adaptive polling. Tap karke update karein.",
-  "btnText": "Update Now v3.5.8 🚀",
-  "timestamp": "2026-09-10T15:15:00.000Z",
-  "version": "v3.5.8"
+  "message": "Naya update v3.5.8 Real App me deploy ho chuka hai! Tap karke turant install karein.",
+  "btnText": "Install Update ⚡",
+  "timestamp": "2026-09-10T15:36:12.465Z"
 };
