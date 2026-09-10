@@ -820,25 +820,39 @@ input:checked + .slider:before {
   cursor: pointer;
 }
 
-/* Real-time Console */
+/* App Activity Feed */
 .log-console {
-  background: #030509;
+  background: rgba(10, 15, 29, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 16px;
-  padding: 16px;
-  font-family: var(--font-mono);
-  font-size: 0.82rem;
-  color: #38bdf8;
+  border-radius: 14px;
+  padding: 14px 16px;
+  font-family: var(--font-family);
+  font-size: 0.85rem;
+  color: var(--text-secondary);
   max-height: 180px;
   overflow-y: auto;
   line-height: 1.6;
 }
 
-.log-entry { margin-bottom: 4px; }
-.log-time { color: var(--text-muted); margin-right: 6px; }
-.log-success { color: #34d399; }
-.log-warn { color: #f59e0b; }
-.log-error { color: #f43f5e; }
+.log-entry {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+.log-entry:last-child { border-bottom: none; }
+.log-time {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.06);
+  padding: 2px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.log-success { color: #34d399; font-weight: 600; }
+.log-warn { color: #fbbf24; font-weight: 600; }
+.log-error { color: #f87171; font-weight: 600; }
 
 /* Toast */
 .admin-toast {

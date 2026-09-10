@@ -120,9 +120,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof initAdminHelpDeskListeners === 'function') initAdminHelpDeskListeners();
   if (typeof refreshAdminChatThreads === 'function') {
     refreshAdminChatThreads(false);
-    setInterval(refreshAdminChatThreads, 4000);
+    // Polite 60s background check (SSE handles instant live delivery with 0 polling)
+    setInterval(() => {
+      if (!document.hidden) refreshAdminChatThreads(false);
+    }, 60000);
   }
-  appendLog('Executive Command Studio v2.0 Ready.', 'success');
+  appendLog('Admin Control Panel Ready.', 'success');
 });
 
 // Navigation
@@ -329,53 +332,74 @@ function updateLivePreview() {
   }
 }
 
-// GitHub REST API Commit Helper
-async function pushFileToGitHub(path, contentString, commitMessage) {
-  if (!githubToken) {
-    throw new Error('GitHub Token not configured. Check the GitHub Settings tab.');
-  }
-
-  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
-  
-  let sha = null;
+// GitHub REST API Commit Helper (with Cache-Busting SHA & Auto-Conflict 409 Retry)
+async function getFreshGitHubSha(path) {
+  if (!githubToken) return null;
+  const cb = Date.now();
+  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}?ref=${DEFAULT_BRANCH}&cb=${cb}`;
   try {
-    const getRes = await fetch(url + '?ref=' + DEFAULT_BRANCH, {
+    const res = await fetch(url, {
+      cache: 'no-store',
       headers: {
         'Authorization': `token ${githubToken}`,
         'Accept': 'application/vnd.github.v3+json'
       }
     });
-    if (getRes.ok) {
-      const existing = await getRes.json();
-      sha = existing.sha;
+    if (res.ok) {
+      const data = await res.json();
+      return data.sha || null;
     }
   } catch (e) {}
+  return null;
+}
 
-  const base64Content = btoa(unescape(encodeURIComponent(contentString)));
-
-  const body = {
-    message: commitMessage,
-    content: base64Content,
-    branch: DEFAULT_BRANCH
-  };
-  if (sha) body.sha = sha;
-
-  const putRes = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'Authorization': `token ${githubToken}`,
-      'Accept': 'application/vnd.github.v3+json',
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
-
-  if (!putRes.ok) {
-    const errData = await putRes.json();
-    throw new Error(errData.message || 'GitHub API error ' + putRes.status);
+async function pushFileToGitHub(path, contentString, commitMessage, maxRetries = 2) {
+  if (!githubToken) {
+    throw new Error('GitHub Token not configured. Check the Settings tab.');
   }
 
-  return await putRes.json();
+  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${path}`;
+  const base64Content = btoa(unescape(encodeURIComponent(contentString)));
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const sha = await getFreshGitHubSha(path);
+
+    const body = {
+      message: commitMessage,
+      content: base64Content,
+      branch: DEFAULT_BRANCH
+    };
+    if (sha) body.sha = sha;
+
+    try {
+      const putRes = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `token ${githubToken}`,
+          'Accept': 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      });
+
+      if (putRes.ok) {
+        return await putRes.json();
+      }
+
+      if (putRes.status === 409 && attempt < maxRetries) {
+        // 409 Conflict: Remote was updated, wait with backoff and retry with newly fetched SHA
+        console.warn(`409 Conflict pushing ${path}. Retrying with fresh SHA (attempt ${attempt + 1})...`);
+        await new Promise(r => setTimeout(r, 600 * (attempt + 1)));
+        continue;
+      }
+
+      const errData = await putRes.json();
+      throw new Error(errData.message || 'GitHub API error ' + putRes.status);
+    } catch (err) {
+      if (attempt >= maxRetries) throw err;
+      await new Promise(r => setTimeout(r, 600 * (attempt + 1)));
+    }
+  }
 }
 
 // Fetch Live Status From GitHub
@@ -2305,28 +2329,34 @@ async function fetchChatMessagesData() {
     }
   }
 
-  // 2. Poll Cloud Relay for any missed incoming events
-  try {
-    const pollRes = await fetch(HELPDESK_RELAY_URL + '/json?poll=1&since=5m');
-    if (pollRes.ok) {
-      const text = await pollRes.text();
-      const lines = text.trim().split('\n');
-      for (const line of lines) {
-        if (!line.trim()) continue;
-        try {
-          const item = JSON.parse(line);
-          if (item && item.message) {
-            const payload = typeof item.message === 'string' ? JSON.parse(item.message) : item.message;
-            if (payload && payload.type === 'helpdesk_chat_msg') {
-              handleAdminIncomingHelpDeskDirectMessage(payload);
-            } else if (payload && payload.type === 'helpdesk_phone_crash_telemetry') {
-              handleIncomingPhoneCrashTelemetry(payload);
+  // 2. Poll Cloud Relay for any missed incoming events (with rate limit backoff protection)
+  if (!window.__ntfyBackoffUntil || Date.now() > window.__ntfyBackoffUntil) {
+    try {
+      const pollRes = await fetch(HELPDESK_RELAY_URL + '/json?poll=1&since=5m');
+      if (pollRes.status === 429) {
+        // Rate limited: Back off for 3 minutes and rely on local storage & git
+        window.__ntfyBackoffUntil = Date.now() + 180000;
+        console.warn('ntfy.sh rate-limited. Backing off for 3 minutes.');
+      } else if (pollRes.ok) {
+        const text = await pollRes.text();
+        const lines = text.trim().split('\n');
+        for (const line of lines) {
+          if (!line.trim()) continue;
+          try {
+            const item = JSON.parse(line);
+            if (item && item.message) {
+              const payload = typeof item.message === 'string' ? JSON.parse(item.message) : item.message;
+              if (payload && payload.type === 'helpdesk_chat_msg') {
+                handleAdminIncomingHelpDeskDirectMessage(payload);
+              } else if (payload && payload.type === 'helpdesk_phone_crash_telemetry') {
+                handleIncomingPhoneCrashTelemetry(payload);
+              }
             }
-          }
-        } catch (e) {}
+          } catch (e) {}
+        }
       }
-    }
-  } catch (err) {}
+    } catch (err) {}
+  }
 
   // 3. Non-destructive merge from chat-messages.json
   const cb = Date.now();
