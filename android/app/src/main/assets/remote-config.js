@@ -1,20 +1,33 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-09-10T15:15:00.000Z",
+  "updatedAt": "2026-09-10T16:15:00.000Z",
   "activeRelease": {
-    "version": "v3.5.8",
-    "name": "Mind Focus Books v3.5.8 — Thermal Cool Engine & Zero-Battery-Drain",
+    "version": "v3.5.9",
+    "name": "Mind Focus Books v3.5.9 — Remote App Kill-Switch & Feature Control Cockpit",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
-      "❄️ Thermal Cool Engine: Zero battery drain & phone overheating completely eliminated",
-      "🛑 Android Native Background Freeze: WebView onStop lifecycle pauses all timers & sockets",
-      "⚡ Adaptive Polling: 60s idle / 8s active chat polling + 90s polite notice check",
-      "🩺 ServiceWorker Android Fix: file:// origin error completely eliminated"
+      "🚨 Remote App Kill-Switch: 1-Tap complete app shutdown & thermal protection freeze",
+      "🎛️ Master Feature Toggles: 1-Click Freeze All Features / Restore All Features",
+      "⚡ 16 Individual Feature Switches: Independent control for Chat, Crash Radar, DevTools, Updates, etc.",
+      "❄️ Zero-CPU Sleep State: Immediate timer, socket & poller hibernation when lockdown is active"
     ],
-    "stagedAt": "2026-09-10T15:15:00.000Z",
+    "stagedAt": "2026-09-10T16:15:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.5.9",
+    "name": "Mind Focus Books v3.5.9 — Remote App Kill-Switch & Feature Control Cockpit",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
+    "features": [
+      "🚨 Remote App Kill-Switch: 1-Tap complete app shutdown & thermal protection freeze",
+      "🎛️ Master Feature Toggles: 1-Click Freeze All Features / Restore All Features",
+      "⚡ 16 Individual Feature Switches: Independent control for Chat, Crash Radar, DevTools, Updates, etc.",
+      "❄️ Zero-CPU Sleep State: Immediate timer, socket & poller hibernation when lockdown is active"
+    ],
+    "stagedAt": "2026-09-10T16:15:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.5.8",
     "name": "Mind Focus Books v3.5.8 — Thermal Cool Engine & Zero-Battery-Drain",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
@@ -27,27 +40,27 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
     "stagedAt": "2026-09-10T15:15:00.000Z",
     "isDeployed": true
   },
-  "previousRelease": {
-    "version": "v3.5.7",
-    "name": "Mind Focus Books v3.5.7 — Zero-Error Telemetry & Direct CDN Engine",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
-    "features": [
-      "🎯 Mobile Touch & Pointer Guard: e.target.closest() crash completely eliminated across all Android screens",
-      "⚡ Direct GitHub Raw CDN Engine: 100% bypass for GitHub API 403 rate limits (smooth & infinite queries)",
-      "💬 Native File Protocol Help Desk Fix: Offline and WebView relative chat-messages.json network resolution",
-      "🩺 Filtered Telemetry & Error Serializer: Full stack traces with clean non-empty diagnostic payloads"
-    ],
-    "stagedAt": "2026-09-10T14:35:00.000Z",
-    "isDeployed": true
-  },
   "features": {
+    "appEmergencyLockdown": false,
+    "lockdownMessage": "🚨 अभी ऐप को बंद कर दिया गया है। कुछ प्रॉब्लम आ गई है, सभी फीचर के साथ ऐप भी बंद हो गया है। कृपया थोड़ी देर प्रतीक्षा करें।",
     "maintenanceMode": false,
     "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
-    "quotesEnabled": true,
-    "audiobookVoiceEnabled": true,
+    "chatHelpDeskEnabled": true,
+    "telemetryEnabled": true,
+    "mobileDevToolsEnabled": true,
+    "broadcastNoticeEnabled": true,
+    "appUpdatesEnabled": true,
     "streakShieldsEnabled": true,
+    "sanctuaryTimerEnabled": true,
+    "flashcardsEnabled": true,
+    "ambientAudioEnabled": true,
+    "visualPhysicsEnabled": true,
+    "barcodeScannerEnabled": true,
+    "audiobookVoiceEnabled": true,
+    "quotesEnabled": true,
     "communityBooksSync": true,
-    "dictionaryBookEnabled": true
+    "dictionaryBookEnabled": true,
+    "pdfExportEnabled": true
   },
   "globalBanner": {
     "active": false,

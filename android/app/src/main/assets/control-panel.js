@@ -532,21 +532,41 @@ function populateConfigFormUI(cfg) {
   const feats = cfg.features || {};
   const banner = cfg.globalBanner || {};
 
-  const dEnabled = document.getElementById('cfgDictionaryEnabled');
-  if (dEnabled) dEnabled.checked = !!feats.dictionaryBookEnabled;
+  // Emergency App Kill-Switch & Notice
+  const appLockdown = document.getElementById('cfgAppEmergencyLockdown');
+  if (appLockdown) appLockdown.checked = !!feats.appEmergencyLockdown;
 
+  const lockdownMsg = document.getElementById('cfgLockdownMessage');
+  if (lockdownMsg && feats.lockdownMessage) lockdownMsg.value = feats.lockdownMessage;
+
+  // 16 Granular Feature Flags
+  const setCheck = (id, val) => {
+    const el = document.getElementById(id);
+    if (el) el.checked = (val !== false);
+  };
+
+  setCheck('cfgChatHelpDesk', feats.chatHelpDeskEnabled);
+  setCheck('cfgTelemetry', feats.telemetryEnabled);
+  setCheck('cfgMobileDevTools', feats.mobileDevToolsEnabled);
+  setCheck('cfgBroadcastNotice', feats.broadcastNoticeEnabled);
+  setCheck('cfgAppUpdates', feats.appUpdatesEnabled);
+  setCheck('cfgStreakShields', feats.streakShieldsEnabled);
+  setCheck('cfgSanctuaryTimer', feats.sanctuaryTimerEnabled);
+  setCheck('cfgFlashcards', feats.flashcardsEnabled);
+  setCheck('cfgAmbientAudio', feats.ambientAudioEnabled);
+  setCheck('cfgVisualPhysics', feats.visualPhysicsEnabled);
+  setCheck('cfgBarcodeScanner', feats.barcodeScannerEnabled);
+  setCheck('cfgAudioVoice', feats.audiobookVoiceEnabled);
+  setCheck('cfgQuotes', feats.quotesEnabled);
+  setCheck('cfgCommunitySync', feats.communityBooksSync);
+  setCheck('cfgDictionary', feats.dictionaryBookEnabled);
+  setCheck('cfgPdfExport', feats.pdfExportEnabled);
+
+  // Scheduled Maintenance Mode
   const mMode = document.getElementById('cfgMaintenanceMode');
   if (mMode) mMode.checked = !!feats.maintenanceMode;
 
-  const qEnabled = document.getElementById('cfgQuotesEnabled');
-  if (qEnabled) qEnabled.checked = feats.quotesEnabled !== false;
-
-  const aEnabled = document.getElementById('cfgAudioVoiceEnabled');
-  if (aEnabled) aEnabled.checked = feats.audiobookVoiceEnabled !== false;
-
-  const sEnabled = document.getElementById('cfgStreakShields');
-  if (sEnabled) sEnabled.checked = feats.streakShieldsEnabled !== false;
-
+  // Global Top Banner
   const bActive = document.getElementById('cfgBannerActive');
   if (bActive) bActive.checked = !!banner.active;
 
@@ -897,12 +917,45 @@ function resendHistoryNotice(idx) {
 // -------------------------------------------------------------
 // REMOTE FEATURE FLAGS & BOOK OF THE DAY
 // -------------------------------------------------------------
+function freezeAllFeatures() {
+  playUiClick();
+  const featureIds = [
+    'cfgChatHelpDesk', 'cfgTelemetry', 'cfgMobileDevTools', 'cfgBroadcastNotice',
+    'cfgAppUpdates', 'cfgStreakShields', 'cfgSanctuaryTimer', 'cfgFlashcards',
+    'cfgAmbientAudio', 'cfgVisualPhysics', 'cfgBarcodeScanner', 'cfgAudioVoice',
+    'cfgQuotes', 'cfgCommunitySync', 'cfgDictionary', 'cfgPdfExport'
+  ];
+  featureIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = false;
+  });
+  showToast('🔴 All 16 features set to OFF. Click "Push to Real App" to apply.');
+}
+
+function restoreAllFeatures() {
+  playUiClick();
+  const featureIds = [
+    'cfgChatHelpDesk', 'cfgTelemetry', 'cfgMobileDevTools', 'cfgBroadcastNotice',
+    'cfgAppUpdates', 'cfgStreakShields', 'cfgSanctuaryTimer', 'cfgFlashcards',
+    'cfgAmbientAudio', 'cfgVisualPhysics', 'cfgBarcodeScanner', 'cfgAudioVoice',
+    'cfgQuotes', 'cfgCommunitySync', 'cfgDictionary', 'cfgPdfExport'
+  ];
+  featureIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.checked = true;
+  });
+  showToast('🟢 All 16 features restored to ON. Click "Push to Real App" to apply.');
+}
+
+window.freezeAllFeatures = freezeAllFeatures;
+window.restoreAllFeatures = restoreAllFeatures;
+
 async function saveRemoteConfigToCloud() {
   playUiClick();
   const btn = document.getElementById('btnSaveConfig');
   if (btn) {
     btn.disabled = true;
-    btn.innerText = '⏳ Pushing to GitHub...';
+    btn.innerText = '⏳ Pushing to Cloud...';
   }
 
   try {
@@ -910,38 +963,95 @@ async function saveRemoteConfigToCloud() {
       await fetchRemoteConfigPipeline();
     }
 
-    const dict = document.getElementById('cfgDictionaryEnabled')?.checked || false;
+    const appLockdown = document.getElementById('cfgAppEmergencyLockdown')?.checked || false;
+    const lockdownMsg = document.getElementById('cfgLockdownMessage')?.value.trim() || '🚨 अभी ऐप को बंद कर दिया गया है। कुछ प्रॉब्लम आ गई है, सभी फीचर के साथ ऐप भी बंद हो गया है। कृपया थोड़ी देर प्रतीक्षा करें।';
+
+    const getCheck = (id) => {
+      const el = document.getElementById(id);
+      return el ? el.checked : true;
+    };
+
+    const chatHelpDesk = getCheck('cfgChatHelpDesk');
+    const telemetry = getCheck('cfgTelemetry');
+    const mobileDevTools = getCheck('cfgMobileDevTools');
+    const broadcastNotice = getCheck('cfgBroadcastNotice');
+    const appUpdates = getCheck('cfgAppUpdates');
+    const streakShields = getCheck('cfgStreakShields');
+    const sanctuaryTimer = getCheck('cfgSanctuaryTimer');
+    const flashcards = getCheck('cfgFlashcards');
+    const ambientAudio = getCheck('cfgAmbientAudio');
+    const visualPhysics = getCheck('cfgVisualPhysics');
+    const barcodeScanner = getCheck('cfgBarcodeScanner');
+    const audioVoice = getCheck('cfgAudioVoice');
+    const quotes = getCheck('cfgQuotes');
+    const communitySync = getCheck('cfgCommunitySync');
+    const dictionary = getCheck('cfgDictionary');
+    const pdfExport = getCheck('cfgPdfExport');
     const maintenance = document.getElementById('cfgMaintenanceMode')?.checked || false;
-    const quotes = document.getElementById('cfgQuotesEnabled')?.checked || false;
-    const audio = document.getElementById('cfgAudioVoiceEnabled')?.checked || false;
-    const streak = document.getElementById('cfgStreakShields')?.checked || false;
+
     const bannerActive = document.getElementById('cfgBannerActive')?.checked || false;
     const bannerText = document.getElementById('cfgBannerText')?.value || '';
 
     if (!remoteConfigData.features) remoteConfigData.features = {};
     if (!remoteConfigData.globalBanner) remoteConfigData.globalBanner = {};
 
-    remoteConfigData.features.dictionaryBookEnabled = dict;
-    remoteConfigData.features.maintenanceMode = maintenance;
-    remoteConfigData.features.quotesEnabled = quotes;
-    remoteConfigData.features.audiobookVoiceEnabled = audio;
-    remoteConfigData.features.streakShieldsEnabled = streak;
+    remoteConfigData.features = {
+      appEmergencyLockdown: appLockdown,
+      lockdownMessage: lockdownMsg,
+      maintenanceMode: maintenance,
+      maintenanceMessage: '🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!',
+      chatHelpDeskEnabled: chatHelpDesk,
+      telemetryEnabled: telemetry,
+      mobileDevToolsEnabled: mobileDevTools,
+      broadcastNoticeEnabled: broadcastNotice,
+      appUpdatesEnabled: appUpdates,
+      streakShieldsEnabled: streakShields,
+      sanctuaryTimerEnabled: sanctuaryTimer,
+      flashcardsEnabled: flashcards,
+      ambientAudioEnabled: ambientAudio,
+      visualPhysicsEnabled: visualPhysics,
+      barcodeScannerEnabled: barcodeScanner,
+      audiobookVoiceEnabled: audioVoice,
+      quotesEnabled: quotes,
+      communityBooksSync: communitySync,
+      dictionaryBookEnabled: dictionary,
+      pdfExportEnabled: pdfExport
+    };
+
     remoteConfigData.globalBanner.active = bannerActive;
     remoteConfigData.globalBanner.text = bannerText;
     remoteConfigData.updatedAt = new Date().toISOString();
 
     const jsonStr = JSON.stringify(remoteConfigData, null, 2);
-    await pushFileToGitHub('remote-config.json', jsonStr, 'Admin: Update remote switches');
+    await pushFileToGitHub('remote-config.json', jsonStr, 'Admin: Update remote switches & emergency kill-switch');
 
-    appendLog('Remote feature switches updated.', 'success');
-    showToast('✅ Feature Switches Pushed to Cloud!');
+    // ⚡ Instant Real-Time Cloud Relay Broadcast (Delivered to phone in < 500ms via SSE)
+    try {
+      const relayPayload = {
+        type: 'remote_config_sync',
+        timestamp: Date.now(),
+        features: remoteConfigData.features
+      };
+      fetch(HELPDESK_RELAY_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain' },
+        body: JSON.stringify(relayPayload)
+      }).catch(() => {});
+    } catch (relayErr) {}
+
+    appendLog('Remote feature switches & kill-switch updated.', 'success');
+    if (appLockdown) {
+      showToast('🚨 EMERGENCY APP LOCKDOWN BROADCASTED! App is now FROZEN on user phones.');
+    } else {
+      showToast('✅ Feature Switches & Kill-Switch Pushed to Real App!');
+    }
   } catch (err) {
     appendLog('Config error: ' + err.message, 'error');
     alert('Error: ' + err.message);
   } finally {
     if (btn) {
       btn.disabled = false;
-      btn.innerText = '☁️ Push Feature Switches to Real App';
+      btn.innerText = '☁️ Push Feature Switches & Kill-Switch to Real App';
     }
   }
 }

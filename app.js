@@ -3038,14 +3038,14 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.5.8';
+const CURRENT_APP_VERSION = 'v3.5.9';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
   if (typeof syncSettingsFlagshipControls === 'function') syncSettingsFlagshipControls();
   const verText = document.getElementById('appCurrentVersionText');
-  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Thermal Cool & Battery Saver Edition';
+  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Remote Kill-Switch & Feature Cockpit';
   const devToolsCheckbox = document.getElementById('toggleDevToolsCheckbox');
   if (devToolsCheckbox) {
     devToolsCheckbox.checked = (localStorage.getItem('mindfocus_devtools_enabled') === 'true');
@@ -5137,6 +5137,171 @@ function dismissInAppNotice(event) {
   }, 300);
 }
 
+window.__IS_EMERGENCY_LOCKED_DOWN = false;
+window.__TELEMETRY_DISABLED = false;
+
+function applyFeaturesConfig(feats) {
+  if (!feats) return;
+
+  // 1. 🚨 EMERGENCY REMOTE APP KILL-SWITCH / LOCKDOWN
+  const isLockdown = (feats.appEmergencyLockdown === true);
+  window.__IS_EMERGENCY_LOCKED_DOWN = isLockdown;
+
+  let lockdownOverlay = document.getElementById('appEmergencyLockdownOverlay');
+  if (isLockdown) {
+    // Immediate CPU/Battery zero-load freeze: Stop all background polling and timers
+    if (userChatPollTimer) {
+      clearInterval(userChatPollTimer);
+      userChatPollTimer = null;
+    }
+    if (broadcastNoticeInterval) {
+      clearInterval(broadcastNoticeInterval);
+      broadcastNoticeInterval = null;
+    }
+    if (window.speechSynthesis) {
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+    }
+    if (typeof stopAmbientAudio === 'function') stopAmbientAudio();
+    if (typeof stopBarcodeScanner === 'function') stopBarcodeScanner();
+    if (typeof pauseZenTimer === 'function') pauseZenTimer();
+
+    // Close any floating modals
+    const chatModal = document.getElementById('userHelpDeskModalOverlay');
+    if (chatModal) chatModal.classList.remove('active');
+    const devToolsModal = document.getElementById('mobileDevToolsDrawer');
+    if (devToolsModal) devToolsModal.classList.remove('active');
+
+    // Create or update full-screen emergency lockdown overlay
+    if (!lockdownOverlay) {
+      lockdownOverlay = document.createElement('div');
+      lockdownOverlay.id = 'appEmergencyLockdownOverlay';
+      lockdownOverlay.style.cssText = 'position:fixed; inset:0; z-index:9999999; background:#030712; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; box-sizing:border-box; overflow-y:auto;';
+      document.body.appendChild(lockdownOverlay);
+    }
+    const noticeText = feats.lockdownMessage || '🚨 अभी ऐप को बंद कर दिया गया है। कुछ प्रॉब्लम आ गई है, सभी फीचर के साथ ऐप भी बंद हो गया है। कृपया थोड़ी देर प्रतीक्षा करें।';
+    lockdownOverlay.innerHTML = `
+      <div style="font-size:72px; margin-bottom:16px; filter:drop-shadow(0 0 25px rgba(239,68,68,0.7));">🚨</div>
+      <h1 style="font-size:1.6rem; font-weight:900; color:#ef4444; margin-bottom:14px; letter-spacing:0.3px;">ऐप अस्थायी रूप से बंद है</h1>
+      <div style="font-size:1.05rem; line-height:1.65; color:#fecaca; max-width:480px; margin-bottom:22px; background:rgba(239,68,68,0.12); border:1.5px solid rgba(239,68,68,0.4); border-radius:14px; padding:18px 20px; font-weight:600; text-align:left;">
+        ${escapeHtml(noticeText)}
+      </div>
+      <p style="font-size:0.86rem; color:#94a3b8; max-width:420px; line-height:1.5; margin-bottom:22px;">
+        ❄️ <b>Zero-CPU Thermal Protection Active:</b> फोन को ठंडा रखने व सुरक्षा के लिए सभी बैकग्राउंड प्रोसेस, नेटवर्क और फीचर्स तत्काल फ्रीज कर दिए गए हैं।
+      </p>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+        <button type="button" onclick="checkRemoteConfig()" style="background:#ef4444; color:#fff; border:none; border-radius:12px; padding:12px 24px; font-size:0.95rem; font-weight:800; cursor:pointer; box-shadow:0 4px 15px rgba(239,68,68,0.4);">
+          🔄 चेक करें (Check Status)
+        </button>
+        <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 16px; background:rgba(239,68,68,0.18); border:1px solid #ef4444; border-radius:999px; color:#fca5a5; font-size:0.8rem; font-weight:800;">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444;"></span>
+          ALL 16 FEATURES FROZEN
+        </div>
+      </div>
+    `;
+    return;
+  } else {
+    // If lockdown was deactivated by admin, remove overlay and resume
+    if (lockdownOverlay) {
+      lockdownOverlay.remove();
+      connectCloudRelaySSE();
+      if (!broadcastNoticeInterval) {
+        broadcastNoticeInterval = setInterval(() => {
+          if (!document.hidden) {
+            checkRemoteBroadcastNotice();
+            checkRemoteConfig();
+          }
+        }, 90000);
+      }
+    }
+  }
+
+  // 2. 💬 Live Help Desk & Chat Support
+  const chatPill = document.getElementById('userHelpDeskTriggerPill');
+  if (chatPill) {
+    chatPill.style.display = (feats.chatHelpDeskEnabled === false) ? 'none' : 'flex';
+  }
+  if (feats.chatHelpDeskEnabled === false) {
+    const chatModal = document.getElementById('userHelpDeskModalOverlay');
+    if (chatModal) chatModal.classList.remove('active');
+  }
+
+  // 3. 🩺 Phone Crash Radar & Telemetry
+  window.__TELEMETRY_DISABLED = (feats.telemetryEnabled === false);
+
+  // 4. 🛠️ Mobile DevTools Console
+  const devToolsPill = document.getElementById('mobileDevToolsPill');
+  if (devToolsPill) {
+    devToolsPill.style.display = (feats.mobileDevToolsEnabled === false) ? 'none' : 'flex';
+  }
+  if (feats.mobileDevToolsEnabled === false) {
+    const devToolsModal = document.getElementById('mobileDevToolsDrawer');
+    if (devToolsModal) devToolsModal.classList.remove('active');
+  }
+
+  // 5. 📢 Broadcast Notices
+  if (feats.broadcastNoticeEnabled === false) {
+    const noticeOverlay = document.getElementById('appBroadcastNoticeOverlay');
+    if (noticeOverlay) noticeOverlay.classList.remove('active');
+  }
+
+  // 6. 🔄 In-App Update Scanner
+  const updateBtn = document.getElementById('headerUpdateBtn');
+  if (updateBtn && feats.appUpdatesEnabled === false) {
+    updateBtn.style.display = 'none';
+  }
+
+  // 7. ⏱️ Zen Sanctuary Timer
+  if (feats.sanctuaryTimerEnabled === false) {
+    if (typeof pauseZenTimer === 'function') pauseZenTimer();
+  }
+
+  // 8. 🎴 3D Smart Flashcards
+  if (feats.flashcardsEnabled === false) {
+    const fcOverlay = document.getElementById('flashcardTrainerModalOverlay');
+    if (fcOverlay) fcOverlay.classList.remove('active');
+  }
+
+  // 9. 🎵 Spatial EQ & Ambient Audio
+  if (feats.ambientAudioEnabled === false) {
+    if (typeof stopAmbientAudio === 'function') stopAmbientAudio();
+  }
+
+  // 10. 🎨 3D Tilt Physics & Dynamic Aurora
+  const auroraBg = document.getElementById('ambientAuroraBg');
+  if (auroraBg) {
+    auroraBg.style.display = (feats.visualPhysicsEnabled === false) ? 'none' : 'block';
+  }
+
+  // 11. 📷 Barcode / ISBN Camera Scanner
+  if (feats.barcodeScannerEnabled === false) {
+    if (typeof stopBarcodeScanner === 'function') stopBarcodeScanner();
+  }
+
+  // 12. 🎙️ Audiobook Voice Reader (TTS)
+  if (feats.audiobookVoiceEnabled === false) {
+    if (window.speechSynthesis) {
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+    }
+  }
+
+  // 13. 📖 Daily Motivational Quotes
+  const quotesCard = document.getElementById('dailyQuoteContainer') || document.querySelector('.quote-card');
+  if (quotesCard) {
+    quotesCard.style.display = (feats.quotesEnabled === false) ? 'none' : 'block';
+  }
+
+  // 14. 📖 3D Dictionary Book
+  if (typeof feats.dictionaryBookEnabled === 'boolean') {
+    const isDictActive = feats.dictionaryBookEnabled === true;
+    if (state.dictionaryEnabled !== isDictActive) {
+      state.dictionaryEnabled = isDictActive;
+      localStorage.setItem('mf_dictionary_enabled', isDictActive ? 'true' : 'false');
+      loadData();
+      if (typeof renderAll === 'function') renderAll();
+    }
+  }
+}
+
 async function checkRemoteConfig() {
   // Battery & Heat Guard: Never poll config when app is hidden or offline
   if (typeof document !== 'undefined' && document.hidden) return;
@@ -5170,6 +5335,13 @@ async function checkRemoteConfig() {
 
     if (!cfg) return;
 
+    // Apply Remote Feature Flags & Emergency Lockdown
+    if (cfg.features) {
+      applyFeaturesConfig(cfg.features);
+    }
+
+    if (window.__IS_EMERGENCY_LOCKED_DOWN) return;
+
     // 1. Maintenance Mode
     const maintenanceOverlay = document.getElementById('appMaintenanceOverlay');
     if (cfg.features && cfg.features.maintenanceMode) {
@@ -5201,19 +5373,6 @@ async function checkRemoteConfig() {
       topBanner.innerText = cfg.globalBanner.text;
     } else {
       if (topBanner) topBanner.remove();
-    }
-
-    // 3. Remote Feature Flags (Dictionary Book, Quotes, etc.)
-    if (cfg.features && typeof cfg.features.dictionaryBookEnabled === 'boolean') {
-      const isDictActive = cfg.features.dictionaryBookEnabled === true || 
-        (cfg.stagedRelease && cfg.stagedRelease.version === 'v3.3.0' && cfg.stagedRelease.isDeployed === true);
-      
-      if (state.dictionaryEnabled !== isDictActive) {
-        state.dictionaryEnabled = isDictActive;
-        localStorage.setItem('mf_dictionary_enabled', isDictActive ? 'true' : 'false');
-        loadData();
-        if (typeof renderAll === 'function') renderAll();
-      }
     }
 
     // 4. In-App Version Update Trigger (OTA Updates)
@@ -7570,6 +7729,8 @@ function initLiveHelpDeskEngine() {
       userChatBroadcastChannel.onmessage = (e) => {
         if (e.data && e.data.type === 'helpdesk_chat_msg') {
           handleIncomingHelpDeskDirectMessage(e.data);
+        } else if (e.data && e.data.type === 'remote_config_sync') {
+          applyFeaturesConfig(e.data.features);
         }
       };
     }
@@ -7580,8 +7741,12 @@ function initLiveHelpDeskEngine() {
     if (e.key === 'mindfocus_chat_last_event' && e.newValue) {
       try {
         const item = JSON.parse(e.newValue);
-        if (item && item.payload && item.payload.type === 'helpdesk_chat_msg') {
-          handleIncomingHelpDeskDirectMessage(item.payload);
+        if (item && item.payload) {
+          if (item.payload.type === 'helpdesk_chat_msg') {
+            handleIncomingHelpDeskDirectMessage(item.payload);
+          } else if (item.payload.type === 'remote_config_sync') {
+            applyFeaturesConfig(item.payload.features);
+          }
         }
       } catch (err) {}
     }
@@ -7647,6 +7812,8 @@ function connectCloudRelaySSE() {
           const payload = typeof parsed.message === 'string' ? JSON.parse(parsed.message) : parsed.message;
           if (payload && payload.type === 'helpdesk_chat_msg') {
             handleIncomingHelpDeskDirectMessage(payload);
+          } else if (payload && payload.type === 'remote_config_sync') {
+            applyFeaturesConfig(payload.features);
           }
         }
       } catch (err) {}
@@ -7760,6 +7927,8 @@ async function fetchAndSyncUserChat(isUserAction = false) {
             const payload = typeof item.message === 'string' ? JSON.parse(item.message) : item.message;
             if (payload && payload.type === 'helpdesk_chat_msg') {
               handleIncomingHelpDeskDirectMessage(payload);
+            } else if (payload && payload.type === 'remote_config_sync') {
+              applyFeaturesConfig(payload.features);
             }
           }
         } catch (e) {}
@@ -8383,6 +8552,7 @@ function recordAndDispatchPhoneError(errObj, logToDevConsole = true) {
   } catch (e) {}
 
   // 3. Dispatch to Cloud Relay (ntfy.sh) so Admin Control Panel receives it instantly
+  if (window.__TELEMETRY_DISABLED || window.__IS_EMERGENCY_LOCKED_DOWN) return;
   try {
     // Battery & Network Throttle: Never dispatch identical error more than once every 60 seconds
     const now = Date.now();

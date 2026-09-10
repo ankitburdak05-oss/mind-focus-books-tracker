@@ -539,32 +539,256 @@
       </div>
     </section>
 
-    <!-- TAB 3: REMOTE FEATURE SWITCHES -->
+    <!-- TAB 3: REMOTE FEATURE SWITCHES & EMERGENCY COCKPIT -->
     <section class="tab-view" id="tabFeatures">
       <div class="glass-panel">
         <div class="panel-header">
           <div class="panel-title">
-            <span>🎛️</span> Remote "God Mode" Switches (Real App Controls)
+            <span>🎛️</span> Remote Feature Control Cockpit & App Kill-Switch
           </div>
-          <span class="panel-pill">INSTANT CLOUD TOGGLES</span>
+          <span class="panel-pill" style="background:rgba(239,68,68,0.2); color:#fca5a5; border:1px solid rgba(239,68,68,0.4);">LIVE KILL-SWITCH</span>
         </div>
 
-        <!-- 3D Dictionary Book Master Switch -->
-        <div class="toggle-row" style="background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.25); border-radius:12px; padding:14px; margin-bottom:12px;">
-          <div>
-            <div class="toggle-info-title" style="color:#fbbf24;">📖 3D Dictionary Book (Book #0 Lexicon)</div>
-            <div class="toggle-info-desc">Enable/disable Book 0 A-Z English-Hindi 3D Dictionary Book in the Phone App. When OFF, it is hidden from app users.</div>
+        <!-- 🚨 EMERGENCY APP KILL-SWITCH (FULL APP SHUTDOWN) -->
+        <div style="background:linear-gradient(135deg, rgba(239,68,68,0.18), rgba(185,28,28,0.08)); border:2px solid #ef4444; border-radius:14px; padding:18px; margin-bottom:20px; box-shadow:0 0 25px rgba(239,68,68,0.2);">
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:12px;">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span style="font-size:2rem; animation:pulse 1.5s infinite;">🚨</span>
+              <div>
+                <div style="font-size:1.15rem; font-weight:800; color:#f87171; letter-spacing:0.3px;">Emergency App Kill-Switch (रिमोट ऐप लॉकडाउन)</div>
+                <div style="font-size:0.82rem; color:#cbd5e1; margin-top:2px;">
+                  1-क्लिक में पूरे फोन ऐप को बंद करें। इससे सभी बैकग्राउंड प्रोसेस, टाइमर व सॉकेट्स फ्रीज हो जाएंगे और फोन तुरंत ठंडा हो जाएगा।
+                </div>
+              </div>
+            </div>
+            <label class="switch" style="transform:scale(1.15);">
+              <input type="checkbox" id="cfgAppEmergencyLockdown">
+              <span class="slider" style="background-color:#475569;"></span>
+            </label>
           </div>
-          <label class="switch">
-            <input type="checkbox" id="cfgDictionaryEnabled">
-            <span class="slider"></span>
-          </label>
+
+          <div class="form-group" style="margin-top:10px; margin-bottom:0;">
+            <label class="form-label" style="color:#fca5a5; font-size:0.8rem; font-weight:700;">
+              🔒 Phone App Screen Shutdown Notice (ऐप बंद होने पर दिखने वाला संदेश):
+            </label>
+            <textarea class="form-input" id="cfgLockdownMessage" rows="2" style="border-color:rgba(239,68,68,0.4); font-size:0.85rem; color:#fecaca;" placeholder="संदेश डालें...">🚨 अभी ऐप को बंद कर दिया गया है। कुछ प्रॉब्लम आ गई है, सभी फीचर के साथ ऐप भी बंद हो गया है। कृपया थोड़ी देर प्रतीक्षा करें।</textarea>
+          </div>
         </div>
 
-        <div class="toggle-row">
+        <!-- 🎛️ MASTER QUICK ACTION BUTTONS -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+          <button type="button" class="btn-admin" onclick="freezeAllFeatures()" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#fca5a5; font-weight:800; padding:12px; border-radius:10px;">
+            <span>🔴</span> Freeze All Features (सभी बंद करें)
+          </button>
+          <button type="button" class="btn-admin" onclick="restoreAllFeatures()" style="background:rgba(16,185,129,0.2); border:1px solid #10b981; color:#6ee7b7; font-weight:800; padding:12px; border-radius:10px;">
+            <span>🟢</span> Restore All Features (सभी चालू करें)
+          </button>
+        </div>
+
+        <!-- ⚡ 16 INDIVIDUAL GRANULAR FEATURE SWITCHES -->
+        <div style="font-size:0.9rem; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px; border-bottom:1px solid rgba(255,255,255,0.08); padding-bottom:6px;">
+          ⚡ Individual Granular Feature Toggles (अलग-अलग फीचर चालू / बंद करें)
+        </div>
+
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:10px;">
+          <!-- 1. Help Desk & Chat -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">💬 Live Help Desk & Chat Support</div>
+              <div class="toggle-info-desc">In-app floating chat pill & real-time help desk messaging.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgChatHelpDesk" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 2. Phone Crash Radar & Telemetry -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">🩺 Phone Crash Radar & Telemetry</div>
+              <div class="toggle-info-desc">Real-time error diagnostics & crash report dispatch.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgTelemetry" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 3. Mobile DevTools -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">🛠️ Mobile DevTools Console</div>
+              <div class="toggle-info-desc">Floating in-app console & diagnostic inspector pill.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgMobileDevTools" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 4. Broadcast Notices -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">📢 Broadcast Notices & Alerts</div>
+              <div class="toggle-info-desc">Admin flash announcements & alert banners on user screen.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgBroadcastNotice" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 5. In-App Update Scanner -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">🔄 In-App Update Scanner & Installer</div>
+              <div class="toggle-info-desc">OTA APK auto-update prompt dialogs & header badge.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgAppUpdates" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 6. Reading Streaks & Shields -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">🔥 Daily Streaks & Freeze Shields</div>
+              <div class="toggle-info-desc">Duolingo-style reading streaks & shield inventory.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgStreakShields" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 7. Zen Sanctuary Timer -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">⏱️ Zen Sanctuary & Pomodoro Timer</div>
+              <div class="toggle-info-desc">Focus session interval timer with interval chimes.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgSanctuaryTimer" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 8. 3D Smart Flashcards -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">🎴 3D Smart Flashcards & Quizzes</div>
+              <div class="toggle-info-desc">Interactive 3D book summary flashcards & spaced repetition.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgFlashcards" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 9. Spatial EQ & Ambient Audio -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">🎵 Spatial EQ & Ambient Audio</div>
+              <div class="toggle-info-desc">Binaural rain, cafe, and forest white noise engine.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgAmbientAudio" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 10. 3D Tilt Physics & Dynamic Aurora -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">🎨 3D Tilt Physics & Chromatic Aurora</div>
+              <div class="toggle-info-desc">Gyroscope card tilt & GPU aurora waves (Turn OFF to save battery).</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgVisualPhysics" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 11. Barcode / ISBN Camera Scanner -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">📷 Barcode / ISBN Camera Scanner</div>
+              <div class="toggle-info-desc">Live camera barcode scanner to instantly find book metadata.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgBarcodeScanner" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 12. Audiobook Voice Reader (TTS) -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">🎙️ Audiobook Voice Reader (TTS)</div>
+              <div class="toggle-info-desc">Synthetic text-to-speech audio reader for book key points.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgAudioVoice" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 13. Daily Motivational Quotes -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">📖 Daily Motivational Quotes</div>
+              <div class="toggle-info-desc">Inspirational reading quote of the day banner.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgQuotes" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 14. Community Books Sync -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">📚 Community Books Sync</div>
+              <div class="toggle-info-desc">Sync books curated by the community across readers.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgCommunitySync" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 15. 3D Dictionary Book -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.25); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title" style="color:#fbbf24;">📖 3D Dictionary Book (Book #0)</div>
+              <div class="toggle-info-desc">A-Z English-Hindi 3D Dictionary book in phone library.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgDictionary" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+
+          <!-- 16. Reading Analytics & PDF Exporter -->
+          <div class="toggle-row" style="padding:10px 14px; margin-bottom:0; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
+            <div>
+              <div class="toggle-info-title">📊 Reading Analytics & PDF Export</div>
+              <div class="toggle-info-desc">Progress charts, reading stats, and printable PDF certificate.</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="cfgPdfExport" checked>
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Extra: Scheduled Maintenance Mode -->
+        <div class="toggle-row" style="margin-top:16px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
           <div>
-            <div class="toggle-info-title">🚨 Emergency Maintenance Mode</div>
-            <div class="toggle-info-desc">When enabled, all app users will see a scheduled maintenance screen.</div>
+            <div class="toggle-info-title">🚧 Scheduled Maintenance Screen</div>
+            <div class="toggle-info-desc">When enabled, shows scheduled maintenance screen on user app.</div>
           </div>
           <label class="switch">
             <input type="checkbox" id="cfgMaintenanceMode">
@@ -572,40 +796,8 @@
           </label>
         </div>
 
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-info-title">📖 Daily Motivational Quotes</div>
-            <div class="toggle-info-desc">Show dynamic daily book quotes and morning inspiration cards in the app.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="cfgQuotesEnabled" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-info-title">🎙️ Audiobook Voice Reader (TTS)</div>
-            <div class="toggle-info-desc">Enable synthetic speech audiobook narrator for book notes.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="cfgAudioVoiceEnabled" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-info-title">🛡️ Duolingo Streak Shield Rewards</div>
-            <div class="toggle-info-desc">Allow users to earn freeze shields to preserve reading streaks.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="cfgStreakShields" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
+        <!-- Global Top Ticker Banner -->
+        <div class="toggle-row" style="margin-top:10px; background:rgba(255,255,255,0.02); border:1px solid rgba(255,255,255,0.07); border-radius:10px;">
           <div>
             <div class="toggle-info-title">📢 Global Top Announcement Ticker</div>
             <div class="toggle-info-desc">Show a thin glowing headline banner pinned at the very top of the app.</div>
@@ -616,13 +808,13 @@
           </label>
         </div>
 
-        <div class="form-group" style="margin-top: 18px;">
+        <div class="form-group" style="margin-top: 14px;">
           <label class="form-label">Top Banner Ticker Text</label>
           <input type="text" class="form-input" id="cfgBannerText" placeholder="e.g. 🌟 Welcome Book Lovers! Happy Reading!">
         </div>
 
-        <button type="button" class="btn-admin btn-primary" id="btnSaveConfig" onclick="saveRemoteConfigToCloud()" style="margin-top: 14px;">
-          <span>☁️</span> Push Feature Switches to Real App
+        <button type="button" class="btn-admin btn-primary" id="btnSaveConfig" onclick="saveRemoteConfigToCloud()" style="margin-top: 16px; font-size:1rem; padding:14px;">
+          <span>☁️</span> Push Feature Switches & Kill-Switch to Real App
         </button>
       </div>
     </section>
