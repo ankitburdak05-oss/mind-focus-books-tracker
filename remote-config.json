@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-10T17:14:31.066Z",
+  "updatedAt": "2026-09-10T17:16:13.311Z",
   "activeRelease": {
     "version": "v3.5.9",
     "name": "Mind Focus Books v3.5.9 — Remote App Kill-Switch & Feature Control Cockpit",
@@ -46,8 +46,8 @@
     "maintenanceMode": false,
     "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
     "chatHelpDeskEnabled": true,
-    "telemetryEnabled": false,
-    "mobileDevToolsEnabled": false,
+    "telemetryEnabled": true,
+    "mobileDevToolsEnabled": true,
     "broadcastNoticeEnabled": true,
     "appUpdatesEnabled": true,
     "streakShieldsEnabled": true,
