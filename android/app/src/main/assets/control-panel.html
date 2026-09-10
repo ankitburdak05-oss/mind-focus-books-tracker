@@ -38,11 +38,11 @@
         <div class="pipeline-badge-icon">🚀</div>
         <div>
           <div class="pipeline-title">
-            <span id="pipelineStagedTitle">Mind Focus Books v3.5.0</span>
-            <span class="pipeline-status-tag tag-staged" id="pipelineStatusTag">READY TO PUSH</span>
+            <span id="pipelineStagedTitle">Mind Focus Books v3.5.2</span>
+            <span class="pipeline-status-tag tag-staged" id="pipelineStatusTag">STAGED — READY TO PUSH</span>
           </div>
           <div class="pipeline-desc" id="pipelineStagedDesc">
-            Staged Release: v3.5.0 Phone Heating & Battery Drain Permanent Fix + In-App Re-Update Engine. Click Deploy to push live to Phone App!
+            🚀 v3.5.2 Clean Architecture Release: (1) 134 lines dead code & hidden legacy blocks deleted, (2) Book cover upload & remove 100% fixed, (3) Interactive Knowledge Value breakdown, (4) Direct Finished books filter from progress ring, (5) 5s ultra-fast update delivery.
           </div>
         </div>
       </div>
@@ -88,8 +88,8 @@
       <div style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.12)); border:1.5px solid rgba(16,185,129,0.45); border-radius:14px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
         <div>
           <div style="font-weight:900; color:#34d399; font-size:1.05rem; display:flex; align-items:center; gap:8px;">
-            <span>🚀</span> <span>App Version Release Manager (v3.5.0 Staged)</span>
-            <span class="pipeline-status-tag tag-staged" style="font-size:0.7rem; padding:2px 8px;">READY TO PUSH</span>
+            <span>🚀</span> <span>App Version Release Manager (v3.5.1 Staged — Bug Fix)</span>
+            <span class="pipeline-status-tag tag-staged" style="font-size:0.7rem; padding:2px 8px;">STAGED</span>
           </div>
           <div style="font-size:0.84rem; color:var(--text-secondary); margin-top:4px;">
             Real App Version Update sabhi phones me bhejna hai? Niche button dabate hi Phone App me direct Update Dialog khulega!
@@ -306,11 +306,11 @@
           <div style="display:grid; grid-template-columns:1fr 2fr; gap:14px; margin-bottom:14px;">
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label">Version Tag</label>
-              <input type="text" class="form-input" id="targetVersionTag" value="v3.5.0" placeholder="e.g. v3.5.0">
+              <input type="text" class="form-input" id="targetVersionTag" value="v3.5.2" placeholder="e.g. v3.5.2">
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label">Release Name / Title</label>
-              <input type="text" class="form-input" id="targetReleaseName" value="Mind Focus Books v3.5.0 (Phone Heat & Battery Fix + Re-Update Release)">
+              <input type="text" class="form-input" id="targetReleaseName" value="Mind Focus Books v3.5.2 — Clean Architecture & Performance Release">
             </div>
           </div>
 
@@ -321,11 +321,11 @@
 
           <div class="form-group">
             <label class="form-label">What's New Points / Changelog (1 feature per line)</label>
-            <textarea class="form-textarea" id="targetReleaseFeatures" rows="5" placeholder="Enter new features...">❄️ Phone Overheating Fixed: Android WebView & JS timers now freeze 100% on minimize/lock
-🔋 90s Battery-Saver Polling: Zero radio wake-ups when app is backgrounded
-🔄 In-App Re-Update & Repair: Now properly displays 100% Up to Date status
-🎁 Mystery Golden Gift Box: 3D sky falling box drop with crackers & confetti
-📖 3D A-Z English-Hindi Focus Vocabulary Lexicon Book with voice pronunciation</textarea>
+            <textarea class="form-textarea" id="targetReleaseFeatures" rows="5" placeholder="Enter new features...">🗑️ Dead Code Purged: 134 lines of legacy hidden code & unused dropdown listeners removed
+🖼️ Cover Photo System Fixed: Live photo upload & remove now 100% working in Edit modal
+💰 Interactive Knowledge Value: 1-tap financial breakdown of your entire reading library
+🎯 Progress Ring Quick Filter: 1-tap direct access to finished books without wrong modal
+⚡ 5s Ultra-Fast Update Delivery: Cloud sync runs in 5 seconds with zero battery waste</textarea>
           </div>
 
           <div style="margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08); display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
@@ -844,6 +844,7 @@
   </div>
 
   <script src="dictionary-data.js"></script>
+  <script src="remote-config.js"></script>
   <script src="control-panel.js"></script>
 </body>
 </html>

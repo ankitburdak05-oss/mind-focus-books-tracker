@@ -1,21 +1,35 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-09-10T00:45:00.000Z",
+  "updatedAt": "2026-09-10T02:55:00.000Z",
   "activeRelease": {
-    "version": "v3.5.0",
-    "name": "Mind Focus Books v3.5.0 (Phone Heat & Battery Fix + Re-Update Release)",
+    "version": "v3.5.2",
+    "name": "Mind Focus Books v3.5.2 — Clean Architecture & Performance Release",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
-      "❄️ Phone Overheating Fixed: Android WebView & JS timers now freeze 100% on minimize/lock",
-      "🔋 90s Battery-Saver Polling: Zero radio wake-ups when app is backgrounded",
-      "🔄 In-App Re-Update & Repair: Now properly displays 100% Up to Date status",
-      "🎁 Mystery Golden Gift Box: 3D sky falling box drop with crackers & confetti",
-      "📖 3D A-Z English-Hindi Focus Vocabulary Lexicon Book with voice pronunciation"
+      "🗑️ Dead Code Purged: 134 lines of legacy hidden code & unused dropdown listeners removed",
+      "🖼️ Cover Photo System Fixed: Live photo upload & remove now 100% working in Edit modal",
+      "💰 Interactive Knowledge Value: 1-tap financial breakdown of your entire reading library",
+      "🎯 Progress Ring Quick Filter: 1-tap direct access to finished books without wrong modal",
+      "⚡ 5s Ultra-Fast Update Delivery: Cloud sync runs in 5 seconds with zero battery waste"
     ],
-    "stagedAt": "2026-09-09T16:40:00.000Z",
+    "stagedAt": "2026-09-10T02:55:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.5.2",
+    "name": "Mind Focus Books v3.5.2 — Clean Architecture & Performance Release",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
+    "features": [
+      "🗑️ Dead Code Purged: 134 lines of legacy hidden code & unused dropdown listeners removed",
+      "🖼️ Cover Photo System Fixed: Live photo upload & remove now 100% working in Edit modal",
+      "💰 Interactive Knowledge Value: 1-tap financial breakdown of your entire reading library",
+      "🎯 Progress Ring Quick Filter: 1-tap direct access to finished books without wrong modal",
+      "⚡ 5s Ultra-Fast Update Delivery: Cloud sync runs in 5 seconds with zero battery waste"
+    ],
+    "stagedAt": "2026-09-10T02:55:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.5.1",
     "name": "Mind Focus Books v3.5.1 — Bug Fix & Polish Release",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
@@ -26,20 +40,7 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
       "🔗 Category Filter Sync Fix — carousel chip aur dropdown ab ek saath sync hote hain",
       "🔑 PIN Forgot/Reset Button — lock screen pe 'Forgot PIN? Reset it' option add hua, data safe"
     ],
-    "stagedAt": "2026-09-10T00:45:00.000Z",
-    "isDeployed": false
-  },
-  "previousRelease": {
-    "version": "v3.4.0",
-    "name": "Mind Focus Books v3.4.0 (Mystery Golden Gift Box & Audio Fix Release)",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
-    "features": [
-      "🎁 Mystery Golden Gift Box Engine (Admin can drop 3D flying golden boxes with confetti & crackers)",
-      "🔇 Tunu-Tunu Sound Bug Fixed (Pull-to-refresh repeated chime sound completely muted on phones)",
-      "⚡ Ultra-Fast In-App Notice Sync (Direct GitHub raw connection with zero API rate limit blocks)",
-      "🔒 Secure Admin Vault (PAT securely stored in client storage with zero hardcoded secret leaks)"
-    ],
-    "stagedAt": "2026-09-09T15:55:36.801Z",
+    "stagedAt": "2026-09-10T02:02:31.850Z",
     "isDeployed": true
   },
   "features": {
