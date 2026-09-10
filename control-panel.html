@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Mind Focus Books • Executive Command Studio</title>
   <link rel="manifest" href="manifest-admin.json">
-  <link rel="stylesheet" href="control-panel.css">
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="control-panel.css">
   <link rel="icon" type="image/png" href="icon-192.png">
 </head>
 <body>
@@ -50,7 +50,7 @@
         <button type="button" class="btn-admin btn-emerald" id="btnDeployToRealAppBanner" onclick="deployStagedReleaseToRealApp()">
           <span>⚡</span> Deploy to Real App
         </button>
-        <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()" style="min-width:130px; font-size:0.82rem;">
+        <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()" style="font-size:0.82rem;">
           <span>↩️</span> Rollback
         </button>
       </div>
@@ -85,17 +85,17 @@
     <section class="tab-view active" id="tabBroadcast">
 
       <!-- Direct Version Release Launcher Banner (Always Visible) -->
-      <div style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.12)); border:1.5px solid rgba(16,185,129,0.45); border-radius:14px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
+      <div class="version-direct-banner" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.12)); border:1.5px solid rgba(16,185,129,0.45); border-radius:14px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
         <div>
-          <div style="font-weight:900; color:#34d399; font-size:1.05rem; display:flex; align-items:center; gap:8px;">
-            <span>🚀</span> <span>App Version Release Manager (v3.5.1 Staged — Bug Fix)</span>
+          <div style="font-weight:900; color:#34d399; font-size:1.05rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
+            <span>🚀</span> <span>App Version Release Manager (v3.5.2 Staged)</span>
             <span class="pipeline-status-tag tag-staged" style="font-size:0.7rem; padding:2px 8px;">STAGED</span>
           </div>
           <div style="font-size:0.84rem; color:var(--text-secondary); margin-top:4px;">
             Real App Version Update sabhi phones me bhejna hai? Niche button dabate hi Phone App me direct Update Dialog khulega!
           </div>
         </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <div class="version-direct-actions" style="display:flex; gap:10px; flex-wrap:wrap;">
           <button type="button" class="btn-admin btn-secondary" onclick="switchTab('tabPipeline')" style="font-size:0.85rem; padding:8px 16px;">
             <span>🔍</span> Review Features in Tab 2
           </button>
@@ -201,7 +201,7 @@
             <button type="button" class="btn-admin btn-gold" id="btnAutoSequence" onclick="triggerAutoSequence()">
               <span>⏱️</span> Auto-Sequence (Card 2 → 10s → Card 1)
             </button>
-            <button type="button" class="btn-admin btn-danger" id="btnDeactivate" onclick="deactivateLiveNotice()" style="min-width:140px;">
+            <button type="button" class="btn-admin btn-danger" id="btnDeactivate" onclick="deactivateLiveNotice()">
               <span>🔴</span> Turn Off Notice
             </button>
           </div>
@@ -303,7 +303,7 @@
             <span class="pipeline-status-tag tag-staged" id="pipelineStagedTagBadge">READY TO PUSH</span>
           </div>
 
-          <div style="display:grid; grid-template-columns:1fr 2fr; gap:14px; margin-bottom:14px;">
+          <div class="responsive-grid-1-2">
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label">Version Tag</label>
               <input type="text" class="form-input" id="targetVersionTag" value="v3.5.2" placeholder="e.g. v3.5.2">
@@ -340,7 +340,7 @@
           <button type="button" class="btn-admin btn-emerald" id="btnDeployToRealApp" onclick="deployStagedReleaseToRealApp()" style="flex:1; font-size:1rem; padding:14px 24px;">
             <span>🚀</span> Push Version Update to All Phones (Trigger In-App Update Dialog)
           </button>
-          <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()" style="min-width:140px;">
+          <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()">
             <span>↩️</span> Revert Release
           </button>
         </div>
@@ -364,7 +364,7 @@
         <!-- Reward Type Selector Grid -->
         <div class="form-group">
           <label class="form-label">Select Reward Type to Put Inside Gift Box</label>
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:12px; margin-top:8px;">
+          <div class="responsive-grid-cards">
             <label class="card-radio-label" style="margin:0;">
               <input type="radio" name="giftRewardType" value="vip_badge" checked>
               <div class="card-option">
@@ -401,7 +401,7 @@
         </div>
 
         <!-- Gift Details -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px;">
+        <div class="responsive-grid-1-1">
           <div class="form-group">
             <label class="form-label">Gift Box Headline / Title</label>
             <input type="text" class="form-input" id="giftTitleInput" value="👑 Special VIP Surprise From Mind Focus!" placeholder="Title...">
@@ -435,7 +435,7 @@
           <button type="button" class="btn-admin" id="btnDropGiftToAllPhones" onclick="dispatchGiftDropToAllPhones()" style="flex:1; font-size:1.05rem; padding:16px 28px; background:linear-gradient(135deg, #d97706, #f59e0b 50%, #fbbf24); color:#050814; font-weight:900; box-shadow:0 10px 30px rgba(245,158,11,0.5);">
             <span>🎁</span> Drop Golden Gift Box to All Phones
           </button>
-          <button type="button" class="btn-admin btn-danger" onclick="deactivateGiftDrop()" style="min-width:140px;">
+          <button type="button" class="btn-admin btn-danger" onclick="deactivateGiftDrop()">
             <span>🛑</span> Stop Gift Drop
           </button>
         </div>
@@ -467,7 +467,7 @@
             </div>
           </div>
 
-          <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-top:10px;">
+          <div class="responsive-grid-slots">
             <!-- Slot 1 -->
             <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
               <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #1</div>
@@ -506,7 +506,7 @@
         </div>
 
         <!-- Custom Notice Text -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px;">
+        <div class="responsive-grid-1-1">
           <div class="form-group">
             <label class="form-label">Challenge Title</label>
             <input type="text" class="form-input" id="fcChallengeTitle" value="🎴 Today's 5 Target Words Challenge!" placeholder="Title...">
@@ -527,7 +527,7 @@
           <button type="button" class="btn-admin" id="btnPushDailyFlashcards" onclick="dispatchFlashcardsDropToAllPhones()" style="flex:1; font-size:1.05rem; padding:16px 28px; background:linear-gradient(135deg, #ec4899, #8b5cf6 60%, #3b82f6); color:#fff; font-weight:900; box-shadow:0 10px 30px rgba(236,72,153,0.45);">
             <span>🎴</span> Push Today's 5 Target Words to All Phones
           </button>
-          <button type="button" class="btn-admin btn-danger" onclick="deactivateFlashcardsDrop()" style="min-width:140px;">
+          <button type="button" class="btn-admin btn-danger" onclick="deactivateFlashcardsDrop()">
             <span>🛑</span> Stop Challenge
           </button>
         </div>
