@@ -1,11 +1,10 @@
 {
-  "id": "gift-drop-1789006093887",
-  "type": "mystery_gift",
-  "isMysteryGift": true,
+  "id": "notice-1789006162691-card2",
   "active": true,
-  "rewardType": "secret_book",
-  "title": "👑 Special VIP Surprise From Mind Focus!",
-  "rewardName": "VIP Golden Reader Badge",
-  "message": "Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai! Tap karke apna reward claim karein.",
-  "timestamp": "2026-09-10T02:08:13.888Z"
+  "card": "card2",
+  "icon": "💎",
+  "title": "Card 2 • 3D Model",
+  "message": "kese ho",
+  "btnText": "Mast Hai 🔥",
+  "timestamp": "2026-09-10T02:09:22.691Z"
 }
