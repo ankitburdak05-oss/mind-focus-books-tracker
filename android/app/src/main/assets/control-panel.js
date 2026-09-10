@@ -183,6 +183,110 @@ function refreshAdminData() {
 }
 window.refreshAdminData = refreshAdminData;
 
+// Fullscreen Browser Mode Toggle
+function toggleBrowserFullscreen() {
+  playUiClick();
+  if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+    const docEl = document.documentElement;
+    if (docEl.requestFullscreen) {
+      docEl.requestFullscreen().catch(() => {});
+    } else if (docEl.webkitRequestFullscreen) {
+      docEl.webkitRequestFullscreen();
+    }
+    const btn = document.getElementById('btnFullscreenToggle');
+    if (btn) btn.innerHTML = '<span>🗗</span> <span class="action-btn-text">Exit Full</span>';
+    showToast('⛶ Fullscreen Browser Mode Enabled');
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen().catch(() => {});
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+    const btn = document.getElementById('btnFullscreenToggle');
+    if (btn) btn.innerHTML = '<span>⛶</span> <span class="action-btn-text">Full Screen</span>';
+    showToast('🗗 Fullscreen Exited');
+  }
+}
+window.toggleBrowserFullscreen = toggleBrowserFullscreen;
+
+// Feature Tiles Interactive Grid Controllers
+function toggleFeatureTile(id) {
+  playUiClick();
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.checked = !el.checked;
+  onFeatureTileChanged(id);
+}
+window.toggleFeatureTile = toggleFeatureTile;
+
+function onFeatureTileChanged(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const card = document.getElementById('card_' + id);
+  const pill = document.getElementById('pill_' + id);
+  if (el.checked) {
+    if (card) card.classList.remove('is-disabled');
+    if (pill) {
+      pill.innerText = 'ACTIVE';
+      pill.className = 'tile-status-pill pill-active';
+    }
+  } else {
+    if (card) card.classList.add('is-disabled');
+    if (pill) {
+      pill.innerText = 'PAUSED';
+      pill.className = 'tile-status-pill pill-paused';
+    }
+  }
+}
+window.onFeatureTileChanged = onFeatureTileChanged;
+
+function syncAllFeatureTilesVisual() {
+  const featureIds = [
+    'cfgChatHelpDesk', 'cfgTelemetry', 'cfgMobileDevTools', 'cfgBroadcastNotice',
+    'cfgAppUpdates', 'cfgStreakShields', 'cfgSanctuaryTimer', 'cfgFlashcards',
+    'cfgAmbientAudio', 'cfgVisualPhysics', 'cfgBarcodeScanner', 'cfgAudioVoice',
+    'cfgQuotes', 'cfgCommunitySync', 'cfgDictionary', 'cfgPdfExport'
+  ];
+  featureIds.forEach(id => onFeatureTileChanged(id));
+  if (typeof onLockdownToggleChanged === 'function') onLockdownToggleChanged(false);
+}
+window.syncAllFeatureTilesVisual = syncAllFeatureTilesVisual;
+
+function onLockdownToggleChanged(playAudio = true) {
+  if (playAudio) playUiClick();
+  const el = document.getElementById('cfgAppEmergencyLockdown');
+  const beacon = document.getElementById('statusBeaconRing');
+  const headline = document.getElementById('statusHeadlineText');
+  const subheadline = document.getElementById('statusSubheadlineText');
+  const heroCard = document.getElementById('emergencyStatusHeroCard');
+
+  if (el && el.checked) {
+    if (beacon) beacon.className = 'status-beacon beacon-lockdown';
+    if (headline) {
+      headline.innerText = '🚨 EMERGENCY THERMAL LOCKDOWN ACTIVE';
+      headline.style.color = '#f87171';
+    }
+    if (subheadline) {
+      subheadline.innerText = 'All app features, background workers, timers, and sockets will be killed immediately on users phones.';
+    }
+    if (heroCard) heroCard.classList.add('in-lockdown');
+    if (playAudio) showToast('🚨 Emergency App Lockdown Armed! Click Push to deploy.');
+  } else {
+    if (beacon) beacon.className = 'status-beacon beacon-normal';
+    if (headline) {
+      headline.innerText = 'SYSTEMS NORMAL • 16 NODES ONLINE';
+      headline.style.color = '#34d399';
+    }
+    if (subheadline) {
+      subheadline.innerText = 'Phone app operating with zero CPU throttling. All background workers, sockets, and features active.';
+    }
+    if (heroCard) heroCard.classList.remove('in-lockdown');
+    if (playAudio) showToast('🟢 App Lockdown Disarmed (Normal Operation)');
+  }
+}
+window.onLockdownToggleChanged = onLockdownToggleChanged;
+
+
 
 // Form Listeners
 function initFormInputs() {
@@ -634,6 +738,8 @@ function populateConfigFormUI(cfg) {
   if (botdAuthor) botdAuthor.value = botd.author || '';
   const botdQuote = document.getElementById('botdQuote');
   if (botdQuote) botdQuote.value = botd.quote || '';
+
+  syncAllFeatureTilesVisual();
 }
 
 // ACTION: DEPLOY STAGED RELEASE TO REAL APP
@@ -982,7 +1088,8 @@ function freezeAllFeatures() {
     const el = document.getElementById(id);
     if (el) el.checked = false;
   });
-  showToast('🔴 All 16 features set to OFF. Click "Push to Real App" to apply.');
+  syncAllFeatureTilesVisual();
+  showToast('🔴 All 16 features set to OFF. Click "Push Changes" to apply.');
 }
 
 function restoreAllFeatures() {
@@ -997,7 +1104,8 @@ function restoreAllFeatures() {
     const el = document.getElementById(id);
     if (el) el.checked = true;
   });
-  showToast('🟢 All 16 features restored to ON. Click "Push to Real App" to apply.');
+  syncAllFeatureTilesVisual();
+  showToast('🟢 All 16 features restored to ON. Click "Push Changes" to apply.');
 }
 
 window.freezeAllFeatures = freezeAllFeatures;
