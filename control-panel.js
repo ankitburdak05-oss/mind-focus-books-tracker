@@ -2478,9 +2478,7 @@ async function sendAdminChatReply() {
     fetch(HELPDESK_RELAY_URL, {
       method: 'POST',
       headers: {
-        'Title': '👑 Admin Reply to ' + thread.userName,
-        'Priority': 'high',
-        'Tags': 'crown,speech_balloon'
+        'Content-Type': 'text/plain'
       },
       body: JSON.stringify(payload)
     }).catch(() => {});

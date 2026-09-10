@@ -3037,14 +3037,14 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.5.3';
+const CURRENT_APP_VERSION = 'v3.5.4';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
   if (typeof syncSettingsFlagshipControls === 'function') syncSettingsFlagshipControls();
   const verText = document.getElementById('appCurrentVersionText');
-  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Live Help Desk Edition';
+  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • 2-Way Live Help Desk Edition';
   const overlay = document.getElementById('appSettingsModalOverlay');
   if (overlay) overlay.classList.add('active');
 }
@@ -7944,6 +7944,16 @@ async function sendUserChatMessage() {
 
   playUserChatAudioChime('send');
 
+  // Hardened ID and Name resolution
+  if (!userChatId) {
+    userChatId = localStorage.getItem('mindfocus_chat_user_id') || ('reader_' + Math.random().toString(36).substring(2, 8));
+    localStorage.setItem('mindfocus_chat_user_id', userChatId);
+  }
+  if (!userChatName) {
+    userChatName = localStorage.getItem('mindfocus_chat_user_name') || ('Reader #' + userChatId.slice(-4).toUpperCase());
+    localStorage.setItem('mindfocus_chat_user_name', userChatName);
+  }
+
   if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
   if (!userChatData.threads) userChatData.threads = {};
 
@@ -8002,17 +8012,17 @@ async function sendUserChatMessage() {
     }));
   } catch (e) {}
 
-  // 3. Post to Cloud Relay (ntfy.sh) so Remote Control Panel receives it instantly
+  // 3. Post to Cloud Relay (ntfy.sh) using text/plain (CORS safelisted - NO preflight roundtrip)
   try {
     fetch(HELPDESK_RELAY_URL, {
       method: 'POST',
       headers: {
-        'Title': 'Reader: ' + userChatName,
-        'Priority': 'high',
-        'Tags': 'speech_balloon'
+        'Content-Type': 'text/plain'
       },
       body: JSON.stringify(payload)
-    }).catch(() => {});
+    }).catch(err => {
+      console.warn('Relay post error:', err);
+    });
   } catch (e) {}
 
   if (typeof showToastNotification === 'function') {
