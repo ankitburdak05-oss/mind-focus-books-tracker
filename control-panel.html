@@ -3,37 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Mind Focus Books • Executive Command Studio</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Mind Focus Books • एडमिन कंट्रोल पैनल</title>
   <link rel="manifest" href="manifest-admin.json">
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="control-panel.css">
+  <link rel="stylesheet" href="style.css?v=3.5.9.4">
+  <link rel="stylesheet" href="control-panel.css?v=3.5.9.4">
   <link rel="icon" type="image/png" href="icon-192.png">
 </head>
 <body>
   <div class="admin-shell">
-    <!-- Executive Cockpit Header -->
-    <!-- App Header & Live Status -->
+    <!-- Executive Cockpit Mobile App Header -->
     <header class="admin-header">
       <div class="header-brand">
+        <a href="index.html" class="brand-back-btn" title="Back to Mind Focus Books App">← मुख्य ऐप</a>
         <div class="brand-icon">📚</div>
         <div>
-          <h1 class="brand-title">Mind Focus Books • कंट्रोल पैनल</h1>
-          <p class="brand-subtitle">ऑफिशियल एडमिन ऐप — लाइव फीचर्स व रिमोट कंट्रोल</p>
+          <h1 class="brand-title">कंट्रोल पैनल</h1>
+          <p class="brand-subtitle">Mind Focus Books • एडमिन कंट्रोल</p>
         </div>
       </div>
       <div class="header-telemetry">
+        <button type="button" class="btn-header-refresh" onclick="refreshAdminData()" title="रिफ्रेश करें (Refresh)">
+          <span>🔄</span>
+        </button>
         <div class="telemetry-chip">
           <div class="telemetry-dot"></div>
           <span id="liveNoticeStatusBadge">लाइव स्टेटस</span>
         </div>
         <div class="telemetry-chip" style="background:rgba(56,189,248,0.12); border-color:rgba(56,189,248,0.35); color:var(--accent-cyan);">
-          <span>☁️ सिंक: </span>
+          <span>☁️ </span>
           <span id="radarStatusText">ऑनलाइन</span>
         </div>
       </div>
     </header>
 
-    <!-- VIP STAGING TO REAL APP PIPELINE BANNER (Requested Core Feature) -->
+    <!-- VIP STAGING TO REAL APP PIPELINE BANNER -->
     <section class="pipeline-card">
       <div class="pipeline-left">
         <div class="pipeline-badge-icon">🚀</div>
@@ -57,39 +63,42 @@
       </div>
     </section>
 
-    <!-- Modern App Navigation Tabs -->
+    <!-- Modern App Navigation Tabs (Top Scrollable Pills) -->
     <nav class="admin-tabs">
-      <button class="tab-btn active" data-tab="tabBroadcast">
+      <button class="tab-btn active" data-tab="tabFeatures">
+        <span>🎛️</span> कंट्रोल (Kill-Switch)
+      </button>
+      <button class="tab-btn" data-tab="tabBroadcast">
         <span>📢</span> सूचनाएं (Notices)
       </button>
-      <button class="tab-btn" data-tab="tabFeatures">
-        <span>🎛️</span> ऐप फीचर्स व किल-स्विच (App Controls)
-      </button>
       <button class="tab-btn" data-tab="tabPipeline">
-        <span>🚀</span> ऐप अपडेट (App Updates)
+        <span>🚀</span> ऐप अपडेट (Updates)
       </button>
       <button class="tab-btn" data-tab="tabLiveChat">
         <span>💬</span> कस्टमर चैट <span class="badge-chat-unread" id="adminChatUnreadBadge" style="display:none;">0</span>
+      </button>
+      <button class="tab-btn" data-tab="tabMore">
+        <span>⚙️</span> अन्य टूल्स (Tools)
       </button>
       <button class="tab-btn" data-tab="tabDiagnostics">
         <span>🩺</span> फोन हेल्थ <span class="badge-chat-unread" id="phoneCrashBadge" style="display:none; background:#ef4444;">0</span>
       </button>
       <button class="tab-btn" data-tab="tabMysteryGift">
-        <span>🎁</span> गिफ्ट बॉक्स (Surprise Gift)
+        <span>🎁</span> गिफ्ट बॉक्स
       </button>
       <button class="tab-btn" data-tab="tabFlashcards">
-        <span>🎴</span> फ्लैशकार्ड्स (Flashcards)
+        <span>🎴</span> फ्लैशकार्ड्स
       </button>
       <button class="tab-btn" data-tab="tabBooks">
-        <span>🌟</span> आज की किताब (Book of Day)
+        <span>🌟</span> आज की किताब
       </button>
       <button class="tab-btn" data-tab="tabGithub">
-        <span>⚙️</span> सेटिंग्स (Settings)
+        <span>🔑</span> गिटहब
       </button>
     </nav>
 
     <!-- TAB 1: BROADCAST STUDIO -->
-    <section class="tab-view active" id="tabBroadcast">
+    <section class="tab-view" id="tabBroadcast">
 
       <!-- Direct Version Release Launcher Banner (Always Visible) -->
       <div class="version-direct-banner" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.12)); border:1.5px solid rgba(16,185,129,0.45); border-radius:14px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
@@ -355,6 +364,11 @@
 
     <!-- TAB: MYSTERY GOLDEN GIFT BOX STUDIO (Surprise Reward Engine) -->
     <section class="tab-view" id="tabMysteryGift">
+      <div class="subtab-back-bar">
+        <button type="button" class="btn-subtab-back" onclick="switchTab('tabMore')">
+          <span>‹</span> <span>वापस टूल्स मेनू (Back to Tools)</span>
+        </button>
+      </div>
       <div class="glass-panel">
         <div class="panel-header">
           <div class="panel-title">
@@ -450,6 +464,11 @@
 
     <!-- TAB: 3D SMART FLASHCARDS STUDIO -->
     <section class="tab-view" id="tabFlashcards">
+      <div class="subtab-back-bar">
+        <button type="button" class="btn-subtab-back" onclick="switchTab('tabMore')">
+          <span>‹</span> <span>वापस टूल्स मेनू (Back to Tools)</span>
+        </button>
+      </div>
       <div class="glass-panel">
         <div class="panel-header">
           <div class="panel-title">
@@ -541,7 +560,7 @@
     </section>
 
     <!-- TAB 3: REMOTE FEATURE SWITCHES & EMERGENCY COCKPIT -->
-    <section class="tab-view" id="tabFeatures">
+    <section class="tab-view active" id="tabFeatures">
       <div class="glass-panel">
         <div class="panel-header">
           <div class="panel-title">
@@ -822,6 +841,11 @@
 
     <!-- TAB 4: BOOKS & BOOK OF THE DAY -->
     <section class="tab-view" id="tabBooks">
+      <div class="subtab-back-bar">
+        <button type="button" class="btn-subtab-back" onclick="switchTab('tabMore')">
+          <span>‹</span> <span>वापस टूल्स मेनू (Back to Tools)</span>
+        </button>
+      </div>
       <div class="glass-panel">
         <div class="panel-header">
           <div class="panel-title">
@@ -857,6 +881,11 @@
 
     <!-- TAB 5: GITHUB VAULT & RADAR -->
     <section class="tab-view" id="tabGithub">
+      <div class="subtab-back-bar">
+        <button type="button" class="btn-subtab-back" onclick="switchTab('tabMore')">
+          <span>‹</span> <span>वापस टूल्स मेनू (Back to Tools)</span>
+        </button>
+      </div>
       <div class="glass-panel">
         <div class="panel-header">
           <div class="panel-title">
@@ -995,6 +1024,11 @@
 
     <!-- TAB 7: REAL PHONE CRASH RADAR & TELEMETRY -->
     <section class="tab-view" id="tabDiagnostics">
+      <div class="subtab-back-bar">
+        <button type="button" class="btn-subtab-back" onclick="switchTab('tabMore')">
+          <span>‹</span> <span>वापस टूल्स मेनू (Back to Tools)</span>
+        </button>
+      </div>
       <div class="glass-panel" style="padding: 18px 20px;">
         <div class="panel-header" style="margin-bottom: 14px; padding-bottom: 12px; flex-wrap:wrap; gap:10px;">
           <div class="panel-title">
@@ -1083,6 +1117,74 @@
       </div>
     </section>
 
+    <!-- TAB 8: MORE TOOLS & ADVANCED SETTINGS HUB -->
+    <section class="tab-view" id="tabMore">
+      <div class="glass-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span>⚙️</span> अतिरिक्त टूल्स व सेटिंग्स (Tools Hub)
+          </div>
+          <span class="panel-pill">ADMIN SUITE</span>
+        </div>
+
+        <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:18px;">
+          यहा से आप फोन हेल्थ, क्रैश रडार, सरप्राइज गिफ्ट, फ्लैशकार्ड्स और गिटहब सेटिंग्स को आसानी से एक्सेस कर सकते हैं।
+        </p>
+
+        <div class="more-tools-grid">
+          <!-- Tool 1: Crash Radar -->
+          <div class="more-tool-card" onclick="switchTab('tabDiagnostics')">
+            <div class="more-tool-icon" style="background:rgba(239,68,68,0.18); color:#f87171;">🩺</div>
+            <div class="more-tool-content">
+              <div class="more-tool-title">फोन हेल्थ व क्रैश रडार <span class="badge-chat-unread" id="phoneCrashBadgeMore" style="display:none; background:#ef4444;">0</span></div>
+              <div class="more-tool-desc">लाइव क्रैश अलर्ट, हार्डवेयर स्पेक्स, एरर स्टैक ट्रेस व यूएसबी डिबगिंग</div>
+            </div>
+            <div class="more-tool-arrow">›</div>
+          </div>
+
+          <!-- Tool 2: Surprise Gift -->
+          <div class="more-tool-card" onclick="switchTab('tabMysteryGift')">
+            <div class="more-tool-icon" style="background:rgba(245,158,11,0.18); color:#fbbf24;">🎁</div>
+            <div class="more-tool-content">
+              <div class="more-tool-title">गोल्डन गिफ्ट बॉक्स (Surprise Gift)</div>
+              <div class="more-tool-desc">फोन स्क्रीन पर 3D गोल्डन गिफ्ट बॉक्स ड्रॉप करें व सेलिब्रेशन रिवॉर्ड दें</div>
+            </div>
+            <div class="more-tool-arrow">›</div>
+          </div>
+
+          <!-- Tool 3: Flashcards -->
+          <div class="more-tool-card" onclick="switchTab('tabFlashcards')">
+            <div class="more-tool-icon" style="background:rgba(168,85,247,0.18); color:#c084fc;">🎴</div>
+            <div class="more-tool-content">
+              <div class="more-tool-title">3D स्मार्ट फ्लैशकार्ड्स (Flashcards)</div>
+              <div class="more-tool-desc">डेली 5 टारगेट वर्ड्स बनाएं, एडिट करें व सभी फोन्स पर पुश करें</div>
+            </div>
+            <div class="more-tool-arrow">›</div>
+          </div>
+
+          <!-- Tool 4: Book of the Day -->
+          <div class="more-tool-card" onclick="switchTab('tabBooks')">
+            <div class="more-tool-icon" style="background:rgba(56,189,248,0.18); color:#38bdf8;">🌟</div>
+            <div class="more-tool-content">
+              <div class="more-tool-title">आज की खास किताब (Book of the Day)</div>
+              <div class="more-tool-desc">होम स्क्रीन पर डेली फीचर्ड बुक स्पॉटलाइट सेट करें</div>
+            </div>
+            <div class="more-tool-arrow">›</div>
+          </div>
+
+          <!-- Tool 5: GitHub Vault -->
+          <div class="more-tool-card" onclick="switchTab('tabGithub')">
+            <div class="more-tool-icon" style="background:rgba(16,185,129,0.18); color:#34d399;">🔑</div>
+            <div class="more-tool-content">
+              <div class="more-tool-title">गिटहब टोकन व क्लाउड सिंक (Vault)</div>
+              <div class="more-tool-desc">GitHub Personal Access Token, कनेक्शन टेस्ट व रेट लिमिट्स</div>
+            </div>
+            <div class="more-tool-arrow">›</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- Clean Modern App Activity History (Non-Hacker, Friendly UI) -->
     <details class="glass-panel" style="margin-top:20px; border-radius:18px; padding:16px 20px;">
       <summary style="cursor:pointer; font-weight:800; color:var(--text-secondary); display:flex; align-items:center; justify-content:space-between; outline:none; user-select:none;">
@@ -1096,6 +1198,36 @@
       </div>
     </details>
   </div>
+
+  <!-- Real Mobile App Fixed Bottom Navigation Dock -->
+  <nav class="app-bottom-dock">
+    <button type="button" class="app-dock-item active" data-tab="tabFeatures" onclick="switchTab('tabFeatures')">
+      <div class="dock-icon-wrap"><span class="dock-icon">🎛️</span></div>
+      <span class="dock-label">कंट्रोल</span>
+    </button>
+    <button type="button" class="app-dock-item" data-tab="tabBroadcast" onclick="switchTab('tabBroadcast')">
+      <div class="dock-icon-wrap"><span class="dock-icon">📢</span></div>
+      <span class="dock-label">सूचनाएं</span>
+    </button>
+    <button type="button" class="app-dock-item" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
+      <div class="dock-icon-wrap"><span class="dock-icon">🚀</span></div>
+      <span class="dock-label">अपडेट</span>
+    </button>
+    <button type="button" class="app-dock-item" data-tab="tabLiveChat" onclick="switchTab('tabLiveChat')">
+      <div class="dock-icon-wrap">
+        <span class="dock-icon">💬</span>
+        <span class="badge-dock-unread" id="dockChatUnreadBadge" style="display:none;">0</span>
+      </div>
+      <span class="dock-label">चैट</span>
+    </button>
+    <button type="button" class="app-dock-item" data-tab="tabMore" onclick="switchTab('tabMore')">
+      <div class="dock-icon-wrap">
+        <span class="dock-icon">⚙️</span>
+        <span class="badge-dock-unread badge-dock-alert" id="dockCrashBadge" style="display:none;">0</span>
+      </div>
+      <span class="dock-label">टूल्स</span>
+    </button>
+  </nav>
 
   <!-- 3D Real Pages Dictionary Book Reader Preview Modal in Control Panel -->
   <div id="dictionaryBookModalOverlay" class="dictionary-modal-overlay" onclick="handleDictOverlayClick(event)">
@@ -1234,8 +1366,8 @@
     </div>
   </div>
 
-  <script src="dictionary-data.js"></script>
-  <script src="remote-config.js"></script>
-  <script src="control-panel.js"></script>
+  <script src="dictionary-data.js?v=3.5.9.4"></script>
+  <script src="remote-config.js?v=3.5.9.4"></script>
+  <script src="control-panel.js?v=3.5.9.4"></script>
 </body>
 </html>

@@ -136,12 +136,23 @@ function switchTab(viewId) {
     if (t.getAttribute('data-tab') === viewId) t.classList.add('active');
     else t.classList.remove('active');
   });
+
+  const dockItems = document.querySelectorAll('.app-dock-item');
+  const isUnderMore = ['tabDiagnostics', 'tabMysteryGift', 'tabFlashcards', 'tabBooks', 'tabGithub', 'tabMore'].includes(viewId);
+  dockItems.forEach(item => {
+    const dockTab = item.getAttribute('data-tab');
+    if (dockTab === viewId || (dockTab === 'tabMore' && isUnderMore)) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
+  });
+
   document.querySelectorAll('.tab-view').forEach(v => {
     if (v.id === viewId) v.classList.add('active');
     else v.classList.remove('active');
   });
-  const targetEl = document.getElementById(viewId);
-  if (targetEl) targetEl.scrollIntoView({ behavior: 'smooth' });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 window.switchTab = switchTab;
 
@@ -153,7 +164,25 @@ function initTabs() {
       switchTab(viewId);
     });
   });
+
+  const dockItems = document.querySelectorAll('.app-dock-item');
+  dockItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const viewId = item.getAttribute('data-tab');
+      switchTab(viewId);
+    });
+  });
 }
+
+function refreshAdminData() {
+  playUiClick();
+  if (typeof loadRemoteConfigFromCloud === 'function') loadRemoteConfigFromCloud();
+  if (typeof refreshAdminChatThreads === 'function') refreshAdminChatThreads(true);
+  if (typeof refreshPhoneCrashLogs === 'function') refreshPhoneCrashLogs(false);
+  showToast('🔄 एडमिन डेटा रिफ्रेश हो गया!');
+}
+window.refreshAdminData = refreshAdminData;
+
 
 // Form Listeners
 function initFormInputs() {
@@ -2414,14 +2443,17 @@ async function refreshAdminChatThreads(manual = false) {
     });
 
     const badge = document.getElementById('adminChatUnreadBadge');
-    if (badge) {
-      if (totalUnread > 0) {
-        badge.innerText = totalUnread;
-        badge.style.display = 'inline-block';
-      } else {
-        badge.style.display = 'none';
+    const dockBadge = document.getElementById('dockChatUnreadBadge');
+    [badge, dockBadge].forEach(b => {
+      if (b) {
+        if (totalUnread > 0) {
+          b.innerText = totalUnread;
+          b.style.display = 'inline-block';
+        } else {
+          b.style.display = 'none';
+        }
       }
-    }
+    });
 
     if (totalUserMsgs > lastKnownUserMsgCount && lastKnownUserMsgCount > 0) {
       playChatAudioChime('receive');
@@ -2840,6 +2872,8 @@ function handleIncomingPhoneCrashTelemetry(payload) {
 
 function updateCrashRadarKPIs() {
   const badge = document.getElementById('phoneCrashBadge');
+  const dockBadge = document.getElementById('dockCrashBadge');
+  const moreBadge = document.getElementById('phoneCrashBadgeMore');
   const kpiTotal = document.getElementById('kpiTotalCrashes');
   const kpiDevices = document.getElementById('kpiAffectedDevices');
 
@@ -2850,14 +2884,16 @@ function updateCrashRadarKPIs() {
   const uniqueDevices = new Set(phoneCrashRadarLogs.map(c => c.device && c.device.userId ? c.device.userId : 'unknown'));
   if (kpiDevices) kpiDevices.innerText = uniqueDevices.size;
 
-  if (badge) {
-    if (total > 0) {
-      badge.innerText = total;
-      badge.style.display = 'inline-block';
-    } else {
-      badge.style.display = 'none';
+  [badge, dockBadge, moreBadge].forEach(b => {
+    if (b) {
+      if (total > 0) {
+        b.innerText = total;
+        b.style.display = 'inline-block';
+      } else {
+        b.style.display = 'none';
+      }
     }
-  }
+  });
 }
 
 function renderPhoneCrashRadarStream() {
