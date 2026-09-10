@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "lastUpdated": "2026-09-10T05:09:56.672Z",
+  "lastUpdated": "2026-09-10T05:12:15.992Z",
   "threads": {
     "user_welcome": {
       "userId": "user_welcome",
@@ -30,10 +30,23 @@
       "userName": "Reader #K12H",
       "userDevice": "Web App",
       "unreadByAdmin": 0,
-      "unreadByUser": 0,
-      "lastMessage": "",
-      "lastTimestamp": "2026-09-10T05:08:53.665Z",
-      "messages": []
+      "unreadByUser": 2,
+      "lastMessage": "Hum aapka issue check kar rahe hain, jald solve ho jayega! 🙏",
+      "lastTimestamp": "2026-09-10T05:12:15.979Z",
+      "messages": [
+        {
+          "id": "msg_admin_1789017052549",
+          "sender": "admin",
+          "text": "Hum aapka issue check kar rahe hain, jald solve ho jayega! 🙏",
+          "timestamp": "2026-09-10T05:10:52.549Z"
+        },
+        {
+          "id": "msg_admin_1789017135979",
+          "sender": "admin",
+          "text": "Hum aapka issue check kar rahe hain, jald solve ho jayega! 🙏",
+          "timestamp": "2026-09-10T05:12:15.979Z"
+        }
+      ]
     }
   }
 }
