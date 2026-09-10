@@ -3038,14 +3038,14 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.5.7';
+const CURRENT_APP_VERSION = 'v3.5.8';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
   if (typeof syncSettingsFlagshipControls === 'function') syncSettingsFlagshipControls();
   const verText = document.getElementById('appCurrentVersionText');
-  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Zero-Error Telemetry & Direct CDN Edition';
+  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Thermal Cool & Battery Saver Edition';
   const devToolsCheckbox = document.getElementById('toggleDevToolsCheckbox');
   if (devToolsCheckbox) {
     devToolsCheckbox.checked = (localStorage.getItem('mindfocus_devtools_enabled') === 'true');
@@ -5250,7 +5250,7 @@ function startLiveNoticeListener() {
     checkRemoteConfig();
   }, 1000);
 
-  // High-Speed Realtime Polling Loop: 5 seconds (Only runs when screen is ON & visible!)
+  // Energy-Efficient Thermal-Guard Polling Loop: 90 seconds (Only runs when screen is ON & visible!)
   // When app is minimized or phone is locked, document.hidden freezes 100% of network calls.
   broadcastNoticeInterval = setInterval(() => {
     if (document.hidden || (typeof document.visibilityState !== 'undefined' && document.visibilityState !== 'visible')) {
@@ -5258,30 +5258,15 @@ function startLiveNoticeListener() {
     }
     checkRemoteBroadcastNotice();
     checkRemoteConfig();
-  }, 5000);
+  }, 90000);
 
-  // Instant refresh when user returns to or touches the app
+  // Polite refresh only when user switches back to the app
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
       checkRemoteBroadcastNotice();
       checkRemoteConfig();
     }
   });
-  window.addEventListener('focus', () => {
-    checkRemoteBroadcastNotice();
-    checkRemoteConfig();
-  });
-
-  // Tap / Touch interaction speed trigger (Max once every 4 seconds)
-  let lastTouchCheck = 0;
-  window.addEventListener('pointerdown', () => {
-    const now = Date.now();
-    if (now - lastTouchCheck > 4000) {
-      lastTouchCheck = now;
-      checkRemoteBroadcastNotice();
-      checkRemoteConfig();
-    }
-  }, { passive: true });
 
   // Laptop Multi-Tab Realtime Instant Sync via localStorage event (0ms instantaneous)
   window.addEventListener('storage', (e) => {
@@ -7610,16 +7595,45 @@ function initLiveHelpDeskEngine() {
   if (typeof setupUserChatEventListeners === 'function') setupUserChatEventListeners();
 
   fetchAndSyncUserChat(false);
-  if (!userChatPollTimer) {
-    userChatPollTimer = setInterval(() => {
-      if (document.hidden) return;
+  setUserChatPollingSpeed(false);
+
+  // Background Thermal Guard: Hibernate SSE & polling when screen is locked or app minimized
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden || (typeof document.visibilityState !== 'undefined' && document.visibilityState !== 'visible')) {
+      if (userChatEventSource) {
+        userChatEventSource.close();
+        userChatEventSource = null;
+      }
+      if (userChatPollTimer) {
+        clearInterval(userChatPollTimer);
+        userChatPollTimer = null;
+      }
+    } else {
+      connectCloudRelaySSE();
+      const modal = document.getElementById('userHelpDeskModalOverlay');
+      const isChatOpen = modal && modal.classList.contains('active');
+      setUserChatPollingSpeed(isChatOpen);
       fetchAndSyncUserChat(false);
-    }, 4000);
+    }
+  });
+}
+
+function setUserChatPollingSpeed(isChatOpen) {
+  if (userChatPollTimer) {
+    clearInterval(userChatPollTimer);
+    userChatPollTimer = null;
   }
+  if (document.hidden) return; // Never poll in background
+  const intervalMs = isChatOpen ? 8000 : 60000;
+  userChatPollTimer = setInterval(() => {
+    if (document.hidden) return;
+    fetchAndSyncUserChat(false);
+  }, intervalMs);
 }
 
 function connectCloudRelaySSE() {
   if (typeof EventSource === 'undefined') return;
+  if (document.hidden) return;
   try {
     if (userChatEventSource) {
       userChatEventSource.close();
@@ -7822,6 +7836,9 @@ function openUserHelpDeskModal() {
     modal.style.display = 'flex';
   }
 
+  setUserChatPollingSpeed(true);
+  fetchAndSyncUserChat(false);
+
   if (typeof setupUserChatEventListeners === 'function') setupUserChatEventListeners();
 
   if (userChatData && userChatData.threads && userChatData.threads[userChatId]) {
@@ -7848,6 +7865,7 @@ function closeUserHelpDeskModal() {
       modal.style.display = 'none';
     }, 250);
   }
+  setUserChatPollingSpeed(false);
 }
 
 function handleHelpDeskOverlayClick(e) {
@@ -8306,7 +8324,13 @@ window.fetch = async function(...args) {
 function recordNetworkCall(net) {
   capturedNetworkCalls.unshift(net);
   if (capturedNetworkCalls.length > 30) capturedNetworkCalls.pop();
-  renderDevToolsNetwork();
+  
+  // Power & Heat Saver: Only re-render DOM if DevTools modal and Network tab are actively open
+  const devToolsModal = document.getElementById('mobileDevToolsModalOverlay');
+  const netTab = document.getElementById('devTabNetwork');
+  if (devToolsModal && devToolsModal.classList.contains('active') && netTab && netTab.classList.contains('active')) {
+    renderDevToolsNetwork();
+  }
 }
 
 // 5. RECORD & DISPATCH TELEMETRY (To Control Panel & Local UI)
@@ -8359,7 +8383,17 @@ function recordAndDispatchPhoneError(errObj, logToDevConsole = true) {
 
   // 3. Dispatch to Cloud Relay (ntfy.sh) so Admin Control Panel receives it instantly
   try {
-    fetch(HELPDESK_RELAY_URL, {
+    // Battery & Network Throttle: Never dispatch identical error more than once every 60 seconds
+    const now = Date.now();
+    const errKey = (errObj.message || '') + (errObj.source || '') + (errObj.lineno || 0);
+    if (window.__lastDispatchedErrKey === errKey && (now - (window.__lastDispatchedErrTime || 0) < 60000)) {
+      return;
+    }
+    window.__lastDispatchedErrKey = errKey;
+    window.__lastDispatchedErrTime = now;
+
+    const fetchFunc = typeof _originalFetch === 'function' ? _originalFetch : fetch;
+    fetchFunc(HELPDESK_RELAY_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain' },
       body: JSON.stringify(telemetryPayload)

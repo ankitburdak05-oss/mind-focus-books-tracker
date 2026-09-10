@@ -308,6 +308,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        if (webView != null) {
+            webView.onPause();
+            webView.pauseTimers();
+            webView.stopLoading();
+        }
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
         if (webView != null) {

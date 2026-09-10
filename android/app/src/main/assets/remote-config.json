@@ -1,20 +1,33 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-10T14:35:00.000Z",
+  "updatedAt": "2026-09-10T15:15:00.000Z",
   "activeRelease": {
-    "version": "v3.5.7",
-    "name": "Mind Focus Books v3.5.7 — Zero-Error Telemetry & Direct CDN Engine",
+    "version": "v3.5.8",
+    "name": "Mind Focus Books v3.5.8 — Thermal Cool Engine & Zero-Battery-Drain",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [
-      "🎯 Mobile Touch & Pointer Guard: e.target.closest() crash completely eliminated across all Android screens",
-      "⚡ Direct GitHub Raw CDN Engine: 100% bypass for GitHub API 403 rate limits (smooth & infinite queries)",
-      "💬 Native File Protocol Help Desk Fix: Offline and WebView relative chat-messages.json network resolution",
-      "🩺 Filtered Telemetry & Error Serializer: Full stack traces with clean non-empty diagnostic payloads"
+      "❄️ Thermal Cool Engine: Zero battery drain & phone overheating completely eliminated",
+      "🛑 Android Native Background Freeze: WebView onStop lifecycle pauses all timers & sockets",
+      "⚡ Adaptive Polling: 60s idle / 8s active chat polling + 90s polite notice check",
+      "🩺 ServiceWorker Android Fix: file:// origin error completely eliminated"
     ],
-    "stagedAt": "2026-09-10T14:35:00.000Z",
+    "stagedAt": "2026-09-10T15:15:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.5.8",
+    "name": "Mind Focus Books v3.5.8 — Thermal Cool Engine & Zero-Battery-Drain",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
+    "features": [
+      "❄️ Thermal Cool Engine: Zero battery drain & phone overheating completely eliminated",
+      "🛑 Android Native Background Freeze: WebView onStop lifecycle pauses all timers & sockets",
+      "⚡ Adaptive Polling: 60s idle / 8s active chat polling + 90s polite notice check",
+      "🩺 ServiceWorker Android Fix: file:// origin error completely eliminated"
+    ],
+    "stagedAt": "2026-09-10T15:15:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.5.7",
     "name": "Mind Focus Books v3.5.7 — Zero-Error Telemetry & Direct CDN Engine",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
@@ -25,19 +38,6 @@
       "🩺 Filtered Telemetry & Error Serializer: Full stack traces with clean non-empty diagnostic payloads"
     ],
     "stagedAt": "2026-09-10T14:35:00.000Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
-    "version": "v3.5.6",
-    "name": "Mind Focus Books v3.5.6 — Live Phone Crash Radar & Mobile DevTools",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
-    "features": [
-      "📡 Live Phone Crash Radar: Phone par aane wala koi bhi error seedha Control Panel me live alert bhejega",
-      "🛠️ In-App Mobile DevTools: Phone screen par floating F12 developer console, network monitor aur storage viewer",
-      "🩺 360° Phone Diagnostics: Real-time hardware specs, screen resolution, online status aur stack traces",
-      "🔌 USB Remote Inspect Guide: Computer Chrome se live phone inspect karne ka built-in workflow"
-    ],
-    "stagedAt": "2026-09-10T13:45:00.000Z",
     "isDeployed": true
   },
   "features": {
