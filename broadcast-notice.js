@@ -1,10 +1,19 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "deploy-notice-1789054572465",
-  "active": true,
+  "id": "fc-drop-1789060097110",
+  "type": "flashcard_drop",
+  "isFlashcardDrop": true,
   "card": "card2",
-  "icon": "🚀",
-  "title": "Update Live: v3.5.8",
-  "message": "Naya update v3.5.8 Real App me deploy ho chuka hai! Tap karke turant install karein.",
-  "btnText": "Install Update ⚡",
-  "timestamp": "2026-09-10T15:36:12.465Z"
+  "active": true,
+  "icon": "🎴",
+  "title": "🎴 Today's 5 Target Words Challenge!",
+  "btnText": "🎴 Practice Flashcards Now",
+  "message": "Aapke liye 5 naye 3D smart flashcards unlock ho chuke hain! Tap karke Leitner memory challenge shuru karein.",
+  "words": [
+    "Abandon",
+    "Benevolent",
+    "Cognizant",
+    "Diligent",
+    "Empirical"
+  ],
+  "timestamp": "2026-09-10T17:08:17.110Z"
 };
