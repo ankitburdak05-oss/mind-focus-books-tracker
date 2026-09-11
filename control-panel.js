@@ -4040,14 +4040,42 @@ function cleanupWarriorAnim() {
 }
 
 window.testGiftDropInPanel = function() {
+  console.log('[Mystery] testGiftDropInPanel called, box=' + selectedMysteryBox + ', running=' + warriorAnimState.running);
   if (warriorAnimState.running) return;
   // Box 1 = existing behavior, Box 2 = warrior
   if (selectedMysteryBox === 1) {
     runBox1Animation();
   } else {
-    runWarriorSwordAnimation();
+    // Pre-load images before animation
+    preloadWarriorImages().then(() => {
+      console.log('[Mystery] warrior images preloaded, starting animation');
+      runWarriorSwordAnimation();
+    }).catch(err => {
+      console.error('[Mystery] image preload failed:', err);
+      runWarriorSwordAnimation(); // Try anyway
+    });
   }
 };
+
+// Pre-load warrior images so they show instantly during animation
+function preloadWarriorImages() {
+  return new Promise((resolve) => {
+    const imgs = ['assets/warrior/hero.png', 'assets/warrior/swing.png', 'assets/warrior/sword_up.png'];
+    let loaded = 0;
+    imgs.forEach(src => {
+      const img = new Image();
+      img.onload = img.onerror = () => {
+        loaded++;
+        console.log(`[Mystery] preloaded ${src}: ${loaded}/${imgs.length}`);
+        if (loaded >= imgs.length) resolve();
+      };
+      img.src = src;
+    });
+    // Failsafe: resolve after 2s even if images not loaded
+    setTimeout(resolve, 2000);
+  });
+}
+window.preloadWarriorImages = preloadWarriorImages;
 
 function runBox1Animation() {
   showToast('🎁 Box 1 (Classic) drop test — see phone for animation');
@@ -4062,8 +4090,9 @@ function runBox1Animation() {
 function runWarriorSwordAnimation() {
   warriorAnimState.running = true;
   const overlay = document.getElementById('warriorBoxOverlay');
-  if (!overlay) return;
+  if (!overlay) { console.error('[Mystery] warriorBoxOverlay not found'); return; }
   overlay.classList.add('is-active');
+  console.log('[Mystery] overlay activated');
 
   const box = document.getElementById('wbBoxFalling');
   const warrior = document.getElementById('wbWarrior');

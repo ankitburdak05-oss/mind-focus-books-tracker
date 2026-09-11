@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Warrior Test</title>
+<link rel="stylesheet" href="control-panel.css"/>
+<style>
+body { margin:0; padding:20px; background:#1a1a2e; color:#fff; font-family:system-ui; min-height:100vh; }
+.test-btn { padding:14px 28px; background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#000; border:none; border-radius:14px; font-weight:700; font-size:16px; cursor:pointer; box-shadow:0 4px 16px rgba(245,158,11,0.5); }
+h1 { color:#fbbf24; }
+.info { background:rgba(255,255,255,0.05); padding:14px; border-radius:12px; margin:14px 0; border-left:3px solid #fbbf24; }
+</style>
+</head>
+<body>
+<h1>⚔️ Warrior Animation Test</h1>
+<p>Click button to test warrior box 2 animation (same as in Mystery Gift tab)</p>
+
+<div class="info">
+  <strong>Debug info:</strong> Open browser DevTools (F12) → Console to see logs.
+</div>
+
+<button class="test-btn" onclick="startTest()">▶️ Start Warrior Animation</button>
+
+<!-- Warrior overlay (copy of main HTML) -->
+<div class="warrior-box-overlay" id="warriorBoxOverlay">
+  <div class="wb-sky"></div>
+  <div class="wb-box-falling" id="wbBoxFalling">
+    <div class="wb-box-shape">
+      <div class="wb-box-top">⚔️</div>
+      <div class="wb-box-body"></div>
+    </div>
+  </div>
+  <div class="wb-warrior" id="wbWarrior">
+    <img class="wb-warrior-img wb-pose-hero" id="wbPoseHero" src="assets/warrior/hero.png" alt="Samurai"/>
+    <img class="wb-warrior-img wb-pose-swing" id="wbPoseSwing" src="assets/warrior/swing.png" alt="Swing"/>
+    <img class="wb-warrior-img wb-pose-sword-up" id="wbPoseSwordUp" src="assets/warrior/sword_up.png" alt="Up"/>
+  </div>
+  <div class="wb-screen-crack" id="wbScreenCrack"></div>
+  <div class="wb-sky-beam" id="wbSkyBeam"></div>
+  <div class="wb-blast" id="wbBlast"></div>
+  <div class="wb-car" id="wbCar">
+    <div class="wb-car-body">
+      <div class="wb-car-roof"></div>
+      <div class="wb-car-trunk" id="wbCarTrunk"></div>
+      <div class="wb-car-wheels">
+        <div class="wb-car-wheel"></div>
+        <div class="wb-car-wheel"></div>
+      </div>
+      <div class="wb-car-prize" id="wbCarPrize">🎁 REWARD!</div>
+    </div>
+  </div>
+  <div class="wb-skip-btn" onclick="skipWarriorAnimation()">Skip</div>
+</div>
+
+<script>
+// Inline JS for testing
+let warriorAnimState = { running: false, timeouts: [] };
+
+function skipWarriorAnimation() {
+  warriorAnimState.timeouts.forEach(t => clearTimeout(t));
+  cleanupWarriorAnim();
+}
+
+function cleanupWarriorAnim() {
+  warriorAnimState.running = false;
+  const overlay = document.getElementById('warriorBoxOverlay');
+  if (overlay) {
+    overlay.classList.remove('is-active');
+    ['wbBoxFalling','wbWarrior','wbSword','wbScreenCrack','wbSkyBeam','wbBlast','wbCar','wbCarTrunk','wbCarPrize'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('is-falling','is-enter','is-swing','is-sword-up','is-shown','is-fire','is-blast','is-drive','is-open','is-show');
+    });
+  }
+}
+
+function startTest() {
+  console.log('[TEST] Starting warrior animation');
+  if (warriorAnimState.running) return;
+  warriorAnimState.running = true;
+  const overlay = document.getElementById('warriorBoxOverlay');
+  if (!overlay) { console.error('No overlay!'); return; }
+  overlay.classList.add('is-active');
+  console.log('[TEST] overlay activated');
+
+  const box = document.getElementById('wbBoxFalling');
+  const warrior = document.getElementById('wbWarrior');
+  const crack = document.getElementById('wbScreenCrack');
+  const beam = document.getElementById('wbSkyBeam');
+  const blast = document.getElementById('wbBlast');
+  const car = document.getElementById('wbCar');
+  const trunk = document.getElementById('wbCarTrunk');
+  const prize = document.getElementById('wbCarPrize');
+  if (prize) prize.textContent = '🎁 VIP REWARD';
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 1: Box falling');
+    box.classList.add('is-falling');
+  }, 100));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 2: Warrior entering');
+    warrior.classList.add('is-enter');
+  }, 2500));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 3: Sword swing');
+    warrior.classList.add('is-swing');
+    warriorAnimState.timeouts.push(setTimeout(() => {
+      console.log('[TEST] Phase 3b: Crack shown');
+      crack.classList.add('is-shown');
+    }, 700));
+  }, 3000));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 4: Sky beam');
+    warrior.classList.remove('is-swing');
+    warrior.classList.add('is-sword-up');
+    crack.classList.remove('is-shown');
+    beam.classList.add('is-fire');
+  }, 4000));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 5: Blast');
+    blast.classList.add('is-blast');
+  }, 5000));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 6: Car');
+    warrior.classList.remove('is-sword-up');
+    beam.classList.remove('is-fire');
+    blast.classList.remove('is-blast');
+    car.classList.add('is-drive');
+  }, 5600));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 7: Trunk open + prize');
+    trunk.classList.add('is-open');
+    warriorAnimState.timeouts.push(setTimeout(() => {
+      console.log('[TEST] Phase 7b: Prize show');
+      prize.classList.add('is-show');
+    }, 500));
+  }, 7000));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Cleanup');
+    cleanupWarriorAnim();
+  }, 11000));
+}
+
+// Pre-load images
+['hero.png','swing.png','sword_up.png'].forEach(f => {
+  const img = new Image();
+  img.src = 'assets/warrior/' + f;
+  img.onload = () => console.log('[IMG] loaded: ' + f);
+  img.onerror = () => console.error('[IMG] FAILED: ' + f);
+});
+</script>
+</body>
+</html>
