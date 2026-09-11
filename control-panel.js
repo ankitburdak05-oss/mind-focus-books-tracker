@@ -4033,7 +4033,7 @@ function cleanupWarriorAnim() {
     ['wbBoxFalling','wbWarrior','wbSword','wbScreenCrack','wbSkyBeam','wbBlast','wbCar','wbCarTrunk','wbCarPrize','wbPhaseLabel','wbSkipBtn'].forEach(id => {
       const el = document.getElementById(id);
       if (el) {
-        el.classList.remove('is-falling','is-enter','is-swing','is-shown','is-fire','is-blast','is-drive','is-open','is-show');
+        el.classList.remove('is-falling','is-enter','is-swing','is-sword-up','is-shown','is-fire','is-blast','is-drive','is-open','is-show');
       }
     });
   }
@@ -4088,12 +4088,14 @@ function runWarriorSwordAnimation() {
 
   // Phase 3: Sword swings (3.6s) - breaks screen
   warriorAnimState.timeouts.push(setTimeout(() => {
-    sword.classList.add('is-swing');
+    warrior.classList.add('is-swing');
     warriorAnimState.timeouts.push(setTimeout(() => crack.classList.add('is-shown'), 700));
   }, 2900));
 
   // Phase 4: Sky beam (5.0s) - light from above
   warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-swing');
+    warrior.classList.add('is-sword-up');
     crack.classList.remove('is-shown');
     beam.classList.add('is-fire');
   }, 4000));
@@ -4105,6 +4107,7 @@ function runWarriorSwordAnimation() {
 
   // Phase 6: Car arrives (6.8s)
   warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-sword-up');
     beam.classList.remove('is-fire');
     blast.classList.remove('is-blast');
     car.classList.add('is-drive');
