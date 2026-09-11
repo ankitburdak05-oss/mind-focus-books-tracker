@@ -4084,12 +4084,12 @@ function runWarriorSwordAnimation() {
   // Phase 2: Warrior enters (2.6s)
   warriorAnimState.timeouts.push(setTimeout(() => {
     warrior.classList.add('is-enter');
-  }, 2600));
+  }, 2500));
 
   // Phase 3: Sword swings (3.6s) - breaks screen
   warriorAnimState.timeouts.push(setTimeout(() => {
     sword.classList.add('is-swing');
-    setTimeout(() => crack.classList.add('is-shown'), 500);
+    warriorAnimState.timeouts.push(setTimeout(() => crack.classList.add('is-shown'), 700));
   }, 2900));
 
   // Phase 4: Sky beam (5.0s) - light from above
