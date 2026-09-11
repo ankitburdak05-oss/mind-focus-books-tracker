@@ -3246,5 +3246,44 @@ window.simulateTestCrashTelemetry = simulateTestCrashTelemetry;
 window.jumpToHelpDeskUser = jumpToHelpDeskUser;
 window.playCrashAudioAlert = playCrashAudioAlert;
 
+// Interactive Theme Engine
+function setPanelTheme(themeName) {
+  playUiClick();
+  document.body.setAttribute('data-theme', themeName);
+  try {
+    localStorage.setItem('mf_panel_theme_v2', themeName);
+  } catch (e) {}
+
+  document.querySelectorAll('.theme-swatch').forEach(s => {
+    if (s.getAttribute('data-theme-name') === themeName) s.classList.add('active');
+    else s.classList.remove('active');
+  });
+
+  const names = {
+    aurora: 'Cosmic Indigo',
+    ocean: 'Sapphire Ocean',
+    emerald: 'Emerald Forest',
+    ruby: 'Crimson Ruby',
+    gold: 'Sunset Gold',
+    amethyst: 'Cyber Amethyst'
+  };
+  showToast(`🎨 Theme: ${names[themeName] || themeName}`);
+}
+window.setPanelTheme = setPanelTheme;
+
+function initPanelTheme() {
+  let saved = 'aurora';
+  try {
+    saved = localStorage.getItem('mf_panel_theme_v2') || 'aurora';
+  } catch (e) {}
+  document.body.setAttribute('data-theme', saved);
+  document.querySelectorAll('.theme-swatch').forEach(s => {
+    if (s.getAttribute('data-theme-name') === saved) s.classList.add('active');
+    else s.classList.remove('active');
+  });
+}
+window.addEventListener('DOMContentLoaded', initPanelTheme);
+
+
 
 

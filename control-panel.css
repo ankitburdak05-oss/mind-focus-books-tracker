@@ -134,6 +134,285 @@ body {
 }
 
 /* ===================================================
+   INTERACTIVE COLOR PALETTE & THEME ENGINE
+   =================================================== */
+.theme-palette-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 4px 10px;
+  border-radius: 999px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.sidebar-theme-bar {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.theme-bar-title {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #64748b;
+  letter-spacing: 0.8px;
+}
+
+.theme-swatches-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-swatch {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  flex-shrink: 0;
+  outline: none;
+  padding: 0;
+}
+
+.theme-swatch:hover {
+  transform: scale(1.25);
+}
+
+.theme-swatch.active {
+  border-color: #ffffff !important;
+  box-shadow: 0 0 10px #ffffff, 0 0 16px currentColor !important;
+  transform: scale(1.18);
+}
+
+.swatch-aurora {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #6366f1;
+}
+
+.swatch-ocean {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #38bdf8;
+}
+
+.swatch-emerald {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #10b981;
+}
+
+.swatch-ruby {
+  background: linear-gradient(135deg, #e11d48, #f43f5e);
+  color: #f43f5e;
+}
+
+.swatch-gold {
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  color: #f59e0b;
+}
+
+.swatch-amethyst {
+  background: linear-gradient(135deg, #9333ea, #c084fc);
+  color: #c084fc;
+}
+
+/* --- THEME 1: COSMIC AURORA (DEFAULT) --- */
+body[data-theme="aurora"], body:not([data-theme]) {
+  background-color: #060914 !important;
+}
+body[data-theme="aurora"] .panel-aurora-bg, body:not([data-theme]) .panel-aurora-bg {
+  background: #060914 !important;
+}
+
+/* --- THEME 2: SAPPHIRE OCEAN --- */
+body[data-theme="ocean"] {
+  background-color: #051126 !important;
+}
+body[data-theme="ocean"] .panel-aurora-bg {
+  background: #051126 !important;
+}
+body[data-theme="ocean"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.55) 0%, rgba(2, 132, 199, 0.3) 45%, transparent 70%) !important;
+}
+body[data-theme="ocean"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.5) 0%, rgba(56, 189, 248, 0.28) 45%, transparent 70%) !important;
+}
+body[data-theme="ocean"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(37, 99, 235, 0.45) 0%, rgba(29, 78, 216, 0.2) 45%, transparent 70%) !important;
+}
+body[data-theme="ocean"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(14, 165, 233, 0.2) 45%, transparent 70%) !important;
+}
+body[data-theme="ocean"] .glass-panel {
+  background: rgba(8, 24, 52, 0.72) !important;
+  border-color: rgba(56, 189, 248, 0.22) !important;
+}
+body[data-theme="ocean"] .feature-tile-card {
+  background: linear-gradient(150deg, rgba(12, 32, 70, 0.76) 0%, rgba(6, 18, 44, 0.82) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.2) !important;
+}
+body[data-theme="ocean"] .app-sidebar {
+  background: rgba(6, 18, 42, 0.85) !important;
+  border-right-color: rgba(56, 189, 248, 0.15) !important;
+}
+body[data-theme="ocean"] .stage-topbar {
+  background: rgba(6, 20, 48, 0.78) !important;
+  border-bottom-color: rgba(56, 189, 248, 0.15) !important;
+}
+
+/* --- THEME 3: EMERALD LUXURY --- */
+body[data-theme="emerald"] {
+  background-color: #031c14 !important;
+}
+body[data-theme="emerald"] .panel-aurora-bg {
+  background: #031c14 !important;
+}
+body[data-theme="emerald"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.55) 0%, rgba(5, 150, 105, 0.3) 45%, transparent 70%) !important;
+}
+body[data-theme="emerald"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.45) 0%, rgba(13, 148, 136, 0.25) 45%, transparent 70%) !important;
+}
+body[data-theme="emerald"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.4) 0%, rgba(16, 185, 129, 0.2) 45%, transparent 70%) !important;
+}
+body[data-theme="emerald"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(6, 182, 212, 0.35) 0%, rgba(20, 184, 166, 0.18) 45%, transparent 70%) !important;
+}
+body[data-theme="emerald"] .glass-panel {
+  background: rgba(5, 34, 25, 0.72) !important;
+  border-color: rgba(16, 185, 129, 0.25) !important;
+}
+body[data-theme="emerald"] .feature-tile-card {
+  background: linear-gradient(150deg, rgba(7, 44, 32, 0.78) 0%, rgba(3, 24, 18, 0.82) 100%) !important;
+  border-color: rgba(16, 185, 129, 0.2) !important;
+}
+body[data-theme="emerald"] .app-sidebar {
+  background: rgba(4, 28, 20, 0.85) !important;
+  border-right-color: rgba(16, 185, 129, 0.15) !important;
+}
+body[data-theme="emerald"] .stage-topbar {
+  background: rgba(4, 30, 22, 0.78) !important;
+  border-bottom-color: rgba(16, 185, 129, 0.15) !important;
+}
+
+/* --- THEME 4: CRIMSON RUBY --- */
+body[data-theme="ruby"] {
+  background-color: #1e0512 !important;
+}
+body[data-theme="ruby"] .panel-aurora-bg {
+  background: #1e0512 !important;
+}
+body[data-theme="ruby"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.55) 0%, rgba(225, 29, 72, 0.3) 45%, transparent 70%) !important;
+}
+body[data-theme="ruby"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(239, 68, 68, 0.45) 0%, rgba(185, 28, 28, 0.25) 45%, transparent 70%) !important;
+}
+body[data-theme="ruby"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(251, 113, 133, 0.4) 0%, rgba(244, 63, 94, 0.2) 45%, transparent 70%) !important;
+}
+body[data-theme="ruby"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(217, 70, 239, 0.35) 0%, rgba(168, 85, 247, 0.18) 45%, transparent 70%) !important;
+}
+body[data-theme="ruby"] .glass-panel {
+  background: rgba(38, 10, 24, 0.72) !important;
+  border-color: rgba(244, 63, 94, 0.25) !important;
+}
+body[data-theme="ruby"] .feature-tile-card {
+  background: linear-gradient(150deg, rgba(48, 12, 30, 0.78) 0%, rgba(26, 6, 16, 0.82) 100%) !important;
+  border-color: rgba(244, 63, 94, 0.2) !important;
+}
+body[data-theme="ruby"] .app-sidebar {
+  background: rgba(32, 8, 20, 0.85) !important;
+  border-right-color: rgba(244, 63, 94, 0.15) !important;
+}
+body[data-theme="ruby"] .stage-topbar {
+  background: rgba(36, 8, 22, 0.78) !important;
+  border-bottom-color: rgba(244, 63, 94, 0.15) !important;
+}
+
+/* --- THEME 5: SUNSET GOLD --- */
+body[data-theme="gold"] {
+  background-color: #1a0f04 !important;
+}
+body[data-theme="gold"] .panel-aurora-bg {
+  background: #1a0f04 !important;
+}
+body[data-theme="gold"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.55) 0%, rgba(217, 119, 6, 0.3) 45%, transparent 70%) !important;
+}
+body[data-theme="gold"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.45) 0%, rgba(245, 158, 11, 0.25) 45%, transparent 70%) !important;
+}
+body[data-theme="gold"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(234, 88, 12, 0.4) 0%, rgba(194, 65, 12, 0.2) 45%, transparent 70%) !important;
+}
+body[data-theme="gold"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, rgba(217, 119, 6, 0.18) 45%, transparent 70%) !important;
+}
+body[data-theme="gold"] .glass-panel {
+  background: rgba(36, 20, 8, 0.72) !important;
+  border-color: rgba(245, 158, 11, 0.25) !important;
+}
+body[data-theme="gold"] .feature-tile-card {
+  background: linear-gradient(150deg, rgba(46, 26, 10, 0.78) 0%, rgba(24, 12, 4, 0.82) 100%) !important;
+  border-color: rgba(245, 158, 11, 0.2) !important;
+}
+body[data-theme="gold"] .app-sidebar {
+  background: rgba(28, 16, 6, 0.85) !important;
+  border-right-color: rgba(245, 158, 11, 0.15) !important;
+}
+body[data-theme="gold"] .stage-topbar {
+  background: rgba(30, 18, 6, 0.78) !important;
+  border-bottom-color: rgba(245, 158, 11, 0.15) !important;
+}
+
+/* --- THEME 6: CYBER AMETHYST --- */
+body[data-theme="amethyst"] {
+  background-color: #140524 !important;
+}
+body[data-theme="amethyst"] .panel-aurora-bg {
+  background: #140524 !important;
+}
+body[data-theme="amethyst"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.55) 0%, rgba(147, 51, 234, 0.3) 45%, transparent 70%) !important;
+}
+body[data-theme="amethyst"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(217, 70, 239, 0.45) 0%, rgba(192, 38, 211, 0.25) 45%, transparent 70%) !important;
+}
+body[data-theme="amethyst"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(109, 40, 217, 0.2) 45%, transparent 70%) !important;
+}
+body[data-theme="amethyst"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(192, 132, 252, 0.35) 0%, rgba(168, 85, 247, 0.18) 45%, transparent 70%) !important;
+}
+body[data-theme="amethyst"] .glass-panel {
+  background: rgba(30, 12, 50, 0.72) !important;
+  border-color: rgba(168, 85, 247, 0.25) !important;
+}
+body[data-theme="amethyst"] .feature-tile-card {
+  background: linear-gradient(150deg, rgba(40, 16, 68, 0.78) 0%, rgba(20, 6, 36, 0.82) 100%) !important;
+  border-color: rgba(168, 85, 247, 0.2) !important;
+}
+body[data-theme="amethyst"] .app-sidebar {
+  background: rgba(24, 8, 40, 0.85) !important;
+  border-right-color: rgba(168, 85, 247, 0.15) !important;
+}
+body[data-theme="amethyst"] .stage-topbar {
+  background: rgba(26, 8, 44, 0.78) !important;
+  border-bottom-color: rgba(168, 85, 247, 0.15) !important;
+}
+
+/* ===================================================
    MODERN REAL APP SHELL LAYOUT
    =================================================== */
 .app-layout {
