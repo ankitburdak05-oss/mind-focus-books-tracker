@@ -1615,5 +1615,21 @@
   <script src="dictionary-data.js?v=3.7.4"></script>
   <script src="remote-config.js?v=3.7.4"></script>
   <script src="control-panel.js?v=3.7.4"></script>
+
+  <!-- ==========================================================================
+       HIDDEN PLACEHOLDER IDS (FIX FOR MISSING ELEMENTS)
+       Iss block ko koi delete nahi karna - yeh missing IDs provide karta hai
+       jo control-panel.js me getElementById() se reference ho rahi hain.
+       Visual layout me nahi dikhte (display:none) - safe JS read/write ke liye.
+       ========================================================================== -->
+  <div id="controlPanelMissingIdsRoot" style="display:none !important; visibility:hidden; position:absolute; left:-9999px; top:-9999px; width:0; height:0; overflow:hidden;" aria-hidden="true">
+    <!-- Admin Toast / Notification Snackbar -->
+    <div id="adminToast" role="status" aria-live="polite"></div>
+
+    <!-- Pipeline Staged Release Description Block (for next deploy card) -->
+    <h3 id="pipelineStagedTitle" data-default="Ready to Deploy">Ready to Deploy</h3>
+    <p id="pipelineStagedDesc" data-default="Staged version waiting for production push.">Staged version waiting for production push.</p>
+  </div>
+  <!-- END OF MISSING-IDS PLACEHOLDER BLOCK -->
 </body>
 </html>

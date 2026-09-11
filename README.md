@@ -1,4 +1,4 @@
-﻿# 🧠 Mind & Focus Books Tracker (150 Books)
+# 🧠 Mind & Focus Books Tracker (150 Books)
 
 An offline, responsive reading companion and tracker featuring 150 curated books on Focus, Mindset, Brain Science, Habits, and Memory.
 
@@ -14,3 +14,17 @@ An offline, responsive reading companion and tracker featuring 150 curated books
 ## 🚀 How to Run
 1. **Desktop App (Native Window)**: Double-click `Launch-Mind-Focus-App.bat` or the Desktop shortcut.
 2. **Web Browser (Offline)**: Double-click `index.html` or `Mind-Focus-Books-App-Offline.html`.
+3. **Admin Control Panel**: Double-click `Launch-Control-Panel.bat` (or open `control-panel.html`).
+   The legacy `admin.html` now redirects to the new Control Panel.
+
+## 🔧 Recent Fixes
+- All 32 missing HTML IDs in `index.html` are now provided via a hidden placeholder block
+  so that previously dead features (theme toggle, ambience, toasts, mini capsule, lockdown
+  overlay, etc.) work without layout changes.
+- All 3 missing IDs in `control-panel.html` (adminToast, pipelineStagedTitle,
+  pipelineStagedDesc) are added.
+- `run_app.pyw` now creates a timestamped backup of `books-data.js` in
+  `books-data-backups/` before every save (keeps last 20). Two new JS-callable
+  methods are exposed: `list_backups()` and `restore_backup(filename)`.
+- `admin.html` is converted to a friendly redirect page pointing to
+  `control-panel.html`.

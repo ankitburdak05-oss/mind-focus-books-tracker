@@ -2,439 +2,61 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Mind Focus Books • Executive Command Studio</title>
-  <link rel="manifest" href="manifest-admin.json">
-  <link rel="stylesheet" href="control-panel.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mind Focus Books • Admin (Redirected)</title>
   <link rel="icon" type="image/png" href="icon-192.png">
+  <meta http-equiv="refresh" content="0; url=control-panel.html">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #0b0f19 0%, #1a1f3a 100%);
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      padding: 1.5rem;
+    }
+    .card {
+      max-width: 480px;
+      width: 100%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 16px;
+      padding: 1.75rem;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+    h1 { color: #38bdf8; margin: 0 0 0.5rem; font-size: 1.4rem; }
+    p { color: #94a3b8; font-size: 0.95rem; line-height: 1.55; margin: 0.5rem 0; }
+    .icon { font-size: 3rem; margin-bottom: 0.5rem; }
+    a.btn {
+      display: inline-block;
+      margin-top: 1.25rem;
+      padding: 0.75rem 1.5rem;
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #fff;
+      text-decoration: none;
+      border-radius: 10px;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(56, 189, 248, 0.4);
+    }
+    .note { font-size: 0.8rem; color: #64748b; margin-top: 1rem; }
+  </style>
 </head>
 <body>
-  <div class="admin-shell">
-    <!-- Executive Cockpit Header -->
-    <header class="admin-header">
-      <div class="header-brand">
-        <div class="brand-icon">👑</div>
-        <div>
-          <h1 class="brand-title">Mind Focus Books • Executive Command Studio</h1>
-          <p class="brand-subtitle">VIP Real-time Broadcast Engine &amp; Staging-to-Production Pipeline</p>
-        </div>
-      </div>
-      <div class="header-telemetry">
-        <div class="telemetry-chip">
-          <div class="telemetry-dot"></div>
-          <span id="liveNoticeStatusBadge">FETCHING LIVE STATUS...</span>
-        </div>
-        <div class="telemetry-chip" style="background:rgba(56,189,248,0.12); border-color:rgba(56,189,248,0.35); color:var(--accent-cyan);">
-          <span>🛰️ Radar: </span>
-          <span id="radarStatusText">Connecting...</span>
-        </div>
-      </div>
-    </header>
-
-    <!-- VIP STAGING TO REAL APP PIPELINE BANNER (Requested Core Feature) -->
-    <section class="pipeline-card">
-      <div class="pipeline-left">
-        <div class="pipeline-badge-icon">🚀</div>
-        <div>
-          <div class="pipeline-title">
-            <span id="pipelineStagedTitle">Mind Focus Books v3.2.0</span>
-            <span class="pipeline-status-tag tag-staged" id="pipelineStatusTag">PENDING REVIEW</span>
-          </div>
-          <div class="pipeline-desc" id="pipelineStagedDesc">
-            Staged Release ready in Control Panel. Review features and click Deploy to push live to all Real App users!
-          </div>
-        </div>
-      </div>
-      <div class="pipeline-actions">
-        <button type="button" class="btn-admin btn-emerald" id="btnDeployToRealApp" onclick="deployStagedReleaseToRealApp()">
-          <span>⚡</span> Deploy to Real App
-        </button>
-        <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()" style="min-width:130px; font-size:0.82rem;">
-          <span>↩️</span> Rollback
-        </button>
-      </div>
-    </section>
-
-    <!-- Navigation Tabs -->
-    <nav class="admin-tabs">
-      <button class="tab-btn active" data-tab="tabBroadcast">
-        <span>📢</span> Broadcast Notification Studio
-      </button>
-      <button class="tab-btn" data-tab="tabPipeline">
-        <span>🚀</span> Staging Pipeline
-      </button>
-      <button class="tab-btn" data-tab="tabFeatures">
-        <span>🎛️</span> Remote Feature Switches
-      </button>
-      <button class="tab-btn" data-tab="tabBooks">
-        <span>📚</span> Books &amp; Book of the Day
-      </button>
-      <button class="tab-btn" data-tab="tabGithub">
-        <span>🔑</span> GitHub Vault &amp; Radar
-      </button>
-    </nav>
-
-    <!-- TAB 1: BROADCAST STUDIO -->
-    <section class="tab-view active" id="tabBroadcast">
-      <div class="dashboard-grid">
-        <!-- Left Column: Broadcast Form -->
-        <div class="glass-panel">
-          <div class="panel-header">
-            <div class="panel-title">
-              <span>🚀</span> Broadcast Notification Dispatcher
-            </div>
-            <span class="panel-pill">0-DELAY ENGINE</span>
-          </div>
-
-          <!-- Quick Presets -->
-          <div class="form-group">
-            <label class="form-label">⚡ 1-Click Quick Presets</label>
-            <select class="form-select" id="noticePresetSelect">
-              <option value="c2_feedback">💎 Card 2: "kesa laga new card" (3D Model)</option>
-              <option value="c1_poll">📢 Card 1: "ye acha hai ya card2" (Quantum Portal)</option>
-              <option value="new_update">🚀 New Update Ready: v3.2.0</option>
-              <option value="book_of_day">🌟 Book of the Day Announcement</option>
-              <option value="daily_motivation">📖 Daily Reading Motivation</option>
-              <option value="maintenance">⚡ Server Maintenance Alert</option>
-            </select>
-          </div>
-
-          <!-- Card Style Selector -->
-          <div class="form-group">
-            <label class="form-label">Design Layout (Card 1 vs Card 2)</label>
-            <div class="card-selector-grid">
-              <label class="card-radio-label">
-                <input type="radio" name="noticeCardType" value="card1">
-                <div class="card-option">
-                  <div class="card-option-badge">🌀</div>
-                  <div>
-                    <div class="card-option-title">Card 1 • Quantum Portal</div>
-                    <div class="card-option-desc">Holographic Orb, Shockwave Ring &amp; Cyan Particles</div>
-                  </div>
-                </div>
-              </label>
-
-              <label class="card-radio-label">
-                <input type="radio" name="noticeCardType" value="card2" checked>
-                <div class="card-option">
-                  <div class="card-option-badge">💎</div>
-                  <div>
-                    <div class="card-option-title">Card 2 • 3D Crystal Model</div>
-                    <div class="card-option-desc">Real CSS 3D Spinning Crystal Cube &amp; Gold Accents</div>
-                  </div>
-                </div>
-              </label>
-            </div>
-          </div>
-
-          <!-- Title Input -->
-          <div class="form-group">
-            <label class="form-label">Popup Title</label>
-            <input type="text" class="form-input" id="noticeTitleInput" value="Card 2 • 3D Model" placeholder="Headline...">
-          </div>
-
-          <!-- Message Input -->
-          <div class="form-group">
-            <label class="form-label">Message Body</label>
-            <textarea class="form-textarea" id="noticeMsgInput" placeholder="Aapka sandesh / message yaha likhein...">kesa laga new card</textarea>
-          </div>
-
-          <!-- Emoji / Icon Selector -->
-          <div class="form-group">
-            <label class="form-label">Icon / Emoji</label>
-            <input type="text" class="form-input" id="noticeIconInput" value="💎" style="max-width: 120px; font-size: 1.3rem; text-align: center;">
-            <div class="emoji-chips">
-              <span class="emoji-chip" onclick="selectEmoji('💎')">💎</span>
-              <span class="emoji-chip" onclick="selectEmoji('📢')">📢</span>
-              <span class="emoji-chip" onclick="selectEmoji('🔥')">🔥</span>
-              <span class="emoji-chip" onclick="selectEmoji('🚀')">🚀</span>
-              <span class="emoji-chip" onclick="selectEmoji('🌟')">🌟</span>
-              <span class="emoji-chip" onclick="selectEmoji('📚')">📚</span>
-              <span class="emoji-chip" onclick="selectEmoji('⚡')">⚡</span>
-              <span class="emoji-chip" onclick="selectEmoji('🏆')">🏆</span>
-              <span class="emoji-chip" onclick="selectEmoji('👑')">👑</span>
-              <span class="emoji-chip" onclick="selectEmoji('🎉')">🎉</span>
-            </div>
-          </div>
-
-          <!-- Button Text -->
-          <div class="form-group">
-            <label class="form-label">Button Action Text</label>
-            <input type="text" class="form-input" id="noticeBtnTextInput" value="Mast Hai 🔥" placeholder="Button text...">
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="btn-row">
-            <button type="button" class="btn-admin btn-primary" id="btnBroadcastNow" onclick="broadcastLiveNotice()">
-              <span>⚡</span> Broadcast Live to App
-            </button>
-            <button type="button" class="btn-admin btn-gold" id="btnAutoSequence" onclick="triggerAutoSequence()">
-              <span>⏱️</span> Auto-Sequence (Card 2 → 10s → Card 1)
-            </button>
-            <button type="button" class="btn-admin btn-danger" id="btnDeactivate" onclick="deactivateLiveNotice()" style="min-width:140px;">
-              <span>🔴</span> Turn Off Notice
-            </button>
-          </div>
-        </div>
-
-        <!-- Right Column: Interactive 3D Simulator & History -->
-        <div>
-          <div class="glass-panel">
-            <div class="panel-header">
-              <div class="panel-title">
-                <span>📱</span> Live Interactive 3D Simulator
-              </div>
-              <span class="panel-pill">DRAG 3D VIEWPORT</span>
-            </div>
-
-            <div class="simulator-card" id="simViewport" title="Drag with mouse or finger to tilt in 3D!">
-              <!-- Card 1 Simulator -->
-              <div class="sim-card1" id="simCard1" style="display:none;">
-                <div class="sim-orb">
-                  <span id="simCard1Icon">📢</span>
-                </div>
-                <div class="sim-title" id="simCard1Title">Card 1 vs Card 2</div>
-                <div class="sim-message" id="simCard1Msg">ye acha hai ya card2</div>
-                <button type="button" class="sim-btn sim-btn-cyan" id="simCard1Btn">Batao Bhai 🏆</button>
-              </div>
-
-              <!-- Card 2 Simulator (3D Cube Model) -->
-              <div class="sim-card2" id="simCard2">
-                <div class="sim-cube-stage">
-                  <div class="sim-cube">
-                    <div class="sim-cube-face front"></div>
-                    <div class="sim-cube-face back"></div>
-                    <div class="sim-cube-face right"></div>
-                    <div class="sim-cube-face left"></div>
-                    <div class="sim-cube-face top"></div>
-                    <div class="sim-cube-face bottom"></div>
-                    <div class="sim-cube-core">
-                      <span id="simCard2Icon">💎</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="sim-title" id="simCard2Title">Card 2 • 3D Model</div>
-                <div class="sim-message" id="simCard2Msg">kesa laga new card</div>
-                <button type="button" class="sim-btn sim-btn-gold" id="simCard2Btn">Mast Hai 🔥</button>
-              </div>
-            </div>
-
-            <p style="font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: 12px;">
-              ✦ Touch / Drag to rotate the 3D model! Form inputs change this live.
-            </p>
-          </div>
-
-          <!-- Broadcast History Panel -->
-          <div class="glass-panel">
-            <div class="panel-header">
-              <div class="panel-title">
-                <span>🕒</span> Recent Broadcast History
-              </div>
-              <span class="panel-pill">1-TAP RE-SEND</span>
-            </div>
-            <div class="history-list" id="broadcastHistoryList">
-              <!-- Dynamically populated -->
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 2: STAGING PIPELINE -->
-    <section class="tab-view" id="tabPipeline">
-      <div class="glass-panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <span>🚀</span> Feature Staging to Production Pipeline
-          </div>
-          <span class="panel-pill">STAGE-FIRST DEPLOYMENT</span>
-        </div>
-
-        <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:20px; line-height:1.6;">
-          Jab bhi koi naya feature ya update banta hai, wo sabse pehle yaha <b>Staging Hub</b> me aata hai. Aap yaha features verify kar sakte hain aur fir <b>"Deploy to Real App"</b> button dabakar sabhi users ke phone me live launch kar sakte hain!
-        </p>
-
-        <div style="background:rgba(10,15,29,0.7); border:1px solid var(--border-subtle); border-radius:16px; padding:20px; margin-bottom:20px;">
-          <h3 style="font-size:1.1rem; color:var(--accent-cyan); margin-bottom:12px;">📦 Staged Release: Mind Focus Books v3.2.0</h3>
-          <ul style="padding-left:22px; font-size:0.88rem; color:var(--text-secondary); line-height:2;">
-            <li>✦ <b>Ultra-Fast Real-Time Broadcast Engine:</b> GitHub API direct 0-second cache delay &amp; 5s fast polling.</li>
-            <li>✦ <b>Laptop 0ms Multi-Window Sync:</b> Instant broadcast reception on laptop and native app.</li>
-            <li>✦ <b>Executive Command Studio:</b> VIP Cyber Obsidian dashboard with 3D model viewport.</li>
-            <li>✦ <b>Book of the Day Remote Curator:</b> Remote spotlight book recommendations for users.</li>
-          </ul>
-        </div>
-
-        <div class="btn-row">
-          <button type="button" class="btn-admin btn-emerald" onclick="deployStagedReleaseToRealApp()">
-            <span>🚀</span> Confirm &amp; Deploy v3.2.0 to Real App
-          </button>
-          <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()">
-            <span>↩️</span> Revert to Previous Release
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 3: REMOTE FEATURE SWITCHES -->
-    <section class="tab-view" id="tabFeatures">
-      <div class="glass-panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <span>🎛️</span> Remote "God Mode" Switches (Real App Controls)
-          </div>
-          <span class="panel-pill">INSTANT CLOUD TOGGLES</span>
-        </div>
-
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-info-title">🚨 Emergency Maintenance Mode</div>
-            <div class="toggle-info-desc">When enabled, all app users will see a scheduled maintenance screen.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="cfgMaintenanceMode">
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-info-title">📖 Daily Motivational Quotes</div>
-            <div class="toggle-info-desc">Show dynamic daily book quotes and morning inspiration cards in the app.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="cfgQuotesEnabled" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-info-title">🎙️ Audiobook Voice Reader (TTS)</div>
-            <div class="toggle-info-desc">Enable synthetic speech audiobook narrator for book notes.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="cfgAudioVoiceEnabled" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-info-title">🛡️ Duolingo Streak Shield Rewards</div>
-            <div class="toggle-info-desc">Allow users to earn freeze shields to preserve reading streaks.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="cfgStreakShields" checked>
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="toggle-row">
-          <div>
-            <div class="toggle-info-title">📢 Global Top Announcement Ticker</div>
-            <div class="toggle-info-desc">Show a thin glowing headline banner pinned at the very top of the app.</div>
-          </div>
-          <label class="switch">
-            <input type="checkbox" id="cfgBannerActive">
-            <span class="slider"></span>
-          </label>
-        </div>
-
-        <div class="form-group" style="margin-top: 18px;">
-          <label class="form-label">Top Banner Ticker Text</label>
-          <input type="text" class="form-input" id="cfgBannerText" placeholder="e.g. 🌟 Welcome Book Lovers! Happy Reading!">
-        </div>
-
-        <button type="button" class="btn-admin btn-primary" id="btnSaveConfig" onclick="saveRemoteConfigToCloud()" style="margin-top: 14px;">
-          <span>☁️</span> Push Feature Switches to Real App
-        </button>
-      </div>
-    </section>
-
-    <!-- TAB 4: BOOKS & BOOK OF THE DAY -->
-    <section class="tab-view" id="tabBooks">
-      <div class="glass-panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <span>🌟</span> Remote "Book of the Day" Spotlight
-          </div>
-          <span class="panel-pill">SPOTLIGHT FEATURE</span>
-        </div>
-
-        <p style="font-size:0.88rem; color:var(--text-muted); margin-bottom:18px;">
-          Yaha se aap rozana ek featured book select kar sakte hain jo sabhi app users ke home screen par spotlight ban kar chamkegi!
-        </p>
-
-        <div class="form-group">
-          <label class="form-label">Featured Book Title</label>
-          <input type="text" class="form-input" id="botdTitle" value="Atomic Habits">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Author Name</label>
-          <input type="text" class="form-input" id="botdAuthor" value="James Clear">
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Inspiring Book Quote</label>
-          <textarea class="form-textarea" id="botdQuote">You do not rise to the level of your goals. You fall to the level of your systems.</textarea>
-        </div>
-
-        <button type="button" class="btn-admin btn-gold" onclick="saveBookOfTheDay()">
-          <span>🌟</span> Set as Book of the Day
-        </button>
-      </div>
-    </section>
-
-    <!-- TAB 5: GITHUB VAULT & RADAR -->
-    <section class="tab-view" id="tabGithub">
-      <div class="glass-panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <span>🔑</span> GitHub Cloud Authentication Vault
-          </div>
-          <span class="panel-pill" style="background:rgba(239,68,68,0.2); color:#fca5a5; border:1px solid #ef4444;">SECURED &amp; PRIVATE</span>
-        </div>
-
-        <p style="font-size: 0.88rem; color: var(--text-muted); margin-bottom: 16px;">
-          Apna GitHub Personal Access Token (PAT with <code>repo</code> scope) yahan enter karein. Token aapke browser ke private local storage me rehta hai aur source code me kabhi store ya leak nahi hota.
-        </p>
-
-        <div class="form-group">
-          <label class="form-label">GitHub Personal Access Token (Classic or Fine-grained with repo access)</label>
-          <input type="password" class="form-input" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-        </div>
-
-        <div class="btn-row" style="flex-wrap:wrap; gap:8px;">
-          <button type="button" class="btn-admin btn-primary" onclick="saveGithubToken()">
-            <span>💾</span> Save / Update Token
-          </button>
-          <button type="button" class="btn-admin btn-secondary" onclick="testGitHubConnection()">
-            <span>🔌</span> Test Connection &amp; Rate Limits
-          </button>
-          <button type="button" class="btn-admin" onclick="clearGithubToken()" style="background:rgba(239,68,68,0.2); border:1px solid #ef4444; color:#f87171;">
-            <span>🔒</span> Logout / Clear Token
-          </button>
-        </div>
-
-        <div id="tokenTestResult" style="margin-top: 14px; font-size: 0.88rem;"></div>
-      </div>
-    </section>
-
-    <!-- Realtime Action Telemetry Console -->
-    <section class="glass-panel">
-      <div class="panel-header" style="margin-bottom: 10px; padding-bottom: 8px;">
-        <div class="panel-title" style="font-size: 0.9rem;">
-          <span>📟</span> Real-Time Action Activity &amp; System Telemetry
-        </div>
-        <span class="panel-pill" style="font-size: 0.7rem;">LIVE CONSOLE</span>
-      </div>
-      <div class="log-console" id="adminConsoleLog">
-        <div class="log-entry"><span class="log-time">[System]</span> Executive Command Studio v2.0 initialized. Ready for operations.</div>
-      </div>
-    </section>
+  <div class="card">
+    <div class="icon">🚀</div>
+    <h1>Admin Studio Moved</h1>
+    <p>
+      Aap naye aur improved <b>Master Control Studio</b> pe redirect ho rahe hain.
+    </p>
+    <p>
+      Yaha click karein agar auto-redirect kaam nahi kar raha:
+    </p>
+    <a class="btn" href="control-panel.html">⚡ Open Control Panel</a>
+    <div class="note">admin.html v1 (legacy) &mdash; replaced by control-panel.html v3.7.4</div>
   </div>
-
-  <script src="control-panel.js"></script>
 </body>
 </html>
