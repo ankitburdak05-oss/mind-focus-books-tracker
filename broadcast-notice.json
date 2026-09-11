@@ -1,11 +1,11 @@
 {
-  "id": "notice-v3.6.0-live",
+  "id": "gift-drop-1789142151447",
+  "type": "mystery_gift",
+  "isMysteryGift": true,
   "active": true,
-  "card": "card2",
-  "icon": "🚀",
-  "title": "New Update Live: v3.6.0 Available!",
-  "btnText": "Update to v3.6.0 🚀",
-  "message": "Mind Focus Books v3.6.0 update live ho chuka hai! Real App UI Redesign, 3D Flashcards, Live Help Desk aur zero battery drain ke sath. Tap karke turant install karein.",
-  "action": "update",
-  "timestamp": "2026-09-11T02:35:00.000Z"
+  "rewardType": "vip_badge",
+  "title": "👑 Special VIP Surprise From Mind Focus!",
+  "rewardName": "VIP Golden Reader Badge",
+  "message": "Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai! Tap karke apna reward claim karein.",
+  "timestamp": "2026-09-11T15:55:51.447Z"
 }
