@@ -28,3 +28,20 @@ An offline, responsive reading companion and tracker featuring 150 curated books
   methods are exposed: `list_backups()` and `restore_backup(filename)`.
 - `admin.html` is converted to a friendly redirect page pointing to
   `control-panel.html`.
+
+## 🔐 Admin Panel Password / PIN Lock (NEW)
+Control panel ab password ya 4-digit PIN se lock hota hai.
+
+- **First time:** Setup screen open hoga — password (min 6 chars) ya 4-digit PIN choose karein.
+- **Saved:** Har reload pe password/PIN maangega.
+- **Idle auto-lock:** 30 minute koi activity nahi → automatic re-lock.
+- **Manual lock:** Browser me `adminLockRelock()` call kar sakte ho (future me button add hoga).
+- **Forgot password?**
+  1. Open `https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/admin-reset-token.txt`
+  2. Copy the token
+  3. Click "Forgot password?" → paste token → set new password
+- **Recovery token** is in `admin-reset-token.txt` at the repo root. Keep it private.
+  Change it by editing the file and pushing — only holders of the new token can reset.
+
+**Lock data storage:** hashed value is saved in browser `localStorage` under
+`mf_admin_lock_v1`. Clear it manually from DevTools if you want to wipe the lock.

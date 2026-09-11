@@ -3,6 +3,469 @@ const REPO_OWNER = 'ankitburdak05-oss';
 const REPO_NAME = 'mind-focus-books-tracker';
 const DEFAULT_BRANCH = 'main';
 
+// ==========================================================================
+// 🔐 ADMIN PASSWORD / PIN LOCK ENGINE
+// Iss section pehle DOMContentLoaded se chalta hai aur agar lock set hai
+// to page hide karke lock screen dikhata hai.
+// ==========================================================================
+const ADMIN_LOCK_KEY = 'mf_admin_lock_v1';
+const ADMIN_LOCK_ATTEMPTS_KEY = 'mf_admin_lock_attempts_v1';
+const ADMIN_LOCK_MAX_ATTEMPTS = 5;
+const ADMIN_LOCK_LOCKOUT_MS = 60 * 1000; // 1 minute lockout after max attempts
+const ADMIN_LOCK_AUTO_UNLOCK_MS = 30 * 60 * 1000; // 30 min idle auto-lock
+const ADMIN_RESET_TOKEN_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/admin-reset-token.txt`;
+
+let adminLockState = {
+  mode: 'password',          // 'password' or 'pin'
+  unlockMode: 'password',    // active unlock mode (saved at setup)
+  setupPinBuffer: '',
+  loginPinBuffer: '',
+  attempts: 0,
+  lockoutUntil: 0,
+  lastActivityTs: Date.now(),
+  isUnlocked: false
+};
+
+function adminLockLoad() {
+  try {
+    const raw = localStorage.getItem(ADMIN_LOCK_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (e) { return null; }
+}
+
+function adminLockSave(lockObj) {
+  try {
+    localStorage.setItem(ADMIN_LOCK_KEY, JSON.stringify(lockObj));
+  } catch (e) {}
+}
+
+function adminLockLoadAttempts() {
+  try {
+    const raw = localStorage.getItem(ADMIN_LOCK_ATTEMPTS_KEY);
+    if (!raw) return { attempts: 0, lockoutUntil: 0 };
+    return JSON.parse(raw);
+  } catch (e) { return { attempts: 0, lockoutUntil: 0 }; }
+}
+
+function adminLockSaveAttempts(attemptsObj) {
+  try {
+    localStorage.setItem(ADMIN_LOCK_ATTEMPTS_KEY, JSON.stringify(attemptsObj));
+  } catch (e) {}
+}
+
+function adminLockHash(input) {
+  // Lightweight browser-only obfuscated hash (NOT cryptographically strong,
+  // but stops casual inspection of devtools localStorage). Server-side
+  // bcrypt-like security is unnecessary for a single-user local admin tool.
+  let salt = 'mfadmin_2026_salt_$';
+  let combined = salt + input + salt.split('').reverse().join('');
+  let h1 = 0, h2 = 0x9e3779b9;
+  for (let i = 0; i < combined.length; i++) {
+    const c = combined.charCodeAt(i);
+    h1 = ((h1 << 5) - h1) + c;
+    h1 |= 0;
+    h2 = ((h2 << 7) ^ h2) ^ c;
+  }
+  return ('0000000' + (h1 >>> 0).toString(16)).slice(-8) +
+         ('0000000' + (h2 >>> 0).toString(16)).slice(-8) +
+         ('0000' + combined.length.toString(16)).slice(-4);
+}
+
+function adminLockShowError(screen, msg) {
+  const el = document.getElementById('adminLockError' + screen);
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 4500);
+}
+
+function adminLockClearError(screen) {
+  const el = document.getElementById('adminLockError' + screen);
+  if (!el) return;
+  el.textContent = '';
+  el.classList.remove('show');
+}
+
+function adminLockSwitchMode(mode) {
+  playUiClick();
+  adminLockState.mode = mode;
+
+  document.querySelectorAll('.admin-lock-tab-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+  });
+
+  const isPin = (mode === 'pin');
+  const pwdSetup = document.getElementById('adminLockPasswordSetup');
+  const pinSetup = document.getElementById('adminLockPinSetup');
+  if (pwdSetup) pwdSetup.style.display = isPin ? 'none' : 'block';
+  if (pinSetup) pinSetup.style.display = isPin ? 'block' : 'none';
+
+  const lbl = document.getElementById('adminLockModeSwitchLabel');
+  if (lbl) lbl.textContent = isPin ? 'Password' : 'PIN';
+
+  adminLockState.setupPinBuffer = '';
+  adminLockUpdatePinDots('adminLockPinDots', '');
+  adminLockClearError('Setup');
+}
+
+function adminLockUpdatePinDots(containerId, buffer) {
+  const cont = document.getElementById(containerId);
+  if (!cont) return;
+  const dots = cont.querySelectorAll('.admin-lock-pin-dot');
+  dots.forEach((d, i) => {
+    d.classList.remove('filled', 'error');
+    if (i < buffer.length) d.classList.add('filled');
+  });
+}
+
+function adminLockPinPress(digit) {
+  playUiClick();
+  if (digit === 'C') {
+    adminLockState.setupPinBuffer = '';
+    adminLockUpdatePinDots('adminLockPinDots', '');
+    const st = document.getElementById('adminLockPinStatus');
+    if (st) { st.textContent = 'PIN enter karo (4 digits)'; st.style.color = '#94a3b8'; }
+    adminLockClearError('Setup');
+    return;
+  }
+  if (digit === 'X') {
+    adminLockState.setupPinBuffer = adminLockState.setupPinBuffer.slice(0, -1);
+    adminLockUpdatePinDots('adminLockPinDots', adminLockState.setupPinBuffer);
+    return;
+  }
+  if (adminLockState.setupPinBuffer.length >= 4) return;
+  adminLockState.setupPinBuffer += digit;
+  adminLockUpdatePinDots('adminLockPinDots', adminLockState.setupPinBuffer);
+
+  if (adminLockState.setupPinBuffer.length === 4) {
+    // Auto-validate after 4 digits
+    setTimeout(() => {
+      adminLockCompleteSetup();
+    }, 250);
+  }
+}
+
+function adminLockCompleteSetup() {
+  adminLockClearError('Setup');
+  let secretValue = '';
+  if (adminLockState.mode === 'pin') {
+    if (adminLockState.setupPinBuffer.length !== 4) {
+      adminLockShowError('Setup', '⚠️ PIN 4 digits ka hona chahiye.');
+      const dots = document.querySelectorAll('#adminLockPinDots .admin-lock-pin-dot');
+      dots.forEach(d => d.classList.add('error'));
+      return;
+    }
+    secretValue = adminLockState.setupPinBuffer;
+  } else {
+    const pwd = document.getElementById('adminLockNewPwd')?.value || '';
+    const cfm = document.getElementById('adminLockConfirmPwd')?.value || '';
+    if (pwd.length < 6) {
+      adminLockShowError('Setup', '⚠️ Password minimum 6 characters ka hona chahiye.');
+      return;
+    }
+    if (pwd !== cfm) {
+      adminLockShowError('Setup', '⚠️ Password aur confirm password match nahi ho rahe.');
+      return;
+    }
+    secretValue = pwd;
+  }
+
+  const lockObj = {
+    mode: adminLockState.mode,
+    hash: adminLockHash(secretValue),
+    createdAt: new Date().toISOString()
+  };
+  adminLockSave(lockObj);
+  adminLockSaveAttempts({ attempts: 0, lockoutUntil: 0 });
+
+  showToast('✅ Lock setup complete! Welcome Admin.');
+  adminLockUnlock();
+}
+
+function adminLockLoginPinPress(digit) {
+  playUiClick();
+  if (digit === 'C') {
+    adminLockState.loginPinBuffer = '';
+    adminLockUpdatePinDots('adminLockLoginPinDots', '');
+    adminLockClearError('Login');
+    return;
+  }
+  if (digit === 'X') {
+    adminLockState.loginPinBuffer = adminLockState.loginPinBuffer.slice(0, -1);
+    adminLockUpdatePinDots('adminLockLoginPinDots', adminLockState.loginPinBuffer);
+    return;
+  }
+  if (adminLockState.loginPinBuffer.length >= 4) return;
+  adminLockState.loginPinBuffer += digit;
+  adminLockUpdatePinDots('adminLockLoginPinDots', adminLockState.loginPinBuffer);
+
+  if (adminLockState.loginPinBuffer.length === 4) {
+    setTimeout(() => adminLockAttemptLogin(), 250);
+  }
+}
+
+function adminLockAttemptLogin() {
+  const stored = adminLockLoad();
+  if (!stored) {
+    adminLockShowSetup();
+    return;
+  }
+  adminLockClearError('Login');
+
+  const attemptsState = adminLockLoadAttempts();
+  if (attemptsState.lockoutUntil && Date.now() < attemptsState.lockoutUntil) {
+    const waitSec = Math.ceil((attemptsState.lockoutUntil - Date.now()) / 1000);
+    adminLockShowError('Login', `🔒 Bahut zyada galat attempts. ${waitSec} second ruko.`);
+    return;
+  }
+
+  let provided = '';
+  if (adminLockState.unlockMode === 'pin') {
+    provided = adminLockState.loginPinBuffer;
+    if (provided.length !== 4) {
+      adminLockShowError('Login', '⚠️ 4-digit PIN daalna zaroori hai.');
+      return;
+    }
+  } else {
+    provided = document.getElementById('adminLockLoginPwd')?.value || '';
+    if (provided.length < 6) {
+      adminLockShowError('Login', '⚠️ Sahi password daalein.');
+      return;
+    }
+  }
+
+  const hashed = adminLockHash(provided);
+  if (hashed === stored.hash) {
+    adminLockSaveAttempts({ attempts: 0, lockoutUntil: 0 });
+    showToast('🔓 Welcome Admin!');
+    adminLockUnlock();
+  } else {
+    attemptsState.attempts = (attemptsState.attempts || 0) + 1;
+    if (attemptsState.attempts >= ADMIN_LOCK_MAX_ATTEMPTS) {
+      attemptsState.lockoutUntil = Date.now() + ADMIN_LOCK_LOCKOUT_MS;
+      attemptsState.attempts = 0;
+      adminLockShowError('Login', '🚫 Galat password! 1 minute ke liye lock ho gaya.');
+    } else {
+      const remaining = ADMIN_LOCK_MAX_ATTEMPTS - attemptsState.attempts;
+      adminLockShowError('Login', `❌ Galat password. ${remaining} attempts baaki.`);
+    }
+    adminLockSaveAttempts(attemptsState);
+    adminLockUpdateAttemptsUI(attemptsState);
+
+    if (adminLockState.unlockMode === 'pin') {
+      adminLockState.loginPinBuffer = '';
+      adminLockUpdatePinDots('adminLockLoginPinDots', '');
+      const dots = document.querySelectorAll('#adminLockLoginPinDots .admin-lock-pin-dot');
+      dots.forEach(d => d.classList.add('error'));
+      setTimeout(() => dots.forEach(d => d.classList.remove('error')), 400);
+    } else {
+      const pwdInput = document.getElementById('adminLockLoginPwd');
+      if (pwdInput) { pwdInput.value = ''; pwdInput.focus(); }
+    }
+    playAudioTone(220, 'square', 0.18, 0.12);
+  }
+}
+
+function adminLockUpdateAttemptsUI(attemptsState) {
+  const el = document.getElementById('adminLockAttemptsText');
+  if (!el) return;
+  el.classList.remove('warning', 'danger');
+  const remaining = ADMIN_LOCK_MAX_ATTEMPTS - (attemptsState.attempts || 0);
+  if (attemptsState.lockoutUntil && Date.now() < attemptsState.lockoutUntil) {
+    const waitSec = Math.ceil((attemptsState.lockoutUntil - Date.now()) / 1000);
+    el.textContent = `🔒 Locked. ${waitSec}s wait karo.`;
+    el.classList.add('danger');
+  } else if (remaining <= 2) {
+    el.textContent = `⚠️ Sirf ${remaining} attempts baaki.`;
+    el.classList.add('danger');
+  } else if (remaining <= 3) {
+    el.textContent = `${remaining} attempts baaki.`;
+    el.classList.add('warning');
+  } else {
+    el.textContent = '';
+  }
+}
+
+function adminLockShowSetup() {
+  const overlay = document.getElementById('adminLockOverlay');
+  const setup = document.getElementById('adminLockSetupScreen');
+  const login = document.getElementById('adminLockLoginScreen');
+  const forgot = document.getElementById('adminLockForgotScreen');
+  if (overlay) overlay.style.display = 'flex';
+  if (setup) setup.style.display = 'block';
+  if (login) login.style.display = 'none';
+  if (forgot) forgot.style.display = 'none';
+
+  // Default to password mode
+  adminLockSwitchMode('password');
+  setTimeout(() => {
+    const pwdInput = document.getElementById('adminLockNewPwd');
+    if (pwdInput) pwdInput.focus();
+  }, 100);
+}
+
+function adminLockShowLogin(unlockMode) {
+  const overlay = document.getElementById('adminLockOverlay');
+  const setup = document.getElementById('adminLockSetupScreen');
+  const login = document.getElementById('adminLockLoginScreen');
+  const forgot = document.getElementById('adminLockForgotScreen');
+  if (overlay) overlay.style.display = 'flex';
+  if (setup) setup.style.display = 'none';
+  if (login) login.style.display = 'block';
+  if (forgot) forgot.style.display = 'none';
+
+  adminLockState.unlockMode = unlockMode || 'password';
+
+  const pwdLogin = document.getElementById('adminLockPasswordLogin');
+  const pinLogin = document.getElementById('adminLockPinLogin');
+  if (pwdLogin) pwdLogin.style.display = (adminLockState.unlockMode === 'pin') ? 'none' : 'block';
+  if (pinLogin) pinLogin.style.display = (adminLockState.unlockMode === 'pin') ? 'block' : 'none';
+
+  adminLockState.loginPinBuffer = '';
+  adminLockUpdatePinDots('adminLockLoginPinDots', '');
+  adminLockClearError('Login');
+
+  const subTitle = document.getElementById('adminLockLoginSubtitle');
+  if (subTitle) {
+    subTitle.textContent = (adminLockState.unlockMode === 'pin')
+      ? 'Apna 4-digit PIN daal kar unlock karo.'
+      : 'Apna password daal kar unlock karo.';
+  }
+
+  adminLockUpdateAttemptsUI(adminLockLoadAttempts());
+
+  setTimeout(() => {
+    if (adminLockState.unlockMode === 'pin') return;
+    const pwdInput = document.getElementById('adminLockLoginPwd');
+    if (pwdInput) pwdInput.focus();
+  }, 100);
+}
+
+function adminLockShowForgot() {
+  const overlay = document.getElementById('adminLockOverlay');
+  const setup = document.getElementById('adminLockSetupScreen');
+  const login = document.getElementById('adminLockLoginScreen');
+  const forgot = document.getElementById('adminLockForgotScreen');
+  if (overlay) overlay.style.display = 'flex';
+  if (setup) setup.style.display = 'none';
+  if (login) login.style.display = 'none';
+  if (forgot) forgot.style.display = 'block';
+  adminLockClearError('Forgot');
+  setTimeout(() => {
+    const tokenInput = document.getElementById('adminLockResetToken');
+    if (tokenInput) tokenInput.focus();
+  }, 100);
+}
+
+async function adminLockResetViaToken() {
+  adminLockClearError('Forgot');
+  const token = document.getElementById('adminLockResetToken')?.value.trim();
+  const newPwd = document.getElementById('adminLockResetNewPwd')?.value || '';
+
+  if (!token) {
+    adminLockShowError('Forgot', '⚠️ Master reset token daalein.');
+    return;
+  }
+  if (newPwd.length < 6) {
+    adminLockShowError('Forgot', '⚠️ New password minimum 6 characters.');
+    return;
+  }
+
+  // Validate token against remote file
+  try {
+    showToast('⏳ Verifying reset token...');
+    const res = await fetch(ADMIN_RESET_TOKEN_URL + '?cb=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) throw new Error('Token file not accessible (HTTP ' + res.status + ')');
+    const remoteToken = (await res.text()).trim();
+
+    if (token !== remoteToken) {
+      adminLockShowError('Forgot', '❌ Invalid reset token. Check GitHub file.');
+      return;
+    }
+
+    // Token valid: replace lock with new password
+    const newLock = {
+      mode: 'password',
+      hash: adminLockHash(newPwd),
+      createdAt: new Date().toISOString(),
+      resetAt: new Date().toISOString()
+    };
+    adminLockSave(newLock);
+    adminLockSaveAttempts({ attempts: 0, lockoutUntil: 0 });
+    adminLockState.unlockMode = 'password';
+    showToast('🔓 Reset successful! Welcome Admin.');
+    adminLockUnlock();
+  } catch (err) {
+    adminLockShowError('Forgot', '⚠️ Token verify nahi ho paya: ' + err.message);
+  }
+}
+
+function adminLockUnlock() {
+  adminLockState.isUnlocked = true;
+  adminLockState.lastActivityTs = Date.now();
+  const overlay = document.getElementById('adminLockOverlay');
+  if (overlay) {
+    overlay.style.opacity = '0';
+    setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = '1'; }, 250);
+  }
+  // Clear sensitive fields
+  const pwdInput = document.getElementById('adminLockLoginPwd');
+  if (pwdInput) pwdInput.value = '';
+  const newPwd = document.getElementById('adminLockNewPwd');
+  if (newPwd) newPwd.value = '';
+  const cfmPwd = document.getElementById('adminLockConfirmPwd');
+  if (cfmPwd) cfmPwd.value = '';
+  const tokenInput = document.getElementById('adminLockResetToken');
+  if (tokenInput) tokenInput.value = '';
+  const resetPwd = document.getElementById('adminLockResetNewPwd');
+  if (resetPwd) resetPwd.value = '';
+}
+
+function adminLockRelock() {
+  if (!adminLockState.isUnlocked) return;
+  const stored = adminLockLoad();
+  if (!stored) return; // no lock set
+  adminLockState.isUnlocked = false;
+  adminLockShowLogin(stored.mode);
+  showToast('🔒 Admin panel re-locked for security.');
+}
+
+function adminLockCheckIdle() {
+  if (!adminLockState.isUnlocked) return;
+  if (Date.now() - adminLockState.lastActivityTs > ADMIN_LOCK_AUTO_UNLOCK_MS) {
+    adminLockRelock();
+  }
+}
+
+['mousedown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
+  window.addEventListener(evt, () => {
+    adminLockState.lastActivityTs = Date.now();
+  }, { passive: true });
+});
+
+setInterval(adminLockCheckIdle, 60 * 1000);
+
+function adminLockInit() {
+  const stored = adminLockLoad();
+  if (!stored) {
+    adminLockShowSetup();
+  } else {
+    adminLockShowLogin(stored.mode || 'password');
+  }
+}
+
+// Expose to window so HTML inline handlers can call them
+window.adminLockSwitchMode = adminLockSwitchMode;
+window.adminLockCompleteSetup = adminLockCompleteSetup;
+window.adminLockPinPress = adminLockPinPress;
+window.adminLockLoginPinPress = adminLockLoginPinPress;
+window.adminLockAttemptLogin = adminLockAttemptLogin;
+window.adminLockShowForgot = adminLockShowForgot;
+window.adminLockShowLogin = adminLockShowLogin;
+window.adminLockResetViaToken = adminLockResetViaToken;
+window.adminLockRelock = adminLockRelock;
+
 // Secure GitHub Authentication Token (Stored strictly in client-side storage, never hardcoded)
 let githubToken = sessionStorage.getItem('mf_admin_github_token') || localStorage.getItem('mf_admin_github_token') || '';
 
@@ -107,6 +570,32 @@ function playDeployChime() {
 
 // Lifecycle Init
 document.addEventListener('DOMContentLoaded', () => {
+  // 🔐 Lock screen first - baaki sab hide rahega jab tak unlock na ho
+  adminLockInit();
+  // Hide the rest of the app until unlocked
+  if (!adminLockState.isUnlocked) {
+    document.body.classList.add('admin-locked');
+  }
+
+  // 1. Setup event to re-enable app after unlock
+  const origUnlock = adminLockUnlock;
+  window.adminLockUnlock = function() {
+    origUnlock();
+    document.body.classList.remove('admin-locked');
+    // Now boot the rest of the app
+    bootRestOfAdminPanel();
+  };
+
+  // If already unlocked (e.g. via token reset), boot immediately
+  if (adminLockState.isUnlocked) {
+    document.body.classList.remove('admin-locked');
+    bootRestOfAdminPanel();
+  }
+});
+
+function bootRestOfAdminPanel() {
+  if (window.__adminPanelBooted) return;
+  window.__adminPanelBooted = true;
   initTabs();
   initFormInputs();
   initInteractive3dViewer();
@@ -120,13 +609,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof initAdminHelpDeskListeners === 'function') initAdminHelpDeskListeners();
   if (typeof refreshAdminChatThreads === 'function') {
     refreshAdminChatThreads(false);
-    // Polite 60s background check (SSE handles instant live delivery with 0 polling)
     setInterval(() => {
       if (!document.hidden) refreshAdminChatThreads(false);
     }, 60000);
   }
   appendLog('Admin Control Panel Ready.', 'success');
-});
+}
 
 // Mobile Sidebar Drawer Toggle
 function toggleMobileSidebar(force) {

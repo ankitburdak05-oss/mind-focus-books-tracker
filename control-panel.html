@@ -11,8 +11,378 @@
   <link rel="stylesheet" href="style.css?v=3.7.4">
   <link rel="stylesheet" href="control-panel.css?v=3.7.4">
   <link rel="icon" type="image/png" href="icon-192.png">
+  <style>
+    /* ==========================================================================
+       ADMIN LOCK: hide all body content while locked
+       ========================================================================== */
+    body.admin-locked > *:not(#adminLockOverlay) { display: none !important; }
+
+    /* ==========================================================================
+       PASSWORD / PIN LOCK SCREEN STYLES
+       ========================================================================== */
+    .admin-lock-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #0b0f19 0%, #1a1f3a 100%);
+      z-index: 9999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(20px);
+    }
+    .admin-lock-overlay.hidden { display: none; }
+    .admin-lock-card {
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 20px;
+      padding: 2rem 1.75rem;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(56, 189, 248, 0.15);
+      text-align: center;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .admin-lock-icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.4);
+      animation: lockPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes lockPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 8px 24px rgba(56, 189, 248, 0.4); }
+      50% { transform: scale(1.05); box-shadow: 0 8px 32px rgba(56, 189, 248, 0.6); }
+    }
+    .admin-lock-title { font-size: 1.5rem; font-weight: 900; color: #38bdf8; margin: 0 0 0.5rem; }
+    .admin-lock-subtitle { font-size: 0.9rem; color: #94a3b8; margin: 0 0 1.25rem; line-height: 1.5; }
+    .admin-lock-tabs { display: flex; gap: 0.4rem; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 1.25rem; }
+    .admin-lock-tab-btn {
+      flex: 1;
+      padding: 0.55rem 0.5rem;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .admin-lock-tab-btn.active {
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+    }
+    .admin-lock-input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1.5px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.85rem;
+      box-sizing: border-box;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .admin-lock-input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+    .admin-lock-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+      transition: transform 0.1s;
+    }
+    .admin-lock-btn:active { transform: scale(0.98); }
+    .admin-lock-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .admin-lock-secondary-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #94a3b8;
+      margin-top: 0.6rem;
+      padding: 0.65rem;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .admin-lock-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 0.65rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 0.85rem;
+      min-height: 0;
+      display: none;
+    }
+    .admin-lock-error.show { display: block; animation: shake 0.4s; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .admin-lock-attempts {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 0.75rem;
+    }
+    .admin-lock-attempts.warning { color: #f59e0b; }
+    .admin-lock-attempts.danger { color: #ef4444; font-weight: 700; }
+    .admin-lock-pin-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 1rem 0 1.5rem;
+    }
+    .admin-lock-pin-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      transition: all 0.2s;
+    }
+    .admin-lock-pin-dot.filled {
+      background: #38bdf8;
+      border-color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+      transform: scale(1.1);
+    }
+    .admin-lock-pin-dot.error {
+      background: #ef4444;
+      border-color: #ef4444;
+      animation: shake 0.4s;
+    }
+    .admin-lock-numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+    .admin-lock-numpad-btn {
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.1s;
+      font-family: inherit;
+    }
+    .admin-lock-numpad-btn:active { background: rgba(56, 189, 248, 0.2); transform: scale(0.95); }
+    .admin-lock-numpad-btn.action { background: rgba(239, 68, 68, 0.1); color: #fca5a5; font-size: 0.95rem; }
+    .admin-lock-footer-note {
+      font-size: 0.72rem;
+      color: #475569;
+      margin-top: 1rem;
+      line-height: 1.5;
+    }
+    .admin-lock-setup-step {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.65rem 0.85rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      margin-bottom: 0.85rem;
+      text-align: left;
+    }
+    .admin-lock-setup-step .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #38bdf8;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .admin-lock-setup-step .step-info { flex: 1; }
+    .admin-lock-setup-step .step-title { color: #e2e8f0; font-weight: 700; font-size: 0.85rem; }
+    .admin-lock-setup-step .step-desc { color: #94a3b8; font-size: 0.75rem; margin-top: 2px; }
+  </style>
 </head>
 <body>
+  <!-- ==========================================================================
+       ADMIN PASSWORD / PIN LOCK SCREEN
+       Top-priority overlay - jab tak unlock nahi hoga baaki UI hidden rahega.
+       ========================================================================== -->
+  <div id="adminLockOverlay" class="admin-lock-overlay">
+    <!-- Screen 1: First-time SETUP (jab password set nahi hai) -->
+    <div id="adminLockSetupScreen" class="admin-lock-card" style="display:none;">
+      <div class="admin-lock-icon">🔐</div>
+      <h2 class="admin-lock-title">Setup Admin Lock</h2>
+      <p class="admin-lock-subtitle">Pehli baar use kar rahe ho. Apna password/PIN set karo — yeh sirf iss browser mein save hoga.</p>
+
+      <div class="admin-lock-tabs">
+        <button type="button" class="admin-lock-tab-btn active" data-mode="password" onclick="adminLockSwitchMode('password')">🔤 Password</button>
+        <button type="button" class="admin-lock-tab-btn" data-mode="pin" onclick="adminLockSwitchMode('pin')">🔢 4-Digit PIN</button>
+      </div>
+
+      <div id="adminLockErrorSetup" class="admin-lock-error"></div>
+
+      <!-- Password Mode Inputs -->
+      <div id="adminLockPasswordSetup">
+        <div class="admin-lock-setup-step">
+          <div class="step-num">1</div>
+          <div class="step-info">
+            <div class="step-title">Choose a strong password</div>
+            <div class="step-desc">Minimum 6 characters. Mix letters & numbers recommended.</div>
+          </div>
+        </div>
+        <input type="password" id="adminLockNewPwd" class="admin-lock-input" placeholder="New password (min 6 chars)" autocomplete="new-password">
+        <input type="password" id="adminLockConfirmPwd" class="admin-lock-input" placeholder="Confirm password" autocomplete="new-password" onkeydown="if(event.key==='Enter')adminLockCompleteSetup()">
+      </div>
+
+      <!-- PIN Mode Inputs -->
+      <div id="adminLockPinSetup" style="display:none;">
+        <div class="admin-lock-setup-step">
+          <div class="step-num">1</div>
+          <div class="step-info">
+            <div class="step-title">Choose a 4-digit PIN</div>
+            <div class="step-desc">Quick access ke liye. Use numpad below.</div>
+          </div>
+        </div>
+        <div class="admin-lock-pin-dots" id="adminLockPinDots">
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+        </div>
+        <div class="admin-lock-numpad">
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('1')">1</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('2')">2</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('3')">3</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('4')">4</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('5')">5</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('6')">6</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('7')">7</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('8')">8</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('9')">9</button>
+          <button type="button" class="admin-lock-numpad-btn action" onclick="adminLockPinPress('C')">C</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('0')">0</button>
+          <button type="button" class="admin-lock-numpad-btn action" onclick="adminLockPinPress('X')">⌫</button>
+        </div>
+        <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.5rem;" id="adminLockPinStatus">PIN enter karo (4 digits)</div>
+      </div>
+
+      <button type="button" class="admin-lock-btn" onclick="adminLockCompleteSetup()">✅ Save & Unlock</button>
+      <button type="button" class="admin-lock-secondary-btn" onclick="adminLockSwitchMode(document.getElementById('adminLockPinSetup').style.display==='none' ? 'pin' : 'password')">Switch to <span id="adminLockModeSwitchLabel">PIN</span></button>
+
+      <div class="admin-lock-footer-note">
+        Tip: Password/PIN sirf iss browser me localStorage me save hoga (encrypted).<br>
+        Recovery: Master reset token GitHub repo me hai (for emergency).
+      </div>
+    </div>
+
+    <!-- Screen 2: LOGIN (jab password set hai) -->
+    <div id="adminLockLoginScreen" class="admin-lock-card" style="display:none;">
+      <div class="admin-lock-icon">🔒</div>
+      <h2 class="admin-lock-title">Admin Locked</h2>
+      <p class="admin-lock-subtitle" id="adminLockLoginSubtitle">Apna password/PIN daal kar unlock karo.</p>
+
+      <div id="adminLockErrorLogin" class="admin-lock-error"></div>
+
+      <!-- Password Login -->
+      <div id="adminLockPasswordLogin">
+        <input type="password" id="adminLockLoginPwd" class="admin-lock-input" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')adminLockAttemptLogin()">
+      </div>
+
+      <!-- PIN Login -->
+      <div id="adminLockPinLogin" style="display:none;">
+        <div class="admin-lock-pin-dots" id="adminLockLoginPinDots">
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+        </div>
+        <div class="admin-lock-numpad">
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('1')">1</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('2')">2</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('3')">3</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('4')">4</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('5')">5</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('6')">6</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('7')">7</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('8')">8</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('9')">9</button>
+          <button type="button" class="admin-lock-numpad-btn action" onclick="adminLockLoginPinPress('C')">C</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('0')">0</button>
+          <button type="button" class="admin-lock-numpad-btn action" onclick="adminLockLoginPinPress('X')">⌫</button>
+        </div>
+      </div>
+
+      <button type="button" class="admin-lock-btn" id="adminLockLoginBtn" onclick="adminLockAttemptLogin()">🔓 Unlock</button>
+      <button type="button" class="admin-lock-secondary-btn" id="adminLockForgotBtn" onclick="adminLockShowForgot()">🔑 Forgot password? Reset</button>
+
+      <div class="admin-lock-attempts" id="adminLockAttemptsText"></div>
+    </div>
+
+    <!-- Screen 3: FORGOT / RESET via recovery token -->
+    <div id="adminLockForgotScreen" class="admin-lock-card" style="display:none;">
+      <div class="admin-lock-icon">🆘</div>
+      <h2 class="admin-lock-title">Reset Lock</h2>
+      <p class="admin-lock-subtitle">Master reset token GitHub repo me publish kiya hai. Woh token daal ke naya password set karo.</p>
+
+      <div id="adminLockErrorForgot" class="admin-lock-error"></div>
+
+      <div class="admin-lock-setup-step">
+        <div class="step-num">1</div>
+        <div class="step-info">
+          <div class="step-title">Master Reset Token</div>
+          <div class="step-desc">URL: <code>https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/admin-reset-token.txt</code></div>
+        </div>
+      </div>
+      <input type="text" id="adminLockResetToken" class="admin-lock-input" placeholder="Paste reset token from GitHub" autocomplete="off">
+
+      <div class="admin-lock-setup-step">
+        <div class="step-num">2</div>
+        <div class="step-info">
+          <div class="step-title">New Password</div>
+          <div class="step-desc">Min 6 characters ya 4-digit PIN</div>
+        </div>
+      </div>
+      <input type="password" id="adminLockResetNewPwd" class="admin-lock-input" placeholder="New password (min 6 chars)">
+
+      <button type="button" class="admin-lock-btn" onclick="adminLockResetViaToken()">🔓 Reset & Set New Password</button>
+      <button type="button" class="admin-lock-secondary-btn" onclick="adminLockShowLogin()">← Back to Login</button>
+
+      <div class="admin-lock-footer-note">
+        Recovery token public hai. Koi bhi jis ke paas URL hai, reset kar sakta hai.<br>
+        Isliye sirf trusted laptop/browser me use karo.
+      </div>
+    </div>
+  </div>
+
   <!-- Dynamic Chromatic Spatial Aurora Background (Apple VisionOS / Linear Glow) -->
   <div class="panel-aurora-bg" aria-hidden="true">
     <div class="aurora-blob aurora-blob-1"></div>
