@@ -4673,41 +4673,25 @@ input:checked + .slider:before {
   animation: overlayFadeIn 0.3s ease !important;
 }
 
-/* Phase label */
-.wb-phase-label {
-  position: absolute !important;
-  top: 60px !important;
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  color: #fff !important;
-  font-size: 18px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.05em !important;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.8) !important;
-  opacity: 0;
-  transition: opacity 0.3s !important;
-  z-index: 100 !important;
-  white-space: nowrap !important;
-}
-.wb-phase-label.is-show { opacity: 1 !important; }
-
-/* Skip button */
+/* Phase label — hidden for cinematic feel */
+.wb-phase-label { display: none !important; }
+/* Skip button — kept but minimal for emergency abort */
 .wb-skip-btn {
   position: absolute !important;
   bottom: 24px !important;
   right: 24px !important;
-  padding: 8px 16px !important;
-  background: rgba(255,255,255,0.1) !important;
-  border: 1px solid rgba(255,255,255,0.25) !important;
-  color: #fff !important;
-  border-radius: 20px !important;
-  font-size: 12px !important;
+  padding: 6px 14px !important;
+  background: rgba(255,255,255,0.08) !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  color: rgba(255,255,255,0.5) !important;
+  border-radius: 16px !important;
+  font-size: 11px !important;
   cursor: pointer !important;
-  opacity: 0 !important;
-  transition: opacity 0.4s !important;
+  opacity: 0.5 !important;
   z-index: 200 !important;
+  transition: all 0.3s !important;
 }
-.wb-skip-btn.is-show { opacity: 0.85 !important; }
+.wb-skip-btn:hover { opacity: 1 !important; background: rgba(255,255,255,0.15) !important; }
 
 /* Sky background */
 .wb-sky {
