@@ -4753,157 +4753,73 @@ input:checked + .slider:before {
 /* Warrior (phase 2-4) */
 .wb-warrior {
   position: absolute !important;
-  bottom: -400px !important;
+  bottom: -500px !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
-  width: 280px !important;
-  height: 380px !important;
+  width: 500px !important;
+  height: 280px !important;
   opacity: 0 !important;
   z-index: 60 !important;
-  filter: drop-shadow(0 12px 24px rgba(0,0,0,0.7)) drop-shadow(0 0 30px rgba(255,140,0,0.4)) !important;
 }
 .wb-warrior.is-enter {
   animation: warriorEnter 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
 }
 @keyframes warriorEnter {
-  0%   { bottom: -400px; opacity: 0; }
-  50%  { bottom: 12%; opacity: 1; }
-  75%  { bottom: 18%; }
-  100% { bottom: 15%; opacity: 1; }
+  0%   { bottom: -500px; opacity: 0; }
+  50%  { bottom: 14%; opacity: 1; }
+  75%  { bottom: 22%; }
+  100% { bottom: 18%; opacity: 1; }
 }
 
-/* Subtle idle breathing */
-.wb-warrior-svg {
-  width: 100% !important;
-  height: 100% !important;
-  animation: warriorIdle 3s ease-in-out infinite !important;
-  transform-origin: center bottom !important;
-}
-@keyframes warriorIdle {
-  0%, 100% { transform: scale(1) translateY(0); }
-  50%      { transform: scale(1.015) translateY(-2px); }
-}
-
-/* Cape flutter */
-.war-cape {
-  transform-origin: top center !important;
-  animation: capeFlutter 2.5s ease-in-out infinite alternate !important;
-}
-@keyframes capeFlutter {
-  0%   { transform: rotate(-2deg) scaleX(1); }
-  100% { transform: rotate(3deg) scaleX(1.05); }
-}
-
-/* Eye glow pulse */
-.wb-warrior-svg ellipse[fill="#ff3030"] {
-  animation: eyeGlow 1.5s ease-in-out infinite alternate !important;
-}
-@keyframes eyeGlow {
-  0%   { filter: drop-shadow(0 0 2px #ff3030); opacity: 1; }
-  100% { filter: drop-shadow(0 0 8px #ff3030); opacity: 0.85; }
-}
-
-/* Sword - separate element for swing animation */
-.wb-sword {
-  position: absolute !important;
-  top: 200px !important;
-  left: 70px !important;
-  width: 200px !important;
-  height: 30px !important;
-  transform-origin: 0% 50% !important;
-  transform: rotate(-100deg) !important;
-  z-index: 70 !important;
-  filter: drop-shadow(0 0 8px rgba(255,255,255,0.6)) drop-shadow(0 0 16px rgba(180,200,255,0.5)) !important;
-  opacity: 0 !important;
-}
-.wb-sword-svg {
-  width: 100% !important;
-  height: 100% !important;
-}
-.wb-warrior.is-enter .wb-sword {
-  opacity: 1 !important;
-  transition: opacity 0.3s 0.2s !important;
-}
-.wb-sword.is-swing {
-  animation: swordSwing 1.3s cubic-bezier(0.5, 0, 0.2, 1) forwards !important;
-}
-@keyframes swordSwing {
-  0%   { transform: rotate(-100deg) scale(0.9); }
-  20%  { transform: rotate(-60deg) scale(1); }
-  45%  { transform: rotate(20deg) scale(1.2); }
-  65%  { transform: rotate(80deg) scale(1.5); }
-  80%  { transform: rotate(130deg) scale(1.7); }
-  100% { transform: rotate(190deg) scale(1.6); }
-}
-
-/* Motion blur trail during swing */
-.wb-sword.is-swing::before {
-  content: '' !important;
-  position: absolute !important;
-  top: 50% !important;
-  left: -100% !important;
-  width: 200% !important;
-  height: 4px !important;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent) !important;
-  transform: translateY(-50%) !important;
-  animation: motionBlur 1.3s ease-in forwards !important;
-  pointer-events: none !important;
-}
-@keyframes motionBlur {
-  0%   { opacity: 0; }
-  40%  { opacity: 0.8; }
-  100% { opacity: 0; }
-}
-
-/* Screen crack (phase 3 - when sword breaks screen) */
-.wb-screen-crack {
-  position: absolute !important;
-  inset: 0 !important;
-  background-image: 
-    linear-gradient(105deg, transparent 49.5%, rgba(255,255,255,0.6) 49.8%, transparent 50.2%),
-    linear-gradient(75deg, transparent 49.5%, rgba(255,255,255,0.5) 49.8%, transparent 50.2%),
-    linear-gradient(45deg, transparent 49.7%, rgba(255,255,255,0.55) 49.9%, transparent 50.1%),
-    linear-gradient(135deg, transparent 49.7%, rgba(255,255,255,0.45) 49.9%, transparent 50.1%),
-    radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15) 0%, transparent 60%),
-    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.12) 0%, transparent 60%) !important;
-  opacity: 0 !important;
-  pointer-events: none !important;
-  transition: opacity 0.4s !important;
-  z-index: 90 !important;
-}
-.wb-screen-crack.is-shown {
-  opacity: 1 !important;
-  animation: screenShake 0.4s ease !important;
-}
-@keyframes screenShake {
-  0%, 100% { transform: translate(0, 0); }
-  20%      { transform: translate(-8px, 4px); }
-  40%      { transform: translate(6px, -6px); }
-  60%      { transform: translate(-4px, 6px); }
-  80%      { transform: translate(4px, -2px); }
-}
-
-/* Sky beam (phase 5) */
-.wb-sky-beam {
+/* Warrior image poses */
+.wb-warrior-img {
   position: absolute !important;
   left: 50% !important;
-  bottom: 0 !important;
-  transform: translateX(-50%) scaleY(0) !important;
-  transform-origin: bottom center !important;
-  width: 240px !important;
-  height: 100vh !important;
-  background: linear-gradient(180deg, 
-    rgba(255,255,255,0) 0%, 
-    rgba(255,240,200,0.3) 30%, 
-    rgba(255,220,150,0.7) 70%, 
-    rgba(255,255,255,1) 100%) !important;
-  filter: blur(20px) !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 100% !important;
+  height: auto !important;
+  max-width: 500px !important;
+  filter: drop-shadow(0 12px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 40px rgba(100,180,255,0.4)) !important;
   opacity: 0 !important;
-  z-index: 80 !important;
+  transition: opacity 0.25s ease !important;
+  pointer-events: none !important;
 }
-.wb-sky-beam.is-fire {
-  animation: skyBeamFire 1.2s ease-out forwards !important;
+.wb-pose-hero { opacity: 1 !important; }
+.wb-warrior.is-swing .wb-pose-hero { opacity: 0 !important; }
+.wb-warrior.is-swing .wb-pose-swing { opacity: 1 !important; }
+.wb-warrior.is-sword-up .wb-pose-swing { opacity: 0 !important; }
+.wb-warrior.is-sword-up .wb-pose-sword-up { opacity: 1 !important; }
+
+/* Sword swing pose - slight rotation */
+.wb-pose-swing {
+  transform: translate(-50%, -50%) rotate(-2deg) scale(1.05) !important;
 }
+.wb-warrior.is-swing .wb-pose-swing {
+  animation: swingShake 1.3s ease !important;
+}
+@keyframes swingShake {
+  0%, 100% { transform: translate(-50%, -50%) rotate(-2deg) scale(1.05); }
+  20%      { transform: translate(-52%, -50%) rotate(-4deg) scale(1.08); }
+  50%      { transform: translate(-48%, -50%) rotate(0deg) scale(1.12); }
+  80%      { transform: translate(-50%, -50%) rotate(2deg) scale(1.1); }
+}
+
+/* Sword up pose - lightning glow */
+.wb-pose-sword-up {
+  filter: drop-shadow(0 12px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 60px rgba(100,180,255,0.9)) drop-shadow(0 0 30px rgba(255,255,255,0.7)) !important;
+}
+.wb-warrior.is-sword-up .wb-pose-sword-up {
+  animation: swordUpPulse 1.5s ease-in-out infinite !important;
+}
+@keyframes swordUpPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50%      { transform: translate(-50%, -50%) scale(1.05); }
+}
+
+/* Hide old SVG-based sword (kept for compatibility, but hidden) */
+.wb-sword { display: none !important; }
+
 @keyframes skyBeamFire {
   0%   { transform: translateX(-50%) scaleY(0); opacity: 0; }
   40%  { transform: translateX(-50%) scaleY(0.5); opacity: 0.8; }
