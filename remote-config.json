@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-11T01:27:42.491Z",
+  "updatedAt": "2026-09-11T01:30:13.252Z",
   "activeRelease": {
     "version": "v3.5.9",
     "name": "Mind Focus Books v3.5.9 — Remote App Kill-Switch & Feature Control Cockpit",
@@ -63,7 +63,7 @@
     "pdfExportEnabled": true
   },
   "globalBanner": {
-    "active": true,
+    "active": false,
     "text": "✨ Welcome to Mind Focus Books Tracker! Read distraction-free.",
     "type": "info",
     "link": ""
