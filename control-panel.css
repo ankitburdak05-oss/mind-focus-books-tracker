@@ -4753,21 +4753,25 @@ input:checked + .slider:before {
 /* Warrior (phase 2-4) */
 .wb-warrior {
   position: absolute !important;
-  bottom: -500px !important;
+  bottom: 18% !important;
   left: 50% !important;
   transform: translateX(-50%) !important;
   width: 500px !important;
   height: 280px !important;
-  opacity: 0 !important;
   z-index: 60 !important;
+  pointer-events: none !important;
+  /* Default hidden — animation will show it */
+  opacity: 0 !important;
+}
+.warrior-box-overlay.is-active .wb-warrior {
+  opacity: 1 !important;
 }
 .wb-warrior.is-enter {
   animation: warriorEnter 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
 }
 @keyframes warriorEnter {
   0%   { bottom: -500px; opacity: 0; }
-  50%  { bottom: 14%; opacity: 1; }
-  75%  { bottom: 22%; }
+  60%  { bottom: 14%; opacity: 1; }
   100% { bottom: 18%; opacity: 1; }
 }
 
@@ -4781,17 +4785,20 @@ input:checked + .slider:before {
   height: auto !important;
   max-width: 500px !important;
   filter: drop-shadow(0 12px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 40px rgba(100,180,255,0.4)) !important;
-  opacity: 0 !important;
-  transition: opacity 0.25s ease !important;
   pointer-events: none !important;
+  transition: opacity 0.3s ease !important;
 }
+/* Default pose visibility */
 .wb-pose-hero { opacity: 1 !important; }
+.wb-pose-swing, .wb-pose-sword-up { opacity: 0 !important; }
+/* Pose swapping when class added on parent */
 .wb-warrior.is-swing .wb-pose-hero { opacity: 0 !important; }
 .wb-warrior.is-swing .wb-pose-swing { opacity: 1 !important; }
+.wb-warrior.is-sword-up .wb-pose-hero { opacity: 0 !important; }
 .wb-warrior.is-sword-up .wb-pose-swing { opacity: 0 !important; }
 .wb-warrior.is-sword-up .wb-pose-sword-up { opacity: 1 !important; }
 
-/* Sword swing pose - slight rotation */
+/* Swing pose - slight rotation + shake */
 .wb-pose-swing {
   transform: translate(-50%, -50%) rotate(-2deg) scale(1.05) !important;
 }
@@ -4817,7 +4824,7 @@ input:checked + .slider:before {
   50%      { transform: translate(-50%, -50%) scale(1.05); }
 }
 
-/* Hide old SVG-based sword (kept for compatibility, but hidden) */
+/* Hide old SVG-based sword */
 .wb-sword { display: none !important; }
 
 @keyframes skyBeamFire {
