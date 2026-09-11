@@ -11,9 +11,9 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <script>
-    if ('serviceWorker' in navigator) {
+    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
       window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(console.error);
+        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
       });
     }
   </script>
@@ -2343,6 +2343,30 @@ textarea.form-control {
   0%, 100% { transform: translateX(0); }
   20%, 60% { transform: translateX(-10px); }
   40%, 80% { transform: translateX(10px); }
+}
+
+/* Fix 5: Forgot PIN button styling */
+.forgot-pin-btn {
+  margin-top: 1.2rem;
+  background: none;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: rgba(239, 68, 68, 0.75);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.45rem 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+.forgot-pin-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.55);
+  transform: scale(1.03);
+}
+.forgot-pin-btn:active {
+  transform: scale(0.97);
 }
 
 /* ===================================================
@@ -7565,6 +7589,642 @@ body {
   gap: 10px;
 }
 
+/* ==========================================================================
+   💬 LIVE IN-APP HELP DESK & CHAT WIDGET
+   ========================================================================== */
+
+.chat-unread-dot {
+  position: absolute;
+  top: 4px;
+  right: 6px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 10px #ef4444;
+  animation: pulseGlow 1.5s infinite;
+}
+
+.fab-chat-wrapper {
+  position: fixed;
+  bottom: 86px;
+  right: 18px;
+  z-index: 9999;
+}
+
+.fab-chat-btn {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(56, 189, 248, 0.5), 0 0 20px rgba(56, 189, 248, 0.35);
+  position: relative;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fab-chat-btn:hover {
+  transform: scale(1.1) translateY(-2px);
+  box-shadow: 0 14px 40px rgba(56, 189, 248, 0.7);
+}
+
+.fab-chat-btn:active {
+  transform: scale(0.95);
+}
+
+.fab-chat-ping {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border-radius: 50%;
+  border: 2px solid #38bdf8;
+  animation: pingRipple 2.5s infinite cubic-bezier(0, 0.2, 0.8, 1);
+  pointer-events: none;
+}
+
+@keyframes pingRipple {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+
+.fab-chat-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 999px;
+  border: 2px solid #050811;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+}
+
+/* Help Desk Modal Dialog */
+.help-desk-modal-dialog {
+  max-width: 520px;
+  width: 94%;
+  height: 85vh;
+  max-height: 680px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: 24px !important;
+  background: linear-gradient(150deg, rgba(13, 20, 38, 0.98), rgba(8, 12, 24, 0.99)) !important;
+  border: 1.5px solid rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85), 0 0 35px rgba(56, 189, 248, 0.25) !important;
+}
+
+.help-desk-header {
+  padding: 16px 20px;
+  background: rgba(5, 8, 17, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.help-desk-header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.help-desk-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #d97706, #f59e0b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.4);
+}
+
+.help-desk-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.help-desk-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+
+.help-desk-online-badge {
+  font-size: 0.68rem;
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+.help-desk-subtitle {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+.help-desk-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  background-image: radial-gradient(rgba(56, 189, 248, 0.03) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.user-chat-messages-stream {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  flex: 1;
+}
+
+.user-chat-welcome-card {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(56, 189, 248, 0.3);
+  border-radius: 16px;
+  padding: 20px;
+  margin: auto 0;
+}
+
+.user-msg-bubble-wrap {
+  display: flex;
+  flex-direction: column;
+  max-width: 82%;
+  animation: fadeInMsg 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.user-msg-bubble-wrap.from-user {
+  align-self: flex-end;
+}
+
+.user-msg-bubble-wrap.from-admin {
+  align-self: flex-start;
+}
+
+.user-bubble {
+  padding: 12px 16px;
+  border-radius: 18px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.user-msg-bubble-wrap.from-user .user-bubble {
+  background: linear-gradient(135deg, #0284c7, #0ea5e9);
+  color: #ffffff;
+  border-bottom-right-radius: 4px;
+  box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35);
+}
+
+.user-msg-bubble-wrap.from-admin .user-bubble {
+  background: rgba(18, 26, 48, 0.95);
+  border: 1.5px solid rgba(245, 158, 11, 0.45);
+  color: #f8fafc;
+  border-bottom-left-radius: 4px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+}
+
+.user-bubble-meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  font-size: 0.68rem;
+  margin-top: 4px;
+  opacity: 0.75;
+}
+
+.user-chat-quick-prompts {
+  padding: 8px 14px;
+  background: rgba(5, 8, 17, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.user-chat-quick-prompts::-webkit-scrollbar {
+  display: none;
+}
+
+.user-prompt-chip {
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  color: var(--text-secondary);
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  white-space: nowrap;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.user-prompt-chip:hover {
+  background: rgba(56, 189, 248, 0.22);
+  color: #fff;
+  border-color: var(--accent-cyan);
+}
+
+.help-desk-footer {
+  padding: 12px 16px;
+  background: rgba(5, 8, 17, 0.96);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  position: relative;
+  z-index: 30;
+  margin: 0;
+}
+
+.user-chat-input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(13, 20, 38, 0.92);
+  border: 1.5px solid rgba(56, 189, 248, 0.25);
+  border-radius: 14px;
+  padding: 12px 16px;
+  color: #fff;
+  font-size: 0.94rem;
+  outline: none;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  -webkit-appearance: none;
+}
+
+.user-chat-input:focus {
+  border-color: var(--accent-cyan);
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+  background: rgba(13, 20, 38, 0.98);
+}
+
+.btn-user-chat-send {
+  background: linear-gradient(135deg, #0284c7, #38bdf8);
+  color: #000;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-weight: 800;
+  font-size: 0.92rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
+  flex-shrink: 0;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
+}
+
+.btn-user-chat-send * {
+  pointer-events: none;
+}
+
+.btn-user-chat-send:hover {
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.6);
+  transform: translateY(-1px);
+}
+
+.btn-user-chat-send:active {
+  transform: scale(0.94);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.85);
+}
+
+@media (max-height: 550px) {
+  .help-desk-modal-dialog {
+    height: 96vh !important;
+    max-height: none !important;
+    border-radius: 16px !important;
+  }
+  .help-desk-header {
+    padding: 10px 14px !important;
+  }
+  .user-chat-quick-prompts {
+    display: none !important;
+  }
+  .help-desk-footer {
+    padding: 8px 12px !important;
+  }
+}
+
+/* ======================================================== */
+/* 🛠️ IN-APP MOBILE DEVTOOLS & PHONE DIAGNOSTICS SUITE      */
+/* ======================================================== */
+.mobile-devtools-pill {
+  position: fixed;
+  left: 14px;
+  bottom: 86px;
+  z-index: 99998;
+  background: rgba(13, 20, 38, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 16px rgba(16, 185, 129, 0.35);
+  color: #34d399;
+  font-size: 0.8rem;
+  font-weight: 800;
+  padding: 8px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
+}
+
+.mobile-devtools-pill:active {
+  transform: scale(0.92);
+  box-shadow: 0 0 20px rgba(16, 185, 129, 0.8);
+}
+
+.mobile-devtools-pill.has-errors {
+  border-color: #ef4444 !important;
+  color: #f87171 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.7), 0 0 18px rgba(239, 68, 68, 0.5) !important;
+  animation: devtoolsPillPulse 1.8s infinite;
+}
+
+@keyframes devtoolsPillPulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+  100% { transform: scale(1); }
+}
+
+.pill-error-badge {
+  background: #ef4444;
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 900;
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 2px;
+}
+
+/* Mobile DevTools Modal Overlay */
+.mobile-devtools-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(3, 7, 18, 0.88);
+  backdrop-filter: blur(12px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+
+.mobile-devtools-overlay.active {
+  display: flex;
+}
+
+.mobile-devtools-dialog {
+  width: 95%;
+  max-width: 650px;
+  height: 90vh;
+  max-height: 750px;
+  background: linear-gradient(150deg, rgba(13, 20, 38, 0.98), rgba(6, 10, 20, 0.99));
+  border: 1.5px solid rgba(16, 185, 129, 0.4);
+  border-radius: 20px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.9), 0 0 30px rgba(16, 185, 129, 0.2);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.devtools-header {
+  padding: 12px 16px;
+  background: rgba(5, 8, 17, 0.85);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.devtools-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #34d399;
+}
+
+.devtools-tabs-bar {
+  display: flex;
+  background: rgba(5, 8, 17, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  overflow-x: auto;
+  scrollbar-width: none;
+  flex-shrink: 0;
+}
+
+.devtools-tabs-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.devtools-tab-btn {
+  padding: 10px 16px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.devtools-tab-btn.active {
+  color: #34d399;
+  border-bottom-color: #34d399;
+  background: rgba(16, 185, 129, 0.08);
+}
+
+.devtools-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.devtools-tab-content {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.devtools-tab-content.active {
+  display: flex;
+}
+
+/* Console Logs Stream */
+.devtools-console-stream {
+  flex: 1;
+  background: rgba(3, 7, 18, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-family: 'SF Mono', Consolas, Monaco, monospace;
+  font-size: 0.78rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 200px;
+  max-height: 48vh;
+}
+
+.devtools-log-entry {
+  padding: 6px 8px;
+  border-radius: 6px;
+  line-height: 1.4;
+  word-break: break-all;
+  border-left: 3px solid #64748b;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.devtools-log-entry.error {
+  border-left-color: #ef4444;
+  background: rgba(239, 68, 68, 0.1);
+  color: #fca5a5;
+}
+
+.devtools-log-entry.warn {
+  border-left-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.08);
+  color: #fde68a;
+}
+
+.devtools-log-entry.info {
+  border-left-color: #38bdf8;
+  background: rgba(56, 189, 248, 0.08);
+  color: #bae6fd;
+}
+
+.devtools-log-entry.success {
+  border-left-color: #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  color: #a7f3d0;
+}
+
+.devtools-log-meta {
+  font-size: 0.68rem;
+  opacity: 0.75;
+  margin-bottom: 2px;
+}
+
+.devtools-repl-bar {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  flex-shrink: 0;
+}
+
+.devtools-repl-input {
+  flex: 1;
+  background: rgba(5, 8, 17, 0.95);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 10px;
+  padding: 8px 12px;
+  color: #38bdf8;
+  font-family: monospace;
+  font-size: 0.82rem;
+  outline: none;
+}
+
+.devtools-repl-input:focus {
+  border-color: #34d399;
+}
+
+.devtools-actions-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+}
+
+.btn-devtools-sm {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-devtools-sm:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.btn-devtools-sm.primary {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  border: none;
+}
+
+/* Device Health Table */
+.devtools-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+}
+
+.devtools-info-table td {
+  padding: 8px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.devtools-info-table td:first-child {
+  color: var(--text-muted);
+  font-weight: 600;
+  width: 38%;
+}
+
+.devtools-info-table td:last-child {
+  color: var(--text-primary);
+  font-family: monospace;
+  word-break: break-all;
+}
+
 
 
 
@@ -7643,6 +8303,10 @@ body {
         <button class="btn" id="headerPomodoroBtn" onclick="openPomodoroModal()" title="25-Min Focus Reading Timer" style="background:rgba(239, 68, 68, 0.15); border-color:rgba(239, 68, 68, 0.35); color:#ef4444; font-weight:700;">
           ⏱️ <span id="headerPomodoroText">Focus Timer</span>
         </button>
+        <button type="button" class="btn" id="headerHelpDeskBtn" onclick="openUserHelpDeskModal()" title="Live Help Desk &amp; Chat with Admin" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.18)); border-color:rgba(16,185,129,0.35); color:#34d399; font-weight:700; position:relative;">
+          💬 <span class="desktop-only-txt">Help Desk</span>
+          <span class="chat-unread-dot" id="headerChatDot" style="display:none;"></span>
+        </button>
       </div>
     </div>
   </header>
@@ -7666,7 +8330,7 @@ body {
 
     <!-- Compact Luxury KPI & Progress Strip (Ultra-Clean & De-cluttered) -->
     <section class="compact-kpi-strip">
-      <div class="kpi-strip-item kpi-progress-item" onclick="openStreakModal()" title="Overall Reading Progress & Streak">
+      <div class="kpi-strip-item kpi-progress-item" onclick="filterByStatus('DONE')" style="cursor:pointer;" title="Tap to view Finished Books">
         <div class="kpi-ring-wrap">
           <svg viewBox="0 0 36 36" class="circular-chart">
             <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
@@ -7701,7 +8365,7 @@ body {
           <span class="chip-val" id="kpiTotalBooks">150</span>
           <span class="chip-lbl">Total</span>
         </div>
-        <div class="kpi-chip" title="Knowledge Value">
+        <div class="kpi-chip" onclick="showKnowledgeValueBreakdown()" style="cursor:pointer;" title="Tap to view Library Value Breakdown">
           <span class="chip-icon">💰</span>
           <span class="chip-val" id="kpiMoneySaved">₹0</span>
           <span class="chip-lbl">Value</span>
@@ -7716,16 +8380,6 @@ body {
           <span class="chip-val" id="kpiFlashcardsCount">5 Due</span>
           <span class="chip-lbl">Flashcards</span>
         </div>
-      </div>
-
-      <!-- Hidden elements preserved for JS backward compatibility -->
-      <div style="display:none;">
-        <div id="progressBarFill" style="width:0%;"></div>
-        <span id="kpiTotalDays">0</span>
-        <span id="kpiAvgDays">0.0</span>
-        <span id="kpiHoursInvested">0 hrs</span>
-        <span id="kpiMoneySubtext"></span>
-        <div id="curatedShelvesSection"></div>
       </div>
     </section>
 
@@ -7923,13 +8577,13 @@ body {
               <img id="coverPreviewImg" src="" alt="Cover" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:4px;">
             </div>
             <div style="display:flex; flex-direction:column; gap:0.5rem; flex:1;">
-              <input type="text" id="editBookCover" class="form-control" placeholder="Paste Image URL or choose file below">
+              <input type="text" id="editBookCover" class="form-control" placeholder="Paste Image URL or choose file below" oninput="onEditBookCoverUrlInput(this.value)">
               <div style="display:flex; gap:0.5rem; align-items:center;">
                 <label class="btn btn-sm" style="cursor:pointer; margin:0;">
                   📁 Upload Photo
-                  <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverPhotoUpload(this)">
+                  <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverImageUpload(this)">
                 </label>
-                <button type="button" class="btn btn-sm btn-danger" id="removeCoverBtn" onclick="removeBookCoverPhoto()" style="display:none;">
+                <button type="button" class="btn btn-sm btn-danger" id="removeCoverBtn" onclick="removeCoverPhoto()" style="display:none;">
                   Remove
                 </button>
               </div>
@@ -7944,6 +8598,7 @@ body {
               <option value="PENDING">⏳ PENDING</option>
               <option value="READING">📖 READING</option>
               <option value="DONE">✅ DONE</option>
+              <option value="LENT">👥 LENT OUT</option>
             </select>
           </div>
           <div class="form-group">
@@ -8287,6 +8942,11 @@ body {
         <button type="button" class="numpad-btn" onclick="enterPinDigit('0')">0</button>
         <button type="button" class="numpad-btn numpad-action" onclick="deletePinDigit()">⌫</button>
       </div>
+
+      <!-- Fix 5: Forgot PIN recovery option -->
+      <button type="button" class="forgot-pin-btn" onclick="forgotPinReset()" title="Reset PIN — aapka data safe rahega">
+        🔑 Forgot PIN? Reset it
+      </button>
     </div>
   </div>
 
@@ -8518,7 +9178,7 @@ body {
             </div>
             <div>
               <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Tracker</div>
-              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700;" id="appCurrentVersionText">v3.1.0 Dual Broadcast Edition</div>
+              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.5.8 Thermal Cool Engine</div>
             </div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn" style="border-radius:12px; padding:0.45rem 0.85rem; font-weight:800;">
@@ -8700,7 +9360,36 @@ body {
             </div>
             <span class="settings-row-chevron" style="color:#ef4444;">›</span>
           </button>
-        <!-- Group 6: ⚡ Master Admin Control Panel -->
+        </div>
+
+        <!-- Group 6: 🛠️ Phone Developer & Crash Diagnostics -->
+        <div class="settings-group">
+          <div class="settings-group-header">Developer &amp; Diagnostics</div>
+          <div class="settings-action-row" style="cursor:pointer;" onclick="toggleMobileDevToolsPillSetting()">
+            <div class="settings-row-left">
+              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; box-shadow:0 6px 18px rgba(16,185,129,0.4);">🛠️</div>
+              <div class="settings-row-info">
+                <div class="settings-row-title">Mobile DevTools Console</div>
+                <div class="settings-row-sub">Floating on-screen F12 debugger &amp; error radar</div>
+              </div>
+            </div>
+            <div style="display:flex; align-items:center;">
+              <input type="checkbox" id="toggleDevToolsCheckbox" style="transform:scale(1.3); cursor:pointer;" onclick="event.stopPropagation(); toggleMobileDevToolsPillSetting();">
+            </div>
+          </div>
+          <button type="button" class="settings-action-row" onclick="openMobileDevToolsModal()">
+            <div class="settings-row-left">
+              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #6366f1, #4f46e5); color:#fff; box-shadow:0 6px 18px rgba(99,102,241,0.4);">🩺</div>
+              <div class="settings-row-info">
+                <div class="settings-row-title">Open In-App Debug Console</div>
+                <div class="settings-row-sub">Live error logs, network monitor &amp; system health</div>
+              </div>
+            </div>
+            <span class="settings-row-chevron" style="color:#6366f1; font-weight:bold;">Inspect ›</span>
+          </button>
+        </div>
+
+        <!-- Group 7: ⚡ Master Admin Control Panel -->
         <div class="settings-group">
           <div class="settings-group-header">Administrator Command</div>
           <a href="control-panel.html" class="settings-action-row" style="text-decoration:none;">
@@ -9553,6 +10242,186 @@ body {
           <button type="button" class="btn" onclick="closeFlashcardTrainer()" style="padding:12px 24px; font-weight:700; border-radius:12px;">
             Close Trainer
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 💬 FLOATING LIVE HELP DESK TRIGGER BUTTON -->
+  <div class="fab-chat-wrapper" id="fabChatWrapper">
+    <button type="button" class="fab-chat-btn" id="fabLiveHelpDeskBtn" onclick="openUserHelpDeskModal()" title="Live Help Desk • Chat with Admin">
+      <span class="fab-chat-icon">💬</span>
+      <span class="fab-chat-ping"></span>
+      <span class="fab-chat-badge" id="userChatUnreadBadge" style="display:none;">0</span>
+    </button>
+  </div>
+
+  <!-- 💬 LIVE IN-APP HELP DESK MODAL (Zomato/Telegram Style Live Support) -->
+  <div class="modal-overlay" id="userHelpDeskModalOverlay" onclick="handleHelpDeskOverlayClick(event)">
+    <div class="modal-content help-desk-modal-dialog" onclick="event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="help-desk-header">
+        <div class="help-desk-header-info">
+          <div class="help-desk-avatar">👑</div>
+          <div>
+            <div class="help-desk-title-row">
+              <h3 class="help-desk-title">Mind Focus Executive Help Desk</h3>
+              <span class="help-desk-online-badge">🟢 Online</span>
+            </div>
+            <div class="help-desk-subtitle">Direct line to Developer &amp; Admin &bull; Real-time answers</div>
+          </div>
+        </div>
+        <button type="button" class="modal-close" onclick="closeUserHelpDeskModal()">&times;</button>
+      </div>
+
+      <!-- Messages Container -->
+      <div class="help-desk-body" id="userHelpDeskBody">
+        <div class="user-chat-messages-stream" id="userChatMessagesStream">
+          <div class="user-chat-welcome-card">
+            <div style="font-size:36px; margin-bottom:8px;">💬</div>
+            <div style="font-weight:800; color:var(--text-primary); font-size:1.05rem;">Namaste Reader!</div>
+            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;">
+              Aapko app me koi naya feature chahiye, koi bug report karna hai, ya koi sawaal puchna hai to direct message likhein. Hum live reply karenge! 🙏
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Prompt Chips for User -->
+      <div class="user-chat-quick-prompts">
+        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Bhai naya feature kab aayega?')">
+          🚀 Naya feature kab aayega?
+        </button>
+        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Bhai ek nayi book request karni hai!')">
+          📚 Nayi book request
+        </button>
+        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('App me ek bug notice kiya hai.')">
+          🐛 Bug report karna hai
+        </button>
+        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Audio reader bohot mast chal raha hai, thank you! 🔥')">
+          🔥 Feedback
+        </button>
+      </div>
+
+      <!-- Message Input Bar -->
+      <form id="userChatForm" class="help-desk-footer" onsubmit="event.preventDefault(); sendUserChatMessage(); return false;">
+        <input type="text" id="userChatInputText" class="user-chat-input" placeholder="Type message to Admin... (e.g. Bhai naya...)" autocomplete="off" autocorrect="on" autocapitalize="sentences" onkeydown="handleUserChatKeydown(event)">
+        <button type="submit" class="btn-user-chat-send" id="btnUserSendChat" onclick="event.preventDefault(); sendUserChatMessage();">
+          <span>✈️ Send</span>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Floating Mobile DevTools Button -->
+  <button type="button" id="mobileDevToolsPill" class="mobile-devtools-pill" onclick="openMobileDevToolsModal()" style="display:none;" title="Mobile DevTools">
+    <span>🛠️ Dev</span>
+    <span class="pill-error-badge" id="pillErrorBadge" style="display:none;">0</span>
+  </button>
+
+  <!-- Mobile DevTools & Crash Diagnostics Modal -->
+  <div class="mobile-devtools-overlay" id="mobileDevToolsModalOverlay" onclick="handleDevToolsOverlayClick(event)">
+    <div class="mobile-devtools-dialog" onclick="event.stopPropagation()">
+      <!-- Header -->
+      <div class="devtools-header">
+        <div class="devtools-title">
+          <span>🛠️</span>
+          <span>Mobile DevTools &amp; Crash Radar</span>
+        </div>
+        <button type="button" class="btn-close-modal" onclick="closeMobileDevToolsModal()" style="font-size:1.4rem; color:var(--text-muted); background:none; border:none; cursor:pointer;">&times;</button>
+      </div>
+
+      <!-- Tabs Bar -->
+      <div class="devtools-tabs-bar">
+        <button type="button" class="devtools-tab-btn active" id="btnDevTabConsole" onclick="switchDevToolsTab('devTabConsole')">
+          <span>📟 Console</span>
+          <span class="pill-error-badge" id="devConsoleErrorCountBadge" style="display:none;">0</span>
+        </button>
+        <button type="button" class="devtools-tab-btn" id="btnDevTabNetwork" onclick="switchDevToolsTab('devTabNetwork')">
+          <span>🌐 Network</span>
+        </button>
+        <button type="button" class="devtools-tab-btn" id="btnDevTabStorage" onclick="switchDevToolsTab('devTabStorage')">
+          <span>💾 Storage</span>
+        </button>
+        <button type="button" class="devtools-tab-btn" id="btnDevTabDevice" onclick="switchDevToolsTab('devTabDevice')">
+          <span>📱 Device</span>
+        </button>
+        <button type="button" class="devtools-tab-btn" id="btnDevTabUsb" onclick="switchDevToolsTab('devTabUsb')">
+          <span>🔌 USB Inspect</span>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="devtools-body">
+        <!-- Tab 1: Console -->
+        <div class="devtools-tab-content active" id="devTabConsole">
+          <div class="devtools-actions-row">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button type="button" class="btn-devtools-sm" onclick="clearDevToolsConsole()">🗑️ Clear</button>
+              <button type="button" class="btn-devtools-sm" onclick="copyDevToolsLogs()">📋 Copy Logs</button>
+              <button type="button" class="btn-devtools-sm" onclick="triggerTestCrashTelemetry()">🧪 Test Crash</button>
+            </div>
+            <span style="font-size:0.72rem; color:var(--text-muted);" id="devLogsCountText">0 entries</span>
+          </div>
+          <div class="devtools-console-stream" id="devtoolsConsoleStream">
+            <div class="devtools-log-entry info">
+              <div class="devtools-log-meta">[System] Mobile DevTools Engine initialized</div>
+              <div>Ready to capture runtime errors, unhandled rejections, and network calls.</div>
+            </div>
+          </div>
+          <!-- REPL Command Line -->
+          <div class="devtools-repl-bar">
+            <input type="text" id="devReplInput" class="devtools-repl-input" placeholder="Run JavaScript on phone... (e.g. alert('Hello!'))" onkeydown="handleDevReplKeydown(event)">
+            <button type="button" class="btn-devtools-sm primary" onclick="runDevReplCode()">Run ›</button>
+          </div>
+        </div>
+
+        <!-- Tab 2: Network -->
+        <div class="devtools-tab-content" id="devTabNetwork">
+          <div class="devtools-actions-row">
+            <span style="font-size:0.8rem; color:#38bdf8; font-weight:700;">Recent Network &amp; Cloud Relay Calls</span>
+            <button type="button" class="btn-devtools-sm" onclick="clearDevToolsNetwork()">🗑️ Clear</button>
+          </div>
+          <div class="devtools-console-stream" id="devtoolsNetworkStream">
+            <div style="color:var(--text-muted); text-align:center; padding:20px;">No network calls captured yet.</div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Storage -->
+        <div class="devtools-tab-content" id="devTabStorage">
+          <div class="devtools-actions-row">
+            <span style="font-size:0.8rem; color:#f59e0b; font-weight:700;">localStorage Keys &amp; Values</span>
+            <button type="button" class="btn-devtools-sm" onclick="refreshDevToolsStorage()">🔄 Refresh</button>
+          </div>
+          <div class="devtools-console-stream" id="devtoolsStorageStream">
+            <div style="color:var(--text-muted); text-align:center; padding:20px;">Loading storage...</div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Device Health -->
+        <div class="devtools-tab-content" id="devTabDevice">
+          <div style="font-size:0.82rem; color:#34d399; font-weight:700; margin-bottom:8px;">📱 Real-Time Phone Hardware &amp; WebView Specs</div>
+          <table class="devtools-info-table" id="devtoolsDeviceTable">
+            <!-- Populated via JavaScript -->
+          </table>
+        </div>
+
+        <!-- Tab 5: USB Remote Inspect -->
+        <div class="devtools-tab-content" id="devTabUsb">
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px; line-height:1.5;">
+            <div style="font-weight:800; color:#38bdf8; margin-bottom:6px; font-size:0.9rem;">🔌 Connect to PC Chrome (Remote F12)</div>
+            <p style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:10px;">
+              Phone ko USB cable se PC se jodh kar poora Google Chrome DevTools kholne ke steps:
+            </p>
+            <ol style="font-size:0.78rem; color:var(--text-primary); padding-left:18px; display:flex; flex-direction:column; gap:6px;">
+              <li>Phone Settings me <b>Developer Options</b> ON karein aur <b>USB Debugging</b> allow karein.</li>
+              <li>Phone ko USB data cable se Computer se connect karein.</li>
+              <li>Computer ke Chrome browser me ye link open karein:<br>
+                <code style="background:rgba(56,189,248,0.15); color:#38bdf8; padding:3px 8px; border-radius:6px; display:inline-block; margin-top:4px;">chrome://inspect/#devices</code>
+              </li>
+              <li>Waha aapko <b>Mind Focus Books</b> app dikhega, samne <b>Inspect</b> dabate hi computer screen par live phone inspect khul jayega!</li>
+            </ol>
+          </div>
         </div>
       </div>
     </div>
@@ -11907,43 +12776,87 @@ const ICONS = {
   note: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>'
 };
 
-const CURATED_BOOK_COVERS = {
-  "hyperfocus": "https://covers.openlibrary.org/b/id/10524458-M.jpg",
-  "the power of your subconscious mind": "https://covers.openlibrary.org/b/id/8231996-M.jpg",
-  "limitless": "https://covers.openlibrary.org/b/id/10414441-M.jpg",
-  "thinking, fast and slow": "https://covers.openlibrary.org/b/id/7288636-M.jpg",
-  "deep work": "https://covers.openlibrary.org/b/id/8302306-M.jpg",
-  "atomic habits": "https://covers.openlibrary.org/b/id/12741544-M.jpg",
-  "the psychology of money": "https://covers.openlibrary.org/b/id/10595166-M.jpg",
-  "rich dad poor dad": "https://covers.openlibrary.org/b/id/8282367-M.jpg",
-  "ikigai": "https://covers.openlibrary.org/b/id/9255566-M.jpg",
-  "can't hurt me": "https://covers.openlibrary.org/b/id/10283416-M.jpg",
-  "meditations": "https://covers.openlibrary.org/b/id/8235116-M.jpg",
-  "start with why": "https://covers.openlibrary.org/b/id/8231856-M.jpg",
-  "the 7 habits of highly effective people": "https://covers.openlibrary.org/b/id/8231946-M.jpg",
-  "ego is the enemy": "https://covers.openlibrary.org/b/id/8235086-M.jpg",
-  "make time": "https://covers.openlibrary.org/b/id/8824156-M.jpg"
+// Fix 1: Sab external internet URLs remove kar diye — 100% offline
+// Pehle user-uploaded cover check hoga, baaki sab offline gradient placeholder
+const CATEGORY_COVER_GRADIENTS = {
+  'Focus':       [['#1e3a5f', '#3b82f6', '#06b6d4'], '⚡'],
+  'Habits':      [['#1c1917', '#d97706', '#f59e0b'], '🔥'],
+  'Wealth':      [['#052e16', '#16a34a', '#34d399'], '💰'],
+  'Psychology':  [['#2e1065', '#7c3aed', '#a78bfa'], '🧠'],
+  'Philosophy':  [['#1c1917', '#78716c', '#d6d3d1'], '🏛️'],
+  'Biographies': [['#1e1b4b', '#4338ca', '#818cf8'], '👑'],
+  'Memory':      [['#042f2e', '#0d9488', '#5eead4'], '🧩'],
+  'Mindset':     [['#450a0a', '#dc2626', '#fca5a5'], '💪'],
+  'Leadership':  [['#1a1a2e', '#6366f1', '#c7d2fe'], '🎯'],
+  'Science':     [['#0c1445', '#2563eb', '#93c5fd'], '🔬'],
+  'default':     [['#0f172a', '#334155', '#64748b'], '📖'],
 };
 
-function getBookCover(book) {
-  if (book.cover_image && book.cover_image.trim().length > 0) return book.cover_image;
-  const key = (book.title || '').toLowerCase().trim();
-  for (let k of Object.keys(CURATED_BOOK_COVERS)) {
-    if (key.includes(k)) return CURATED_BOOK_COVERS[k];
+function getOfflineCoverGradient(book) {
+  const cat = (book.category || 'default');
+  let match = null;
+  for (const key of Object.keys(CATEGORY_COVER_GRADIENTS)) {
+    if (cat.toLowerCase().includes(key.toLowerCase())) {
+      match = CATEGORY_COVER_GRADIENTS[key];
+      break;
+    }
   }
+  if (!match) match = CATEGORY_COVER_GRADIENTS['default'];
+  // Book number se unique hue shift generate karo
+  const num = parseInt((book.no || '').replace(/\D/g, '')) || 0;
+  const hueShift = (num * 17) % 60; // 0-59 degree shift for variety
+  const [colors, emoji] = match;
+  return { colors, emoji, hueShift };
+}
+
+function getBookCover(book) {
+  // Sirf user-uploaded cover URL use karo — koi internet URL nahi
+  if (book.cover_image && book.cover_image.trim().length > 0) {
+    // Agar ye ek external http URL hai aur user ne khud upload nahi kiya (base64 nahi)
+    // toh bhi use karo — user ne manually add kiya hoga
+    return book.cover_image;
+  }
+  // Koi external internet cover nahi — null return karo, placeholder render hoga
   return null;
 }
 
+// Offline gradient cover HTML banana (koi img tag nahi, zero internet)
+function buildOfflineCoverHtml(book, sizeClass) {
+  const { colors, emoji } = getOfflineCoverGradient(book);
+  const bookNum = (book.no || '').replace(/\D/g, '') || '?';
+  const shortTitle = (book.title || '').substring(0, 18) + ((book.title || '').length > 18 ? '…' : '');
+  const gradient = `linear-gradient(160deg, ${colors[0]} 0%, ${colors[1]} 55%, ${colors[2]} 100%)`;
+  const isSmall = sizeClass === 'small';
+  return `<div class="offline-book-cover ${sizeClass || ''}" style="background:${gradient}; display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; border-radius:6px; padding:6px; box-sizing:border-box; position:relative; overflow:hidden;">
+    <div style="position:absolute; top:0; left:0; right:0; bottom:0; background:repeating-linear-gradient(45deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 12px); pointer-events:none;"></div>
+    <div style="font-size:${isSmall ? '1.4rem' : '2rem'}; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5)); margin-bottom:2px;">${emoji}</div>
+    <div style="font-size:${isSmall ? '0.55rem' : '0.65rem'}; font-weight:900; color:rgba(255,255,255,0.95); text-align:center; letter-spacing:0.5px; line-height:1.2; word-break:break-word; text-shadow:0 1px 3px rgba(0,0,0,0.6);">${escapeHtml(shortTitle)}</div>
+    <div style="margin-top:auto; font-size:${isSmall ? '0.5rem' : '0.6rem'}; font-weight:700; color:rgba(255,255,255,0.6); background:rgba(0,0,0,0.35); border-radius:3px; padding:1px 4px;">#${bookNum}</div>
+  </div>`;
+}
+
 function getBookPages(book) {
-  const total = parseInt(book.total_pages) || 280;
+  // Fix 3: Auto-45% HATAYA — sirf real data dikhao
+  // Agar total_pages set nahi hai toh 0 return karo (unknown)
+  const total = parseInt(book.total_pages) || 0;
   let curr = parseInt(book.current_page);
+
   if (isNaN(curr)) {
-    curr = book.status === 'DONE' ? total : (book.status === 'READING' ? Math.round(total * 0.45) : 0);
+    // Pages enter nahi kiye — DONE ho toh total, baaki 0
+    curr = (book.status === 'DONE' && total > 0) ? total : 0;
+    // READING mein kabhi fake estimate nahi: 0 dikhao
   }
+
+  if (total === 0) {
+    // Pages set hi nahi kiye — meaningful data nahi hai
+    return { current: curr, total: 0, pct: (book.status === 'DONE' ? 100 : 0), unknown: true };
+  }
+
   curr = Math.max(0, Math.min(curr, total));
   const pct = Math.round((curr / total) * 100);
-  return { current: curr, total: total, pct: pct };
+  return { current: curr, total: total, pct: pct, unknown: false };
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
   initTheme();
@@ -11964,6 +12877,8 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof init4DFlagshipSystems === 'function') init4DFlagshipSystems();
   if (typeof initMysteryGiftEngine === 'function') initMysteryGiftEngine();
   if (typeof initFlashcardTrainerEngine === 'function') initFlashcardTrainerEngine();
+  if (typeof initLiveHelpDeskEngine === 'function') initLiveHelpDeskEngine();
+  if (typeof initMobileDevToolsEngine === 'function') initMobileDevToolsEngine();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -12219,12 +13134,19 @@ function onStatusChange(index, newStatus) {
   } else if (newStatus === 'PENDING') {
     book.end_date = '';
     showToast('Marked "' + book.title + '" as Pending.', '');
+  } else if (newStatus === 'LENT') {
+    // Fix 2: LENT status — lend tracker modal automatically open karo
+    showToast('Marked "' + book.title + '" as Lent Out. Please enter borrower details.', 'info');
+    setTimeout(() => {
+      if (typeof openLendModal === 'function') openLendModal(index);
+    }, 400);
   }
 
   markChange();
   saveData();
   renderApp();
 }
+
 
 function onRatingChange(index, rating) {
   if (state.books[index]) {
@@ -12348,12 +13270,12 @@ function renderNowReadingHero() {
   if (coverUrl) {
     coverHtml = '<img src="' + coverUrl + '" alt="cover" class="hero-3d-book">';
   } else {
-    coverHtml = '<div class="hero-book-placeholder">' +
-      '<div style="font-size:2.2rem; margin-bottom:0.25rem;">📖</div>' +
-      '<div style="font-size:0.75rem; font-weight:800; opacity:0.95;">#' + escapeHtml(currentBook.no) + '</div>' +
-      '<div style="font-size:0.65rem; opacity:0.75; margin-top:2px;">' + escapeHtml(currentBook.category || 'Focus') + '</div>' +
+    // Offline gradient cover — internet nahi chahiye
+    coverHtml = '<div class="hero-book-placeholder" style="overflow:hidden; border-radius:8px;">' +
+      buildOfflineCoverHtml(currentBook, 'hero') +
       '</div>';
   }
+
 
   const isAudioActive = typeof isAmbiencePlaying !== 'undefined' && isAmbiencePlaying;
   const wrappedCover = '<div style="position:relative; display:inline-block;">' +
@@ -12371,14 +13293,20 @@ function renderNowReadingHero() {
     '<h2 class="hero-title" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;">' + escapeHtml(currentBook.title) + '</h2>' +
     '<div class="hero-author">by ' + escapeHtml(currentBook.author) + ' • <span style="color:#10b981; font-weight:700;">' + escapeHtml(currentBook.category || 'General') + '</span></div>' +
 
-    // Mini Page Progress Bar inside Hero Card
-    '<div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:10px; padding:0.5rem 0.85rem; margin:0.4rem 0; max-width:420px;">' +
-    '<div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:700; color:var(--text-primary); margin-bottom:0.3rem;">' +
-    '<span>Page ' + pages.current + ' of ' + pages.total + '</span>' +
-    '<span style="color:#10b981;">' + pages.pct + '% Completed</span>' +
-    '</div>' +
-    '<div class="page-progress-bar"><div class="page-progress-fill" style="width:' + pages.pct + '%;"></div></div>' +
-    '</div>' +
+    // Mini Page Progress Bar inside Hero Card (Fix 3: real data only)
+    (pages.unknown ?
+      '<div style="background:var(--bg-primary); border:1px dashed rgba(99,102,241,0.4); border-radius:10px; padding:0.5rem 0.85rem; margin:0.4rem 0; max-width:420px; text-align:center;">' +
+      '<span style="font-size:0.78rem; color:var(--text-muted);">📄 Pages not set — <a href="#" onclick="event.preventDefault(); openEditModal(' + origIdx + ')" style="color:#6366f1; font-weight:700;">Add in Edit ⚙️</a> to track progress</span>' +
+      '</div>'
+      :
+      '<div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:10px; padding:0.5rem 0.85rem; margin:0.4rem 0; max-width:420px;">' +
+      '<div style="display:flex; justify-content:space-between; font-size:0.78rem; font-weight:700; color:var(--text-primary); margin-bottom:0.3rem;">' +
+      '<span>Page ' + pages.current + ' of ' + pages.total + '</span>' +
+      '<span style="color:#10b981;">' + pages.pct + '% Completed</span>' +
+      '</div>' +
+      '<div class="page-progress-bar"><div class="page-progress-fill" style="width:' + pages.pct + '%;"></div></div>' +
+      '</div>'
+    ) +
 
     (hasNotes ? '<div class="hero-quote-snippet">💡 "' + escapeHtml(currentBook.takeaway) + '"</div>' : '') +
     '<div class="hero-actions-row">' +
@@ -12433,13 +13361,11 @@ function renderMiniShelfCard(b) {
   if (b.cover_image) {
     cover = '<img src="' + b.cover_image + '" alt="cover" class="mini-card-cover">';
   } else {
-    const isReading = b.status === 'READING';
-    const bg = isReading ? 'linear-gradient(135deg, #1e3a8a, #3b82f6)' : 'linear-gradient(135deg, #1e293b, #334155)';
-    cover = '<div class="mini-card-placeholder" style="background:' + bg + ';">' +
-      '<span style="font-size:1.8rem;">' + (isReading ? '📖' : '📚') + '</span>' +
-      '<span style="font-size:0.65rem; font-weight:800; color:#cbd5e1;">#' + escapeHtml(b.no) + '</span>' +
+    cover = '<div class="mini-card-placeholder" style="overflow:hidden;">' +
+      buildOfflineCoverHtml(b, 'small') +
       '</div>';
   }
+
 
   return '<div class="mini-shelf-card" onclick="openTakeawayModal(' + origIdx + ')" title="' + escapeHtml(b.title) + '">' +
     '<div class="mini-card-cover-wrap">' + cover + '</div>' +
@@ -12815,10 +13741,10 @@ function setupEventListeners() {
   });
 
   document.getElementById('categoryFilter').addEventListener('change', (e) => {
-    state.categoryFilter = e.target.value;
-    state.currentPage = 1;
-    renderApp();
+    // Fix 4: setCategoryFilter use karo — carousel chip bhi sync ho jayega
+    setCategoryFilter(e.target.value === 'ALL' ? 'ALL' : e.target.value);
   });
+
 
   document.getElementById('availabilityFilter').addEventListener('change', (e) => {
     state.availabilityFilter = e.target.value;
@@ -12843,24 +13769,6 @@ function setupEventListeners() {
   const updateBtn = document.getElementById('headerUpdateBtn');
   if (updateBtn) updateBtn.addEventListener('click', handleUpdateClick);
 
-  // Download Dropdown Toggle
-  const downloadDropdown = document.getElementById('downloadDropdown');
-  const downloadDropdownBtn = document.getElementById('downloadDropdownBtn');
-  const downloadDropdownMenu = document.getElementById('downloadDropdownMenu');
-
-  if (downloadDropdownBtn && downloadDropdownMenu) {
-    downloadDropdownBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      downloadDropdownMenu.classList.toggle('show');
-    });
-
-    document.addEventListener('click', (e) => {
-      if (!downloadDropdown.contains(e.target)) {
-        downloadDropdownMenu.classList.remove('show');
-      }
-    });
-  }
-
   const addBookBtn = document.getElementById('addBookBtn');
   if (addBookBtn) addBookBtn.addEventListener('click', openAddModal);
 
@@ -12869,38 +13777,6 @@ function setupEventListeners() {
     pickNextBookBtn.addEventListener('click', openPickBookModal);
   }
 
-  const exportCsvBtn = document.getElementById('exportCsvBtn');
-  if (exportCsvBtn) {
-    exportCsvBtn.addEventListener('click', () => {
-      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
-      exportToCsv();
-    });
-  }
-
-  const exportPdfBtn = document.getElementById('exportPdfBtn');
-  if (exportPdfBtn) {
-    exportPdfBtn.addEventListener('click', () => {
-      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
-      exportToPdf();
-    });
-  }
-
-  const exportJsonBtn = document.getElementById('exportJsonBtn');
-  if (exportJsonBtn) {
-    exportJsonBtn.addEventListener('click', () => {
-      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
-      exportToJson();
-    });
-  }
-
-  const importFileBtn = document.getElementById('importFileBtn');
-  if (importFileBtn) {
-    importFileBtn.addEventListener('click', () => {
-      if (downloadDropdownMenu) downloadDropdownMenu.classList.remove('show');
-      const fi = document.getElementById('importFileInput');
-      if (fi) fi.click();
-    });
-  }
 
   const importFileInput = document.getElementById('importFileInput');
   if (importFileInput) importFileInput.addEventListener('change', handleFileImport);
@@ -13057,8 +13933,42 @@ function handleCoverImageUpload(input) {
 
 function removeCoverPhoto() {
   state.currentEditingCoverImage = '';
+  const urlInput = document.getElementById('editBookCover');
+  if (urlInput) urlInput.value = '';
+  updateCoverPreview();
+  showToast('Cover photo removed', 'info');
+}
+
+function onEditBookCoverUrlInput(url) {
+  state.currentEditingCoverImage = (url || '').trim();
   updateCoverPreview();
 }
+
+window.removeCoverPhoto = removeCoverPhoto;
+window.removeBookCoverPhoto = removeCoverPhoto;
+window.handleCoverPhotoUpload = handleCoverImageUpload;
+window.onEditBookCoverUrlInput = onEditBookCoverUrlInput;
+
+function showKnowledgeValueBreakdown() {
+  const done = state.books.filter(b => b.status === 'DONE').length;
+  const total = state.books.length;
+  let customTotal = 0;
+  state.books.forEach(b => {
+    const p = parseFloat(b.price);
+    if (!isNaN(p) && p > 0) customTotal += p;
+  });
+
+  const displayVal = customTotal > 0 ? customTotal : (done * 399);
+  alert(
+    '💰 Knowledge Value Breakdown\n\n' +
+    '• Finished Books: ' + done + ' of ' + total + '\n' +
+    '• Estimated Completed Value: ₹' + displayVal.toLocaleString('en-IN') + '\n' +
+    '• Total Library Potential: ₹' + (total * 399).toLocaleString('en-IN') + '\n\n' +
+    '💡 Tip: Har book ke "Edit" me jakar aap uski actual purchase price set kar sakte hain!'
+  );
+}
+window.showKnowledgeValueBreakdown = showKnowledgeValueBreakdown;
+
 
 function openAddModal() {
   state.editingBookIndex = -1;
@@ -14374,6 +15284,33 @@ function removePrivacyPin() {
   }
 }
 
+// Fix 5: PIN bhool gaye? Reset karo — data safe rahega
+function forgotPinReset() {
+  const confirmed = confirm(
+    '🔑 PIN Reset\n\n' +
+    'Kya aap PIN reset karna chahte hain?\n\n' +
+    '✅ Aapka POORA data safe rahega\n' +
+    '✅ Books, progress, notes — kuch nahi mitega\n' +
+    '❌ Sirf PIN lock remove hoga\n\n' +
+    '"OK" dabao PIN reset karne ke liye.'
+  );
+  if (!confirmed) return;
+
+  // Double confirm for safety
+  const confirmed2 = confirm(
+    '⚠️ Last Confirmation\n\nPIN permanently remove ho jayega.\n\nData bilkul safe hai — confirm karo?'
+  );
+  if (!confirmed2) return;
+
+  localStorage.removeItem(PIN_KEY);
+  state.pinLocked = false;
+  hidePinLockScreen();
+  updatePrivacyBtnHeader(false);
+  clearEnteredPin();
+  showToast('✅ PIN reset ho gaya! Library unlock hai. New PIN set kar sakte ho.', 'success');
+}
+
+
 // ==========================================
 // FEATURE: 3D REALISTIC WOODEN BOOKSHELF VIEW
 // ==========================================
@@ -14841,12 +15778,18 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.5.0';
+const CURRENT_APP_VERSION = 'v3.5.9';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
   if (typeof syncSettingsFlagshipControls === 'function') syncSettingsFlagshipControls();
+  const verText = document.getElementById('appCurrentVersionText');
+  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Remote Kill-Switch & Feature Cockpit';
+  const devToolsCheckbox = document.getElementById('toggleDevToolsCheckbox');
+  if (devToolsCheckbox) {
+    devToolsCheckbox.checked = (localStorage.getItem('mindfocus_devtools_enabled') === 'true');
+  }
   const overlay = document.getElementById('appSettingsModalOverlay');
   if (overlay) overlay.classList.add('active');
 }
@@ -14976,28 +15919,12 @@ async function checkForAppUpdates(showFeedback = true) {
       } catch (e) {}
     }
 
-    // 3. Try GitHub API
+    // 3. Try jsDelivr CDN
     if (!cloudRelease) {
       try {
-        const cfgRes = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
-          cache: 'no-store',
-          headers: { 'Accept': 'application/vnd.github.v3.raw' }
-        });
-        if (cfgRes.ok) {
-          const cfg = await cfgRes.json();
-          if (cfg.activeRelease && cfg.activeRelease.version) {
-            cloudRelease = cfg.activeRelease;
-          }
-        }
-      } catch (e) {}
-    }
-
-    // 4. Try jsDelivr fallback
-    if (!cloudRelease) {
-      try {
-        const cfgRes = await fetch('https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/remote-config.json?cb=' + cb, { cache: 'no-store' });
-        if (cfgRes.ok) {
-          const cfg = await cfgRes.json();
+        const cdnRes = await fetch('https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/remote-config.json?cb=' + cb, { cache: 'no-store' });
+        if (cdnRes.ok) {
+          const cfg = await cdnRes.json();
           if (cfg.activeRelease && cfg.activeRelease.version) {
             cloudRelease = cfg.activeRelease;
           }
@@ -15144,12 +16071,13 @@ function triggerInAppUpdate(apkUrl) {
     if (pctText) pctText.innerText = pct + '%';
   }, 120);
 
+  const freshApkUrl = apkUrl + (apkUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
   setTimeout(() => {
     if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
-      window.Android.downloadAndInstallApk(apkUrl);
+      window.Android.downloadAndInstallApk(freshApkUrl);
       showToast('Downloading update package... ⏳', 'success');
     } else {
-      window.location.href = apkUrl;
+      window.location.href = freshApkUrl;
       showToast('Downloading update APK file...', 'success');
     }
   }, 600);
@@ -15816,6 +16744,7 @@ function init3DCardPhysics() {
     return;
   }
   document.addEventListener('pointermove', (e) => {
+    if (!e.target || typeof e.target.closest !== 'function') return;
     const card = e.target.closest('.book-card, .now-reading-hero, .sanctuary-cover-wrap');
     if (!card) return;
     const r = card.getBoundingClientRect();
@@ -15826,7 +16755,7 @@ function init3DCardPhysics() {
     card.style.setProperty('--sheen-x', pctX + '%');
     card.style.setProperty('--sheen-y', pctY + '%');
 
-    if (card.classList.contains('book-card')) {
+    if (card.classList && card.classList.contains('book-card')) {
       const rotY = (((x / r.width) - 0.5) * 12).toFixed(2);
       const rotX = (-((y / r.height) - 0.5) * 12).toFixed(2);
       card.style.transform = 'perspective(1000px) rotateX(' + rotX + 'deg) rotateY(' + rotY + 'deg) scale3d(1.018, 1.018, 1.018)';
@@ -15834,12 +16763,13 @@ function init3DCardPhysics() {
   });
 
   document.addEventListener('pointerleave', (e) => {
+    if (!e.target || typeof e.target.closest !== 'function') return;
     const card = e.target.closest('.book-card');
     if (card) card.style.transform = '';
   }, true);
 
   document.addEventListener('pointerout', (e) => {
-    if (e.target.classList && e.target.classList.contains('book-card')) {
+    if (e.target && e.target.classList && typeof e.target.classList.contains === 'function' && e.target.classList.contains('book-card')) {
       e.target.style.transform = '';
     }
   });
@@ -15995,8 +16925,12 @@ function renderSpotlightResults(q) {
           title: b.title,
           sub: 'by ' + b.author + ' • ' + (b.category || 'General'),
           icon: b.status === 'DONE' ? '✅' : (b.status === 'READING' ? '📖' : '📚'),
-          status: b.status || 'PENDING',
-          fn: () => { closeSpotlightModal(); openBookDetailSheet(idx); }
+          fn: () => {
+            closeSpotlightModal();
+            if (typeof setCategoryFilter === 'function') setCategoryFilter('ALL');
+            if (typeof filterByStatus === 'function') filterByStatus('ALL');
+            openBookDetailSheet(idx);
+          }
         });
       }
     });
@@ -16705,14 +17639,14 @@ async function checkRemoteBroadcastNotice() {
     const cb = Date.now() + '_' + Math.floor(Math.random() * 100000);
     let data = null;
 
-    // 1. PRIMARY & FASTEST: GitHub Raw (CORS open *, no 60-call API rate limit, fresh with cb)
+    // 1. PRIMARY & ULTRA-FAST: GitHub Raw CDN (Direct raw JSON, zero 60/hr API rate limits)
     try {
       const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?cb=' + cb;
       const res = await fetch(rawUrl, { cache: 'no-store' });
       if (res.ok) data = await res.json();
     } catch (e) {}
 
-    // 2. SECONDARY: GitHub Pages (CORS open *, official live host)
+    // 2. SECONDARY: GitHub Pages (Official live host)
     if (!data) {
       try {
         const ghPagesUrl = 'https://ankitburdak05-oss.github.io/mind-focus-books-tracker/broadcast-notice.json?cb=' + cb;
@@ -16721,14 +17655,11 @@ async function checkRemoteBroadcastNotice() {
       } catch (e) {}
     }
 
-    // 3. TERTIARY: GitHub API (Fallback with raw accept header)
+    // 3. TERTIARY: jsDelivr CDN
     if (!data) {
       try {
-        const apiUrl = 'https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/broadcast-notice.json?cb=' + cb;
-        const res = await fetch(apiUrl, {
-          cache: 'no-store',
-          headers: { 'Accept': 'application/vnd.github.v3.raw' }
-        });
+        const cdnUrl = 'https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/broadcast-notice.json?cb=' + cb;
+        const res = await fetch(cdnUrl, { cache: 'no-store' });
         if (res.ok) data = await res.json();
       } catch (e) {}
     }
@@ -16885,7 +17816,7 @@ function dismissInAppNotice(event) {
   } catch (e) {}
   dismissedNoticeIds[idToDismiss] = true;
 
-  const isActionBtn = event && event.target && (
+  const isActionBtn = event && event.target && typeof event.target.closest === 'function' && (
     event.target.id === 'inAppNoticeDismissBtn' || 
     event.target.id === 'cyber3dDismissBtn' || 
     event.target.closest('#inAppNoticeDismissBtn') || 
@@ -16946,6 +17877,201 @@ function dismissInAppNotice(event) {
   }, 300);
 }
 
+window.__IS_EMERGENCY_LOCKED_DOWN = false;
+window.__TELEMETRY_DISABLED = false;
+
+function applyFeaturesConfig(feats) {
+  if (!feats) return;
+
+  // 1. 🚨 EMERGENCY REMOTE APP KILL-SWITCH / LOCKDOWN
+  const isLockdown = (feats.appEmergencyLockdown === true);
+  window.__IS_EMERGENCY_LOCKED_DOWN = isLockdown;
+
+  let lockdownOverlay = document.getElementById('appEmergencyLockdownOverlay');
+  if (isLockdown) {
+    // Immediate CPU/Battery zero-load freeze: Stop all background polling and timers
+    if (userChatPollTimer) {
+      clearInterval(userChatPollTimer);
+      userChatPollTimer = null;
+    }
+    if (broadcastNoticeInterval) {
+      clearInterval(broadcastNoticeInterval);
+      broadcastNoticeInterval = null;
+    }
+    if (window.speechSynthesis) {
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+    }
+    if (typeof stopAmbientAudio === 'function') stopAmbientAudio();
+    if (typeof stopBarcodeScanner === 'function') stopBarcodeScanner();
+    if (typeof pauseZenTimer === 'function') pauseZenTimer();
+
+    // Close any floating modals
+    const chatModal = document.getElementById('userHelpDeskModalOverlay');
+    if (chatModal) chatModal.classList.remove('active');
+    const devToolsModal = document.getElementById('mobileDevToolsDrawer');
+    if (devToolsModal) devToolsModal.classList.remove('active');
+
+    // Create or update full-screen emergency lockdown overlay
+    if (!lockdownOverlay) {
+      lockdownOverlay = document.createElement('div');
+      lockdownOverlay.id = 'appEmergencyLockdownOverlay';
+      lockdownOverlay.style.cssText = 'position:fixed; inset:0; z-index:9999999; background:#030712; color:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; box-sizing:border-box; overflow-y:auto;';
+      document.body.appendChild(lockdownOverlay);
+    }
+    const noticeText = feats.lockdownMessage || '🚨 अभी ऐप को बंद कर दिया गया है। कुछ प्रॉब्लम आ गई है, सभी फीचर के साथ ऐप भी बंद हो गया है। कृपया थोड़ी देर प्रतीक्षा करें।';
+    lockdownOverlay.innerHTML = `
+      <div style="font-size:72px; margin-bottom:16px; filter:drop-shadow(0 0 25px rgba(239,68,68,0.7));">🚨</div>
+      <h1 style="font-size:1.6rem; font-weight:900; color:#ef4444; margin-bottom:14px; letter-spacing:0.3px;">ऐप अस्थायी रूप से बंद है</h1>
+      <div style="font-size:1.05rem; line-height:1.65; color:#fecaca; max-width:480px; margin-bottom:22px; background:rgba(239,68,68,0.12); border:1.5px solid rgba(239,68,68,0.4); border-radius:14px; padding:18px 20px; font-weight:600; text-align:left;">
+        ${escapeHtml(noticeText)}
+      </div>
+      <p style="font-size:0.86rem; color:#94a3b8; max-width:420px; line-height:1.5; margin-bottom:22px;">
+        ❄️ <b>Zero-CPU Thermal Protection Active:</b> फोन को ठंडा रखने व सुरक्षा के लिए सभी बैकग्राउंड प्रोसेस, नेटवर्क और फीचर्स तत्काल फ्रीज कर दिए गए हैं।
+      </p>
+      <div style="display:flex; flex-direction:column; align-items:center; gap:12px;">
+        <button type="button" onclick="checkRemoteConfig()" style="background:#ef4444; color:#fff; border:none; border-radius:12px; padding:12px 24px; font-size:0.95rem; font-weight:800; cursor:pointer; box-shadow:0 4px 15px rgba(239,68,68,0.4);">
+          🔄 चेक करें (Check Status)
+        </button>
+        <div style="display:inline-flex; align-items:center; gap:8px; padding:6px 16px; background:rgba(239,68,68,0.18); border:1px solid #ef4444; border-radius:999px; color:#fca5a5; font-size:0.8rem; font-weight:800;">
+          <span style="display:inline-block; width:8px; height:8px; border-radius:50%; background:#ef4444;"></span>
+          ALL 16 FEATURES FROZEN
+        </div>
+      </div>
+    `;
+    return;
+  } else {
+    // If lockdown was deactivated by admin, remove overlay and resume
+    if (lockdownOverlay) {
+      lockdownOverlay.remove();
+      connectCloudRelaySSE();
+      if (!broadcastNoticeInterval) {
+        broadcastNoticeInterval = setInterval(() => {
+          if (!document.hidden) {
+            checkRemoteBroadcastNotice();
+            checkRemoteConfig();
+          }
+        }, 90000);
+      }
+    }
+  }
+
+  // 2. 💬 Live Help Desk & Chat Support
+  const chatFab = document.getElementById('fabChatWrapper') || document.getElementById('fabLiveHelpDeskBtn');
+  if (chatFab) {
+    chatFab.style.display = (feats.chatHelpDeskEnabled === false) ? 'none' : 'flex';
+  }
+  if (feats.chatHelpDeskEnabled === false) {
+    const chatModal = document.getElementById('userHelpDeskModalOverlay');
+    if (chatModal) {
+      chatModal.classList.remove('active');
+      chatModal.style.display = 'none';
+    }
+  }
+
+  // 3. 🩺 Phone Crash Radar & Telemetry
+  window.__TELEMETRY_DISABLED = (feats.telemetryEnabled === false);
+
+  // 4. 🛠️ Mobile DevTools Console
+  const devToolsPill = document.getElementById('mobileDevToolsPill');
+  if (devToolsPill) {
+    devToolsPill.style.display = (feats.mobileDevToolsEnabled === false) ? 'none' : 'flex';
+  }
+  if (feats.mobileDevToolsEnabled === false) {
+    const devToolsModal = document.getElementById('mobileDevToolsModalOverlay');
+    if (devToolsModal) {
+      devToolsModal.classList.remove('active');
+      devToolsModal.style.display = 'none';
+    }
+  }
+
+  // 5. 📢 Broadcast Notices
+  if (feats.broadcastNoticeEnabled === false) {
+    const noticeOverlay = document.getElementById('inAppNoticeModalOverlay');
+    if (noticeOverlay) {
+      noticeOverlay.classList.remove('active');
+      noticeOverlay.style.display = 'none';
+    }
+  }
+
+  // 6. 🔄 In-App Update Scanner
+  const updateBtn = document.getElementById('headerUpdateBtn');
+  if (updateBtn && feats.appUpdatesEnabled === false) {
+    updateBtn.style.display = 'none';
+  }
+
+  // 7. ⏱️ Zen Sanctuary Timer
+  const timerBtn = document.getElementById('headerPomodoroBtn');
+  if (timerBtn) {
+    timerBtn.style.display = (feats.sanctuaryTimerEnabled === false) ? 'none' : 'inline-flex';
+  }
+  if (feats.sanctuaryTimerEnabled === false) {
+    if (typeof pauseZenTimer === 'function') pauseZenTimer();
+    const pomModal = document.getElementById('pomodoroTimerModalOverlay');
+    if (pomModal) pomModal.classList.remove('active');
+  }
+
+  // 8. 🎴 3D Smart Flashcards
+  const fcBtn = document.getElementById('headerFlashcardsBtn');
+  const fcKpi = document.getElementById('kpiFlashcardsCount');
+  if (fcBtn) fcBtn.style.display = (feats.flashcardsEnabled === false) ? 'none' : 'inline-flex';
+  if (fcKpi) fcKpi.style.display = (feats.flashcardsEnabled === false) ? 'none' : 'inline-flex';
+  if (feats.flashcardsEnabled === false) {
+    const fcOverlay = document.getElementById('flashcardModalOverlay');
+    if (fcOverlay) {
+      fcOverlay.classList.remove('active');
+      fcOverlay.style.display = 'none';
+    }
+  }
+
+  // 9. 🎵 Spatial EQ & Ambient Audio
+  const ambDock = document.getElementById('dockAmbienceBtn');
+  if (ambDock) ambDock.style.display = (feats.ambientAudioEnabled === false) ? 'none' : 'flex';
+  if (feats.ambientAudioEnabled === false) {
+    if (typeof stopAmbientAudio === 'function') stopAmbientAudio();
+    const ambModal = document.getElementById('ambienceModalOverlay');
+    if (ambModal) ambModal.classList.remove('active');
+  }
+
+  // 10. 🎨 3D Tilt Physics & Dynamic Aurora
+  const auroraBg = document.getElementById('ambientAuroraBg');
+  if (auroraBg) {
+    auroraBg.style.display = (feats.visualPhysicsEnabled === false) ? 'none' : 'block';
+  }
+
+  // 11. 📷 Barcode / ISBN Camera Scanner
+  const barcodeBtn = document.getElementById('scanBarcodeBtn');
+  if (barcodeBtn) barcodeBtn.style.display = (feats.barcodeScannerEnabled === false) ? 'none' : 'inline-flex';
+  if (feats.barcodeScannerEnabled === false) {
+    if (typeof stopBarcodeScanner === 'function') stopBarcodeScanner();
+    const bcModal = document.getElementById('barcodeScannerOverlay');
+    if (bcModal) bcModal.classList.remove('active');
+  }
+
+  // 12. 🎙️ Audiobook Voice Reader (TTS)
+  if (feats.audiobookVoiceEnabled === false) {
+    if (window.speechSynthesis) {
+      try { window.speechSynthesis.cancel(); } catch (e) {}
+    }
+  }
+
+  // 13. 📖 Daily Motivational Quotes
+  const quotesCard = document.getElementById('dailyQuoteContainer') || document.querySelector('.quote-card');
+  if (quotesCard) {
+    quotesCard.style.display = (feats.quotesEnabled === false) ? 'none' : 'block';
+  }
+
+  // 14. 📖 3D Dictionary Book
+  if (typeof feats.dictionaryBookEnabled === 'boolean') {
+    const isDictActive = feats.dictionaryBookEnabled === true;
+    if (state.dictionaryEnabled !== isDictActive) {
+      state.dictionaryEnabled = isDictActive;
+      localStorage.setItem('mf_dictionary_enabled', isDictActive ? 'true' : 'false');
+      loadData();
+      if (typeof renderAll === 'function') renderAll();
+    }
+  }
+}
+
 async function checkRemoteConfig() {
   // Battery & Heat Guard: Never poll config when app is hidden or offline
   if (typeof document !== 'undefined' && document.hidden) return;
@@ -16955,7 +18081,7 @@ async function checkRemoteConfig() {
     const cb = Date.now();
     let cfg = null;
 
-    // 1. PRIMARY: GitHub Raw (CORS open, no rate limit)
+    // 1. PRIMARY & ULTRA-FAST: GitHub Raw CDN (Direct raw JSON, zero 60/hr API rate limits)
     try {
       const res = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?cb=' + cb, { cache: 'no-store' });
       if (res.ok) cfg = await res.json();
@@ -16969,18 +18095,7 @@ async function checkRemoteConfig() {
       } catch (e) {}
     }
 
-    // 3. TERTIARY: GitHub API
-    if (!cfg) {
-      try {
-        const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/contents/remote-config.json?cb=' + cb, {
-          cache: 'no-store',
-          headers: { 'Accept': 'application/vnd.github.v3.raw' }
-        });
-        if (res.ok) cfg = await res.json();
-      } catch (e) {}
-    }
-
-    // 4. QUATERNARY: jsDelivr fallback
+    // 3. TERTIARY: jsDelivr fallback
     if (!cfg) {
       try {
         const res = await fetch('https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/remote-config.json?cb=' + cb, { cache: 'no-store' });
@@ -16989,6 +18104,13 @@ async function checkRemoteConfig() {
     }
 
     if (!cfg) return;
+
+    // Apply Remote Feature Flags & Emergency Lockdown
+    if (cfg.features) {
+      applyFeaturesConfig(cfg.features);
+    }
+
+    if (window.__IS_EMERGENCY_LOCKED_DOWN) return;
 
     // 1. Maintenance Mode
     const maintenanceOverlay = document.getElementById('appMaintenanceOverlay');
@@ -17021,19 +18143,6 @@ async function checkRemoteConfig() {
       topBanner.innerText = cfg.globalBanner.text;
     } else {
       if (topBanner) topBanner.remove();
-    }
-
-    // 3. Remote Feature Flags (Dictionary Book, Quotes, etc.)
-    if (cfg.features && typeof cfg.features.dictionaryBookEnabled === 'boolean') {
-      const isDictActive = cfg.features.dictionaryBookEnabled === true || 
-        (cfg.stagedRelease && cfg.stagedRelease.version === 'v3.3.0' && cfg.stagedRelease.isDeployed === true);
-      
-      if (state.dictionaryEnabled !== isDictActive) {
-        state.dictionaryEnabled = isDictActive;
-        localStorage.setItem('mf_dictionary_enabled', isDictActive ? 'true' : 'false');
-        loadData();
-        if (typeof renderAll === 'function') renderAll();
-      }
     }
 
     // 4. In-App Version Update Trigger (OTA Updates)
@@ -17071,24 +18180,22 @@ function startLiveNoticeListener() {
     checkRemoteConfig();
   }, 1000);
 
-  // Battery-Saver Polling Loop: 90 seconds, only runs when app is actively visible on screen
+  // Energy-Efficient Thermal-Guard Polling Loop: 90 seconds (Only runs when screen is ON & visible!)
+  // When app is minimized or phone is locked, document.hidden freezes 100% of network calls.
   broadcastNoticeInterval = setInterval(() => {
     if (document.hidden || (typeof document.visibilityState !== 'undefined' && document.visibilityState !== 'visible')) {
-      return; // ZERO radio wake-ups when app is minimized, locked, or backgrounded!
+      return; // ZERO network wake-ups when app is minimized, locked, or backgrounded!
     }
     checkRemoteBroadcastNotice();
     checkRemoteConfig();
   }, 90000);
 
-  // Instant refresh when user returns to app
+  // Polite refresh only when user switches back to the app
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
       checkRemoteBroadcastNotice();
       checkRemoteConfig();
     }
-  });
-  window.addEventListener('focus', () => {
-    checkRemoteBroadcastNotice();
   });
 
   // Laptop Multi-Tab Realtime Instant Sync via localStorage event (0ms instantaneous)
@@ -17286,26 +18393,42 @@ function initPullToRefresh() {
 /* 4. Horizontal Swipeable Category Track */
 let activeCategoryFilter = 'ALL';
 
-function selectCategoryChip(category, chipEl) {
-  triggerHaptic('selection');
+// Fix 4: Shared category setter — dono (chip carousel + dropdown) ek saath sync hote hain
+function setCategoryFilter(category) {
   activeCategoryFilter = category;
-
-  document.querySelectorAll('.category-pill-chip').forEach(chip => {
-    chip.classList.toggle('active', chip.dataset.cat === category);
-  });
-
-  if (chipEl && chipEl.scrollIntoView) {
-    chipEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-  }
-
-  // Filter books by category
-  if (category === 'ALL') {
+  if (category === 'ALL' || !category) {
     state.categoryFilter = '';
   } else {
     state.categoryFilter = category;
   }
   state.currentPage = 1;
+
+  // Swipeable category carousel chips sync karo
+  document.querySelectorAll('.category-pill-chip').forEach(chip => {
+    const isActive = category === 'ALL'
+      ? (chip.dataset.cat === 'ALL')
+      : (chip.dataset.cat === category);
+    chip.classList.toggle('active', isActive);
+  });
+
+  // Dropdown (categoryFilter select) bhi sync karo
+  const dropdown = document.getElementById('categoryFilter');
+  if (dropdown) {
+    const val = category === 'ALL' ? 'ALL' : category;
+    // Option milega toh set karo, nahi toh ALL pe rakho
+    const found = Array.from(dropdown.options).some(o => o.value === val);
+    dropdown.value = found ? val : 'ALL';
+  }
+
   renderApp();
+}
+
+function selectCategoryChip(category, chipEl) {
+  triggerHaptic('selection');
+  if (chipEl && chipEl.scrollIntoView) {
+    chipEl.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+  setCategoryFilter(category);
 }
 
 function syncCategoryTrackActiveState() {
@@ -17314,7 +18437,14 @@ function syncCategoryTrackActiveState() {
     const isTarget = chip.dataset.cat === cat || (!state.categoryFilter && chip.dataset.cat === 'ALL');
     chip.classList.toggle('active', isTarget);
   });
+  // Also sync dropdown
+  const dropdown = document.getElementById('categoryFilter');
+  if (dropdown) {
+    const found = Array.from(dropdown.options).some(o => o.value === cat);
+    dropdown.value = found ? cat : 'ALL';
+  }
 }
+
 
 /* 5. Floating Mini Reading Capsule (Dynamic Now-Reading HUD) */
 function getActiveReadingBook() {
@@ -17436,7 +18566,7 @@ function initSheetSwipeDismiss() {
   const handleTouchStart = (e) => {
     // Only allow drag from top area or handle
     const target = e.target;
-    const isHandle = target.classList.contains('sheet-drag-handle') || target.closest('.modal-header') || target.closest('.sheet-drag-handle');
+    const isHandle = target && typeof target.closest === 'function' && ((target.classList && target.classList.contains('sheet-drag-handle')) || target.closest('.modal-header') || target.closest('.sheet-drag-handle'));
     if (!isHandle) return;
 
     startY = e.touches[0].clientY;
@@ -19178,7 +20308,7 @@ function initFlashcardTrainerEngine() {
 
     arena.addEventListener('pointerdown', (e) => {
       if (fcState.isAnimatingAction) return;
-      if (e.target.closest('#fcAudioBtn')) return;
+      if (e.target && typeof e.target.closest === 'function' && e.target.closest('#fcAudioBtn')) return;
 
       isDragging = true;
       pointerId = e.pointerId;
@@ -19298,6 +20428,1330 @@ window.speakFlashcardWord = speakFlashcardWord;
 window.restartFlashcardsDeck = restartFlashcardsDeck;
 window.handleFlashcardOverlayClick = handleFlashcardOverlayClick;
 window.initFlashcardTrainerEngine = initFlashcardTrainerEngine;
+
+// ==========================================================================
+// 💬 LIVE IN-APP HELP DESK & CHAT CLIENT ENGINE (Zomato/Telegram Style)
+// ==========================================================================
+
+const HELPDESK_CLOUD_TOPIC = 'mf_helpdesk_ankitburdak05';
+const HELPDESK_RELAY_URL = 'https://ntfy.sh/' + HELPDESK_CLOUD_TOPIC;
+
+let userChatId = null;
+let userChatName = null;
+let userChatDevice = 'Android Reader';
+let userChatData = null;
+let userChatPollTimer = null;
+let userChatBroadcastChannel = null;
+let userChatEventSource = null;
+let lastKnownAdminMsgCount = 0;
+
+function initLiveHelpDeskEngine() {
+  try {
+    userChatId = localStorage.getItem('mindfocus_chat_user_id');
+    if (!userChatId) {
+      userChatId = 'reader_' + Math.random().toString(36).substring(2, 8);
+      localStorage.setItem('mindfocus_chat_user_id', userChatId);
+    }
+
+    userChatName = localStorage.getItem('mindfocus_chat_user_name');
+    if (!userChatName) {
+      userChatName = 'Reader #' + userChatId.slice(-4).toUpperCase();
+      localStorage.setItem('mindfocus_chat_user_name', userChatName);
+    }
+
+    const ua = navigator.userAgent || '';
+    if (ua.includes('Android')) userChatDevice = 'Android App';
+    else if (ua.includes('iPhone') || ua.includes('iPad')) userChatDevice = 'iOS Device';
+    else userChatDevice = 'Web App';
+
+    // 1. Instantly restore chat from local storage so messages NEVER disappear
+    const local = localStorage.getItem('mindfocus_chat_data');
+    if (local) {
+      try {
+        userChatData = JSON.parse(local);
+      } catch (e) {}
+    }
+    if (!userChatData) {
+      userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
+    }
+    if (!userChatData.threads) userChatData.threads = {};
+    if (!userChatData.threads[userChatId]) {
+      userChatData.threads[userChatId] = {
+        userId: userChatId,
+        userName: userChatName,
+        userDevice: userChatDevice,
+        unreadByAdmin: 0,
+        unreadByUser: 0,
+        lastMessage: '',
+        lastTimestamp: new Date().toISOString(),
+        messages: []
+      };
+    }
+  } catch (e) {
+    userChatId = 'reader_guest';
+    userChatName = 'Reader';
+  }
+
+  // 2. Setup Local Zero-Latency BroadcastChannel (0ms sync for same origin/device)
+  try {
+    if (typeof BroadcastChannel !== 'undefined') {
+      userChatBroadcastChannel = new BroadcastChannel('mindfocus_helpdesk_channel');
+      userChatBroadcastChannel.onmessage = (e) => {
+        if (e.data && e.data.type === 'helpdesk_chat_msg') {
+          handleIncomingHelpDeskDirectMessage(e.data);
+        } else if (e.data && e.data.type === 'remote_config_sync') {
+          applyFeaturesConfig(e.data.features);
+        }
+      };
+    }
+  } catch (bcErr) {}
+
+  // 3. LocalStorage storage event listener (cross-tab fallback)
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'mindfocus_chat_last_event' && e.newValue) {
+      try {
+        const item = JSON.parse(e.newValue);
+        if (item && item.payload) {
+          if (item.payload.type === 'helpdesk_chat_msg') {
+            handleIncomingHelpDeskDirectMessage(item.payload);
+          } else if (item.payload.type === 'remote_config_sync') {
+            applyFeaturesConfig(item.payload.features);
+          }
+        }
+      } catch (err) {}
+    }
+  });
+
+  // 4. Connect to Cloud Relay via SSE (Instant live delivery from Control Panel)
+  connectCloudRelaySSE();
+
+  // 5. Initial UI render and background sync poll
+  checkUserChatNotifications();
+  renderUserChatStream();
+  if (typeof setupUserChatEventListeners === 'function') setupUserChatEventListeners();
+
+  fetchAndSyncUserChat(false);
+  setUserChatPollingSpeed(false);
+
+  // Background Thermal Guard: Hibernate SSE & polling when screen is locked or app minimized
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden || (typeof document.visibilityState !== 'undefined' && document.visibilityState !== 'visible')) {
+      if (userChatEventSource) {
+        userChatEventSource.close();
+        userChatEventSource = null;
+      }
+      if (userChatPollTimer) {
+        clearInterval(userChatPollTimer);
+        userChatPollTimer = null;
+      }
+    } else {
+      connectCloudRelaySSE();
+      const modal = document.getElementById('userHelpDeskModalOverlay');
+      const isChatOpen = modal && modal.classList.contains('active');
+      setUserChatPollingSpeed(isChatOpen);
+      fetchAndSyncUserChat(false);
+    }
+  });
+}
+
+function setUserChatPollingSpeed(isChatOpen) {
+  if (userChatPollTimer) {
+    clearInterval(userChatPollTimer);
+    userChatPollTimer = null;
+  }
+  if (document.hidden) return; // Never poll in background
+  const intervalMs = isChatOpen ? 8000 : 60000;
+  userChatPollTimer = setInterval(() => {
+    if (document.hidden) return;
+    fetchAndSyncUserChat(false);
+  }, intervalMs);
+}
+
+function connectCloudRelaySSE() {
+  if (typeof EventSource === 'undefined') return;
+  if (document.hidden) return;
+  try {
+    if (userChatEventSource) {
+      userChatEventSource.close();
+    }
+    userChatEventSource = new EventSource(HELPDESK_RELAY_URL + '/sse');
+    userChatEventSource.onmessage = (e) => {
+      try {
+        const parsed = JSON.parse(e.data);
+        if (parsed && parsed.message) {
+          const payload = typeof parsed.message === 'string' ? JSON.parse(parsed.message) : parsed.message;
+          if (payload && payload.type === 'helpdesk_chat_msg') {
+            handleIncomingHelpDeskDirectMessage(payload);
+          } else if (payload && payload.type === 'remote_config_sync') {
+            applyFeaturesConfig(payload.features);
+          }
+        }
+      } catch (err) {}
+    };
+    userChatEventSource.onerror = () => {};
+  } catch (e) {}
+}
+
+function handleIncomingHelpDeskDirectMessage(payload) {
+  if (!payload || !payload.threadId || !payload.message) return;
+  if (payload.threadId !== userChatId) return;
+
+  const msg = payload.message;
+  if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
+  if (!userChatData.threads) userChatData.threads = {};
+  if (!userChatData.threads[userChatId]) {
+    userChatData.threads[userChatId] = {
+      userId: userChatId,
+      userName: userChatName,
+      userDevice: userChatDevice,
+      unreadByAdmin: 0,
+      unreadByUser: 0,
+      lastMessage: '',
+      lastTimestamp: new Date().toISOString(),
+      messages: []
+    };
+  }
+
+  const thread = userChatData.threads[userChatId];
+  if (!Array.isArray(thread.messages)) thread.messages = [];
+
+  const exists = thread.messages.some(m => m.id === msg.id || (m.timestamp === msg.timestamp && m.text === msg.text));
+  if (exists) return;
+
+  thread.messages.push(msg);
+  thread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+  thread.lastMessage = msg.text;
+  thread.lastTimestamp = msg.timestamp;
+
+  if (msg.sender === 'admin') {
+    const modal = document.getElementById('userHelpDeskModalOverlay');
+    const isModalOpen = modal && modal.classList.contains('active');
+    if (!isModalOpen) {
+      thread.unreadByUser = (thread.unreadByUser || 0) + 1;
+    }
+    playUserChatAudioChime('receive');
+    if (typeof showToastNotification === 'function') {
+      showToastNotification('👑 Developer/Admin: ' + (msg.text.length > 35 ? msg.text.substring(0, 32) + '...' : msg.text));
+    }
+  }
+
+  saveUserChatDataLocally();
+  checkUserChatNotifications();
+  renderUserChatStream();
+}
+
+function mergeIncomingChatData(data) {
+  if (!data || !data.threads) return;
+  if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
+  if (!userChatData.threads) userChatData.threads = {};
+
+  let updated = false;
+  const myThread = userChatData.threads[userChatId];
+  const remoteThread = data.threads[userChatId];
+
+  if (remoteThread && Array.isArray(remoteThread.messages)) {
+    if (!myThread) {
+      userChatData.threads[userChatId] = remoteThread;
+      updated = true;
+    } else {
+      if (!Array.isArray(myThread.messages)) myThread.messages = [];
+      const existingIds = new Set(myThread.messages.map(m => m.id));
+      remoteThread.messages.forEach(m => {
+        if (!existingIds.has(m.id)) {
+          myThread.messages.push(m);
+          existingIds.add(m.id);
+          updated = true;
+          if (m.sender === 'admin') {
+            playUserChatAudioChime('receive');
+          }
+        }
+      });
+      myThread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
+      if (myThread.messages.length > 0) {
+        const last = myThread.messages[myThread.messages.length - 1];
+        myThread.lastMessage = last.text;
+        myThread.lastTimestamp = last.timestamp;
+      }
+    }
+  }
+
+  if (updated) {
+    saveUserChatDataLocally();
+    checkUserChatNotifications();
+    renderUserChatStream();
+  }
+}
+
+async function fetchAndSyncUserChat(isUserAction = false) {
+  // 1. Fetch from Cloud Relay ntfy.sh
+  try {
+    const pollRes = await fetch(HELPDESK_RELAY_URL + '/json?poll=1&since=5m');
+    if (pollRes.ok) {
+      const text = await pollRes.text();
+      const lines = text.trim().split('\n');
+      for (const line of lines) {
+        if (!line.trim()) continue;
+        try {
+          const item = JSON.parse(line);
+          if (item && item.message) {
+            const payload = typeof item.message === 'string' ? JSON.parse(item.message) : item.message;
+            if (payload && payload.type === 'helpdesk_chat_msg') {
+              handleIncomingHelpDeskDirectMessage(payload);
+            } else if (payload && payload.type === 'remote_config_sync') {
+              applyFeaturesConfig(payload.features);
+            }
+          }
+        } catch (e) {}
+      }
+    }
+  } catch (err) {}
+
+  // 2. Fetch from static/git repository chat-messages.json (non-destructive merge)
+  const cb = Date.now();
+  try {
+    let chatUrl = `chat-messages.json?cb=${cb}`;
+    if (typeof window !== 'undefined' && (window.location.protocol === 'file:' || !window.location.host)) {
+      chatUrl = `https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/chat-messages.json?cb=${cb}`;
+    }
+    let res = await fetch(chatUrl, { cache: 'no-store' });
+    if (!res.ok && chatUrl.startsWith('chat-messages.json')) {
+      res = await fetch(`https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/chat-messages.json?cb=${cb}`, { cache: 'no-store' });
+    }
+    if (res && res.ok) {
+      const data = await res.json();
+      mergeIncomingChatData(data);
+    }
+  } catch (e) {
+    try {
+      const fallbackRes = await fetch(`https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/chat-messages.json?cb=${cb}`, { cache: 'no-store' });
+      if (fallbackRes.ok) {
+        const data = await fallbackRes.json();
+        mergeIncomingChatData(data);
+      }
+    } catch (err2) {}
+  }
+}
+
+function checkUserChatNotifications() {
+  if (!userChatData || !userChatData.threads || !userChatId) return;
+  const thread = userChatData.threads[userChatId];
+  if (!thread) return;
+
+  const unreadCount = thread.unreadByUser || 0;
+  let adminMsgCount = 0;
+  if (Array.isArray(thread.messages)) {
+    thread.messages.forEach(m => {
+      if (m.sender === 'admin') adminMsgCount++;
+    });
+  }
+
+  const badge = document.getElementById('userChatUnreadBadge');
+  const dot = document.getElementById('headerChatDot');
+
+  if (unreadCount > 0) {
+    if (badge) {
+      badge.innerText = unreadCount;
+      badge.style.display = 'inline-block';
+    }
+    if (dot) dot.style.display = 'block';
+
+    if (adminMsgCount > lastKnownAdminMsgCount && lastKnownAdminMsgCount > 0) {
+      playUserChatAudioChime('receive');
+      if (typeof showToastNotification === 'function') {
+        showToastNotification('👑 Developer/Admin ne aapko reply kiya hai!');
+      }
+    }
+  } else {
+    if (badge) badge.style.display = 'none';
+    if (dot) dot.style.display = 'none';
+  }
+
+  lastKnownAdminMsgCount = adminMsgCount;
+}
+
+function openUserHelpDeskModal() {
+  const modal = document.getElementById('userHelpDeskModalOverlay');
+  if (modal) {
+    modal.classList.add('active');
+    modal.style.display = 'flex';
+  }
+
+  setUserChatPollingSpeed(true);
+  fetchAndSyncUserChat(false);
+
+  if (typeof setupUserChatEventListeners === 'function') setupUserChatEventListeners();
+
+  if (userChatData && userChatData.threads && userChatData.threads[userChatId]) {
+    userChatData.threads[userChatId].unreadByUser = 0;
+    saveUserChatDataLocally();
+    const badge = document.getElementById('userChatUnreadBadge');
+    const dot = document.getElementById('headerChatDot');
+    if (badge) badge.style.display = 'none';
+    if (dot) dot.style.display = 'none';
+  }
+
+  renderUserChatStream();
+  setTimeout(() => {
+    const input = document.getElementById('userChatInputText');
+    if (input) input.focus();
+  }, 250);
+}
+
+function closeUserHelpDeskModal() {
+  const modal = document.getElementById('userHelpDeskModalOverlay');
+  if (modal) {
+    modal.classList.remove('active');
+    setTimeout(() => {
+      modal.style.display = 'none';
+    }, 250);
+  }
+  setUserChatPollingSpeed(false);
+}
+
+function handleHelpDeskOverlayClick(e) {
+  if (e.target && e.target.id === 'userHelpDeskModalOverlay') {
+    closeUserHelpDeskModal();
+  }
+}
+
+function playUserChatAudioChime(type = 'receive') {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'receive') {
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.18, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.35);
+    } else {
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(440, ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.14, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.15);
+    }
+  } catch (e) {
+    // Audio contexts can require user gesture or be unsupported on older webviews
+  }
+}
+
+function setupUserChatEventListeners() {
+  try {
+    const form = document.getElementById('userChatForm');
+    const btn = document.getElementById('btnUserSendChat');
+    const input = document.getElementById('userChatInputText');
+
+    if (form && !form._bound) {
+      form._bound = true;
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        sendUserChatMessage();
+      });
+    }
+
+    if (btn && !btn._bound) {
+      btn._bound = true;
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        sendUserChatMessage();
+      });
+      btn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        sendUserChatMessage();
+      }, { passive: false });
+    }
+
+    if (input && !input._bound) {
+      input._bound = true;
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          sendUserChatMessage();
+        }
+      });
+    }
+  } catch (e) {
+    console.warn('Error setting up user chat listeners:', e);
+  }
+}
+
+function insertUserPrompt(text) {
+  const input = document.getElementById('userChatInputText');
+  if (input) {
+    input.value = text;
+    input.focus();
+  }
+}
+
+function handleUserChatKeydown(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    sendUserChatMessage();
+  }
+}
+
+function renderUserChatStream() {
+  const stream = document.getElementById('userChatMessagesStream');
+  if (!stream) return;
+
+  if (!userChatData || !userChatData.threads || !userChatData.threads[userChatId]) {
+    stream.innerHTML = `
+      <div class="user-chat-welcome-card">
+        <div style="font-size:36px; margin-bottom:8px;">💬</div>
+        <div style="font-weight:800; color:var(--text-primary); font-size:1.05rem;">Namaste Reader!</div>
+        <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;">
+          Aapko app me koi naya feature chahiye, koi bug report karna hai, ya koi sawaal puchna hai to direct message likhein. Hum live reply karenge! 🙏
+        </div>
+      </div>`;
+    return;
+  }
+
+  const thread = userChatData.threads[userChatId];
+  const messages = thread.messages || [];
+
+  if (messages.length === 0) {
+    stream.innerHTML = `
+      <div class="user-chat-welcome-card">
+        <div style="font-size:36px; margin-bottom:8px;">💬</div>
+        <div style="font-weight:800; color:var(--text-primary); font-size:1.05rem;">Namaste Reader!</div>
+        <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;">
+          Niche box me apna message likhein aur send karein! Hum seedha Control Panel se aapse connect honge.
+        </div>
+      </div>`;
+    return;
+  }
+
+  let html = `
+    <div style="text-align:center; margin-bottom:8px;">
+      <span style="font-size:0.68rem; color:var(--text-muted); background:rgba(255,255,255,0.06); padding:2px 10px; border-radius:999px;">
+        Encrypted Direct Help Desk Session
+      </span>
+    </div>`;
+
+  messages.forEach(m => {
+    const isMe = m.sender === 'user';
+    const timeStr = formatUserChatTime(m.timestamp);
+
+    html += `
+      <div class="user-msg-bubble-wrap ${isMe ? 'from-user' : 'from-admin'}">
+        <div class="user-bubble">
+          ${!isMe ? '<div style="font-size:0.72rem; color:#fbbf24; font-weight:800; margin-bottom:2px;">👑 Developer &bull; Admin</div>' : ''}
+          ${escapeHtmlText(m.text)}
+          <div class="user-bubble-meta">
+            <span>${timeStr}</span>
+            ${isMe ? '<span style="color:#a7f3d0;">✓</span>' : ''}
+          </div>
+        </div>
+      </div>`;
+  });
+
+  stream.innerHTML = html;
+  stream.scrollTop = stream.scrollHeight;
+}
+
+let isSendingUserChat = false;
+async function sendUserChatMessage() {
+  if (isSendingUserChat) return;
+
+  const input = document.getElementById('userChatInputText');
+  if (!input) return;
+
+  const text = (input.value || '').trim();
+  if (!text) {
+    input.focus();
+    return;
+  }
+
+  isSendingUserChat = true;
+
+  // Immediate visual feedback on the send button
+  const sendBtn = document.getElementById('btnUserSendChat');
+  let originalBtnHtml = '';
+  if (sendBtn) {
+    originalBtnHtml = sendBtn.innerHTML;
+    sendBtn.disabled = true;
+    sendBtn.innerHTML = '<span>⏳ Sending...</span>';
+    sendBtn.style.opacity = '0.85';
+  }
+
+  try {
+    try {
+      playUserChatAudioChime('send');
+    } catch (audioErr) {}
+
+    // Hardened ID and Name resolution
+    if (!userChatId) {
+      userChatId = localStorage.getItem('mindfocus_chat_user_id') || ('reader_' + Math.random().toString(36).substring(2, 8));
+      localStorage.setItem('mindfocus_chat_user_id', userChatId);
+    }
+    if (!userChatName) {
+      userChatName = localStorage.getItem('mindfocus_chat_user_name') || ('Reader #' + userChatId.slice(-4).toUpperCase());
+      localStorage.setItem('mindfocus_chat_user_name', userChatName);
+    }
+
+    if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
+    if (!userChatData.threads) userChatData.threads = {};
+
+    if (!userChatData.threads[userChatId]) {
+      userChatData.threads[userChatId] = {
+        userId: userChatId,
+        userName: userChatName,
+        userDevice: userChatDevice,
+        unreadByAdmin: 0,
+        unreadByUser: 0,
+        lastMessage: '',
+        lastTimestamp: new Date().toISOString(),
+        messages: []
+      };
+    }
+
+    const thread = userChatData.threads[userChatId];
+    const newMsg = {
+      id: 'msg_user_' + userChatId + '_' + Date.now(),
+      sender: 'user',
+      text: text,
+      timestamp: new Date().toISOString()
+    };
+
+    if (!Array.isArray(thread.messages)) thread.messages = [];
+    thread.messages.push(newMsg);
+    thread.lastMessage = text;
+    thread.lastTimestamp = newMsg.timestamp;
+    thread.unreadByAdmin = (thread.unreadByAdmin || 0) + 1;
+
+    // Clear input immediately and render locally so user sees message right away!
+    input.value = '';
+    saveUserChatDataLocally();
+    renderUserChatStream();
+
+    const payload = {
+      type: 'helpdesk_chat_msg',
+      threadId: userChatId,
+      userName: userChatName,
+      userDevice: userChatDevice,
+      message: newMsg
+    };
+
+    // 1. Send via local BroadcastChannel (0ms sync for same device/browser)
+    try {
+      if (userChatBroadcastChannel) {
+        userChatBroadcastChannel.postMessage(payload);
+      }
+    } catch (e) {}
+
+    // 2. Trigger localStorage cross-tab event
+    try {
+      localStorage.setItem('mindfocus_chat_last_event', JSON.stringify({
+        t: Date.now(),
+        payload: payload
+      }));
+    } catch (e) {}
+
+    // 3. Post to Cloud Relay (ntfy.sh) using text/plain (CORS safelisted - NO preflight roundtrip)
+    try {
+      fetch(HELPDESK_RELAY_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain'
+        },
+        body: JSON.stringify(payload)
+      }).catch(err => {
+        console.warn('Relay post warning:', err);
+      });
+    } catch (e) {}
+
+    if (typeof showToastNotification === 'function') {
+      showToastNotification('💬 Message sent to Developer / Admin!');
+    }
+  } catch (err) {
+    console.error('Error in sendUserChatMessage:', err);
+  } finally {
+    isSendingUserChat = false;
+    if (sendBtn) {
+      sendBtn.disabled = false;
+      sendBtn.innerHTML = originalBtnHtml || '<span>✈️ Send</span>';
+      sendBtn.style.opacity = '1';
+    }
+    setTimeout(() => {
+      if (input) input.focus();
+    }, 60);
+  }
+}
+
+function saveUserChatDataLocally() {
+  try {
+    localStorage.setItem('mindfocus_chat_data', JSON.stringify(userChatData));
+  } catch (e) {}
+}
+
+function formatUserChatTime(isoStr) {
+  if (!isoStr) return '';
+  try {
+    const d = new Date(isoStr);
+    let hours = d.getHours();
+    const mins = d.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    return `${hours}:${mins} ${ampm}`;
+  } catch (e) {
+    return '';
+  }
+}
+
+function escapeHtmlText(str) {
+  if (!str) return '';
+  return str.replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;');
+}
+
+window.openUserHelpDeskModal = openUserHelpDeskModal;
+window.closeUserHelpDeskModal = closeUserHelpDeskModal;
+window.handleHelpDeskOverlayClick = handleHelpDeskOverlayClick;
+window.insertUserPrompt = insertUserPrompt;
+window.handleUserChatKeydown = handleUserChatKeydown;
+window.sendUserChatMessage = sendUserChatMessage;
+window.initLiveHelpDeskEngine = initLiveHelpDeskEngine;
+window.playUserChatAudioChime = playUserChatAudioChime;
+window.setupUserChatEventListeners = setupUserChatEventListeners;
+
+// ========================================================
+// 🩺 REAL-TIME PHONE CRASH TELEMETRY & MOBILE DEVTOOLS SUITE
+// ========================================================
+let phoneCrashLogsHistory = [];
+let capturedNetworkCalls = [];
+let devToolsErrorCount = 0;
+let secretVersionTapCount = 0;
+let secretVersionTapTimer = null;
+
+try {
+  const savedLogs = localStorage.getItem('mindfocus_phone_crash_logs');
+  if (savedLogs) phoneCrashLogsHistory = JSON.parse(savedLogs);
+  if (!Array.isArray(phoneCrashLogsHistory)) phoneCrashLogsHistory = [];
+} catch (e) {
+  phoneCrashLogsHistory = [];
+}
+
+// 1. GLOBAL UNCAUGHT RUNTIME ERROR INTERCEPTOR
+window.onerror = function(message, source, lineno, colno, error) {
+  const errObj = {
+    level: 'error',
+    type: 'uncaught_exception',
+    message: String(message || 'Unknown runtime error'),
+    source: (source || 'inline script').replace(/.*(\/|\\)/, ''),
+    fullSource: source || '',
+    lineno: lineno || 0,
+    colno: colno || 0,
+    stack: error && error.stack ? error.stack : '',
+    timestamp: new Date().toISOString()
+  };
+  recordAndDispatchPhoneError(errObj);
+  return false;
+};
+
+// 2. UNHANDLED PROMISE REJECTIONS
+window.addEventListener('unhandledrejection', function(event) {
+  const reason = event.reason;
+  const errObj = {
+    level: 'error',
+    type: 'unhandled_promise_rejection',
+    message: reason ? (reason.message || String(reason)) : 'Unhandled Promise Rejection',
+    source: (reason && reason.fileName ? reason.fileName : 'promise').replace(/.*(\/|\\)/, ''),
+    fullSource: reason && reason.fileName ? reason.fileName : '',
+    lineno: reason && reason.lineNumber ? reason.lineNumber : 0,
+    colno: reason && reason.columnNumber ? reason.columnNumber : 0,
+    stack: reason && reason.stack ? reason.stack : '',
+    timestamp: new Date().toISOString()
+  };
+  recordAndDispatchPhoneError(errObj);
+});
+
+// 3. CONSOLE.ERROR PROXY (Captures trapped library/framework errors)
+const _originalConsoleError = console.error;
+console.error = function(...args) {
+  try {
+    const formatted = args.map(a => {
+      if (a === null) return 'null';
+      if (a === undefined) return 'undefined';
+      if (a instanceof Error || (typeof a === 'object' && a && a.message)) {
+        return (a.name ? a.name + ': ' : '') + a.message + (a.stack ? '\n' + a.stack : '');
+      }
+      if (typeof a === 'object') {
+        try {
+          const json = JSON.stringify(a);
+          if (json === '{}') {
+            const props = Object.getOwnPropertyNames(a);
+            if (props.length > 0) {
+              const custom = {};
+              props.forEach(p => { custom[p] = a[p]; });
+              return JSON.stringify(custom);
+            }
+            return (a.toString && a.toString() !== '[object Object]') ? a.toString() : '';
+          }
+          return json;
+        } catch(e) {
+          return String(a);
+        }
+      }
+      return String(a);
+    }).join(' ').trim();
+
+    if (formatted && formatted !== '{}' && !formatted.includes('Remote Telemetry Dispatch') && !formatted.includes('Relay post warning')) {
+      const errObj = {
+        level: 'error',
+        type: 'console_error',
+        message: formatted,
+        source: 'console.error',
+        fullSource: 'console.error',
+        lineno: 0,
+        colno: 0,
+        stack: (new Error()).stack || '',
+        timestamp: new Date().toISOString()
+      };
+      recordAndDispatchPhoneError(errObj, false);
+    }
+  } catch (e) {}
+  _originalConsoleError.apply(console, args);
+};
+
+// 4. NETWORK CALL INTERCEPTOR
+const _originalFetch = window.fetch;
+window.fetch = async function(...args) {
+  const startTime = Date.now();
+  const url = typeof args[0] === 'string' ? args[0] : (args[0] && args[0].url ? args[0].url : 'unknown');
+  const method = (args[1] && args[1].method ? args[1].method : 'GET').toUpperCase();
+  
+  try {
+    const response = await _originalFetch.apply(this, args);
+    const duration = Date.now() - startTime;
+    recordNetworkCall({
+      url: url,
+      method: method,
+      status: response.status,
+      statusText: response.statusText,
+      duration: duration,
+      timestamp: new Date().toISOString(),
+      ok: response.ok
+    });
+    return response;
+  } catch (fetchErr) {
+    const duration = Date.now() - startTime;
+    recordNetworkCall({
+      url: url,
+      method: method,
+      status: 'FAILED',
+      statusText: fetchErr.message || 'Network Error',
+      duration: duration,
+      timestamp: new Date().toISOString(),
+      ok: false
+    });
+    throw fetchErr;
+  }
+};
+
+function recordNetworkCall(net) {
+  capturedNetworkCalls.unshift(net);
+  if (capturedNetworkCalls.length > 30) capturedNetworkCalls.pop();
+  
+  // Power & Heat Saver: Only re-render DOM if DevTools modal and Network tab are actively open
+  const devToolsModal = document.getElementById('mobileDevToolsModalOverlay');
+  const netTab = document.getElementById('devTabNetwork');
+  if (devToolsModal && devToolsModal.classList.contains('active') && netTab && netTab.classList.contains('active')) {
+    renderDevToolsNetwork();
+  }
+}
+
+// 5. RECORD & DISPATCH TELEMETRY (To Control Panel & Local UI)
+function recordAndDispatchPhoneError(errObj, logToDevConsole = true) {
+  phoneCrashLogsHistory.unshift(errObj);
+  if (phoneCrashLogsHistory.length > 50) phoneCrashLogsHistory.pop();
+  try {
+    localStorage.setItem('mindfocus_phone_crash_logs', JSON.stringify(phoneCrashLogsHistory));
+  } catch (e) {}
+
+  devToolsErrorCount++;
+  updateDevToolsBadgeCount();
+
+  if (logToDevConsole) {
+    appendDevToolsConsoleLog(errObj);
+  }
+
+  const deviceContext = {
+    userId: userChatId || localStorage.getItem('mindfocus_chat_user_id') || 'reader_phone',
+    userName: userChatName || localStorage.getItem('mindfocus_chat_user_name') || 'Phone User',
+    deviceType: userChatDevice || 'Android Phone',
+    userAgent: navigator.userAgent || '',
+    appVersion: CURRENT_APP_VERSION,
+    screen: `${window.innerWidth}x${window.innerHeight} (Screen: ${screen.width}x${screen.height})`,
+    online: navigator.onLine,
+    url: window.location.href
+  };
+
+  const telemetryPayload = {
+    type: 'helpdesk_phone_crash_telemetry',
+    timestamp: errObj.timestamp,
+    error: errObj,
+    device: deviceContext
+  };
+
+  // 1. Broadcast via local BroadcastChannel
+  try {
+    if (userChatBroadcastChannel) {
+      userChatBroadcastChannel.postMessage(telemetryPayload);
+    }
+  } catch (e) {}
+
+  // 2. Broadcast via localStorage event
+  try {
+    localStorage.setItem('mindfocus_chat_last_event', JSON.stringify({
+      t: Date.now(),
+      payload: telemetryPayload
+    }));
+  } catch (e) {}
+
+  // 3. Dispatch to Cloud Relay (ntfy.sh) so Admin Control Panel receives it instantly
+  if (window.__TELEMETRY_DISABLED || window.__IS_EMERGENCY_LOCKED_DOWN) return;
+  try {
+    // Battery & Network Throttle: Never dispatch identical error more than once every 60 seconds
+    const now = Date.now();
+    const errKey = (errObj.message || '') + (errObj.source || '') + (errObj.lineno || 0);
+    if (window.__lastDispatchedErrKey === errKey && (now - (window.__lastDispatchedErrTime || 0) < 60000)) {
+      return;
+    }
+    window.__lastDispatchedErrKey = errKey;
+    window.__lastDispatchedErrTime = now;
+
+    const fetchFunc = typeof _originalFetch === 'function' ? _originalFetch : fetch;
+    fetchFunc(HELPDESK_RELAY_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify(telemetryPayload)
+    }).catch(() => {});
+  } catch (e) {}
+}
+
+function updateDevToolsBadgeCount() {
+  const pill = document.getElementById('mobileDevToolsPill');
+  const badge = document.getElementById('pillErrorBadge');
+  const consoleBadge = document.getElementById('devConsoleErrorCountBadge');
+
+  if (badge) {
+    if (devToolsErrorCount > 0) {
+      badge.innerText = devToolsErrorCount;
+      badge.style.display = 'inline-block';
+      if (pill) pill.classList.add('has-errors');
+    } else {
+      badge.style.display = 'none';
+      if (pill) pill.classList.remove('has-errors');
+    }
+  }
+  if (consoleBadge) {
+    if (devToolsErrorCount > 0) {
+      consoleBadge.innerText = devToolsErrorCount;
+      consoleBadge.style.display = 'inline-block';
+    } else {
+      consoleBadge.style.display = 'none';
+    }
+  }
+}
+
+// 6. DEVTOOLS CONTROLLER & UI FUNCTIONS
+function initMobileDevToolsEngine() {
+  const isEnabled = localStorage.getItem('mindfocus_devtools_enabled') === 'true';
+  const pill = document.getElementById('mobileDevToolsPill');
+  if (pill) {
+    pill.style.display = isEnabled ? 'flex' : 'none';
+    makeElementDraggable(pill);
+  }
+
+  renderDevToolsDeviceHealth();
+  refreshDevToolsStorage();
+
+  if (phoneCrashLogsHistory.length > 0) {
+    phoneCrashLogsHistory.slice().reverse().forEach(err => appendDevToolsConsoleLog(err));
+  }
+}
+
+function toggleMobileDevToolsPillSetting() {
+  const isEnabled = localStorage.getItem('mindfocus_devtools_enabled') === 'true';
+  const newState = !isEnabled;
+  localStorage.setItem('mindfocus_devtools_enabled', newState ? 'true' : 'false');
+  
+  const checkbox = document.getElementById('toggleDevToolsCheckbox');
+  if (checkbox) checkbox.checked = newState;
+
+  const pill = document.getElementById('mobileDevToolsPill');
+  if (pill) pill.style.display = newState ? 'flex' : 'none';
+
+  if (typeof showToastNotification === 'function') {
+    showToastNotification(newState ? '🛠️ Mobile DevTools Console Enabled!' : '🛠️ Mobile DevTools Console Hidden');
+  }
+}
+
+function handleVersionSecretTap() {
+  secretVersionTapCount++;
+  clearTimeout(secretVersionTapTimer);
+  secretVersionTapTimer = setTimeout(() => {
+    secretVersionTapCount = 0;
+  }, 3000);
+
+  if (secretVersionTapCount >= 5) {
+    secretVersionTapCount = 0;
+    localStorage.setItem('mindfocus_devtools_enabled', 'true');
+    const pill = document.getElementById('mobileDevToolsPill');
+    if (pill) pill.style.display = 'flex';
+    const checkbox = document.getElementById('toggleDevToolsCheckbox');
+    if (checkbox) checkbox.checked = true;
+    if (typeof showToastNotification === 'function') {
+      showToastNotification('🎉 Developer Mode Unlocked! Floating 🛠️ Dev button is now visible.');
+    }
+    openMobileDevToolsModal();
+  }
+}
+
+function openMobileDevToolsModal() {
+  const overlay = document.getElementById('mobileDevToolsModalOverlay');
+  if (overlay) overlay.classList.add('active');
+  renderDevToolsDeviceHealth();
+  refreshDevToolsStorage();
+  renderDevToolsNetwork();
+}
+
+function closeMobileDevToolsModal() {
+  const overlay = document.getElementById('mobileDevToolsModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+function handleDevToolsOverlayClick(e) {
+  if (e.target && e.target.id === 'mobileDevToolsModalOverlay') {
+    closeMobileDevToolsModal();
+  }
+}
+
+function switchDevToolsTab(tabId) {
+  document.querySelectorAll('.devtools-tab-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.devtools-tab-content').forEach(tab => tab.classList.remove('active'));
+
+  const targetTab = document.getElementById(tabId);
+  if (targetTab) targetTab.classList.add('active');
+
+  const btnMap = {
+    'devTabConsole': 'btnDevTabConsole',
+    'devTabNetwork': 'btnDevTabNetwork',
+    'devTabStorage': 'btnDevTabStorage',
+    'devTabDevice': 'btnDevTabDevice',
+    'devTabUsb': 'btnDevTabUsb'
+  };
+  const btn = document.getElementById(btnMap[tabId]);
+  if (btn) btn.classList.add('active');
+
+  if (tabId === 'devTabStorage') refreshDevToolsStorage();
+  if (tabId === 'devTabDevice') renderDevToolsDeviceHealth();
+  if (tabId === 'devTabNetwork') renderDevToolsNetwork();
+}
+
+function appendDevToolsConsoleLog(errObj) {
+  const stream = document.getElementById('devtoolsConsoleStream');
+  if (!stream) return;
+
+  const entry = document.createElement('div');
+  entry.className = 'devtools-log-entry ' + (errObj.level || 'info');
+  const timeStr = formatUserChatTime(errObj.timestamp);
+  
+  entry.innerHTML = `
+    <div class="devtools-log-meta">
+      <b>[${(errObj.type || 'LOG').toUpperCase()}]</b> ${timeStr} • ${escapeHtmlText(errObj.source)}:${errObj.lineno}
+    </div>
+    <div style="font-weight:700; margin-bottom:2px;">${escapeHtmlText(errObj.message)}</div>
+    ${errObj.stack ? `<details style="margin-top:4px;"><summary style="cursor:pointer; opacity:0.8;">Stack trace</summary><pre style="margin:4px 0 0; font-size:0.7rem; white-space:pre-wrap; opacity:0.75;">${escapeHtmlText(errObj.stack)}</pre></details>` : ''}
+  `;
+
+  stream.appendChild(entry);
+  stream.scrollTop = stream.scrollHeight;
+
+  const countText = document.getElementById('devLogsCountText');
+  if (countText) countText.innerText = `${stream.children.length} entries`;
+}
+
+function clearDevToolsConsole() {
+  const stream = document.getElementById('devtoolsConsoleStream');
+  if (stream) {
+    stream.innerHTML = '<div class="devtools-log-entry info"><div class="devtools-log-meta">[System]</div><div>Console logs cleared.</div></div>';
+  }
+  devToolsErrorCount = 0;
+  updateDevToolsBadgeCount();
+  phoneCrashLogsHistory = [];
+  try { localStorage.removeItem('mindfocus_phone_crash_logs'); } catch (e) {}
+}
+
+function copyDevToolsLogs() {
+  const stream = document.getElementById('devtoolsConsoleStream');
+  if (!stream) return;
+  const text = stream.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    if (typeof showToastNotification === 'function') showToastNotification('📋 Console logs copied to clipboard!');
+  }).catch(() => {
+    alert('Log text: \n' + text);
+  });
+}
+
+function triggerTestCrashTelemetry() {
+  try {
+    throw new Error('Test Crash Telemetry triggered by User from Mobile DevTools!');
+  } catch (err) {
+    recordAndDispatchPhoneError({
+      level: 'error',
+      type: 'user_triggered_test',
+      message: err.message,
+      source: 'app.js:test_suite',
+      lineno: 1,
+      colno: 1,
+      stack: err.stack,
+      timestamp: new Date().toISOString()
+    });
+    if (typeof showToastNotification === 'function') {
+      showToastNotification('🧪 Test crash dispatched! Check Control Panel "Phone Crash Radar" tab.');
+    }
+  }
+}
+
+function runDevReplCode() {
+  const input = document.getElementById('devReplInput');
+  if (!input) return;
+  const code = (input.value || '').trim();
+  if (!code) return;
+
+  const stream = document.getElementById('devtoolsConsoleStream');
+  if (stream) {
+    const userCmd = document.createElement('div');
+    userCmd.className = 'devtools-log-entry info';
+    userCmd.innerHTML = `<div class="devtools-log-meta">[EVAL &gt;]</div><code>${escapeHtmlText(code)}</code>`;
+    stream.appendChild(userCmd);
+  }
+
+  try {
+    const result = window.eval(code);
+    const resultEntry = document.createElement('div');
+    resultEntry.className = 'devtools-log-entry success';
+    resultEntry.innerHTML = `<div class="devtools-log-meta">[RESULT &lt;]</div><pre style="margin:0;">${escapeHtmlText(typeof result === 'object' ? JSON.stringify(result, null, 2) : String(result))}</pre>`;
+    if (stream) {
+      stream.appendChild(resultEntry);
+      stream.scrollTop = stream.scrollHeight;
+    }
+  } catch (err) {
+    const errEntry = document.createElement('div');
+    errEntry.className = 'devtools-log-entry error';
+    errEntry.innerHTML = `<div class="devtools-log-meta">[ERROR]</div><div>${escapeHtmlText(err.message)}</div>`;
+    if (stream) {
+      stream.appendChild(errEntry);
+      stream.scrollTop = stream.scrollHeight;
+    }
+  }
+
+  input.value = '';
+}
+
+function handleDevReplKeydown(e) {
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    runDevReplCode();
+  }
+}
+
+function renderDevToolsNetwork() {
+  const stream = document.getElementById('devtoolsNetworkStream');
+  if (!stream) return;
+
+  if (capturedNetworkCalls.length === 0) {
+    stream.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:20px;">No network calls captured yet.</div>';
+    return;
+  }
+
+  let html = '';
+  capturedNetworkCalls.forEach(n => {
+    const isOk = n.ok || (typeof n.status === 'number' && n.status < 400);
+    html += `
+      <div class="devtools-log-entry ${isOk ? 'success' : 'error'}">
+        <div class="devtools-log-meta">
+          <span style="font-weight:800; color:${isOk ? '#34d399' : '#f87171'}">${n.method} [${n.status}]</span>
+          • ${n.duration}ms • ${formatUserChatTime(n.timestamp)}
+        </div>
+        <div style="font-family:monospace; font-size:0.75rem; word-break:break-all;">${escapeHtmlText(n.url)}</div>
+      </div>
+    `;
+  });
+  stream.innerHTML = html;
+}
+
+function clearDevToolsNetwork() {
+  capturedNetworkCalls = [];
+  renderDevToolsNetwork();
+}
+
+function refreshDevToolsStorage() {
+  const stream = document.getElementById('devtoolsStorageStream');
+  if (!stream) return;
+
+  try {
+    const keys = Object.keys(localStorage);
+    if (keys.length === 0) {
+      stream.innerHTML = '<div style="color:var(--text-muted); text-align:center; padding:20px;">localStorage is empty.</div>';
+      return;
+    }
+
+    let html = '';
+    keys.sort().forEach(k => {
+      const val = localStorage.getItem(k) || '';
+      const sizeKb = (val.length / 1024).toFixed(1);
+      html += `
+        <div class="devtools-log-entry info" style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+          <div style="flex:1; min-width:0;">
+            <div style="font-weight:800; color:#38bdf8;">${escapeHtmlText(k)} <span style="font-size:0.68rem; opacity:0.75;">(${sizeKb} KB)</span></div>
+            <div style="font-size:0.72rem; color:var(--text-secondary); max-height:40px; overflow:hidden; text-overflow:ellipsis;">${escapeHtmlText(val.substring(0, 100))}${val.length > 100 ? '...' : ''}</div>
+          </div>
+          <button type="button" class="btn-devtools-sm" onclick="deleteDevStorageKey('${escapeHtmlText(k)}')" style="padding:2px 8px; font-size:0.68rem; color:#f87171;">Del</button>
+        </div>
+      `;
+    });
+    stream.innerHTML = html;
+  } catch (e) {
+    stream.innerHTML = '<div style="color:#ef4444; padding:10px;">Storage read error: ' + e.message + '</div>';
+  }
+}
+
+function deleteDevStorageKey(key) {
+  if (confirm(`Delete "${key}" from localStorage?`)) {
+    localStorage.removeItem(key);
+    refreshDevToolsStorage();
+  }
+}
+
+function renderDevToolsDeviceHealth() {
+  const table = document.getElementById('devtoolsDeviceTable');
+  if (!table) return;
+
+  const ua = navigator.userAgent || 'Unknown';
+  let os = 'Unknown OS';
+  if (ua.includes('Android')) os = 'Android OS';
+  else if (ua.includes('iPhone') || ua.includes('iPad')) os = 'iOS';
+  else if (ua.includes('Windows')) os = 'Windows PC';
+  else if (ua.includes('Macintosh')) os = 'macOS';
+
+  const rows = [
+    ['App Version', CURRENT_APP_VERSION],
+    ['Operating System', os],
+    ['Viewport Size', `${window.innerWidth} x ${window.innerHeight} px`],
+    ['Physical Screen', `${screen.width} x ${screen.height} px (DPR: ${window.devicePixelRatio || 1})`],
+    ['Network Status', navigator.onLine ? '🟢 Online' : '🔴 Offline'],
+    ['User Agent', ua],
+    ['Local Time', new Date().toLocaleTimeString()],
+    ['Local User ID', userChatId || 'reader_unknown'],
+    ['AudioContext Support', (window.AudioContext || window.webkitAudioContext) ? '✅ Supported' : '❌ None'],
+    ['BroadcastChannel', typeof BroadcastChannel !== 'undefined' ? '✅ Supported' : '❌ None']
+  ];
+
+  let html = '';
+  rows.forEach(([k, v]) => {
+    html += `<tr><td>${k}</td><td>${v}</td></tr>`;
+  });
+  table.innerHTML = html;
+}
+
+function makeElementDraggable(elmnt) {
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  let hasMoved = false;
+
+  elmnt.onmousedown = dragMouseDown;
+  elmnt.ontouchstart = dragTouchStart;
+
+  function dragMouseDown(e) {
+    e = e || window.event;
+    e.preventDefault();
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    hasMoved = false;
+    document.onmouseup = closeDragElement;
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e = e || window.event;
+    e.preventDefault();
+    hasMoved = true;
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    elmnt.style.bottom = 'auto';
+  }
+
+  function closeDragElement() {
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
+
+  function dragTouchStart(e) {
+    if (!e.touches || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    pos3 = touch.clientX;
+    pos4 = touch.clientY;
+    hasMoved = false;
+    document.ontouchend = closeTouchDrag;
+    document.ontouchmove = touchDrag;
+  }
+
+  function touchDrag(e) {
+    if (!e.touches || e.touches.length === 0) return;
+    const touch = e.touches[0];
+    hasMoved = true;
+    pos1 = pos3 - touch.clientX;
+    pos2 = pos4 - touch.clientY;
+    pos3 = touch.clientX;
+    pos4 = touch.clientY;
+    elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
+    elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+    elmnt.style.bottom = 'auto';
+  }
+
+  function closeTouchDrag() {
+    document.ontouchend = null;
+    document.ontouchmove = null;
+  }
+}
+
+// Global window exports
+window.initMobileDevToolsEngine = initMobileDevToolsEngine;
+window.toggleMobileDevToolsPillSetting = toggleMobileDevToolsPillSetting;
+window.handleVersionSecretTap = handleVersionSecretTap;
+window.openMobileDevToolsModal = openMobileDevToolsModal;
+window.closeMobileDevToolsModal = closeMobileDevToolsModal;
+window.handleDevToolsOverlayClick = handleDevToolsOverlayClick;
+window.switchDevToolsTab = switchDevToolsTab;
+window.clearDevToolsConsole = clearDevToolsConsole;
+window.copyDevToolsLogs = copyDevToolsLogs;
+window.triggerTestCrashTelemetry = triggerTestCrashTelemetry;
+window.runDevReplCode = runDevReplCode;
+window.handleDevReplKeydown = handleDevReplKeydown;
+window.clearDevToolsNetwork = clearDevToolsNetwork;
+window.refreshDevToolsStorage = refreshDevToolsStorage;
+window.deleteDevStorageKey = deleteDevStorageKey;
+window.renderDevToolsDeviceHealth = renderDevToolsDeviceHealth;
+window.reportPhoneErrorTelemetry = recordAndDispatchPhoneError;
+
 
 
 

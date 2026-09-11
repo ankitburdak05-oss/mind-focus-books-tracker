@@ -5216,13 +5216,16 @@ function applyFeaturesConfig(feats) {
   }
 
   // 2. 💬 Live Help Desk & Chat Support
-  const chatPill = document.getElementById('userHelpDeskTriggerPill');
-  if (chatPill) {
-    chatPill.style.display = (feats.chatHelpDeskEnabled === false) ? 'none' : 'flex';
+  const chatFab = document.getElementById('fabChatWrapper') || document.getElementById('fabLiveHelpDeskBtn');
+  if (chatFab) {
+    chatFab.style.display = (feats.chatHelpDeskEnabled === false) ? 'none' : 'flex';
   }
   if (feats.chatHelpDeskEnabled === false) {
     const chatModal = document.getElementById('userHelpDeskModalOverlay');
-    if (chatModal) chatModal.classList.remove('active');
+    if (chatModal) {
+      chatModal.classList.remove('active');
+      chatModal.style.display = 'none';
+    }
   }
 
   // 3. 🩺 Phone Crash Radar & Telemetry
@@ -5234,14 +5237,20 @@ function applyFeaturesConfig(feats) {
     devToolsPill.style.display = (feats.mobileDevToolsEnabled === false) ? 'none' : 'flex';
   }
   if (feats.mobileDevToolsEnabled === false) {
-    const devToolsModal = document.getElementById('mobileDevToolsDrawer');
-    if (devToolsModal) devToolsModal.classList.remove('active');
+    const devToolsModal = document.getElementById('mobileDevToolsModalOverlay');
+    if (devToolsModal) {
+      devToolsModal.classList.remove('active');
+      devToolsModal.style.display = 'none';
+    }
   }
 
   // 5. 📢 Broadcast Notices
   if (feats.broadcastNoticeEnabled === false) {
-    const noticeOverlay = document.getElementById('appBroadcastNoticeOverlay');
-    if (noticeOverlay) noticeOverlay.classList.remove('active');
+    const noticeOverlay = document.getElementById('inAppNoticeModalOverlay');
+    if (noticeOverlay) {
+      noticeOverlay.classList.remove('active');
+      noticeOverlay.style.display = 'none';
+    }
   }
 
   // 6. 🔄 In-App Update Scanner
@@ -5251,19 +5260,36 @@ function applyFeaturesConfig(feats) {
   }
 
   // 7. ⏱️ Zen Sanctuary Timer
+  const timerBtn = document.getElementById('headerPomodoroBtn');
+  if (timerBtn) {
+    timerBtn.style.display = (feats.sanctuaryTimerEnabled === false) ? 'none' : 'inline-flex';
+  }
   if (feats.sanctuaryTimerEnabled === false) {
     if (typeof pauseZenTimer === 'function') pauseZenTimer();
+    const pomModal = document.getElementById('pomodoroTimerModalOverlay');
+    if (pomModal) pomModal.classList.remove('active');
   }
 
   // 8. 🎴 3D Smart Flashcards
+  const fcBtn = document.getElementById('headerFlashcardsBtn');
+  const fcKpi = document.getElementById('kpiFlashcardsCount');
+  if (fcBtn) fcBtn.style.display = (feats.flashcardsEnabled === false) ? 'none' : 'inline-flex';
+  if (fcKpi) fcKpi.style.display = (feats.flashcardsEnabled === false) ? 'none' : 'inline-flex';
   if (feats.flashcardsEnabled === false) {
-    const fcOverlay = document.getElementById('flashcardTrainerModalOverlay');
-    if (fcOverlay) fcOverlay.classList.remove('active');
+    const fcOverlay = document.getElementById('flashcardModalOverlay');
+    if (fcOverlay) {
+      fcOverlay.classList.remove('active');
+      fcOverlay.style.display = 'none';
+    }
   }
 
   // 9. 🎵 Spatial EQ & Ambient Audio
+  const ambDock = document.getElementById('dockAmbienceBtn');
+  if (ambDock) ambDock.style.display = (feats.ambientAudioEnabled === false) ? 'none' : 'flex';
   if (feats.ambientAudioEnabled === false) {
     if (typeof stopAmbientAudio === 'function') stopAmbientAudio();
+    const ambModal = document.getElementById('ambienceModalOverlay');
+    if (ambModal) ambModal.classList.remove('active');
   }
 
   // 10. 🎨 3D Tilt Physics & Dynamic Aurora
@@ -5273,8 +5299,12 @@ function applyFeaturesConfig(feats) {
   }
 
   // 11. 📷 Barcode / ISBN Camera Scanner
+  const barcodeBtn = document.getElementById('scanBarcodeBtn');
+  if (barcodeBtn) barcodeBtn.style.display = (feats.barcodeScannerEnabled === false) ? 'none' : 'inline-flex';
   if (feats.barcodeScannerEnabled === false) {
     if (typeof stopBarcodeScanner === 'function') stopBarcodeScanner();
+    const bcModal = document.getElementById('barcodeScannerOverlay');
+    if (bcModal) bcModal.classList.remove('active');
   }
 
   // 12. 🎙️ Audiobook Voice Reader (TTS)
