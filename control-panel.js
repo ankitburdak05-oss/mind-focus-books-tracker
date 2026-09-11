@@ -128,15 +128,47 @@ document.addEventListener('DOMContentLoaded', () => {
   appendLog('Admin Control Panel Ready.', 'success');
 });
 
+// Mobile Sidebar Drawer Toggle
+function toggleMobileSidebar(force) {
+  const sidebar = document.getElementById('appSidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+  if (!sidebar) return;
+  const isOpening = (typeof force === 'boolean') ? force : !sidebar.classList.contains('open');
+  if (isOpening) {
+    sidebar.classList.add('open');
+    if (backdrop) backdrop.classList.add('open');
+  } else {
+    sidebar.classList.remove('open');
+    if (backdrop) backdrop.classList.remove('open');
+  }
+}
+window.toggleMobileSidebar = toggleMobileSidebar;
+
+const TAB_TITLES = {
+  tabFeatures: { title: 'Features & Remote Switches', breadcrumb: 'Features' },
+  tabBroadcast: { title: 'Broadcast Studio & Alerts', breadcrumb: 'Broadcast' },
+  tabPipeline: { title: 'App Release & OTA Pipeline', breadcrumb: 'Releases' },
+  tabLiveChat: { title: 'Reader Live Help Desk & Chat', breadcrumb: 'Help Desk' },
+  tabFlashcards: { title: '3D Flashcards & Leitner Studio', breadcrumb: 'Flashcards' },
+  tabMysteryGift: { title: 'Mystery Gift Box & Rewards', breadcrumb: 'Mystery Gift' },
+  tabBooks: { title: 'Book Spotlight & Recommendations', breadcrumb: 'Spotlight' },
+  tabDiagnostics: { title: 'Phone Diagnostics & Crash Radar', breadcrumb: 'Diagnostics' },
+  tabGithub: { title: 'GitHub Sync & Cloud PAT', breadcrumb: 'GitHub' },
+  tabMore: { title: 'System Utilities & Data Backup', breadcrumb: 'Utilities' }
+};
+
 // Navigation
 function switchTab(viewId) {
   playUiClick();
-  const tabs = document.querySelectorAll('.tab-btn');
-  tabs.forEach(t => {
+
+  // Update tabs & sidebar items
+  const navItems = document.querySelectorAll('.tab-btn, .sidebar-nav-item');
+  navItems.forEach(t => {
     if (t.getAttribute('data-tab') === viewId) t.classList.add('active');
     else t.classList.remove('active');
   });
 
+  // Update mobile dock items
   const dockItems = document.querySelectorAll('.app-dock-item');
   const isUnderMore = ['tabDiagnostics', 'tabMysteryGift', 'tabFlashcards', 'tabBooks', 'tabGithub', 'tabMore'].includes(viewId);
   dockItems.forEach(item => {
@@ -148,20 +180,40 @@ function switchTab(viewId) {
     }
   });
 
+  // Update views
   document.querySelectorAll('.tab-view').forEach(v => {
     if (v.id === viewId) v.classList.add('active');
     else v.classList.remove('active');
   });
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+
+  // Update Topbar Title & Breadcrumb
+  const meta = TAB_TITLES[viewId];
+  if (meta) {
+    const titleEl = document.getElementById('currentViewTitle');
+    const bcEl = document.getElementById('currentViewBreadcrumb');
+    if (titleEl) titleEl.textContent = meta.title;
+    if (bcEl) bcEl.textContent = meta.breadcrumb;
+  }
+
+  // Close mobile sidebar drawer if open
+  toggleMobileSidebar(false);
+
+  // Smooth scroll content to top
+  const stage = document.getElementById('stageContentScroll');
+  if (stage) {
+    stage.scrollTo({ top: 0, behavior: 'smooth' });
+  } else {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
 }
 window.switchTab = switchTab;
 
 function initTabs() {
-  const tabs = document.querySelectorAll('.tab-btn');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const viewId = tab.getAttribute('data-tab');
-      switchTab(viewId);
+  const navElements = document.querySelectorAll('.tab-btn, .sidebar-nav-item');
+  navElements.forEach(item => {
+    item.addEventListener('click', () => {
+      const viewId = item.getAttribute('data-tab');
+      if (viewId) switchTab(viewId);
     });
   });
 
@@ -169,7 +221,7 @@ function initTabs() {
   dockItems.forEach(item => {
     item.addEventListener('click', () => {
       const viewId = item.getAttribute('data-tab');
-      switchTab(viewId);
+      if (viewId) switchTab(viewId);
     });
   });
 }
