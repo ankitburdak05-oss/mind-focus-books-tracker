@@ -13,9 +13,30 @@
   <link rel="icon" type="image/png" href="icon-192.png">
   <style>
     /* ==========================================================================
-       ADMIN LOCK: hide all body content while locked
+       ADMIN LOCK: hide all body content while locked.
+       Iss rule ko JS-controlled class toggle se operate karte hain.
+       body.admin-locked pe sab children display:none, sirf #adminLockOverlay
+       visible rahega.
        ========================================================================== */
-    body.admin-locked > *:not(#adminLockOverlay) { display: none !important; }
+    body.admin-locked > div:not(#adminLockOverlay),
+    body.admin-locked > nav,
+    body.admin-locked > aside,
+    body.admin-locked > main,
+    body.admin-locked > header,
+    body.admin-locked > section,
+    body.admin-locked > script,
+    body.admin-locked > style,
+    body.admin-locked > link,
+    body.admin-locked > meta {
+      display: none !important;
+    }
+    /* Lock overlay always visible during lock state */
+    body.admin-locked #adminLockOverlay {
+      display: flex !important;
+    }
+
+    /* Default state: lock overlay initially hidden, JS will show it on DOMContentLoaded */
+    .admin-lock-overlay { display: none !important; }
 
     /* ==========================================================================
        PASSWORD / PIN LOCK SCREEN STYLES
@@ -235,8 +256,10 @@
   <!-- ==========================================================================
        ADMIN PASSWORD / PIN LOCK SCREEN
        Top-priority overlay - jab tak unlock nahi hoga baaki UI hidden rahega.
+       Initially display:none (set by CSS rule above); JS DOMContentLoaded pe
+       show karega jab user unlock karne aayega.
        ========================================================================== -->
-  <div id="adminLockOverlay" class="admin-lock-overlay">
+  <div id="adminLockOverlay" class="admin-lock-overlay" style="display:none;">
     <!-- Screen 1: First-time SETUP (jab password set nahi hai) -->
     <div id="adminLockSetupScreen" class="admin-lock-card" style="display:none;">
       <div class="admin-lock-icon">🔐</div>

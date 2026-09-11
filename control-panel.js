@@ -288,11 +288,12 @@ function adminLockUpdateAttemptsUI(attemptsState) {
 }
 
 function adminLockShowSetup() {
+  document.body.classList.add('admin-locked');
   const overlay = document.getElementById('adminLockOverlay');
   const setup = document.getElementById('adminLockSetupScreen');
   const login = document.getElementById('adminLockLoginScreen');
   const forgot = document.getElementById('adminLockForgotScreen');
-  if (overlay) overlay.style.display = 'flex';
+  if (overlay) { overlay.style.display = 'flex'; overlay.style.opacity = '1'; }
   if (setup) setup.style.display = 'block';
   if (login) login.style.display = 'none';
   if (forgot) forgot.style.display = 'none';
@@ -306,11 +307,12 @@ function adminLockShowSetup() {
 }
 
 function adminLockShowLogin(unlockMode) {
+  document.body.classList.add('admin-locked');
   const overlay = document.getElementById('adminLockOverlay');
   const setup = document.getElementById('adminLockSetupScreen');
   const login = document.getElementById('adminLockLoginScreen');
   const forgot = document.getElementById('adminLockForgotScreen');
-  if (overlay) overlay.style.display = 'flex';
+  if (overlay) { overlay.style.display = 'flex'; overlay.style.opacity = '1'; }
   if (setup) setup.style.display = 'none';
   if (login) login.style.display = 'block';
   if (forgot) forgot.style.display = 'none';
@@ -343,11 +345,12 @@ function adminLockShowLogin(unlockMode) {
 }
 
 function adminLockShowForgot() {
+  document.body.classList.add('admin-locked');
   const overlay = document.getElementById('adminLockOverlay');
   const setup = document.getElementById('adminLockSetupScreen');
   const login = document.getElementById('adminLockLoginScreen');
   const forgot = document.getElementById('adminLockForgotScreen');
-  if (overlay) overlay.style.display = 'flex';
+  if (overlay) { overlay.style.display = 'flex'; overlay.style.opacity = '1'; }
   if (setup) setup.style.display = 'none';
   if (login) login.style.display = 'none';
   if (forgot) forgot.style.display = 'block';
@@ -404,10 +407,21 @@ async function adminLockResetViaToken() {
 function adminLockUnlock() {
   adminLockState.isUnlocked = true;
   adminLockState.lastActivityTs = Date.now();
+  document.body.classList.remove('admin-locked');
   const overlay = document.getElementById('adminLockOverlay');
   if (overlay) {
     overlay.style.opacity = '0';
-    setTimeout(() => { overlay.style.display = 'none'; overlay.style.opacity = '1'; }, 250);
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      overlay.style.opacity = '1';
+      // Reset all sub-screens to be safe
+      const setup = document.getElementById('adminLockSetupScreen');
+      const login = document.getElementById('adminLockLoginScreen');
+      const forgot = document.getElementById('adminLockForgotScreen');
+      if (setup) setup.style.display = 'none';
+      if (login) login.style.display = 'none';
+      if (forgot) forgot.style.display = 'none';
+    }, 250);
   }
   // Clear sensitive fields
   const pwdInput = document.getElementById('adminLockLoginPwd');
@@ -447,7 +461,14 @@ function adminLockCheckIdle() {
 setInterval(adminLockCheckIdle, 60 * 1000);
 
 function adminLockInit() {
+  // Pehle body ko locked class de do — CSS se overlay dikhega
+  document.body.classList.add('admin-locked');
+
   const stored = adminLockLoad();
+  const overlay = document.getElementById('adminLockOverlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+  }
   if (!stored) {
     adminLockShowSetup();
   } else {
@@ -570,26 +591,38 @@ function playDeployChime() {
 
 // Lifecycle Init
 document.addEventListener('DOMContentLoaded', () => {
-  // 🔐 Lock screen first - baaki sab hide rahega jab tak unlock na ho
-  adminLockInit();
-  // Hide the rest of the app until unlocked
-  if (!adminLockState.isUnlocked) {
+  console.log('[AdminLock] DOMContentLoaded - initializing lock screen');
+  try {
+    // 1. Lock screen first - baaki sab hide rahega jab tak unlock na ho
+    adminLockInit();
+
+    // 2. Wrap adminLockUnlock so that after unlock the rest of the panel boots
+    const origUnlock = window.adminLockUnlock || adminLockUnlock;
+    window.adminLockUnlock = function() {
+      origUnlock();
+      document.body.classList.remove('admin-locked');
+      // Now boot the rest of the app
+      bootRestOfAdminPanel();
+    };
+
+    // 3. Failsafe: If for any reason lock didn't show, force show after 1s
+    setTimeout(() => {
+      const overlay = document.getElementById('adminLockOverlay');
+      if (overlay && !adminLockState.isUnlocked) {
+        if (overlay.style.display === 'none' || getComputedStyle(overlay).display === 'none') {
+          console.warn('[AdminLock] Failsafe: re-initializing lock screen');
+          adminLockInit();
+        }
+      }
+    }, 1000);
+  } catch (err) {
+    console.error('[AdminLock] Init error:', err);
+    // If anything breaks, at least show setup screen
+    const overlay = document.getElementById('adminLockOverlay');
+    const setup = document.getElementById('adminLockSetupScreen');
+    if (overlay) overlay.style.display = 'flex';
+    if (setup) setup.style.display = 'block';
     document.body.classList.add('admin-locked');
-  }
-
-  // 1. Setup event to re-enable app after unlock
-  const origUnlock = adminLockUnlock;
-  window.adminLockUnlock = function() {
-    origUnlock();
-    document.body.classList.remove('admin-locked');
-    // Now boot the rest of the app
-    bootRestOfAdminPanel();
-  };
-
-  // If already unlocked (e.g. via token reset), boot immediately
-  if (adminLockState.isUnlocked) {
-    document.body.classList.remove('admin-locked');
-    bootRestOfAdminPanel();
   }
 });
 
