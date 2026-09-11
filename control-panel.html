@@ -1138,264 +1138,152 @@
           </button>
         </div>
 
-        <div class="feature-tiles-grid">
-          <!-- 1. Help Desk & Chat -->
-          <div class="feature-tile-card" id="card_cfgChatHelpDesk" onclick="toggleFeatureTile('cfgChatHelpDesk')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(99,102,241,0.18); color:#818cf8;">💬</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgChatHelpDesk">ACTIVE</span>
+        <div class="icon-tiles-grid">
+          <!-- 1. Help Desk -->
+          <div class="feature-icon-tile" id="card_cfgChatHelpDesk" data-feature-id="cfgChatHelpDesk" data-feature-name="Help Desk" onclick="openFeatureQuickPanel('cfgChatHelpDesk')">
+            <div class="icon-tile-glyph" style="background:rgba(99,102,241,0.18);color:#818cf8;">💬</div>
+            <div class="icon-tile-name">Help Desk</div>
+            <div class="icon-tile-status" id="status_cfgChatHelpDesk">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Live Help Desk & Chat</div>
-            <div class="tile-desc">In-app floating chat pill & real-time help desk messaging.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgChatHelpDesk" checked onchange="onFeatureTileChanged('cfgChatHelpDesk')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgChatHelpDesk" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgChatHelpDesk')">
           </div>
-
-          <!-- 2. Phone Crash Radar & Telemetry -->
-          <div class="feature-tile-card" id="card_cfgTelemetry" onclick="toggleFeatureTile('cfgTelemetry')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(239,68,68,0.18); color:#f87171;">🩺</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgTelemetry">ACTIVE</span>
+          <!-- 2. Diagnostics -->
+          <div class="feature-icon-tile" id="card_cfgTelemetry" data-feature-id="cfgTelemetry" data-feature-name="Diagnostics" onclick="openFeatureQuickPanel('cfgTelemetry')">
+            <div class="icon-tile-glyph" style="background:rgba(239,68,68,0.18);color:#f87171;">🩺</div>
+            <div class="icon-tile-name">Diagnostics</div>
+            <div class="icon-tile-status" id="status_cfgTelemetry">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Crash Radar & Telemetry</div>
-            <div class="tile-desc">Real-time error diagnostics & automatic crash report dispatch.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgTelemetry" checked onchange="onFeatureTileChanged('cfgTelemetry')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgTelemetry" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgTelemetry')">
           </div>
-
-          <!-- 3. Mobile DevTools -->
-          <div class="feature-tile-card" id="card_cfgMobileDevTools" onclick="toggleFeatureTile('cfgMobileDevTools')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(56,189,248,0.18); color:#38bdf8;">🛠️</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgMobileDevTools">ACTIVE</span>
+          <!-- 3. DevTools -->
+          <div class="feature-icon-tile" id="card_cfgMobileDevTools" data-feature-id="cfgMobileDevTools" data-feature-name="DevTools" onclick="openFeatureQuickPanel('cfgMobileDevTools')">
+            <div class="icon-tile-glyph" style="background:rgba(56,189,248,0.18);color:#38bdf8;">🛠️</div>
+            <div class="icon-tile-name">DevTools</div>
+            <div class="icon-tile-status" id="status_cfgMobileDevTools">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Mobile DevTools Console</div>
-            <div class="tile-desc">Floating in-app console & diagnostic inspector pill on phone.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgMobileDevTools" checked onchange="onFeatureTileChanged('cfgMobileDevTools')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgMobileDevTools" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgMobileDevTools')">
           </div>
-
-          <!-- 4. Broadcast Notices -->
-          <div class="feature-tile-card" id="card_cfgBroadcastNotice" onclick="toggleFeatureTile('cfgBroadcastNotice')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(245,158,11,0.18); color:#fbbf24;">📢</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgBroadcastNotice">ACTIVE</span>
+          <!-- 4. Broadcast -->
+          <div class="feature-icon-tile" id="card_cfgBroadcastNotice" data-feature-id="cfgBroadcastNotice" data-feature-name="Broadcast" onclick="openFeatureQuickPanel('cfgBroadcastNotice')">
+            <div class="icon-tile-glyph" style="background:rgba(245,158,11,0.18);color:#fbbf24;">📢</div>
+            <div class="icon-tile-name">Broadcast</div>
+            <div class="icon-tile-status" id="status_cfgBroadcastNotice">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Broadcast Notices & Alerts</div>
-            <div class="tile-desc">Admin flash announcements & alert banners on user screen.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgBroadcastNotice" checked onchange="onFeatureTileChanged('cfgBroadcastNotice')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgBroadcastNotice" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgBroadcastNotice')">
           </div>
-
-          <!-- 5. In-App Update Scanner -->
-          <div class="feature-tile-card" id="card_cfgAppUpdates" onclick="toggleFeatureTile('cfgAppUpdates')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(16,185,129,0.18); color:#34d399;">🔄</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgAppUpdates">ACTIVE</span>
+          <!-- 5. Updates -->
+          <div class="feature-icon-tile" id="card_cfgAppUpdates" data-feature-id="cfgAppUpdates" data-feature-name="Updates" onclick="openFeatureQuickPanel('cfgAppUpdates')">
+            <div class="icon-tile-glyph" style="background:rgba(16,185,129,0.18);color:#34d399;">🔄</div>
+            <div class="icon-tile-name">Updates</div>
+            <div class="icon-tile-status" id="status_cfgAppUpdates">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">In-App Update Scanner</div>
-            <div class="tile-desc">OTA APK auto-update prompt dialogs & header update badge.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgAppUpdates" checked onchange="onFeatureTileChanged('cfgAppUpdates')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgAppUpdates" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgAppUpdates')">
           </div>
-
-          <!-- 6. Reading Streaks & Shields -->
-          <div class="feature-tile-card" id="card_cfgStreakShields" onclick="toggleFeatureTile('cfgStreakShields')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(236,72,153,0.18); color:#f472b6;">🔥</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgStreakShields">ACTIVE</span>
+          <!-- 6. Streaks -->
+          <div class="feature-icon-tile" id="card_cfgStreakShields" data-feature-id="cfgStreakShields" data-feature-name="Streaks" onclick="openFeatureQuickPanel('cfgStreakShields')">
+            <div class="icon-tile-glyph" style="background:rgba(236,72,153,0.18);color:#f472b6;">🔥</div>
+            <div class="icon-tile-name">Streaks</div>
+            <div class="icon-tile-status" id="status_cfgStreakShields">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Daily Streaks & Shields</div>
-            <div class="tile-desc">Duolingo-style reading streaks & streak freeze shields.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgStreakShields" checked onchange="onFeatureTileChanged('cfgStreakShields')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgStreakShields" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgStreakShields')">
           </div>
-
-          <!-- 7. Zen Sanctuary Timer -->
-          <div class="feature-tile-card" id="card_cfgSanctuaryTimer" onclick="toggleFeatureTile('cfgSanctuaryTimer')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(168,85,247,0.18); color:#c084fc;">⏱️</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgSanctuaryTimer">ACTIVE</span>
+          <!-- 7. Zen Timer -->
+          <div class="feature-icon-tile" id="card_cfgSanctuaryTimer" data-feature-id="cfgSanctuaryTimer" data-feature-name="Zen Timer" onclick="openFeatureQuickPanel('cfgSanctuaryTimer')">
+            <div class="icon-tile-glyph" style="background:rgba(168,85,247,0.18);color:#c084fc;">⏱️</div>
+            <div class="icon-tile-name">Zen Timer</div>
+            <div class="icon-tile-status" id="status_cfgSanctuaryTimer">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Zen Sanctuary Timer</div>
-            <div class="tile-desc">Focus interval timer with Pomodoro chimes & peaceful bell.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgSanctuaryTimer" checked onchange="onFeatureTileChanged('cfgSanctuaryTimer')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgSanctuaryTimer" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgSanctuaryTimer')">
           </div>
-
-          <!-- 8. 3D Smart Flashcards -->
-          <div class="feature-tile-card" id="card_cfgFlashcards" onclick="toggleFeatureTile('cfgFlashcards')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(244,63,94,0.18); color:#fb7185;">🎴</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgFlashcards">ACTIVE</span>
+          <!-- 8. Flashcards -->
+          <div class="feature-icon-tile" id="card_cfgFlashcards" data-feature-id="cfgFlashcards" data-feature-name="Flashcards" onclick="openFeatureQuickPanel('cfgFlashcards')">
+            <div class="icon-tile-glyph" style="background:rgba(244,63,94,0.18);color:#fb7185;">🎴</div>
+            <div class="icon-tile-name">Flashcards</div>
+            <div class="icon-tile-status" id="status_cfgFlashcards">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">3D Smart Flashcards</div>
-            <div class="tile-desc">Interactive 3D book summary flashcards & target words.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgFlashcards" checked onchange="onFeatureTileChanged('cfgFlashcards')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgFlashcards" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgFlashcards')">
           </div>
-
-          <!-- 9. Spatial EQ & Ambient Audio -->
-          <div class="feature-tile-card" id="card_cfgAmbientAudio" onclick="toggleFeatureTile('cfgAmbientAudio')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(56,189,248,0.18); color:#38bdf8;">🎵</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgAmbientAudio">ACTIVE</span>
+          <!-- 9. Audio EQ -->
+          <div class="feature-icon-tile" id="card_cfgAmbientAudio" data-feature-id="cfgAmbientAudio" data-feature-name="Audio EQ" onclick="openFeatureQuickPanel('cfgAmbientAudio')">
+            <div class="icon-tile-glyph" style="background:rgba(56,189,248,0.18);color:#38bdf8;">🎵</div>
+            <div class="icon-tile-name">Audio EQ</div>
+            <div class="icon-tile-status" id="status_cfgAmbientAudio">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Spatial EQ & Audio</div>
-            <div class="tile-desc">Binaural rain, cafe, and forest white noise generator.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgAmbientAudio" checked onchange="onFeatureTileChanged('cfgAmbientAudio')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgAmbientAudio" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgAmbientAudio')">
           </div>
-
-          <!-- 10. 3D Tilt Physics & Dynamic Aurora -->
-          <div class="feature-tile-card" id="card_cfgVisualPhysics" onclick="toggleFeatureTile('cfgVisualPhysics')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(129,140,248,0.18); color:#a5b4fc;">🎨</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgVisualPhysics">ACTIVE</span>
+          <!-- 10. Aurora 3D -->
+          <div class="feature-icon-tile" id="card_cfgVisualPhysics" data-feature-id="cfgVisualPhysics" data-feature-name="Aurora 3D" onclick="openFeatureQuickPanel('cfgVisualPhysics')">
+            <div class="icon-tile-glyph" style="background:rgba(129,140,248,0.18);color:#a5b4fc;">🎨</div>
+            <div class="icon-tile-name">Aurora 3D</div>
+            <div class="icon-tile-status" id="status_cfgVisualPhysics">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">3D Tilt & Aurora Waves</div>
-            <div class="tile-desc">Gyroscope card tilt & GPU aurora (Turn OFF to save battery).</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgVisualPhysics" checked onchange="onFeatureTileChanged('cfgVisualPhysics')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgVisualPhysics" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgVisualPhysics')">
           </div>
-
-          <!-- 11. Barcode / ISBN Camera Scanner -->
-          <div class="feature-tile-card" id="card_cfgBarcodeScanner" onclick="toggleFeatureTile('cfgBarcodeScanner')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(52,211,153,0.18); color:#6ee7b7;">📷</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgBarcodeScanner">ACTIVE</span>
+          <!-- 11. ISBN Scan -->
+          <div class="feature-icon-tile" id="card_cfgBarcodeScanner" data-feature-id="cfgBarcodeScanner" data-feature-name="ISBN Scan" onclick="openFeatureQuickPanel('cfgBarcodeScanner')">
+            <div class="icon-tile-glyph" style="background:rgba(52,211,153,0.18);color:#6ee7b7;">📷</div>
+            <div class="icon-tile-name">ISBN Scan</div>
+            <div class="icon-tile-status" id="status_cfgBarcodeScanner">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Barcode / ISBN Camera</div>
-            <div class="tile-desc">Live camera barcode scanner to instantly find book metadata.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgBarcodeScanner" checked onchange="onFeatureTileChanged('cfgBarcodeScanner')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgBarcodeScanner" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgBarcodeScanner')">
           </div>
-
-          <!-- 12. Audiobook Voice Reader (TTS) -->
-          <div class="feature-tile-card" id="card_cfgAudioVoice" onclick="toggleFeatureTile('cfgAudioVoice')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(251,146,60,0.18); color:#fdba74;">🎙️</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgAudioVoice">ACTIVE</span>
+          <!-- 12. TTS Voice -->
+          <div class="feature-icon-tile" id="card_cfgAudioVoice" data-feature-id="cfgAudioVoice" data-feature-name="TTS Voice" onclick="openFeatureQuickPanel('cfgAudioVoice')">
+            <div class="icon-tile-glyph" style="background:rgba(251,146,60,0.18);color:#fdba74;">🎙️</div>
+            <div class="icon-tile-name">TTS Voice</div>
+            <div class="icon-tile-status" id="status_cfgAudioVoice">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Audiobook Voice (TTS)</div>
-            <div class="tile-desc">Synthetic text-to-speech audio voice reader for book notes.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgAudioVoice" checked onchange="onFeatureTileChanged('cfgAudioVoice')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgAudioVoice" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgAudioVoice')">
           </div>
-
-          <!-- 13. Daily Motivational Quotes -->
-          <div class="feature-tile-card" id="card_cfgQuotes" onclick="toggleFeatureTile('cfgQuotes')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(234,179,8,0.18); color:#fde047;">📖</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgQuotes">ACTIVE</span>
+          <!-- 13. Quotes -->
+          <div class="feature-icon-tile" id="card_cfgQuotes" data-feature-id="cfgQuotes" data-feature-name="Quotes" onclick="openFeatureQuickPanel('cfgQuotes')">
+            <div class="icon-tile-glyph" style="background:rgba(234,179,8,0.18);color:#fde047;">📖</div>
+            <div class="icon-tile-name">Quotes</div>
+            <div class="icon-tile-status" id="status_cfgQuotes">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Daily Quotes Banner</div>
-            <div class="tile-desc">Inspirational daily reading quotes & wisdom on home feed.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgQuotes" checked onchange="onFeatureTileChanged('cfgQuotes')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgQuotes" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgQuotes')">
           </div>
-
-          <!-- 14. Community Books Sync -->
-          <div class="feature-tile-card" id="card_cfgCommunitySync" onclick="toggleFeatureTile('cfgCommunitySync')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(14,165,233,0.18); color:#7dd3fc;">📚</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgCommunitySync">ACTIVE</span>
+          <!-- 14. Community -->
+          <div class="feature-icon-tile" id="card_cfgCommunitySync" data-feature-id="cfgCommunitySync" data-feature-name="Community" onclick="openFeatureQuickPanel('cfgCommunitySync')">
+            <div class="icon-tile-glyph" style="background:rgba(14,165,233,0.18);color:#7dd3fc;">📚</div>
+            <div class="icon-tile-name">Community</div>
+            <div class="icon-tile-status" id="status_cfgCommunitySync">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Community Books Sync</div>
-            <div class="tile-desc">Sync community curated books and reviews across devices.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgCommunitySync" checked onchange="onFeatureTileChanged('cfgCommunitySync')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgCommunitySync" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgCommunitySync')">
           </div>
-
-          <!-- 15. 3D Dictionary Book -->
-          <div class="feature-tile-card" id="card_cfgDictionary" onclick="toggleFeatureTile('cfgDictionary')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(245,158,11,0.18); color:#fbbf24;">📖</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgDictionary">ACTIVE</span>
+          <!-- 15. Dictionary -->
+          <div class="feature-icon-tile" id="card_cfgDictionary" data-feature-id="cfgDictionary" data-feature-name="Dictionary" onclick="openFeatureQuickPanel('cfgDictionary')">
+            <div class="icon-tile-glyph" style="background:rgba(245,158,11,0.18);color:#fbbf24;">🔤</div>
+            <div class="icon-tile-name">Dictionary</div>
+            <div class="icon-tile-status" id="status_cfgDictionary">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">3D Dictionary Book (#0)</div>
-            <div class="tile-desc">A-Z English-Hindi 3D Dictionary book in phone library.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgDictionary" checked onchange="onFeatureTileChanged('cfgDictionary')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgDictionary" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgDictionary')">
           </div>
-
-          <!-- 16. Reading Analytics & PDF Exporter -->
-          <div class="feature-tile-card" id="card_cfgPdfExport" onclick="toggleFeatureTile('cfgPdfExport')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(16,185,129,0.18); color:#34d399;">📊</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgPdfExport">ACTIVE</span>
+          <!-- 16. Analytics -->
+          <div class="feature-icon-tile" id="card_cfgPdfExport" data-feature-id="cfgPdfExport" data-feature-name="Analytics" onclick="openFeatureQuickPanel('cfgPdfExport')">
+            <div class="icon-tile-glyph" style="background:rgba(16,185,129,0.18);color:#34d399;">📊</div>
+            <div class="icon-tile-name">Analytics</div>
+            <div class="icon-tile-status" id="status_cfgPdfExport">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Reading Analytics & PDF</div>
-            <div class="tile-desc">Reading time stats, graphs & printable PDF reading certificate.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgPdfExport" checked onchange="onFeatureTileChanged('cfgPdfExport')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgPdfExport" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgPdfExport')">
           </div>
         </div>
-
         <!-- Extra Controls Bar -->
         <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.08); display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px;">
           <!-- Scheduled Maintenance Mode -->

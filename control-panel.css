@@ -4423,3 +4423,222 @@ input:checked + .slider:before {
   background: rgba(10, 132, 255, 0.4);
   color: #fff;
 }
+
+/* ===== ICON-ONLY FEATURE GRID (iOS Home Screen Style) ===== */
+.icon-tiles-grid {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(95px, 1fr)) !important;
+  gap: 14px !important;
+  padding: 8px 4px !important;
+  margin: 0 !important;
+}
+
+.feature-icon-tile {
+  position: relative !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px 8px 12px !important;
+  border-radius: 18px !important;
+  background: var(--ios-bg-card, rgba(255,255,255,0.04)) !important;
+  border: 1px solid var(--ios-border, rgba(255,255,255,0.08)) !important;
+  cursor: pointer !important;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  min-height: 110px !important;
+  user-select: none !important;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.feature-icon-tile:hover {
+  transform: translateY(-3px) scale(1.03) !important;
+  background: var(--ios-bg-card-hover, rgba(255,255,255,0.08)) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15) !important;
+  border-color: var(--ios-accent, rgba(99,102,241,0.4)) !important;
+}
+
+.feature-icon-tile:active {
+  transform: scale(0.96) !important;
+}
+
+.feature-icon-tile.is-off {
+  opacity: 0.45 !important;
+}
+
+.feature-icon-tile.is-off .icon-tile-glyph {
+  filter: grayscale(60%) !important;
+}
+
+.icon-tile-glyph {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 28px !important;
+  margin-bottom: 8px !important;
+  transition: all 0.2s !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+}
+
+.icon-tile-name {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  text-align: center !important;
+  color: var(--ios-text, #1a1a1a) !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0.01em !important;
+  word-break: break-word !important;
+}
+
+.icon-tile-status {
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: 8px !important;
+  height: 8px !important;
+}
+
+.status-dot-mini {
+  display: block !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+}
+
+.status-dot-mini.dot-on {
+  background: #10b981 !important;
+  box-shadow: 0 0 6px rgba(16,185,129,0.6) !important;
+}
+
+.status-dot-mini.dot-off {
+  background: #6b7280 !important;
+}
+
+.icon-tile-checkbox {
+  position: absolute !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Quick Panel Modal */
+.feature-quick-panel-backdrop {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0,0,0,0.55) !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  z-index: 9999 !important;
+  display: none;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 20px !important;
+  animation: backdropFadeIn 0.2s ease !important;
+}
+
+.feature-quick-panel-backdrop.is-open {
+  display: flex !important;
+}
+
+.feature-quick-panel {
+  background: var(--ios-bg-card, #fff) !important;
+  border-radius: 22px !important;
+  padding: 28px 24px !important;
+  width: 100% !important;
+  max-width: 380px !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.3) !important;
+  animation: panelSlideUp 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  color: var(--ios-text, #1a1a1a) !important;
+}
+
+.fqp-icon {
+  width: 72px !important;
+  height: 72px !important;
+  border-radius: 20px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 40px !important;
+  margin: 0 auto 16px !important;
+}
+
+.fqp-title {
+  text-align: center !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  margin-bottom: 6px !important;
+}
+
+.fqp-desc {
+  text-align: center !important;
+  font-size: 13px !important;
+  opacity: 0.65 !important;
+  margin-bottom: 24px !important;
+  line-height: 1.5 !important;
+}
+
+.fqp-toggle-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 16px !important;
+  background: rgba(0,0,0,0.04) !important;
+  border-radius: 14px !important;
+  margin-bottom: 20px !important;
+}
+
+.fqp-toggle-row .switch {
+  transform: scale(1.15) !important;
+}
+
+.fqp-close-btn {
+  width: 100% !important;
+  padding: 14px !important;
+  border: none !important;
+  background: linear-gradient(135deg, var(--ios-accent, #6366f1), var(--ios-accent-2, #8b5cf6)) !important;
+  color: #fff !important;
+  border-radius: 14px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  cursor: pointer !important;
+  transition: opacity 0.2s !important;
+}
+
+.fqp-close-btn:active {
+  opacity: 0.8 !important;
+}
+
+@keyframes backdropFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes panelSlideUp {
+  from { transform: translateY(40px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Mobile responsive - smaller tiles */
+@media (max-width: 640px) {
+  .icon-tiles-grid {
+    grid-template-columns: repeat(auto-fill, minmax(78px, 1fr)) !important;
+    gap: 10px !important;
+  }
+  .feature-icon-tile {
+    min-height: 92px !important;
+    padding: 12px 4px 10px !important;
+    border-radius: 16px !important;
+  }
+  .icon-tile-glyph {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 24px !important;
+    border-radius: 12px !important;
+  }
+  .icon-tile-name {
+    font-size: 10px !important;
+  }
+}
