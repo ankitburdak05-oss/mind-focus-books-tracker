@@ -4642,3 +4642,417 @@ input:checked + .slider:before {
     font-size: 10px !important;
   }
 }
+
+/* ===== BOX 1 vs BOX 2 SELECTOR ===== */
+.box-select-card {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+.box-select-card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1) !important;
+}
+.box-select-card.box-select-active {
+  border-color: rgba(245,158,11,0.6) !important;
+  background: linear-gradient(135deg,rgba(245,158,11,0.18),rgba(251,191,36,0.10)) !important;
+  box-shadow: 0 8px 28px rgba(245,158,11,0.25) !important;
+}
+
+/* ===== WARRIOR SWORD BOX 2 ANIMATION ===== */
+.warrior-box-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  z-index: 10000 !important;
+  pointer-events: none !important;
+  overflow: hidden !important;
+  display: none;
+  background: #050816 !important;
+}
+.warrior-box-overlay.is-active {
+  display: block !important;
+  pointer-events: auto !important;
+  animation: overlayFadeIn 0.3s ease !important;
+}
+
+/* Phase label */
+.wb-phase-label {
+  position: absolute !important;
+  top: 60px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  color: #fff !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em !important;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.8) !important;
+  opacity: 0;
+  transition: opacity 0.3s !important;
+  z-index: 100 !important;
+  white-space: nowrap !important;
+}
+.wb-phase-label.is-show { opacity: 1 !important; }
+
+/* Skip button */
+.wb-skip-btn {
+  position: absolute !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  padding: 8px 16px !important;
+  background: rgba(255,255,255,0.1) !important;
+  border: 1px solid rgba(255,255,255,0.25) !important;
+  color: #fff !important;
+  border-radius: 20px !important;
+  font-size: 12px !important;
+  cursor: pointer !important;
+  opacity: 0 !important;
+  transition: opacity 0.4s !important;
+  z-index: 200 !important;
+}
+.wb-skip-btn.is-show { opacity: 0.85 !important; }
+
+/* Sky background */
+.wb-sky {
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(180deg, #0c1445 0%, #1a1a3a 40%, #2d1810 80%, #050816 100%) !important;
+  opacity: 0;
+  transition: opacity 0.5s !important;
+}
+.warrior-box-overlay.is-active .wb-sky { opacity: 1 !important; }
+
+/* Falling Box (phase 1) */
+.wb-box-falling {
+  position: absolute !important;
+  top: -200px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  opacity: 0 !important;
+  z-index: 50 !important;
+}
+.wb-box-falling.is-falling {
+  animation: boxFall 2.4s cubic-bezier(0.55, 0, 0.45, 1) forwards !important;
+}
+@keyframes boxFall {
+  0%   { top: -200px; opacity: 0; transform: translateX(-50%) rotate(0deg) scale(1); }
+  10%  { opacity: 1; }
+  60%  { top: 35%; transform: translateX(-50%) rotate(360deg) scale(1.1); }
+  70%  { top: 38%; transform: translateX(-50%) rotate(380deg) scale(1.15); }
+  80%  { top: 35%; transform: translateX(-50%) rotate(380deg) scale(1.1); }
+  100% { top: 32%; transform: translateX(-50%) rotate(380deg) scale(1); opacity: 1; }
+}
+.wb-box-shape {
+  width: 130px !important;
+  height: 130px !important;
+  position: relative !important;
+}
+.wb-box-top {
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(135deg, #ff8c00, #ffb347) !important;
+  border-radius: 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 56px !important;
+  box-shadow: 0 12px 40px rgba(255,140,0,0.6), inset 0 0 20px rgba(255,255,255,0.3) !important;
+  border: 3px solid #fbbf24 !important;
+}
+.wb-box-body {
+  position: absolute !important;
+  top: 110% !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 50px !important;
+  background: radial-gradient(ellipse, rgba(255,140,0,0.4), transparent 70%) !important;
+  filter: blur(12px) !important;
+}
+
+/* Warrior (phase 2-4) */
+.wb-warrior {
+  position: absolute !important;
+  bottom: -300px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 180px !important;
+  height: 280px !important;
+  opacity: 0 !important;
+  z-index: 60 !important;
+}
+.wb-warrior.is-enter {
+  animation: warriorEnter 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+@keyframes warriorEnter {
+  0%   { bottom: -300px; opacity: 0; }
+  60%  { bottom: 15%; opacity: 1; }
+  80%  { bottom: 18%; }
+  100% { bottom: 15%; opacity: 1; }
+}
+
+.wb-warrior-head {
+  position: absolute !important;
+  top: 0 !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 60px !important;
+  height: 60px !important;
+  background: radial-gradient(circle at 30% 30%, #4a3527, #1a0f08) !important;
+  border-radius: 50% !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.6), inset 0 0 8px rgba(255,140,0,0.3) !important;
+}
+.wb-warrior-head::before {
+  content: '👁️' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 24px !important;
+}
+
+.wb-warrior-body {
+  position: absolute !important;
+  top: 55px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 110px !important;
+  height: 180px !important;
+  background: linear-gradient(180deg, #2d1810 0%, #4a2818 50%, #1a0f08 100%) !important;
+  border-radius: 30px 30px 12px 12px !important;
+  box-shadow: inset 0 -20px 30px rgba(0,0,0,0.5), 0 8px 20px rgba(0,0,0,0.5) !important;
+}
+
+.wb-warrior-arm-left {
+  position: absolute !important;
+  top: 70px !important;
+  left: 5px !important;
+  width: 30px !important;
+  height: 130px !important;
+  background: linear-gradient(180deg, #2d1810, #4a2818) !important;
+  border-radius: 14px !important;
+  transform-origin: top center !important;
+  transform: rotate(-30deg) !important;
+}
+
+/* Sword (phase 3-4) */
+.wb-sword {
+  position: absolute !important;
+  top: 60px !important;
+  right: -90px !important;
+  width: 140px !important;
+  height: 14px !important;
+  transform-origin: left center !important;
+  transform: rotate(-90deg) !important;
+  z-index: 70 !important;
+}
+.wb-sword.is-swing {
+  animation: swordSwing 1.2s cubic-bezier(0.65, 0, 0.35, 1) forwards !important;
+}
+@keyframes swordSwing {
+  0%   { transform: rotate(-90deg) scale(1); }
+  35%  { transform: rotate(-30deg) scale(1.1); }
+  55%  { transform: rotate(45deg) scale(1.4); }
+  70%  { transform: rotate(85deg) scale(1.6); }
+  85%  { transform: rotate(115deg) scale(1.7); }
+  100% { transform: rotate(180deg) scale(1.6); }
+}
+.wb-sword-blade {
+  position: absolute !important;
+  top: 0 !important;
+  right: 0 !important;
+  width: 100px !important;
+  height: 8px !important;
+  background: linear-gradient(180deg, #f0f0f0 0%, #c0c0c0 50%, #909090 100%) !important;
+  border-radius: 0 4px 4px 0 !important;
+  box-shadow: 0 0 16px rgba(255,255,255,0.8), 0 0 30px rgba(180,200,255,0.6) !important;
+}
+.wb-sword-handle {
+  position: absolute !important;
+  top: -2px !important;
+  left: 0 !important;
+  width: 30px !important;
+  height: 18px !important;
+  background: linear-gradient(90deg, #8b4513, #5c2c0c) !important;
+  border-radius: 4px 0 0 4px !important;
+  border: 1px solid #fbbf24 !important;
+}
+
+/* Screen crack (phase 3 - when sword breaks screen) */
+.wb-screen-crack {
+  position: absolute !important;
+  inset: 0 !important;
+  background-image: 
+    linear-gradient(105deg, transparent 49.5%, rgba(255,255,255,0.6) 49.8%, transparent 50.2%),
+    linear-gradient(75deg, transparent 49.5%, rgba(255,255,255,0.5) 49.8%, transparent 50.2%),
+    linear-gradient(45deg, transparent 49.7%, rgba(255,255,255,0.55) 49.9%, transparent 50.1%),
+    linear-gradient(135deg, transparent 49.7%, rgba(255,255,255,0.45) 49.9%, transparent 50.1%),
+    radial-gradient(circle at 30% 40%, rgba(255,255,255,0.15) 0%, transparent 60%),
+    radial-gradient(circle at 70% 60%, rgba(255,255,255,0.12) 0%, transparent 60%) !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.4s !important;
+  z-index: 90 !important;
+}
+.wb-screen-crack.is-shown {
+  opacity: 1 !important;
+  animation: screenShake 0.4s ease !important;
+}
+@keyframes screenShake {
+  0%, 100% { transform: translate(0, 0); }
+  20%      { transform: translate(-8px, 4px); }
+  40%      { transform: translate(6px, -6px); }
+  60%      { transform: translate(-4px, 6px); }
+  80%      { transform: translate(4px, -2px); }
+}
+
+/* Sky beam (phase 5) */
+.wb-sky-beam {
+  position: absolute !important;
+  left: 50% !important;
+  bottom: 0 !important;
+  transform: translateX(-50%) scaleY(0) !important;
+  transform-origin: bottom center !important;
+  width: 240px !important;
+  height: 100vh !important;
+  background: linear-gradient(180deg, 
+    rgba(255,255,255,0) 0%, 
+    rgba(255,240,200,0.3) 30%, 
+    rgba(255,220,150,0.7) 70%, 
+    rgba(255,255,255,1) 100%) !important;
+  filter: blur(20px) !important;
+  opacity: 0 !important;
+  z-index: 80 !important;
+}
+.wb-sky-beam.is-fire {
+  animation: skyBeamFire 1.2s ease-out forwards !important;
+}
+@keyframes skyBeamFire {
+  0%   { transform: translateX(-50%) scaleY(0); opacity: 0; }
+  40%  { transform: translateX(-50%) scaleY(0.5); opacity: 0.8; }
+  70%  { transform: translateX(-50%) scaleY(1); opacity: 1; }
+  100% { transform: translateX(-50%) scaleY(1.1); opacity: 1; }
+}
+
+/* Blast (phase 6) */
+.wb-blast {
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) scale(0) !important;
+  width: 100px !important;
+  height: 100px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, #fff 0%, #ffd700 30%, #ff8c00 60%, transparent 80%) !important;
+  opacity: 0 !important;
+  z-index: 95 !important;
+}
+.wb-blast.is-blast {
+  animation: blast 1s cubic-bezier(0.2, 0.8, 0.4, 1) forwards !important;
+}
+@keyframes blast {
+  0%   { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  20%  { transform: translate(-50%, -50%) scale(0.5); opacity: 1; }
+  50%  { transform: translate(-50%, -50%) scale(4); opacity: 0.9; }
+  80%  { transform: translate(-50%, -50%) scale(8); opacity: 0.4; }
+  100% { transform: translate(-50%, -50%) scale(12); opacity: 0; }
+}
+
+/* Car reveal (phase 7) */
+.wb-car {
+  position: absolute !important;
+  bottom: -400px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  width: 280px !important;
+  height: 180px !important;
+  opacity: 0 !important;
+  z-index: 70 !important;
+}
+.wb-car.is-drive {
+  animation: carDrive 1.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+@keyframes carDrive {
+  0%   { bottom: -400px; opacity: 0; }
+  60%  { bottom: 18%; opacity: 1; }
+  100% { bottom: 20%; opacity: 1; }
+}
+.wb-car-body {
+  position: relative !important;
+  width: 100% !important;
+  height: 100% !important;
+}
+.wb-car-roof {
+  position: absolute !important;
+  bottom: 80px !important;
+  left: 20% !important;
+  width: 60% !important;
+  height: 50px !important;
+  background: linear-gradient(135deg, #ff8c00, #d97706) !important;
+  border-radius: 50% 50% 0 0 !important;
+  box-shadow: inset 0 -8px 12px rgba(0,0,0,0.3) !important;
+}
+.wb-car-trunk {
+  position: absolute !important;
+  bottom: 60px !important;
+  left: 10% !important;
+  width: 80% !important;
+  height: 50px !important;
+  background: linear-gradient(180deg, #fbbf24, #d97706) !important;
+  border-radius: 12px !important;
+  transform-origin: right center !important;
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  z-index: 2 !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.4) !important;
+}
+.wb-car-trunk.is-open {
+  transform: rotate(-65deg) translateX(-30px) !important;
+}
+.wb-car-wheels {
+  position: absolute !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: 0 15% !important;
+}
+.wb-car-wheel {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  background: radial-gradient(circle, #2a2a2a 30%, #000 70%) !important;
+  border: 4px solid #fbbf24 !important;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.6) !important;
+  animation: wheelSpin 0.8s linear infinite !important;
+}
+@keyframes wheelSpin {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.wb-car-prize {
+  position: absolute !important;
+  bottom: 120px !important;
+  left: 50% !important;
+  transform: translateX(-50%) scale(0) !important;
+  padding: 12px 24px !important;
+  background: linear-gradient(135deg, #fbbf24, #f59e0b) !important;
+  color: #050816 !important;
+  font-size: 18px !important;
+  font-weight: 900 !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 28px rgba(251,191,36,0.6), 0 0 40px rgba(251,191,36,0.4) !important;
+  white-space: nowrap !important;
+  z-index: 3 !important;
+  letter-spacing: 0.02em !important;
+}
+.wb-car-prize.is-show {
+  animation: prizeReveal 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards !important;
+}
+@keyframes prizeReveal {
+  0%   { transform: translateX(-50%) scale(0); opacity: 0; }
+  60%  { transform: translateX(-50%) scale(1.2); opacity: 1; }
+  100% { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+
+@keyframes overlayFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

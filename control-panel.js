@@ -4004,3 +4004,139 @@ window.addEventListener('DOMContentLoaded', initPanelTheme);
 
 
 
+
+
+// ===== BOX 1 vs BOX 2 SELECTOR =====
+let selectedMysteryBox = 1;
+window.selectMysteryBox = function(boxNum) {
+  selectedMysteryBox = boxNum;
+  document.querySelectorAll('.box-select-card').forEach(c => c.classList.remove('box-select-active'));
+  document.getElementById('boxCard' + boxNum).classList.add('box-select-active');
+  document.querySelector(`input[name="mysteryBoxType"][value="box${boxNum}"]`).checked = true;
+};
+
+// ===== WARRIOR SWORD BOX ANIMATION =====
+let warriorAnimState = { running: false, timeouts: [], rafId: null };
+
+window.skipWarriorAnimation = function() {
+  warriorAnimState.timeouts.forEach(t => clearTimeout(t));
+  if (warriorAnimState.rafId) cancelAnimationFrame(warriorAnimState.rafId);
+  cleanupWarriorAnim();
+};
+
+function cleanupWarriorAnim() {
+  warriorAnimState.running = false;
+  const overlay = document.getElementById('warriorBoxOverlay');
+  if (overlay) {
+    overlay.classList.remove('is-active');
+    // reset all child states
+    ['wbBoxFalling','wbWarrior','wbSword','wbScreenCrack','wbSkyBeam','wbBlast','wbCar','wbCarTrunk','wbCarPrize','wbPhaseLabel','wbSkipBtn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('is-falling','is-enter','is-swing','is-shown','is-fire','is-blast','is-drive','is-open','is-show');
+      }
+    });
+  }
+}
+
+function setPhase(text, durationMs) {
+  const label = document.getElementById('wbPhaseLabel');
+  const skip = document.querySelector('.wb-skip-btn');
+  if (!label) return;
+  label.textContent = text;
+  label.classList.add('is-show');
+  if (skip) skip.classList.add('is-show');
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    label.classList.remove('is-show');
+  }, durationMs || 1500));
+}
+
+window.testGiftDropInPanel = function() {
+  if (warriorAnimState.running) return;
+  // Box 1 = existing behavior, Box 2 = warrior
+  if (selectedMysteryBox === 1) {
+    runBox1Animation();
+  } else {
+    runWarriorSwordAnimation();
+  }
+};
+
+function runBox1Animation() {
+  showToast('🎁 Box 1 (Classic) drop test — see phone for animation');
+  // Reuse existing overlay if present
+  const overlay = document.getElementById('mysteryGiftOverlay');
+  if (overlay && typeof overlay.classList !== 'undefined') {
+    overlay.classList.add('is-active');
+    setTimeout(() => overlay.classList.remove('is-active'), 4500);
+  }
+}
+
+function runWarriorSwordAnimation() {
+  warriorAnimState.running = true;
+  const overlay = document.getElementById('warriorBoxOverlay');
+  if (!overlay) return;
+  overlay.classList.add('is-active');
+
+  const box = document.getElementById('wbBoxFalling');
+  const warrior = document.getElementById('wbWarrior');
+  const sword = document.getElementById('wbSword');
+  const crack = document.getElementById('wbScreenCrack');
+  const beam = document.getElementById('wbSkyBeam');
+  const blast = document.getElementById('wbBlast');
+  const car = document.getElementById('wbCar');
+  const trunk = document.getElementById('wbCarTrunk');
+  const prize = document.getElementById('wbCarPrize');
+  const title = document.getElementById('giftTitleInput').value || 'CONGRATULATIONS!';
+  const reward = document.getElementById('giftRewardNameInput').value || '🎁 VIP REWARD';
+  if (prize) prize.textContent = reward.toUpperCase();
+
+  // Phase 1: Box falls (0-2.4s)
+  setPhase('⚔️ A MYSTERIOUS BOX FALLS FROM SKY...', 2000);
+  warriorAnimState.timeouts.push(setTimeout(() => box.classList.add('is-falling'), 200));
+
+  // Phase 2: Warrior enters (2.6s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    setPhase('👤 A WARRIOR EMERGES', 1400);
+    warrior.classList.add('is-enter');
+  }, 2600));
+
+  // Phase 3: Sword swings (3.6s) - breaks screen
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    setPhase('⚔️ SWORD SLASHES THROUGH SCREEN!', 1500);
+    sword.classList.add('is-swing');
+    setTimeout(() => crack.classList.add('is-shown'), 700);
+  }, 3600));
+
+  // Phase 4: Sky beam (5.0s) - light from above
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    setPhase('✨ SKY BEAM DESCENDS', 1400);
+    crack.classList.remove('is-shown');
+    beam.classList.add('is-fire');
+  }, 5000));
+
+  // Phase 5: Blast (6.2s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    setPhase('💥 BLAST!', 900);
+    blast.classList.add('is-blast');
+  }, 6200));
+
+  // Phase 6: Car arrives (6.8s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    setPhase('🚗 YOUR REWARD ARRIVES', 1500);
+    beam.classList.remove('is-fire');
+    blast.classList.remove('is-blast');
+    car.classList.add('is-drive');
+  }, 6800));
+
+  // Phase 7: Car trunk opens (8.4s) + prize reveal
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    setPhase('🎁 REWARD REVEALED!', 4000);
+    trunk.classList.add('is-open');
+    setTimeout(() => prize.classList.add('is-show'), 600);
+  }, 8400));
+
+  // Cleanup after 13.5s
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    cleanupWarriorAnim();
+  }, 13500));
+}

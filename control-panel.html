@@ -889,6 +889,24 @@
           <span class="panel-pill" style="background:rgba(245,158,11,0.18); border-color:#f59e0b; color:#fbbf24;">SURPRISE REWARD ENGINE</span>
         </div>
 
+        <!-- BOX 1 vs BOX 2 Selector -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:0 0 18px 0;">
+          <div class="box-select-card box-select-active" id="boxCard1" onclick="selectMysteryBox(1)" style="cursor:pointer; padding:16px; border-radius:16px; background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(251,191,36,0.08)); border:2px solid rgba(245,158,11,0.4); display:flex; gap:14px; align-items:center;">
+            <div style="font-size:42px; line-height:1;">🎁</div>
+            <div>
+              <div style="font-weight:800; font-size:1.05rem; color:var(--ios-text);">Box 1 — Classic Golden</div>
+              <div style="font-size:0.78rem; opacity:0.7; margin-top:3px;">3D drop + confetti + reward reveal</div>
+            </div>
+          </div>
+          <div class="box-select-card" id="boxCard2" onclick="selectMysteryBox(2)" style="cursor:pointer; padding:16px; border-radius:16px; background:var(--ios-bg-card); border:2px solid var(--ios-border); display:flex; gap:14px; align-items:center;">
+            <div style="font-size:42px; line-height:1;">⚔️</div>
+            <div>
+              <div style="font-weight:800; font-size:1.05rem; color:var(--ios-text);">Box 2 — Warrior Sword</div>
+              <div style="font-size:0.78rem; opacity:0.7; margin-top:3px;">Character breaks screen + blast + car reveal</div>
+            </div>
+          </div>
+        </div>
+
         <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:18px; line-height:1.6;">
           Yaha se aap sabhi users ke phone screen par aasmaan se ek <b>3D Golden Gift Box</b> drop kar sakte hain! Jab user box par tap karega, to 3D box khulega, celebratory confetti aur crackers phootenge, aur unhe special reward milega!
         </p>
@@ -1685,6 +1703,42 @@
       </div><!-- /stage-content-scroll -->
     </main><!-- /app-main-stage -->
   </div><!-- /app-layout -->
+
+  <!-- Warrior Sword Box Animation Overlay (Box 2) -->
+  <div class="warrior-box-overlay" id="warriorBoxOverlay">
+    <div class="wb-sky"></div>
+    <div class="wb-box-falling" id="wbBoxFalling">
+      <div class="wb-box-shape">
+        <div class="wb-box-top">⚔️</div>
+        <div class="wb-box-body"></div>
+      </div>
+    </div>
+    <div class="wb-warrior" id="wbWarrior">
+      <div class="wb-warrior-head"></div>
+      <div class="wb-warrior-body"></div>
+      <div class="wb-warrior-arm-left"></div>
+      <div class="wb-sword" id="wbSword">
+        <div class="wb-sword-blade"></div>
+        <div class="wb-sword-handle"></div>
+      </div>
+    </div>
+    <div class="wb-screen-crack" id="wbScreenCrack"></div>
+    <div class="wb-sky-beam" id="wbSkyBeam"></div>
+    <div class="wb-blast" id="wbBlast"></div>
+    <div class="wb-car" id="wbCar">
+      <div class="wb-car-body">
+        <div class="wb-car-roof"></div>
+        <div class="wb-car-trunk" id="wbCarTrunk"></div>
+        <div class="wb-car-wheels">
+          <div class="wb-car-wheel"></div>
+          <div class="wb-car-wheel"></div>
+        </div>
+        <div class="wb-car-prize" id="wbCarPrize">🎁 REWARD!</div>
+      </div>
+    </div>
+    <div class="wb-skip-btn" onclick="skipWarriorAnimation()">Tap to Skip ›</div>
+    <div class="wb-phase-label" id="wbPhaseLabel"></div>
+  </div>
 
   <!-- Real Mobile App Fixed Bottom Navigation Dock — iOS Premium Style -->
   <nav class="app-bottom-dock">
