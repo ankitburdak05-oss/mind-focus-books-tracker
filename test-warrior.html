@@ -83,6 +83,12 @@ function startTest() {
   overlay.classList.add('is-active');
   console.log('[TEST] overlay activated');
 
+  const warriorVid = document.getElementById('wbWarriorVideo');
+  if (warriorVid) {
+    warriorVid.currentTime = 0;
+    warriorVid.play().catch(err => console.warn('Video failed:', err.message));
+  }
+
   const box = document.getElementById('wbBoxFalling');
   const warrior = document.getElementById('wbWarrior');
   const crack = document.getElementById('wbScreenCrack');

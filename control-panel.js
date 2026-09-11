@@ -4027,8 +4027,16 @@ window.skipWarriorAnimation = function() {
 function cleanupWarriorAnim() {
   warriorAnimState.running = false;
   const overlay = document.getElementById('warriorBoxOverlay');
+  // Pause and reset video
+  const warriorVid = document.getElementById('wbWarriorVideo');
+  if (warriorVid) {
+    warriorVid.pause();
+    warriorVid.currentTime = 0;
+  }
   if (overlay) {
     overlay.classList.remove('is-active');
+    const warriorEl = document.getElementById('wbWarrior');
+    if (warriorEl) warriorEl.classList.remove('no-video');
     // reset all child states
     ['wbBoxFalling','wbWarrior','wbSword','wbScreenCrack','wbSkyBeam','wbBlast','wbCar','wbCarTrunk','wbCarPrize','wbPhaseLabel','wbSkipBtn'].forEach(id => {
       const el = document.getElementById(id);
@@ -4097,6 +4105,20 @@ function runWarriorSwordAnimation() {
   const box = document.getElementById('wbBoxFalling');
   const warrior = document.getElementById('wbWarrior');
   const sword = document.getElementById('wbSword');
+  const warriorVid = document.getElementById('wbWarriorVideo');
+
+  // Try to play real video; if fails, use frame fallback
+  if (warriorVid) {
+    warriorVid.currentTime = 0;
+    warriorVid.play().then(() => {
+      console.log('[Mystery] warrior video playing');
+    }).catch(err => {
+      console.warn('[Mystery] video play failed, using frame fallback:', err.message);
+      warrior.classList.add('no-video');
+    });
+  } else {
+    warrior.classList.add('no-video');
+  }
   const crack = document.getElementById('wbScreenCrack');
   const beam = document.getElementById('wbSkyBeam');
   const blast = document.getElementById('wbBlast');
