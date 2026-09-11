@@ -488,43 +488,47 @@
         </div>
       </div>
 
-      <!-- Navigation Links -->
+      <!-- Navigation Links — iOS Premium Style -->
       <div class="sidebar-nav-scroll">
-        <!-- Group 1: Core Studio -->
+        <!-- Group 1: Main -->
         <div class="nav-group">
-          <div class="nav-group-title">CORE STUDIO</div>
+          <div class="nav-group-title">MAIN</div>
           <button type="button" class="sidebar-nav-item tab-btn active" data-tab="tabFeatures" onclick="switchTab('tabFeatures')">
-            <span class="nav-icon">🎛️</span>
-            <span class="nav-label">Features &amp; Safety</span>
-            <span class="nav-badge-pill" id="badgeFeaturesCount">16 Active</span>
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Dashboard</span>
+            <span class="nav-badge-pill" id="badgeFeaturesCount">16</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabBroadcast" onclick="switchTab('tabBroadcast')">
             <span class="nav-icon">📢</span>
-            <span class="nav-label">Broadcast Studio</span>
-            <span class="nav-pulse-dot"></span>
-          </button>
-          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
-            <span class="nav-icon">🚀</span>
-            <span class="nav-label">App Release &amp; OTA</span>
-            <span class="nav-tag-live">v3.6.0</span>
+            <span class="nav-label">Broadcast</span>
           </button>
         </div>
 
-        <!-- Group 2: Reader Engagement -->
+        <!-- Group 2: Engage -->
         <div class="nav-group">
-          <div class="nav-group-title">ENGAGEMENT</div>
+          <div class="nav-group-title">ENGAGE</div>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabLiveChat" onclick="switchTab('tabLiveChat')">
             <span class="nav-icon">💬</span>
-            <span class="nav-label">Live Help Desk</span>
+            <span class="nav-label">Help Desk</span>
             <span class="badge-chat-unread" id="adminChatUnreadBadge" style="display:none;">0</span>
-          </button>
-          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabFlashcards" onclick="switchTab('tabFlashcards')">
-            <span class="nav-icon">🎴</span>
-            <span class="nav-label">3D Flashcards</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabMysteryGift" onclick="switchTab('tabMysteryGift')">
             <span class="nav-icon">🎁</span>
-            <span class="nav-label">Mystery Gift Box</span>
+            <span class="nav-label">Mystery Gift</span>
+          </button>
+          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabFlashcards" onclick="switchTab('tabFlashcards')">
+            <span class="nav-icon">🎴</span>
+            <span class="nav-label">Flashcards</span>
+          </button>
+        </div>
+
+        <!-- Group 3: Build -->
+        <div class="nav-group">
+          <div class="nav-group-title">BUILD</div>
+          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
+            <span class="nav-icon">🚀</span>
+            <span class="nav-label">Deploy &amp; OTA</span>
+            <span class="nav-tag-live">v3.6.0</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabBooks" onclick="switchTab('tabBooks')">
             <span class="nav-icon">🌟</span>
@@ -532,21 +536,21 @@
           </button>
         </div>
 
-        <!-- Group 3: Diagnostics & Cloud -->
+        <!-- Group 4: System -->
         <div class="nav-group">
-          <div class="nav-group-title">SYSTEM &amp; CLOUD</div>
+          <div class="nav-group-title">SYSTEM</div>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabDiagnostics" onclick="switchTab('tabDiagnostics')">
             <span class="nav-icon">🩺</span>
-            <span class="nav-label">Phone Diagnostics</span>
+            <span class="nav-label">Diagnostics</span>
             <span class="badge-chat-unread" id="phoneCrashBadge" style="display:none; background:#ef4444;">0</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabGithub" onclick="switchTab('tabGithub')">
             <span class="nav-icon">🔑</span>
-            <span class="nav-label">GitHub Cloud Sync</span>
+            <span class="nav-label">GitHub Sync</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabMore" onclick="switchTab('tabMore')">
             <span class="nav-icon">⚙️</span>
-            <span class="nav-label">Data &amp; Utilities</span>
+            <span class="nav-label">Settings</span>
           </button>
         </div>
       </div>
@@ -567,13 +571,13 @@
 
     <!-- Main Stage -->
     <main class="app-main-stage">
-      <!-- Top Stage Cockpit / Header -->
+      <!-- Top Stage Cockpit / Header — iOS Premium Style -->
       <header class="stage-topbar">
         <div class="topbar-left">
-          <button type="button" class="topbar-mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle Menu">
+          <button type="button" class="topbar-mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle Menu" style="background:var(--ios-bg-card);border:none;color:var(--ios-text);width:40px;height:40px;border-radius:12px;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
             <span>☰</span>
           </button>
-          <div class="topbar-heading">
+          <div class="topbar-heading" style="margin-left:12px;">
             <h2 class="view-title" id="currentViewTitle">Features &amp; Remote Switches</h2>
             <div class="breadcrumbs">
               <span>MindFocus Studio</span> <span class="bc-sep">/</span> <span id="currentViewBreadcrumb">Features</span>
@@ -581,65 +585,18 @@
           </div>
         </div>
 
-        <div class="topbar-center">
-          <div class="compact-kpi-row">
-            <div class="kpi-chip" onclick="switchTab('tabPipeline')" title="App Release Status">
-              <span class="kpi-chip-icon">🚀</span>
-              <span class="kpi-chip-val">v3.6.0 Live</span>
-            </div>
-            <div class="kpi-chip" onclick="switchTab('tabFeatures')" title="Active Feature Switches">
-              <span class="kpi-chip-icon">🛡️</span>
-              <span class="kpi-chip-val">16 Active</span>
-            </div>
-            <div class="kpi-chip" onclick="switchTab('tabLiveChat')" title="Live Help Desk Chat">
-              <span class="kpi-chip-icon">💬</span>
-              <span class="kpi-chip-val">Help Desk</span>
-            </div>
-            <div class="kpi-chip" onclick="switchTab('tabFlashcards')" title="3D Flashcards">
-              <span class="kpi-chip-icon">🎴</span>
-              <span class="kpi-chip-val">Flashcards</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="topbar-right">
-          <!-- Quick App Mode / Color Switcher -->
-          <div class="topbar-theme-group" title="Select App Mode (Light / Colors / Dark)">
-            <button type="button" class="topbar-mode-toggle" id="topbarModeToggle" onclick="toggleLightDarkMode()" title="Toggle Light / Dark Mode">
-              <span id="topbarModeIcon">☀️</span> <span id="topbarModeText">Light Mode</span>
-            </button>
-            <div class="theme-pills-row">
-              <button type="button" class="theme-pill-btn pill-light" data-theme-name="light" onclick="setPanelTheme('light')" title="Snow White Light Mode">
-                <span class="pill-dot"></span><span class="pill-label">White ☀️</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-ocean" data-theme-name="ocean" onclick="setPanelTheme('ocean')" title="Vivid Sapphire Ocean Blue">
-                <span class="pill-dot"></span><span class="pill-label">Blue 🔵</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-emerald" data-theme-name="emerald" onclick="setPanelTheme('emerald')" title="Lush Emerald Forest Green">
-                <span class="pill-dot"></span><span class="pill-label">Green 🟢</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-ruby" data-theme-name="ruby" onclick="setPanelTheme('ruby')" title="Vivid Crimson Ruby Red">
-                <span class="pill-dot"></span><span class="pill-label">Red 🔴</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-gold" data-theme-name="gold" onclick="setPanelTheme('gold')" title="Warm Sunset Amber Gold">
-                <span class="pill-dot"></span><span class="pill-label">Gold 🟠</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-amethyst" data-theme-name="amethyst" onclick="setPanelTheme('amethyst')" title="Cyber Royal Purple">
-                <span class="pill-dot"></span><span class="pill-label">Purple 🟣</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-dark" data-theme-name="dark" onclick="setPanelTheme('dark')" title="Midnight OLED Dark Mode">
-                <span class="pill-dot"></span><span class="pill-label">Dark 🌙</span>
-              </button>
-            </div>
-          </div>
-          <button type="button" class="btn-topbar-action" onclick="toggleBrowserFullscreen()" id="btnFullscreenToggle" title="Toggle Fullscreen">
-            <span>⛶</span> <span class="action-btn-text">Full Screen</span>
+        <div class="topbar-right" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <button type="button" class="ios-quick-btn" onclick="toggleLightDarkMode()" title="Toggle Theme" id="iosThemeToggle" style="background:var(--ios-bg-card);border:1px solid var(--ios-border);color:var(--ios-text);width:42px;height:42px;border-radius:12px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">
+            <span id="iosThemeIcon">🌙</span>
           </button>
-          <button type="button" class="btn-topbar-action btn-deploy-pill" id="btnDeployToRealAppBanner" onclick="deployStagedReleaseToRealApp()" title="Deploy Update to Phones">
-            <span>🚀</span> <span class="action-btn-text">Push OTA</span>
+          <button type="button" class="ios-quick-btn" onclick="toggleBrowserFullscreen()" title="Fullscreen" style="background:var(--ios-bg-card);border:1px solid var(--ios-border);color:var(--ios-text);width:42px;height:42px;border-radius:12px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">
+            <span>⛶</span>
           </button>
-          <div class="telemetry-live-pill">
-            <span class="pulse-beacon"></span>
+          <button type="button" class="ios-deploy-btn" id="btnDeployToRealAppBanner" onclick="deployStagedReleaseToRealApp()" title="Deploy Update" style="background:linear-gradient(135deg,var(--ios-accent),var(--ios-accent-2));color:#fff;border:none;padding:11px 18px;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 16px rgba(10,132,255,0.4);display:flex;align-items:center;gap:6px;transition:all 0.2s;">
+            <span>🚀</span> <span>Deploy</span>
+          </button>
+          <div style="display:flex;align-items:center;gap:6px;background:rgba(48,209,88,0.15);border:1px solid rgba(48,209,88,0.3);color:var(--ios-success);padding:8px 12px;border-radius:12px;font-size:12px;font-weight:700;">
+            <span style="width:8px;height:8px;border-radius:50%;background:var(--ios-success);box-shadow:0 0 8px var(--ios-success);animation:pulse 1.5s infinite;"></span>
             <span id="liveNoticeStatusBadge">LIVE</span>
           </div>
         </div>
@@ -1838,33 +1795,37 @@
     </main><!-- /app-main-stage -->
   </div><!-- /app-layout -->
 
-  <!-- Real Mobile App Fixed Bottom Navigation Dock -->
+  <!-- Real Mobile App Fixed Bottom Navigation Dock — iOS Premium Style -->
   <nav class="app-bottom-dock">
     <button type="button" class="app-dock-item active" data-tab="tabFeatures" onclick="switchTab('tabFeatures')">
-      <div class="dock-icon-wrap"><span class="dock-icon">🎛️</span></div>
-      <span class="dock-label">कंट्रोल</span>
+      <div class="dock-icon-wrap"><span class="dock-icon">🏠</span></div>
+      <span class="dock-label">Home</span>
     </button>
     <button type="button" class="app-dock-item" data-tab="tabBroadcast" onclick="switchTab('tabBroadcast')">
       <div class="dock-icon-wrap"><span class="dock-icon">📢</span></div>
-      <span class="dock-label">सूचनाएं</span>
-    </button>
-    <button type="button" class="app-dock-item" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
-      <div class="dock-icon-wrap"><span class="dock-icon">🚀</span></div>
-      <span class="dock-label">अपडेट</span>
+      <span class="dock-label">Send</span>
     </button>
     <button type="button" class="app-dock-item" data-tab="tabLiveChat" onclick="switchTab('tabLiveChat')">
       <div class="dock-icon-wrap">
         <span class="dock-icon">💬</span>
         <span class="badge-dock-unread" id="dockChatUnreadBadge" style="display:none;">0</span>
       </div>
-      <span class="dock-label">चैट</span>
+      <span class="dock-label">Chat</span>
+    </button>
+    <button type="button" class="app-dock-item" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
+      <div class="dock-icon-wrap"><span class="dock-icon">🚀</span></div>
+      <span class="dock-label">Deploy</span>
+    </button>
+    <button type="button" class="app-dock-item" data-tab="tabMysteryGift" onclick="switchTab('tabMysteryGift')">
+      <div class="dock-icon-wrap"><span class="dock-icon">🎁</span></div>
+      <span class="dock-label">Library</span>
     </button>
     <button type="button" class="app-dock-item" data-tab="tabMore" onclick="switchTab('tabMore')">
       <div class="dock-icon-wrap">
         <span class="dock-icon">⚙️</span>
         <span class="badge-dock-unread badge-dock-alert" id="dockCrashBadge" style="display:none;">0</span>
       </div>
-      <span class="dock-label">टूल्स</span>
+      <span class="dock-label">Settings</span>
     </button>
   </nav>
 
