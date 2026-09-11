@@ -4039,18 +4039,6 @@ function cleanupWarriorAnim() {
   }
 }
 
-function setPhase(text, durationMs) {
-  const label = document.getElementById('wbPhaseLabel');
-  const skip = document.querySelector('.wb-skip-btn');
-  if (!label) return;
-  label.textContent = text;
-  label.classList.add('is-show');
-  if (skip) skip.classList.add('is-show');
-  warriorAnimState.timeouts.push(setTimeout(() => {
-    label.classList.remove('is-show');
-  }, durationMs || 1500));
-}
-
 window.testGiftDropInPanel = function() {
   if (warriorAnimState.running) return;
   // Box 1 = existing behavior, Box 2 = warrior
@@ -4091,52 +4079,45 @@ function runWarriorSwordAnimation() {
   if (prize) prize.textContent = reward.toUpperCase();
 
   // Phase 1: Box falls (0-2.4s)
-  setPhase('⚔️ A MYSTERIOUS BOX FALLS FROM SKY...', 2000);
-  warriorAnimState.timeouts.push(setTimeout(() => box.classList.add('is-falling'), 200));
+  warriorAnimState.timeouts.push(setTimeout(() => box.classList.add('is-falling'), 100));
 
   // Phase 2: Warrior enters (2.6s)
   warriorAnimState.timeouts.push(setTimeout(() => {
-    setPhase('👤 A WARRIOR EMERGES', 1400);
     warrior.classList.add('is-enter');
   }, 2600));
 
   // Phase 3: Sword swings (3.6s) - breaks screen
   warriorAnimState.timeouts.push(setTimeout(() => {
-    setPhase('⚔️ SWORD SLASHES THROUGH SCREEN!', 1500);
     sword.classList.add('is-swing');
-    setTimeout(() => crack.classList.add('is-shown'), 700);
-  }, 3600));
+    setTimeout(() => crack.classList.add('is-shown'), 500);
+  }, 2900));
 
   // Phase 4: Sky beam (5.0s) - light from above
   warriorAnimState.timeouts.push(setTimeout(() => {
-    setPhase('✨ SKY BEAM DESCENDS', 1400);
     crack.classList.remove('is-shown');
     beam.classList.add('is-fire');
-  }, 5000));
+  }, 4000));
 
   // Phase 5: Blast (6.2s)
   warriorAnimState.timeouts.push(setTimeout(() => {
-    setPhase('💥 BLAST!', 900);
     blast.classList.add('is-blast');
-  }, 6200));
+  }, 5000));
 
   // Phase 6: Car arrives (6.8s)
   warriorAnimState.timeouts.push(setTimeout(() => {
-    setPhase('🚗 YOUR REWARD ARRIVES', 1500);
     beam.classList.remove('is-fire');
     blast.classList.remove('is-blast');
     car.classList.add('is-drive');
-  }, 6800));
+  }, 5600));
 
   // Phase 7: Car trunk opens (8.4s) + prize reveal
   warriorAnimState.timeouts.push(setTimeout(() => {
-    setPhase('🎁 REWARD REVEALED!', 4000);
     trunk.classList.add('is-open');
-    setTimeout(() => prize.classList.add('is-show'), 600);
-  }, 8400));
+    setTimeout(() => prize.classList.add('is-show'), 500);
+  }, 7000));
 
   // Cleanup after 13.5s
   warriorAnimState.timeouts.push(setTimeout(() => {
     cleanupWarriorAnim();
-  }, 13500));
+  }, 11000));
 }
