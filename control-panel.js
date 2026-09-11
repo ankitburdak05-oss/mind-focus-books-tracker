@@ -367,7 +367,7 @@ async function adminLockResetViaToken() {
   const newPwd = document.getElementById('adminLockResetNewPwd')?.value || '';
 
   if (!token) {
-    adminLockShowError('Forgot', '⚠️ Master reset token daalein.');
+    adminLockShowError('Forgot', '⚠️ Master reset token daalein. GitHub file se copy karein ya "Auto-Fetch" button dabayein.');
     return;
   }
   if (newPwd.length < 6) {
@@ -375,19 +375,55 @@ async function adminLockResetViaToken() {
     return;
   }
 
-  // Validate token against remote file
   try {
     showToast('⏳ Verifying reset token...');
-    const res = await fetch(ADMIN_RESET_TOKEN_URL + '?cb=' + Date.now(), { cache: 'no-store' });
-    if (!res.ok) throw new Error('Token file not accessible (HTTP ' + res.status + ')');
-    const remoteToken = (await res.text()).trim();
 
-    if (token !== remoteToken) {
-      adminLockShowError('Forgot', '❌ Invalid reset token. Check GitHub file.');
+    // Try multiple URLs in order (raw → GitHub API → jsDelivr CDN)
+    const candidates = [
+      ADMIN_RESET_TOKEN_URL,
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/admin-reset-token.txt?ref=${DEFAULT_BRANCH}`,
+      `https://cdn.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${DEFAULT_BRANCH}/admin-reset-token.txt`
+    ];
+
+    let remoteToken = null;
+    let lastErr = null;
+    for (const url of candidates) {
+      try {
+        const sep = url.includes('?') ? '&' : '?';
+        const res = await fetch(url + sep + 'cb=' + Date.now(), {
+          cache: 'no-store',
+          headers: { 'Accept': 'text/plain' }
+        });
+        if (!res.ok) { lastErr = 'HTTP ' + res.status; continue; }
+        let body = await res.text();
+
+        // GitHub API returns JSON with base64 content
+        if (url.includes('api.github.com')) {
+          try {
+            const json = JSON.parse(body);
+            if (json && json.content) body = atob(json.content.replace(/\s/g, ''));
+          } catch (e) {}
+        }
+
+        const trimmed = body.trim();
+        if (trimmed.length > 5) { remoteToken = trimmed; break; }
+      } catch (e) { lastErr = e.message; }
+    }
+
+    if (!remoteToken) {
+      adminLockShowError('Forgot', '⚠️ Token file fetch nahi ho paya. ' + (lastErr || 'Network issue') + '. Browser console (F12) mein check karein.');
       return;
     }
 
-    // Token valid: replace lock with new password
+    const providedTrim = token.trim();
+    if (providedTrim !== remoteToken) {
+      const prefix = remoteToken.substring(0, 12);
+      adminLockShowError('Forgot', `❌ Token match nahi hua. Token start hota hai "${prefix}..." se. Aapne ${providedTrim.length} chars diye, expected ${remoteToken.length}. Sahi token GitHub se copy karein.`);
+      console.warn('[AdminLock] Token file says:', remoteToken);
+      console.warn('[AdminLock] You provided:', providedTrim);
+      return;
+    }
+
     const newLock = {
       mode: 'password',
       hash: adminLockHash(newPwd),
@@ -403,6 +439,31 @@ async function adminLockResetViaToken() {
     adminLockShowError('Forgot', '⚠️ Token verify nahi ho paya: ' + err.message);
   }
 }
+
+// One-click auto-fetch from GitHub + copy to clipboard
+async function adminLockAutoFetchToken() {
+  const input = document.getElementById('adminLockResetToken');
+  const btn = document.getElementById('adminLockAutoFetchBtn');
+  if (!input) return;
+  if (btn) { btn.disabled = true; btn.innerText = '⏳ Fetching...'; }
+  try {
+    const res = await fetch(ADMIN_RESET_TOKEN_URL + '?cb=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) {
+      const t = (await res.text()).trim();
+      input.value = t;
+      input.select();
+      showToast('✅ Token fetched! Auto-filled in box. Submit karein.');
+      try { await navigator.clipboard.writeText(t); } catch (e) {}
+    } else {
+      showToast('❌ Fetch failed. Manually URL kholke copy karein.');
+    }
+  } catch (err) {
+    showToast('❌ Network error: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerText = '📋 Auto-Fetch Token from GitHub'; }
+  }
+}
+window.adminLockAutoFetchToken = adminLockAutoFetchToken;
 
 function adminLockUnlock() {
   adminLockState.isUnlocked = true;
