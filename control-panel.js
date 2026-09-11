@@ -857,22 +857,88 @@ function onFeatureTileChanged(id) {
   const el = document.getElementById(id);
   if (!el) return;
   const card = document.getElementById('card_' + id);
-  const pill = document.getElementById('pill_' + id);
+  const statusEl = document.getElementById('status_' + id);
   if (el.checked) {
-    if (card) card.classList.remove('is-disabled');
-    if (pill) {
-      pill.innerText = 'ACTIVE';
-      pill.className = 'tile-status-pill pill-active';
-    }
+    if (card) card.classList.remove('is-off');
+    if (statusEl) statusEl.innerHTML = '<span class="status-dot-mini dot-on"></span>';
   } else {
-    if (card) card.classList.add('is-disabled');
-    if (pill) {
-      pill.innerText = 'PAUSED';
-      pill.className = 'tile-status-pill pill-paused';
-    }
+    if (card) card.classList.add('is-off');
+    if (statusEl) statusEl.innerHTML = '<span class="status-dot-mini dot-off"></span>';
   }
 }
 window.onFeatureTileChanged = onFeatureTileChanged;
+
+// Quick Panel Modal — iOS-style sheet for feature details
+const FEATURE_DESCRIPTIONS = {
+  cfgChatHelpDesk: 'In-app floating chat pill & real-time help desk messaging for users.',
+  cfgTelemetry: 'Real-time crash detection & automatic error report dispatch to your dashboard.',
+  cfgMobileDevTools: 'Floating in-app developer console & diagnostic inspector pill on user phone.',
+  cfgBroadcastNotice: 'Push admin flash announcements & alert banners on every user screen instantly.',
+  cfgAppUpdates: 'OTA APK auto-update prompts & header update badge for new versions.',
+  cfgStreakShields: 'Duolingo-style daily reading streaks & streak freeze shields gamification.',
+  cfgSanctuaryTimer: 'Focus interval timer with Pomodoro chimes & peaceful bell meditation.',
+  cfgFlashcards: 'Interactive 3D book summary flashcards with target words & spaced repetition.',
+  cfgAmbientAudio: 'Binaural rain, cafe, and forest white noise generator for focus mode.',
+  cfgVisualPhysics: 'Gyroscope card tilt & GPU aurora waves — turn OFF to save battery.',
+  cfgBarcodeScanner: 'Live camera barcode scanner to instantly find book ISBN & metadata.',
+  cfgAudioVoice: 'Synthetic text-to-speech audio voice reader for book notes & summaries.',
+  cfgQuotes: 'Inspirational daily reading quotes & wisdom shown on home feed.',
+  cfgCommunitySync: 'Sync community curated books and reviews across all user devices.',
+  cfgDictionary: 'A-Z English-Hindi 3D Dictionary book in user phone library.',
+  cfgPdfExport: 'Reading time stats, graphs & printable PDF reading certificate generator.'
+};
+
+function openFeatureQuickPanel(id) {
+  playUiClick();
+  const card = document.getElementById('card_' + id);
+  const cb = document.getElementById(id);
+  if (!card || !cb) return;
+  
+  // Extract glyph (emoji + bg color) from existing card
+  const glyph = card.querySelector('.icon-tile-glyph');
+  const name = card.dataset.featureName || id;
+  const desc = FEATURE_DESCRIPTIONS[id] || 'Toggle this feature on/off for all users.';
+  const bgStyle = glyph ? glyph.getAttribute('style') : '';
+  
+  // Remove existing panel if any
+  const existing = document.getElementById('featureQuickPanel');
+  if (existing) existing.remove();
+  
+  // Build panel
+  const panel = document.createElement('div');
+  panel.id = 'featureQuickPanel';
+  panel.className = 'feature-quick-panel-backdrop';
+  panel.innerHTML = `
+    <div class="feature-quick-panel" onclick="event.stopPropagation()">
+      <div class="fqp-icon" style="${bgStyle}">${glyph ? glyph.innerHTML : '⚙️'}</div>
+      <div class="fqp-title">${name}</div>
+      <div class="fqp-desc">${desc}</div>
+      <div class="fqp-toggle-row">
+        <span style="font-weight:600;font-size:14px;">Status</span>
+        <label class="switch" onclick="event.stopPropagation()">
+          <input type="checkbox" id="fqp_${id}" ${cb.checked ? 'checked' : ''} onchange="onFeatureTileChanged('${id}'); document.getElementById('${id}').checked = this.checked;">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <button type="button" class="fqp-close-btn" onclick="closeFeatureQuickPanel()">Done</button>
+    </div>
+  `;
+  
+  panel.addEventListener('click', () => closeFeatureQuickPanel());
+  document.body.appendChild(panel);
+  setTimeout(() => panel.classList.add('is-open'), 10);
+}
+
+function closeFeatureQuickPanel() {
+  const panel = document.getElementById('featureQuickPanel');
+  if (panel) {
+    panel.classList.remove('is-open');
+    setTimeout(() => panel.remove(), 200);
+  }
+}
+
+window.openFeatureQuickPanel = openFeatureQuickPanel;
+window.closeFeatureQuickPanel = closeFeatureQuickPanel;
 
 function syncAllFeatureTilesVisual() {
   const featureIds = [
