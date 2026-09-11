@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-11T03:17:14.666Z",
+  "updatedAt": "2026-09-11T03:19:57.909Z",
   "activeRelease": {
     "version": "v3.6.0",
     "name": "Mind Focus Books v3.6.0 — Premium Real-App Studio & UI Redesign",
@@ -42,7 +42,7 @@
     "isDeployed": true
   },
   "features": {
-    "appEmergencyLockdown": false,
+    "appEmergencyLockdown": true,
     "lockdownMessage": "🚨 अभी ऐप को बंद कर दिया गया है। कुछ प्रॉब्लम आ गई है, सभी फीचर के साथ ऐप भी बंद हो गया है। कृपया थोड़ी देर प्रतीक्षा करें।",
     "maintenanceMode": false,
     "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
