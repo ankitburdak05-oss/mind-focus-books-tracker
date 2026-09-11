@@ -148,7 +148,7 @@ body {
   -webkit-backdrop-filter: blur(12px);
 }
 
-/* --- THEME CONTROLS & PALETTE SELECTOR --- */
+/* /* --- THEME CONTROLS & PALETTE SELECTOR --- */
 .sidebar-theme-bar {
   margin-top: 10px;
   padding: 10px 12px;
@@ -182,6 +182,40 @@ body {
   color: #38bdf8;
 }
 
+/* Master Mode Switch (Light vs Dark) */
+.master-mode-switch-bar {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 3px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.mode-toggle-pill {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: transparent;
+  color: #94a3b8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.mode-toggle-pill.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  font-weight: 800;
+}
+
 .theme-pills-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -201,12 +235,26 @@ body {
   -webkit-backdrop-filter: blur(16px);
 }
 
-.topbar-theme-tag {
-  font-size: 0.72rem;
+.topbar-mode-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-size: 0.74rem;
   font-weight: 800;
-  color: #94a3b8;
-  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
   white-space: nowrap;
+}
+
+.topbar-mode-toggle:hover {
+  background: #ffffff;
+  color: #0f172a;
+  transform: translateY(-1px);
 }
 
 .theme-pills-row {
@@ -242,12 +290,13 @@ body {
   box-shadow: 0 0 6px currentColor;
 }
 
-.pill-aurora .pill-dot { background: #818cf8; color: #818cf8; }
+.pill-light .pill-dot { background: #f8fafc; color: #94a3b8; border: 1px solid #94a3b8; }
 .pill-ocean .pill-dot { background: #38bdf8; color: #38bdf8; }
 .pill-emerald .pill-dot { background: #34d399; color: #34d399; }
 .pill-ruby .pill-dot { background: #fb7185; color: #fb7185; }
 .pill-gold .pill-dot { background: #fbbf24; color: #fbbf24; }
 .pill-amethyst .pill-dot { background: #c084fc; color: #c084fc; }
+.pill-dark .pill-dot { background: #0f172a; color: #818cf8; border: 1px solid #818cf8; }
 
 .theme-pill-btn:hover {
   background: rgba(255, 255, 255, 0.16);
@@ -264,265 +313,624 @@ body {
   font-weight: 800;
 }
 
-/* Legacy Swatches (Preserved for compatibility) */
-.theme-swatches-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+/* ===================================================
+   ☀️ THEME 1: CLEAN SNOW WHITE (REAL LIGHT MODE)
+   =================================================== */
+body[data-theme="light"] {
+  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 50%, #e2e8f0 100%) !important;
+  color: #0f172a !important;
+  --text-main: #0f172a !important;
+  --text-secondary: #475569 !important;
+  --text-muted: #64748b !important;
 }
-.theme-swatch {
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
-  flex-shrink: 0;
-  outline: none;
-  padding: 0;
+
+body[data-theme="light"] .panel-aurora-bg {
+  background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 50%, #e2e8f0 100%) !important;
 }
-.theme-swatch:hover { transform: scale(1.25); }
-.theme-swatch.active {
-  border-color: #ffffff !important;
-  box-shadow: 0 0 10px #ffffff, 0 0 16px currentColor !important;
-  transform: scale(1.18);
+
+body[data-theme="light"] .panel-grid-pattern {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px) !important;
 }
-.swatch-aurora { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: #6366f1; }
-.swatch-ocean { background: linear-gradient(135deg, #0284c7, #38bdf8); color: #38bdf8; }
-.swatch-emerald { background: linear-gradient(135deg, #059669, #10b981); color: #10b981; }
-.swatch-ruby { background: linear-gradient(135deg, #e11d48, #f43f5e); color: #f43f5e; }
-.swatch-gold { background: linear-gradient(135deg, #d97706, #f59e0b); color: #f59e0b; }
-.swatch-amethyst { background: linear-gradient(135deg, #9333ea, #c084fc); color: #c084fc; }
+
+body[data-theme="light"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.22) 0%, rgba(79, 70, 229, 0.1) 45%, transparent 70%) !important;
+}
+body[data-theme="light"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.25) 0%, rgba(14, 165, 233, 0.1) 45%, transparent 70%) !important;
+}
+body[data-theme="light"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.2) 0%, rgba(16, 185, 129, 0.08) 45%, transparent 70%) !important;
+}
+body[data-theme="light"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.2) 0%, rgba(245, 158, 11, 0.08) 45%, transparent 70%) !important;
+}
+
+/* Sidebar Light Mode */
+body[data-theme="light"] .app-sidebar {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border-right: 1px solid rgba(0, 0, 0, 0.09) !important;
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.06) !important;
+  color: #0f172a !important;
+}
+body[data-theme="light"] .sidebar-header {
+  border-bottom-color: rgba(0, 0, 0, 0.08) !important;
+}
+body[data-theme="light"] .brand-name {
+  color: #0f172a !important;
+}
+body[data-theme="light"] .brand-desc {
+  color: #64748b !important;
+}
+body[data-theme="light"] .sidebar-reader-btn {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #1e293b !important;
+}
+body[data-theme="light"] .sidebar-reader-btn:hover {
+  background: rgba(99, 102, 241, 0.1) !important;
+  color: #4f46e5 !important;
+}
+body[data-theme="light"] .sidebar-theme-bar {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+body[data-theme="light"] .theme-bar-title {
+  color: #475569 !important;
+}
+body[data-theme="light"] .theme-current-label {
+  color: #4f46e5 !important;
+}
+body[data-theme="light"] .master-mode-switch-bar {
+  background: rgba(0, 0, 0, 0.06) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+body[data-theme="light"] .mode-toggle-pill {
+  color: #475569 !important;
+}
+body[data-theme="light"] .mode-toggle-pill.active {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1) !important;
+}
+body[data-theme="light"] .theme-pill-btn {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #334155 !important;
+}
+body[data-theme="light"] .theme-pill-btn:hover {
+  background: rgba(0, 0, 0, 0.08) !important;
+  color: #0f172a !important;
+}
+body[data-theme="light"] .theme-pill-btn.active {
+  background: #0f172a !important;
+  color: #ffffff !important;
+  border-color: #0f172a !important;
+}
+body[data-theme="light"] .nav-group-title {
+  color: #94a3b8 !important;
+}
+body[data-theme="light"] .sidebar-nav-item {
+  color: #475569 !important;
+}
+body[data-theme="light"] .sidebar-nav-item:hover {
+  background: rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
+}
+body[data-theme="light"] .sidebar-nav-item.active {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.12), rgba(139, 92, 246, 0.1)) !important;
+  color: #4f46e5 !important;
+  border-color: rgba(99, 102, 241, 0.3) !important;
+}
+body[data-theme="light"] .sidebar-footer {
+  background: rgba(248, 250, 252, 0.95) !important;
+  border-top-color: rgba(0, 0, 0, 0.08) !important;
+}
+body[data-theme="light"] .btn-sidebar-refresh {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #1e293b !important;
+}
+
+/* Stage Topbar Light Mode */
+body[data-theme="light"] .stage-topbar {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
+}
+body[data-theme="light"] .crumb-app {
+  color: #0f172a !important;
+}
+body[data-theme="light"] .crumb-active {
+  color: #4f46e5 !important;
+}
+body[data-theme="light"] .kpi-chip {
+  background: rgba(0, 0, 0, 0.04) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #1e293b !important;
+}
+body[data-theme="light"] .kpi-chip:hover {
+  background: rgba(99, 102, 241, 0.1) !important;
+  color: #4f46e5 !important;
+}
+body[data-theme="light"] .topbar-theme-group {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+}
+body[data-theme="light"] .topbar-mode-toggle {
+  background: #ffffff !important;
+  color: #0f172a !important;
+  border-color: rgba(0, 0, 0, 0.12) !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08) !important;
+}
+body[data-theme="light"] .btn-topbar-action:not(.btn-deploy-pill) {
+  background: rgba(0, 0, 0, 0.05) !important;
+  border-color: rgba(0, 0, 0, 0.1) !important;
+  color: #1e293b !important;
+}
+
+/* Glass Panel & Cards Light Mode */
+body[data-theme="light"] .glass-panel {
+  background: rgba(255, 255, 255, 0.92) !important;
+  border: 1px solid rgba(0, 0, 0, 0.09) !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.04) !important;
+  color: #0f172a !important;
+}
+body[data-theme="light"] .panel-title {
+  color: #0f172a !important;
+}
+body[data-theme="light"] .panel-header {
+  border-bottom-color: rgba(0, 0, 0, 0.07) !important;
+}
+
+/* Emergency Hero Card Light Mode */
+body[data-theme="light"] .emergency-hero-card {
+  background: rgba(255, 255, 255, 0.94) !important;
+  border: 1.5px solid rgba(16, 185, 129, 0.35) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.07) !important;
+}
+body[data-theme="light"] .status-headline {
+  color: #059669 !important;
+}
+body[data-theme="light"] .status-subheadline {
+  color: #475569 !important;
+}
+body[data-theme="light"] .emergency-switch-box {
+  background: #fef2f2 !important;
+  border-color: #fecaca !important;
+}
+body[data-theme="light"] .master-switch-title {
+  color: #dc2626 !important;
+}
+body[data-theme="light"] .emergency-lockdown-input-wrap {
+  background: #fff1f2 !important;
+  border-color: #fecdd3 !important;
+}
+body[data-theme="light"] .emergency-textarea {
+  background: #ffffff !important;
+  border-color: #fca5a5 !important;
+  color: #991b1b !important;
+}
+body[data-theme="light"] .btn-freeze-all {
+  background: #fef2f2 !important;
+  border-color: #fecaca !important;
+  color: #dc2626 !important;
+}
+body[data-theme="light"] .btn-restore-all {
+  background: #f0fdf4 !important;
+  border-color: #bbf7d0 !important;
+  color: #16a34a !important;
+}
+
+/* 16 Feature Tiles Light Mode */
+body[data-theme="light"] .feature-tile-card {
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05) !important;
+}
+body[data-theme="light"] .feature-tile-card:hover {
+  background: #ffffff !important;
+  border-color: #6366f1 !important;
+  box-shadow: 0 12px 28px rgba(99, 102, 241, 0.15) !important;
+}
+body[data-theme="light"] .tile-title {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+body[data-theme="light"] .tile-desc {
+  color: #64748b !important;
+}
+body[data-theme="light"] .tile-icon-badge {
+  background: #f8fafc !important;
+  border-color: #e2e8f0 !important;
+}
+body[data-theme="light"] .tile-status-pill.pill-active {
+  background: #ecfdf5 !important;
+  color: #059669 !important;
+  border-color: #a7f3d0 !important;
+}
+body[data-theme="light"] .tile-status-pill.pill-paused {
+  background: #f1f5f9 !important;
+  color: #64748b !important;
+  border-color: #cbd5e1 !important;
+}
+body[data-theme="light"] .tile-toggle-wrap {
+  border-top-color: #f1f5f9 !important;
+}
+body[data-theme="light"] .slider {
+  background-color: #cbd5e1 !important;
+}
+body[data-theme="light"] .slider:before {
+  background-color: #ffffff !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2) !important;
+}
+body[data-theme="light"] input:checked + .slider {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+}
+
+/* KPI Mini Cards Light Mode */
+body[data-theme="light"] .kpi-mini-card {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+}
+body[data-theme="light"] .kpi-mini-value {
+  color: #0f172a !important;
+}
+body[data-theme="light"] .kpi-mini-sub {
+  color: #64748b !important;
+}
+
+/* Form Inputs Light Mode */
+body[data-theme="light"] .form-label {
+  color: #475569 !important;
+}
+body[data-theme="light"] .form-input, 
+body[data-theme="light"] .form-textarea, 
+body[data-theme="light"] .form-select {
+  background: #ffffff !important;
+  border: 1.5px solid #cbd5e1 !important;
+  color: #0f172a !important;
+}
+body[data-theme="light"] .form-input:focus, 
+body[data-theme="light"] .form-textarea:focus, 
+body[data-theme="light"] .form-select:focus {
+  border-color: #4f46e5 !important;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15) !important;
+}
+body[data-theme="light"] .card-option {
+  background: #ffffff !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
+body[data-theme="light"] .card-radio-label input:checked + .card-option {
+  border-color: #4f46e5 !important;
+  background: #f5f3ff !important;
+}
+body[data-theme="light"] .card-option-title {
+  color: #0f172a !important;
+}
+body[data-theme="light"] .card-option-desc {
+  color: #64748b !important;
+}
+
+/* Chat Pane Light Mode */
+body[data-theme="light"] .chat-conversation-pane {
+  background: #ffffff !important;
+  border-color: #e2e8f0 !important;
+}
+body[data-theme="light"] .chat-active-header {
+  background: #f8fafc !important;
+  border-bottom-color: #e2e8f0 !important;
+}
+body[data-theme="light"] .chat-user-display-name {
+  color: #0f172a !important;
+}
+body[data-theme="light"] .chat-messages-stream {
+  background-color: #f8fafc !important;
+}
+body[data-theme="light"] .chat-msg-row.from-user .chat-bubble {
+  background: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  color: #0f172a !important;
+}
+body[data-theme="light"] .chat-input-row {
+  background: #ffffff !important;
+  border-top-color: #e2e8f0 !important;
+}
+body[data-theme="light"] .chat-text-input {
+  background: #f8fafc !important;
+  border-color: #cbd5e1 !important;
+  color: #0f172a !important;
+}
 
 /* ===================================================
-   VIBRANT APP BACKGROUND COLOR THEMES
+   🔵 THEME 2: VIVID SAPPHIRE OCEAN BLUE (REAL BLUE)
    =================================================== */
-
-/* --- THEME 1: COSMIC INDIGO (DEFAULT) --- */
-body[data-theme="aurora"], body:not([data-theme]) {
-  background: linear-gradient(135deg, #0e1738 0%, #162557 38%, #22377d 72%, #101c44 100%) !important;
+body[data-theme="ocean"] {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 45%, #3b82f6 80%, #1d4ed8 100%) !important;
   background-attachment: fixed !important;
+  color: #ffffff !important;
 }
-body[data-theme="aurora"] .panel-aurora-bg, body:not([data-theme]) .panel-aurora-bg {
-  background: linear-gradient(135deg, #0e1738 0%, #162557 38%, #22377d 72%, #101c44 100%) !important;
+body[data-theme="ocean"] .panel-aurora-bg {
+  background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 45%, #3b82f6 80%, #1d4ed8 100%) !important;
 }
-body[data-theme="aurora"] .aurora-blob-1, body:not([data-theme]) .aurora-blob-1 {
-  background: radial-gradient(circle, rgba(99, 102, 241, 0.75) 0%, rgba(79, 70, 229, 0.45) 45%, transparent 70%) !important;
+body[data-theme="ocean"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.9) 0%, rgba(2, 132, 199, 0.5) 45%, transparent 70%) !important;
 }
-body[data-theme="aurora"] .aurora-blob-2, body:not([data-theme]) .aurora-blob-2 {
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.65) 0%, rgba(147, 51, 234, 0.38) 45%, transparent 70%) !important;
+body[data-theme="ocean"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(96, 165, 250, 0.8) 0%, rgba(56, 189, 248, 0.45) 45%, transparent 70%) !important;
 }
-body[data-theme="aurora"] .aurora-blob-3, body:not([data-theme]) .aurora-blob-3 {
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.6) 0%, rgba(2, 132, 199, 0.32) 45%, transparent 70%) !important;
+body[data-theme="ocean"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(147, 197, 253, 0.75) 0%, rgba(37, 99, 235, 0.4) 45%, transparent 70%) !important;
 }
-body[data-theme="aurora"] .aurora-blob-4, body:not([data-theme]) .aurora-blob-4 {
-  background: radial-gradient(circle, rgba(129, 140, 248, 0.6) 0%, rgba(99, 102, 241, 0.3) 45%, transparent 70%) !important;
+body[data-theme="ocean"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.75) 0%, rgba(14, 165, 233, 0.4) 45%, transparent 70%) !important;
 }
-body[data-theme="aurora"] .glass-panel, body:not([data-theme]) .glass-panel {
-  background: rgba(14, 22, 48, 0.42) !important;
+body[data-theme="ocean"] .glass-panel {
+  background: rgba(15, 45, 110, 0.55) !important;
+  border-color: rgba(147, 197, 253, 0.45) !important;
+  box-shadow: 0 16px 40px rgba(10, 30, 80, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+body[data-theme="ocean"] .emergency-hero-card {
+  background: rgba(15, 45, 110, 0.6) !important;
+  border-color: rgba(147, 197, 253, 0.5) !important;
+}
+body[data-theme="ocean"] .feature-tile-card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+body[data-theme="ocean"] .feature-tile-card:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: #ffffff !important;
+}
+body[data-theme="ocean"] .app-sidebar {
+  background: rgba(15, 40, 95, 0.75) !important;
+  border-right-color: rgba(147, 197, 253, 0.3) !important;
+}
+body[data-theme="ocean"] .stage-topbar {
+  background: rgba(15, 42, 100, 0.7) !important;
+  border-bottom-color: rgba(147, 197, 253, 0.3) !important;
+}
+
+/* ===================================================
+   🟢 THEME 3: FRESH EMERALD GREEN (REAL GREEN)
+   =================================================== */
+body[data-theme="emerald"] {
+  background: linear-gradient(135deg, #064e3b 0%, #059669 45%, #10b981 80%, #047857 100%) !important;
+  background-attachment: fixed !important;
+  color: #ffffff !important;
+}
+body[data-theme="emerald"] .panel-aurora-bg {
+  background: linear-gradient(135deg, #064e3b 0%, #059669 45%, #10b981 80%, #047857 100%) !important;
+}
+body[data-theme="emerald"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.5) 45%, transparent 70%) !important;
+}
+body[data-theme="emerald"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(52, 211, 153, 0.8) 0%, rgba(13, 148, 136, 0.45) 45%, transparent 70%) !important;
+}
+body[data-theme="emerald"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(110, 231, 183, 0.75) 0%, rgba(16, 185, 129, 0.4) 45%, transparent 70%) !important;
+}
+body[data-theme="emerald"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(20, 184, 166, 0.75) 0%, rgba(5, 150, 105, 0.35) 45%, transparent 70%) !important;
+}
+body[data-theme="emerald"] .glass-panel {
+  background: rgba(4, 55, 38, 0.55) !important;
+  border-color: rgba(110, 231, 183, 0.45) !important;
+  box-shadow: 0 16px 40px rgba(3, 40, 28, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+body[data-theme="emerald"] .emergency-hero-card {
+  background: rgba(4, 55, 38, 0.6) !important;
+  border-color: rgba(110, 231, 183, 0.5) !important;
+}
+body[data-theme="emerald"] .feature-tile-card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+body[data-theme="emerald"] .feature-tile-card:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: #ffffff !important;
+}
+body[data-theme="emerald"] .app-sidebar {
+  background: rgba(4, 50, 35, 0.75) !important;
+  border-right-color: rgba(110, 231, 183, 0.3) !important;
+}
+body[data-theme="emerald"] .stage-topbar {
+  background: rgba(4, 52, 36, 0.7) !important;
+  border-bottom-color: rgba(110, 231, 183, 0.3) !important;
+}
+
+/* ===================================================
+   🔴 THEME 4: CRIMSON RUBY (REAL VIVID RED)
+   =================================================== */
+body[data-theme="ruby"] {
+  background: linear-gradient(135deg, #881337 0%, #be123c 45%, #e11d48 80%, #9f1239 100%) !important;
+  background-attachment: fixed !important;
+  color: #ffffff !important;
+}
+body[data-theme="ruby"] .panel-aurora-bg {
+  background: linear-gradient(135deg, #881337 0%, #be123c 45%, #e11d48 80%, #9f1239 100%) !important;
+}
+body[data-theme="ruby"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(244, 63, 94, 0.9) 0%, rgba(225, 29, 72, 0.5) 45%, transparent 70%) !important;
+}
+body[data-theme="ruby"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(251, 113, 133, 0.8) 0%, rgba(190, 18, 60, 0.45) 45%, transparent 70%) !important;
+}
+body[data-theme="ruby"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(253, 164, 175, 0.75) 0%, rgba(244, 63, 94, 0.4) 45%, transparent 70%) !important;
+}
+body[data-theme="ruby"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(217, 70, 239, 0.75) 0%, rgba(168, 85, 247, 0.35) 45%, transparent 70%) !important;
+}
+body[data-theme="ruby"] .glass-panel {
+  background: rgba(85, 12, 35, 0.55) !important;
+  border-color: rgba(253, 164, 175, 0.45) !important;
+  box-shadow: 0 16px 40px rgba(60, 8, 25, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+body[data-theme="ruby"] .emergency-hero-card {
+  background: rgba(85, 12, 35, 0.6) !important;
+  border-color: rgba(253, 164, 175, 0.5) !important;
+}
+body[data-theme="ruby"] .feature-tile-card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+body[data-theme="ruby"] .feature-tile-card:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: #ffffff !important;
+}
+body[data-theme="ruby"] .app-sidebar {
+  background: rgba(75, 10, 30, 0.75) !important;
+  border-right-color: rgba(253, 164, 175, 0.3) !important;
+}
+body[data-theme="ruby"] .stage-topbar {
+  background: rgba(78, 10, 32, 0.7) !important;
+  border-bottom-color: rgba(253, 164, 175, 0.3) !important;
+}
+
+/* ===================================================
+   🟠 THEME 5: SUNSET AMBER GOLD (WARM GOLD/AMBER)
+   =================================================== */
+body[data-theme="gold"] {
+  background: linear-gradient(135deg, #78350f 0%, #b45309 45%, #d97706 80%, #92400e 100%) !important;
+  background-attachment: fixed !important;
+  color: #ffffff !important;
+}
+body[data-theme="gold"] .panel-aurora-bg {
+  background: linear-gradient(135deg, #78350f 0%, #b45309 45%, #d97706 80%, #92400e 100%) !important;
+}
+body[data-theme="gold"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.9) 0%, rgba(217, 119, 6, 0.5) 45%, transparent 70%) !important;
+}
+body[data-theme="gold"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.8) 0%, rgba(245, 158, 11, 0.45) 45%, transparent 70%) !important;
+}
+body[data-theme="gold"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(253, 230, 138, 0.75) 0%, rgba(217, 119, 6, 0.4) 45%, transparent 70%) !important;
+}
+body[data-theme="gold"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(234, 88, 12, 0.75) 0%, rgba(194, 65, 12, 0.35) 45%, transparent 70%) !important;
+}
+body[data-theme="gold"] .glass-panel {
+  background: rgba(85, 38, 8, 0.55) !important;
+  border-color: rgba(253, 230, 138, 0.45) !important;
+  box-shadow: 0 16px 40px rgba(60, 26, 6, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+body[data-theme="gold"] .emergency-hero-card {
+  background: rgba(85, 38, 8, 0.6) !important;
+  border-color: rgba(253, 230, 138, 0.5) !important;
+}
+body[data-theme="gold"] .feature-tile-card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+body[data-theme="gold"] .feature-tile-card:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: #ffffff !important;
+}
+body[data-theme="gold"] .app-sidebar {
+  background: rgba(75, 32, 6, 0.75) !important;
+  border-right-color: rgba(253, 230, 138, 0.3) !important;
+}
+body[data-theme="gold"] .stage-topbar {
+  background: rgba(78, 35, 8, 0.7) !important;
+  border-bottom-color: rgba(253, 230, 138, 0.3) !important;
+}
+
+/* ===================================================
+   🟣 THEME 6: CYBER ROYAL PURPLE (REAL VIVID PURPLE)
+   =================================================== */
+body[data-theme="amethyst"] {
+  background: linear-gradient(135deg, #581c87 0%, #7e22ce 45%, #9333ea 80%, #6b21a8 100%) !important;
+  background-attachment: fixed !important;
+  color: #ffffff !important;
+}
+body[data-theme="amethyst"] .panel-aurora-bg {
+  background: linear-gradient(135deg, #581c87 0%, #7e22ce 45%, #9333ea 80%, #6b21a8 100%) !important;
+}
+body[data-theme="amethyst"] .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.9) 0%, rgba(147, 51, 234, 0.5) 45%, transparent 70%) !important;
+}
+body[data-theme="amethyst"] .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(217, 70, 239, 0.8) 0%, rgba(192, 38, 211, 0.45) 45%, transparent 70%) !important;
+}
+body[data-theme="amethyst"] .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(233, 213, 255, 0.75) 0%, rgba(139, 92, 246, 0.4) 45%, transparent 70%) !important;
+}
+body[data-theme="amethyst"] .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(192, 132, 252, 0.75) 0%, rgba(147, 51, 234, 0.35) 45%, transparent 70%) !important;
+}
+body[data-theme="amethyst"] .glass-panel {
+  background: rgba(65, 18, 100, 0.55) !important;
+  border-color: rgba(233, 213, 255, 0.45) !important;
+  box-shadow: 0 16px 40px rgba(45, 12, 70, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+body[data-theme="amethyst"] .emergency-hero-card {
+  background: rgba(65, 18, 100, 0.6) !important;
+  border-color: rgba(233, 213, 255, 0.5) !important;
+}
+body[data-theme="amethyst"] .feature-tile-card {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+body[data-theme="amethyst"] .feature-tile-card:hover {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: #ffffff !important;
+}
+body[data-theme="amethyst"] .app-sidebar {
+  background: rgba(55, 15, 85, 0.75) !important;
+  border-right-color: rgba(233, 213, 255, 0.3) !important;
+}
+body[data-theme="amethyst"] .stage-topbar {
+  background: rgba(58, 16, 90, 0.7) !important;
+  border-bottom-color: rgba(233, 213, 255, 0.3) !important;
+}
+
+/* ===================================================
+   🌙 THEME 7: MIDNIGHT OBSIDIAN DARK MODE (OLED DARK)
+   =================================================== */
+body[data-theme="dark"], body[data-theme="aurora"], body:not([data-theme]) {
+  background: linear-gradient(135deg, #090d16 0%, #111827 50%, #1f2937 100%) !important;
+  background-attachment: fixed !important;
+  color: #ffffff !important;
+}
+body[data-theme="dark"] .panel-aurora-bg, body[data-theme="aurora"] .panel-aurora-bg, body:not([data-theme]) .panel-aurora-bg {
+  background: linear-gradient(135deg, #090d16 0%, #111827 50%, #1f2937 100%) !important;
+}
+body[data-theme="dark"] .aurora-blob-1, body[data-theme="aurora"] .aurora-blob-1, body:not([data-theme]) .aurora-blob-1 {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.75) 0%, rgba(79, 70, 229, 0.4) 45%, transparent 70%) !important;
+}
+body[data-theme="dark"] .aurora-blob-2, body[data-theme="aurora"] .aurora-blob-2, body:not([data-theme]) .aurora-blob-2 {
+  background: radial-gradient(circle, rgba(168, 85, 247, 0.65) 0%, rgba(147, 51, 234, 0.35) 45%, transparent 70%) !important;
+}
+body[data-theme="dark"] .aurora-blob-3, body[data-theme="aurora"] .aurora-blob-3, body:not([data-theme]) .aurora-blob-3 {
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.6) 0%, rgba(2, 132, 199, 0.3) 45%, transparent 70%) !important;
+}
+body[data-theme="dark"] .aurora-blob-4, body[data-theme="aurora"] .aurora-blob-4, body:not([data-theme]) .aurora-blob-4 {
+  background: radial-gradient(circle, rgba(129, 140, 248, 0.6) 0%, rgba(99, 102, 241, 0.25) 45%, transparent 70%) !important;
+}
+body[data-theme="dark"] .glass-panel, body[data-theme="aurora"] .glass-panel, body:not([data-theme]) .glass-panel {
+  background: rgba(14, 22, 48, 0.45) !important;
   border-color: rgba(129, 140, 248, 0.28) !important;
 }
-body[data-theme="aurora"] .feature-tile-card, body:not([data-theme]) .feature-tile-card {
-  background: linear-gradient(150deg, rgba(20, 32, 70, 0.52) 0%, rgba(10, 18, 42, 0.62) 100%) !important;
-  border-color: rgba(129, 140, 248, 0.25) !important;
+body[data-theme="dark"] .emergency-hero-card, body[data-theme="aurora"] .emergency-hero-card, body:not([data-theme]) .emergency-hero-card {
+  background: rgba(14, 22, 48, 0.48) !important;
+  border-color: rgba(129, 140, 248, 0.28) !important;
 }
-body[data-theme="aurora"] .app-sidebar, body:not([data-theme]) .app-sidebar {
+body[data-theme="dark"] .feature-tile-card, body[data-theme="aurora"] .feature-tile-card, body:not([data-theme]) .feature-tile-card {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+body[data-theme="dark"] .app-sidebar, body[data-theme="aurora"] .app-sidebar, body:not([data-theme]) .app-sidebar {
   background: rgba(12, 20, 46, 0.65) !important;
   border-right-color: rgba(129, 140, 248, 0.22) !important;
 }
-body[data-theme="aurora"] .stage-topbar, body:not([data-theme]) .stage-topbar {
+body[data-theme="dark"] .stage-topbar, body[data-theme="aurora"] .stage-topbar, body:not([data-theme]) .stage-topbar {
   background: rgba(14, 22, 50, 0.6) !important;
   border-bottom-color: rgba(129, 140, 248, 0.22) !important;
-}
-
-/* --- THEME 2: SAPPHIRE OCEAN (VIVID BLUE) --- */
-body[data-theme="ocean"] {
-  background: linear-gradient(135deg, #092047 0%, #0d3674 38%, #1550a6 72%, #0a2552 100%) !important;
-  background-attachment: fixed !important;
-}
-body[data-theme="ocean"] .panel-aurora-bg {
-  background: linear-gradient(135deg, #092047 0%, #0d3674 38%, #1550a6 72%, #0a2552 100%) !important;
-}
-body[data-theme="ocean"] .aurora-blob-1 {
-  background: radial-gradient(circle, rgba(14, 165, 233, 0.8) 0%, rgba(2, 132, 199, 0.45) 45%, transparent 70%) !important;
-}
-body[data-theme="ocean"] .aurora-blob-2 {
-  background: radial-gradient(circle, rgba(6, 182, 212, 0.7) 0%, rgba(56, 189, 248, 0.4) 45%, transparent 70%) !important;
-}
-body[data-theme="ocean"] .aurora-blob-3 {
-  background: radial-gradient(circle, rgba(96, 165, 250, 0.65) 0%, rgba(37, 99, 235, 0.35) 45%, transparent 70%) !important;
-}
-body[data-theme="ocean"] .aurora-blob-4 {
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.65) 0%, rgba(14, 165, 233, 0.35) 45%, transparent 70%) !important;
-}
-body[data-theme="ocean"] .glass-panel {
-  background: rgba(10, 28, 62, 0.42) !important;
-  border-color: rgba(96, 165, 250, 0.3) !important;
-  box-shadow: 0 12px 36px -4px rgba(7, 26, 68, 0.45), 0 0 0 1px rgba(125, 211, 252, 0.15) inset !important;
-}
-body[data-theme="ocean"] .feature-tile-card {
-  background: linear-gradient(150deg, rgba(14, 42, 92, 0.52) 0%, rgba(8, 26, 62, 0.62) 100%) !important;
-  border-color: rgba(96, 165, 250, 0.28) !important;
-}
-body[data-theme="ocean"] .app-sidebar {
-  background: rgba(8, 28, 68, 0.65) !important;
-  border-right-color: rgba(96, 165, 250, 0.25) !important;
-}
-body[data-theme="ocean"] .stage-topbar {
-  background: rgba(8, 30, 72, 0.6) !important;
-  border-bottom-color: rgba(96, 165, 250, 0.25) !important;
-}
-
-/* --- THEME 3: EMERALD FOREST (VIVID GREEN) --- */
-body[data-theme="emerald"] {
-  background: linear-gradient(135deg, #053322 0%, #0a5439 38%, #117e57 72%, #07422c 100%) !important;
-  background-attachment: fixed !important;
-}
-body[data-theme="emerald"] .panel-aurora-bg {
-  background: linear-gradient(135deg, #053322 0%, #0a5439 38%, #117e57 72%, #07422c 100%) !important;
-}
-body[data-theme="emerald"] .aurora-blob-1 {
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.8) 0%, rgba(5, 150, 105, 0.45) 45%, transparent 70%) !important;
-}
-body[data-theme="emerald"] .aurora-blob-2 {
-  background: radial-gradient(circle, rgba(52, 211, 153, 0.7) 0%, rgba(13, 148, 136, 0.4) 45%, transparent 70%) !important;
-}
-body[data-theme="emerald"] .aurora-blob-3 {
-  background: radial-gradient(circle, rgba(110, 231, 183, 0.65) 0%, rgba(16, 185, 129, 0.35) 45%, transparent 70%) !important;
-}
-body[data-theme="emerald"] .aurora-blob-4 {
-  background: radial-gradient(circle, rgba(20, 184, 166, 0.65) 0%, rgba(5, 150, 105, 0.3) 45%, transparent 70%) !important;
-}
-body[data-theme="emerald"] .glass-panel {
-  background: rgba(5, 42, 28, 0.42) !important;
-  border-color: rgba(52, 211, 153, 0.3) !important;
-  box-shadow: 0 12px 36px -4px rgba(4, 30, 20, 0.45), 0 0 0 1px rgba(110, 231, 183, 0.15) inset !important;
-}
-body[data-theme="emerald"] .feature-tile-card {
-  background: linear-gradient(150deg, rgba(8, 56, 38, 0.52) 0%, rgba(4, 34, 24, 0.62) 100%) !important;
-  border-color: rgba(52, 211, 153, 0.28) !important;
-}
-body[data-theme="emerald"] .app-sidebar {
-  background: rgba(4, 36, 24, 0.65) !important;
-  border-right-color: rgba(52, 211, 153, 0.25) !important;
-}
-body[data-theme="emerald"] .stage-topbar {
-  background: rgba(4, 38, 26, 0.6) !important;
-  border-bottom-color: rgba(52, 211, 153, 0.25) !important;
-}
-
-/* --- THEME 4: CRIMSON RUBY (VIVID RED) --- */
-body[data-theme="ruby"] {
-  background: linear-gradient(135deg, #3d091e 0%, #631233 38%, #941b4e 72%, #4e0b27 100%) !important;
-  background-attachment: fixed !important;
-}
-body[data-theme="ruby"] .panel-aurora-bg {
-  background: linear-gradient(135deg, #3d091e 0%, #631233 38%, #941b4e 72%, #4e0b27 100%) !important;
-}
-body[data-theme="ruby"] .aurora-blob-1 {
-  background: radial-gradient(circle, rgba(244, 63, 94, 0.8) 0%, rgba(225, 29, 72, 0.45) 45%, transparent 70%) !important;
-}
-body[data-theme="ruby"] .aurora-blob-2 {
-  background: radial-gradient(circle, rgba(251, 113, 133, 0.7) 0%, rgba(190, 18, 60, 0.4) 45%, transparent 70%) !important;
-}
-body[data-theme="ruby"] .aurora-blob-3 {
-  background: radial-gradient(circle, rgba(253, 164, 175, 0.65) 0%, rgba(244, 63, 94, 0.35) 45%, transparent 70%) !important;
-}
-body[data-theme="ruby"] .aurora-blob-4 {
-  background: radial-gradient(circle, rgba(217, 70, 239, 0.65) 0%, rgba(168, 85, 247, 0.3) 45%, transparent 70%) !important;
-}
-body[data-theme="ruby"] .glass-panel {
-  background: rgba(48, 12, 28, 0.42) !important;
-  border-color: rgba(251, 113, 133, 0.3) !important;
-  box-shadow: 0 12px 36px -4px rgba(35, 7, 19, 0.45), 0 0 0 1px rgba(253, 164, 175, 0.15) inset !important;
-}
-body[data-theme="ruby"] .feature-tile-card {
-  background: linear-gradient(150deg, rgba(68, 16, 40, 0.52) 0%, rgba(38, 10, 24, 0.62) 100%) !important;
-  border-color: rgba(251, 113, 133, 0.28) !important;
-}
-body[data-theme="ruby"] .app-sidebar {
-  background: rgba(42, 10, 24, 0.65) !important;
-  border-right-color: rgba(251, 113, 133, 0.25) !important;
-}
-body[data-theme="ruby"] .stage-topbar {
-  background: rgba(44, 10, 26, 0.6) !important;
-  border-bottom-color: rgba(251, 113, 133, 0.25) !important;
-}
-
-/* --- THEME 5: SUNSET AMBER GOLD (VIVID WARM GOLD) --- */
-body[data-theme="gold"] {
-  background: linear-gradient(135deg, #3d1c04 0%, #632e08 38%, #994910 72%, #4f2205 100%) !important;
-  background-attachment: fixed !important;
-}
-body[data-theme="gold"] .panel-aurora-bg {
-  background: linear-gradient(135deg, #3d1c04 0%, #632e08 38%, #994910 72%, #4f2205 100%) !important;
-}
-body[data-theme="gold"] .aurora-blob-1 {
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.8) 0%, rgba(217, 119, 6, 0.45) 45%, transparent 70%) !important;
-}
-body[data-theme="gold"] .aurora-blob-2 {
-  background: radial-gradient(circle, rgba(251, 191, 36, 0.7) 0%, rgba(245, 158, 11, 0.4) 45%, transparent 70%) !important;
-}
-body[data-theme="gold"] .aurora-blob-3 {
-  background: radial-gradient(circle, rgba(253, 230, 138, 0.65) 0%, rgba(217, 119, 6, 0.35) 45%, transparent 70%) !important;
-}
-body[data-theme="gold"] .aurora-blob-4 {
-  background: radial-gradient(circle, rgba(234, 88, 12, 0.65) 0%, rgba(194, 65, 12, 0.3) 45%, transparent 70%) !important;
-}
-body[data-theme="gold"] .glass-panel {
-  background: rgba(48, 24, 8, 0.42) !important;
-  border-color: rgba(251, 191, 36, 0.3) !important;
-  box-shadow: 0 12px 36px -4px rgba(35, 16, 4, 0.45), 0 0 0 1px rgba(253, 230, 138, 0.15) inset !important;
-}
-body[data-theme="gold"] .feature-tile-card {
-  background: linear-gradient(150deg, rgba(68, 34, 12, 0.52) 0%, rgba(38, 18, 6, 0.62) 100%) !important;
-  border-color: rgba(251, 191, 36, 0.28) !important;
-}
-body[data-theme="gold"] .app-sidebar {
-  background: rgba(42, 20, 6, 0.65) !important;
-  border-right-color: rgba(251, 191, 36, 0.25) !important;
-}
-body[data-theme="gold"] .stage-topbar {
-  background: rgba(44, 22, 8, 0.6) !important;
-  border-bottom-color: rgba(251, 191, 36, 0.25) !important;
-}
-
-/* --- THEME 6: CYBER ROYAL PURPLE (VIVID PURPLE) --- */
-body[data-theme="amethyst"] {
-  background: linear-gradient(135deg, #2a0b4c 0%, #46147d 38%, #6d20be 72%, #350c60 100%) !important;
-  background-attachment: fixed !important;
-}
-body[data-theme="amethyst"] .panel-aurora-bg {
-  background: linear-gradient(135deg, #2a0b4c 0%, #46147d 38%, #6d20be 72%, #350c60 100%) !important;
-}
-body[data-theme="amethyst"] .aurora-blob-1 {
-  background: radial-gradient(circle, rgba(168, 85, 247, 0.8) 0%, rgba(147, 51, 234, 0.45) 45%, transparent 70%) !important;
-}
-body[data-theme="amethyst"] .aurora-blob-2 {
-  background: radial-gradient(circle, rgba(217, 70, 239, 0.7) 0%, rgba(192, 38, 211, 0.4) 45%, transparent 70%) !important;
-}
-body[data-theme="amethyst"] .aurora-blob-3 {
-  background: radial-gradient(circle, rgba(233, 213, 255, 0.65) 0%, rgba(139, 92, 246, 0.35) 45%, transparent 70%) !important;
-}
-body[data-theme="amethyst"] .aurora-blob-4 {
-  background: radial-gradient(circle, rgba(192, 132, 252, 0.65) 0%, rgba(147, 51, 234, 0.3) 45%, transparent 70%) !important;
-}
-body[data-theme="amethyst"] .glass-panel {
-  background: rgba(38, 14, 65, 0.42) !important;
-  border-color: rgba(217, 70, 239, 0.3) !important;
-  box-shadow: 0 12px 36px -4px rgba(26, 8, 48, 0.45), 0 0 0 1px rgba(233, 213, 255, 0.15) inset !important;
-}
-body[data-theme="amethyst"] .feature-tile-card {
-  background: linear-gradient(150deg, rgba(55, 18, 92, 0.52) 0%, rgba(30, 8, 54, 0.62) 100%) !important;
-  border-color: rgba(217, 70, 239, 0.28) !important;
-}
-body[data-theme="amethyst"] .app-sidebar {
-  background: rgba(34, 10, 58, 0.65) !important;
-  border-right-color: rgba(217, 70, 239, 0.25) !important;
-}
-body[data-theme="amethyst"] .stage-topbar {
-  background: rgba(36, 12, 62, 0.6) !important;
-  border-bottom-color: rgba(217, 70, 239, 0.25) !important;
 }
 
 /* ===================================================

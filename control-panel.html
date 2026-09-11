@@ -8,8 +8,8 @@
   <meta http-equiv="Expires" content="0">
   <title>Mind Focus Books • Admin Studio & Control Panel</title>
   <link rel="manifest" href="manifest-admin.json">
-  <link rel="stylesheet" href="style.css?v=3.7.3">
-  <link rel="stylesheet" href="control-panel.css?v=3.7.3">
+  <link rel="stylesheet" href="style.css?v=3.7.4">
+  <link rel="stylesheet" href="control-panel.css?v=3.7.4">
   <link rel="icon" type="image/png" href="icon-192.png">
 </head>
 <body>
@@ -48,33 +48,48 @@
         <!-- Sidebar Theme Palette Selector -->
         <div class="sidebar-theme-bar">
           <div class="theme-bar-header">
-            <span class="theme-bar-title">🎨 APP BG COLOR</span>
-            <span class="theme-current-label" id="currentThemeLabel">Cosmic Indigo</span>
+            <span class="theme-bar-title">🎨 APP MODE &amp; COLOR</span>
+            <span class="theme-current-label" id="currentThemeLabel">Light Mode ☀️</span>
           </div>
+
+          <!-- Master Mode Quick Switch (Light / Dark) -->
+          <div class="master-mode-switch-bar">
+            <button type="button" class="mode-toggle-pill btn-mode-light" id="btnModeLight" onclick="setPanelTheme('light')" title="Snow White Light Mode">
+              <span>☀️ Light Mode</span>
+            </button>
+            <button type="button" class="mode-toggle-pill btn-mode-dark" id="btnModeDark" onclick="setPanelTheme('dark')" title="Midnight OLED Dark Mode">
+              <span>🌙 Dark Mode</span>
+            </button>
+          </div>
+
           <div class="theme-pills-grid">
-            <button type="button" class="theme-pill-btn pill-aurora active" data-theme-name="aurora" onclick="setPanelTheme('aurora')" title="Cosmic Indigo Background">
+            <button type="button" class="theme-pill-btn pill-light" data-theme-name="light" onclick="setPanelTheme('light')" title="Snow White Light Mode">
               <span class="pill-dot"></span>
-              <span class="pill-label">Indigo</span>
+              <span class="pill-label">White ☀️</span>
             </button>
-            <button type="button" class="theme-pill-btn pill-ocean" data-theme-name="ocean" onclick="setPanelTheme('ocean')" title="Sapphire Ocean Blue Background">
+            <button type="button" class="theme-pill-btn pill-ocean" data-theme-name="ocean" onclick="setPanelTheme('ocean')" title="Vivid Sapphire Ocean Blue">
               <span class="pill-dot"></span>
-              <span class="pill-label">Blue</span>
+              <span class="pill-label">Blue 🔵</span>
             </button>
-            <button type="button" class="theme-pill-btn pill-emerald" data-theme-name="emerald" onclick="setPanelTheme('emerald')" title="Emerald Forest Green Background">
+            <button type="button" class="theme-pill-btn pill-emerald" data-theme-name="emerald" onclick="setPanelTheme('emerald')" title="Lush Emerald Forest Green">
               <span class="pill-dot"></span>
-              <span class="pill-label">Green</span>
+              <span class="pill-label">Green 🟢</span>
             </button>
-            <button type="button" class="theme-pill-btn pill-ruby" data-theme-name="ruby" onclick="setPanelTheme('ruby')" title="Crimson Ruby Red Background">
+            <button type="button" class="theme-pill-btn pill-ruby" data-theme-name="ruby" onclick="setPanelTheme('ruby')" title="Vivid Crimson Ruby Red">
               <span class="pill-dot"></span>
-              <span class="pill-label">Red</span>
+              <span class="pill-label">Red 🔴</span>
             </button>
-            <button type="button" class="theme-pill-btn pill-gold" data-theme-name="gold" onclick="setPanelTheme('gold')" title="Sunset Amber Gold Background">
+            <button type="button" class="theme-pill-btn pill-gold" data-theme-name="gold" onclick="setPanelTheme('gold')" title="Warm Sunset Amber Gold">
               <span class="pill-dot"></span>
-              <span class="pill-label">Gold</span>
+              <span class="pill-label">Gold 🟠</span>
             </button>
-            <button type="button" class="theme-pill-btn pill-amethyst" data-theme-name="amethyst" onclick="setPanelTheme('amethyst')" title="Cyber Royal Purple Background">
+            <button type="button" class="theme-pill-btn pill-amethyst" data-theme-name="amethyst" onclick="setPanelTheme('amethyst')" title="Cyber Royal Purple">
               <span class="pill-dot"></span>
-              <span class="pill-label">Purple</span>
+              <span class="pill-label">Purple 🟣</span>
+            </button>
+            <button type="button" class="theme-pill-btn pill-dark" data-theme-name="dark" onclick="setPanelTheme('dark')" title="Midnight OLED Dark Mode">
+              <span class="pill-dot"></span>
+              <span class="pill-label">Dark 🌙</span>
             </button>
           </div>
         </div>
@@ -195,27 +210,32 @@
         </div>
 
         <div class="topbar-right">
-          <!-- Quick App Background Theme Switcher -->
-          <div class="topbar-theme-group" title="Select App Background Color">
-            <span class="topbar-theme-tag">🎨 BG:</span>
+          <!-- Quick App Mode / Color Switcher -->
+          <div class="topbar-theme-group" title="Select App Mode (Light / Colors / Dark)">
+            <button type="button" class="topbar-mode-toggle" id="topbarModeToggle" onclick="toggleLightDarkMode()" title="Toggle Light / Dark Mode">
+              <span id="topbarModeIcon">☀️</span> <span id="topbarModeText">Light Mode</span>
+            </button>
             <div class="theme-pills-row">
-              <button type="button" class="theme-pill-btn pill-aurora active" data-theme-name="aurora" onclick="setPanelTheme('aurora')" title="Cosmic Indigo Background">
-                <span class="pill-dot"></span><span class="pill-label">Indigo</span>
+              <button type="button" class="theme-pill-btn pill-light" data-theme-name="light" onclick="setPanelTheme('light')" title="Snow White Light Mode">
+                <span class="pill-dot"></span><span class="pill-label">White ☀️</span>
               </button>
-              <button type="button" class="theme-pill-btn pill-ocean" data-theme-name="ocean" onclick="setPanelTheme('ocean')" title="Sapphire Ocean Blue Background">
-                <span class="pill-dot"></span><span class="pill-label">Blue</span>
+              <button type="button" class="theme-pill-btn pill-ocean" data-theme-name="ocean" onclick="setPanelTheme('ocean')" title="Vivid Sapphire Ocean Blue">
+                <span class="pill-dot"></span><span class="pill-label">Blue 🔵</span>
               </button>
-              <button type="button" class="theme-pill-btn pill-emerald" data-theme-name="emerald" onclick="setPanelTheme('emerald')" title="Emerald Green Background">
-                <span class="pill-dot"></span><span class="pill-label">Green</span>
+              <button type="button" class="theme-pill-btn pill-emerald" data-theme-name="emerald" onclick="setPanelTheme('emerald')" title="Lush Emerald Forest Green">
+                <span class="pill-dot"></span><span class="pill-label">Green 🟢</span>
               </button>
-              <button type="button" class="theme-pill-btn pill-ruby" data-theme-name="ruby" onclick="setPanelTheme('ruby')" title="Crimson Ruby Red Background">
-                <span class="pill-dot"></span><span class="pill-label">Red</span>
+              <button type="button" class="theme-pill-btn pill-ruby" data-theme-name="ruby" onclick="setPanelTheme('ruby')" title="Vivid Crimson Ruby Red">
+                <span class="pill-dot"></span><span class="pill-label">Red 🔴</span>
               </button>
-              <button type="button" class="theme-pill-btn pill-gold" data-theme-name="gold" onclick="setPanelTheme('gold')" title="Sunset Amber Gold Background">
-                <span class="pill-dot"></span><span class="pill-label">Gold</span>
+              <button type="button" class="theme-pill-btn pill-gold" data-theme-name="gold" onclick="setPanelTheme('gold')" title="Warm Sunset Amber Gold">
+                <span class="pill-dot"></span><span class="pill-label">Gold 🟠</span>
               </button>
-              <button type="button" class="theme-pill-btn pill-amethyst" data-theme-name="amethyst" onclick="setPanelTheme('amethyst')" title="Cyber Royal Purple Background">
-                <span class="pill-dot"></span><span class="pill-label">Purple</span>
+              <button type="button" class="theme-pill-btn pill-amethyst" data-theme-name="amethyst" onclick="setPanelTheme('amethyst')" title="Cyber Royal Purple">
+                <span class="pill-dot"></span><span class="pill-label">Purple 🟣</span>
+              </button>
+              <button type="button" class="theme-pill-btn pill-dark" data-theme-name="dark" onclick="setPanelTheme('dark')" title="Midnight OLED Dark Mode">
+                <span class="pill-dot"></span><span class="pill-label">Dark 🌙</span>
               </button>
             </div>
           </div>
@@ -1592,8 +1612,8 @@
     </div>
   </div>
 
-  <script src="dictionary-data.js?v=3.7.3"></script>
-  <script src="remote-config.js?v=3.7.3"></script>
-  <script src="control-panel.js?v=3.7.3"></script>
+  <script src="dictionary-data.js?v=3.7.4"></script>
+  <script src="remote-config.js?v=3.7.4"></script>
+  <script src="control-panel.js?v=3.7.4"></script>
 </body>
 </html>

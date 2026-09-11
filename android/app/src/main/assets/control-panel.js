@@ -3246,7 +3246,18 @@ window.simulateTestCrashTelemetry = simulateTestCrashTelemetry;
 window.jumpToHelpDeskUser = jumpToHelpDeskUser;
 window.playCrashAudioAlert = playCrashAudioAlert;
 
-// Interactive Real App Background Theme Engine
+// Interactive Real App Theme & Mode Engine (Light, Dark & Vibrant Color Modes)
+const THEME_NAMES = {
+  light: 'Snow White Light Mode ☀️',
+  ocean: 'Sapphire Ocean Blue 🔵',
+  emerald: 'Emerald Forest Green 🟢',
+  ruby: 'Crimson Ruby Red 🔴',
+  gold: 'Sunset Amber Gold 🟠',
+  amethyst: 'Cyber Royal Purple 🟣',
+  dark: 'Midnight Obsidian Dark 🌙',
+  aurora: 'Midnight Obsidian Dark 🌙'
+};
+
 function setPanelTheme(themeName) {
   playUiClick();
   document.body.setAttribute('data-theme', themeName);
@@ -3254,7 +3265,7 @@ function setPanelTheme(themeName) {
     localStorage.setItem('mf_panel_theme_v2', themeName);
   } catch (e) {}
 
-  // Sync all theme swatches and pill buttons
+  // Sync all theme pills & swatches
   document.querySelectorAll('.theme-swatch, .theme-pill-btn').forEach(el => {
     if (el.getAttribute('data-theme-name') === themeName) {
       el.classList.add('active');
@@ -3263,28 +3274,49 @@ function setPanelTheme(themeName) {
     }
   });
 
-  const names = {
-    aurora: 'Cosmic Indigo',
-    ocean: 'Sapphire Ocean Blue',
-    emerald: 'Emerald Forest Green',
-    ruby: 'Crimson Ruby Red',
-    gold: 'Sunset Amber Gold',
-    amethyst: 'Cyber Royal Purple'
-  };
+  // Sync master mode buttons (btnModeLight vs btnModeDark)
+  const isLight = (themeName === 'light');
+  const btnLight = document.getElementById('btnModeLight');
+  const btnDark = document.getElementById('btnModeDark');
+  if (btnLight) btnLight.classList.toggle('active', isLight);
+  if (btnDark) btnDark.classList.toggle('active', !isLight);
+
+  // Sync Topbar Mode Toggle text & icon
+  const topbarModeIcon = document.getElementById('topbarModeIcon');
+  const topbarModeText = document.getElementById('topbarModeText');
+  if (topbarModeIcon && topbarModeText) {
+    if (isLight) {
+      topbarModeIcon.textContent = '🌙';
+      topbarModeText.textContent = 'Dark Mode';
+    } else {
+      topbarModeIcon.textContent = '☀️';
+      topbarModeText.textContent = 'Light Mode';
+    }
+  }
 
   const currentLabelEl = document.getElementById('currentThemeLabel');
   if (currentLabelEl) {
-    currentLabelEl.textContent = names[themeName] || themeName;
+    currentLabelEl.textContent = THEME_NAMES[themeName] || themeName;
   }
 
-  showToast(`🎨 Background Color: ${names[themeName] || themeName} Active!`);
+  showToast(`🎨 Mode: ${THEME_NAMES[themeName] || themeName} Active!`);
 }
 window.setPanelTheme = setPanelTheme;
 
+function toggleLightDarkMode() {
+  const current = document.body.getAttribute('data-theme') || 'light';
+  if (current === 'light') {
+    setPanelTheme('dark');
+  } else {
+    setPanelTheme('light');
+  }
+}
+window.toggleLightDarkMode = toggleLightDarkMode;
+
 function initPanelTheme() {
-  let saved = 'aurora';
+  let saved = 'light';
   try {
-    saved = localStorage.getItem('mf_panel_theme_v2') || 'aurora';
+    saved = localStorage.getItem('mf_panel_theme_v2') || 'light';
   } catch (e) {}
   document.body.setAttribute('data-theme', saved);
 
@@ -3296,18 +3328,27 @@ function initPanelTheme() {
     }
   });
 
-  const names = {
-    aurora: 'Cosmic Indigo',
-    ocean: 'Sapphire Ocean Blue',
-    emerald: 'Emerald Forest Green',
-    ruby: 'Crimson Ruby Red',
-    gold: 'Sunset Amber Gold',
-    amethyst: 'Cyber Royal Purple'
-  };
+  const isLight = (saved === 'light');
+  const btnLight = document.getElementById('btnModeLight');
+  const btnDark = document.getElementById('btnModeDark');
+  if (btnLight) btnLight.classList.toggle('active', isLight);
+  if (btnDark) btnDark.classList.toggle('active', !isLight);
+
+  const topbarModeIcon = document.getElementById('topbarModeIcon');
+  const topbarModeText = document.getElementById('topbarModeText');
+  if (topbarModeIcon && topbarModeText) {
+    if (isLight) {
+      topbarModeIcon.textContent = '🌙';
+      topbarModeText.textContent = 'Dark Mode';
+    } else {
+      topbarModeIcon.textContent = '☀️';
+      topbarModeText.textContent = 'Light Mode';
+    }
+  }
 
   const currentLabelEl = document.getElementById('currentThemeLabel');
   if (currentLabelEl) {
-    currentLabelEl.textContent = names[saved] || saved;
+    currentLabelEl.textContent = THEME_NAMES[saved] || saved;
   }
 }
 window.addEventListener('DOMContentLoaded', initPanelTheme);
