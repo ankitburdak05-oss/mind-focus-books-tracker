@@ -4757,10 +4757,9 @@ input:checked + .slider:before {
   left: 50% !important;
   transform: translateX(-50%) !important;
   width: 500px !important;
-  height: 280px !important;
+  height: 320px !important;
   z-index: 60 !important;
   pointer-events: none !important;
-  /* Default hidden — animation will show it */
   opacity: 0 !important;
 }
 .warrior-box-overlay.is-active .wb-warrior {
@@ -4775,8 +4774,8 @@ input:checked + .slider:before {
   100% { bottom: 18%; opacity: 1; }
 }
 
-/* Warrior image poses */
-.wb-warrior-img {
+/* Warrior frames (8 unique poses for frame-by-frame animation) */
+.wb-warrior-frame {
   position: absolute !important;
   left: 50% !important;
   top: 50% !important;
@@ -4786,37 +4785,45 @@ input:checked + .slider:before {
   max-width: 500px !important;
   filter: drop-shadow(0 12px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 40px rgba(100,180,255,0.4)) !important;
   pointer-events: none !important;
-  transition: opacity 0.3s ease !important;
-}
-/* Default pose visibility */
-.wb-pose-hero { opacity: 1 !important; }
-.wb-pose-swing, .wb-pose-sword-up { opacity: 0 !important; }
-/* Pose swapping when class added on parent */
-.wb-warrior.is-swing .wb-pose-hero { opacity: 0 !important; }
-.wb-warrior.is-swing .wb-pose-swing { opacity: 1 !important; }
-.wb-warrior.is-sword-up .wb-pose-hero { opacity: 0 !important; }
-.wb-warrior.is-sword-up .wb-pose-swing { opacity: 0 !important; }
-.wb-warrior.is-sword-up .wb-pose-sword-up { opacity: 1 !important; }
-
-/* Swing pose - slight rotation + shake */
-.wb-pose-swing {
-  transform: translate(-50%, -50%) rotate(-2deg) scale(1.05) !important;
-}
-.wb-warrior.is-swing .wb-pose-swing {
-  animation: swingShake 1.3s ease !important;
-}
-@keyframes swingShake {
-  0%, 100% { transform: translate(-50%, -50%) rotate(-2deg) scale(1.05); }
-  20%      { transform: translate(-52%, -50%) rotate(-4deg) scale(1.08); }
-  50%      { transform: translate(-48%, -50%) rotate(0deg) scale(1.12); }
-  80%      { transform: translate(-50%, -50%) rotate(2deg) scale(1.1); }
+  opacity: 0 !important;
+  transition: opacity 0.08s linear !important;
 }
 
-/* Sword up pose - lightning glow */
-.wb-pose-sword-up {
+/* Default: walk1 visible */
+#wf_1 { opacity: 1 !important; }
+
+/* Walk cycle frames */
+.wb-warrior.is-walk-2 #wf_1 { opacity: 0 !important; }
+.wb-warrior.is-walk-2 #wf_2 { opacity: 1 !important; }
+
+/* Raise frame */
+.wb-warrior.is-raise #wf_2,
+.wb-warrior.is-raise #wf_1 { opacity: 0 !important; }
+.wb-warrior.is-raise #wf_3 { opacity: 1 !important; }
+
+/* Windup frame */
+.wb-warrior.is-windup #wf_3 { opacity: 0 !important; }
+.wb-warrior.is-windup #wf_4 { opacity: 1 !important; }
+
+/* Swing start */
+.wb-warrior.is-swing-start #wf_4 { opacity: 0 !important; }
+.wb-warrior.is-swing-start #wf_5 { opacity: 1 !important; }
+
+/* Swing mid */
+.wb-warrior.is-swing-mid #wf_5 { opacity: 0 !important; }
+.wb-warrior.is-swing-mid #wf_6 { opacity: 1 !important; }
+
+/* Swing end */
+.wb-warrior.is-swing-end #wf_6 { opacity: 0 !important; }
+.wb-warrior.is-swing-end #wf_7 { opacity: 1 !important; }
+
+/* Sword up (final pose) */
+.wb-warrior.is-sword-up #wf_7,
+.wb-warrior.is-sword-up #wf_5,
+.wb-warrior.is-sword-up #wf_6 { opacity: 0 !important; }
+.wb-warrior.is-sword-up #wf_8 { opacity: 1 !important; }
+.wb-warrior.is-sword-up #wf_8 {
   filter: drop-shadow(0 12px 30px rgba(0,0,0,0.8)) drop-shadow(0 0 60px rgba(100,180,255,0.9)) drop-shadow(0 0 30px rgba(255,255,255,0.7)) !important;
-}
-.wb-warrior.is-sword-up .wb-pose-sword-up {
   animation: swordUpPulse 1.5s ease-in-out infinite !important;
 }
 @keyframes swordUpPulse {
@@ -4824,7 +4831,7 @@ input:checked + .slider:before {
   50%      { transform: translate(-50%, -50%) scale(1.05); }
 }
 
-/* Hide old SVG-based sword */
+/* Hide old single-pose elements (kept for backwards compat) */
 .wb-sword { display: none !important; }
 
 @keyframes skyBeamFire {

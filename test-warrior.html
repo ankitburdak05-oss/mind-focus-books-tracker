@@ -103,27 +103,53 @@ function startTest() {
     warrior.classList.add('is-enter');
   }, 2500));
 
-  warriorAnimState.timeouts.push(setTimeout(() => {
-    console.log('[TEST] Phase 3: Sword swing');
-    warrior.classList.add('is-swing');
-    warriorAnimState.timeouts.push(setTimeout(() => {
-      console.log('[TEST] Phase 3b: Crack shown');
-      crack.classList.add('is-shown');
-    }, 700));
-  }, 3000));
+  warriorAnimState.timeouts.push(setTimeout(() => warrior.classList.add('is-walk-2'), 2900));
+  warriorAnimState.timeouts.push(setTimeout(() => warrior.classList.remove('is-walk-2'), 3300));
+  warriorAnimState.timeouts.push(setTimeout(() => warrior.classList.add('is-walk-2'), 3700));
 
   warriorAnimState.timeouts.push(setTimeout(() => {
-    console.log('[TEST] Phase 4: Sky beam');
-    warrior.classList.remove('is-swing');
+    console.log('[TEST] Phase 3a: Raise');
+    warrior.classList.remove('is-walk-2');
+    warrior.classList.add('is-raise');
+  }, 4100));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 3b: Windup');
+    warrior.classList.remove('is-raise');
+    warrior.classList.add('is-windup');
+  }, 4500));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 3c: Swing start');
+    warrior.classList.remove('is-windup');
+    warrior.classList.add('is-swing-start');
+  }, 4900));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 3d: Swing mid + crack');
+    warrior.classList.remove('is-swing-start');
+    warrior.classList.add('is-swing-mid');
+    crack.classList.add('is-shown');
+  }, 5200));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 3e: Swing end');
+    warrior.classList.remove('is-swing-mid');
+    warrior.classList.add('is-swing-end');
+  }, 5500));
+
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    console.log('[TEST] Phase 4: Sword up + beam');
+    warrior.classList.remove('is-swing-end');
     warrior.classList.add('is-sword-up');
     crack.classList.remove('is-shown');
     beam.classList.add('is-fire');
-  }, 4000));
+  }, 5900));
 
   warriorAnimState.timeouts.push(setTimeout(() => {
     console.log('[TEST] Phase 5: Blast');
     blast.classList.add('is-blast');
-  }, 5000));
+  }, 6500));
 
   warriorAnimState.timeouts.push(setTimeout(() => {
     console.log('[TEST] Phase 6: Car');
@@ -131,7 +157,7 @@ function startTest() {
     beam.classList.remove('is-fire');
     blast.classList.remove('is-blast');
     car.classList.add('is-drive');
-  }, 5600));
+  }, 7100));
 
   warriorAnimState.timeouts.push(setTimeout(() => {
     console.log('[TEST] Phase 7: Trunk open + prize');
@@ -140,12 +166,12 @@ function startTest() {
       console.log('[TEST] Phase 7b: Prize show');
       prize.classList.add('is-show');
     }, 500));
-  }, 7000));
+  }, 8500));
 
   warriorAnimState.timeouts.push(setTimeout(() => {
     console.log('[TEST] Cleanup');
     cleanupWarriorAnim();
-  }, 11000));
+  }, 13000));
 }
 
 // Pre-load images
