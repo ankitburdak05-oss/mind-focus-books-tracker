@@ -4033,7 +4033,7 @@ function cleanupWarriorAnim() {
     ['wbBoxFalling','wbWarrior','wbSword','wbScreenCrack','wbSkyBeam','wbBlast','wbCar','wbCarTrunk','wbCarPrize','wbPhaseLabel','wbSkipBtn'].forEach(id => {
       const el = document.getElementById(id);
       if (el) {
-        el.classList.remove('is-falling','is-enter','is-swing','is-sword-up','is-shown','is-fire','is-blast','is-drive','is-open','is-show');
+        el.classList.remove('is-falling','is-enter','is-walk-2','is-raise','is-windup','is-swing-start','is-swing-mid','is-swing-end','is-sword-up','is-shown','is-fire','is-blast','is-drive','is-open','is-show');
       }
     });
   }
@@ -4107,40 +4107,70 @@ function runWarriorSwordAnimation() {
   const reward = document.getElementById('giftRewardNameInput').value || '🎁 VIP REWARD';
   if (prize) prize.textContent = reward.toUpperCase();
 
-  // Phase 1: Box falls (0-2.4s)
+  // Phase 1: Box falls (0-2s)
   warriorAnimState.timeouts.push(setTimeout(() => box.classList.add('is-falling'), 100));
 
-  // Phase 2: Warrior enters (2.6s)
+  // Phase 2: Warrior enters (2.5s)
   warriorAnimState.timeouts.push(setTimeout(() => {
     warrior.classList.add('is-enter');
   }, 2500));
 
-  // Phase 3: Sword swings (3.6s) - breaks screen
-  warriorAnimState.timeouts.push(setTimeout(() => {
-    warrior.classList.add('is-swing');
-    warriorAnimState.timeouts.push(setTimeout(() => crack.classList.add('is-shown'), 700));
-  }, 2900));
+  // Phase 2b: Walking animation (cycle through walk frames)
+  warriorAnimState.timeouts.push(setTimeout(() => warrior.classList.add('is-walk-2'), 2900));
+  warriorAnimState.timeouts.push(setTimeout(() => warrior.classList.remove('is-walk-2'), 3300));
+  warriorAnimState.timeouts.push(setTimeout(() => warrior.classList.add('is-walk-2'), 3700));
 
-  // Phase 4: Sky beam (5.0s) - light from above
+  // Phase 3a: Raise sword (4.1s)
   warriorAnimState.timeouts.push(setTimeout(() => {
-    warrior.classList.remove('is-swing');
+    warrior.classList.remove('is-walk-2');
+    warrior.classList.add('is-raise');
+  }, 4100));
+
+  // Phase 3b: Windup (4.5s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-raise');
+    warrior.classList.add('is-windup');
+  }, 4500));
+
+  // Phase 3c: Swing start (4.9s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-windup');
+    warrior.classList.add('is-swing-start');
+  }, 4900));
+
+  // Phase 3d: Swing mid (5.2s) — peak with crack
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-swing-start');
+    warrior.classList.add('is-swing-mid');
+    crack.classList.add('is-shown');
+  }, 5200));
+
+  // Phase 3e: Swing end (5.5s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-swing-mid');
+    warrior.classList.add('is-swing-end');
+  }, 5500));
+
+  // Phase 4: Sky beam + sword up (5.9s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-swing-end');
     warrior.classList.add('is-sword-up');
     crack.classList.remove('is-shown');
     beam.classList.add('is-fire');
-  }, 4000));
+  }, 5900));
 
-  // Phase 5: Blast (6.2s)
+  // Phase 5: Blast (6.5s)
   warriorAnimState.timeouts.push(setTimeout(() => {
     blast.classList.add('is-blast');
-  }, 5000));
+  }, 6500));
 
-  // Phase 6: Car arrives (6.8s)
+  // Phase 6: Car arrives (7.1s)
   warriorAnimState.timeouts.push(setTimeout(() => {
     warrior.classList.remove('is-sword-up');
     beam.classList.remove('is-fire');
     blast.classList.remove('is-blast');
     car.classList.add('is-drive');
-  }, 5600));
+  }, 7100));
 
   // Phase 7: Car trunk opens (8.4s) + prize reveal
   warriorAnimState.timeouts.push(setTimeout(() => {
@@ -4148,8 +4178,8 @@ function runWarriorSwordAnimation() {
     setTimeout(() => prize.classList.add('is-show'), 500);
   }, 7000));
 
-  // Cleanup after 13.5s
+  // Cleanup after 13s
   warriorAnimState.timeouts.push(setTimeout(() => {
     cleanupWarriorAnim();
-  }, 11000));
+  }, 13000));
 }
