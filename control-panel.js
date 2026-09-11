@@ -3246,7 +3246,7 @@ window.simulateTestCrashTelemetry = simulateTestCrashTelemetry;
 window.jumpToHelpDeskUser = jumpToHelpDeskUser;
 window.playCrashAudioAlert = playCrashAudioAlert;
 
-// Interactive Theme Engine
+// Interactive Real App Background Theme Engine
 function setPanelTheme(themeName) {
   playUiClick();
   document.body.setAttribute('data-theme', themeName);
@@ -3254,20 +3254,30 @@ function setPanelTheme(themeName) {
     localStorage.setItem('mf_panel_theme_v2', themeName);
   } catch (e) {}
 
-  document.querySelectorAll('.theme-swatch').forEach(s => {
-    if (s.getAttribute('data-theme-name') === themeName) s.classList.add('active');
-    else s.classList.remove('active');
+  // Sync all theme swatches and pill buttons
+  document.querySelectorAll('.theme-swatch, .theme-pill-btn').forEach(el => {
+    if (el.getAttribute('data-theme-name') === themeName) {
+      el.classList.add('active');
+    } else {
+      el.classList.remove('active');
+    }
   });
 
   const names = {
     aurora: 'Cosmic Indigo',
-    ocean: 'Sapphire Ocean',
-    emerald: 'Emerald Forest',
-    ruby: 'Crimson Ruby',
-    gold: 'Sunset Gold',
-    amethyst: 'Cyber Amethyst'
+    ocean: 'Sapphire Ocean Blue',
+    emerald: 'Emerald Forest Green',
+    ruby: 'Crimson Ruby Red',
+    gold: 'Sunset Amber Gold',
+    amethyst: 'Cyber Royal Purple'
   };
-  showToast(`🎨 Theme: ${names[themeName] || themeName}`);
+
+  const currentLabelEl = document.getElementById('currentThemeLabel');
+  if (currentLabelEl) {
+    currentLabelEl.textContent = names[themeName] || themeName;
+  }
+
+  showToast(`🎨 Background Color: ${names[themeName] || themeName} Active!`);
 }
 window.setPanelTheme = setPanelTheme;
 
@@ -3277,10 +3287,28 @@ function initPanelTheme() {
     saved = localStorage.getItem('mf_panel_theme_v2') || 'aurora';
   } catch (e) {}
   document.body.setAttribute('data-theme', saved);
-  document.querySelectorAll('.theme-swatch').forEach(s => {
-    if (s.getAttribute('data-theme-name') === saved) s.classList.add('active');
-    else s.classList.remove('active');
+
+  document.querySelectorAll('.theme-swatch, .theme-pill-btn').forEach(el => {
+    if (el.getAttribute('data-theme-name') === saved) {
+      el.classList.add('active');
+    } else {
+      el.classList.remove('active');
+    }
   });
+
+  const names = {
+    aurora: 'Cosmic Indigo',
+    ocean: 'Sapphire Ocean Blue',
+    emerald: 'Emerald Forest Green',
+    ruby: 'Crimson Ruby Red',
+    gold: 'Sunset Amber Gold',
+    amethyst: 'Cyber Royal Purple'
+  };
+
+  const currentLabelEl = document.getElementById('currentThemeLabel');
+  if (currentLabelEl) {
+    currentLabelEl.textContent = names[saved] || saved;
+  }
 }
 window.addEventListener('DOMContentLoaded', initPanelTheme);
 

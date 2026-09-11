@@ -8,8 +8,8 @@
   <meta http-equiv="Expires" content="0">
   <title>Mind Focus Books • Admin Studio & Control Panel</title>
   <link rel="manifest" href="manifest-admin.json">
-  <link rel="stylesheet" href="style.css?v=3.7.2">
-  <link rel="stylesheet" href="control-panel.css?v=3.7.2">
+  <link rel="stylesheet" href="style.css?v=3.7.3">
+  <link rel="stylesheet" href="control-panel.css?v=3.7.3">
   <link rel="icon" type="image/png" href="icon-192.png">
 </head>
 <body>
@@ -47,14 +47,35 @@
 
         <!-- Sidebar Theme Palette Selector -->
         <div class="sidebar-theme-bar">
-          <span class="theme-bar-title">COLOR THEMES</span>
-          <div class="theme-swatches-row">
-            <button type="button" class="theme-swatch swatch-aurora active" data-theme-name="aurora" onclick="setPanelTheme('aurora')" title="Cosmic Indigo"></button>
-            <button type="button" class="theme-swatch swatch-ocean" data-theme-name="ocean" onclick="setPanelTheme('ocean')" title="Sapphire Ocean"></button>
-            <button type="button" class="theme-swatch swatch-emerald" data-theme-name="emerald" onclick="setPanelTheme('emerald')" title="Emerald Forest"></button>
-            <button type="button" class="theme-swatch swatch-ruby" data-theme-name="ruby" onclick="setPanelTheme('ruby')" title="Crimson Ruby"></button>
-            <button type="button" class="theme-swatch swatch-gold" data-theme-name="gold" onclick="setPanelTheme('gold')" title="Sunset Gold"></button>
-            <button type="button" class="theme-swatch swatch-amethyst" data-theme-name="amethyst" onclick="setPanelTheme('amethyst')" title="Cyber Amethyst"></button>
+          <div class="theme-bar-header">
+            <span class="theme-bar-title">🎨 APP BG COLOR</span>
+            <span class="theme-current-label" id="currentThemeLabel">Cosmic Indigo</span>
+          </div>
+          <div class="theme-pills-grid">
+            <button type="button" class="theme-pill-btn pill-aurora active" data-theme-name="aurora" onclick="setPanelTheme('aurora')" title="Cosmic Indigo Background">
+              <span class="pill-dot"></span>
+              <span class="pill-label">Indigo</span>
+            </button>
+            <button type="button" class="theme-pill-btn pill-ocean" data-theme-name="ocean" onclick="setPanelTheme('ocean')" title="Sapphire Ocean Blue Background">
+              <span class="pill-dot"></span>
+              <span class="pill-label">Blue</span>
+            </button>
+            <button type="button" class="theme-pill-btn pill-emerald" data-theme-name="emerald" onclick="setPanelTheme('emerald')" title="Emerald Forest Green Background">
+              <span class="pill-dot"></span>
+              <span class="pill-label">Green</span>
+            </button>
+            <button type="button" class="theme-pill-btn pill-ruby" data-theme-name="ruby" onclick="setPanelTheme('ruby')" title="Crimson Ruby Red Background">
+              <span class="pill-dot"></span>
+              <span class="pill-label">Red</span>
+            </button>
+            <button type="button" class="theme-pill-btn pill-gold" data-theme-name="gold" onclick="setPanelTheme('gold')" title="Sunset Amber Gold Background">
+              <span class="pill-dot"></span>
+              <span class="pill-label">Gold</span>
+            </button>
+            <button type="button" class="theme-pill-btn pill-amethyst" data-theme-name="amethyst" onclick="setPanelTheme('amethyst')" title="Cyber Royal Purple Background">
+              <span class="pill-dot"></span>
+              <span class="pill-label">Purple</span>
+            </button>
           </div>
         </div>
       </div>
@@ -174,14 +195,29 @@
         </div>
 
         <div class="topbar-right">
-          <!-- Quick Palette Switcher -->
-          <div class="theme-palette-picker" title="Change Background Theme Color">
-            <button type="button" class="theme-swatch swatch-aurora active" data-theme-name="aurora" onclick="setPanelTheme('aurora')" title="Cosmic Indigo"></button>
-            <button type="button" class="theme-swatch swatch-ocean" data-theme-name="ocean" onclick="setPanelTheme('ocean')" title="Sapphire Ocean"></button>
-            <button type="button" class="theme-swatch swatch-emerald" data-theme-name="emerald" onclick="setPanelTheme('emerald')" title="Emerald Forest"></button>
-            <button type="button" class="theme-swatch swatch-ruby" data-theme-name="ruby" onclick="setPanelTheme('ruby')" title="Crimson Ruby"></button>
-            <button type="button" class="theme-swatch swatch-gold" data-theme-name="gold" onclick="setPanelTheme('gold')" title="Sunset Gold"></button>
-            <button type="button" class="theme-swatch swatch-amethyst" data-theme-name="amethyst" onclick="setPanelTheme('amethyst')" title="Cyber Amethyst"></button>
+          <!-- Quick App Background Theme Switcher -->
+          <div class="topbar-theme-group" title="Select App Background Color">
+            <span class="topbar-theme-tag">🎨 BG:</span>
+            <div class="theme-pills-row">
+              <button type="button" class="theme-pill-btn pill-aurora active" data-theme-name="aurora" onclick="setPanelTheme('aurora')" title="Cosmic Indigo Background">
+                <span class="pill-dot"></span><span class="pill-label">Indigo</span>
+              </button>
+              <button type="button" class="theme-pill-btn pill-ocean" data-theme-name="ocean" onclick="setPanelTheme('ocean')" title="Sapphire Ocean Blue Background">
+                <span class="pill-dot"></span><span class="pill-label">Blue</span>
+              </button>
+              <button type="button" class="theme-pill-btn pill-emerald" data-theme-name="emerald" onclick="setPanelTheme('emerald')" title="Emerald Green Background">
+                <span class="pill-dot"></span><span class="pill-label">Green</span>
+              </button>
+              <button type="button" class="theme-pill-btn pill-ruby" data-theme-name="ruby" onclick="setPanelTheme('ruby')" title="Crimson Ruby Red Background">
+                <span class="pill-dot"></span><span class="pill-label">Red</span>
+              </button>
+              <button type="button" class="theme-pill-btn pill-gold" data-theme-name="gold" onclick="setPanelTheme('gold')" title="Sunset Amber Gold Background">
+                <span class="pill-dot"></span><span class="pill-label">Gold</span>
+              </button>
+              <button type="button" class="theme-pill-btn pill-amethyst" data-theme-name="amethyst" onclick="setPanelTheme('amethyst')" title="Cyber Royal Purple Background">
+                <span class="pill-dot"></span><span class="pill-label">Purple</span>
+              </button>
+            </div>
           </div>
           <button type="button" class="btn-topbar-action" onclick="toggleBrowserFullscreen()" id="btnFullscreenToggle" title="Toggle Fullscreen">
             <span>⛶</span> <span class="action-btn-text">Full Screen</span>
@@ -1556,8 +1592,8 @@
     </div>
   </div>
 
-  <script src="dictionary-data.js?v=3.7.2"></script>
-  <script src="remote-config.js?v=3.7.2"></script>
-  <script src="control-panel.js?v=3.7.2"></script>
+  <script src="dictionary-data.js?v=3.7.3"></script>
+  <script src="remote-config.js?v=3.7.3"></script>
+  <script src="control-panel.js?v=3.7.3"></script>
 </body>
 </html>
