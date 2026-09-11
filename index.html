@@ -21,6 +21,77 @@
 </head>
 <body>
 
+  <!-- ==========================================================================
+       HIDDEN PLACEHOLDER IDS (FIX FOR MISSING ELEMENTS)
+       Iss block ko koi delete nahi karna - yeh missing IDs provide karta hai
+       jo app.js me getElementById() se reference ho rahi hain.
+       Yeh elements visual layout me nahi dikhte (display:none), but JS
+       safely read/write kar sakta hai bina error throw kiye.
+       ========================================================================== -->
+  <div id="missingIdsPlaceholderRoot" style="display:none !important; visibility:hidden; position:absolute; left:-9999px; top:-9999px; width:0; height:0; overflow:hidden;" aria-hidden="true">
+    <!-- KPI / Metrics -->
+    <span id="kpiAvgDays">0</span>
+    <span id="kpiTotalDays">0</span>
+    <span id="kpiHoursInvested">0</span>
+    <span id="kpiMoneySubtext">Library Value</span>
+    <div id="progressBarFill" style="width:0%"></div>
+
+    <!-- Toast / Notifications Container -->
+    <div id="toastContainer" role="status" aria-live="polite"></div>
+
+    <!-- Theme Toggle (header shortcut) -->
+    <button type="button" id="themeToggleBtn">
+      <span id="themeToggleIcon">🌙</span>
+      <span id="themeToggleBtnText">Theme</span>
+    </button>
+
+    <!-- Daily Quote / Global Banner -->
+    <div id="dailyQuoteContainer"></div>
+    <div id="globalTopBanner"></div>
+
+    <!-- PWA / App Lock -->
+    <button type="button" id="installAppBtn" title="Install App">📲 Install</button>
+    <button type="button" id="privacyLockBtn" title="Lock">🔒</button>
+
+    <!-- Header Streak Count -->
+    <span id="headerStreakCount">0</span>
+
+    <!-- Ambience Cards (4 channels) -->
+    <div id="ambienceRainCard" data-channel="rain"></div>
+    <div id="ambienceForestCard" data-channel="forest"></div>
+    <div id="ambienceCafeCard" data-channel="cafe"></div>
+    <div id="ambienceWavesCard" data-channel="waves"></div>
+    <label id="ambienceVolumeLabel" for="ambienceVolumeSlider">Volume</label>
+    <input type="range" id="ambienceVolumeSlider" min="0" max="100" value="50">
+    <span id="ambienceHeaderBtnText">🎧 Ambience</span>
+
+    <!-- Dictionary / Flashcards -->
+    <button type="button" id="dictFlashcardsBtn" onclick="openFlashcardTrainer()">🎴 Flashcards</button>
+
+    <!-- Curated Shelves Section (book curation block) -->
+    <section id="curatedShelvesSection"></section>
+
+    <!-- App Overlays (lockdown / maintenance) -->
+    <div id="appEmergencyLockdownOverlay" data-overlay="lockdown"></div>
+    <div id="appMaintenanceOverlay" data-overlay="maintenance"></div>
+
+    <!-- Floating Mini Capsule (suspended reading resume) -->
+    <div id="floatingMiniCapsule">
+      <img id="miniCapsuleCover" src="" alt="">
+      <span id="miniCapsuleTitle">Resume</span>
+      <div id="miniCapsuleProgressFill" style="width:0%"></div>
+    </div>
+
+    <!-- Mobile DevTools Drawer (alternative to existing modal) -->
+    <aside id="mobileDevToolsDrawer"></aside>
+
+    <!-- Reading Sheet (modal) Pagination -->
+    <input type="range" id="sheetPageSlider" min="0" max="100" value="0">
+    <span id="sheetPageDisplay">0 / 0</span>
+    <span id="sheetPctDisplay">0%</span>
+  </div>
+  <!-- END OF MISSING-IDS PLACEHOLDER BLOCK -->
+
   <!-- Dynamic Chromatic Aurora Background (Apple Music / VisionOS Spatial Glow) -->
   <div id="ambientAuroraBg" class="ambient-aurora-bg">
     <div class="aurora-blob aurora-blob-1"></div>
