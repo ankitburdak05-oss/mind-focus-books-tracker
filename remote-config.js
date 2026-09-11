@@ -1,34 +1,36 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-09-10T16:15:00.000Z",
+  "updatedAt": "2026-09-11T02:35:00.000Z",
   "activeRelease": {
-    "version": "v3.5.9",
-    "name": "Mind Focus Books v3.5.9 — Remote App Kill-Switch & Feature Control Cockpit",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
+    "version": "v3.6.0",
+    "name": "Mind Focus Books v3.6.0 — Premium Real-App Studio & UI Redesign",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.6.0",
     "features": [
-      "🚨 Remote App Kill-Switch: 1-Tap complete app shutdown & thermal protection freeze",
-      "🎛️ Master Feature Toggles: 1-Click Freeze All Features / Restore All Features",
-      "⚡ 16 Individual Feature Switches: Independent control for Chat, Crash Radar, DevTools, Updates, etc.",
-      "❄️ Zero-CPU Sleep State: Immediate timer, socket & poller hibernation when lockdown is active"
+      "🎨 Control Panel Complete Redesign: Hacker console completely replaced with elegant Real App UI matching Mind Focus Books",
+      "🎴 3D Smart Flashcard Trainer: Leitner Memory Box & interactive swipe gestures live",
+      "💬 Live Help Desk: Fast direct messaging between reader app and admin studio",
+      "⚡ Zero Battery Drain & Thermal Freeze: Complete background optimization",
+      "🛡️ 16 Remote Feature Switches & Instant Emergency Pause Control"
     ],
-    "stagedAt": "2026-09-10T16:15:00.000Z",
+    "stagedAt": "2026-09-11T02:35:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.5.9",
-    "name": "Mind Focus Books v3.5.9 — Remote App Kill-Switch & Feature Control Cockpit",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
+    "version": "v3.6.0",
+    "name": "Mind Focus Books v3.6.0 — Premium Real-App Studio & UI Redesign",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.6.0",
     "features": [
-      "🚨 Remote App Kill-Switch: 1-Tap complete app shutdown & thermal protection freeze",
-      "🎛️ Master Feature Toggles: 1-Click Freeze All Features / Restore All Features",
-      "⚡ 16 Individual Feature Switches: Independent control for Chat, Crash Radar, DevTools, Updates, etc.",
-      "❄️ Zero-CPU Sleep State: Immediate timer, socket & poller hibernation when lockdown is active"
+      "🎨 Control Panel Complete Redesign: Hacker console completely replaced with elegant Real App UI matching Mind Focus Books",
+      "🎴 3D Smart Flashcard Trainer: Leitner Memory Box & interactive swipe gestures live",
+      "💬 Live Help Desk: Fast direct messaging between reader app and admin studio",
+      "⚡ Zero Battery Drain & Thermal Freeze: Complete background optimization",
+      "🛡️ 16 Remote Feature Switches & Instant Emergency Pause Control"
     ],
-    "stagedAt": "2026-09-10T16:15:00.000Z",
+    "stagedAt": "2026-09-11T02:35:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {
-    "version": "v3.5.8",
+    "version": "v3.5.9",
     "name": "Mind Focus Books v3.5.8 — Thermal Cool Engine & Zero-Battery-Drain",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk",
     "features": [

@@ -6,15 +6,15 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
-  <title>Mind Focus Books • Command Studio & Control Hub</title>
+  <title>Mind Focus Books • Admin Studio & Control Panel</title>
   <link rel="manifest" href="manifest-admin.json">
-  <link rel="stylesheet" href="style.css?v=3.5.9.5">
-  <link rel="stylesheet" href="control-panel.css?v=3.5.9.5">
+  <link rel="stylesheet" href="style.css?v=3.6.0">
+  <link rel="stylesheet" href="control-panel.css?v=3.6.0">
   <link rel="icon" type="image/png" href="icon-192.png">
 </head>
 <body>
   <div class="admin-shell">
-    <!-- Executive Cockpit Header (Edge-to-Edge Responsive) -->
+    <!-- Real App Inspired Studio Header -->
     <header class="admin-header">
       <div class="header-brand">
         <a href="index.html" class="brand-back-btn" title="Back to Mind Focus Books App">
@@ -23,10 +23,10 @@
         <div class="brand-icon">📚</div>
         <div>
           <div style="display:flex; align-items:center; gap:8px;">
-            <h1 class="brand-title">Mind Focus • Command Studio</h1>
-            <span class="version-pill-badge">v3.5.9</span>
+            <h1 class="brand-title">Mind Focus Books</h1>
+            <span class="version-pill-badge">v3.6.0 Live</span>
           </div>
-          <p class="brand-subtitle">ऑफिशियल एडमिन कंसोल — लाइव क्लाउड टेलीमेट्री व रिमोट कंट्रोल</p>
+          <p class="brand-subtitle">ऑफिशियल कंट्रोल स्टूडियो — रियल ऐप डिजाइन, लाइव चैट व रिमोट फीचर्स</p>
         </div>
       </div>
       <div class="header-telemetry">
@@ -47,23 +47,59 @@
       </div>
     </header>
 
+    <!-- Real App Executive 4-Card KPI Strip -->
+    <div class="realapp-kpi-strip">
+      <div class="kpi-mini-card" onclick="switchTab('tabPipeline')">
+        <div class="kpi-mini-icon" style="background:rgba(99,102,241,0.18); color:#818cf8;">🚀</div>
+        <div class="kpi-mini-body">
+          <div class="kpi-mini-label">App Release</div>
+          <div class="kpi-mini-value" style="color:#818cf8;">v3.6.0 Live</div>
+          <div class="kpi-mini-sub">Ready for phones</div>
+        </div>
+      </div>
+      <div class="kpi-mini-card" onclick="switchTab('tabFeatures')">
+        <div class="kpi-mini-icon" style="background:rgba(16,185,129,0.18); color:#34d399;">🛡️</div>
+        <div class="kpi-mini-body">
+          <div class="kpi-mini-label">Feature Switches</div>
+          <div class="kpi-mini-value" style="color:#34d399;">16 Active</div>
+          <div class="kpi-mini-sub">Full remote control</div>
+        </div>
+      </div>
+      <div class="kpi-mini-card" onclick="switchTab('tabLiveChat')">
+        <div class="kpi-mini-icon" style="background:rgba(56,189,248,0.18); color:#38bdf8;">💬</div>
+        <div class="kpi-mini-body">
+          <div class="kpi-mini-label">Live Help Desk</div>
+          <div class="kpi-mini-value" style="color:#38bdf8;">Online</div>
+          <div class="kpi-mini-sub">Direct reader chat</div>
+        </div>
+      </div>
+      <div class="kpi-mini-card" onclick="switchTab('tabFlashcards')">
+        <div class="kpi-mini-icon" style="background:rgba(236,72,153,0.18); color:#f472b6;">🎴</div>
+        <div class="kpi-mini-body">
+          <div class="kpi-mini-label">3D Flashcards</div>
+          <div class="kpi-mini-value" style="color:#f472b6;">5 Target Words</div>
+          <div class="kpi-mini-sub">Leitner memory box</div>
+        </div>
+      </div>
+    </div>
+
     <!-- VIP STAGING TO REAL APP PIPELINE BANNER -->
     <section class="pipeline-card">
       <div class="pipeline-left">
         <div class="pipeline-badge-icon">🚀</div>
         <div>
           <div class="pipeline-title">
-            <span id="pipelineStagedTitle">Mind Focus Books v3.5.9</span>
-            <span class="pipeline-status-tag tag-staged" id="pipelineStatusTag">STAGED — READY TO PUSH</span>
+            <span id="pipelineStagedTitle">Mind Focus Books v3.6.0</span>
+            <span class="pipeline-status-tag tag-staged" id="pipelineStatusTag">v3.6.0 LIVE &amp; READY</span>
           </div>
           <div class="pipeline-desc" id="pipelineStagedDesc">
-            🚀 v3.5.9 Remote App Kill-Switch & Feature Control: Remote 1-tap lockdown, Master Freeze/Restore, 16 individual toggles, and zero-CPU thermal freeze.
+            🎉 v3.6.0 Real App Design &amp; Feature Studio: कंट्रोल पैनल का नया रियल ऐप लुक, 3D स्मार्ट फ्लैशकार्ड्स, लाइव रीडर चैट व 16 रिमोट फीचर्स।
           </div>
         </div>
       </div>
       <div class="pipeline-actions">
         <button type="button" class="btn-admin btn-emerald" id="btnDeployToRealAppBanner" onclick="deployStagedReleaseToRealApp()">
-          <span>⚡</span> Deploy to Real App
+          <span>🚀</span> Push v3.6.0 Update to All Phones
         </button>
         <button type="button" class="btn-admin btn-secondary" onclick="rollbackToPreviousRelease()" style="font-size:0.82rem;">
           <span>↩️</span> Rollback
@@ -71,10 +107,10 @@
       </div>
     </section>
 
-    <!-- Modern App Navigation Tabs (Top Scrollable Pills) -->
+    <!-- Modern App Navigation Tabs (Top Scrollable Rounded Pills) -->
     <nav class="admin-tabs">
       <button class="tab-btn active" data-tab="tabFeatures">
-        <span>🎛️</span> कंट्रोल (Kill-Switch)
+        <span>🎛️</span> फीचर्स व सेफ्टी
       </button>
       <button class="tab-btn" data-tab="tabBroadcast">
         <span>📢</span> सूचनाएं (Notices)
@@ -86,7 +122,7 @@
         <span>💬</span> कस्टमर चैट <span class="badge-chat-unread" id="adminChatUnreadBadge" style="display:none;">0</span>
       </button>
       <button class="tab-btn" data-tab="tabMore">
-        <span>⚙️</span> अन्य टूल्स (Tools)
+        <span>⚙️</span> अन्य टूल्स
       </button>
       <button class="tab-btn" data-tab="tabDiagnostics">
         <span>🩺</span> फोन हेल्थ <span class="badge-chat-unread" id="phoneCrashBadge" style="display:none; background:#ef4444;">0</span>
@@ -95,7 +131,7 @@
         <span>🎁</span> गिफ्ट बॉक्स
       </button>
       <button class="tab-btn" data-tab="tabFlashcards">
-        <span>🎴</span> फ्लैशकार्ड्स
+        <span>🎴</span> 3D फ्लैशकार्ड्स
       </button>
       <button class="tab-btn" data-tab="tabBooks">
         <span>🌟</span> आज की किताब
@@ -112,8 +148,8 @@
       <div class="version-direct-banner" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.12)); border:1.5px solid rgba(16,185,129,0.45); border-radius:14px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
         <div>
           <div style="font-weight:900; color:#34d399; font-size:1.05rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <span>🚀</span> <span>App Version Release Manager (v3.5.8 Staged)</span>
-            <span class="pipeline-status-tag tag-staged" style="font-size:0.7rem; padding:2px 8px;">STAGED</span>
+            <span>🚀</span> <span>App Version Release Manager (v3.6.0 Live &amp; Ready)</span>
+            <span class="pipeline-status-tag tag-staged" style="font-size:0.7rem; padding:2px 8px;">READY</span>
           </div>
           <div style="font-size:0.84rem; color:var(--text-secondary); margin-top:4px;">
             Real App Version Update sabhi phones me bhejna hai? Niche button dabate hi Phone App me direct Update Dialog khulega!
@@ -312,8 +348,8 @@
         <div style="background:rgba(10,15,29,0.85); border:1px solid rgba(56,189,248,0.25); border-radius:16px; padding:18px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
           <div>
             <div style="font-size:0.75rem; color:var(--text-muted); font-weight:800; letter-spacing:1px; text-transform:uppercase;">ACTIVE PRODUCTION VERSION IN PHONES</div>
-            <div style="font-size:1.4rem; font-weight:900; color:#38bdf8; margin-top:2px;" id="pipelineActiveVersionText">v3.2.0</div>
-            <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:2px;" id="pipelineActiveNameText">Mind Focus Books Live Edition</div>
+            <div style="font-size:1.4rem; font-weight:900; color:#38bdf8; margin-top:2px;" id="pipelineActiveVersionText">v3.6.0</div>
+            <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:2px;" id="pipelineActiveNameText">Mind Focus Books v3.6.0 — Premium Real-App Studio &amp; UI Redesign</div>
           </div>
           <div style="text-align:right;">
             <span class="pipeline-status-tag tag-deployed" id="pipelineStatusTag">LIVE IN PHONES</span>
@@ -330,25 +366,26 @@
           <div class="responsive-grid-1-2">
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label">Version Tag</label>
-              <input type="text" class="form-input" id="targetVersionTag" value="v3.5.8" placeholder="e.g. v3.5.8">
+              <input type="text" class="form-input" id="targetVersionTag" value="v3.6.0" placeholder="e.g. v3.6.0">
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label">Release Name / Title</label>
-              <input type="text" class="form-input" id="targetReleaseName" value="Mind Focus Books v3.5.8 — Thermal Cool Engine & Zero-Battery-Drain Architecture">
+              <input type="text" class="form-input" id="targetReleaseName" value="Mind Focus Books v3.6.0 — Premium Real-App Studio &amp; UI Redesign">
             </div>
           </div>
 
           <div class="form-group">
             <label class="form-label">Signed APK Download URL</label>
-            <input type="text" class="form-input" id="targetApkUrl" value="https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk">
+            <input type="text" class="form-input" id="targetApkUrl" value="https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.6.0">
           </div>
 
           <div class="form-group">
             <label class="form-label">What's New Points / Changelog (1 feature per line)</label>
-            <textarea class="form-textarea" id="targetReleaseFeatures" rows="5" placeholder="Enter new features...">📡 Live Phone Crash Radar: Phone par aane wala koi bhi error seedha Control Panel me live alert bhejega
-🛠️ In-App Mobile DevTools: Phone screen par floating F12 developer console, network monitor aur storage viewer
-🩺 360° Phone Diagnostics: Real-time hardware specs, screen resolution, online status aur stack traces
-🔌 USB Remote Inspect Guide: Computer Chrome se live phone inspect karne ka built-in workflow</textarea>
+            <textarea class="form-textarea" id="targetReleaseFeatures" rows="5" placeholder="Enter new features...">🎨 Control Panel Complete Redesign: Hacker console completely replaced with elegant Real App UI
+🎴 3D Smart Flashcard Trainer: Leitner Memory Box &amp; interactive swipe gestures live
+💬 Live Help Desk: Fast direct messaging between reader app and admin studio
+⚡ Zero Battery Drain &amp; Thermal Freeze: Complete background optimization
+🛡️ 16 Remote Feature Switches &amp; Instant Emergency Pause Control</textarea>
           </div>
 
           <div style="margin-top:16px; padding-top:14px; border-top:1px solid rgba(255,255,255,0.08); display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
@@ -577,15 +614,15 @@
               <span class="beacon-core"></span>
             </div>
             <div>
-              <div class="status-headline" id="statusHeadlineText">SYSTEMS NORMAL • 16 NODES ONLINE</div>
+              <div class="status-headline" id="statusHeadlineText">✨ ऐप स्टेटस: सामान्य • सभी 16 फीचर्स एक्टिव</div>
               <div class="status-subheadline" id="statusSubheadlineText">
-                Phone app operating with zero CPU throttling. All background workers, sockets, and features active.
+                सभी यूजर्स के फोन में ऐप बहुत स्मूथ और बिना किसी लैग के चल रहा है। आपातकालीन स्थिति में आप यहाँ से पूरे ऐप को एक क्लिक में अस्थायी रूप से रोक सकते हैं।
               </div>
             </div>
           </div>
           <div class="emergency-switch-box">
-            <div class="master-switch-title">🚨 EMERGENCY LOCKDOWN</div>
-            <label class="master-switch" title="1-क्लिक में पूरे फोन ऐप को बंद करें">
+            <div class="master-switch-title">🛡️ मास्टर ऐप पॉज (Emergency Pause)</div>
+            <label class="master-switch" title="1-क्लिक में पूरे फोन ऐप को अस्थायी रूप से रोकें">
               <input type="checkbox" id="cfgAppEmergencyLockdown" onchange="onLockdownToggleChanged()">
               <span class="master-slider"></span>
             </label>
@@ -602,17 +639,17 @@
         <!-- Master Freeze / Restore Action Bar -->
         <div class="master-action-grid">
           <button type="button" class="btn-master-action btn-freeze-all" onclick="freezeAllFeatures()">
-            <span class="master-btn-icon">🔴</span>
+            <span class="master-btn-icon">⏸️</span>
             <div class="master-btn-info">
-              <div class="master-btn-title">FREEZE ALL FEATURES</div>
-              <div class="master-btn-desc">सभी 16 फीचर्स एक साथ बंद करें (Zero Battery Drain)</div>
+              <div class="master-btn-title">सभी फीचर्स रोकें (Freeze All)</div>
+              <div class="master-btn-desc">1-क्लिक में सभी 16 फीचर्स पॉज करें (Zero Battery Drain)</div>
             </div>
           </button>
           <button type="button" class="btn-master-action btn-restore-all" onclick="restoreAllFeatures()">
-            <span class="master-btn-icon">🟢</span>
+            <span class="master-btn-icon">▶️</span>
             <div class="master-btn-info">
-              <div class="master-btn-title">RESTORE ALL FEATURES</div>
-              <div class="master-btn-desc">सभी 16 फीचर्स दोबारा चालू करें (Full App Runtimes)</div>
+              <div class="master-btn-title">सभी फीचर्स चालू करें (Restore All)</div>
+              <div class="master-btn-desc">सभी 16 फीचर्स दोबारा सामान्य रूप से चालू करें</div>
             </div>
           </button>
         </div>
@@ -1168,7 +1205,7 @@
           </div>
           <div class="kpi-card" style="border-left: 4px solid #38bdf8;">
             <div class="kpi-label">Active App Version</div>
-            <div class="kpi-value" id="kpiActiveVersion" style="color:#38bdf8; font-size:1.3rem;">v3.5.8</div>
+            <div class="kpi-value" id="kpiActiveVersion" style="color:#38bdf8; font-size:1.3rem;">v3.6.0</div>
             <div class="kpi-sub">Live Native &amp; PWA Build</div>
           </div>
         </div>

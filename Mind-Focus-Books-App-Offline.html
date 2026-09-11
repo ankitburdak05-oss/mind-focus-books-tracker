@@ -9178,7 +9178,7 @@ body {
             </div>
             <div>
               <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Tracker</div>
-              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.5.8 Thermal Cool Engine</div>
+              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.6.0 Real App Design &amp; Feature Studio</div>
             </div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn" style="border-radius:12px; padding:0.45rem 0.85rem; font-weight:800;">
@@ -15778,14 +15778,14 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.5.9';
+const CURRENT_APP_VERSION = 'v3.6.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
   updateSettingsThemeChoices();
   if (typeof syncSettingsFlagshipControls === 'function') syncSettingsFlagshipControls();
   const verText = document.getElementById('appCurrentVersionText');
-  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Remote Kill-Switch & Feature Cockpit';
+  if (verText) verText.innerText = CURRENT_APP_VERSION + ' • Real App Design & Feature Studio';
   const devToolsCheckbox = document.getElementById('toggleDevToolsCheckbox');
   if (devToolsCheckbox) {
     devToolsCheckbox.checked = (localStorage.getItem('mindfocus_devtools_enabled') === 'true');

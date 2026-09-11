@@ -263,25 +263,25 @@ function onLockdownToggleChanged(playAudio = true) {
   if (el && el.checked) {
     if (beacon) beacon.className = 'status-beacon beacon-lockdown';
     if (headline) {
-      headline.innerText = '🚨 EMERGENCY THERMAL LOCKDOWN ACTIVE';
+      headline.innerText = '🚨 ऐप को अस्थायी रूप से रोका गया है (App Paused)';
       headline.style.color = '#f87171';
     }
     if (subheadline) {
-      subheadline.innerText = 'All app features, background workers, timers, and sockets will be killed immediately on users phones.';
+      subheadline.innerText = 'आपातकालीन स्थिति के लिए फोन ऐप में सभी फीचर्स को अस्थायी रूप से रोक दिया गया है। दोबारा चालू करने के लिए स्विच बंद करें।';
     }
     if (heroCard) heroCard.classList.add('in-lockdown');
-    if (playAudio) showToast('🚨 Emergency App Lockdown Armed! Click Push to deploy.');
+    if (playAudio) showToast('🚨 ऐप पॉज स्विच चालू किया गया! "Push Changes" दबाकर फोन में भेजें।');
   } else {
     if (beacon) beacon.className = 'status-beacon beacon-normal';
     if (headline) {
-      headline.innerText = 'SYSTEMS NORMAL • 16 NODES ONLINE';
+      headline.innerText = '✨ ऐप स्टेटस: सामान्य • सभी 16 फीचर्स एक्टिव';
       headline.style.color = '#34d399';
     }
     if (subheadline) {
-      subheadline.innerText = 'Phone app operating with zero CPU throttling. All background workers, sockets, and features active.';
+      subheadline.innerText = 'सभी यूजर्स के फोन में ऐप बहुत स्मूथ और बिना किसी लैग के चल रहा है। सभी 16 फीचर्स एक्टिव हैं।';
     }
     if (heroCard) heroCard.classList.remove('in-lockdown');
-    if (playAudio) showToast('🟢 App Lockdown Disarmed (Normal Operation)');
+    if (playAudio) showToast('🟢 ऐप स्टेटस सामान्य है (सभी फीचर्स एक्टिव)');
   }
 }
 window.onLockdownToggleChanged = onLockdownToggleChanged;
@@ -565,12 +565,12 @@ async function fetchLiveStatusFromGitHub() {
 // -------------------------------------------------------------
 // -------------------------------------------------------------
 async function fetchRemoteConfigPipeline() {
-  // 1. INSTANT LOCAL DATA (Zero-delay render for v3.5.8)
+  // 1. INSTANT LOCAL DATA (Zero-delay render for v3.6.0)
   if (typeof window !== 'undefined' && window.__DEFAULT_REMOTE_CONFIG__) {
     remoteConfigData = JSON.parse(JSON.stringify(window.__DEFAULT_REMOTE_CONFIG__));
     updatePipelineCardUI(remoteConfigData);
     populateConfigFormUI(remoteConfigData);
-    appendLog('📁 Pipeline config v3.5.8 loaded instantly.', 'success');
+    appendLog('📁 Pipeline config v3.6.0 loaded instantly.', 'success');
   }
 
   // 2. Try fetching from GitHub if online
@@ -2943,7 +2943,7 @@ function handleIncomingPhoneCrashTelemetry(payload) {
       userName: 'Phone User',
       deviceType: 'Android Phone',
       userAgent: 'Unknown UA',
-      appVersion: 'v3.5.8',
+      appVersion: 'v3.6.0',
       screen: 'Unknown Screen',
       online: true
     }
@@ -3042,7 +3042,7 @@ function renderPhoneCrashRadarStream() {
               ${isTest ? '🧪 TEST EVENT' : '🔴 RUNTIME CRASH'}
             </span>
             <span style="font-size:0.78rem; font-weight:700; color:#e2e8f0;">${escapeHtml(dev.userName || 'Reader')} (${escapeHtml(dev.deviceType || 'Phone')})</span>
-            <span style="font-size:0.7rem; color:var(--text-muted);">${escapeHtml(dev.appVersion || 'v3.5.8')}</span>
+            <span style="font-size:0.7rem; color:var(--text-muted);">${escapeHtml(dev.appVersion || 'v3.6.0')}</span>
           </div>
           <div style="display:flex; align-items:center; gap:10px;">
             <span style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">${timeStr}</span>
@@ -3162,7 +3162,7 @@ function simulateTestCrashTelemetry() {
       userName: 'Test Reader (Simulation)',
       deviceType: 'Android Phone (Redmi Note 13)',
       userAgent: 'Mozilla/5.0 (Linux; Android 14; 2312DRA50G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36',
-      appVersion: 'v3.5.8',
+      appVersion: 'v3.6.0',
       screen: '412x915 px',
       online: true
     }
