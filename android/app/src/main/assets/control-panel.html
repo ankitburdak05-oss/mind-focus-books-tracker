@@ -10,9 +10,406 @@
   <link rel="manifest" href="manifest-admin.json">
   <link rel="stylesheet" href="style.css?v=3.7.4">
   <link rel="stylesheet" href="control-panel.css?v=3.7.4">
+  <link rel="stylesheet" href="lookbook-strip.css?v=3.7.4">
   <link rel="icon" type="image/png" href="icon-192.png">
+  <style>
+    /* ==========================================================================
+       ADMIN LOCK: hide all body content while locked.
+       Iss rule ko JS-controlled class toggle se operate karte hain.
+       body.admin-locked pe sab children display:none, sirf #adminLockOverlay
+       visible rahega.
+       ========================================================================== */
+    body.admin-locked > div:not(#adminLockOverlay),
+    body.admin-locked > nav,
+    body.admin-locked > aside,
+    body.admin-locked > main,
+    body.admin-locked > header,
+    body.admin-locked > section,
+    body.admin-locked > script,
+    body.admin-locked > style,
+    body.admin-locked > link,
+    body.admin-locked > meta {
+      display: none !important;
+    }
+    /* Lock overlay always visible during lock state */
+    body.admin-locked #adminLockOverlay {
+      display: flex !important;
+    }
+
+    /* Default state: lock overlay initially hidden, JS will show it on DOMContentLoaded */
+    .admin-lock-overlay { display: none !important; }
+
+    /* ==========================================================================
+       PASSWORD / PIN LOCK SCREEN STYLES
+       ========================================================================== */
+    .admin-lock-overlay {
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(135deg, #0b0f19 0%, #1a1f3a 100%);
+      z-index: 9999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: blur(20px);
+    }
+    .admin-lock-overlay.hidden { display: none; }
+    .admin-lock-card {
+      background: rgba(15, 23, 42, 0.92);
+      border: 1px solid rgba(56, 189, 248, 0.35);
+      border-radius: 20px;
+      padding: 2rem 1.75rem;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 60px rgba(56, 189, 248, 0.15);
+      text-align: center;
+      color: #e2e8f0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    .admin-lock-icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 1rem;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      box-shadow: 0 8px 24px rgba(56, 189, 248, 0.4);
+      animation: lockPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes lockPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 8px 24px rgba(56, 189, 248, 0.4); }
+      50% { transform: scale(1.05); box-shadow: 0 8px 32px rgba(56, 189, 248, 0.6); }
+    }
+    .admin-lock-title { font-size: 1.5rem; font-weight: 900; color: #38bdf8; margin: 0 0 0.5rem; }
+    .admin-lock-subtitle { font-size: 0.9rem; color: #94a3b8; margin: 0 0 1.25rem; line-height: 1.5; }
+    .admin-lock-tabs { display: flex; gap: 0.4rem; background: rgba(0,0,0,0.3); border-radius: 12px; padding: 4px; margin-bottom: 1.25rem; }
+    .admin-lock-tab-btn {
+      flex: 1;
+      padding: 0.55rem 0.5rem;
+      background: transparent;
+      border: none;
+      color: #94a3b8;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .admin-lock-tab-btn.active {
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+    }
+    .admin-lock-input {
+      width: 100%;
+      padding: 0.85rem 1rem;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1.5px solid rgba(56, 189, 248, 0.3);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-align: center;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.85rem;
+      box-sizing: border-box;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+    .admin-lock-input:focus {
+      outline: none;
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+    }
+    .admin-lock-btn {
+      width: 100%;
+      padding: 0.85rem;
+      background: linear-gradient(135deg, #38bdf8, #6366f1);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-weight: 800;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+      transition: transform 0.1s;
+    }
+    .admin-lock-btn:active { transform: scale(0.98); }
+    .admin-lock-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .admin-lock-secondary-btn {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #94a3b8;
+      margin-top: 0.6rem;
+      padding: 0.65rem;
+      width: 100%;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .admin-lock-error {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #fca5a5;
+      padding: 0.65rem;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      margin-bottom: 0.85rem;
+      min-height: 0;
+      display: none;
+    }
+    .admin-lock-error.show { display: block; animation: shake 0.4s; }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-6px); }
+      75% { transform: translateX(6px); }
+    }
+    .admin-lock-attempts {
+      font-size: 0.75rem;
+      color: #64748b;
+      margin-top: 0.75rem;
+    }
+    .admin-lock-attempts.warning { color: #f59e0b; }
+    .admin-lock-attempts.danger { color: #ef4444; font-weight: 700; }
+    .admin-lock-pin-dots {
+      display: flex;
+      justify-content: center;
+      gap: 0.75rem;
+      margin: 1rem 0 1.5rem;
+    }
+    .admin-lock-pin-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(56, 189, 248, 0.4);
+      transition: all 0.2s;
+    }
+    .admin-lock-pin-dot.filled {
+      background: #38bdf8;
+      border-color: #38bdf8;
+      box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+      transform: scale(1.1);
+    }
+    .admin-lock-pin-dot.error {
+      background: #ef4444;
+      border-color: #ef4444;
+      animation: shake 0.4s;
+    }
+    .admin-lock-numpad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+    .admin-lock-numpad-btn {
+      padding: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 1.4rem;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.1s;
+      font-family: inherit;
+    }
+    .admin-lock-numpad-btn:active { background: rgba(56, 189, 248, 0.2); transform: scale(0.95); }
+    .admin-lock-numpad-btn.action { background: rgba(239, 68, 68, 0.1); color: #fca5a5; font-size: 0.95rem; }
+    .admin-lock-footer-note {
+      font-size: 0.72rem;
+      color: #475569;
+      margin-top: 1rem;
+      line-height: 1.5;
+    }
+    .admin-lock-setup-step {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.65rem 0.85rem;
+      background: rgba(255,255,255,0.03);
+      border-radius: 10px;
+      margin-bottom: 0.85rem;
+      text-align: left;
+    }
+    .admin-lock-setup-step .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #38bdf8;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .admin-lock-setup-step .step-info { flex: 1; }
+    .admin-lock-setup-step .step-title { color: #e2e8f0; font-weight: 700; font-size: 0.85rem; }
+    .admin-lock-setup-step .step-desc { color: #94a3b8; font-size: 0.75rem; margin-top: 2px; }
+  </style>
 </head>
 <body>
+  <!-- ==========================================================================
+       ADMIN PASSWORD / PIN LOCK SCREEN
+       Top-priority overlay - jab tak unlock nahi hoga baaki UI hidden rahega.
+       Initially display:none (set by CSS rule above); JS DOMContentLoaded pe
+       show karega jab user unlock karne aayega.
+       ========================================================================== -->
+  <div id="adminLockOverlay" class="admin-lock-overlay" style="display:none;">
+    <!-- Screen 1: First-time SETUP (jab password set nahi hai) -->
+    <div id="adminLockSetupScreen" class="admin-lock-card" style="display:none;">
+      <div class="admin-lock-icon">🔐</div>
+      <h2 class="admin-lock-title">Setup Admin Lock</h2>
+      <p class="admin-lock-subtitle">Pehli baar use kar rahe ho. Apna password/PIN set karo — yeh sirf iss browser mein save hoga.</p>
+
+      <div class="admin-lock-tabs">
+        <button type="button" class="admin-lock-tab-btn active" data-mode="password" onclick="adminLockSwitchMode('password')">🔤 Password</button>
+        <button type="button" class="admin-lock-tab-btn" data-mode="pin" onclick="adminLockSwitchMode('pin')">🔢 4-Digit PIN</button>
+      </div>
+
+      <div id="adminLockErrorSetup" class="admin-lock-error"></div>
+
+      <!-- Password Mode Inputs -->
+      <div id="adminLockPasswordSetup">
+        <div class="admin-lock-setup-step">
+          <div class="step-num">1</div>
+          <div class="step-info">
+            <div class="step-title">Choose a strong password</div>
+            <div class="step-desc">Minimum 6 characters. Mix letters & numbers recommended.</div>
+          </div>
+        </div>
+        <input type="password" id="adminLockNewPwd" class="admin-lock-input" placeholder="New password (min 6 chars)" autocomplete="new-password">
+        <input type="password" id="adminLockConfirmPwd" class="admin-lock-input" placeholder="Confirm password" autocomplete="new-password" onkeydown="if(event.key==='Enter')adminLockCompleteSetup()">
+      </div>
+
+      <!-- PIN Mode Inputs -->
+      <div id="adminLockPinSetup" style="display:none;">
+        <div class="admin-lock-setup-step">
+          <div class="step-num">1</div>
+          <div class="step-info">
+            <div class="step-title">Choose a 4-digit PIN</div>
+            <div class="step-desc">Quick access ke liye. Use numpad below.</div>
+          </div>
+        </div>
+        <div class="admin-lock-pin-dots" id="adminLockPinDots">
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+        </div>
+        <div class="admin-lock-numpad">
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('1')">1</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('2')">2</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('3')">3</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('4')">4</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('5')">5</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('6')">6</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('7')">7</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('8')">8</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('9')">9</button>
+          <button type="button" class="admin-lock-numpad-btn action" onclick="adminLockPinPress('C')">C</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockPinPress('0')">0</button>
+          <button type="button" class="admin-lock-numpad-btn action" onclick="adminLockPinPress('X')">⌫</button>
+        </div>
+        <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:0.5rem;" id="adminLockPinStatus">PIN enter karo (4 digits)</div>
+      </div>
+
+      <button type="button" class="admin-lock-btn" onclick="adminLockCompleteSetup()">✅ Save & Unlock</button>
+      <button type="button" class="admin-lock-secondary-btn" onclick="adminLockSwitchMode(document.getElementById('adminLockPinSetup').style.display==='none' ? 'pin' : 'password')">Switch to <span id="adminLockModeSwitchLabel">PIN</span></button>
+
+      <div class="admin-lock-footer-note">
+        Tip: Password/PIN sirf iss browser me localStorage me save hoga (encrypted).<br>
+        Recovery: Master reset token GitHub repo me hai (for emergency).
+      </div>
+    </div>
+
+    <!-- Screen 2: LOGIN (jab password set hai) -->
+    <div id="adminLockLoginScreen" class="admin-lock-card" style="display:none;">
+      <div class="admin-lock-icon">🔒</div>
+      <h2 class="admin-lock-title">Admin Locked</h2>
+      <p class="admin-lock-subtitle" id="adminLockLoginSubtitle">Apna password/PIN daal kar unlock karo.</p>
+
+      <div id="adminLockErrorLogin" class="admin-lock-error"></div>
+
+      <!-- Password Login -->
+      <div id="adminLockPasswordLogin">
+        <input type="password" id="adminLockLoginPwd" class="admin-lock-input" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')adminLockAttemptLogin()">
+      </div>
+
+      <!-- PIN Login -->
+      <div id="adminLockPinLogin" style="display:none;">
+        <div class="admin-lock-pin-dots" id="adminLockLoginPinDots">
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+          <div class="admin-lock-pin-dot"></div>
+        </div>
+        <div class="admin-lock-numpad">
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('1')">1</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('2')">2</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('3')">3</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('4')">4</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('5')">5</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('6')">6</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('7')">7</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('8')">8</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('9')">9</button>
+          <button type="button" class="admin-lock-numpad-btn action" onclick="adminLockLoginPinPress('C')">C</button>
+          <button type="button" class="admin-lock-numpad-btn" onclick="adminLockLoginPinPress('0')">0</button>
+          <button type="button" class="admin-lock-numpad-btn action" onclick="adminLockLoginPinPress('X')">⌫</button>
+        </div>
+      </div>
+
+      <button type="button" class="admin-lock-btn" id="adminLockLoginBtn" onclick="adminLockAttemptLogin()">🔓 Unlock</button>
+      <button type="button" class="admin-lock-secondary-btn" id="adminLockForgotBtn" onclick="adminLockShowForgot()">🔑 Forgot password? Reset</button>
+
+      <div class="admin-lock-attempts" id="adminLockAttemptsText"></div>
+    </div>
+
+    <!-- Screen 3: FORGOT / RESET via recovery token -->
+    <div id="adminLockForgotScreen" class="admin-lock-card" style="display:none;">
+      <div class="admin-lock-icon">🆘</div>
+      <h2 class="admin-lock-title">Reset Lock</h2>
+      <p class="admin-lock-subtitle">Master reset token GitHub repo me publish kiya hai. Woh token daal ke naya password set karo.</p>
+
+      <div id="adminLockErrorForgot" class="admin-lock-error"></div>
+
+      <div class="admin-lock-setup-step">
+        <div class="step-num">1</div>
+        <div class="step-info">
+          <div class="step-title">Master Reset Token</div>
+          <div class="step-desc">URL: <code>https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/admin-reset-token.txt</code></div>
+        </div>
+      </div>
+      <input type="text" id="adminLockResetToken" class="admin-lock-input" placeholder="Paste reset token from GitHub" autocomplete="off">
+      <button type="button" id="adminLockAutoFetchBtn" class="admin-lock-secondary-btn" onclick="adminLockAutoFetchToken()" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-color:transparent; margin-top:0;">
+        📋 Auto-Fetch Token from GitHub (1-Click)
+      </button>
+
+      <div class="admin-lock-setup-step">
+        <div class="step-num">2</div>
+        <div class="step-info">
+          <div class="step-title">New Password</div>
+          <div class="step-desc">Min 6 characters ya 4-digit PIN</div>
+        </div>
+      </div>
+      <input type="password" id="adminLockResetNewPwd" class="admin-lock-input" placeholder="New password (min 6 chars)">
+
+      <button type="button" class="admin-lock-btn" onclick="adminLockResetViaToken()">🔓 Reset & Set New Password</button>
+      <button type="button" class="admin-lock-secondary-btn" onclick="adminLockShowLogin()">← Back to Login</button>
+
+      <div class="admin-lock-footer-note">
+        Recovery token public hai. Koi bhi jis ke paas URL hai, reset kar sakta hai.<br>
+        Isliye sirf trusted laptop/browser me use karo.
+      </div>
+    </div>
+  </div>
+
   <!-- Dynamic Chromatic Spatial Aurora Background (Apple VisionOS / Linear Glow) -->
   <div class="panel-aurora-bg" aria-hidden="true">
     <div class="aurora-blob aurora-blob-1"></div>
@@ -95,43 +492,47 @@
         </div>
       </div>
 
-      <!-- Navigation Links -->
+      <!-- Navigation Links — iOS Premium Style -->
       <div class="sidebar-nav-scroll">
-        <!-- Group 1: Core Studio -->
+        <!-- Group 1: Main -->
         <div class="nav-group">
-          <div class="nav-group-title">CORE STUDIO</div>
+          <div class="nav-group-title">MAIN</div>
           <button type="button" class="sidebar-nav-item tab-btn active" data-tab="tabFeatures" onclick="switchTab('tabFeatures')">
-            <span class="nav-icon">🎛️</span>
-            <span class="nav-label">Features &amp; Safety</span>
-            <span class="nav-badge-pill" id="badgeFeaturesCount">16 Active</span>
+            <span class="nav-icon">🏠</span>
+            <span class="nav-label">Dashboard</span>
+            <span class="nav-badge-pill" id="badgeFeaturesCount">16</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabBroadcast" onclick="switchTab('tabBroadcast')">
             <span class="nav-icon">📢</span>
-            <span class="nav-label">Broadcast Studio</span>
-            <span class="nav-pulse-dot"></span>
-          </button>
-          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
-            <span class="nav-icon">🚀</span>
-            <span class="nav-label">App Release &amp; OTA</span>
-            <span class="nav-tag-live">v3.6.0</span>
+            <span class="nav-label">Broadcast</span>
           </button>
         </div>
 
-        <!-- Group 2: Reader Engagement -->
+        <!-- Group 2: Engage -->
         <div class="nav-group">
-          <div class="nav-group-title">ENGAGEMENT</div>
+          <div class="nav-group-title">ENGAGE</div>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabLiveChat" onclick="switchTab('tabLiveChat')">
             <span class="nav-icon">💬</span>
-            <span class="nav-label">Live Help Desk</span>
+            <span class="nav-label">Help Desk</span>
             <span class="badge-chat-unread" id="adminChatUnreadBadge" style="display:none;">0</span>
-          </button>
-          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabFlashcards" onclick="switchTab('tabFlashcards')">
-            <span class="nav-icon">🎴</span>
-            <span class="nav-label">3D Flashcards</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabMysteryGift" onclick="switchTab('tabMysteryGift')">
             <span class="nav-icon">🎁</span>
-            <span class="nav-label">Mystery Gift Box</span>
+            <span class="nav-label">Mystery Gift</span>
+          </button>
+          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabFlashcards" onclick="switchTab('tabFlashcards')">
+            <span class="nav-icon">🎴</span>
+            <span class="nav-label">Flashcards</span>
+          </button>
+        </div>
+
+        <!-- Group 3: Build -->
+        <div class="nav-group">
+          <div class="nav-group-title">BUILD</div>
+          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
+            <span class="nav-icon">🚀</span>
+            <span class="nav-label">Deploy &amp; OTA</span>
+            <span class="nav-tag-live">v3.6.0</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabBooks" onclick="switchTab('tabBooks')">
             <span class="nav-icon">🌟</span>
@@ -139,21 +540,21 @@
           </button>
         </div>
 
-        <!-- Group 3: Diagnostics & Cloud -->
+        <!-- Group 4: System -->
         <div class="nav-group">
-          <div class="nav-group-title">SYSTEM &amp; CLOUD</div>
+          <div class="nav-group-title">SYSTEM</div>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabDiagnostics" onclick="switchTab('tabDiagnostics')">
             <span class="nav-icon">🩺</span>
-            <span class="nav-label">Phone Diagnostics</span>
+            <span class="nav-label">Diagnostics</span>
             <span class="badge-chat-unread" id="phoneCrashBadge" style="display:none; background:#ef4444;">0</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabGithub" onclick="switchTab('tabGithub')">
             <span class="nav-icon">🔑</span>
-            <span class="nav-label">GitHub Cloud Sync</span>
+            <span class="nav-label">GitHub Sync</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabMore" onclick="switchTab('tabMore')">
             <span class="nav-icon">⚙️</span>
-            <span class="nav-label">Data &amp; Utilities</span>
+            <span class="nav-label">Settings</span>
           </button>
         </div>
       </div>
@@ -174,13 +575,13 @@
 
     <!-- Main Stage -->
     <main class="app-main-stage">
-      <!-- Top Stage Cockpit / Header -->
+      <!-- Top Stage Cockpit / Header — iOS Premium Style -->
       <header class="stage-topbar">
         <div class="topbar-left">
-          <button type="button" class="topbar-mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle Menu">
+          <button type="button" class="topbar-mobile-menu-btn" onclick="toggleMobileSidebar()" aria-label="Toggle Menu" style="background:var(--ios-bg-card);border:none;color:var(--ios-text);width:40px;height:40px;border-radius:12px;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;">
             <span>☰</span>
           </button>
-          <div class="topbar-heading">
+          <div class="topbar-heading" style="margin-left:12px;">
             <h2 class="view-title" id="currentViewTitle">Features &amp; Remote Switches</h2>
             <div class="breadcrumbs">
               <span>MindFocus Studio</span> <span class="bc-sep">/</span> <span id="currentViewBreadcrumb">Features</span>
@@ -188,65 +589,18 @@
           </div>
         </div>
 
-        <div class="topbar-center">
-          <div class="compact-kpi-row">
-            <div class="kpi-chip" onclick="switchTab('tabPipeline')" title="App Release Status">
-              <span class="kpi-chip-icon">🚀</span>
-              <span class="kpi-chip-val">v3.6.0 Live</span>
-            </div>
-            <div class="kpi-chip" onclick="switchTab('tabFeatures')" title="Active Feature Switches">
-              <span class="kpi-chip-icon">🛡️</span>
-              <span class="kpi-chip-val">16 Active</span>
-            </div>
-            <div class="kpi-chip" onclick="switchTab('tabLiveChat')" title="Live Help Desk Chat">
-              <span class="kpi-chip-icon">💬</span>
-              <span class="kpi-chip-val">Help Desk</span>
-            </div>
-            <div class="kpi-chip" onclick="switchTab('tabFlashcards')" title="3D Flashcards">
-              <span class="kpi-chip-icon">🎴</span>
-              <span class="kpi-chip-val">Flashcards</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="topbar-right">
-          <!-- Quick App Mode / Color Switcher -->
-          <div class="topbar-theme-group" title="Select App Mode (Light / Colors / Dark)">
-            <button type="button" class="topbar-mode-toggle" id="topbarModeToggle" onclick="toggleLightDarkMode()" title="Toggle Light / Dark Mode">
-              <span id="topbarModeIcon">☀️</span> <span id="topbarModeText">Light Mode</span>
-            </button>
-            <div class="theme-pills-row">
-              <button type="button" class="theme-pill-btn pill-light" data-theme-name="light" onclick="setPanelTheme('light')" title="Snow White Light Mode">
-                <span class="pill-dot"></span><span class="pill-label">White ☀️</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-ocean" data-theme-name="ocean" onclick="setPanelTheme('ocean')" title="Vivid Sapphire Ocean Blue">
-                <span class="pill-dot"></span><span class="pill-label">Blue 🔵</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-emerald" data-theme-name="emerald" onclick="setPanelTheme('emerald')" title="Lush Emerald Forest Green">
-                <span class="pill-dot"></span><span class="pill-label">Green 🟢</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-ruby" data-theme-name="ruby" onclick="setPanelTheme('ruby')" title="Vivid Crimson Ruby Red">
-                <span class="pill-dot"></span><span class="pill-label">Red 🔴</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-gold" data-theme-name="gold" onclick="setPanelTheme('gold')" title="Warm Sunset Amber Gold">
-                <span class="pill-dot"></span><span class="pill-label">Gold 🟠</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-amethyst" data-theme-name="amethyst" onclick="setPanelTheme('amethyst')" title="Cyber Royal Purple">
-                <span class="pill-dot"></span><span class="pill-label">Purple 🟣</span>
-              </button>
-              <button type="button" class="theme-pill-btn pill-dark" data-theme-name="dark" onclick="setPanelTheme('dark')" title="Midnight OLED Dark Mode">
-                <span class="pill-dot"></span><span class="pill-label">Dark 🌙</span>
-              </button>
-            </div>
-          </div>
-          <button type="button" class="btn-topbar-action" onclick="toggleBrowserFullscreen()" id="btnFullscreenToggle" title="Toggle Fullscreen">
-            <span>⛶</span> <span class="action-btn-text">Full Screen</span>
+        <div class="topbar-right" style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <button type="button" class="ios-quick-btn" onclick="toggleLightDarkMode()" title="Toggle Theme" id="iosThemeToggle" style="background:var(--ios-bg-card);border:1px solid var(--ios-border);color:var(--ios-text);width:42px;height:42px;border-radius:12px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">
+            <span id="iosThemeIcon">🌙</span>
           </button>
-          <button type="button" class="btn-topbar-action btn-deploy-pill" id="btnDeployToRealAppBanner" onclick="deployStagedReleaseToRealApp()" title="Deploy Update to Phones">
-            <span>🚀</span> <span class="action-btn-text">Push OTA</span>
+          <button type="button" class="ios-quick-btn" onclick="toggleBrowserFullscreen()" title="Fullscreen" style="background:var(--ios-bg-card);border:1px solid var(--ios-border);color:var(--ios-text);width:42px;height:42px;border-radius:12px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;">
+            <span>⛶</span>
           </button>
-          <div class="telemetry-live-pill">
-            <span class="pulse-beacon"></span>
+          <button type="button" class="ios-deploy-btn" id="btnDeployToRealAppBanner" onclick="deployStagedReleaseToRealApp()" title="Deploy Update" style="background:linear-gradient(135deg,var(--ios-accent),var(--ios-accent-2));color:#fff;border:none;padding:11px 18px;border-radius:12px;font-weight:700;font-size:14px;cursor:pointer;box-shadow:0 4px 16px rgba(10,132,255,0.4);display:flex;align-items:center;gap:6px;transition:all 0.2s;">
+            <span>🚀</span> <span>Deploy</span>
+          </button>
+          <div style="display:flex;align-items:center;gap:6px;background:rgba(48,209,88,0.15);border:1px solid rgba(48,209,88,0.3);color:var(--ios-success);padding:8px 12px;border-radius:12px;font-size:12px;font-weight:700;">
+            <span style="width:8px;height:8px;border-radius:50%;background:var(--ios-success);box-shadow:0 0 8px var(--ios-success);animation:pulse 1.5s infinite;"></span>
             <span id="liveNoticeStatusBadge">LIVE</span>
           </div>
         </div>
@@ -254,6 +608,9 @@
 
       <!-- Scrollable Stage Content Container -->
       <div class="stage-content-scroll" id="stageContentScroll">
+
+        <!-- Top Sliding Lookbook Story Carousel Strip -->
+        <div id="topLookbookStoryStrip"></div>
 
     <!-- TAB 1: BROADCAST STUDIO -->
     <section class="tab-view" id="tabBroadcast">
@@ -536,6 +893,24 @@
           <span class="panel-pill" style="background:rgba(245,158,11,0.18); border-color:#f59e0b; color:#fbbf24;">SURPRISE REWARD ENGINE</span>
         </div>
 
+        <!-- BOX 1 vs BOX 2 Selector -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:0 0 18px 0;">
+          <div class="box-select-card box-select-active" id="boxCard1" onclick="selectMysteryBox(1)" style="cursor:pointer; padding:16px; border-radius:16px; background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(251,191,36,0.08)); border:2px solid rgba(245,158,11,0.4); display:flex; gap:14px; align-items:center;">
+            <div style="font-size:42px; line-height:1;">🎁</div>
+            <div>
+              <div style="font-weight:800; font-size:1.05rem; color:var(--ios-text);">Box 1 — Classic Golden</div>
+              <div style="font-size:0.78rem; opacity:0.7; margin-top:3px;">3D drop + confetti + reward reveal</div>
+            </div>
+          </div>
+          <div class="box-select-card" id="boxCard2" onclick="selectMysteryBox(2)" style="cursor:pointer; padding:16px; border-radius:16px; background:var(--ios-bg-card); border:2px solid var(--ios-border); display:flex; gap:14px; align-items:center;">
+            <div style="font-size:42px; line-height:1;">⚔️</div>
+            <div>
+              <div style="font-weight:800; font-size:1.05rem; color:var(--ios-text);">Box 2 — Warrior Sword</div>
+              <div style="font-size:0.78rem; opacity:0.7; margin-top:3px;">Character breaks screen + blast + car reveal</div>
+            </div>
+          </div>
+        </div>
+
         <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:18px; line-height:1.6;">
           Yaha se aap sabhi users ke phone screen par aasmaan se ek <b>3D Golden Gift Box</b> drop kar sakte hain! Jab user box par tap karega, to 3D box khulega, celebratory confetti aur crackers phootenge, aur unhe special reward milega!
         </p>
@@ -785,264 +1160,152 @@
           </button>
         </div>
 
-        <div class="feature-tiles-grid">
-          <!-- 1. Help Desk & Chat -->
-          <div class="feature-tile-card" id="card_cfgChatHelpDesk" onclick="toggleFeatureTile('cfgChatHelpDesk')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(99,102,241,0.18); color:#818cf8;">💬</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgChatHelpDesk">ACTIVE</span>
+        <div class="icon-tiles-grid">
+          <!-- 1. Help Desk -->
+          <div class="feature-icon-tile" id="card_cfgChatHelpDesk" data-feature-id="cfgChatHelpDesk" data-feature-name="Help Desk" onclick="openFeatureQuickPanel('cfgChatHelpDesk')">
+            <div class="icon-tile-glyph" style="background:rgba(99,102,241,0.18);color:#818cf8;">💬</div>
+            <div class="icon-tile-name">Help Desk</div>
+            <div class="icon-tile-status" id="status_cfgChatHelpDesk">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Live Help Desk & Chat</div>
-            <div class="tile-desc">In-app floating chat pill & real-time help desk messaging.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgChatHelpDesk" checked onchange="onFeatureTileChanged('cfgChatHelpDesk')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgChatHelpDesk" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgChatHelpDesk')">
           </div>
-
-          <!-- 2. Phone Crash Radar & Telemetry -->
-          <div class="feature-tile-card" id="card_cfgTelemetry" onclick="toggleFeatureTile('cfgTelemetry')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(239,68,68,0.18); color:#f87171;">🩺</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgTelemetry">ACTIVE</span>
+          <!-- 2. Diagnostics -->
+          <div class="feature-icon-tile" id="card_cfgTelemetry" data-feature-id="cfgTelemetry" data-feature-name="Diagnostics" onclick="openFeatureQuickPanel('cfgTelemetry')">
+            <div class="icon-tile-glyph" style="background:rgba(239,68,68,0.18);color:#f87171;">🩺</div>
+            <div class="icon-tile-name">Diagnostics</div>
+            <div class="icon-tile-status" id="status_cfgTelemetry">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Crash Radar & Telemetry</div>
-            <div class="tile-desc">Real-time error diagnostics & automatic crash report dispatch.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgTelemetry" checked onchange="onFeatureTileChanged('cfgTelemetry')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgTelemetry" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgTelemetry')">
           </div>
-
-          <!-- 3. Mobile DevTools -->
-          <div class="feature-tile-card" id="card_cfgMobileDevTools" onclick="toggleFeatureTile('cfgMobileDevTools')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(56,189,248,0.18); color:#38bdf8;">🛠️</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgMobileDevTools">ACTIVE</span>
+          <!-- 3. DevTools -->
+          <div class="feature-icon-tile" id="card_cfgMobileDevTools" data-feature-id="cfgMobileDevTools" data-feature-name="DevTools" onclick="openFeatureQuickPanel('cfgMobileDevTools')">
+            <div class="icon-tile-glyph" style="background:rgba(56,189,248,0.18);color:#38bdf8;">🛠️</div>
+            <div class="icon-tile-name">DevTools</div>
+            <div class="icon-tile-status" id="status_cfgMobileDevTools">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Mobile DevTools Console</div>
-            <div class="tile-desc">Floating in-app console & diagnostic inspector pill on phone.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgMobileDevTools" checked onchange="onFeatureTileChanged('cfgMobileDevTools')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgMobileDevTools" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgMobileDevTools')">
           </div>
-
-          <!-- 4. Broadcast Notices -->
-          <div class="feature-tile-card" id="card_cfgBroadcastNotice" onclick="toggleFeatureTile('cfgBroadcastNotice')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(245,158,11,0.18); color:#fbbf24;">📢</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgBroadcastNotice">ACTIVE</span>
+          <!-- 4. Broadcast -->
+          <div class="feature-icon-tile" id="card_cfgBroadcastNotice" data-feature-id="cfgBroadcastNotice" data-feature-name="Broadcast" onclick="openFeatureQuickPanel('cfgBroadcastNotice')">
+            <div class="icon-tile-glyph" style="background:rgba(245,158,11,0.18);color:#fbbf24;">📢</div>
+            <div class="icon-tile-name">Broadcast</div>
+            <div class="icon-tile-status" id="status_cfgBroadcastNotice">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Broadcast Notices & Alerts</div>
-            <div class="tile-desc">Admin flash announcements & alert banners on user screen.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgBroadcastNotice" checked onchange="onFeatureTileChanged('cfgBroadcastNotice')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgBroadcastNotice" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgBroadcastNotice')">
           </div>
-
-          <!-- 5. In-App Update Scanner -->
-          <div class="feature-tile-card" id="card_cfgAppUpdates" onclick="toggleFeatureTile('cfgAppUpdates')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(16,185,129,0.18); color:#34d399;">🔄</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgAppUpdates">ACTIVE</span>
+          <!-- 5. Updates -->
+          <div class="feature-icon-tile" id="card_cfgAppUpdates" data-feature-id="cfgAppUpdates" data-feature-name="Updates" onclick="openFeatureQuickPanel('cfgAppUpdates')">
+            <div class="icon-tile-glyph" style="background:rgba(16,185,129,0.18);color:#34d399;">🔄</div>
+            <div class="icon-tile-name">Updates</div>
+            <div class="icon-tile-status" id="status_cfgAppUpdates">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">In-App Update Scanner</div>
-            <div class="tile-desc">OTA APK auto-update prompt dialogs & header update badge.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgAppUpdates" checked onchange="onFeatureTileChanged('cfgAppUpdates')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgAppUpdates" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgAppUpdates')">
           </div>
-
-          <!-- 6. Reading Streaks & Shields -->
-          <div class="feature-tile-card" id="card_cfgStreakShields" onclick="toggleFeatureTile('cfgStreakShields')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(236,72,153,0.18); color:#f472b6;">🔥</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgStreakShields">ACTIVE</span>
+          <!-- 6. Streaks -->
+          <div class="feature-icon-tile" id="card_cfgStreakShields" data-feature-id="cfgStreakShields" data-feature-name="Streaks" onclick="openFeatureQuickPanel('cfgStreakShields')">
+            <div class="icon-tile-glyph" style="background:rgba(236,72,153,0.18);color:#f472b6;">🔥</div>
+            <div class="icon-tile-name">Streaks</div>
+            <div class="icon-tile-status" id="status_cfgStreakShields">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Daily Streaks & Shields</div>
-            <div class="tile-desc">Duolingo-style reading streaks & streak freeze shields.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgStreakShields" checked onchange="onFeatureTileChanged('cfgStreakShields')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgStreakShields" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgStreakShields')">
           </div>
-
-          <!-- 7. Zen Sanctuary Timer -->
-          <div class="feature-tile-card" id="card_cfgSanctuaryTimer" onclick="toggleFeatureTile('cfgSanctuaryTimer')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(168,85,247,0.18); color:#c084fc;">⏱️</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgSanctuaryTimer">ACTIVE</span>
+          <!-- 7. Zen Timer -->
+          <div class="feature-icon-tile" id="card_cfgSanctuaryTimer" data-feature-id="cfgSanctuaryTimer" data-feature-name="Zen Timer" onclick="openFeatureQuickPanel('cfgSanctuaryTimer')">
+            <div class="icon-tile-glyph" style="background:rgba(168,85,247,0.18);color:#c084fc;">⏱️</div>
+            <div class="icon-tile-name">Zen Timer</div>
+            <div class="icon-tile-status" id="status_cfgSanctuaryTimer">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Zen Sanctuary Timer</div>
-            <div class="tile-desc">Focus interval timer with Pomodoro chimes & peaceful bell.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgSanctuaryTimer" checked onchange="onFeatureTileChanged('cfgSanctuaryTimer')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgSanctuaryTimer" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgSanctuaryTimer')">
           </div>
-
-          <!-- 8. 3D Smart Flashcards -->
-          <div class="feature-tile-card" id="card_cfgFlashcards" onclick="toggleFeatureTile('cfgFlashcards')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(244,63,94,0.18); color:#fb7185;">🎴</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgFlashcards">ACTIVE</span>
+          <!-- 8. Flashcards -->
+          <div class="feature-icon-tile" id="card_cfgFlashcards" data-feature-id="cfgFlashcards" data-feature-name="Flashcards" onclick="openFeatureQuickPanel('cfgFlashcards')">
+            <div class="icon-tile-glyph" style="background:rgba(244,63,94,0.18);color:#fb7185;">🎴</div>
+            <div class="icon-tile-name">Flashcards</div>
+            <div class="icon-tile-status" id="status_cfgFlashcards">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">3D Smart Flashcards</div>
-            <div class="tile-desc">Interactive 3D book summary flashcards & target words.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgFlashcards" checked onchange="onFeatureTileChanged('cfgFlashcards')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgFlashcards" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgFlashcards')">
           </div>
-
-          <!-- 9. Spatial EQ & Ambient Audio -->
-          <div class="feature-tile-card" id="card_cfgAmbientAudio" onclick="toggleFeatureTile('cfgAmbientAudio')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(56,189,248,0.18); color:#38bdf8;">🎵</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgAmbientAudio">ACTIVE</span>
+          <!-- 9. Audio EQ -->
+          <div class="feature-icon-tile" id="card_cfgAmbientAudio" data-feature-id="cfgAmbientAudio" data-feature-name="Audio EQ" onclick="openFeatureQuickPanel('cfgAmbientAudio')">
+            <div class="icon-tile-glyph" style="background:rgba(56,189,248,0.18);color:#38bdf8;">🎵</div>
+            <div class="icon-tile-name">Audio EQ</div>
+            <div class="icon-tile-status" id="status_cfgAmbientAudio">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Spatial EQ & Audio</div>
-            <div class="tile-desc">Binaural rain, cafe, and forest white noise generator.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgAmbientAudio" checked onchange="onFeatureTileChanged('cfgAmbientAudio')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgAmbientAudio" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgAmbientAudio')">
           </div>
-
-          <!-- 10. 3D Tilt Physics & Dynamic Aurora -->
-          <div class="feature-tile-card" id="card_cfgVisualPhysics" onclick="toggleFeatureTile('cfgVisualPhysics')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(129,140,248,0.18); color:#a5b4fc;">🎨</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgVisualPhysics">ACTIVE</span>
+          <!-- 10. Aurora 3D -->
+          <div class="feature-icon-tile" id="card_cfgVisualPhysics" data-feature-id="cfgVisualPhysics" data-feature-name="Aurora 3D" onclick="openFeatureQuickPanel('cfgVisualPhysics')">
+            <div class="icon-tile-glyph" style="background:rgba(129,140,248,0.18);color:#a5b4fc;">🎨</div>
+            <div class="icon-tile-name">Aurora 3D</div>
+            <div class="icon-tile-status" id="status_cfgVisualPhysics">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">3D Tilt & Aurora Waves</div>
-            <div class="tile-desc">Gyroscope card tilt & GPU aurora (Turn OFF to save battery).</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgVisualPhysics" checked onchange="onFeatureTileChanged('cfgVisualPhysics')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgVisualPhysics" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgVisualPhysics')">
           </div>
-
-          <!-- 11. Barcode / ISBN Camera Scanner -->
-          <div class="feature-tile-card" id="card_cfgBarcodeScanner" onclick="toggleFeatureTile('cfgBarcodeScanner')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(52,211,153,0.18); color:#6ee7b7;">📷</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgBarcodeScanner">ACTIVE</span>
+          <!-- 11. ISBN Scan -->
+          <div class="feature-icon-tile" id="card_cfgBarcodeScanner" data-feature-id="cfgBarcodeScanner" data-feature-name="ISBN Scan" onclick="openFeatureQuickPanel('cfgBarcodeScanner')">
+            <div class="icon-tile-glyph" style="background:rgba(52,211,153,0.18);color:#6ee7b7;">📷</div>
+            <div class="icon-tile-name">ISBN Scan</div>
+            <div class="icon-tile-status" id="status_cfgBarcodeScanner">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Barcode / ISBN Camera</div>
-            <div class="tile-desc">Live camera barcode scanner to instantly find book metadata.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgBarcodeScanner" checked onchange="onFeatureTileChanged('cfgBarcodeScanner')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgBarcodeScanner" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgBarcodeScanner')">
           </div>
-
-          <!-- 12. Audiobook Voice Reader (TTS) -->
-          <div class="feature-tile-card" id="card_cfgAudioVoice" onclick="toggleFeatureTile('cfgAudioVoice')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(251,146,60,0.18); color:#fdba74;">🎙️</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgAudioVoice">ACTIVE</span>
+          <!-- 12. TTS Voice -->
+          <div class="feature-icon-tile" id="card_cfgAudioVoice" data-feature-id="cfgAudioVoice" data-feature-name="TTS Voice" onclick="openFeatureQuickPanel('cfgAudioVoice')">
+            <div class="icon-tile-glyph" style="background:rgba(251,146,60,0.18);color:#fdba74;">🎙️</div>
+            <div class="icon-tile-name">TTS Voice</div>
+            <div class="icon-tile-status" id="status_cfgAudioVoice">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Audiobook Voice (TTS)</div>
-            <div class="tile-desc">Synthetic text-to-speech audio voice reader for book notes.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgAudioVoice" checked onchange="onFeatureTileChanged('cfgAudioVoice')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgAudioVoice" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgAudioVoice')">
           </div>
-
-          <!-- 13. Daily Motivational Quotes -->
-          <div class="feature-tile-card" id="card_cfgQuotes" onclick="toggleFeatureTile('cfgQuotes')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(234,179,8,0.18); color:#fde047;">📖</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgQuotes">ACTIVE</span>
+          <!-- 13. Quotes -->
+          <div class="feature-icon-tile" id="card_cfgQuotes" data-feature-id="cfgQuotes" data-feature-name="Quotes" onclick="openFeatureQuickPanel('cfgQuotes')">
+            <div class="icon-tile-glyph" style="background:rgba(234,179,8,0.18);color:#fde047;">📖</div>
+            <div class="icon-tile-name">Quotes</div>
+            <div class="icon-tile-status" id="status_cfgQuotes">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Daily Quotes Banner</div>
-            <div class="tile-desc">Inspirational daily reading quotes & wisdom on home feed.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgQuotes" checked onchange="onFeatureTileChanged('cfgQuotes')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgQuotes" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgQuotes')">
           </div>
-
-          <!-- 14. Community Books Sync -->
-          <div class="feature-tile-card" id="card_cfgCommunitySync" onclick="toggleFeatureTile('cfgCommunitySync')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(14,165,233,0.18); color:#7dd3fc;">📚</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgCommunitySync">ACTIVE</span>
+          <!-- 14. Community -->
+          <div class="feature-icon-tile" id="card_cfgCommunitySync" data-feature-id="cfgCommunitySync" data-feature-name="Community" onclick="openFeatureQuickPanel('cfgCommunitySync')">
+            <div class="icon-tile-glyph" style="background:rgba(14,165,233,0.18);color:#7dd3fc;">📚</div>
+            <div class="icon-tile-name">Community</div>
+            <div class="icon-tile-status" id="status_cfgCommunitySync">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Community Books Sync</div>
-            <div class="tile-desc">Sync community curated books and reviews across devices.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgCommunitySync" checked onchange="onFeatureTileChanged('cfgCommunitySync')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgCommunitySync" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgCommunitySync')">
           </div>
-
-          <!-- 15. 3D Dictionary Book -->
-          <div class="feature-tile-card" id="card_cfgDictionary" onclick="toggleFeatureTile('cfgDictionary')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(245,158,11,0.18); color:#fbbf24;">📖</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgDictionary">ACTIVE</span>
+          <!-- 15. Dictionary -->
+          <div class="feature-icon-tile" id="card_cfgDictionary" data-feature-id="cfgDictionary" data-feature-name="Dictionary" onclick="openFeatureQuickPanel('cfgDictionary')">
+            <div class="icon-tile-glyph" style="background:rgba(245,158,11,0.18);color:#fbbf24;">🔤</div>
+            <div class="icon-tile-name">Dictionary</div>
+            <div class="icon-tile-status" id="status_cfgDictionary">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">3D Dictionary Book (#0)</div>
-            <div class="tile-desc">A-Z English-Hindi 3D Dictionary book in phone library.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgDictionary" checked onchange="onFeatureTileChanged('cfgDictionary')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgDictionary" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgDictionary')">
           </div>
-
-          <!-- 16. Reading Analytics & PDF Exporter -->
-          <div class="feature-tile-card" id="card_cfgPdfExport" onclick="toggleFeatureTile('cfgPdfExport')">
-            <div class="tile-top">
-              <div class="tile-icon-badge" style="background:rgba(16,185,129,0.18); color:#34d399;">📊</div>
-              <span class="tile-status-pill pill-active" id="pill_cfgPdfExport">ACTIVE</span>
+          <!-- 16. Analytics -->
+          <div class="feature-icon-tile" id="card_cfgPdfExport" data-feature-id="cfgPdfExport" data-feature-name="Analytics" onclick="openFeatureQuickPanel('cfgPdfExport')">
+            <div class="icon-tile-glyph" style="background:rgba(16,185,129,0.18);color:#34d399;">📊</div>
+            <div class="icon-tile-name">Analytics</div>
+            <div class="icon-tile-status" id="status_cfgPdfExport">
+              <span class="status-dot-mini dot-on"></span>
             </div>
-            <div class="tile-title">Reading Analytics & PDF</div>
-            <div class="tile-desc">Reading time stats, graphs & printable PDF reading certificate.</div>
-            <div class="tile-toggle-wrap">
-              <label class="switch" onclick="event.stopPropagation()">
-                <input type="checkbox" id="cfgPdfExport" checked onchange="onFeatureTileChanged('cfgPdfExport')">
-                <span class="slider"></span>
-              </label>
-            </div>
+            <input type="checkbox" id="cfgPdfExport" class="icon-tile-checkbox" checked onchange="onFeatureTileChanged('cfgPdfExport')">
           </div>
         </div>
-
         <!-- Extra Controls Bar -->
         <div style="margin-top:20px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.08); display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:14px;">
           <!-- Scheduled Maintenance Mode -->
@@ -1445,33 +1708,78 @@
     </main><!-- /app-main-stage -->
   </div><!-- /app-layout -->
 
-  <!-- Real Mobile App Fixed Bottom Navigation Dock -->
+  <!-- Warrior Sword Box Animation Overlay (Box 2) -->
+  <div class="warrior-box-overlay" id="warriorBoxOverlay">
+    <div class="wb-sky"></div>
+    <div class="wb-box-falling" id="wbBoxFalling">
+      <div class="wb-box-shape">
+        <div class="wb-box-top">⚔️</div>
+        <div class="wb-box-body"></div>
+      </div>
+    </div>
+    <div class="wb-warrior" id="wbWarrior">
+      <video class="wb-warrior-video" id="wbWarriorVideo" muted playsinline preload="auto" loop>
+        <source src="assets/warrior/warrior_sword.mp4" type="video/mp4"/>
+        <source src="assets/warrior/warrior_sword.webm" type="video/webm"/>
+      </video>
+      <!-- Fallback static frames if video can't play -->
+      <img class="wb-warrior-frame" id="wf_1" src="assets/warrior/frames/wf_1_walk.png" alt="Walk 1"/>
+      <img class="wb-warrior-frame" id="wf_2" src="assets/warrior/frames/wf_2_walk.png" alt="Walk 2"/>
+      <img class="wb-warrior-frame" id="wf_3" src="assets/warrior/frames/wf_3_raise.png" alt="Raise"/>
+      <img class="wb-warrior-frame" id="wf_4" src="assets/warrior/frames/wf_4_windup.png" alt="Windup"/>
+      <img class="wb-warrior-frame" id="wf_5" src="assets/warrior/frames/wf_5_swing_start.png" alt="Swing Start"/>
+      <img class="wb-warrior-frame" id="wf_6" src="assets/warrior/frames/wf_6_swing_mid.png" alt="Swing Mid"/>
+      <img class="wb-warrior-frame" id="wf_7" src="assets/warrior/frames/wf_7_swing_end.png" alt="Swing End"/>
+      <img class="wb-warrior-frame" id="wf_8" src="assets/warrior/frames/wf_8_sword_up.png" alt="Sword Up"/>
+    </div>
+    <div class="wb-screen-crack" id="wbScreenCrack"></div>
+    <div class="wb-sky-beam" id="wbSkyBeam"></div>
+    <div class="wb-blast" id="wbBlast"></div>
+    <div class="wb-car" id="wbCar">
+      <div class="wb-car-body">
+        <div class="wb-car-roof"></div>
+        <div class="wb-car-trunk" id="wbCarTrunk"></div>
+        <div class="wb-car-wheels">
+          <div class="wb-car-wheel"></div>
+          <div class="wb-car-wheel"></div>
+        </div>
+        <div class="wb-car-prize" id="wbCarPrize">🎁 REWARD!</div>
+      </div>
+    </div>
+    <div class="wb-skip-btn" onclick="skipWarriorAnimation()">Skip</div>
+  </div>
+
+  <!-- Real Mobile App Fixed Bottom Navigation Dock — iOS Premium Style -->
   <nav class="app-bottom-dock">
     <button type="button" class="app-dock-item active" data-tab="tabFeatures" onclick="switchTab('tabFeatures')">
-      <div class="dock-icon-wrap"><span class="dock-icon">🎛️</span></div>
-      <span class="dock-label">कंट्रोल</span>
+      <div class="dock-icon-wrap"><span class="dock-icon">🏠</span></div>
+      <span class="dock-label">Home</span>
     </button>
     <button type="button" class="app-dock-item" data-tab="tabBroadcast" onclick="switchTab('tabBroadcast')">
       <div class="dock-icon-wrap"><span class="dock-icon">📢</span></div>
-      <span class="dock-label">सूचनाएं</span>
-    </button>
-    <button type="button" class="app-dock-item" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
-      <div class="dock-icon-wrap"><span class="dock-icon">🚀</span></div>
-      <span class="dock-label">अपडेट</span>
+      <span class="dock-label">Send</span>
     </button>
     <button type="button" class="app-dock-item" data-tab="tabLiveChat" onclick="switchTab('tabLiveChat')">
       <div class="dock-icon-wrap">
         <span class="dock-icon">💬</span>
         <span class="badge-dock-unread" id="dockChatUnreadBadge" style="display:none;">0</span>
       </div>
-      <span class="dock-label">चैट</span>
+      <span class="dock-label">Chat</span>
+    </button>
+    <button type="button" class="app-dock-item" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
+      <div class="dock-icon-wrap"><span class="dock-icon">🚀</span></div>
+      <span class="dock-label">Deploy</span>
+    </button>
+    <button type="button" class="app-dock-item" data-tab="tabMysteryGift" onclick="switchTab('tabMysteryGift')">
+      <div class="dock-icon-wrap"><span class="dock-icon">🎁</span></div>
+      <span class="dock-label">Library</span>
     </button>
     <button type="button" class="app-dock-item" data-tab="tabMore" onclick="switchTab('tabMore')">
       <div class="dock-icon-wrap">
         <span class="dock-icon">⚙️</span>
         <span class="badge-dock-unread badge-dock-alert" id="dockCrashBadge" style="display:none;">0</span>
       </div>
-      <span class="dock-label">टूल्स</span>
+      <span class="dock-label">Settings</span>
     </button>
   </nav>
 
@@ -1615,5 +1923,22 @@
   <script src="dictionary-data.js?v=3.7.4"></script>
   <script src="remote-config.js?v=3.7.4"></script>
   <script src="control-panel.js?v=3.7.4"></script>
+  <script src="lookbook-strip.js?v=3.7.4"></script>
+
+  <!-- ==========================================================================
+       HIDDEN PLACEHOLDER IDS (FIX FOR MISSING ELEMENTS)
+       Iss block ko koi delete nahi karna - yeh missing IDs provide karta hai
+       jo control-panel.js me getElementById() se reference ho rahi hain.
+       Visual layout me nahi dikhte (display:none) - safe JS read/write ke liye.
+       ========================================================================== -->
+  <div id="controlPanelMissingIdsRoot" style="display:none !important; visibility:hidden; position:absolute; left:-9999px; top:-9999px; width:0; height:0; overflow:hidden;" aria-hidden="true">
+    <!-- Admin Toast / Notification Snackbar -->
+    <div id="adminToast" role="status" aria-live="polite"></div>
+
+    <!-- Pipeline Staged Release Description Block (for next deploy card) -->
+    <h3 id="pipelineStagedTitle" data-default="Ready to Deploy">Ready to Deploy</h3>
+    <p id="pipelineStagedDesc" data-default="Staged version waiting for production push.">Staged version waiting for production push.</p>
+  </div>
+  <!-- END OF MISSING-IDS PLACEHOLDER BLOCK -->
 </body>
 </html>

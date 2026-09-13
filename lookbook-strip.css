@@ -1,0 +1,576 @@
+/* ==========================================================================
+   TOP FASHION LOOKBOOK STORIES STRIP
+   Slides in smoothly from the left at the very top of the app.
+   ========================================================================== */
+
+:root {
+  --lookbook-ring-grad: linear-gradient(135deg, #f59e0b, #ec4899 50%, #8b5cf6);
+  --lookbook-card-bg: rgba(15, 23, 42, 0.78);
+  --lookbook-card-border: rgba(255, 255, 255, 0.12);
+  --lookbook-text: #f8fafc;
+  --lookbook-subtext: #94a3b8;
+}
+
+[data-theme="light"] {
+  --lookbook-ring-grad: linear-gradient(135deg, #f59e0b, #ec4899 50%, #6366f1);
+  --lookbook-card-bg: rgba(255, 255, 255, 0.90);
+  --lookbook-card-border: rgba(0, 0, 0, 0.08);
+  --lookbook-text: #0f172a;
+  --lookbook-subtext: #64748b;
+}
+
+/* Container pinned or placed right at the very top */
+.lookbook-strip-wrapper {
+  width: 100%;
+  position: relative;
+  z-index: 95;
+  margin: 0 0 16px 0;
+  padding: 12px 14px 14px;
+  background: var(--lookbook-card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--lookbook-card-border);
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+
+  /* Entrance animation: Smooth slide-in from the left */
+  animation: slideInLookbookFromLeft 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+@keyframes slideInLookbookFromLeft {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Header bar inside the lookbook strip */
+.lookbook-strip-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 0 4px;
+}
+
+.lookbook-strip-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--lookbook-text);
+}
+
+.lookbook-badge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 7px;
+  background: linear-gradient(135deg, #ec4899, #8b5cf6);
+  color: #fff;
+  font-size: 0.8rem;
+  box-shadow: 0 2px 8px rgba(236, 72, 153, 0.4);
+}
+
+.lookbook-badge-count {
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(236, 72, 153, 0.18);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.35);
+  font-weight: 700;
+}
+
+.lookbook-strip-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lookbook-nav-btn {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--lookbook-card-border);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--lookbook-text);
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.lookbook-nav-btn:hover {
+  background: rgba(236, 72, 153, 0.25);
+  border-color: #ec4899;
+  transform: scale(1.08);
+}
+
+.lookbook-nav-btn:active {
+  transform: scale(0.92);
+}
+
+/* Horizontal Scroll Track */
+.lookbook-scroll-track {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  padding: 4px 6px 6px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.lookbook-scroll-track::-webkit-scrollbar {
+  display: none;
+}
+
+/* Individual Story Item */
+.lookbook-item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;
+  cursor: pointer;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+  outline: none;
+}
+
+.lookbook-item:hover {
+  transform: translateY(-3px) scale(1.04);
+}
+
+.lookbook-item:active {
+  transform: scale(0.94);
+}
+
+/* Glowing Story Ring */
+.lookbook-avatar-ring {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  padding: 2.5px;
+  background: var(--lookbook-ring-grad);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35);
+  position: relative;
+  transition: box-shadow 0.25s ease, transform 0.25s ease;
+  animation: ringPulse 4s ease-in-out infinite;
+}
+
+@keyframes ringPulse {
+  0%, 100% {
+    box-shadow: 0 4px 14px rgba(236, 72, 153, 0.35);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(139, 92, 246, 0.55);
+  }
+}
+
+.lookbook-item:hover .lookbook-avatar-ring {
+  box-shadow: 0 6px 22px rgba(236, 72, 153, 0.6);
+  transform: rotate(4deg);
+}
+
+/* Inner Image Container */
+.lookbook-avatar-img-wrap {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #0b0f19;
+  border: 2px solid #0b0f19;
+}
+
+.lookbook-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.lookbook-item:hover .lookbook-avatar-img {
+  transform: scale(1.12);
+}
+
+/* Index Dot / Number Badge */
+.lookbook-index-tag {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  background: #0f172a;
+  border: 1.5px solid #ec4899;
+  color: #fff;
+  font-size: 0.62rem;
+  font-weight: 800;
+  border-radius: 8px;
+  padding: 1px 5px;
+  line-height: 1;
+}
+
+/* Look Name / Caption */
+.lookbook-item-title {
+  margin-top: 6px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--lookbook-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+  line-height: 1.2;
+}
+
+.lookbook-item-tag {
+  font-size: 0.62rem;
+  color: var(--lookbook-subtext);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 80px;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+/* ==========================================================================
+   STORY VIEWER LIGHTBOX MODAL
+   Instagram Stories style full-screen modal
+   ========================================================================== */
+
+.lookbook-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999999;
+  background: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.lookbook-modal-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lookbook-modal-container {
+  width: 100%;
+  max-width: 440px;
+  height: 90vh;
+  max-height: 820px;
+  background: #0b0f19;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 24px;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 40px rgba(236, 72, 153, 0.25);
+  transform: scale(0.92) translateY(20px);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lookbook-modal-overlay.active .lookbook-modal-container {
+  transform: scale(1) translateY(0);
+}
+
+/* Top Progress Bars (Story Segments) */
+.lookbook-modal-bars {
+  position: absolute;
+  top: 12px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  gap: 4px;
+  z-index: 10;
+}
+
+.lookbook-bar-seg {
+  flex: 1;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+
+.lookbook-bar-seg-fill {
+  width: 0%;
+  height: 100%;
+  background: #fff;
+  transition: width 0.1s linear;
+}
+
+.lookbook-bar-seg.completed .lookbook-bar-seg-fill {
+  width: 100%;
+}
+
+/* Modal Top Bar */
+.lookbook-modal-top {
+  position: absolute;
+  top: 24px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 10;
+}
+
+.lookbook-modal-author {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.lookbook-modal-author-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid #ec4899;
+  object-fit: cover;
+}
+
+.lookbook-modal-author-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.lookbook-modal-author-name {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+}
+
+.lookbook-modal-author-sub {
+  font-size: 0.72rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.lookbook-modal-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lookbook-modal-close-btn:hover {
+  background: rgba(239, 68, 68, 0.8);
+  transform: rotate(90deg);
+}
+
+/* Modal Main Image Display */
+.lookbook-modal-stage {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  overflow: hidden;
+  user-select: none;
+}
+
+.lookbook-modal-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tap Zones (Left/Right like Instagram Stories) */
+.lookbook-tap-zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 40%;
+  z-index: 5;
+  cursor: pointer;
+}
+
+.lookbook-tap-zone.left {
+  left: 0;
+}
+
+.lookbook-tap-zone.right {
+  right: 0;
+}
+
+/* Navigation Chevrons inside viewer */
+.lookbook-modal-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 1.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 8;
+  transition: all 0.2s ease;
+}
+
+.lookbook-modal-arrow:hover {
+  background: rgba(236, 72, 153, 0.7);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.lookbook-modal-arrow.prev {
+  left: 12px;
+}
+
+.lookbook-modal-arrow.next {
+  right: 12px;
+}
+
+/* Modal Bottom Drawer / Description */
+.lookbook-modal-bottom {
+  padding: 16px 20px 20px;
+  background: linear-gradient(180deg, rgba(11, 15, 25, 0.8) 0%, #0b0f19 100%);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+
+.lookbook-modal-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lookbook-modal-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.lookbook-modal-tag-pill {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.25), rgba(139, 92, 246, 0.25));
+  border: 1px solid rgba(236, 72, 153, 0.45);
+  color: #f472b6;
+}
+
+.lookbook-modal-desc {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.lookbook-modal-footer-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 6px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.lookbook-modal-counter {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.lookbook-download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 6px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.lookbook-download-btn:hover {
+  background: rgba(56, 189, 248, 0.25);
+  color: #fff;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 640px) {
+  .lookbook-strip-wrapper {
+    padding: 10px 8px 12px;
+    margin-bottom: 12px;
+    border-radius: 0;
+  }
+  .lookbook-avatar-ring {
+    width: 62px;
+    height: 62px;
+  }
+  .lookbook-item {
+    width: 70px;
+  }
+  .lookbook-item-title {
+    max-width: 70px;
+    font-size: 0.7rem;
+  }
+  .lookbook-modal-container {
+    height: 100vh;
+    max-height: 100vh;
+    border-radius: 0;
+    border: none;
+  }
+}
