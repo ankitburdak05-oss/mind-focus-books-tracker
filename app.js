@@ -5739,7 +5739,13 @@ function updateFloatingMiniCapsule() {
   const fillEl = document.getElementById('miniCapsuleProgressFill');
 
   if (titleEl) titleEl.innerText = book.title || 'Untitled';
-  if (coverEl) coverEl.src = book.cover_image || 'cover_placeholder.jpg';
+  if (coverEl) {
+    coverEl.onerror = function() {
+      this.onerror = null;
+      this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='110' viewBox='0 0 80 110'%3E%3Crect width='80' height='110' fill='%231e293b'/%3E%3Ctext x='40' y='55' fill='%2394a3b8' font-size='24' text-anchor='middle' dominant-baseline='middle'%3E📖%3C/text%3E%3C/svg%3E";
+    };
+    coverEl.src = book.cover_image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='110' viewBox='0 0 80 110'%3E%3Crect width='80' height='110' fill='%231e293b'/%3E%3Ctext x='40' y='55' fill='%2394a3b8' font-size='24' text-anchor='middle' dominant-baseline='middle'%3E📖%3C/text%3E%3C/svg%3E";
+  }
 
   const total = parseInt(book.total_pages) || 280;
   const curr = parseInt(book.current_page) || 0;
@@ -6817,15 +6823,23 @@ function escapeHtmlText(str) {
             .replace(/"/g, '&quot;');
 }
 
-window.openUserHelpDeskModal = openUserHelpDeskModal;
-window.closeUserHelpDeskModal = closeUserHelpDeskModal;
-window.handleHelpDeskOverlayClick = handleHelpDeskOverlayClick;
-window.insertUserPrompt = insertUserPrompt;
-window.handleUserChatKeydown = handleUserChatKeydown;
-window.sendUserChatMessage = sendUserChatMessage;
-window.initLiveHelpDeskEngine = initLiveHelpDeskEngine;
-window.playUserChatAudioChime = playUserChatAudioChime;
-window.setupUserChatEventListeners = setupUserChatEventListeners;
+// User & Device Telemetry Context for Phone DevTools
+let userChatId = localStorage.getItem('mindfocus_chat_user_id') || ('usr_' + Math.random().toString(36).substring(2, 9));
+let userChatName = localStorage.getItem('mindfocus_chat_user_name') || 'Phone User';
+let userChatDevice = 'Android Phone';
+
+function formatUserChatTime(isoStr) {
+  try {
+    const d = isoStr ? new Date(isoStr) : new Date();
+    let hours = d.getHours();
+    const mins = d.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    return `${hours}:${mins} ${ampm}`;
+  } catch (e) {
+    return '';
+  }
+}
 
 // ========================================================
 // 🩺 REAL-TIME PHONE CRASH TELEMETRY & MOBILE DEVTOOLS SUITE
