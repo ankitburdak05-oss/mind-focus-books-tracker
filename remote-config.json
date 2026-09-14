@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-14T04:08:03.304Z",
+  "updatedAt": "2026-09-14T04:08:47.425Z",
   "activeRelease": {
     "version": "v3.7.0",
     "name": "Mind Focus Books v3.7.0 — Clean Lightweight Streamlined Edition",
@@ -44,7 +44,7 @@
   "features": {
     "appEmergencyLockdown": true,
     "lockdownMessage": "🚨 अभी ऐप को बंद कर दिया गया है। कुछ प्रॉब्लम आ गई है, सभी फीचर के साथ ऐप भी बंद हो गया है। कृपया थोड़ी देर प्रतीक्षा करें।",
-    "maintenanceMode": false,
+    "maintenanceMode": true,
     "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
     "chatHelpDeskEnabled": false,
     "telemetryEnabled": false,
