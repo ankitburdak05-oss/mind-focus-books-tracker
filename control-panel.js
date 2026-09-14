@@ -363,13 +363,21 @@ function adminLockShowForgot() {
 
 async function adminLockResetViaToken() {
   adminLockClearError('Forgot');
-  const token = document.getElementById('adminLockResetToken')?.value.trim();
+  const tokenInput = document.getElementById('adminLockResetToken');
+  const token = (tokenInput?.value || '').trim();
   const newPwd = document.getElementById('adminLockResetNewPwd')?.value || '';
 
   if (!token) {
-    adminLockShowError('Forgot', '⚠️ Master reset token daalein. GitHub file se copy karein ya "Auto-Fetch" button dabayein.');
+    adminLockShowError('Forgot', '⚠️ Master reset token daalein. GitHub se copy karein ya neeche "Auto-Fetch Token" button dabayein.');
     return;
   }
+
+  // PIN confusion check — short numeric tokens are NOT the reset token
+  if (/^\d{4,6}$/.test(token)) {
+    adminLockShowError('Forgot', '❌ Ye PIN hai (4-6 digits), reset token NAHI. Reset token ek LONG STRING hai (jaise mfadmin-reset-2026-...). "Auto-Fetch Token" button use karein.');
+    return;
+  }
+
   if (newPwd.length < 6) {
     adminLockShowError('Forgot', '⚠️ New password minimum 6 characters.');
     return;
@@ -387,6 +395,7 @@ async function adminLockResetViaToken() {
 
     let remoteToken = null;
     let lastErr = null;
+    let fetchSucceeded = false;
     for (const url of candidates) {
       try {
         const sep = url.includes('?') ? '&' : '?';
@@ -394,7 +403,7 @@ async function adminLockResetViaToken() {
           cache: 'no-store',
           headers: { 'Accept': 'text/plain' }
         });
-        if (!res.ok) { lastErr = 'HTTP ' + res.status; continue; }
+        if (!res.ok) { lastErr = 'HTTP ' + res.status + ' on ' + url.substring(0, 60); continue; }
         let body = await res.text();
 
         // GitHub API returns JSON with base64 content
@@ -406,21 +415,41 @@ async function adminLockResetViaToken() {
         }
 
         const trimmed = body.trim();
-        if (trimmed.length > 5) { remoteToken = trimmed; break; }
+        if (trimmed.length > 5) {
+          remoteToken = trimmed;
+          fetchSucceeded = true;
+          console.log('[AdminLock] Token fetched from:', url.substring(0, 80));
+          console.log('[AdminLock] Token length:', trimmed.length);
+          break;
+        }
       } catch (e) { lastErr = e.message; }
     }
 
     if (!remoteToken) {
-      adminLockShowError('Forgot', '⚠️ Token file fetch nahi ho paya. ' + (lastErr || 'Network issue') + '. Browser console (F12) mein check karein.');
+      adminLockShowError('Forgot', '⚠️ Token file fetch nahi ho paya. ' + (lastErr || 'Network issue') + '. Browser console (F12) mein check karein ya "Auto-Fetch Token" button try karein.');
       return;
     }
 
-    const providedTrim = token.trim();
-    if (providedTrim !== remoteToken) {
-      const prefix = remoteToken.substring(0, 12);
-      adminLockShowError('Forgot', `❌ Token match nahi hua. Token start hota hai "${prefix}..." se. Aapne ${providedTrim.length} chars diye, expected ${remoteToken.length}. Sahi token GitHub se copy karein.`);
-      console.warn('[AdminLock] Token file says:', remoteToken);
-      console.warn('[AdminLock] You provided:', providedTrim);
+    // Normalize: trim both sides, collapse internal whitespace
+    const normProvided = token.replace(/\s+/g, '');
+    const normRemote = remoteToken.replace(/\s+/g, '');
+
+    if (normProvided !== normRemote) {
+      const prefix = remoteToken.substring(0, 16);
+      const providedLen = normProvided.length;
+      const remoteLen = normRemote.length;
+      let hint = '';
+      if (providedLen !== remoteLen) {
+        hint = `\n\n📏 Length mismatch: aapne ${providedLen} chars diye, expected ${remoteLen}.`;
+      }
+      if (providedLen < 20) {
+        hint += `\n\n💡 Token ek LONG STRING hai (40+ chars), sirf PIN nahi.`;
+      }
+      adminLockShowError('Forgot', `❌ Token match nahi hua. Token start hota hai: "${prefix}..." se.${hint}\n\n✅ "Auto-Fetch Token" button dabayein - ek click me sahi token aa jayega.`);
+      console.warn('[AdminLock] Expected token:', remoteToken);
+      console.warn('[AdminLock] You provided:', normProvided);
+      console.warn('[AdminLock] Expected length:', remoteLen);
+      console.warn('[AdminLock] Your length:', providedLen);
       return;
     }
 
@@ -437,6 +466,7 @@ async function adminLockResetViaToken() {
     adminLockUnlock();
   } catch (err) {
     adminLockShowError('Forgot', '⚠️ Token verify nahi ho paya: ' + err.message);
+    console.error('[AdminLock] Reset error:', err);
   }
 }
 
@@ -445,22 +475,52 @@ async function adminLockAutoFetchToken() {
   const input = document.getElementById('adminLockResetToken');
   const btn = document.getElementById('adminLockAutoFetchBtn');
   if (!input) return;
-  if (btn) { btn.disabled = true; btn.innerText = '⏳ Fetching...'; }
+  if (btn) { btn.disabled = true; btn.innerText = '⏳ Fetching token...'; }
   try {
-    const res = await fetch(ADMIN_RESET_TOKEN_URL + '?cb=' + Date.now(), { cache: 'no-store' });
-    if (res.ok) {
-      const t = (await res.text()).trim();
-      input.value = t;
-      input.select();
-      showToast('✅ Token fetched! Auto-filled in box. Submit karein.');
-      try { await navigator.clipboard.writeText(t); } catch (e) {}
+    const candidates = [
+      ADMIN_RESET_TOKEN_URL,
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/admin-reset-token.txt?ref=${DEFAULT_BRANCH}`,
+      `https://cdn.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${DEFAULT_BRANCH}/admin-reset-token.txt`
+    ];
+
+    let fetched = null;
+    for (const url of candidates) {
+      try {
+        const sep = url.includes('?') ? '&' : '?';
+        const res = await fetch(url + sep + 'cb=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) continue;
+        let body = await res.text();
+        if (url.includes('api.github.com')) {
+          try {
+            const json = JSON.parse(body);
+            if (json && json.content) body = atob(json.content.replace(/\s/g, ''));
+          } catch (e) {}
+        }
+        const t = body.trim();
+        if (t.length > 5) { fetched = t; break; }
+      } catch (e) {}
+    }
+
+    if (fetched) {
+      input.value = fetched;
+      input.style.borderColor = 'rgba(16, 185, 129, 0.8)';
+      input.style.background = 'rgba(16, 185, 129, 0.1)';
+      showToast('✅ Token fetched! Ab "🔓 Reset" button dabayein.');
+      try { await navigator.clipboard.writeText(fetched); } catch (e) {}
+      // Auto-submit after short delay
+      setTimeout(() => {
+        const newPwd = document.getElementById('adminLockResetNewPwd');
+        if (newPwd && newPwd.value.length >= 6) {
+          adminLockResetViaToken();
+        }
+      }, 500);
     } else {
       showToast('❌ Fetch failed. Manually URL kholke copy karein.');
     }
   } catch (err) {
     showToast('❌ Network error: ' + err.message);
   } finally {
-    if (btn) { btn.disabled = false; btn.innerText = '📋 Auto-Fetch Token from GitHub'; }
+    if (btn) { btn.disabled = false; btn.innerText = '📋 Auto-Fetch Token from GitHub (1-Click)'; }
   }
 }
 window.adminLockAutoFetchToken = adminLockAutoFetchToken;
