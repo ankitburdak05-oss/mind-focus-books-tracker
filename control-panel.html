@@ -8,8 +8,8 @@
   <meta http-equiv="Expires" content="0">
   <title>Mind Focus Books • Admin Studio & Control Panel</title>
   <link rel="manifest" href="manifest-admin.json">
-  <link rel="stylesheet" href="style.css?v=3.7.4">
-  <link rel="stylesheet" href="control-panel.css?v=3.7.4">
+  <link rel="stylesheet" href="style.css?v=3.7.0">
+  <link rel="stylesheet" href="control-panel.css?v=3.7.0">
   <link rel="icon" type="image/png" href="icon-192.png">
   <style>
     /* ==========================================================================
@@ -511,31 +511,13 @@
           </button>
         </div>
 
-        <!-- Group 2: Engage -->
-        <div class="nav-group">
-          <div class="nav-group-title">ENGAGE</div>
-          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabLiveChat" onclick="switchTab('tabLiveChat')">
-            <span class="nav-icon">💬</span>
-            <span class="nav-label">Help Desk</span>
-            <span class="badge-chat-unread" id="adminChatUnreadBadge" style="display:none;">0</span>
-          </button>
-          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabMysteryGift" onclick="switchTab('tabMysteryGift')">
-            <span class="nav-icon">🎁</span>
-            <span class="nav-label">Mystery Gift</span>
-          </button>
-          <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabFlashcards" onclick="switchTab('tabFlashcards')">
-            <span class="nav-icon">🎴</span>
-            <span class="nav-label">Flashcards</span>
-          </button>
-        </div>
-
-        <!-- Group 3: Build -->
+        <!-- Group 2: Build -->
         <div class="nav-group">
           <div class="nav-group-title">BUILD</div>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
             <span class="nav-icon">🚀</span>
             <span class="nav-label">Deploy &amp; OTA</span>
-            <span class="nav-tag-live">v3.6.0</span>
+            <span class="nav-tag-live">v3.7.0</span>
           </button>
           <button type="button" class="sidebar-nav-item tab-btn" data-tab="tabBooks" onclick="switchTab('tabBooks')">
             <span class="nav-icon">🌟</span>
@@ -619,7 +601,7 @@
       <div class="version-direct-banner" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.12)); border:1.5px solid rgba(16,185,129,0.45); border-radius:14px; padding:14px 18px; margin-bottom:18px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; box-shadow:0 8px 24px rgba(0,0,0,0.3);">
         <div>
           <div style="font-weight:900; color:#34d399; font-size:1.05rem; display:flex; align-items:center; gap:8px; flex-wrap:wrap;">
-            <span>🚀</span> <span>App Version Release Manager (v3.6.0 Live &amp; Ready)</span>
+            <span>🚀</span> <span>App Version Release Manager (v3.7.0 Live &amp; Ready)</span>
             <span class="pipeline-status-tag tag-staged" style="font-size:0.7rem; padding:2px 8px;">READY</span>
           </div>
           <div style="font-size:0.84rem; color:var(--text-secondary); margin-top:4px;">
@@ -650,62 +632,33 @@
           <div class="form-group">
             <label class="form-label">⚡ 1-Click Quick Presets</label>
             <select class="form-select" id="noticePresetSelect">
-              <option value="dictionary_release">📖 Card 2: "v3.3.0 A-Z Dictionary Book Live!" (3D Model)</option>
-              <option value="c2_feedback">💎 Card 2: "kesa laga new card" (3D Model)</option>
-              <option value="c1_poll">📢 Card 1: "ye acha hai ya card2" (Quantum Portal)</option>
-              <option value="new_update">🚀 New Update Ready: v3.2.0</option>
+              <option value="new_update">🚀 New Update Ready: v3.7.0</option>
               <option value="book_of_day">🌟 Book of the Day Announcement</option>
               <option value="daily_motivation">📖 Daily Reading Motivation</option>
               <option value="maintenance">⚡ Server Maintenance Alert</option>
             </select>
           </div>
 
-          <!-- Card Style Selector -->
-          <div class="form-group">
-            <label class="form-label">Design Layout (Card 1 vs Card 2)</label>
-            <div class="card-selector-grid">
-              <label class="card-radio-label">
-                <input type="radio" name="noticeCardType" value="card1">
-                <div class="card-option">
-                  <div class="card-option-badge">🌀</div>
-                  <div>
-                    <div class="card-option-title">Card 1 • Quantum Portal</div>
-                    <div class="card-option-desc">Holographic Orb, Shockwave Ring &amp; Cyan Particles</div>
-                  </div>
-                </div>
-              </label>
-
-              <label class="card-radio-label">
-                <input type="radio" name="noticeCardType" value="card2" checked>
-                <div class="card-option">
-                  <div class="card-option-badge">💎</div>
-                  <div>
-                    <div class="card-option-title">Card 2 • 3D Crystal Model</div>
-                    <div class="card-option-desc">Real CSS 3D Spinning Crystal Cube &amp; Gold Accents</div>
-                  </div>
-                </div>
-              </label>
-            </div>
-          </div>
+          <!-- Hidden card type for compatibility -->
+          <input type="hidden" name="noticeCardType" id="noticeCardType" value="card1">
 
           <!-- Title Input -->
           <div class="form-group">
             <label class="form-label">Popup Title</label>
-            <input type="text" class="form-input" id="noticeTitleInput" value="Card 2 • 3D Model" placeholder="Headline...">
+            <input type="text" class="form-input" id="noticeTitleInput" value="Mind Focus Alert" placeholder="Headline...">
           </div>
 
           <!-- Message Input -->
           <div class="form-group">
             <label class="form-label">Message Body</label>
-            <textarea class="form-textarea" id="noticeMsgInput" placeholder="Aapka sandesh / message yaha likhein...">kesa laga new card</textarea>
+            <textarea class="form-textarea" id="noticeMsgInput" placeholder="Aapka sandesh / message yaha likhein...">Welcome to Mind Focus Books v3.7.0!</textarea>
           </div>
 
           <!-- Emoji / Icon Selector -->
           <div class="form-group">
             <label class="form-label">Icon / Emoji</label>
-            <input type="text" class="form-input" id="noticeIconInput" value="💎" style="max-width: 120px; font-size: 1.3rem; text-align: center;">
+            <input type="text" class="form-input" id="noticeIconInput" value="📢" style="max-width: 120px; font-size: 1.3rem; text-align: center;">
             <div class="emoji-chips">
-              <span class="emoji-chip" onclick="selectEmoji('💎')">💎</span>
               <span class="emoji-chip" onclick="selectEmoji('📢')">📢</span>
               <span class="emoji-chip" onclick="selectEmoji('🔥')">🔥</span>
               <span class="emoji-chip" onclick="selectEmoji('🚀')">🚀</span>
@@ -721,7 +674,7 @@
           <!-- Button Text -->
           <div class="form-group">
             <label class="form-label">Button Action Text</label>
-            <input type="text" class="form-input" id="noticeBtnTextInput" value="Mast Hai 🔥" placeholder="Button text...">
+            <input type="text" class="form-input" id="noticeBtnTextInput" value="OK, Samajh Gaya" placeholder="Button text...">
           </div>
 
           <!-- Action Buttons -->
@@ -729,54 +682,31 @@
             <button type="button" class="btn-admin btn-primary" id="btnBroadcastNow" onclick="broadcastLiveNotice()">
               <span>⚡</span> Broadcast Live to App
             </button>
-            <button type="button" class="btn-admin btn-gold" id="btnAutoSequence" onclick="triggerAutoSequence()">
-              <span>⏱️</span> Auto-Sequence (Card 2 → 10s → Card 1)
-            </button>
             <button type="button" class="btn-admin btn-danger" id="btnDeactivate" onclick="deactivateLiveNotice()">
               <span>🔴</span> Turn Off Notice
             </button>
           </div>
         </div>
 
-        <!-- Right Column: Interactive 3D Simulator & History -->
+        <!-- Right Column: Interactive Simulator & History -->
         <div>
           <div class="glass-panel">
             <div class="panel-header">
               <div class="panel-title">
-                <span>📱</span> Live Interactive 3D Simulator
+                <span>📱</span> Live Interactive Simulator
               </div>
-              <span class="panel-pill">DRAG 3D VIEWPORT</span>
+              <span class="panel-pill">POPUP PREVIEW</span>
             </div>
 
-            <div class="simulator-card" id="simViewport" title="Drag with mouse or finger to tilt in 3D!">
+            <div class="simulator-card" id="simViewport">
               <!-- Card 1 Simulator -->
-              <div class="sim-card1" id="simCard1" style="display:none;">
+              <div class="sim-card1" id="simCard1" style="display:block;">
                 <div class="sim-orb">
                   <span id="simCard1Icon">📢</span>
                 </div>
-                <div class="sim-title" id="simCard1Title">Card 1 vs Card 2</div>
-                <div class="sim-message" id="simCard1Msg">ye acha hai ya card2</div>
-                <button type="button" class="sim-btn sim-btn-cyan" id="simCard1Btn">Batao Bhai 🏆</button>
-              </div>
-
-              <!-- Card 2 Simulator (3D Cube Model) -->
-              <div class="sim-card2" id="simCard2">
-                <div class="sim-cube-stage">
-                  <div class="sim-cube">
-                    <div class="sim-cube-face front"></div>
-                    <div class="sim-cube-face back"></div>
-                    <div class="sim-cube-face right"></div>
-                    <div class="sim-cube-face left"></div>
-                    <div class="sim-cube-face top"></div>
-                    <div class="sim-cube-face bottom"></div>
-                    <div class="sim-cube-core">
-                      <span id="simCard2Icon">💎</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="sim-title" id="simCard2Title">Card 2 • 3D Model</div>
-                <div class="sim-message" id="simCard2Msg">kesa laga new card</div>
-                <button type="button" class="sim-btn sim-btn-gold" id="simCard2Btn">Mast Hai 🔥</button>
+                <div class="sim-title" id="simCard1Title">Mind Focus Alert</div>
+                <div class="sim-message" id="simCard1Msg">Welcome to Mind Focus Books v3.7.0!</div>
+                <button type="button" class="sim-btn sim-btn-cyan" id="simCard1Btn">OK, Samajh Gaya</button>
               </div>
             </div>
 
@@ -819,8 +749,8 @@
         <div style="background:rgba(10,15,29,0.85); border:1px solid rgba(56,189,248,0.25); border-radius:16px; padding:18px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
           <div>
             <div style="font-size:0.75rem; color:var(--text-muted); font-weight:800; letter-spacing:1px; text-transform:uppercase;">ACTIVE PRODUCTION VERSION IN PHONES</div>
-            <div style="font-size:1.4rem; font-weight:900; color:#38bdf8; margin-top:2px;" id="pipelineActiveVersionText">v3.6.0</div>
-            <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:2px;" id="pipelineActiveNameText">Mind Focus Books v3.6.0 — Premium Real-App Studio &amp; UI Redesign</div>
+            <div style="font-size:1.4rem; font-weight:900; color:#38bdf8; margin-top:2px;" id="pipelineActiveVersionText">v3.7.0</div>
+            <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:2px;" id="pipelineActiveNameText">Mind Focus Books v3.7.0 — Clean Lightweight Streamlined Edition</div>
           </div>
           <div style="text-align:right;">
             <span class="pipeline-status-tag tag-deployed" id="pipelineStatusTag">LIVE IN PHONES</span>
@@ -837,25 +767,25 @@
           <div class="responsive-grid-1-2">
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label">Version Tag</label>
-              <input type="text" class="form-input" id="targetVersionTag" value="v3.6.0" placeholder="e.g. v3.6.0">
+              <input type="text" class="form-input" id="targetVersionTag" value="v3.7.0" placeholder="e.g. v3.7.0">
             </div>
             <div class="form-group" style="margin-bottom:0;">
               <label class="form-label">Release Name / Title</label>
-              <input type="text" class="form-input" id="targetReleaseName" value="Mind Focus Books v3.6.0 — Premium Real-App Studio &amp; UI Redesign">
+              <input type="text" class="form-input" id="targetReleaseName" value="Mind Focus Books v3.7.0 — Clean Lightweight Streamlined Edition">
             </div>
           </div>
 
           <div class="form-group">
             <label class="form-label">Signed APK Download URL</label>
-            <input type="text" class="form-input" id="targetApkUrl" value="https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.6.0">
+            <input type="text" class="form-input" id="targetApkUrl" value="https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.0">
           </div>
 
           <div class="form-group">
             <label class="form-label">What's New Points / Changelog (1 feature per line)</label>
-            <textarea class="form-textarea" id="targetReleaseFeatures" rows="5" placeholder="Enter new features...">🎨 Control Panel Complete Redesign: Hacker console completely replaced with elegant Real App UI
-🎴 3D Smart Flashcard Trainer: Leitner Memory Box &amp; interactive swipe gestures live
-💬 Live Help Desk: Fast direct messaging between reader app and admin studio
-⚡ Zero Battery Drain &amp; Thermal Freeze: Complete background optimization
+            <textarea class="form-textarea" id="targetReleaseFeatures" rows="5" placeholder="Enter new features...">⚡ Super Clean &amp; Lightweight: Streamlined reading experience with zero bloat
+📖 3D Real Book Reader with realistic page curl animations
+🎨 Premium iOS Glassmorphism UI and fluid navigation
+🚀 Zero Battery Drain &amp; Thermal Freeze: Background engine optimized
 🛡️ 16 Remote Feature Switches &amp; Instant Emergency Pause Control</textarea>
           </div>
 
@@ -878,220 +808,6 @@
       </div>
     </section>
 
-    <!-- TAB: MYSTERY GOLDEN GIFT BOX STUDIO (Surprise Reward Engine) -->
-    <section class="tab-view" id="tabMysteryGift">
-      <div class="subtab-back-bar">
-        <button type="button" class="btn-subtab-back" onclick="switchTab('tabMore')">
-          <span>‹</span> <span>वापस टूल्स मेनू (Back to Tools)</span>
-        </button>
-      </div>
-      <div class="glass-panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <span>🎁</span> Mystery Golden Gift Box Studio &amp; Surprise Drop Engine
-          </div>
-          <span class="panel-pill" style="background:rgba(245,158,11,0.18); border-color:#f59e0b; color:#fbbf24;">SURPRISE REWARD ENGINE</span>
-        </div>
-
-        <!-- BOX 1 vs BOX 2 Selector -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:0 0 18px 0;">
-          <div class="box-select-card box-select-active" id="boxCard1" onclick="selectMysteryBox(1)" style="cursor:pointer; padding:16px; border-radius:16px; background:linear-gradient(135deg,rgba(245,158,11,0.12),rgba(251,191,36,0.08)); border:2px solid rgba(245,158,11,0.4); display:flex; gap:14px; align-items:center;">
-            <div style="font-size:42px; line-height:1;">🎁</div>
-            <div>
-              <div style="font-weight:800; font-size:1.05rem; color:var(--ios-text);">Box 1 — Classic Golden</div>
-              <div style="font-size:0.78rem; opacity:0.7; margin-top:3px;">3D drop + confetti + reward reveal</div>
-            </div>
-          </div>
-          <div class="box-select-card" id="boxCard2" onclick="selectMysteryBox(2)" style="cursor:pointer; padding:16px; border-radius:16px; background:var(--ios-bg-card); border:2px solid var(--ios-border); display:flex; gap:14px; align-items:center;">
-            <div style="font-size:42px; line-height:1;">⚔️</div>
-            <div>
-              <div style="font-weight:800; font-size:1.05rem; color:var(--ios-text);">Box 2 — Warrior Sword</div>
-              <div style="font-size:0.78rem; opacity:0.7; margin-top:3px;">Character breaks screen + blast + car reveal</div>
-            </div>
-          </div>
-        </div>
-
-        <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:18px; line-height:1.6;">
-          Yaha se aap sabhi users ke phone screen par aasmaan se ek <b>3D Golden Gift Box</b> drop kar sakte hain! Jab user box par tap karega, to 3D box khulega, celebratory confetti aur crackers phootenge, aur unhe special reward milega!
-        </p>
-
-        <!-- Reward Type Selector Grid -->
-        <div class="form-group">
-          <label class="form-label">Select Reward Type to Put Inside Gift Box</label>
-          <div class="responsive-grid-cards">
-            <label class="card-radio-label" style="margin:0;">
-              <input type="radio" name="giftRewardType" value="vip_badge" checked>
-              <div class="card-option">
-                <div class="card-option-badge">👑</div>
-                <div>
-                  <div class="card-option-title">VIP Crown Reader Badge</div>
-                  <div class="card-option-desc">Permanent glowing golden crown in user's app header + VIP status</div>
-                </div>
-              </div>
-            </label>
-
-            <label class="card-radio-label" style="margin:0;">
-              <input type="radio" name="giftRewardType" value="secret_book">
-              <div class="card-option">
-                <div class="card-option-badge">🔮</div>
-                <div>
-                  <div class="card-option-title">Secret Bonus Focus Book</div>
-                  <div class="card-option-desc">Unlocks 'The Secret Law of Focus' masterclass book directly in library</div>
-                </div>
-              </div>
-            </label>
-
-            <label class="card-radio-label" style="margin:0;">
-              <input type="radio" name="giftRewardType" value="golden_notes">
-              <div class="card-option">
-                <div class="card-option-badge">📜</div>
-                <div>
-                  <div class="card-option-title">10 Billionaire Mental Models</div>
-                  <div class="card-option-desc">Unlocks exclusive mental frameworks cheat-sheet in notes vault</div>
-                </div>
-              </div>
-            </label>
-          </div>
-        </div>
-
-        <!-- Gift Details -->
-        <div class="responsive-grid-1-1">
-          <div class="form-group">
-            <label class="form-label">Gift Box Headline / Title</label>
-            <input type="text" class="form-input" id="giftTitleInput" value="👑 Special VIP Surprise From Mind Focus!" placeholder="Title...">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Reward Display Name</label>
-            <input type="text" class="form-input" id="giftRewardNameInput" value="VIP Golden Reader Badge" placeholder="Reward Name...">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Surprise Message (Shown to User Inside Gift)</label>
-          <textarea class="form-textarea" id="giftMessageInput" rows="3" placeholder="Message...">Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai! Tap karke apna reward claim karein.</textarea>
-        </div>
-
-        <!-- Simulation & Action Buttons -->
-        <div style="background:rgba(245,158,11,0.06); border:1px solid rgba(245,158,11,0.25); border-radius:14px; padding:16px; margin:20px 0; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
-          <div>
-            <div style="font-weight:800; color:#fbbf24; font-size:0.95rem;">👁️ Test Live 3D Simulation in Panel First</div>
-            <div style="font-size:0.82rem; color:var(--text-muted); margin-top:2px;">
-              Pehle panel ke andar hi 3D Golden Box ka aasmaan se girna, crackers sound, confetti explosion aur reward khulna test karein!
-            </div>
-          </div>
-          <button type="button" class="btn-admin" onclick="testGiftDropInPanel()" style="background:linear-gradient(135deg, #b45309, #f59e0b); color:#000; font-weight:800; padding:10px 20px;">
-            <span>👁️</span> Test Gift Drop (Live Preview)
-          </button>
-        </div>
-
-        <!-- Master Dispatch Button -->
-        <div class="btn-row">
-          <button type="button" class="btn-admin" id="btnDropGiftToAllPhones" onclick="dispatchGiftDropToAllPhones()" style="flex:1; font-size:1.05rem; padding:16px 28px; background:linear-gradient(135deg, #d97706, #f59e0b 50%, #fbbf24); color:#050814; font-weight:900; box-shadow:0 10px 30px rgba(245,158,11,0.5);">
-            <span>🎁</span> Drop Golden Gift Box to All Phones
-          </button>
-          <button type="button" class="btn-admin btn-danger" onclick="deactivateGiftDrop()">
-            <span>🛑</span> Stop Gift Drop
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB: 3D SMART FLASHCARDS STUDIO -->
-    <section class="tab-view" id="tabFlashcards">
-      <div class="subtab-back-bar">
-        <button type="button" class="btn-subtab-back" onclick="switchTab('tabMore')">
-          <span>‹</span> <span>वापस टूल्स मेनू (Back to Tools)</span>
-        </button>
-      </div>
-      <div class="glass-panel">
-        <div class="panel-header">
-          <div class="panel-title">
-            <span>🎴</span> 3D Smart Flashcards Studio &amp; Daily Target Words Dispatcher
-          </div>
-          <span class="panel-pill" style="background:rgba(236,72,153,0.18); border-color:#ec4899; color:#f472b6;">LEITNER REPETITION ENGINE</span>
-        </div>
-
-        <p style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:18px; line-height:1.6;">
-          Yaha se aap sabhi users ke phone screen par <b>3D Smart Flashcards</b> ka target challenge bhej sakte hain. User card ko 360° flip karenge, audio pronunciation sunenge, aur Swipe Right (Mastered) ya Swipe Left (Review Later) karke Leitner Box system se vocabulary yaad karenge.
-        </p>
-
-        <!-- 5 Target Words Selection Grid -->
-        <div class="form-group">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
-            <label class="form-label" style="margin:0;">Select 5 Target Words For Today's Challenge</label>
-            <div style="display:flex; gap:8px;">
-              <button type="button" class="btn-admin btn-secondary" onclick="shuffle5TargetWords()" style="font-size:0.8rem; padding:6px 14px;">
-                <span>🎲</span> Shuffle 5 Random Words
-              </button>
-            </div>
-          </div>
-
-          <div class="responsive-grid-slots">
-            <!-- Slot 1 -->
-            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
-              <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #1</div>
-              <input type="text" class="form-input fc-target-word-input" id="fcTargetWord1" value="Abandon" placeholder="Word 1" oninput="updateFlashcardPreview()">
-              <div class="fc-slot-preview" id="fcSlotPreview1" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">verb • त्याग देना</div>
-            </div>
-
-            <!-- Slot 2 -->
-            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
-              <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #2</div>
-              <input type="text" class="form-input fc-target-word-input" id="fcTargetWord2" value="Benevolent" placeholder="Word 2" oninput="updateFlashcardPreview()">
-              <div class="fc-slot-preview" id="fcSlotPreview2" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">adj • दयालु, परोपकारी</div>
-            </div>
-
-            <!-- Slot 3 -->
-            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
-              <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #3</div>
-              <input type="text" class="form-input fc-target-word-input" id="fcTargetWord3" value="Cognizant" placeholder="Word 3" oninput="updateFlashcardPreview()">
-              <div class="fc-slot-preview" id="fcSlotPreview3" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">adj • अवगत, जानकार</div>
-            </div>
-
-            <!-- Slot 4 -->
-            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
-              <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #4</div>
-              <input type="text" class="form-input fc-target-word-input" id="fcTargetWord4" value="Diligent" placeholder="Word 4" oninput="updateFlashcardPreview()">
-              <div class="fc-slot-preview" id="fcSlotPreview4" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">adj • परिश्रमी, लगनशील</div>
-            </div>
-
-            <!-- Slot 5 -->
-            <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(236,72,153,0.3); border-radius:12px; padding:12px;">
-              <div style="font-size:0.75rem; color:#f472b6; font-weight:800; margin-bottom:4px;">CARD #5</div>
-              <input type="text" class="form-input fc-target-word-input" id="fcTargetWord5" value="Empirical" placeholder="Word 5" oninput="updateFlashcardPreview()">
-              <div class="fc-slot-preview" id="fcSlotPreview5" style="font-size:0.8rem; color:var(--text-muted); margin-top:6px;">adj • अनुभवजन्य</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Custom Notice Text -->
-        <div class="responsive-grid-1-1">
-          <div class="form-group">
-            <label class="form-label">Challenge Title</label>
-            <input type="text" class="form-input" id="fcChallengeTitle" value="🎴 Today's 5 Target Words Challenge!" placeholder="Title...">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Challenge Button Text</label>
-            <input type="text" class="form-input" id="fcChallengeBtnText" value="🎴 Practice Flashcards Now" placeholder="Button Text...">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Challenge Message (Subtitle)</label>
-          <textarea class="form-textarea" id="fcChallengeMessage" rows="2" placeholder="Message...">Aapke liye 5 naye 3D smart flashcards unlock ho chuke hain! Tap karke Leitner memory challenge shuru karein.</textarea>
-        </div>
-
-        <!-- Master Dispatch Button -->
-        <div class="btn-row" style="margin-top:24px;">
-          <button type="button" class="btn-admin" id="btnPushDailyFlashcards" onclick="dispatchFlashcardsDropToAllPhones()" style="flex:1; font-size:1.05rem; padding:16px 28px; background:linear-gradient(135deg, #ec4899, #8b5cf6 60%, #3b82f6); color:#fff; font-weight:900; box-shadow:0 10px 30px rgba(236,72,153,0.45);">
-            <span>🎴</span> Push Today's 5 Target Words to All Phones
-          </button>
-          <button type="button" class="btn-admin btn-danger" onclick="deactivateFlashcardsDrop()">
-            <span>🛑</span> Stop Challenge
-          </button>
-        </div>
-      </div>
-    </section>
 
     <!-- TAB 3: REMOTE FEATURE SWITCHES & EMERGENCY COCKPIT -->
     <section class="tab-view active" id="tabFeatures">
@@ -1426,108 +1142,7 @@
       </div>
     </section>
 
-    <!-- TAB 6: LIVE USER HELP DESK & CHAT STUDIO -->
-    <section class="tab-view" id="tabLiveChat">
-      <div class="glass-panel" style="padding: 18px 20px;">
-        <div class="panel-header" style="margin-bottom: 14px; padding-bottom: 12px; flex-wrap:wrap; gap:10px;">
-          <div class="panel-title">
-            <span>💬</span> Live In-App Help Desk &amp; User Chat Studio
-          </div>
-          <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
-            <span class="panel-pill" id="chatConnectionStatusBadge" style="background:rgba(16,185,129,0.18); color:#34d399; border:1px solid #10b981;">
-              ● RADAR ACTIVE
-            </span>
-            <button type="button" class="btn-admin btn-secondary" onclick="refreshAdminChatThreads(true)" style="padding:5px 14px; font-size:0.78rem; border-radius:8px; min-width:0 !important; width:auto !important;">
-              🔄 Refresh
-            </button>
-            <button type="button" class="btn-admin btn-secondary" id="btnToggleChatAudio" onclick="toggleAdminChatSound()" style="padding:5px 14px; font-size:0.78rem; border-radius:8px; min-width:0 !important; width:auto !important;">
-              🔔 Sound: ON
-            </button>
-          </div>
-        </div>
 
-        <!-- Chat Workspace Grid -->
-        <div class="chat-workspace-grid">
-          <!-- Left Column: User Thread List -->
-          <div class="chat-threads-sidebar">
-            <div class="chat-search-bar">
-              <span style="font-size:0.9rem;">🔍</span>
-              <input type="text" id="chatUserSearchInput" class="form-input" placeholder="Search readers or messages..." oninput="filterChatThreads(this.value)" style="padding:8px 12px; font-size:0.85rem; border-radius:10px;">
-            </div>
-
-            <div class="chat-threads-list" id="chatThreadsList">
-              <div style="text-align:center; padding:24px; color:var(--text-muted); font-size:0.85rem;">
-                Loading conversations...
-              </div>
-            </div>
-          </div>
-
-          <!-- Right Column: Active Conversation Pane -->
-          <div class="chat-conversation-pane" id="chatConversationPane">
-            <!-- Active Header -->
-            <div class="chat-active-header">
-              <div class="chat-user-profile-meta">
-                <div class="chat-user-avatar" id="chatActiveUserAvatar">👤</div>
-                <div>
-                  <div class="chat-user-title-row">
-                    <span class="chat-user-display-name" id="chatActiveUserName">Select a conversation</span>
-                    <span class="chat-user-device-tag" id="chatActiveUserDevice">No user selected</span>
-                  </div>
-                  <div class="chat-user-status-text" id="chatActiveUserStatus">Click on a user thread on the left to start live chat</div>
-                </div>
-              </div>
-              <div class="chat-header-actions">
-                <button type="button" class="btn-chat-action" onclick="simulateIncomingUserMessage()" title="Simulate incoming user message for testing">
-                  🧪 Test User Message
-                </button>
-                <button type="button" class="btn-chat-action danger" onclick="clearCurrentChatThread()" title="Clear this chat history">
-                  🗑️ Clear
-                </button>
-              </div>
-            </div>
-
-            <!-- Messages Stream -->
-            <div class="chat-messages-stream" id="chatMessagesStream">
-              <div class="chat-empty-state">
-                <div style="font-size:38px; margin-bottom:8px;">💬</div>
-                <div style="font-weight:700; color:var(--text-main);">Welcome to Live Help Desk</div>
-                <div style="font-size:0.82rem; color:var(--text-muted); margin-top:4px;">When a reader sends a message from the Phone App, it will appear here instantly!</div>
-              </div>
-            </div>
-
-            <!-- 1-Click Quick Response Chips -->
-            <div class="chat-quick-replies-bar">
-              <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">⚡ Quick:</span>
-              <div class="quick-reply-chips-scroll">
-                <button type="button" class="quick-reply-chip" onclick="insertQuickReply('Kal subah naya version update release ho raha hai! 🚀')">
-                  🚀 Kal naya update aa raha hai!
-                </button>
-                <button type="button" class="quick-reply-chip" onclick="insertQuickReply('Hum aapka issue check kar rahe hain, jald solve ho jayega! 🙏')">
-                  🙏 Check kar rahe hain, jald hoga!
-                </button>
-                <button type="button" class="quick-reply-chip" onclick="insertQuickReply('Feedback dene ke liye bohot-bohot shukriya! ❤️')">
-                  ❤️ Feedback ke liye shukriya!
-                </button>
-                <button type="button" class="quick-reply-chip" onclick="insertQuickReply('Aapke account me VIP bonus reward activate kar diya gaya hai! 👑')">
-                  👑 VIP reward active ho gaya!
-                </button>
-                <button type="button" class="quick-reply-chip" onclick="insertQuickReply('Mind Focus Books Tracker use karne ke liye thank you! Happy Reading! 📖')">
-                  📖 Happy Reading!
-                </button>
-              </div>
-            </div>
-
-            <!-- Message Input & Dispatch Bar -->
-            <div class="chat-input-bar">
-              <textarea id="adminChatInputText" class="chat-input-field" rows="1" placeholder="Type your reply here... (Press Enter to send)" onkeydown="handleAdminChatKeydown(event)"></textarea>
-              <button type="button" class="btn-chat-send" id="btnAdminSendChat" onclick="sendAdminChatReply()">
-                <span>✈️ Send</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
     <!-- TAB 7: REAL PHONE CRASH RADAR & TELEMETRY -->
     <section class="tab-view" id="tabDiagnostics">
@@ -1582,7 +1197,7 @@
           </div>
           <div class="kpi-card" style="border-left: 4px solid #38bdf8;">
             <div class="kpi-label">Active App Version</div>
-            <div class="kpi-value" id="kpiActiveVersion" style="color:#38bdf8; font-size:1.3rem;">v3.6.0</div>
+            <div class="kpi-value" id="kpiActiveVersion" style="color:#38bdf8; font-size:1.3rem;">v3.7.0</div>
             <div class="kpi-sub">Live Native &amp; PWA Build</div>
           </div>
         </div>
@@ -1649,25 +1264,6 @@
             <div class="more-tool-arrow">›</div>
           </div>
 
-          <!-- Tool 2: Surprise Gift -->
-          <div class="more-tool-card" onclick="switchTab('tabMysteryGift')">
-            <div class="more-tool-icon" style="background:rgba(245,158,11,0.18); color:#fbbf24;">🎁</div>
-            <div class="more-tool-content">
-              <div class="more-tool-title">गोल्डन गिफ्ट बॉक्स (Surprise Gift)</div>
-              <div class="more-tool-desc">फोन स्क्रीन पर 3D गोल्डन गिफ्ट बॉक्स ड्रॉप करें व सेलिब्रेशन रिवॉर्ड दें</div>
-            </div>
-            <div class="more-tool-arrow">›</div>
-          </div>
-
-          <!-- Tool 3: Flashcards -->
-          <div class="more-tool-card" onclick="switchTab('tabFlashcards')">
-            <div class="more-tool-icon" style="background:rgba(168,85,247,0.18); color:#c084fc;">🎴</div>
-            <div class="more-tool-content">
-              <div class="more-tool-title">3D स्मार्ट फ्लैशकार्ड्स (Flashcards)</div>
-              <div class="more-tool-desc">डेली 5 टारगेट वर्ड्स बनाएं, एडिट करें व सभी फोन्स पर पुश करें</div>
-            </div>
-            <div class="more-tool-arrow">›</div>
-          </div>
 
           <!-- Tool 4: Book of the Day -->
           <div class="more-tool-card" onclick="switchTab('tabBooks')">
@@ -1708,47 +1304,6 @@
     </main><!-- /app-main-stage -->
   </div><!-- /app-layout -->
 
-  <!-- Warrior Sword Box Animation Overlay (Box 2) -->
-  <div class="warrior-box-overlay" id="warriorBoxOverlay">
-    <div class="wb-sky"></div>
-    <div class="wb-box-falling" id="wbBoxFalling">
-      <div class="wb-box-shape">
-        <div class="wb-box-top">⚔️</div>
-        <div class="wb-box-body"></div>
-      </div>
-    </div>
-    <div class="wb-warrior" id="wbWarrior">
-      <video class="wb-warrior-video" id="wbWarriorVideo" muted playsinline preload="auto" loop>
-        <source src="assets/warrior/warrior_sword.mp4" type="video/mp4"/>
-        <source src="assets/warrior/warrior_sword.webm" type="video/webm"/>
-      </video>
-      <!-- Fallback static frames if video can't play -->
-      <img class="wb-warrior-frame" id="wf_1" src="assets/warrior/frames/wf_1_walk.png" alt="Walk 1"/>
-      <img class="wb-warrior-frame" id="wf_2" src="assets/warrior/frames/wf_2_walk.png" alt="Walk 2"/>
-      <img class="wb-warrior-frame" id="wf_3" src="assets/warrior/frames/wf_3_raise.png" alt="Raise"/>
-      <img class="wb-warrior-frame" id="wf_4" src="assets/warrior/frames/wf_4_windup.png" alt="Windup"/>
-      <img class="wb-warrior-frame" id="wf_5" src="assets/warrior/frames/wf_5_swing_start.png" alt="Swing Start"/>
-      <img class="wb-warrior-frame" id="wf_6" src="assets/warrior/frames/wf_6_swing_mid.png" alt="Swing Mid"/>
-      <img class="wb-warrior-frame" id="wf_7" src="assets/warrior/frames/wf_7_swing_end.png" alt="Swing End"/>
-      <img class="wb-warrior-frame" id="wf_8" src="assets/warrior/frames/wf_8_sword_up.png" alt="Sword Up"/>
-    </div>
-    <div class="wb-screen-crack" id="wbScreenCrack"></div>
-    <div class="wb-sky-beam" id="wbSkyBeam"></div>
-    <div class="wb-blast" id="wbBlast"></div>
-    <div class="wb-car" id="wbCar">
-      <div class="wb-car-body">
-        <div class="wb-car-roof"></div>
-        <div class="wb-car-trunk" id="wbCarTrunk"></div>
-        <div class="wb-car-wheels">
-          <div class="wb-car-wheel"></div>
-          <div class="wb-car-wheel"></div>
-        </div>
-        <div class="wb-car-prize" id="wbCarPrize">🎁 REWARD!</div>
-      </div>
-    </div>
-    <div class="wb-skip-btn" onclick="skipWarriorAnimation()">Skip</div>
-  </div>
-
   <!-- Real Mobile App Fixed Bottom Navigation Dock — iOS Premium Style -->
   <nav class="app-bottom-dock">
     <button type="button" class="app-dock-item active" data-tab="tabFeatures" onclick="switchTab('tabFeatures')">
@@ -1759,20 +1314,9 @@
       <div class="dock-icon-wrap"><span class="dock-icon">📢</span></div>
       <span class="dock-label">Send</span>
     </button>
-    <button type="button" class="app-dock-item" data-tab="tabLiveChat" onclick="switchTab('tabLiveChat')">
-      <div class="dock-icon-wrap">
-        <span class="dock-icon">💬</span>
-        <span class="badge-dock-unread" id="dockChatUnreadBadge" style="display:none;">0</span>
-      </div>
-      <span class="dock-label">Chat</span>
-    </button>
     <button type="button" class="app-dock-item" data-tab="tabPipeline" onclick="switchTab('tabPipeline')">
       <div class="dock-icon-wrap"><span class="dock-icon">🚀</span></div>
       <span class="dock-label">Deploy</span>
-    </button>
-    <button type="button" class="app-dock-item" data-tab="tabMysteryGift" onclick="switchTab('tabMysteryGift')">
-      <div class="dock-icon-wrap"><span class="dock-icon">🎁</span></div>
-      <span class="dock-label">Library</span>
     </button>
     <button type="button" class="app-dock-item" data-tab="tabMore" onclick="switchTab('tabMore')">
       <div class="dock-icon-wrap">
@@ -1842,87 +1386,9 @@
       </div>
     </div>
   </div>
-
-  <!-- 🎁 MYSTERY GOLDEN GIFT BOX DROP OVERLAY (In-Panel Simulator) -->
-  <div class="mystery-gift-overlay" id="mysteryGiftOverlay">
-    <canvas id="giftConfettiCanvas" class="gift-confetti-canvas"></canvas>
-    <div class="gift-sky-glow" id="giftSkyGlow"></div>
-
-    <div class="gift-box-stage" id="giftBoxStage" onclick="openGoldenGiftBox(event)">
-      <div class="gift-aura-halo"></div>
-      <div class="gift-shockwave-ring sw-1"></div>
-      <div class="gift-shockwave-ring sw-2"></div>
-
-      <div class="gift-box-3d" id="giftBox3D">
-        <div class="gift-lid" id="giftLid">
-          <div class="gift-lid-bow">
-            <div class="bow-loop bow-left"></div>
-            <div class="bow-loop bow-right"></div>
-            <div class="bow-ribbon ribbon-left"></div>
-            <div class="bow-ribbon ribbon-right"></div>
-            <div class="bow-knot">✦</div>
-          </div>
-          <div class="gift-lid-top"></div>
-          <div class="gift-lid-side lid-front"></div>
-          <div class="gift-lid-side lid-back"></div>
-          <div class="gift-lid-side lid-left"></div>
-          <div class="gift-lid-side lid-right"></div>
-        </div>
-
-        <div class="gift-body" id="giftBody">
-          <div class="gift-face face-front">
-            <div class="ribbon-vertical"></div>
-            <div class="ribbon-horizontal"></div>
-            <div class="gift-seal">👑</div>
-          </div>
-          <div class="gift-face face-back"><div class="ribbon-vertical"></div><div class="ribbon-horizontal"></div></div>
-          <div class="gift-face face-left"><div class="ribbon-vertical"></div><div class="ribbon-horizontal"></div></div>
-          <div class="gift-face face-right"><div class="ribbon-vertical"></div><div class="ribbon-horizontal"></div></div>
-          <div class="gift-face face-top"><div class="gift-inner-glow"></div></div>
-          <div class="gift-face face-bottom"></div>
-        </div>
-      </div>
-
-      <div class="gift-tap-prompt" id="giftTapPrompt">
-        <span class="prompt-icon">👆</span>
-        <span class="prompt-text">TAP TO OPEN SURPRISE REWARD!</span>
-        <span class="prompt-sparkle">✨</span>
-      </div>
-    </div>
-
-    <div class="gift-reward-modal" id="giftRewardModal">
-      <div class="gift-reward-sheen"></div>
-      <div class="gift-reward-header">
-        <div class="reward-crown-wrap">
-          <span class="reward-crown-icon" id="rewardCrownIcon">👑</span>
-        </div>
-        <span class="reward-pill" id="rewardPillText">SURPRISE REWARD UNLOCKED</span>
-      </div>
-
-      <h2 class="reward-title" id="rewardTitleText">VIP Golden Reader Badge</h2>
-      <div class="reward-badge-preview" id="rewardBadgePreview">
-        <div class="badge-emblem" id="rewardEmblem">🏆</div>
-        <div class="badge-glow-ring"></div>
-      </div>
-
-      <p class="reward-desc" id="rewardDescText">
-        Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!
-      </p>
-
-      <div class="reward-perk-box" id="rewardPerkBox"></div>
-
-      <div class="reward-actions">
-        <button type="button" class="btn-claim-reward" id="btnClaimReward" onclick="claimSurpriseReward()">
-          <span>⚡ Claim Reward Now (Preview Mode)</span>
-          <span class="claim-arrow">→</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <script src="dictionary-data.js?v=3.7.4"></script>
-  <script src="remote-config.js?v=3.7.4"></script>
-  <script src="control-panel.js?v=3.7.4"></script>
+  <script src="dictionary-data.js?v=3.7.0"></script>
+  <script src="remote-config.js?v=3.7.0"></script>
+  <script src="control-panel.js?v=3.7.0"></script>
 
   <!-- ==========================================================================
        HIDDEN PLACEHOLDER IDS (FIX FOR MISSING ELEMENTS)

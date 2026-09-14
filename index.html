@@ -17,7 +17,7 @@
       });
     }
   </script>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=3.7.0">
 </head>
 <body>
 
@@ -65,8 +65,15 @@
     <input type="range" id="ambienceVolumeSlider" min="0" max="100" value="50">
     <span id="ambienceHeaderBtnText">🎧 Ambience</span>
 
-    <!-- Dictionary / Flashcards -->
-    <button type="button" id="dictFlashcardsBtn" onclick="openFlashcardTrainer()">🎴 Flashcards</button>
+    <!-- Removed Features Safe Placeholders (Null-safety stubs) -->
+    <div id="dictFlashcardsBtn"></div>
+    <div id="headerFlashcardsBtn"></div>
+    <div id="headerHelpDeskBtn"></div>
+    <div id="fabLiveHelpDeskBtn"></div>
+    <div id="userHelpDeskModalOverlay"></div>
+    <div id="mysteryGiftOverlay"></div>
+    <div id="flashcardModalOverlay"></div>
+    <div id="cyber3dNoticeCard"></div>
 
     <!-- Curated Shelves Section (book curation block) -->
     <section id="curatedShelvesSection"></section>
@@ -156,15 +163,8 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           + Add Book
         </button>
-        <button class="btn" id="headerFlashcardsBtn" onclick="openFlashcardTrainer()" title="3D Smart Flashcards (Leitner Memory Box)" style="background:linear-gradient(135deg, rgba(236,72,153,0.18), rgba(168,85,247,0.18)); border-color:rgba(236,72,153,0.35); color:#f472b6; font-weight:700;">
-          🎴 <span class="desktop-only-txt">Flashcards</span>
-        </button>
         <button class="btn" id="headerPomodoroBtn" onclick="openPomodoroModal()" title="25-Min Focus Reading Timer" style="background:rgba(239, 68, 68, 0.15); border-color:rgba(239, 68, 68, 0.35); color:#ef4444; font-weight:700;">
           ⏱️ <span id="headerPomodoroText">Focus Timer</span>
-        </button>
-        <button type="button" class="btn" id="headerHelpDeskBtn" onclick="openUserHelpDeskModal()" title="Live Help Desk &amp; Chat with Admin" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.18)); border-color:rgba(16,185,129,0.35); color:#34d399; font-weight:700; position:relative;">
-          💬 <span class="desktop-only-txt">Help Desk</span>
-          <span class="chat-unread-dot" id="headerChatDot" style="display:none;"></span>
         </button>
       </div>
     </div>
@@ -233,11 +233,6 @@
           <span class="chip-icon">🌌</span>
           <span class="chip-val" id="kpiDnaStars">0 ★</span>
           <span class="chip-lbl">DNA Galaxy</span>
-        </div>
-        <div class="kpi-chip" onclick="openFlashcardTrainer()" style="cursor:pointer; background:linear-gradient(135deg, rgba(236,72,153,0.16), rgba(168,85,247,0.16)); border-color:rgba(236,72,153,0.35);" title="Open 3D Flashcards Leitner Trainer">
-          <span class="chip-icon">🎴</span>
-          <span class="chip-val" id="kpiFlashcardsCount">5 Due</span>
-          <span class="chip-lbl">Flashcards</span>
         </div>
       </div>
     </section>
@@ -1037,7 +1032,7 @@
             </div>
             <div>
               <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Tracker</div>
-              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.6.0 Real App Design &amp; Feature Studio</div>
+              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.7.0 Real App Design &amp; Feature Studio</div>
             </div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn" style="border-radius:12px; padding:0.45rem 0.85rem; font-weight:800;">
@@ -1741,59 +1736,6 @@
             </button>
           </div>
         </div>
-
-        <!-- Card 2: 3D Model Cyber Obsidian & Luminescent Gold Spatial Card (New) -->
-        <div class="cyber-3d-notice-card" id="cyber3dNoticeCard" style="display:none;">
-          <div class="cyber-3d-sheen-sweep"></div>
-          
-          <div class="cyber-3d-status-pill">
-            <div class="cyber-3d-status-dot"></div>
-            <span class="cyber-3d-status-tag">CARD 2 • 3D SPATIAL DIMENSION</span>
-            <span class="cyber-3d-status-chip">3D MODEL</span>
-          </div>
-
-          <!-- Real 3D Spinning Crystal Cube Model -->
-          <div class="cube-3d-stage">
-            <div class="cube-3d-spinner" id="cube3dSpinner">
-              <div class="cube-face front"></div>
-              <div class="cube-face back"></div>
-              <div class="cube-face right"></div>
-              <div class="cube-face left"></div>
-              <div class="cube-face top"></div>
-              <div class="cube-face bottom"></div>
-              <div class="cube-3d-core">
-                <span id="inAppNoticeIcon2">💎</span>
-              </div>
-            </div>
-            <div class="cube-3d-ground-ring"></div>
-            <div class="cube-3d-shadow"></div>
-          </div>
-
-          <h3 class="cyber-3d-title" id="inAppNoticeTitle2">3D Power Alert</h3>
-
-          <div class="cyber-3d-message-vault">
-            <div class="cyber-3d-corner-accent c-tl"></div>
-            <div class="cyber-3d-corner-accent c-tr"></div>
-            <div class="cyber-3d-corner-accent c-bl"></div>
-            <div class="cyber-3d-corner-accent c-br"></div>
-            <div class="cyber-3d-watermark">CARD 2 • SPATIAL 3D ENGINE</div>
-            <div class="cyber-3d-message-text" id="inAppNoticeMessage2">
-              Card 2 Spatial Alert
-            </div>
-          </div>
-
-          <div class="cyber-3d-footer">
-            <div class="cyber-3d-meta-row">
-              <span class="cyber-3d-meta-tag">💎 3D MODEL ROTATION</span>
-              <span class="cyber-3d-meta-tag">✨ REALTIME DEPTH</span>
-            </div>
-            <button type="button" class="cyber-3d-action-btn" id="cyber3dDismissBtn" onclick="dismissInAppNotice(event)">
-              <span class="cyber-3d-btn-glow"></span>
-              <span class="cyber-3d-btn-text" id="inAppNoticeBtnText2">I Am Ready 🏆</span>
-              <span class="cyber-3d-btn-icon">🚀</span>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -1815,9 +1757,6 @@
             <input type="text" id="dictSearchInput" placeholder="Search English or Hindi word..." oninput="onDictSearchInput(this.value)">
             <button type="button" class="dict-search-clear" id="dictSearchClearBtn" onclick="clearDictSearch()" style="display:none;">✕</button>
           </div>
-          <button type="button" class="btn btn-sm" onclick="openFlashcardTrainer()" style="background:linear-gradient(135deg, #ec4899, #8b5cf6); color:#fff; border:none; font-weight:800; border-radius:10px; padding:6px 12px; margin-right:8px; display:inline-flex; align-items:center; gap:4px; font-size:0.8rem; box-shadow:0 4px 12px rgba(236,72,153,0.35);" title="Practice 3D Flashcards">
-            🎴 <span>Flashcards</span>
-          </button>
           <button type="button" class="dict-close-btn" onclick="closeDictionaryBookReader()" title="Close Book (Esc)">✕</button>
         </div>
       </div>
@@ -1860,315 +1799,6 @@
           Turn Next Page ›
         </button>
       </div>
-    </div>
-  </div>
-
-  <!-- 🎁 MYSTERY GOLDEN GIFT BOX DROP OVERLAY (Surprise Reward Engine) -->
-  <div class="mystery-gift-overlay" id="mysteryGiftOverlay">
-    <!-- Full-screen Canvas for Confetti & Crackers -->
-    <canvas id="giftConfettiCanvas" class="gift-confetti-canvas"></canvas>
-
-    <!-- Sky Clouds & Golden Starlight Dust -->
-    <div class="gift-sky-glow" id="giftSkyGlow"></div>
-
-    <!-- The 3D Falling & Floating Golden Gift Box -->
-    <div class="gift-box-stage" id="giftBoxStage" onclick="openGoldenGiftBox(event)">
-      <!-- Pulsing Aura & Shockwave Rings -->
-      <div class="gift-aura-halo"></div>
-      <div class="gift-shockwave-ring sw-1"></div>
-      <div class="gift-shockwave-ring sw-2"></div>
-
-      <!-- 3D Box Container -->
-      <div class="gift-box-3d" id="giftBox3D">
-        <!-- Box Lid (Flies open on click) -->
-        <div class="gift-lid" id="giftLid">
-          <div class="gift-lid-bow">
-            <div class="bow-loop bow-left"></div>
-            <div class="bow-loop bow-right"></div>
-            <div class="bow-ribbon ribbon-left"></div>
-            <div class="bow-ribbon ribbon-right"></div>
-            <div class="bow-knot">✦</div>
-          </div>
-          <div class="gift-lid-top"></div>
-          <div class="gift-lid-side lid-front"></div>
-          <div class="gift-lid-side lid-back"></div>
-          <div class="gift-lid-side lid-left"></div>
-          <div class="gift-lid-side lid-right"></div>
-        </div>
-
-        <!-- Box Body -->
-        <div class="gift-body" id="giftBody">
-          <div class="gift-face face-front">
-            <div class="ribbon-vertical"></div>
-            <div class="ribbon-horizontal"></div>
-            <div class="gift-seal">👑</div>
-          </div>
-          <div class="gift-face face-back">
-            <div class="ribbon-vertical"></div>
-            <div class="ribbon-horizontal"></div>
-          </div>
-          <div class="gift-face face-left">
-            <div class="ribbon-vertical"></div>
-            <div class="ribbon-horizontal"></div>
-          </div>
-          <div class="gift-face face-right">
-            <div class="ribbon-vertical"></div>
-            <div class="ribbon-horizontal"></div>
-          </div>
-          <div class="gift-face face-top">
-            <div class="gift-inner-glow"></div>
-          </div>
-          <div class="gift-face face-bottom"></div>
-        </div>
-      </div>
-
-      <!-- Tap Indicator Prompt -->
-      <div class="gift-tap-prompt" id="giftTapPrompt">
-        <span class="prompt-icon">👆</span>
-        <span class="prompt-text">TAP TO OPEN SURPRISE REWARD!</span>
-        <span class="prompt-sparkle">✨</span>
-      </div>
-    </div>
-
-    <!-- Revealed Reward Modal Dialog -->
-    <div class="gift-reward-modal" id="giftRewardModal">
-      <div class="gift-reward-sheen"></div>
-      <div class="gift-reward-header">
-        <div class="reward-crown-wrap">
-          <span class="reward-crown-icon" id="rewardCrownIcon">👑</span>
-        </div>
-        <span class="reward-pill" id="rewardPillText">SURPRISE REWARD UNLOCKED</span>
-      </div>
-
-      <h2 class="reward-title" id="rewardTitleText">VIP Golden Reader Badge</h2>
-      <div class="reward-badge-preview" id="rewardBadgePreview">
-        <div class="badge-emblem" id="rewardEmblem">🏆</div>
-        <div class="badge-glow-ring"></div>
-      </div>
-
-      <p class="reward-desc" id="rewardDescText">
-        Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!
-      </p>
-
-      <div class="reward-perk-box" id="rewardPerkBox"></div>
-
-      <div class="reward-actions">
-        <button type="button" class="btn-claim-reward" id="btnClaimReward" onclick="claimSurpriseReward()">
-          <span>⚡ Claim Reward Now</span>
-          <span class="claim-arrow">→</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==========================================================================
-       FEATURE: 3D SMART FLASHCARD TRAINER (LEITNER SPACED REPETITION BOX)
-       ========================================================================== -->
-  <div class="modal-overlay" id="flashcardModalOverlay" onclick="handleFlashcardOverlayClick(event)">
-    <div class="flashcard-deck-modal" onclick="event.stopPropagation()">
-      <!-- Deck Top Bar -->
-      <div class="flashcard-deck-header">
-        <div class="deck-header-left">
-          <span class="deck-badge">🎴 3D FLASHCARDS</span>
-          <div class="leitner-boxes-strip">
-            <span class="box-chip chip-box1" id="box1Chip" title="Box 1: Review Today">Box 1: <b id="box1Count">0</b></span>
-            <span class="box-chip chip-box2" id="box2Chip" title="Box 2: Learning">Box 2: <b id="box2Count">0</b></span>
-            <span class="box-chip chip-box3" id="box3Chip" title="Box 3: Mastered">Box 3: <b id="box3Count">0</b></span>
-          </div>
-        </div>
-        <div class="deck-header-right">
-          <span class="deck-progress-indicator" id="deckProgressIndicator">Card 1 of 5</span>
-          <button type="button" class="modal-close" onclick="closeFlashcardTrainer()" title="Close Trainer (Esc)">&times;</button>
-        </div>
-      </div>
-
-      <!-- Main Deck Viewport -->
-      <div id="flashcardActiveDeckView">
-        <!-- 3D Card Arena -->
-        <div class="flashcard-3d-arena" id="flashcard3dArena">
-          <div class="flashcard-3d-card" id="flashcard3dCard" onclick="toggleFlashcardFlip()">
-            <!-- Front Face -->
-            <div class="flashcard-face flashcard-front">
-              <div class="card-ornament top-left">✦</div>
-              <div class="card-ornament top-right">✦</div>
-              <div class="card-top-tag">
-                <span class="card-type-tag" id="fcTypeTag">NOUN</span>
-                <button type="button" class="card-audio-btn" id="fcAudioBtn" onclick="event.stopPropagation(); speakFlashcardWord();" title="Speak Word Pronunciation">
-                  🔊
-                </button>
-              </div>
-              
-              <div class="card-front-center">
-                <h1 class="card-word-title" id="fcWordTitle">Abandon</h1>
-                <div class="card-phonetic-badge" id="fcPhoneticBadge">अबैंडन</div>
-              </div>
-
-              <div class="card-flip-prompt">
-                <span>👆 Tap card to flip &amp; reveal Hindi meaning</span>
-                <span class="flip-hint-icon">🔄</span>
-              </div>
-            </div>
-
-            <!-- Back Face -->
-            <div class="flashcard-face flashcard-back">
-              <div class="card-ornament top-left">✦</div>
-              <div class="card-ornament top-right">✦</div>
-              <div class="card-back-header">
-                <span class="card-back-word" id="fcBackWord">Abandon</span>
-                <span class="card-back-type" id="fcBackType">verb</span>
-              </div>
-
-              <div class="card-meaning-box">
-                <div class="card-hindi-meaning" id="fcHindiMeaning">त्याग देना, छोड़ देना</div>
-                <div class="card-english-def" id="fcEnglishDef">To give up completely; desert or leave behind.</div>
-              </div>
-
-              <div class="card-example-box">
-                <div class="card-example-en" id="fcExampleEn">"Never abandon your reading habits."</div>
-                <div class="card-example-hi" id="fcExampleHi">"अपनी पढ़ने की आदतों को कभी मत छोड़ो।"</div>
-              </div>
-
-              <div class="card-synonyms" id="fcSynonyms">
-                <b>Synonyms:</b> <span id="fcSynList">Desert, Discard, Renounce</span>
-              </div>
-
-              <div class="card-back-tap-hint">
-                <span>👆 Tap to flip back</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Gesture Visual Stamps -->
-          <div class="swipe-stamp stamp-review" id="swipeStampReview">🔁 REVIEW LATER</div>
-          <div class="swipe-stamp stamp-mastered" id="swipeStampMastered">✅ MASTERED!</div>
-        </div>
-
-        <!-- Swipe Tip Guide -->
-        <div class="flashcard-swipe-hint">
-          <span class="hint-left">👈 Swipe Left: Review Later</span>
-          <span class="hint-center">• Tap to Flip •</span>
-          <span class="hint-right">Swipe Right: Mastered 👉</span>
-        </div>
-
-        <!-- Bottom Action Dock -->
-        <div class="flashcard-action-dock">
-          <button type="button" class="btn-card-action btn-review" onclick="handleCardAction('review')" title="Swipe Left or click: Review Later">
-            <span class="action-icon">🔁</span>
-            <div class="action-meta">
-              <span class="action-title">Review Later</span>
-              <span class="action-sub">Box 1</span>
-            </div>
-          </button>
-
-          <button type="button" class="btn-card-action btn-flip" onclick="toggleFlashcardFlip()" title="Flip Card (Tap)">
-            <span class="action-icon">🔄</span>
-            <span class="action-title">Flip Card</span>
-          </button>
-
-          <button type="button" class="btn-card-action btn-master" onclick="handleCardAction('mastered')" title="Swipe Right or click: Mastered">
-            <span class="action-icon">✅</span>
-            <div class="action-meta">
-              <span class="action-title">Mastered</span>
-              <span class="action-sub">Box 2/3</span>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <!-- Completion Celebration Screen -->
-      <div class="flashcard-completion-view" id="flashcardCompletionView" style="display:none;">
-        <div class="completion-trophy">🏆</div>
-        <h2 class="completion-title">Daily Flashcards Completed!</h2>
-        <p class="completion-desc">Aapne aaj ke saare target words review kar liye hain! Mastery score increase ho gaya hai.</p>
-        <div class="completion-stats-grid">
-          <div class="completion-stat-card">
-            <div class="stat-num" id="compReviewedCount">5</div>
-            <div class="stat-lbl">Cards Practiced</div>
-          </div>
-          <div class="completion-stat-card">
-            <div class="stat-num" id="compMasteredCount">4</div>
-            <div class="stat-lbl">Mastered Today</div>
-          </div>
-          <div class="completion-stat-card">
-            <div class="stat-num" id="compTotalPoints">+100</div>
-            <div class="stat-lbl">Focus XP Earned</div>
-          </div>
-        </div>
-        <div class="completion-actions">
-          <button type="button" class="btn btn-primary" onclick="restartFlashcardsDeck(5)" style="padding:12px 24px; font-weight:800; border-radius:12px; background:linear-gradient(135deg, #ec4899, #8b5cf6); border:none; color:#fff;">
-            🎴 Practice 5 More Words
-          </button>
-          <button type="button" class="btn" onclick="closeFlashcardTrainer()" style="padding:12px 24px; font-weight:700; border-radius:12px;">
-            Close Trainer
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 💬 FLOATING LIVE HELP DESK TRIGGER BUTTON -->
-  <div class="fab-chat-wrapper" id="fabChatWrapper">
-    <button type="button" class="fab-chat-btn" id="fabLiveHelpDeskBtn" onclick="openUserHelpDeskModal()" title="Live Help Desk • Chat with Admin">
-      <span class="fab-chat-icon">💬</span>
-      <span class="fab-chat-ping"></span>
-      <span class="fab-chat-badge" id="userChatUnreadBadge" style="display:none;">0</span>
-    </button>
-  </div>
-
-  <!-- 💬 LIVE IN-APP HELP DESK MODAL (Zomato/Telegram Style Live Support) -->
-  <div class="modal-overlay" id="userHelpDeskModalOverlay" onclick="handleHelpDeskOverlayClick(event)">
-    <div class="modal-content help-desk-modal-dialog" onclick="event.stopPropagation()">
-      <!-- Modal Header -->
-      <div class="help-desk-header">
-        <div class="help-desk-header-info">
-          <div class="help-desk-avatar">👑</div>
-          <div>
-            <div class="help-desk-title-row">
-              <h3 class="help-desk-title">Mind Focus Executive Help Desk</h3>
-              <span class="help-desk-online-badge">🟢 Online</span>
-            </div>
-            <div class="help-desk-subtitle">Direct line to Developer &amp; Admin &bull; Real-time answers</div>
-          </div>
-        </div>
-        <button type="button" class="modal-close" onclick="closeUserHelpDeskModal()">&times;</button>
-      </div>
-
-      <!-- Messages Container -->
-      <div class="help-desk-body" id="userHelpDeskBody">
-        <div class="user-chat-messages-stream" id="userChatMessagesStream">
-          <div class="user-chat-welcome-card">
-            <div style="font-size:36px; margin-bottom:8px;">💬</div>
-            <div style="font-weight:800; color:var(--text-primary); font-size:1.05rem;">Namaste Reader!</div>
-            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;">
-              Aapko app me koi naya feature chahiye, koi bug report karna hai, ya koi sawaal puchna hai to direct message likhein. Hum live reply karenge! 🙏
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Prompt Chips for User -->
-      <div class="user-chat-quick-prompts">
-        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Bhai naya feature kab aayega?')">
-          🚀 Naya feature kab aayega?
-        </button>
-        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Bhai ek nayi book request karni hai!')">
-          📚 Nayi book request
-        </button>
-        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('App me ek bug notice kiya hai.')">
-          🐛 Bug report karna hai
-        </button>
-        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Audio reader bohot mast chal raha hai, thank you! 🔥')">
-          🔥 Feedback
-        </button>
-      </div>
-
-      <!-- Message Input Bar -->
-      <form id="userChatForm" class="help-desk-footer" onsubmit="event.preventDefault(); sendUserChatMessage(); return false;">
-        <input type="text" id="userChatInputText" class="user-chat-input" placeholder="Type message to Admin... (e.g. Bhai naya...)" autocomplete="off" autocorrect="on" autocapitalize="sentences" onkeydown="handleUserChatKeydown(event)">
-        <button type="submit" class="btn-user-chat-send" id="btnUserSendChat" onclick="event.preventDefault(); sendUserChatMessage();">
-          <span>✈️ Send</span>
-        </button>
-      </form>
     </div>
   </div>
 
@@ -2294,8 +1924,8 @@
   <script src="jspdf.umd.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'"></script>
   <script src="jspdf.plugin.autotable.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js'"></script>
   <script src="tesseract.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js'"></script>
-  <script src="dictionary-data.js"></script>
-  <script src="books-data.js"></script>
-  <script src="app.js"></script>
+  <script src="dictionary-data.js?v=3.7.0"></script>
+  <script src="books-data.js?v=3.7.0"></script>
+  <script src="app.js?v=3.7.0"></script>
 </body>
 </html>

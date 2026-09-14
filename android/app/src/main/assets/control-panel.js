@@ -3,6 +3,611 @@ const REPO_OWNER = 'ankitburdak05-oss';
 const REPO_NAME = 'mind-focus-books-tracker';
 const DEFAULT_BRANCH = 'main';
 
+// ==========================================================================
+// 🔐 ADMIN PASSWORD / PIN LOCK ENGINE
+// Iss section pehle DOMContentLoaded se chalta hai aur agar lock set hai
+// to page hide karke lock screen dikhata hai.
+// ==========================================================================
+const ADMIN_LOCK_KEY = 'mf_admin_lock_v1';
+const ADMIN_LOCK_ATTEMPTS_KEY = 'mf_admin_lock_attempts_v1';
+const ADMIN_LOCK_MAX_ATTEMPTS = 5;
+const ADMIN_LOCK_LOCKOUT_MS = 60 * 1000; // 1 minute lockout after max attempts
+const ADMIN_LOCK_AUTO_UNLOCK_MS = 30 * 60 * 1000; // 30 min idle auto-lock
+const ADMIN_RESET_TOKEN_URL = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/admin-reset-token.txt`;
+
+let adminLockState = {
+  mode: 'password',          // 'password' or 'pin'
+  unlockMode: 'password',    // active unlock mode (saved at setup)
+  setupPinBuffer: '',
+  loginPinBuffer: '',
+  attempts: 0,
+  lockoutUntil: 0,
+  lastActivityTs: Date.now(),
+  isUnlocked: false
+};
+
+function adminLockLoad() {
+  try {
+    const raw = localStorage.getItem(ADMIN_LOCK_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (e) { return null; }
+}
+
+function adminLockSave(lockObj) {
+  try {
+    localStorage.setItem(ADMIN_LOCK_KEY, JSON.stringify(lockObj));
+  } catch (e) {}
+}
+
+function adminLockLoadAttempts() {
+  try {
+    const raw = localStorage.getItem(ADMIN_LOCK_ATTEMPTS_KEY);
+    if (!raw) return { attempts: 0, lockoutUntil: 0 };
+    return JSON.parse(raw);
+  } catch (e) { return { attempts: 0, lockoutUntil: 0 }; }
+}
+
+function adminLockSaveAttempts(attemptsObj) {
+  try {
+    localStorage.setItem(ADMIN_LOCK_ATTEMPTS_KEY, JSON.stringify(attemptsObj));
+  } catch (e) {}
+}
+
+function adminLockHash(input) {
+  // Lightweight browser-only obfuscated hash (NOT cryptographically strong,
+  // but stops casual inspection of devtools localStorage). Server-side
+  // bcrypt-like security is unnecessary for a single-user local admin tool.
+  let salt = 'mfadmin_2026_salt_$';
+  let combined = salt + input + salt.split('').reverse().join('');
+  let h1 = 0, h2 = 0x9e3779b9;
+  for (let i = 0; i < combined.length; i++) {
+    const c = combined.charCodeAt(i);
+    h1 = ((h1 << 5) - h1) + c;
+    h1 |= 0;
+    h2 = ((h2 << 7) ^ h2) ^ c;
+  }
+  return ('0000000' + (h1 >>> 0).toString(16)).slice(-8) +
+         ('0000000' + (h2 >>> 0).toString(16)).slice(-8) +
+         ('0000' + combined.length.toString(16)).slice(-4);
+}
+
+function adminLockShowError(screen, msg) {
+  const el = document.getElementById('adminLockError' + screen);
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 4500);
+}
+
+function adminLockClearError(screen) {
+  const el = document.getElementById('adminLockError' + screen);
+  if (!el) return;
+  el.textContent = '';
+  el.classList.remove('show');
+}
+
+function adminLockSwitchMode(mode) {
+  playUiClick();
+  adminLockState.mode = mode;
+
+  document.querySelectorAll('.admin-lock-tab-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+  });
+
+  const isPin = (mode === 'pin');
+  const pwdSetup = document.getElementById('adminLockPasswordSetup');
+  const pinSetup = document.getElementById('adminLockPinSetup');
+  if (pwdSetup) pwdSetup.style.display = isPin ? 'none' : 'block';
+  if (pinSetup) pinSetup.style.display = isPin ? 'block' : 'none';
+
+  const lbl = document.getElementById('adminLockModeSwitchLabel');
+  if (lbl) lbl.textContent = isPin ? 'Password' : 'PIN';
+
+  adminLockState.setupPinBuffer = '';
+  adminLockUpdatePinDots('adminLockPinDots', '');
+  adminLockClearError('Setup');
+}
+
+function adminLockUpdatePinDots(containerId, buffer) {
+  const cont = document.getElementById(containerId);
+  if (!cont) return;
+  const dots = cont.querySelectorAll('.admin-lock-pin-dot');
+  dots.forEach((d, i) => {
+    d.classList.remove('filled', 'error');
+    if (i < buffer.length) d.classList.add('filled');
+  });
+}
+
+function adminLockPinPress(digit) {
+  playUiClick();
+  if (digit === 'C') {
+    adminLockState.setupPinBuffer = '';
+    adminLockUpdatePinDots('adminLockPinDots', '');
+    const st = document.getElementById('adminLockPinStatus');
+    if (st) { st.textContent = 'PIN enter karo (4 digits)'; st.style.color = '#94a3b8'; }
+    adminLockClearError('Setup');
+    return;
+  }
+  if (digit === 'X') {
+    adminLockState.setupPinBuffer = adminLockState.setupPinBuffer.slice(0, -1);
+    adminLockUpdatePinDots('adminLockPinDots', adminLockState.setupPinBuffer);
+    return;
+  }
+  if (adminLockState.setupPinBuffer.length >= 4) return;
+  adminLockState.setupPinBuffer += digit;
+  adminLockUpdatePinDots('adminLockPinDots', adminLockState.setupPinBuffer);
+
+  if (adminLockState.setupPinBuffer.length === 4) {
+    // Auto-validate after 4 digits
+    setTimeout(() => {
+      adminLockCompleteSetup();
+    }, 250);
+  }
+}
+
+function adminLockCompleteSetup() {
+  adminLockClearError('Setup');
+  let secretValue = '';
+  if (adminLockState.mode === 'pin') {
+    if (adminLockState.setupPinBuffer.length !== 4) {
+      adminLockShowError('Setup', '⚠️ PIN 4 digits ka hona chahiye.');
+      const dots = document.querySelectorAll('#adminLockPinDots .admin-lock-pin-dot');
+      dots.forEach(d => d.classList.add('error'));
+      return;
+    }
+    secretValue = adminLockState.setupPinBuffer;
+  } else {
+    const pwd = document.getElementById('adminLockNewPwd')?.value || '';
+    const cfm = document.getElementById('adminLockConfirmPwd')?.value || '';
+    if (pwd.length < 6) {
+      adminLockShowError('Setup', '⚠️ Password minimum 6 characters ka hona chahiye.');
+      return;
+    }
+    if (pwd !== cfm) {
+      adminLockShowError('Setup', '⚠️ Password aur confirm password match nahi ho rahe.');
+      return;
+    }
+    secretValue = pwd;
+  }
+
+  const lockObj = {
+    mode: adminLockState.mode,
+    hash: adminLockHash(secretValue),
+    createdAt: new Date().toISOString()
+  };
+  adminLockSave(lockObj);
+  adminLockSaveAttempts({ attempts: 0, lockoutUntil: 0 });
+
+  showToast('✅ Lock setup complete! Welcome Admin.');
+  adminLockUnlock();
+}
+
+function adminLockLoginPinPress(digit) {
+  playUiClick();
+  if (digit === 'C') {
+    adminLockState.loginPinBuffer = '';
+    adminLockUpdatePinDots('adminLockLoginPinDots', '');
+    adminLockClearError('Login');
+    return;
+  }
+  if (digit === 'X') {
+    adminLockState.loginPinBuffer = adminLockState.loginPinBuffer.slice(0, -1);
+    adminLockUpdatePinDots('adminLockLoginPinDots', adminLockState.loginPinBuffer);
+    return;
+  }
+  if (adminLockState.loginPinBuffer.length >= 4) return;
+  adminLockState.loginPinBuffer += digit;
+  adminLockUpdatePinDots('adminLockLoginPinDots', adminLockState.loginPinBuffer);
+
+  if (adminLockState.loginPinBuffer.length === 4) {
+    setTimeout(() => adminLockAttemptLogin(), 250);
+  }
+}
+
+function adminLockAttemptLogin() {
+  const stored = adminLockLoad();
+  if (!stored) {
+    adminLockShowSetup();
+    return;
+  }
+  adminLockClearError('Login');
+
+  const attemptsState = adminLockLoadAttempts();
+  if (attemptsState.lockoutUntil && Date.now() < attemptsState.lockoutUntil) {
+    const waitSec = Math.ceil((attemptsState.lockoutUntil - Date.now()) / 1000);
+    adminLockShowError('Login', `🔒 Bahut zyada galat attempts. ${waitSec} second ruko.`);
+    return;
+  }
+
+  let provided = '';
+  if (adminLockState.unlockMode === 'pin') {
+    provided = adminLockState.loginPinBuffer;
+    if (provided.length !== 4) {
+      adminLockShowError('Login', '⚠️ 4-digit PIN daalna zaroori hai.');
+      return;
+    }
+  } else {
+    provided = document.getElementById('adminLockLoginPwd')?.value || '';
+    if (provided.length < 6) {
+      adminLockShowError('Login', '⚠️ Sahi password daalein.');
+      return;
+    }
+  }
+
+  const hashed = adminLockHash(provided);
+  if (hashed === stored.hash) {
+    adminLockSaveAttempts({ attempts: 0, lockoutUntil: 0 });
+    showToast('🔓 Welcome Admin!');
+    adminLockUnlock();
+  } else {
+    attemptsState.attempts = (attemptsState.attempts || 0) + 1;
+    if (attemptsState.attempts >= ADMIN_LOCK_MAX_ATTEMPTS) {
+      attemptsState.lockoutUntil = Date.now() + ADMIN_LOCK_LOCKOUT_MS;
+      attemptsState.attempts = 0;
+      adminLockShowError('Login', '🚫 Galat password! 1 minute ke liye lock ho gaya.');
+    } else {
+      const remaining = ADMIN_LOCK_MAX_ATTEMPTS - attemptsState.attempts;
+      adminLockShowError('Login', `❌ Galat password. ${remaining} attempts baaki.`);
+    }
+    adminLockSaveAttempts(attemptsState);
+    adminLockUpdateAttemptsUI(attemptsState);
+
+    if (adminLockState.unlockMode === 'pin') {
+      adminLockState.loginPinBuffer = '';
+      adminLockUpdatePinDots('adminLockLoginPinDots', '');
+      const dots = document.querySelectorAll('#adminLockLoginPinDots .admin-lock-pin-dot');
+      dots.forEach(d => d.classList.add('error'));
+      setTimeout(() => dots.forEach(d => d.classList.remove('error')), 400);
+    } else {
+      const pwdInput = document.getElementById('adminLockLoginPwd');
+      if (pwdInput) { pwdInput.value = ''; pwdInput.focus(); }
+    }
+    playAudioTone(220, 'square', 0.18, 0.12);
+  }
+}
+
+function adminLockUpdateAttemptsUI(attemptsState) {
+  const el = document.getElementById('adminLockAttemptsText');
+  if (!el) return;
+  el.classList.remove('warning', 'danger');
+  const remaining = ADMIN_LOCK_MAX_ATTEMPTS - (attemptsState.attempts || 0);
+  if (attemptsState.lockoutUntil && Date.now() < attemptsState.lockoutUntil) {
+    const waitSec = Math.ceil((attemptsState.lockoutUntil - Date.now()) / 1000);
+    el.textContent = `🔒 Locked. ${waitSec}s wait karo.`;
+    el.classList.add('danger');
+  } else if (remaining <= 2) {
+    el.textContent = `⚠️ Sirf ${remaining} attempts baaki.`;
+    el.classList.add('danger');
+  } else if (remaining <= 3) {
+    el.textContent = `${remaining} attempts baaki.`;
+    el.classList.add('warning');
+  } else {
+    el.textContent = '';
+  }
+}
+
+function adminLockShowSetup() {
+  document.body.classList.add('admin-locked');
+  const overlay = document.getElementById('adminLockOverlay');
+  const setup = document.getElementById('adminLockSetupScreen');
+  const login = document.getElementById('adminLockLoginScreen');
+  const forgot = document.getElementById('adminLockForgotScreen');
+  if (overlay) { overlay.style.display = 'flex'; overlay.style.opacity = '1'; }
+  if (setup) setup.style.display = 'block';
+  if (login) login.style.display = 'none';
+  if (forgot) forgot.style.display = 'none';
+
+  // Default to password mode
+  adminLockSwitchMode('password');
+  setTimeout(() => {
+    const pwdInput = document.getElementById('adminLockNewPwd');
+    if (pwdInput) pwdInput.focus();
+  }, 100);
+}
+
+function adminLockShowLogin(unlockMode) {
+  document.body.classList.add('admin-locked');
+  const overlay = document.getElementById('adminLockOverlay');
+  const setup = document.getElementById('adminLockSetupScreen');
+  const login = document.getElementById('adminLockLoginScreen');
+  const forgot = document.getElementById('adminLockForgotScreen');
+  if (overlay) { overlay.style.display = 'flex'; overlay.style.opacity = '1'; }
+  if (setup) setup.style.display = 'none';
+  if (login) login.style.display = 'block';
+  if (forgot) forgot.style.display = 'none';
+
+  adminLockState.unlockMode = unlockMode || 'password';
+
+  const pwdLogin = document.getElementById('adminLockPasswordLogin');
+  const pinLogin = document.getElementById('adminLockPinLogin');
+  if (pwdLogin) pwdLogin.style.display = (adminLockState.unlockMode === 'pin') ? 'none' : 'block';
+  if (pinLogin) pinLogin.style.display = (adminLockState.unlockMode === 'pin') ? 'block' : 'none';
+
+  adminLockState.loginPinBuffer = '';
+  adminLockUpdatePinDots('adminLockLoginPinDots', '');
+  adminLockClearError('Login');
+
+  const subTitle = document.getElementById('adminLockLoginSubtitle');
+  if (subTitle) {
+    subTitle.textContent = (adminLockState.unlockMode === 'pin')
+      ? 'Apna 4-digit PIN daal kar unlock karo.'
+      : 'Apna password daal kar unlock karo.';
+  }
+
+  adminLockUpdateAttemptsUI(adminLockLoadAttempts());
+
+  setTimeout(() => {
+    if (adminLockState.unlockMode === 'pin') return;
+    const pwdInput = document.getElementById('adminLockLoginPwd');
+    if (pwdInput) pwdInput.focus();
+  }, 100);
+}
+
+function adminLockShowForgot() {
+  document.body.classList.add('admin-locked');
+  const overlay = document.getElementById('adminLockOverlay');
+  const setup = document.getElementById('adminLockSetupScreen');
+  const login = document.getElementById('adminLockLoginScreen');
+  const forgot = document.getElementById('adminLockForgotScreen');
+  if (overlay) { overlay.style.display = 'flex'; overlay.style.opacity = '1'; }
+  if (setup) setup.style.display = 'none';
+  if (login) login.style.display = 'none';
+  if (forgot) forgot.style.display = 'block';
+  adminLockClearError('Forgot');
+  setTimeout(() => {
+    const tokenInput = document.getElementById('adminLockResetToken');
+    if (tokenInput) tokenInput.focus();
+  }, 100);
+}
+
+async function adminLockResetViaToken() {
+  adminLockClearError('Forgot');
+  const tokenInput = document.getElementById('adminLockResetToken');
+  const token = (tokenInput?.value || '').trim();
+  const newPwd = document.getElementById('adminLockResetNewPwd')?.value || '';
+
+  if (!token) {
+    adminLockShowError('Forgot', '⚠️ Master reset token daalein. GitHub se copy karein ya neeche "Auto-Fetch Token" button dabayein.');
+    return;
+  }
+
+  // PIN confusion check — short numeric tokens are NOT the reset token
+  if (/^\d{4,6}$/.test(token)) {
+    adminLockShowError('Forgot', '❌ Ye PIN hai (4-6 digits), reset token NAHI. Reset token ek LONG STRING hai (jaise mfadmin-reset-2026-...). "Auto-Fetch Token" button use karein.');
+    return;
+  }
+
+  if (newPwd.length < 6) {
+    adminLockShowError('Forgot', '⚠️ New password minimum 6 characters.');
+    return;
+  }
+
+  try {
+    showToast('⏳ Verifying reset token...');
+
+    // Try multiple URLs in order (raw → GitHub API → jsDelivr CDN)
+    const candidates = [
+      ADMIN_RESET_TOKEN_URL,
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/admin-reset-token.txt?ref=${DEFAULT_BRANCH}`,
+      `https://cdn.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${DEFAULT_BRANCH}/admin-reset-token.txt`
+    ];
+
+    let remoteToken = null;
+    let lastErr = null;
+    let fetchSucceeded = false;
+    for (const url of candidates) {
+      try {
+        const sep = url.includes('?') ? '&' : '?';
+        const res = await fetch(url + sep + 'cb=' + Date.now(), {
+          cache: 'no-store',
+          headers: { 'Accept': 'text/plain' }
+        });
+        if (!res.ok) { lastErr = 'HTTP ' + res.status + ' on ' + url.substring(0, 60); continue; }
+        let body = await res.text();
+
+        // GitHub API returns JSON with base64 content
+        if (url.includes('api.github.com')) {
+          try {
+            const json = JSON.parse(body);
+            if (json && json.content) body = atob(json.content.replace(/\s/g, ''));
+          } catch (e) {}
+        }
+
+        const trimmed = body.trim();
+        if (trimmed.length > 5) {
+          remoteToken = trimmed;
+          fetchSucceeded = true;
+          console.log('[AdminLock] Token fetched from:', url.substring(0, 80));
+          console.log('[AdminLock] Token length:', trimmed.length);
+          break;
+        }
+      } catch (e) { lastErr = e.message; }
+    }
+
+    if (!remoteToken) {
+      adminLockShowError('Forgot', '⚠️ Token file fetch nahi ho paya. ' + (lastErr || 'Network issue') + '. Browser console (F12) mein check karein ya "Auto-Fetch Token" button try karein.');
+      return;
+    }
+
+    // Normalize: trim both sides, collapse internal whitespace
+    const normProvided = token.replace(/\s+/g, '');
+    const normRemote = remoteToken.replace(/\s+/g, '');
+
+    if (normProvided !== normRemote) {
+      const prefix = remoteToken.substring(0, 16);
+      const providedLen = normProvided.length;
+      const remoteLen = normRemote.length;
+      let hint = '';
+      if (providedLen !== remoteLen) {
+        hint = `\n\n📏 Length mismatch: aapne ${providedLen} chars diye, expected ${remoteLen}.`;
+      }
+      if (providedLen < 20) {
+        hint += `\n\n💡 Token ek LONG STRING hai (40+ chars), sirf PIN nahi.`;
+      }
+      adminLockShowError('Forgot', `❌ Token match nahi hua. Token start hota hai: "${prefix}..." se.${hint}\n\n✅ "Auto-Fetch Token" button dabayein - ek click me sahi token aa jayega.`);
+      console.warn('[AdminLock] Expected token:', remoteToken);
+      console.warn('[AdminLock] You provided:', normProvided);
+      console.warn('[AdminLock] Expected length:', remoteLen);
+      console.warn('[AdminLock] Your length:', providedLen);
+      return;
+    }
+
+    const newLock = {
+      mode: 'password',
+      hash: adminLockHash(newPwd),
+      createdAt: new Date().toISOString(),
+      resetAt: new Date().toISOString()
+    };
+    adminLockSave(newLock);
+    adminLockSaveAttempts({ attempts: 0, lockoutUntil: 0 });
+    adminLockState.unlockMode = 'password';
+    showToast('🔓 Reset successful! Welcome Admin.');
+    adminLockUnlock();
+  } catch (err) {
+    adminLockShowError('Forgot', '⚠️ Token verify nahi ho paya: ' + err.message);
+    console.error('[AdminLock] Reset error:', err);
+  }
+}
+
+// One-click auto-fetch from GitHub + copy to clipboard
+async function adminLockAutoFetchToken() {
+  const input = document.getElementById('adminLockResetToken');
+  const btn = document.getElementById('adminLockAutoFetchBtn');
+  if (!input) return;
+  if (btn) { btn.disabled = true; btn.innerText = '⏳ Fetching token...'; }
+  try {
+    const candidates = [
+      ADMIN_RESET_TOKEN_URL,
+      `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/admin-reset-token.txt?ref=${DEFAULT_BRANCH}`,
+      `https://cdn.jsdelivr.net/gh/${REPO_OWNER}/${REPO_NAME}@${DEFAULT_BRANCH}/admin-reset-token.txt`
+    ];
+
+    let fetched = null;
+    for (const url of candidates) {
+      try {
+        const sep = url.includes('?') ? '&' : '?';
+        const res = await fetch(url + sep + 'cb=' + Date.now(), { cache: 'no-store' });
+        if (!res.ok) continue;
+        let body = await res.text();
+        if (url.includes('api.github.com')) {
+          try {
+            const json = JSON.parse(body);
+            if (json && json.content) body = atob(json.content.replace(/\s/g, ''));
+          } catch (e) {}
+        }
+        const t = body.trim();
+        if (t.length > 5) { fetched = t; break; }
+      } catch (e) {}
+    }
+
+    if (fetched) {
+      input.value = fetched;
+      input.style.borderColor = 'rgba(16, 185, 129, 0.8)';
+      input.style.background = 'rgba(16, 185, 129, 0.1)';
+      showToast('✅ Token fetched! Ab "🔓 Reset" button dabayein.');
+      try { await navigator.clipboard.writeText(fetched); } catch (e) {}
+      // Auto-submit after short delay
+      setTimeout(() => {
+        const newPwd = document.getElementById('adminLockResetNewPwd');
+        if (newPwd && newPwd.value.length >= 6) {
+          adminLockResetViaToken();
+        }
+      }, 500);
+    } else {
+      showToast('❌ Fetch failed. Manually URL kholke copy karein.');
+    }
+  } catch (err) {
+    showToast('❌ Network error: ' + err.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.innerText = '📋 Auto-Fetch Token from GitHub (1-Click)'; }
+  }
+}
+window.adminLockAutoFetchToken = adminLockAutoFetchToken;
+
+function adminLockUnlock() {
+  adminLockState.isUnlocked = true;
+  adminLockState.lastActivityTs = Date.now();
+  document.body.classList.remove('admin-locked');
+  const overlay = document.getElementById('adminLockOverlay');
+  if (overlay) {
+    overlay.style.opacity = '0';
+    setTimeout(() => {
+      overlay.style.display = 'none';
+      overlay.style.opacity = '1';
+      // Reset all sub-screens to be safe
+      const setup = document.getElementById('adminLockSetupScreen');
+      const login = document.getElementById('adminLockLoginScreen');
+      const forgot = document.getElementById('adminLockForgotScreen');
+      if (setup) setup.style.display = 'none';
+      if (login) login.style.display = 'none';
+      if (forgot) forgot.style.display = 'none';
+    }, 250);
+  }
+  // Clear sensitive fields
+  const pwdInput = document.getElementById('adminLockLoginPwd');
+  if (pwdInput) pwdInput.value = '';
+  const newPwd = document.getElementById('adminLockNewPwd');
+  if (newPwd) newPwd.value = '';
+  const cfmPwd = document.getElementById('adminLockConfirmPwd');
+  if (cfmPwd) cfmPwd.value = '';
+  const tokenInput = document.getElementById('adminLockResetToken');
+  if (tokenInput) tokenInput.value = '';
+  const resetPwd = document.getElementById('adminLockResetNewPwd');
+  if (resetPwd) resetPwd.value = '';
+}
+
+function adminLockRelock() {
+  if (!adminLockState.isUnlocked) return;
+  const stored = adminLockLoad();
+  if (!stored) return; // no lock set
+  adminLockState.isUnlocked = false;
+  adminLockShowLogin(stored.mode);
+  showToast('🔒 Admin panel re-locked for security.');
+}
+
+function adminLockCheckIdle() {
+  if (!adminLockState.isUnlocked) return;
+  if (Date.now() - adminLockState.lastActivityTs > ADMIN_LOCK_AUTO_UNLOCK_MS) {
+    adminLockRelock();
+  }
+}
+
+['mousedown', 'keydown', 'touchstart', 'scroll'].forEach(evt => {
+  window.addEventListener(evt, () => {
+    adminLockState.lastActivityTs = Date.now();
+  }, { passive: true });
+});
+
+setInterval(adminLockCheckIdle, 60 * 1000);
+
+function adminLockInit() {
+  // Pehle body ko locked class de do — CSS se overlay dikhega
+  document.body.classList.add('admin-locked');
+
+  const stored = adminLockLoad();
+  const overlay = document.getElementById('adminLockOverlay');
+  if (overlay) {
+    overlay.style.display = 'flex';
+  }
+  if (!stored) {
+    adminLockShowSetup();
+  } else {
+    adminLockShowLogin(stored.mode || 'password');
+  }
+}
+
+// Expose to window so HTML inline handlers can call them
+window.adminLockSwitchMode = adminLockSwitchMode;
+window.adminLockCompleteSetup = adminLockCompleteSetup;
+window.adminLockPinPress = adminLockPinPress;
+window.adminLockLoginPinPress = adminLockLoginPinPress;
+window.adminLockAttemptLogin = adminLockAttemptLogin;
+window.adminLockShowForgot = adminLockShowForgot;
+window.adminLockShowLogin = adminLockShowLogin;
+window.adminLockResetViaToken = adminLockResetViaToken;
+window.adminLockRelock = adminLockRelock;
+
 // Secure GitHub Authentication Token (Stored strictly in client-side storage, never hardcoded)
 let githubToken = sessionStorage.getItem('mf_admin_github_token') || localStorage.getItem('mf_admin_github_token') || '';
 
@@ -107,6 +712,44 @@ function playDeployChime() {
 
 // Lifecycle Init
 document.addEventListener('DOMContentLoaded', () => {
+  console.log('[AdminLock] DOMContentLoaded - initializing lock screen');
+  try {
+    // 1. Lock screen first - baaki sab hide rahega jab tak unlock na ho
+    adminLockInit();
+
+    // 2. Wrap adminLockUnlock so that after unlock the rest of the panel boots
+    const origUnlock = window.adminLockUnlock || adminLockUnlock;
+    window.adminLockUnlock = function() {
+      origUnlock();
+      document.body.classList.remove('admin-locked');
+      // Now boot the rest of the app
+      bootRestOfAdminPanel();
+    };
+
+    // 3. Failsafe: If for any reason lock didn't show, force show after 1s
+    setTimeout(() => {
+      const overlay = document.getElementById('adminLockOverlay');
+      if (overlay && !adminLockState.isUnlocked) {
+        if (overlay.style.display === 'none' || getComputedStyle(overlay).display === 'none') {
+          console.warn('[AdminLock] Failsafe: re-initializing lock screen');
+          adminLockInit();
+        }
+      }
+    }, 1000);
+  } catch (err) {
+    console.error('[AdminLock] Init error:', err);
+    // If anything breaks, at least show setup screen
+    const overlay = document.getElementById('adminLockOverlay');
+    const setup = document.getElementById('adminLockSetupScreen');
+    if (overlay) overlay.style.display = 'flex';
+    if (setup) setup.style.display = 'block';
+    document.body.classList.add('admin-locked');
+  }
+});
+
+function bootRestOfAdminPanel() {
+  if (window.__adminPanelBooted) return;
+  window.__adminPanelBooted = true;
   initTabs();
   initFormInputs();
   initInteractive3dViewer();
@@ -120,13 +763,12 @@ document.addEventListener('DOMContentLoaded', () => {
   if (typeof initAdminHelpDeskListeners === 'function') initAdminHelpDeskListeners();
   if (typeof refreshAdminChatThreads === 'function') {
     refreshAdminChatThreads(false);
-    // Polite 60s background check (SSE handles instant live delivery with 0 polling)
     setInterval(() => {
       if (!document.hidden) refreshAdminChatThreads(false);
     }, 60000);
   }
   appendLog('Admin Control Panel Ready.', 'success');
-});
+}
 
 // Mobile Sidebar Drawer Toggle
 function toggleMobileSidebar(force) {
@@ -275,22 +917,88 @@ function onFeatureTileChanged(id) {
   const el = document.getElementById(id);
   if (!el) return;
   const card = document.getElementById('card_' + id);
-  const pill = document.getElementById('pill_' + id);
+  const statusEl = document.getElementById('status_' + id);
   if (el.checked) {
-    if (card) card.classList.remove('is-disabled');
-    if (pill) {
-      pill.innerText = 'ACTIVE';
-      pill.className = 'tile-status-pill pill-active';
-    }
+    if (card) card.classList.remove('is-off');
+    if (statusEl) statusEl.innerHTML = '<span class="status-dot-mini dot-on"></span>';
   } else {
-    if (card) card.classList.add('is-disabled');
-    if (pill) {
-      pill.innerText = 'PAUSED';
-      pill.className = 'tile-status-pill pill-paused';
-    }
+    if (card) card.classList.add('is-off');
+    if (statusEl) statusEl.innerHTML = '<span class="status-dot-mini dot-off"></span>';
   }
 }
 window.onFeatureTileChanged = onFeatureTileChanged;
+
+// Quick Panel Modal — iOS-style sheet for feature details
+const FEATURE_DESCRIPTIONS = {
+  cfgChatHelpDesk: 'In-app floating chat pill & real-time help desk messaging for users.',
+  cfgTelemetry: 'Real-time crash detection & automatic error report dispatch to your dashboard.',
+  cfgMobileDevTools: 'Floating in-app developer console & diagnostic inspector pill on user phone.',
+  cfgBroadcastNotice: 'Push admin flash announcements & alert banners on every user screen instantly.',
+  cfgAppUpdates: 'OTA APK auto-update prompts & header update badge for new versions.',
+  cfgStreakShields: 'Duolingo-style daily reading streaks & streak freeze shields gamification.',
+  cfgSanctuaryTimer: 'Focus interval timer with Pomodoro chimes & peaceful bell meditation.',
+  cfgFlashcards: 'Interactive 3D book summary flashcards with target words & spaced repetition.',
+  cfgAmbientAudio: 'Binaural rain, cafe, and forest white noise generator for focus mode.',
+  cfgVisualPhysics: 'Gyroscope card tilt & GPU aurora waves — turn OFF to save battery.',
+  cfgBarcodeScanner: 'Live camera barcode scanner to instantly find book ISBN & metadata.',
+  cfgAudioVoice: 'Synthetic text-to-speech audio voice reader for book notes & summaries.',
+  cfgQuotes: 'Inspirational daily reading quotes & wisdom shown on home feed.',
+  cfgCommunitySync: 'Sync community curated books and reviews across all user devices.',
+  cfgDictionary: 'A-Z English-Hindi 3D Dictionary book in user phone library.',
+  cfgPdfExport: 'Reading time stats, graphs & printable PDF reading certificate generator.'
+};
+
+function openFeatureQuickPanel(id) {
+  playUiClick();
+  const card = document.getElementById('card_' + id);
+  const cb = document.getElementById(id);
+  if (!card || !cb) return;
+  
+  // Extract glyph (emoji + bg color) from existing card
+  const glyph = card.querySelector('.icon-tile-glyph');
+  const name = card.dataset.featureName || id;
+  const desc = FEATURE_DESCRIPTIONS[id] || 'Toggle this feature on/off for all users.';
+  const bgStyle = glyph ? glyph.getAttribute('style') : '';
+  
+  // Remove existing panel if any
+  const existing = document.getElementById('featureQuickPanel');
+  if (existing) existing.remove();
+  
+  // Build panel
+  const panel = document.createElement('div');
+  panel.id = 'featureQuickPanel';
+  panel.className = 'feature-quick-panel-backdrop';
+  panel.innerHTML = `
+    <div class="feature-quick-panel" onclick="event.stopPropagation()">
+      <div class="fqp-icon" style="${bgStyle}">${glyph ? glyph.innerHTML : '⚙️'}</div>
+      <div class="fqp-title">${name}</div>
+      <div class="fqp-desc">${desc}</div>
+      <div class="fqp-toggle-row">
+        <span style="font-weight:600;font-size:14px;">Status</span>
+        <label class="switch" onclick="event.stopPropagation()">
+          <input type="checkbox" id="fqp_${id}" ${cb.checked ? 'checked' : ''} onchange="onFeatureTileChanged('${id}'); document.getElementById('${id}').checked = this.checked;">
+          <span class="slider"></span>
+        </label>
+      </div>
+      <button type="button" class="fqp-close-btn" onclick="closeFeatureQuickPanel()">Done</button>
+    </div>
+  `;
+  
+  panel.addEventListener('click', () => closeFeatureQuickPanel());
+  document.body.appendChild(panel);
+  setTimeout(() => panel.classList.add('is-open'), 10);
+}
+
+function closeFeatureQuickPanel() {
+  const panel = document.getElementById('featureQuickPanel');
+  if (panel) {
+    panel.classList.remove('is-open');
+    setTimeout(() => panel.remove(), 200);
+  }
+}
+
+window.openFeatureQuickPanel = openFeatureQuickPanel;
+window.closeFeatureQuickPanel = closeFeatureQuickPanel;
 
 function syncAllFeatureTilesVisual() {
   const featureIds = [
@@ -617,12 +1325,12 @@ async function fetchLiveStatusFromGitHub() {
 // -------------------------------------------------------------
 // -------------------------------------------------------------
 async function fetchRemoteConfigPipeline() {
-  // 1. INSTANT LOCAL DATA (Zero-delay render for v3.6.0)
+  // 1. INSTANT LOCAL DATA (Zero-delay render for v3.7.0)
   if (typeof window !== 'undefined' && window.__DEFAULT_REMOTE_CONFIG__) {
     remoteConfigData = JSON.parse(JSON.stringify(window.__DEFAULT_REMOTE_CONFIG__));
     updatePipelineCardUI(remoteConfigData);
     populateConfigFormUI(remoteConfigData);
-    appendLog('📁 Pipeline config v3.6.0 loaded instantly.', 'success');
+    appendLog('📁 Pipeline config v3.7.0 loaded instantly.', 'success');
   }
 
   // 2. Try fetching from GitHub if online
@@ -1782,1190 +2490,54 @@ window.speakDictWord = speakDictWord;
 window.playPaperTurnAudio = playPaperTurnAudio;
 
 // =========================================================================
-// 🎁 MYSTERY GOLDEN GIFT BOX CONTROLLER (CONTROL PANEL DISPATCHER)
+// REMOVED LEGACY FEATURES (Mystery Gift, Flashcards, Live Help Desk)
+// Clean no-op stubs preserved for backwards compatibility
 // =========================================================================
-
-let activeGiftBoxOpen = false;
-let currentActiveGiftData = null;
-let confettiAnimFrame = null;
-
-function getSelectedGiftRewardType() {
-  const selected = document.querySelector('input[name="giftRewardType"]:checked');
-  return selected ? selected.value : 'vip_badge';
-}
-
-function testGiftDropInPanel() {
-  const rType = getSelectedGiftRewardType();
-  const title = document.getElementById('giftTitleInput')?.value || '👑 Special VIP Surprise From Mind Focus!';
-  const rewardName = document.getElementById('giftRewardNameInput')?.value || 'VIP Golden Reader Badge';
-  const message = document.getElementById('giftMessageInput')?.value || 'Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!';
-
-  const giftPayload = {
-    id: 'test-gift-' + Date.now(),
-    type: 'mystery_gift',
-    isMysteryGift: true,
-    active: true,
-    rewardType: rType,
-    title: title,
-    rewardName: rewardName,
-    message: message
-  };
-
-  appendLog(`🎁 Testing 3D Gift Box Drop in Panel (Reward: ${rType})...`, 'info');
-  triggerFallingGoldenGiftBox(giftPayload);
-}
-
-async function dispatchGiftDropToAllPhones() {
-  const rType = getSelectedGiftRewardType();
-  const title = document.getElementById('giftTitleInput')?.value.trim() || '👑 Special VIP Surprise From Mind Focus!';
-  const rewardName = document.getElementById('giftRewardNameInput')?.value.trim() || 'VIP Golden Reader Badge';
-  const message = document.getElementById('giftMessageInput')?.value.trim() || 'Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai! Tap to open your mystery box.';
-
-  const confirmMsg = `Kya aap sach me sabhi users ke phone par Golden Gift Box "${rewardName}" drop karna chahte hain?`;
-  if (!confirm(confirmMsg)) return;
-
-  const btn = document.getElementById('btnDropGiftToAllPhones');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerText = '⏳ Dropping Gift Box to Cloud...';
-  }
-
-  try {
-    const giftId = 'gift-drop-' + Date.now();
-    const giftPayload = {
-      id: giftId,
-      type: 'mystery_gift',
-      isMysteryGift: true,
-      active: true,
-      rewardType: rType,
-      title: title,
-      rewardName: rewardName,
-      message: message,
-      timestamp: new Date().toISOString()
-    };
-
-    const jsonContent = JSON.stringify(giftPayload, null, 2);
-    const jsContent = 'window.__REMOTE_BROADCAST_NOTICE__ = ' + JSON.stringify(giftPayload, null, 2) + ';\n';
-
-    appendLog(`🎁 Transmitting Golden Gift Box to all connected phones...`, 'warn');
-
-    await pushFileToGitHub('broadcast-notice.json', jsonContent, `Drop Gift Box: ${rewardName}`);
-    await pushFileToGitHub('broadcast-notice.js', jsContent, `Drop Gift Box JS: ${rewardName}`);
-
-    // Instant local broadcast for multi-tab testing
-    try {
-      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(giftPayload));
-      localStorage.setItem('mindfocus_current_live_notice', JSON.stringify(giftPayload));
-    } catch (e) {}
-
-    playDeployChime();
-    appendLog(`🎉 SUCCESS: 3D Golden Gift Box dropped to all active phones! (ID: ${giftId})`, 'success');
-    showToast(`🎁 Golden Gift Box Dropped to All Phones!`);
-  } catch (err) {
-    appendLog(`Failed to drop gift box: ${err.message}`, 'error');
-    alert(`Gift Drop Error: ${err.message}`);
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = '<span>🎁</span> Drop Golden Gift Box to All Phones';
-    }
-  }
-}
-
-async function deactivateGiftDrop() {
-  if (!confirm('Kya aap sabhi phones se active gift drop hatana chahte hain?')) return;
-  try {
-    const offPayload = {
-      id: 'gift-off-' + Date.now(),
-      active: false,
-      message: ''
-    };
-    const jsonContent = JSON.stringify(offPayload, null, 2);
-    const jsContent = 'window.__REMOTE_BROADCAST_NOTICE__ = ' + JSON.stringify(offPayload, null, 2) + ';\n';
-
-    await pushFileToGitHub('broadcast-notice.json', jsonContent, 'Deactivate Gift Box Drop');
-    await pushFileToGitHub('broadcast-notice.js', jsContent, 'Deactivate Gift Box Drop JS');
-
-    try {
-      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(offPayload));
-      localStorage.removeItem('mindfocus_current_live_notice');
-    } catch (e) {}
-
-    appendLog('🛑 Golden Gift Box Drop deactivated.', 'info');
-    showToast('🛑 Gift Drop Turned Off');
-  } catch (err) {
-    alert('Error: ' + err.message);
-  }
-}
-
-// In-Panel Audio Synthesizers for 3D Gift Box
-function playGiftFallSound() {
-  if (!audioCtx) return;
-  try {
-    const now = audioCtx.currentTime;
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(800, now);
-    osc.frequency.exponentialRampToValueAtTime(180, now + 0.85);
-
-    gain.setValueAtTime(0.12, now);
-    gain.exponentialRampToValueAtTime(0.001, now + 0.85);
-
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-
-    osc.start(now);
-    osc.stop(now + 0.85);
-  } catch (e) {}
-}
-
-function playGiftCrackersFanfare() {
-  if (!audioCtx) return;
-  try {
-    const now = audioCtx.currentTime;
-
-    // Pop sounds
-    for (let i = 0; i < 7; i++) {
-      const burstDelay = now + (i * 0.07) + (Math.random() * 0.04);
-      const noiseBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.08, audioCtx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      for (let j = 0; j < noiseBuffer.length; j++) {
-        output[j] = (Math.random() * 2 - 1) * Math.exp(-j / (audioCtx.sampleRate * 0.02));
-      }
-      const whiteNoise = audioCtx.createBufferSource();
-      whiteNoise.buffer = noiseBuffer;
-      const filter = audioCtx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.value = 1200 + Math.random() * 800;
-
-      const popGain = audioCtx.createGain();
-      popGain.gain.setValueAtTime(0.25, burstDelay);
-      popGain.gain.exponentialRampToValueAtTime(0.001, burstDelay + 0.08);
-
-      whiteNoise.connect(filter);
-      filter.connect(popGain);
-      popGain.connect(audioCtx.destination);
-
-      whiteNoise.start(burstDelay);
-      whiteNoise.stop(burstDelay + 0.09);
-    }
-
-    // Victory fanfare arpeggio
-    const notes = [523.25, 659.25, 783.99, 1046.50];
-    notes.forEach((freq, idx) => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const noteTime = now + 0.15 + (idx * 0.12);
-
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, noteTime);
-
-      gain.setValueAtTime(0.18, noteTime);
-      gain.exponentialRampToValueAtTime(0.001, noteTime + 0.55);
-
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-
-      osc.start(noteTime);
-      osc.stop(noteTime + 0.55);
-    });
-  } catch (e) {}
-}
-
-function playGiftClaimChime() {
-  if (!audioCtx) return;
-  try {
-    const now = audioCtx.currentTime;
-    [659.25, 830.61, 987.77, 1318.51].forEach((f, i) => {
-      const osc = audioCtx.createOscillator();
-      const gain = audioCtx.createGain();
-      const t = now + (i * 0.09);
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(f, t);
-      gain.setValueAtTime(0.14, t);
-      gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
-      osc.connect(gain);
-      gain.connect(audioCtx.destination);
-      osc.start(t);
-      osc.stop(t + 0.65);
-    });
-  } catch (e) {}
-}
-
-function triggerFallingGoldenGiftBox(giftData = {}) {
-  currentActiveGiftData = Object.assign({
-    id: 'gift-' + Date.now(),
-    rewardType: 'vip_badge',
-    title: 'Surprise Golden Gift Box',
-    message: 'Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!',
-    rewardName: 'VIP Golden Reader Badge',
-    rewardEmblem: '👑'
-  }, giftData);
-
-  activeGiftBoxOpen = false;
-
-  const overlay = document.getElementById('mysteryGiftOverlay');
-  const stage = document.getElementById('giftBoxStage');
-  const rewardModal = document.getElementById('giftRewardModal');
-  const tapPrompt = document.getElementById('giftTapPrompt');
-
-  if (!overlay || !stage) return;
-
-  stage.classList.remove('opened');
-  if (rewardModal) rewardModal.classList.remove('active');
-  if (tapPrompt) tapPrompt.style.display = 'flex';
-
-  const rType = currentActiveGiftData.rewardType;
-  const crownIcon = document.getElementById('rewardCrownIcon');
-  const pillText = document.getElementById('rewardPillText');
-  const titleText = document.getElementById('rewardTitleText');
-  const emblem = document.getElementById('rewardEmblem');
-  const descText = document.getElementById('rewardDescText');
-  const perkBox = document.getElementById('rewardPerkBox');
-
-  if (rType === 'secret_book') {
-    if (crownIcon) crownIcon.innerText = '📖';
-    if (pillText) pillText.innerText = 'SECRET BOOK UNLOCKED';
-    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || 'Secret Focus Masterclass Book';
-    if (emblem) emblem.innerText = '🔮';
-    if (descText) descText.innerText = currentActiveGiftData.message || 'You unlocked an exclusive secret masterclass book in your bookshelf!';
-    if (perkBox) {
-      perkBox.innerHTML = `
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Permanent access to Secret Bonus Book in library</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Full summary, Hindi notes &amp; key insights included</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Read anytime offline with zero limits</span></div>
-      `;
-    }
-  } else if (rType === 'golden_notes') {
-    if (crownIcon) crownIcon.innerText = '📜';
-    if (pillText) pillText.innerText = 'EXCLUSIVE WISDOM SCROLL';
-    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || '10 Billionaire Mental Models';
-    if (emblem) emblem.innerText = '⚡';
-    if (descText) descText.innerText = currentActiveGiftData.message || 'Exclusive mental models of Elon Musk, Warren Buffett & Marcus Aurelius unlocked!';
-    if (perkBox) {
-      perkBox.innerHTML = `
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>First-Principles Thinking &amp; Inversion Framework</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Unlocked in your Book Notes Vault</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Daily actionable mental models guide</span></div>
-      `;
-    }
-  } else {
-    if (crownIcon) crownIcon.innerText = '👑';
-    if (pillText) pillText.innerText = 'VIP MASTER READER AWARD';
-    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || 'VIP Golden Reader Badge';
-    if (emblem) emblem.innerText = currentActiveGiftData.rewardEmblem || '👑';
-    if (descText) descText.innerText = currentActiveGiftData.message || 'Aapko Mind Focus Books Tracker ki taraf se permanent VIP Master Reader recognition mili hai!';
-    if (perkBox) {
-      perkBox.innerHTML = `
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Permanent glowing Golden Crown Badge in App Header</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>VIP Priority on all new book releases &amp; updates</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Reading Streak Protection &amp; Golden Shield</span></div>
-      `;
-    }
-  }
-
-  overlay.classList.add('active');
-  playGiftFallSound();
-}
-
-function openGoldenGiftBox(event) {
-  if (activeGiftBoxOpen) return;
-  activeGiftBoxOpen = true;
-  if (event) event.stopPropagation();
-
-  const stage = document.getElementById('giftBoxStage');
-  const rewardModal = document.getElementById('giftRewardModal');
-
-  if (stage) stage.classList.add('opened');
-
-  playGiftCrackersFanfare();
-  startConfettiCrackersBurst();
-
-  setTimeout(() => {
-    if (rewardModal) rewardModal.classList.add('active');
-  }, 650);
-}
-
-function startConfettiCrackersBurst() {
-  const canvas = document.getElementById('giftConfettiCanvas');
-  if (!canvas) return;
-
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  if (confettiAnimFrame) {
-    cancelAnimationFrame(confettiAnimFrame);
-    confettiAnimFrame = null;
-  }
-
-  const particles = [];
-  const colors = ['#fbbf24', '#f59e0b', '#d97706', '#ef4444', '#dc2626', '#10b981', '#34d399', '#38bdf8', '#f8fafc'];
-  const originX = canvas.width / 2;
-  const originY = canvas.height / 2;
-
-  for (let i = 0; i < 180; i++) {
-    const angle = (Math.random() * Math.PI * 2);
-    const speed = 6 + Math.random() * 16;
-    particles.push({
-      x: originX,
-      y: originY,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - (Math.random() * 6 + 4),
-      size: Math.random() * 8 + 5,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      rotation: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 14,
-      shape: Math.random() > 0.4 ? 'rect' : 'circle',
-      opacity: 1,
-      decay: Math.random() * 0.008 + 0.005
-    });
-  }
-
-  const startTime = Date.now();
-
-  function renderConfetti() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    let activeCount = 0;
-    particles.forEach(p => {
-      if (p.opacity <= 0) return;
-      activeCount++;
-
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.28;
-      p.vx *= 0.985;
-      p.rotation += p.rotSpeed;
-      p.opacity -= p.decay;
-
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, p.opacity);
-      ctx.translate(p.x, p.y);
-      ctx.rotate((p.rotation * Math.PI) / 180);
-      ctx.fillStyle = p.color;
-
-      if (p.shape === 'rect') {
-        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
-      } else {
-        ctx.beginPath();
-        ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.restore();
-    });
-
-    if (activeCount > 0 && (Date.now() - startTime) < 4500) {
-      confettiAnimFrame = requestAnimationFrame(renderConfetti);
-    } else {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      confettiAnimFrame = null;
-    }
-  }
-
-  confettiAnimFrame = requestAnimationFrame(renderConfetti);
-}
-
-function claimSurpriseReward() {
-  playGiftClaimChime();
-  const overlay = document.getElementById('mysteryGiftOverlay');
-  const rewardModal = document.getElementById('giftRewardModal');
-
-  showToast('🎉 Reward Claimed in Simulation Preview!');
-
-  if (rewardModal) rewardModal.classList.remove('active');
-  setTimeout(() => {
-    if (overlay) overlay.classList.remove('active');
-    activeGiftBoxOpen = false;
-  }, 400);
-}
-
-// Window bindings for control panel
-window.testGiftDropInPanel = testGiftDropInPanel;
-window.dispatchGiftDropToAllPhones = dispatchGiftDropToAllPhones;
+function previewMysteryGiftBox() {}
+function sendMysteryGiftToUsers() {}
+function deactivateGiftDrop() {}
+function selectMysteryBox() {}
+function openGoldenGiftBox() {}
+function claimSurpriseReward() {}
+function updateFlashcardPreview() {}
+function dispatchFlashcardsDropToAllPhones() {}
+function deactivateFlashcardsDrop() {}
+function previewFlashcardInModal() {}
+function loadFlashcardPreset() {}
+function initAdminHelpDeskListeners() {}
+function refreshAdminChatThreads() {}
+function toggleAdminChatSound() {}
+function sendAdminChatReply() {}
+function insertQuickReply() {}
+function handleAdminChatKeydown() {}
+function simulateIncomingUserMessage() {}
+function clearCurrentChatThread() {}
+function filterChatThreads() {}
+function selectChatThread() {}
+function jumpToHelpDeskUser() {}
+
+window.previewMysteryGiftBox = previewMysteryGiftBox;
+window.sendMysteryGiftToUsers = sendMysteryGiftToUsers;
 window.deactivateGiftDrop = deactivateGiftDrop;
+window.selectMysteryBox = selectMysteryBox;
 window.openGoldenGiftBox = openGoldenGiftBox;
 window.claimSurpriseReward = claimSurpriseReward;
-
-// ==========================================
-// 3D SMART FLASHCARDS STUDIO ENGINE
-// ==========================================
-function updateFlashcardPreview() {
-  const dict = window.DICTIONARY_WORDS || [];
-  for (let i = 1; i <= 5; i++) {
-    const input = document.getElementById(`fcTargetWord${i}`);
-    const preview = document.getElementById(`fcSlotPreview${i}`);
-    if (!input || !preview) continue;
-    const val = input.value.trim().toLowerCase();
-    if (!val) {
-      preview.textContent = 'Empty slot';
-      preview.style.color = 'var(--text-muted)';
-      continue;
-    }
-    const found = dict.find(w => w.word.toLowerCase() === val);
-    if (found) {
-      preview.textContent = `${found.type || 'word'} • ${found.hindi || 'अर्थ'}`;
-      preview.style.color = '#34d399';
-    } else {
-      preview.textContent = `custom word (manual)`;
-      preview.style.color = '#fbbf24';
-    }
-  }
-}
-
-function shuffle5TargetWords() {
-  playUiClick();
-  const dict = window.DICTIONARY_WORDS || [];
-  if (dict.length < 5) {
-    showToast('⚠️ Dictionary words not loaded');
-    return;
-  }
-  const shuffled = [...dict].sort(() => Math.random() - 0.5);
-  for (let i = 1; i <= 5; i++) {
-    const input = document.getElementById(`fcTargetWord${i}`);
-    if (input && shuffled[i - 1]) {
-      input.value = shuffled[i - 1].word;
-    }
-  }
-  updateFlashcardPreview();
-  showToast('🎲 5 Target Words Shuffled from Dictionary!');
-}
-
-async function dispatchFlashcardsDropToAllPhones() {
-  const words = [];
-  for (let i = 1; i <= 5; i++) {
-    const input = document.getElementById(`fcTargetWord${i}`);
-    const val = input ? input.value.trim() : '';
-    if (val) words.push(val);
-  }
-
-  if (words.length === 0) {
-    alert('Kripya kam se kam 1 word target select karein!');
-    return;
-  }
-
-  const title = document.getElementById('fcChallengeTitle')?.value.trim() || "🎴 Today's 5 Target Words Challenge!";
-  const btnText = document.getElementById('fcChallengeBtnText')?.value.trim() || "🎴 Practice Flashcards Now";
-  const message = document.getElementById('fcChallengeMessage')?.value.trim() || "Aapke liye 5 naye 3D smart flashcards unlock ho chuke hain! Tap karke test karein.";
-
-  const confirmMsg = `Kya aap sach me ye 5 target words sabhi users ke phone par push karna chahte hain?\n\nWords: ${words.join(', ')}`;
-  if (!confirm(confirmMsg)) return;
-
-  const btn = document.getElementById('btnPushDailyFlashcards');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerHTML = '<span>⏳</span> Transmitting Flashcards to Cloud...';
-  }
-
-  try {
-    const dropId = 'fc-drop-' + Date.now();
-    const payload = {
-      id: dropId,
-      type: 'flashcard_drop',
-      isFlashcardDrop: true,
-      card: 'card2',
-      active: true,
-      icon: '🎴',
-      title: title,
-      btnText: btnText,
-      message: message,
-      words: words,
-      timestamp: new Date().toISOString()
-    };
-
-    const jsonContent = JSON.stringify(payload, null, 2);
-    const jsContent = 'window.__REMOTE_BROADCAST_NOTICE__ = ' + JSON.stringify(payload, null, 2) + ';\n';
-
-    appendLog(`🎴 Transmitting 5 Target Words to all active phones... (${words.join(', ')})`, 'warn');
-
-    await pushFileToGitHub('broadcast-notice.json', jsonContent, `Push Flashcards Challenge: ${words.slice(0, 3).join(', ')}`);
-    await pushFileToGitHub('broadcast-notice.js', jsContent, `Push Flashcards Challenge JS: ${words.slice(0, 3).join(', ')}`);
-
-    try {
-      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(payload));
-      localStorage.setItem('mindfocus_current_live_notice', JSON.stringify(payload));
-    } catch (e) {}
-
-    playDeployChime();
-    appendLog(`🎉 SUCCESS: Today's 5 Target Words pushed to all connected phones! (ID: ${dropId})`, 'success');
-    showToast(`🎴 5 Flashcards Challenge Pushed to All Phones!`);
-  } catch (err) {
-    appendLog(`Failed to push flashcards: ${err.message}`, 'error');
-    alert(`Flashcards Push Error: ${err.message}`);
-  } finally {
-    if (btn) {
-      btn.disabled = false;
-      btn.innerHTML = "<span>🎴</span> Push Today's 5 Target Words to All Phones";
-    }
-  }
-}
-
-async function deactivateFlashcardsDrop() {
-  if (!confirm('Kya aap active flashcard challenge ko sabhi phones se hatana chahte hain?')) return;
-  try {
-    const offPayload = {
-      id: 'fc-off-' + Date.now(),
-      active: false,
-      message: ''
-    };
-    const jsonContent = JSON.stringify(offPayload, null, 2);
-    const jsContent = 'window.__REMOTE_BROADCAST_NOTICE__ = ' + JSON.stringify(offPayload, null, 2) + ';\n';
-
-    await pushFileToGitHub('broadcast-notice.json', jsonContent, 'Deactivate Flashcards Challenge');
-    await pushFileToGitHub('broadcast-notice.js', jsContent, 'Deactivate Flashcards Challenge JS');
-
-    try {
-      localStorage.setItem('mindfocus_local_broadcast_trigger', JSON.stringify(offPayload));
-      localStorage.removeItem('mindfocus_current_live_notice');
-    } catch (e) {}
-
-    appendLog('🛑 Flashcard Challenge deactivated.', 'info');
-    showToast('🛑 Flashcard Challenge Stopped');
-  } catch (err) {
-    alert('Error: ' + err.message);
-  }
-}
-
 window.updateFlashcardPreview = updateFlashcardPreview;
-window.shuffle5TargetWords = shuffle5TargetWords;
 window.dispatchFlashcardsDropToAllPhones = dispatchFlashcardsDropToAllPhones;
 window.deactivateFlashcardsDrop = deactivateFlashcardsDrop;
-
-// ==========================================================================
-// 💬 LIVE IN-APP HELP DESK & USER CHAT STUDIO
-// ==========================================================================
-
-const HELPDESK_CLOUD_TOPIC = 'mf_helpdesk_ankitburdak05';
-const HELPDESK_RELAY_URL = 'https://ntfy.sh/' + HELPDESK_CLOUD_TOPIC;
-
-let adminChatThreads = {};
-let activeChatUserId = null;
-let adminChatSoundEnabled = true;
-let lastKnownUserMsgCount = 0;
-let adminChatBroadcastChannel = null;
-let adminChatEventSource = null;
-
-function initAdminHelpDeskListeners() {
-  // 1. Zero-latency BroadcastChannel (0ms sync for same browser/origin)
-  try {
-    if (typeof BroadcastChannel !== 'undefined') {
-      adminChatBroadcastChannel = new BroadcastChannel('mindfocus_helpdesk_channel');
-      adminChatBroadcastChannel.onmessage = (e) => {
-        if (e.data && e.data.type === 'helpdesk_chat_msg') {
-          handleAdminIncomingHelpDeskDirectMessage(e.data);
-        } else if (e.data && e.data.type === 'helpdesk_phone_crash_telemetry') {
-          handleIncomingPhoneCrashTelemetry(e.data);
-        }
-      };
-    }
-  } catch (e) {}
-
-  // 2. Storage event listener (cross-tab sync)
-  window.addEventListener('storage', (e) => {
-    if (e.key === 'mindfocus_chat_last_event' && e.newValue) {
-      try {
-        const item = JSON.parse(e.newValue);
-        if (item && item.payload && item.payload.type === 'helpdesk_chat_msg') {
-          handleAdminIncomingHelpDeskDirectMessage(item.payload);
-        } else if (item && item.payload && item.payload.type === 'helpdesk_phone_crash_telemetry') {
-          handleIncomingPhoneCrashTelemetry(item.payload);
-        }
-      } catch (err) {}
-    }
-  });
-
-  // 3. Connect to Cloud Relay via SSE (Instant live delivery from Remote Phone Apps)
-  connectAdminCloudRelaySSE();
-}
-
-function connectAdminCloudRelaySSE() {
-  if (typeof EventSource === 'undefined') return;
-  try {
-    if (adminChatEventSource) adminChatEventSource.close();
-    adminChatEventSource = new EventSource(HELPDESK_RELAY_URL + '/sse');
-    adminChatEventSource.onmessage = (e) => {
-      try {
-        const parsed = JSON.parse(e.data);
-        if (parsed && parsed.message) {
-          const payload = typeof parsed.message === 'string' ? JSON.parse(parsed.message) : parsed.message;
-          if (payload && payload.type === 'helpdesk_chat_msg') {
-            handleAdminIncomingHelpDeskDirectMessage(payload);
-          } else if (payload && payload.type === 'helpdesk_phone_crash_telemetry') {
-            handleIncomingPhoneCrashTelemetry(payload);
-          }
-        }
-      } catch (err) {}
-    };
-    adminChatEventSource.onerror = () => {};
-  } catch (e) {}
-}
-
-function handleAdminIncomingHelpDeskDirectMessage(payload) {
-  if (!payload || !payload.threadId || !payload.message) return;
-  const tid = payload.threadId;
-  const msg = payload.message;
-
-  if (!adminChatThreads) adminChatThreads = {};
-  if (!adminChatThreads[tid]) {
-    adminChatThreads[tid] = {
-      userId: tid,
-      userName: payload.userName || ('Reader #' + tid.slice(-4).toUpperCase()),
-      userDevice: payload.userDevice || 'Reader App',
-      unreadByAdmin: 0,
-      unreadByUser: 0,
-      lastMessage: '',
-      lastTimestamp: new Date().toISOString(),
-      messages: []
-    };
-  }
-
-  const thread = adminChatThreads[tid];
-  if (!Array.isArray(thread.messages)) thread.messages = [];
-
-  const exists = thread.messages.some(m => m.id === msg.id || (m.timestamp === msg.timestamp && m.text === msg.text));
-  if (exists) return;
-
-  thread.messages.push(msg);
-  thread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-  thread.lastMessage = msg.text;
-  thread.lastTimestamp = msg.timestamp;
-
-  if (msg.sender === 'user') {
-    if (activeChatUserId !== tid) {
-      thread.unreadByAdmin = (thread.unreadByAdmin || 0) + 1;
-    }
-    playChatAudioChime('receive');
-    showToast(`💬 ${thread.userName}: "${msg.text.length > 25 ? msg.text.substring(0, 22) + '...' : msg.text}"`);
-    appendLog(`💬 Incoming message from ${thread.userName} (${thread.userDevice}): "${msg.text}"`, 'info');
-  }
-
-  saveChatDataLocallyAndRemote();
-  renderChatThreadsList();
-  if (activeChatUserId === tid) {
-    renderActiveConversation(tid);
-  }
-}
-
-function playChatAudioChime(type = 'receive') {
-  if (!adminChatSoundEnabled) return;
-  try {
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    if (type === 'receive') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.2, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.35);
-    } else {
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(440, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.15, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.15);
-    }
-  } catch (e) {
-    console.warn('Audio chime error:', e);
-  }
-}
-
-function toggleAdminChatSound() {
-  adminChatSoundEnabled = !adminChatSoundEnabled;
-  const btn = document.getElementById('btnToggleChatAudio');
-  if (btn) {
-    btn.innerHTML = adminChatSoundEnabled ? '🔔 Sound: ON' : '🔕 Sound: OFF';
-    btn.style.color = adminChatSoundEnabled ? '#34d399' : '#94a3b8';
-  }
-  showToast(adminChatSoundEnabled ? '🔔 Chat Sound Enabled' : '🔕 Chat Sound Muted');
-}
-
-async function fetchChatMessagesData() {
-  // 1. First ensure we retain local threads so NOTHING is ever lost
-  let localData = null;
-  try {
-    const local = localStorage.getItem('mindfocus_chat_data');
-    if (local) localData = JSON.parse(local);
-  } catch (e) {}
-
-  if (localData && localData.threads) {
-    for (const tid in localData.threads) {
-      if (!adminChatThreads[tid]) {
-        adminChatThreads[tid] = localData.threads[tid];
-      } else {
-        const myThread = adminChatThreads[tid];
-        const locThread = localData.threads[tid];
-        const existingIds = new Set((myThread.messages || []).map(m => m.id));
-        (locThread.messages || []).forEach(m => {
-          if (!existingIds.has(m.id)) {
-            myThread.messages.push(m);
-            existingIds.add(m.id);
-          }
-        });
-        myThread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-      }
-    }
-  }
-
-  // 2. Poll Cloud Relay for any missed incoming events (with rate limit backoff protection)
-  if (!window.__ntfyBackoffUntil || Date.now() > window.__ntfyBackoffUntil) {
-    try {
-      const pollRes = await fetch(HELPDESK_RELAY_URL + '/json?poll=1&since=5m');
-      if (pollRes.status === 429) {
-        // Rate limited: Back off for 3 minutes and rely on local storage & git
-        window.__ntfyBackoffUntil = Date.now() + 180000;
-        console.warn('ntfy.sh rate-limited. Backing off for 3 minutes.');
-      } else if (pollRes.ok) {
-        const text = await pollRes.text();
-        const lines = text.trim().split('\n');
-        for (const line of lines) {
-          if (!line.trim()) continue;
-          try {
-            const item = JSON.parse(line);
-            if (item && item.message) {
-              const payload = typeof item.message === 'string' ? JSON.parse(item.message) : item.message;
-              if (payload && payload.type === 'helpdesk_chat_msg') {
-                handleAdminIncomingHelpDeskDirectMessage(payload);
-              } else if (payload && payload.type === 'helpdesk_phone_crash_telemetry') {
-                handleIncomingPhoneCrashTelemetry(payload);
-              }
-            }
-          } catch (e) {}
-        }
-      }
-    } catch (err) {}
-  }
-
-  // 3. Non-destructive merge from chat-messages.json
-  const cb = Date.now();
-  try {
-    let chatUrl = `chat-messages.json?cb=${cb}`;
-    if (typeof window !== 'undefined' && (window.location.protocol === 'file:' || !window.location.host)) {
-      chatUrl = `https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/chat-messages.json?cb=${cb}`;
-    }
-    let res = await fetch(chatUrl, { cache: 'no-store' });
-    if (!res.ok && chatUrl.startsWith('chat-messages.json')) {
-      res = await fetch(`https://raw.githubusercontent.com/${REPO_OWNER}/${REPO_NAME}/main/chat-messages.json?cb=${cb}`, { cache: 'no-store' });
-    }
-    if (res && res.ok) {
-      const remoteData = await res.json();
-      if (remoteData && remoteData.threads) {
-        for (const tid in remoteData.threads) {
-          if (!adminChatThreads[tid]) {
-            adminChatThreads[tid] = remoteData.threads[tid];
-          } else {
-            const myThread = adminChatThreads[tid];
-            const remThread = remoteData.threads[tid];
-            const existingIds = new Set((myThread.messages || []).map(m => m.id));
-            (remThread.messages || []).forEach(m => {
-              if (!existingIds.has(m.id)) {
-                myThread.messages.push(m);
-                existingIds.add(m.id);
-              }
-            });
-            myThread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-          }
-        }
-      }
-    }
-  } catch (err) {}
-
-  return { threads: adminChatThreads };
-}
-
-async function refreshAdminChatThreads(manual = false) {
-  try {
-    const data = await fetchChatMessagesData();
-    if (!data || !data.threads) return;
-
-    adminChatThreads = data.threads;
-
-    let totalUnread = 0;
-    let totalUserMsgs = 0;
-    Object.values(adminChatThreads).forEach(t => {
-      totalUnread += (t.unreadByAdmin || 0);
-      if (Array.isArray(t.messages)) {
-        t.messages.forEach(m => {
-          if (m.sender === 'user') totalUserMsgs++;
-        });
-      }
-    });
-
-    const badge = document.getElementById('adminChatUnreadBadge');
-    const dockBadge = document.getElementById('dockChatUnreadBadge');
-    [badge, dockBadge].forEach(b => {
-      if (b) {
-        if (totalUnread > 0) {
-          b.innerText = totalUnread;
-          b.style.display = 'inline-block';
-        } else {
-          b.style.display = 'none';
-        }
-      }
-    });
-
-    if (totalUserMsgs > lastKnownUserMsgCount && lastKnownUserMsgCount > 0) {
-      playChatAudioChime('receive');
-      showToast('💬 Naya User Message Aaya Hai!');
-    }
-    lastKnownUserMsgCount = totalUserMsgs;
-
-    renderChatThreadsList();
-
-    if (activeChatUserId && adminChatThreads[activeChatUserId]) {
-      renderActiveConversation(activeChatUserId);
-    }
-
-    if (manual) {
-      showToast('🔄 Chat Threads Updated');
-    }
-  } catch (e) {
-    console.error('refreshAdminChatThreads error:', e);
-  }
-}
-
-function renderChatThreadsList(filteredList = null) {
-  const container = document.getElementById('chatThreadsList');
-  if (!container) return;
-
-  const threads = filteredList || Object.values(adminChatThreads);
-
-  if (threads.length === 0) {
-    container.innerHTML = `
-      <div style="text-align:center; padding:30px 14px; color:var(--text-muted); font-size:0.82rem;">
-        Koi active conversation nahi hai.<br>
-        <button type="button" class="btn-chat-action" onclick="simulateIncomingUserMessage()" style="margin-top:10px;">
-          🧪 Test Message Bhejo
-        </button>
-      </div>`;
-    return;
-  }
-
-  threads.sort((a, b) => new Date(b.lastTimestamp || 0) - new Date(a.lastTimestamp || 0));
-
-  let html = '';
-  threads.forEach(t => {
-    const isActive = t.userId === activeChatUserId;
-    const initial = (t.userName || 'R').charAt(0).toUpperCase();
-    const timeStr = formatChatTime(t.lastTimestamp);
-    const unread = t.unreadByAdmin || 0;
-
-    html += `
-      <div class="chat-thread-card ${isActive ? 'active' : ''}" onclick="selectChatThread('${t.userId}')">
-        <div class="chat-avatar-wrap">
-          <span>${initial}</span>
-          <div class="chat-avatar-dot"></div>
-        </div>
-        <div class="chat-thread-info">
-          <div class="chat-thread-name-row">
-            <span class="chat-thread-name">${escapeHtml(t.userName || 'Reader')}</span>
-            <span class="chat-thread-time">${timeStr}</span>
-          </div>
-          <div style="display:flex; align-items:center; justify-content:space-between;">
-            <span class="chat-thread-snippet">${escapeHtml(t.lastMessage || 'No messages')}</span>
-            ${unread > 0 ? `<span class="chat-thread-unread-pill">${unread}</span>` : ''}
-          </div>
-        </div>
-      </div>`;
-  });
-
-  container.innerHTML = html;
-}
-
-function selectChatThread(userId) {
-  playUiClick();
-  activeChatUserId = userId;
-  const thread = adminChatThreads[userId];
-  if (!thread) return;
-
-  if (thread.unreadByAdmin > 0) {
-    thread.unreadByAdmin = 0;
-    saveChatDataLocallyAndRemote();
-  }
-
-  renderChatThreadsList();
-  renderActiveConversation(userId);
-}
-
-function renderActiveConversation(userId) {
-  const thread = adminChatThreads[userId];
-  if (!thread) return;
-
-  const avatar = document.getElementById('chatActiveUserAvatar');
-  const nameEl = document.getElementById('chatActiveUserName');
-  const deviceEl = document.getElementById('chatActiveUserDevice');
-  const statusEl = document.getElementById('chatActiveUserStatus');
-  const streamEl = document.getElementById('chatMessagesStream');
-
-  if (avatar) avatar.innerText = (thread.userName || 'R').charAt(0).toUpperCase();
-  if (nameEl) nameEl.innerText = thread.userName || 'Reader';
-  if (deviceEl) deviceEl.innerText = thread.userDevice || 'Android';
-  if (statusEl) statusEl.innerHTML = '🟢 Reader Online &bull; Direct Session Active';
-
-  if (!streamEl) return;
-
-  const messages = thread.messages || [];
-  if (messages.length === 0) {
-    streamEl.innerHTML = `
-      <div class="chat-empty-state">
-        <div style="font-size:32px; margin-bottom:6px;">💬</div>
-        <div style="font-weight:700;">No messages yet</div>
-        <div style="font-size:0.8rem; color:var(--text-muted);">Reply below to start chatting with this reader!</div>
-      </div>`;
-    return;
-  }
-
-  let html = `
-    <div class="chat-date-divider">
-      <span class="chat-date-pill">Today &bull; Direct Help Desk Session</span>
-    </div>`;
-
-  messages.forEach(m => {
-    const isUser = m.sender === 'user';
-    const timeStr = formatChatTime(m.timestamp);
-
-    html += `
-      <div class="chat-msg-row ${isUser ? 'from-user' : 'from-admin'}">
-        <div class="chat-bubble">
-          ${escapeHtml(m.text)}
-          <div class="chat-bubble-meta">
-            <span>${timeStr}</span>
-            ${!isUser ? '<span style="color:#6ee7b7;">✓✓</span>' : ''}
-          </div>
-        </div>
-      </div>`;
-  });
-
-  streamEl.innerHTML = html;
-  streamEl.scrollTop = streamEl.scrollHeight;
-}
-
-function handleAdminChatKeydown(event) {
-  if (event.key === 'Enter' && !event.shiftKey) {
-    event.preventDefault();
-    sendAdminChatReply();
-  }
-}
-
-function insertQuickReply(text) {
-  playUiClick();
-  const input = document.getElementById('adminChatInputText');
-  if (input) {
-    input.value = text;
-    input.focus();
-  }
-}
-
-async function sendAdminChatReply() {
-  const input = document.getElementById('adminChatInputText');
-  if (!input) return;
-
-  const text = input.value.trim();
-  if (!text) return;
-
-  if (!activeChatUserId) {
-    alert('Pehle left side se kisi reader ki conversation par click karein!');
-    return;
-  }
-
-  const thread = adminChatThreads[activeChatUserId];
-  if (!thread) return;
-
-  playChatAudioChime('send');
-
-  const newMsg = {
-    id: 'msg_admin_' + Date.now(),
-    sender: 'admin',
-    text: text,
-    timestamp: new Date().toISOString()
-  };
-
-  if (!Array.isArray(thread.messages)) thread.messages = [];
-  thread.messages.push(newMsg);
-  thread.lastMessage = text;
-  thread.lastTimestamp = newMsg.timestamp;
-  thread.unreadByUser = (thread.unreadByUser || 0) + 1;
-
-  input.value = '';
-  renderActiveConversation(activeChatUserId);
-  renderChatThreadsList();
-
-  appendLog(`💬 Reply sent to ${thread.userName}: "${text.slice(0, 30)}..."`, 'success');
-
-  const payload = {
-    type: 'helpdesk_chat_msg',
-    threadId: activeChatUserId,
-    userName: thread.userName,
-    userDevice: thread.userDevice,
-    message: newMsg
-  };
-
-  // 1. Zero-latency BroadcastChannel (0ms sync for same device/browser)
-  try {
-    if (adminChatBroadcastChannel) {
-      adminChatBroadcastChannel.postMessage(payload);
-    }
-  } catch (e) {}
-
-  // 2. Storage event cross-tab trigger
-  try {
-    localStorage.setItem('mindfocus_chat_last_event', JSON.stringify({
-      t: Date.now(),
-      payload: payload
-    }));
-  } catch (e) {}
-
-  // 3. Post to Cloud Relay (ntfy.sh) so user phone receives it anywhere in real-time
-  try {
-    fetch(HELPDESK_RELAY_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain'
-      },
-      body: JSON.stringify(payload)
-    }).catch(() => {});
-  } catch (e) {}
-
-  await saveChatDataLocallyAndRemote();
-}
-
-async function saveChatDataLocallyAndRemote() {
-  const payload = {
-    version: 1,
-    lastUpdated: new Date().toISOString(),
-    threads: adminChatThreads
-  };
-
-  try {
-    localStorage.setItem('mindfocus_chat_data', JSON.stringify(payload));
-  } catch (e) {}
-
-  if (githubToken) {
-    try {
-      const jsonContent = JSON.stringify(payload, null, 2);
-      await pushFileToGitHub('chat-messages.json', jsonContent, 'Update Help Desk Chat Messages');
-      appendLog('☁️ Chat sync saved to Cloud Repository.', 'info');
-    } catch (err) {
-      console.warn('GitHub push chat error:', err.message);
-    }
-  }
-}
-
-function filterChatThreads(keyword) {
-  const q = (keyword || '').toLowerCase().trim();
-  if (!q) {
-    renderChatThreadsList();
-    return;
-  }
-
-  const filtered = Object.values(adminChatThreads).filter(t => {
-    return (t.userName && t.userName.toLowerCase().includes(q)) ||
-           (t.lastMessage && t.lastMessage.toLowerCase().includes(q)) ||
-           (t.userDevice && t.userDevice.toLowerCase().includes(q));
-  });
-
-  renderChatThreadsList(filtered);
-}
-
-function simulateIncomingUserMessage() {
-  playUiClick();
-  const sampleUsers = [
-    { id: 'user_rohit_24', name: 'Rohit Sharma', device: 'Android 14 • Galaxy S23', text: 'Bhai naya update kab release hoga? 3D Lexicon bohot mast laga!' },
-    { id: 'user_priya_09', name: 'Priya Verma', device: 'Android 13 • OnePlus 11R', text: 'Atomic Habits ki audio reader bohot smooth chal rahi hai, thank you sir!' },
-    { id: 'user_amit_88', name: 'Amit Kumar', device: 'Android 14 • Pixel 8', text: 'Bhai psychology of money book add kar do please next update me 🙏' }
-  ];
-
-  const randomChoice = sampleUsers[Math.floor(Math.random() * sampleUsers.length)];
-
-  if (!adminChatThreads[randomChoice.id]) {
-    adminChatThreads[randomChoice.id] = {
-      userId: randomChoice.id,
-      userName: randomChoice.name,
-      userDevice: randomChoice.device,
-      unreadByAdmin: 0,
-      unreadByUser: 0,
-      lastMessage: '',
-      lastTimestamp: new Date().toISOString(),
-      messages: []
-    };
-  }
-
-  const thread = adminChatThreads[randomChoice.id];
-  const newMsg = {
-    id: 'msg_user_' + Date.now(),
-    sender: 'user',
-    text: randomChoice.text,
-    timestamp: new Date().toISOString()
-  };
-
-  thread.messages.push(newMsg);
-  thread.lastMessage = randomChoice.text;
-  thread.lastTimestamp = newMsg.timestamp;
-  thread.unreadByAdmin = (thread.unreadByAdmin || 0) + 1;
-
-  activeChatUserId = randomChoice.id;
-
-  playChatAudioChime('receive');
-  showToast(`💬 Message from ${randomChoice.name}: "${randomChoice.text.slice(0, 25)}..."`);
-
-  renderChatThreadsList();
-  renderActiveConversation(activeChatUserId);
-  saveChatDataLocallyAndRemote();
-}
-
-function clearCurrentChatThread() {
-  if (!activeChatUserId) return;
-  if (!confirm('Kya aap is conversation ko clear karna chahte hain?')) return;
-
-  const thread = adminChatThreads[activeChatUserId];
-  if (thread) {
-    thread.messages = [];
-    thread.lastMessage = 'Chat history cleared';
-    thread.unreadByAdmin = 0;
-    renderActiveConversation(activeChatUserId);
-    renderChatThreadsList();
-    saveChatDataLocallyAndRemote();
-    showToast('🗑️ Conversation cleared');
-  }
-}
-
-function formatChatTime(isoStr) {
-  if (!isoStr) return '';
-  try {
-    const d = new Date(isoStr);
-    const now = new Date();
-    const isToday = d.toDateString() === now.toDateString();
-    let hours = d.getHours();
-    const mins = d.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-    if (isToday) return `${hours}:${mins} ${ampm}`;
-    return `${d.getDate()}/${d.getMonth()+1} ${hours}:${mins} ${ampm}`;
-  } catch (e) {
-    return '';
-  }
-}
-
-window.toggleAdminChatSound = toggleAdminChatSound;
+window.previewFlashcardInModal = previewFlashcardInModal;
+window.loadFlashcardPreset = loadFlashcardPreset;
+window.initAdminHelpDeskListeners = initAdminHelpDeskListeners;
 window.refreshAdminChatThreads = refreshAdminChatThreads;
-window.selectChatThread = selectChatThread;
-window.handleAdminChatKeydown = handleAdminChatKeydown;
-window.insertQuickReply = insertQuickReply;
+window.toggleAdminChatSound = toggleAdminChatSound;
 window.sendAdminChatReply = sendAdminChatReply;
-window.filterChatThreads = filterChatThreads;
+window.insertQuickReply = insertQuickReply;
+window.handleAdminChatKeydown = handleAdminChatKeydown;
 window.simulateIncomingUserMessage = simulateIncomingUserMessage;
 window.clearCurrentChatThread = clearCurrentChatThread;
+window.filterChatThreads = filterChatThreads;
+window.selectChatThread = selectChatThread;
+window.jumpToHelpDeskUser = jumpToHelpDeskUser;
 
 // ==========================================================================
 // 🩺 REAL-TIME PHONE CRASH RADAR & REMOTE TELEMETRY ENGINE
@@ -2995,7 +2567,7 @@ function handleIncomingPhoneCrashTelemetry(payload) {
       userName: 'Phone User',
       deviceType: 'Android Phone',
       userAgent: 'Unknown UA',
-      appVersion: 'v3.6.0',
+      appVersion: 'v3.7.0',
       screen: 'Unknown Screen',
       online: true
     }
@@ -3094,7 +2666,7 @@ function renderPhoneCrashRadarStream() {
               ${isTest ? '🧪 TEST EVENT' : '🔴 RUNTIME CRASH'}
             </span>
             <span style="font-size:0.78rem; font-weight:700; color:#e2e8f0;">${escapeHtml(dev.userName || 'Reader')} (${escapeHtml(dev.deviceType || 'Phone')})</span>
-            <span style="font-size:0.7rem; color:var(--text-muted);">${escapeHtml(dev.appVersion || 'v3.6.0')}</span>
+            <span style="font-size:0.7rem; color:var(--text-muted);">${escapeHtml(dev.appVersion || 'v3.7.0')}</span>
           </div>
           <div style="display:flex; align-items:center; gap:10px;">
             <span style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">${timeStr}</span>
@@ -3214,7 +2786,7 @@ function simulateTestCrashTelemetry() {
       userName: 'Test Reader (Simulation)',
       deviceType: 'Android Phone (Redmi Note 13)',
       userAgent: 'Mozilla/5.0 (Linux; Android 14; 2312DRA50G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36',
-      appVersion: 'v3.6.0',
+      appVersion: 'v3.7.0',
       screen: '412x915 px',
       online: true
     }
@@ -3356,3 +2928,204 @@ window.addEventListener('DOMContentLoaded', initPanelTheme);
 
 
 
+
+
+// ===== BOX 1 vs BOX 2 SELECTOR =====
+let selectedMysteryBox = 1;
+window.selectMysteryBox = function(boxNum) {
+  selectedMysteryBox = boxNum;
+  document.querySelectorAll('.box-select-card').forEach(c => c.classList.remove('box-select-active'));
+  document.getElementById('boxCard' + boxNum).classList.add('box-select-active');
+  document.querySelector(`input[name="mysteryBoxType"][value="box${boxNum}"]`).checked = true;
+};
+
+// ===== WARRIOR SWORD BOX ANIMATION =====
+let warriorAnimState = { running: false, timeouts: [], rafId: null };
+
+window.skipWarriorAnimation = function() {
+  warriorAnimState.timeouts.forEach(t => clearTimeout(t));
+  if (warriorAnimState.rafId) cancelAnimationFrame(warriorAnimState.rafId);
+  cleanupWarriorAnim();
+};
+
+function cleanupWarriorAnim() {
+  warriorAnimState.running = false;
+  const overlay = document.getElementById('warriorBoxOverlay');
+  // Pause and reset video
+  const warriorVid = document.getElementById('wbWarriorVideo');
+  if (warriorVid) {
+    warriorVid.pause();
+    warriorVid.currentTime = 0;
+  }
+  if (overlay) {
+    overlay.classList.remove('is-active');
+    const warriorEl = document.getElementById('wbWarrior');
+    if (warriorEl) warriorEl.classList.remove('no-video');
+    // reset all child states
+    ['wbBoxFalling','wbWarrior','wbSword','wbScreenCrack','wbSkyBeam','wbBlast','wbCar','wbCarTrunk','wbCarPrize','wbPhaseLabel','wbSkipBtn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.remove('is-falling','is-enter','is-walk-2','is-raise','is-windup','is-swing-start','is-swing-mid','is-swing-end','is-sword-up','is-shown','is-fire','is-blast','is-drive','is-open','is-show');
+      }
+    });
+  }
+}
+
+window.testGiftDropInPanel = function() {
+  console.log('[Mystery] testGiftDropInPanel called, box=' + selectedMysteryBox + ', running=' + warriorAnimState.running);
+  if (warriorAnimState.running) return;
+  // Box 1 = existing behavior, Box 2 = warrior
+  if (selectedMysteryBox === 1) {
+    runBox1Animation();
+  } else {
+    // Pre-load images before animation
+    preloadWarriorImages().then(() => {
+      console.log('[Mystery] warrior images preloaded, starting animation');
+      runWarriorSwordAnimation();
+    }).catch(err => {
+      console.error('[Mystery] image preload failed:', err);
+      runWarriorSwordAnimation(); // Try anyway
+    });
+  }
+};
+
+// Pre-load warrior images so they show instantly during animation
+function preloadWarriorImages() {
+  return new Promise((resolve) => {
+    const imgs = ['assets/warrior/hero.png', 'assets/warrior/swing.png', 'assets/warrior/sword_up.png'];
+    let loaded = 0;
+    imgs.forEach(src => {
+      const img = new Image();
+      img.onload = img.onerror = () => {
+        loaded++;
+        console.log(`[Mystery] preloaded ${src}: ${loaded}/${imgs.length}`);
+        if (loaded >= imgs.length) resolve();
+      };
+      img.src = src;
+    });
+    // Failsafe: resolve after 2s even if images not loaded
+    setTimeout(resolve, 2000);
+  });
+}
+window.preloadWarriorImages = preloadWarriorImages;
+
+function runBox1Animation() {
+  showToast('🎁 Box 1 (Classic) drop test — see phone for animation');
+  // Reuse existing overlay if present
+  const overlay = document.getElementById('mysteryGiftOverlay');
+  if (overlay && typeof overlay.classList !== 'undefined') {
+    overlay.classList.add('is-active');
+    setTimeout(() => overlay.classList.remove('is-active'), 4500);
+  }
+}
+
+function runWarriorSwordAnimation() {
+  warriorAnimState.running = true;
+  const overlay = document.getElementById('warriorBoxOverlay');
+  if (!overlay) { console.error('[Mystery] warriorBoxOverlay not found'); return; }
+  overlay.classList.add('is-active');
+  console.log('[Mystery] overlay activated');
+
+  const box = document.getElementById('wbBoxFalling');
+  const warrior = document.getElementById('wbWarrior');
+  const sword = document.getElementById('wbSword');
+  const warriorVid = document.getElementById('wbWarriorVideo');
+
+  // Try to play real video; if fails, use frame fallback
+  if (warriorVid) {
+    warriorVid.currentTime = 0;
+    warriorVid.play().then(() => {
+      console.log('[Mystery] warrior video playing');
+    }).catch(err => {
+      console.warn('[Mystery] video play failed, using frame fallback:', err.message);
+      warrior.classList.add('no-video');
+    });
+  } else {
+    warrior.classList.add('no-video');
+  }
+  const crack = document.getElementById('wbScreenCrack');
+  const beam = document.getElementById('wbSkyBeam');
+  const blast = document.getElementById('wbBlast');
+  const car = document.getElementById('wbCar');
+  const trunk = document.getElementById('wbCarTrunk');
+  const prize = document.getElementById('wbCarPrize');
+  const title = document.getElementById('giftTitleInput').value || 'CONGRATULATIONS!';
+  const reward = document.getElementById('giftRewardNameInput').value || '🎁 VIP REWARD';
+  if (prize) prize.textContent = reward.toUpperCase();
+
+  // Phase 1: Box falls (0-2s)
+  warriorAnimState.timeouts.push(setTimeout(() => box.classList.add('is-falling'), 100));
+
+  // Phase 2: Warrior enters (2.5s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.add('is-enter');
+  }, 2500));
+
+  // Phase 2b: Walking animation (cycle through walk frames)
+  warriorAnimState.timeouts.push(setTimeout(() => warrior.classList.add('is-walk-2'), 2900));
+  warriorAnimState.timeouts.push(setTimeout(() => warrior.classList.remove('is-walk-2'), 3300));
+  warriorAnimState.timeouts.push(setTimeout(() => warrior.classList.add('is-walk-2'), 3700));
+
+  // Phase 3a: Raise sword (4.1s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-walk-2');
+    warrior.classList.add('is-raise');
+  }, 4100));
+
+  // Phase 3b: Windup (4.5s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-raise');
+    warrior.classList.add('is-windup');
+  }, 4500));
+
+  // Phase 3c: Swing start (4.9s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-windup');
+    warrior.classList.add('is-swing-start');
+  }, 4900));
+
+  // Phase 3d: Swing mid (5.2s) — peak with crack
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-swing-start');
+    warrior.classList.add('is-swing-mid');
+    crack.classList.add('is-shown');
+  }, 5200));
+
+  // Phase 3e: Swing end (5.5s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-swing-mid');
+    warrior.classList.add('is-swing-end');
+  }, 5500));
+
+  // Phase 4: Sky beam + sword up (5.9s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-swing-end');
+    warrior.classList.add('is-sword-up');
+    crack.classList.remove('is-shown');
+    beam.classList.add('is-fire');
+  }, 5900));
+
+  // Phase 5: Blast (6.5s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    blast.classList.add('is-blast');
+  }, 6500));
+
+  // Phase 6: Car arrives (7.1s)
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    warrior.classList.remove('is-sword-up');
+    beam.classList.remove('is-fire');
+    blast.classList.remove('is-blast');
+    car.classList.add('is-drive');
+  }, 7100));
+
+  // Phase 7: Car trunk opens (8.4s) + prize reveal
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    trunk.classList.add('is-open');
+    setTimeout(() => prize.classList.add('is-show'), 500);
+  }, 7000));
+
+  // Cleanup after 13s
+  warriorAnimState.timeouts.push(setTimeout(() => {
+    cleanupWarriorAnim();
+  }, 13000));
+}
