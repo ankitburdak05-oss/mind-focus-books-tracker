@@ -386,10 +386,14 @@
           <div class="step-desc">URL: <code>https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/admin-reset-token.txt</code></div>
         </div>
       </div>
-      <input type="text" id="adminLockResetToken" class="admin-lock-input" placeholder="Paste reset token from GitHub" autocomplete="off">
+      <input type="text" id="adminLockResetToken" class="admin-lock-input" placeholder="Paste LONG token from GitHub (PIN nahi hai!)" autocomplete="off" style="border:2px solid rgba(251,191,36,0.5);">
       <button type="button" id="adminLockAutoFetchBtn" class="admin-lock-secondary-btn" onclick="adminLockAutoFetchToken()" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; border-color:transparent; margin-top:0;">
         📋 Auto-Fetch Token from GitHub (1-Click)
       </button>
+
+      <div style="font-size:0.78rem; color:#fbbf24; background:rgba(251,191,36,0.08); padding:10px 12px; border-radius:10px; margin-top:10px; line-height:1.5;">
+        💡 <strong>Yeh PIN nahi hai!</strong> Token ek long string hai (jaise <code style="background:rgba(0,0,0,0.3); padding:1px 5px; border-radius:4px;">mfadmin-reset-2026-ANKIT-PROD-X9Q7L3KP2H8</code>). Auto-Fetch button 1-click me sahi token daal dega.
+      </div>
 
       <div class="admin-lock-setup-step">
         <div class="step-num">2</div>
