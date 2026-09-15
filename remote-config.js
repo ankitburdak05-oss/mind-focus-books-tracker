@@ -2,9 +2,9 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-09-14T03:55:00.000Z",
   "activeRelease": {
-    "version": "v3.7.0",
-    "name": "Mind Focus Books v3.7.0 — Clean Lightweight Streamlined Edition",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.0",
+    "version": "v3.7.1",
+    "name": "Mind Focus Books v3.7.1 — Clean Lightweight Streamlined Edition",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.1",
     "features": [
       "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
       "📖 3D Real Book Reader with realistic page curl animations",
@@ -16,9 +16,9 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.7.0",
-    "name": "Mind Focus Books v3.7.0 — Clean Lightweight Streamlined Edition",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.0",
+    "version": "v3.7.1",
+    "name": "Mind Focus Books v3.7.1 — Clean Lightweight Streamlined Edition",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.1",
     "features": [
       "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
       "📖 3D Real Book Reader with realistic page curl animations",

@@ -1325,12 +1325,12 @@ async function fetchLiveStatusFromGitHub() {
 // -------------------------------------------------------------
 // -------------------------------------------------------------
 async function fetchRemoteConfigPipeline() {
-  // 1. INSTANT LOCAL DATA (Zero-delay render for v3.7.0)
+  // 1. INSTANT LOCAL DATA (Zero-delay render for v3.7.1)
   if (typeof window !== 'undefined' && window.__DEFAULT_REMOTE_CONFIG__) {
     remoteConfigData = JSON.parse(JSON.stringify(window.__DEFAULT_REMOTE_CONFIG__));
     updatePipelineCardUI(remoteConfigData);
     populateConfigFormUI(remoteConfigData);
-    appendLog('📁 Pipeline config v3.7.0 loaded instantly.', 'success');
+    appendLog('📁 Pipeline config v3.7.1 loaded instantly.', 'success');
   }
 
   // 2. Try fetching from GitHub if online
@@ -2567,7 +2567,7 @@ function handleIncomingPhoneCrashTelemetry(payload) {
       userName: 'Phone User',
       deviceType: 'Android Phone',
       userAgent: 'Unknown UA',
-      appVersion: 'v3.7.0',
+      appVersion: 'v3.7.1',
       screen: 'Unknown Screen',
       online: true
     }
@@ -2666,7 +2666,7 @@ function renderPhoneCrashRadarStream() {
               ${isTest ? '🧪 TEST EVENT' : '🔴 RUNTIME CRASH'}
             </span>
             <span style="font-size:0.78rem; font-weight:700; color:#e2e8f0;">${escapeHtml(dev.userName || 'Reader')} (${escapeHtml(dev.deviceType || 'Phone')})</span>
-            <span style="font-size:0.7rem; color:var(--text-muted);">${escapeHtml(dev.appVersion || 'v3.7.0')}</span>
+            <span style="font-size:0.7rem; color:var(--text-muted);">${escapeHtml(dev.appVersion || 'v3.7.1')}</span>
           </div>
           <div style="display:flex; align-items:center; gap:10px;">
             <span style="font-size:0.75rem; color:var(--text-muted); font-family:monospace;">${timeStr}</span>
@@ -2786,7 +2786,7 @@ function simulateTestCrashTelemetry() {
       userName: 'Test Reader (Simulation)',
       deviceType: 'Android Phone (Redmi Note 13)',
       userAgent: 'Mozilla/5.0 (Linux; Android 14; 2312DRA50G) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36',
-      appVersion: 'v3.7.0',
+      appVersion: 'v3.7.1',
       screen: '412x915 px',
       online: true
     }
