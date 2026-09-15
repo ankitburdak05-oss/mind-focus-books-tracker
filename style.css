@@ -3645,7 +3645,7 @@ body {
 }
 
 /* ==========================================================================
-   MINDFOCUS BOOKS v2.0.0 - SPATIAL LUXURY SANCTUARY EDITION
+   MINDFOCUS BOOKS v3.8.0 - SPATIAL LUXURY EDITION
    Aesthetic Architecture: Apple VisionOS Glass, OLED Obsidian, Physical 3D Foil
    ========================================================================== */
 
@@ -3860,7 +3860,7 @@ body {
   transform: scale(1.1);
 }
 
-/* 4. HYPNOTIC SOUNDWAVE VISUALIZER & BREATHING SANCTUARY HALO */
+/* 4. HYPNOTIC SOUNDWAVE VISUALIZER & BREATHING HALO */
 .ambient-soundwave-ring {
   position: absolute;
   inset: -10px;
@@ -4068,7 +4068,6 @@ body {
 
 /* 6. EDITORIAL LUXURY SERIF TYPOGRAPHY & GOLD FOIL ACCENTS */
 .hero-title,
-.sanctuary-title,
 .modal-title {
   font-family: 'Playfair Display', Georgia, -apple-system, serif;
 }
@@ -4087,306 +4086,6 @@ body {
   border-radius: 12px;
   padding: 3px 9px;
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
-}
-
-/* 9. DEEP SANCTUARY FOCUS MODE OVERLAY */
-.sanctuary-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at 50% 30%, #0c101c 0%, #04060a 75%);
-  z-index: 99999;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem;
-  overflow-y: auto;
-}
-
-.sanctuary-overlay.active {
-  display: flex;
-  animation: sanctuaryEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes sanctuaryEnter {
-  from { opacity: 0; transform: scale(1.03); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.sanctuary-header {
-  width: 100%;
-  max-width: 900px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sanctuary-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  color: #fbbf24;
-}
-
-.sanctuary-sparkle {
-  font-size: 1.1rem;
-  animation: sparkleTwinkle 2s infinite alternate ease-in-out;
-}
-
-@keyframes sparkleTwinkle {
-  0% { transform: scale(0.85); opacity: 0.7; }
-  100% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 8px #fbbf24); }
-}
-
-.sanctuary-close-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: var(--text-primary);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.sanctuary-close-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: #ef4444;
-  color: #ef4444;
-}
-
-.sanctuary-centerpiece {
-  width: 100%;
-  max-width: 680px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: auto 0;
-  position: relative;
-}
-
-.sanctuary-aura-halo {
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(99, 102, 241, 0.15) 50%, transparent 75%);
-  filter: blur(50px);
-  pointer-events: none;
-  z-index: 0;
-  animation: candleFlicker 6s infinite alternate ease-in-out;
-}
-
-@keyframes candleFlicker {
-  0% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.95); }
-  50% { opacity: 0.85; transform: translate(-48%, -52%) scale(1.06); }
-  100% { opacity: 0.6; transform: translate(-52%, -48%) scale(0.97); }
-}
-
-.sanctuary-book-stage {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.2rem;
-  margin-bottom: 1.8rem;
-}
-
-.sanctuary-cover-wrap {
-  width: 150px;
-  height: 220px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 0 0 35px rgba(245, 158, 11, 0.25);
-  border: 2px solid rgba(255, 255, 255, 0.14);
-  transform: perspective(800px) rotateY(-8deg);
-  transition: transform 0.4s ease;
-}
-
-.sanctuary-cover-wrap:hover {
-  transform: perspective(800px) rotateY(0deg) scale(1.03);
-}
-
-.sanctuary-cover-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.sanctuary-badge {
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.14);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  border-radius: 14px;
-  padding: 3px 10px;
-  display: inline-block;
-  margin-bottom: 0.4rem;
-}
-
-.sanctuary-title {
-  font-size: 1.75rem;
-  font-weight: 900;
-  color: #fff;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.3rem;
-  max-width: 540px;
-}
-
-.sanctuary-author {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  margin-bottom: 1rem;
-}
-
-.sanctuary-progress-module {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 1rem 1.25rem;
-  width: 100%;
-  max-width: 480px;
-  backdrop-filter: blur(16px);
-}
-
-.sanctuary-progress-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.6rem;
-}
-
-.sanctuary-pace-badge {
-  font-size: 0.75rem;
-  color: #fbbf24;
-  background: rgba(245, 158, 11, 0.15);
-  padding: 2px 8px;
-  border-radius: 8px;
-}
-
-.sanctuary-bar {
-  width: 100%;
-  height: 7px;
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 0.85rem;
-}
-
-.sanctuary-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #f59e0b, #10b981);
-  border-radius: 4px;
-  transition: width 0.4s ease;
-}
-
-.sanctuary-quick-steps {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.sanctuary-quick-steps button {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-  border-radius: 10px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
-
-.sanctuary-quick-steps button:hover {
-  background: rgba(99, 102, 241, 0.35);
-  border-color: #818cf8;
-  transform: translateY(-1px);
-}
-
-.sanctuary-quick-steps .sanctuary-finish-btn {
-  background: rgba(16, 185, 129, 0.2);
-  border-color: #10b981;
-  color: #34d399;
-}
-
-.sanctuary-quick-steps .sanctuary-finish-btn:hover {
-  background: #10b981;
-  color: #fff;
-}
-
-.sanctuary-timer-pod {
-  background: rgba(15, 20, 32, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  padding: 1.2rem 1.6rem;
-  width: 100%;
-  max-width: 480px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
-}
-
-.sanctuary-timer-display {
-  font-size: 3rem;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  color: #fff;
-  font-variant-numeric: tabular-nums;
-  margin-bottom: 0.8rem;
-  text-shadow: 0 0 25px rgba(239, 68, 68, 0.35);
-}
-
-.sanctuary-timer-controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 0.8rem;
-}
-
-.sanctuary-timer-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #fff;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.sanctuary-timer-btn.primary {
-  background: #ef4444;
-  border-color: #ef4444;
-}
-
-.sanctuary-timer-btn.ambient-btn {
-  background: rgba(16, 185, 129, 0.18);
-  border-color: rgba(16, 185, 129, 0.35);
-  color: #34d399;
-}
-
-.sanctuary-quote-glow {
-  font-size: 0.85rem;
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.7);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 0.6rem;
 }
 
 /* 10. READING DNA GALAXY CONSTELLATION */
@@ -5229,7 +4928,7 @@ body {
 }
 
 /* ==========================================================================
-   4D LIVING SPATIAL SANCTUARY APP STYLES (v3.0.0)
+   4D LIVING SPATIAL APP STYLES (v3.8.0)
    ========================================================================== */
 
 /* 1. Pull-to-Refresh & Golden Sweep */

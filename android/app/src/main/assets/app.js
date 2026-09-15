@@ -573,9 +573,6 @@ function renderNowReadingHero() {
     '<button class="hero-btn-primary" onclick="openBookDetailSheet(' + origIdx + ')">' +
     '📖 Update Page & Notes' +
     '</button>' +
-    '<button class="hero-btn-ambient" onclick="openSanctuaryMode(' + origIdx + ')" style="background:linear-gradient(135deg, rgba(245,158,11,0.22), rgba(239,68,68,0.22)); border-color:rgba(245,158,11,0.4); color:#fbbf24; font-weight:700;" title="Enter Distraction-Free Reading Sanctuary">' +
-    '🌌 Sanctuary' +
-    '</button>' +
     '<button class="hero-btn-ambient" onclick="openAmbienceModal()">' +
     '🎧 ' + (typeof isAmbiencePlaying !== 'undefined' && isAmbiencePlaying ? 'Ambience Active' : 'Focus Ambience') +
     '</button>' +
@@ -3038,7 +3035,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.7.1';
+const CURRENT_APP_VERSION = 'v3.8.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3801,14 +3798,6 @@ function updateAmbienceUI() {
     ring.classList.toggle('active', isAmbiencePlaying);
   });
 
-  // Sync Sanctuary Focus Mode Ambience Button
-  const sanctuaryAmbBtn = document.getElementById('sanctuaryAmbienceBtn');
-  if (sanctuaryAmbBtn) {
-    sanctuaryAmbBtn.innerText = isAmbiencePlaying ? ('🎧 ' + name + ': Playing') : '🎧 Ambience: Off';
-    sanctuaryAmbBtn.style.background = isAmbiencePlaying ? '#10b981' : 'rgba(255, 255, 255, 0.08)';
-    sanctuaryAmbBtn.style.color = isAmbiencePlaying ? '#fff' : 'var(--text-primary)';
-  }
-
   // Update EQ visualizer if modal is active
   if (typeof startSpatialEqVisualizer === 'function') {
     startSpatialEqVisualizer();
@@ -3833,114 +3822,6 @@ function closeAmbienceModal() {
   restoreDockActiveTab();
 }
 
-/* ==========================================================
-   FEATURE: POMODORO FOCUS READING TIMER
-   ========================================================== */
-let pomodoroDuration = 25 * 60; // 25 mins default
-let pomodoroRemaining = 25 * 60;
-let pomodoroTimerInterval = null;
-let isPomodoroRunning = false;
-
-function openPomodoroModal() {
-  updatePomodoroDisplay();
-  const overlay = document.getElementById('pomodoroTimerModalOverlay');
-  if (overlay) overlay.classList.add('active');
-}
-
-function closePomodoroModal() {
-  const overlay = document.getElementById('pomodoroTimerModalOverlay');
-  if (overlay) overlay.classList.remove('active');
-  restoreDockActiveTab();
-}
-
-function updatePomodoroDisplay() {
-  const minutes = Math.floor(pomodoroRemaining / 60);
-  const seconds = pomodoroRemaining % 60;
-  const timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-  
-  const displayEl = document.getElementById('pomodoroTimeDisplay');
-  if (displayEl) displayEl.innerText = timeStr;
-
-  const headerText = document.getElementById('headerPomodoroText');
-  if (headerText) {
-    headerText.innerText = isPomodoroRunning ? timeStr : 'Focus Timer';
-  }
-
-  const toggleBtn = document.getElementById('pomodoroToggleBtn');
-  if (toggleBtn) {
-    if (isPomodoroRunning) {
-      toggleBtn.innerText = '⏸️ Pause';
-      toggleBtn.style.background = '#f59e0b';
-      toggleBtn.style.borderColor = '#f59e0b';
-    } else {
-      toggleBtn.innerText = '▶ Start Focus';
-      toggleBtn.style.background = '#ef4444';
-      toggleBtn.style.borderColor = '#ef4444';
-    }
-  }
-}
-
-function togglePomodoroTimer() {
-  if (isPomodoroRunning) {
-    clearInterval(pomodoroTimerInterval);
-    isPomodoroRunning = false;
-    updatePomodoroDisplay();
-    showToast('Focus timer paused', 'info');
-  } else {
-    isPomodoroRunning = true;
-    updatePomodoroDisplay();
-    showToast('Focus session started! Deep reading time 📖', 'success');
-    if (typeof recordReadingActivity === 'function') recordReadingActivity();
-
-    pomodoroTimerInterval = setInterval(() => {
-      if (pomodoroRemaining > 0) {
-        pomodoroRemaining--;
-        updatePomodoroDisplay();
-      } else {
-        clearInterval(pomodoroTimerInterval);
-        isPomodoroRunning = false;
-        updatePomodoroDisplay();
-        playPomodoroBell();
-        showToast('🎉 25 Min Focus Session Completed! Great reading!', 'success');
-      }
-    }, 1000);
-  }
-}
-
-function resetPomodoroTimer() {
-  clearInterval(pomodoroTimerInterval);
-  isPomodoroRunning = false;
-  pomodoroRemaining = pomodoroDuration;
-  updatePomodoroDisplay();
-  showToast('Timer reset to ' + Math.round(pomodoroDuration / 60) + ' mins', 'info');
-}
-
-function setPomodoroDuration(mins) {
-  clearInterval(pomodoroTimerInterval);
-  isPomodoroRunning = false;
-  pomodoroDuration = mins * 60;
-  pomodoroRemaining = pomodoroDuration;
-  updatePomodoroDisplay();
-  showToast('Set focus timer to ' + mins + ' minutes', 'success');
-}
-
-function playPomodoroBell() {
-  const ctx = getOrCreateAudioContext();
-  if (!ctx) return;
-  try {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5 pleasant bell
-    gain.gain.setValueAtTime(0.35, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.5);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 2.5);
-  } catch (e) {}
-}
-
 // Global window bindings for 100% reliable modal opening and navigation
 window.switchBottomTab = switchBottomTab;
 window.restoreDockActiveTab = restoreDockActiveTab;
@@ -3952,8 +3833,6 @@ window.openSettingsModal = openSettingsModal;
 window.closeSettingsModal = closeSettingsModal;
 window.openPickBookModal = openPickBookModal;
 window.closePickBookModal = closePickBookModal;
-window.openPomodoroModal = openPomodoroModal;
-window.closePomodoroModal = closePomodoroModal;
 window.openBookDetailSheet = openBookDetailSheet;
 window.closeBookDetailSheet = closeBookDetailSheet;
 window.handleSheetPageInput = handleSheetPageInput;
@@ -3963,7 +3842,7 @@ window.insertNoteTemplate = insertNoteTemplate;
 window.filterByStatus = filterByStatus;
 
 /* ==========================================================================
-   MINDFOCUS BOOKS v2.0.0 — SPATIAL LUXURY SANCTUARY EDITION
+   MINDFOCUS BOOKS v3.8.0 — SPATIAL LUXURY EDITION
    10 Futuristic UI/UX Systems Implementation
    ========================================================================== */
 
@@ -4014,7 +3893,7 @@ function init3DCardPhysics() {
   }
   document.addEventListener('pointermove', (e) => {
     if (!e.target || typeof e.target.closest !== 'function') return;
-    const card = e.target.closest('.book-card, .now-reading-hero, .sanctuary-cover-wrap');
+    const card = e.target.closest('.book-card, .now-reading-hero');
     if (!card) return;
     const r = card.getBoundingClientRect();
     const x = e.clientX - r.left;
@@ -4104,7 +3983,6 @@ function initSpotlightIsland() {
       openSpotlightModal();
     } else if (e.key === 'Escape') {
       closeSpotlightModal();
-      exitSanctuaryMode();
       closeReadingDnaModal();
     }
   });
@@ -4157,10 +4035,8 @@ function renderSpotlightResults(q) {
 
   // Quick Action commands
   const actions = [
-    { type: 'action', title: '🌌 Launch Reading Sanctuary Mode', sub: 'Distraction-zero luxury focus environment', icon: '🌌', fn: () => { closeSpotlightModal(); openSanctuaryMode(); } },
     { type: 'action', title: '🎧 Play Ambience (Rain Soundscape)', sub: 'Binaural soothing rain sound', icon: '🌧️', fn: () => { closeSpotlightModal(); selectAmbienceTrack('rain'); startAmbienceAudio('rain'); showToast('Rain soundscape playing 🌧️', 'success'); } },
     { type: 'action', title: '🎧 Play Ambience (Deep Forest)', sub: 'Natural birds & wind soundscape', icon: '🌲', fn: () => { closeSpotlightModal(); selectAmbienceTrack('forest'); startAmbienceAudio('forest'); showToast('Forest soundscape playing 🌲', 'success'); } },
-    { type: 'action', title: '⏱️ Start 25-Min Pomodoro Sprint', sub: 'Focus reading interval with peaceful chime', icon: '⏱️', fn: () => { closeSpotlightModal(); openPomodoroModal(); togglePomodoroTimer(); } },
     { type: 'action', title: '🌌 View Reading DNA Galaxy Constellation', sub: 'Inspect your interactive finished books cosmic map', icon: '✨', fn: () => { closeSpotlightModal(); openReadingDnaModal(); } },
     { type: 'action', title: '🎲 Spin Book Roulette', sub: 'Pick a random unread book from library', icon: '🎲', fn: () => { closeSpotlightModal(); openPickBookModal(); } },
     { type: 'action', title: '🔥 Inspect Daily Reading Streak', sub: 'Track milestone trophies and reading history', icon: '🔥', fn: () => { closeSpotlightModal(); openStreakModal(); } },
@@ -4252,158 +4128,6 @@ function calculatePaceEstimate(book) {
   if (totalMins < 60) return '~' + totalMins + 'm left';
   const hours = (totalMins / 60).toFixed(1);
   return '~' + hours + ' hrs left';
-}
-
-// --- 9. DEEP SANCTUARY FOCUS MODE ---
-let sanctuaryActiveBookIdx = -1;
-let sanctuaryTimerInterval = null;
-let sanctuaryTimerRemaining = 25 * 60;
-let isSanctuaryTimerRunning = false;
-
-function openSanctuaryMode(bookIdx) {
-  if (typeof bookIdx === 'undefined' || bookIdx < 0) {
-    bookIdx = state.books.findIndex(b => b.status === 'READING');
-    if (bookIdx < 0) bookIdx = 0;
-  }
-  sanctuaryActiveBookIdx = bookIdx;
-  const b = state.books[bookIdx];
-  if (!b) return;
-
-  const overlay = document.getElementById('sanctuaryModeOverlay');
-  if (!overlay) return;
-
-  const coverWrap = document.getElementById('sanctuaryCoverWrap');
-  const titleEl = document.getElementById('sanctuaryBookTitle');
-  const authorEl = document.getElementById('sanctuaryBookAuthor');
-  const catBadge = document.getElementById('sanctuaryCategoryBadge');
-  const pagesLabel = document.getElementById('sanctuaryPagesLabel');
-  const paceLabel = document.getElementById('sanctuaryPaceLabel');
-  const barFill = document.getElementById('sanctuaryBarFill');
-  const quoteGlow = document.getElementById('sanctuaryQuoteGlow');
-
-  const coverUrl = getBookCover(b);
-  if (coverWrap) {
-    coverWrap.innerHTML = coverUrl 
-      ? '<img src="' + coverUrl + '" alt="cover">'
-      : '<div style="background:linear-gradient(135deg,#1e3a8a,#3b82f6); width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem;">📖</div>';
-  }
-
-  const pages = getBookPages(b);
-  if (titleEl) titleEl.innerText = b.title;
-  if (authorEl) authorEl.innerText = 'by ' + b.author;
-  if (catBadge) catBadge.innerText = (b.category || 'Focus').toUpperCase();
-  if (pagesLabel) pagesLabel.innerText = 'Page ' + pages.current + ' of ' + pages.total + ' (' + pages.pct + '%)';
-  if (paceLabel) paceLabel.innerText = calculatePaceEstimate(b);
-  if (barFill) barFill.style.width = pages.pct + '%';
-
-  if (quoteGlow) {
-    quoteGlow.innerText = b.takeaway ? ('"' + b.takeaway + '"') : '"Quiet the mind and the soul will speak."';
-  }
-
-  updateSanctuaryTimerUI();
-  updateDynamicAurora(b);
-  overlay.classList.add('active');
-  showToast('Entered Reading Sanctuary 🌌 Distraction-free focus', 'info');
-}
-
-function exitSanctuaryMode() {
-  const overlay = document.getElementById('sanctuaryModeOverlay');
-  if (overlay) overlay.classList.remove('active');
-  if (isSanctuaryTimerRunning) {
-    clearInterval(sanctuaryTimerInterval);
-    isSanctuaryTimerRunning = false;
-  }
-  renderApp();
-}
-
-function updateSanctuaryTimerUI() {
-  const digits = document.getElementById('sanctuaryTimerDigits');
-  const toggleBtn = document.getElementById('sanctuaryTimerToggle');
-  const mins = Math.floor(sanctuaryTimerRemaining / 60);
-  const secs = sanctuaryTimerRemaining % 60;
-  const timeStr = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-
-  if (digits) digits.innerText = timeStr;
-  if (toggleBtn) {
-    toggleBtn.innerText = isSanctuaryTimerRunning ? '⏸ Pause Sprint' : '▶ Start 25-Min Sprint';
-    toggleBtn.style.background = isSanctuaryTimerRunning ? '#f59e0b' : '#ef4444';
-  }
-}
-
-function toggleSanctuaryTimer() {
-  if (isSanctuaryTimerRunning) {
-    clearInterval(sanctuaryTimerInterval);
-    isSanctuaryTimerRunning = false;
-    updateSanctuaryTimerUI();
-    showToast('Sprint paused', 'info');
-  } else {
-    isSanctuaryTimerRunning = true;
-    updateSanctuaryTimerUI();
-    showToast('Reading sprint active! Deep focus 🕯️', 'success');
-    if (typeof recordReadingActivity === 'function') recordReadingActivity();
-
-    sanctuaryTimerInterval = setInterval(() => {
-      if (sanctuaryTimerRemaining > 0) {
-        sanctuaryTimerRemaining--;
-        updateSanctuaryTimerUI();
-      } else {
-        clearInterval(sanctuaryTimerInterval);
-        isSanctuaryTimerRunning = false;
-        playPomodoroBell();
-        showToast('Sprint complete! Amazing reading session 🌟', 'success');
-        sanctuaryTimerRemaining = 25 * 60;
-        updateSanctuaryTimerUI();
-      }
-    }, 1000);
-  }
-}
-
-function resetSanctuaryTimer() {
-  clearInterval(sanctuaryTimerInterval);
-  isSanctuaryTimerRunning = false;
-  sanctuaryTimerRemaining = 25 * 60;
-  updateSanctuaryTimerUI();
-  showToast('Timer reset to 25 minutes', 'info');
-}
-
-function toggleAmbienceFromSanctuary() {
-  toggleAmbiencePlayback();
-  updateAmbienceUI();
-}
-
-function stepSanctuaryPage(inc) {
-  if (sanctuaryActiveBookIdx < 0) return;
-  const b = state.books[sanctuaryActiveBookIdx];
-  if (!b) return;
-  const pages = getBookPages(b);
-  const newCurr = Math.min(pages.total, pages.current + inc);
-  b.current_page = newCurr;
-  if (newCurr >= pages.total && b.status !== 'DONE') {
-    b.status = 'DONE';
-    if (!b.end_date) b.end_date = new Date().toISOString().split('T')[0];
-    showToast('Book Finished! Masterpiece completed 🏆', 'success');
-  } else if (b.status === 'PENDING') {
-    b.status = 'READING';
-    if (!b.start_date) b.start_date = new Date().toISOString().split('T')[0];
-  }
-  markChange();
-  saveData();
-  openSanctuaryMode(sanctuaryActiveBookIdx);
-  if (typeof recordReadingActivity === 'function') recordReadingActivity();
-}
-
-function finishSanctuaryBook() {
-  if (sanctuaryActiveBookIdx < 0) return;
-  const b = state.books[sanctuaryActiveBookIdx];
-  if (!b) return;
-  const pages = getBookPages(b);
-  b.current_page = pages.total;
-  b.status = 'DONE';
-  if (!b.end_date) b.end_date = new Date().toISOString().split('T')[0];
-  markChange();
-  saveData();
-  openSanctuaryMode(sanctuaryActiveBookIdx);
-  showToast('Congratulations! "' + b.title + '" marked as FINISHED! 🏆', 'success');
 }
 
 // --- 10. READING DNA GALAXY CONSTELLATION ---
@@ -4607,13 +4331,6 @@ window.filterSpotlightCategory = filterSpotlightCategory;
 window.handleSpotlightBackdrop = handleSpotlightBackdrop;
 window.triggerSpotlightItem = triggerSpotlightItem;
 window.handleDynamicIslandClick = handleDynamicIslandClick;
-window.openSanctuaryMode = openSanctuaryMode;
-window.exitSanctuaryMode = exitSanctuaryMode;
-window.stepSanctuaryPage = stepSanctuaryPage;
-window.finishSanctuaryBook = finishSanctuaryBook;
-window.toggleSanctuaryTimer = toggleSanctuaryTimer;
-window.resetSanctuaryTimer = resetSanctuaryTimer;
-window.toggleAmbienceFromSanctuary = toggleAmbienceFromSanctuary;
 window.openReadingDnaModal = openReadingDnaModal;
 window.closeReadingDnaModal = closeReadingDnaModal;
 window.handleDnaBackdrop = handleDnaBackdrop;
@@ -5268,17 +4985,6 @@ function applyFeaturesConfig(feats) {
     updateBtn.style.display = 'none';
   }
 
-  // 7. ⏱️ Zen Sanctuary Timer
-  const timerBtn = document.getElementById('headerPomodoroBtn');
-  if (timerBtn) {
-    timerBtn.style.display = (feats.sanctuaryTimerEnabled === false) ? 'none' : 'inline-flex';
-  }
-  if (feats.sanctuaryTimerEnabled === false) {
-    if (typeof pauseZenTimer === 'function') pauseZenTimer();
-    const pomModal = document.getElementById('pomodoroTimerModalOverlay');
-    if (pomModal) pomModal.classList.remove('active');
-  }
-
   // 8. 🎴 3D Smart Flashcards
   const fcBtn = document.getElementById('headerFlashcardsBtn');
   const fcKpi = document.getElementById('kpiFlashcardsCount');
@@ -5503,7 +5209,7 @@ window.bindCyber3dNoticeTilt = bindCyber3dNoticeTilt;
 window.createNoticeQuantumBurst = createNoticeQuantumBurst;
 
 // ==========================================================================
-// 4D LIVING SPATIAL SANCTUARY APP ENGINES (v3.0.0)
+// 4D LIVING SPATIAL APP ENGINES (v3.8.0)
 // ==========================================================================
 
 /* 1. Hardware Haptic Feedback Engine */
@@ -5647,7 +5353,7 @@ function initPullToRefresh() {
       setTimeout(() => {
         renderApp();
         if (typeof checkRemoteBroadcastNotice === 'function') checkRemoteBroadcastNotice();
-        showToast('✨ Sanctuary Refreshed with Living Glow', 'success');
+        showToast('✨ Library Refreshed with Living Glow', 'success');
         indicator.style.height = '0px';
         indicator.classList.remove('refreshing', 'pulling');
       }, 700);
@@ -5910,7 +5616,7 @@ function draw3RingActivity() {
   const pagesDone = Math.min(25, totalPagesRead % 25 === 0 && totalPagesRead > 0 ? 25 : (totalPagesRead % 25));
   const pagesPct = Math.min(1.0, pagesDone / pagesGoal);
 
-  // Focus time (Pomodoro session history or streak)
+  // Focus time (Reading activity or streak)
   const minsGoal = 30;
   const minsDone = Math.min(30, 20 + (state.streakCount * 3) % 15);
   const minsPct = Math.min(1.0, minsDone / minsGoal);

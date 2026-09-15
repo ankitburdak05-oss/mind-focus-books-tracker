@@ -1,22 +1,37 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-09-15T03:00:00.000Z",
+  "updatedAt": "2026-09-15T04:10:00.000Z",
   "activeRelease": {
-    "version": "v3.7.1",
-    "name": "Mind Focus Books v3.7.1 — Ultra-Smooth Stable Edition",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.1",
+    "version": "v3.8.0",
+    "name": "Mind Focus Books v3.8.0 — Super Clean Streamlined Edition",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.8.0",
     "features": [
       "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
       "🚀 Ultra-Smooth Update Center: Rock-solid, zero shaking/jitter on mobile",
       "📦 Reliable 1-Tap APK Updater: Direct native download and package installer",
       "📖 3D Real Book Reader with realistic page curl animations",
       "🎨 Premium iOS Glassmorphism UI and fluid navigation",
-      "🛡️ 16 Remote Feature Switches & Instant Emergency Pause Control"
+      "🛡️ Remote Feature Switches & Instant Emergency Pause Control"
     ],
-    "stagedAt": "2026-09-15T03:00:00.000Z",
+    "stagedAt": "2026-09-15T04:10:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.8.0",
+    "name": "Mind Focus Books v3.8.0 — Super Clean Streamlined Edition",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.8.0",
+    "features": [
+      "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
+      "🚀 Ultra-Smooth Update Center: Rock-solid, zero shaking/jitter on mobile",
+      "📦 Reliable 1-Tap APK Updater: Direct native download and package installer",
+      "📖 3D Real Book Reader with realistic page curl animations",
+      "🎨 Premium iOS Glassmorphism UI and fluid navigation",
+      "🛡️ Remote Feature Switches & Instant Emergency Pause Control"
+    ],
+    "stagedAt": "2026-09-15T04:10:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.7.1",
     "name": "Mind Focus Books v3.7.1 — Ultra-Smooth Stable Edition",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.1",
@@ -25,39 +40,23 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
       "🚀 Ultra-Smooth Update Center: Rock-solid, zero shaking/jitter on mobile",
       "📦 Reliable 1-Tap APK Updater: Direct native download and package installer",
       "📖 3D Real Book Reader with realistic page curl animations",
-      "🎨 Premium iOS Glassmorphism UI and fluid navigation",
-      "🛡️ 16 Remote Feature Switches & Instant Emergency Pause Control"
+      "🎨 Premium iOS Glassmorphism UI and fluid navigation"
     ],
     "stagedAt": "2026-09-15T03:00:00.000Z",
     "isDeployed": true
   },
-  "previousRelease": {
-    "version": "v3.7.0",
-    "name": "Mind Focus Books v3.7.0 — Clean Lightweight Streamlined Edition",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.0",
-    "features": [
-      "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
-      "📖 3D Real Book Reader with realistic page curl animations",
-      "🎨 Premium iOS Glassmorphism UI and fluid navigation",
-      "🚀 Zero Battery Drain & Thermal Freeze: Background engine optimized",
-      "🛡️ 16 Remote Feature Switches & Instant Emergency Pause Control"
-    ],
-    "stagedAt": "2026-09-14T03:55:00.000Z",
-    "isDeployed": true
-  },
   "features": {
-    "appEmergencyLockdown": false,
-    "lockdownMessage": "🚨 अभी ऐप को बंद कर दिया गया है। कुछ प्रॉब्लम आ गई है, सभी फीचर के साथ ऐप भी बंद हो गया है। कृपया थोड़ी देर प्रतीक्षा करें।",
+    "appEmergencyLockdown": true,
+    "lockdownMessage": "ye app band kardiya gaya hai",
     "maintenanceMode": false,
     "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
-    "chatHelpDeskEnabled": false,
+    "chatHelpDeskEnabled": true,
     "telemetryEnabled": true,
     "mobileDevToolsEnabled": true,
     "broadcastNoticeEnabled": true,
     "appUpdatesEnabled": true,
     "streakShieldsEnabled": true,
-    "sanctuaryTimerEnabled": true,
-    "flashcardsEnabled": false,
+    "flashcardsEnabled": true,
     "ambientAudioEnabled": true,
     "visualPhysicsEnabled": true,
     "barcodeScannerEnabled": true,

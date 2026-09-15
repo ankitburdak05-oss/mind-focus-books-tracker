@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Mind Focus Books • Offline Single-File Bundler
  * Automatically generates Mind-Focus-Books-App-Offline.html from index.html,
  * style.css, books-data.js, dictionary-data.js, and app.js.
@@ -27,7 +27,7 @@ try {
   const appJs = fs.readFileSync(APP_JS_PATH, 'utf-8');
 
   // 1. Inline style.css
-  const styleLinkRegex = /<link\s+rel=["']stylesheet["']\s+href=["']style\.css["']\s*\/?>/i;
+  const styleLinkRegex = /<link\s+rel=["']stylesheet["']\s+href=["']style\.css(?:\?[^"']*)?["']\s*\/?>/i;
   if (!styleLinkRegex.test(indexHtml)) {
     console.warn('⚠️ Warning: <link rel="stylesheet" href="style.css"> not found, appending to head.');
     indexHtml = indexHtml.replace('</head>', `<style>\n${styleCss}\n</style>\n</head>`);
@@ -36,7 +36,7 @@ try {
   }
 
   // 2. Inline dictionary-data.js
-  const dictScriptRegex = /<script\s+src=["']dictionary-data\.js["']\s*><\/script>/i;
+  const dictScriptRegex = /<script\s+src=["']dictionary-data\.js(?:\?[^"']*)?["']\s*><\/script>/i;
   if (dictScriptRegex.test(indexHtml)) {
     indexHtml = indexHtml.replace(dictScriptRegex, `<script>\n${dictJs}\n</script>`);
   } else {
@@ -44,7 +44,7 @@ try {
   }
 
   // 3. Inline books-data.js
-  const booksScriptRegex = /<script\s+src=["']books-data\.js["']\s*><\/script>/i;
+  const booksScriptRegex = /<script\s+src=["']books-data\.js(?:\?[^"']*)?["']\s*><\/script>/i;
   if (booksScriptRegex.test(indexHtml)) {
     indexHtml = indexHtml.replace(booksScriptRegex, `<script>\n${booksJs}\n</script>`);
   } else {
@@ -52,7 +52,7 @@ try {
   }
 
   // 4. Inline app.js
-  const appScriptRegex = /<script\s+src=["']app\.js["']\s*><\/script>/i;
+  const appScriptRegex = /<script\s+src=["']app\.js(?:\?[^"']*)?["']\s*><\/script>/i;
   if (appScriptRegex.test(indexHtml)) {
     indexHtml = indexHtml.replace(appScriptRegex, `<script>\n${appJs}\n</script>`);
   } else {

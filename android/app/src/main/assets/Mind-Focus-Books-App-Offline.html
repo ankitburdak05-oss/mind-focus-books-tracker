@@ -9,6 +9,7 @@
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta name="theme-color" content="#0b0f19">
   <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <script>
     if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
@@ -1504,36 +1505,6 @@ body {
 
 .modal-overlay.active {
   display: flex !important;
-}
-
-body.modal-open {
-  overflow: hidden !important;
-  overscroll-behavior: none !important;
-  touch-action: none !important;
-  height: 100% !important;
-}
-
-#updateCheckerModalOverlay {
-  align-items: flex-start !important;
-  justify-content: center !important;
-  overflow-y: scroll !important;
-  -webkit-overflow-scrolling: touch !important;
-  overscroll-behavior: contain !important;
-  touch-action: pan-y !important;
-  padding: max(1.2rem, env(safe-area-inset-top, 20px)) 1rem max(2rem, env(safe-area-inset-bottom, 20px)) !important;
-}
-
-.modal-content.update-modal-content {
-  max-width: 460px !important;
-  width: 100% !important;
-  margin: auto auto !important;
-  max-height: none !important;
-  overflow: visible !important;
-  contain: layout paint !important;
-  transform: translateZ(0) !important;
-  backface-visibility: hidden !important;
-  -webkit-backface-visibility: hidden !important;
-  box-sizing: border-box !important;
 }
 
 .modal-content {
@@ -3695,7 +3666,7 @@ body {
 }
 
 /* ==========================================================================
-   MINDFOCUS BOOKS v2.0.0 - SPATIAL LUXURY SANCTUARY EDITION
+   MINDFOCUS BOOKS v3.8.0 - SPATIAL LUXURY EDITION
    Aesthetic Architecture: Apple VisionOS Glass, OLED Obsidian, Physical 3D Foil
    ========================================================================== */
 
@@ -3910,7 +3881,7 @@ body {
   transform: scale(1.1);
 }
 
-/* 4. HYPNOTIC SOUNDWAVE VISUALIZER & BREATHING SANCTUARY HALO */
+/* 4. HYPNOTIC SOUNDWAVE VISUALIZER & BREATHING HALO */
 .ambient-soundwave-ring {
   position: absolute;
   inset: -10px;
@@ -4118,7 +4089,6 @@ body {
 
 /* 6. EDITORIAL LUXURY SERIF TYPOGRAPHY & GOLD FOIL ACCENTS */
 .hero-title,
-.sanctuary-title,
 .modal-title {
   font-family: 'Playfair Display', Georgia, -apple-system, serif;
 }
@@ -4137,306 +4107,6 @@ body {
   border-radius: 12px;
   padding: 3px 9px;
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
-}
-
-/* 9. DEEP SANCTUARY FOCUS MODE OVERLAY */
-.sanctuary-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(circle at 50% 30%, #0c101c 0%, #04060a 75%);
-  z-index: 99999;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.5rem;
-  overflow-y: auto;
-}
-
-.sanctuary-overlay.active {
-  display: flex;
-  animation: sanctuaryEnter 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes sanctuaryEnter {
-  from { opacity: 0; transform: scale(1.03); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-.sanctuary-header {
-  width: 100%;
-  max-width: 900px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.sanctuary-logo {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  font-weight: 900;
-  letter-spacing: 0.14em;
-  color: #fbbf24;
-}
-
-.sanctuary-sparkle {
-  font-size: 1.1rem;
-  animation: sparkleTwinkle 2s infinite alternate ease-in-out;
-}
-
-@keyframes sparkleTwinkle {
-  0% { transform: scale(0.85); opacity: 0.7; }
-  100% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 8px #fbbf24); }
-}
-
-.sanctuary-close-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: var(--text-primary);
-  border-radius: 20px;
-  padding: 6px 14px;
-  font-size: 0.82rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.sanctuary-close-btn:hover {
-  background: rgba(239, 68, 68, 0.2);
-  border-color: #ef4444;
-  color: #ef4444;
-}
-
-.sanctuary-centerpiece {
-  width: 100%;
-  max-width: 680px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  margin: auto 0;
-  position: relative;
-}
-
-.sanctuary-aura-halo {
-  position: absolute;
-  top: 15%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 320px;
-  height: 320px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, rgba(99, 102, 241, 0.15) 50%, transparent 75%);
-  filter: blur(50px);
-  pointer-events: none;
-  z-index: 0;
-  animation: candleFlicker 6s infinite alternate ease-in-out;
-}
-
-@keyframes candleFlicker {
-  0% { opacity: 0.6; transform: translate(-50%, -50%) scale(0.95); }
-  50% { opacity: 0.85; transform: translate(-48%, -52%) scale(1.06); }
-  100% { opacity: 0.6; transform: translate(-52%, -48%) scale(0.97); }
-}
-
-.sanctuary-book-stage {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.2rem;
-  margin-bottom: 1.8rem;
-}
-
-.sanctuary-cover-wrap {
-  width: 150px;
-  height: 220px;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.75), 0 0 35px rgba(245, 158, 11, 0.25);
-  border: 2px solid rgba(255, 255, 255, 0.14);
-  transform: perspective(800px) rotateY(-8deg);
-  transition: transform 0.4s ease;
-}
-
-.sanctuary-cover-wrap:hover {
-  transform: perspective(800px) rotateY(0deg) scale(1.03);
-}
-
-.sanctuary-cover-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.sanctuary-badge {
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  color: #10b981;
-  background: rgba(16, 185, 129, 0.14);
-  border: 1px solid rgba(16, 185, 129, 0.35);
-  border-radius: 14px;
-  padding: 3px 10px;
-  display: inline-block;
-  margin-bottom: 0.4rem;
-}
-
-.sanctuary-title {
-  font-size: 1.75rem;
-  font-weight: 900;
-  color: #fff;
-  letter-spacing: -0.02em;
-  margin-bottom: 0.3rem;
-  max-width: 540px;
-}
-
-.sanctuary-author {
-  font-size: 0.95rem;
-  color: var(--text-secondary);
-  margin-bottom: 1rem;
-}
-
-.sanctuary-progress-module {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  padding: 1rem 1.25rem;
-  width: 100%;
-  max-width: 480px;
-  backdrop-filter: blur(16px);
-}
-
-.sanctuary-progress-meta {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--text-primary);
-  margin-bottom: 0.6rem;
-}
-
-.sanctuary-pace-badge {
-  font-size: 0.75rem;
-  color: #fbbf24;
-  background: rgba(245, 158, 11, 0.15);
-  padding: 2px 8px;
-  border-radius: 8px;
-}
-
-.sanctuary-bar {
-  width: 100%;
-  height: 7px;
-  background: rgba(255, 255, 255, 0.12);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-bottom: 0.85rem;
-}
-
-.sanctuary-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #f59e0b, #10b981);
-  border-radius: 4px;
-  transition: width 0.4s ease;
-}
-
-.sanctuary-quick-steps {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.sanctuary-quick-steps button {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #fff;
-  border-radius: 10px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
-
-.sanctuary-quick-steps button:hover {
-  background: rgba(99, 102, 241, 0.35);
-  border-color: #818cf8;
-  transform: translateY(-1px);
-}
-
-.sanctuary-quick-steps .sanctuary-finish-btn {
-  background: rgba(16, 185, 129, 0.2);
-  border-color: #10b981;
-  color: #34d399;
-}
-
-.sanctuary-quick-steps .sanctuary-finish-btn:hover {
-  background: #10b981;
-  color: #fff;
-}
-
-.sanctuary-timer-pod {
-  background: rgba(15, 20, 32, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 20px;
-  padding: 1.2rem 1.6rem;
-  width: 100%;
-  max-width: 480px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.55);
-}
-
-.sanctuary-timer-display {
-  font-size: 3rem;
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  color: #fff;
-  font-variant-numeric: tabular-nums;
-  margin-bottom: 0.8rem;
-  text-shadow: 0 0 25px rgba(239, 68, 68, 0.35);
-}
-
-.sanctuary-timer-controls {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 0.8rem;
-}
-
-.sanctuary-timer-btn {
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #fff;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.sanctuary-timer-btn.primary {
-  background: #ef4444;
-  border-color: #ef4444;
-}
-
-.sanctuary-timer-btn.ambient-btn {
-  background: rgba(16, 185, 129, 0.18);
-  border-color: rgba(16, 185, 129, 0.35);
-  color: #34d399;
-}
-
-.sanctuary-quote-glow {
-  font-size: 0.85rem;
-  font-style: italic;
-  color: rgba(255, 255, 255, 0.7);
-  border-top: 1px solid rgba(255, 255, 255, 0.08);
-  padding-top: 0.6rem;
 }
 
 /* 10. READING DNA GALAXY CONSTELLATION */
@@ -5279,7 +4949,7 @@ body {
 }
 
 /* ==========================================================================
-   4D LIVING SPATIAL SANCTUARY APP STYLES (v3.0.0)
+   4D LIVING SPATIAL APP STYLES (v3.8.0)
    ========================================================================== */
 
 /* 1. Pull-to-Refresh & Golden Sweep */
@@ -5432,16 +5102,49 @@ body {
   transform: scale(1.04);
 }
 
-/* 3. Cyber-Radar Quantum Update Center Styles */
+/* 3. Cyber-Radar Quantum Update Center Styles (Jitter-Free & Hardware-Accelerated) */
+body.modal-open {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  touch-action: none !important;
+  height: 100% !important;
+}
+
+#updateCheckerModalOverlay {
+  align-items: flex-start !important;
+  justify-content: center !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
+  padding: max(1.2rem, env(safe-area-inset-top, 20px)) 1rem max(2rem, env(safe-area-inset-bottom, 20px)) !important;
+}
+
+.modal-content.update-modal-content {
+  max-width: 460px !important;
+  width: 100% !important;
+  margin: auto auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  contain: layout paint !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  box-sizing: border-box !important;
+}
+
 .update-radar-container {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   margin: 0 auto;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  contain: strict;
+  transform: translateZ(0);
 }
 
 .update-radar-ring {
@@ -5469,6 +5172,8 @@ body {
   background: conic-gradient(from 0deg, transparent 60%, rgba(99, 102, 241, 0.35) 90%, rgba(56, 189, 248, 0.7) 100%);
   animation: radarSweepSpin 2s linear infinite;
   pointer-events: none;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 @keyframes radarSweepSpin {
@@ -5487,13 +5192,14 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(99, 102, 241, 0.5);
-  animation: orbPulse 2s ease-in-out infinite alternate;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(99, 102, 241, 0.5);
+  transform: translateZ(0);
+  animation: orbGlowPulse 2.5s ease-in-out infinite alternate;
 }
 
-@keyframes orbPulse {
-  0% { transform: scale(0.96); box-shadow: 0 0 12px rgba(99, 102, 241, 0.4); }
-  100% { transform: scale(1.06); box-shadow: 0 0 25px rgba(56, 189, 248, 0.7); }
+@keyframes orbGlowPulse {
+  0% { transform: translateZ(0) scale(1); opacity: 0.92; }
+  100% { transform: translateZ(0) scale(1.02); opacity: 1; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6)); }
 }
 
 /* Version Comparison Diff Card */
@@ -5502,10 +5208,12 @@ body {
   align-items: center;
   justify-content: center;
   gap: 1.25rem;
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(15, 23, 42, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   padding: 0.75rem 1.25rem;
+  min-height: 56px;
+  box-sizing: border-box;
 }
 
 .version-diff-col {
@@ -5546,22 +5254,27 @@ body {
   color: #818cf8;
   font-size: 1.1rem;
   font-weight: 900;
+  transform: translateZ(0);
   animation: arrowNudge 1.5s infinite;
 }
 
 @keyframes arrowNudge {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(4px); }
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(4px, 0, 0); }
 }
 
 /* Changelog Showcase Card */
 .update-changelog-card {
   text-align: left;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.88);
   border: 1px solid rgba(99, 102, 241, 0.35);
   border-radius: 14px;
   padding: 0.9rem 1.1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  max-height: 200px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .changelog-header {
@@ -8263,6 +7976,84 @@ body {
 </head>
 <body>
 
+  <!-- ==========================================================================
+       HIDDEN PLACEHOLDER IDS (FIX FOR MISSING ELEMENTS)
+       Iss block ko koi delete nahi karna - yeh missing IDs provide karta hai
+       jo app.js me getElementById() se reference ho rahi hain.
+       Yeh elements visual layout me nahi dikhte (display:none), but JS
+       safely read/write kar sakta hai bina error throw kiye.
+       ========================================================================== -->
+  <div id="missingIdsPlaceholderRoot" style="display:none !important; visibility:hidden; position:absolute; left:-9999px; top:-9999px; width:0; height:0; overflow:hidden;" aria-hidden="true">
+    <!-- KPI / Metrics -->
+    <span id="kpiAvgDays">0</span>
+    <span id="kpiTotalDays">0</span>
+    <span id="kpiHoursInvested">0</span>
+    <span id="kpiMoneySubtext">Library Value</span>
+    <div id="progressBarFill" style="width:0%"></div>
+
+    <!-- Toast / Notifications Container -->
+    <div id="toastContainer" role="status" aria-live="polite"></div>
+
+    <!-- Theme Toggle (header shortcut) -->
+    <button type="button" id="themeToggleBtn">
+      <span id="themeToggleIcon">🌙</span>
+      <span id="themeToggleBtnText">Theme</span>
+    </button>
+
+    <!-- Daily Quote / Global Banner -->
+    <div id="dailyQuoteContainer"></div>
+    <div id="globalTopBanner"></div>
+
+    <!-- PWA / App Lock -->
+    <button type="button" id="installAppBtn" title="Install App">📲 Install</button>
+    <button type="button" id="privacyLockBtn" title="Lock">🔒</button>
+
+    <!-- Header Streak Count -->
+    <span id="headerStreakCount">0</span>
+
+    <!-- Ambience Cards (4 channels) -->
+    <div id="ambienceRainCard" data-channel="rain"></div>
+    <div id="ambienceForestCard" data-channel="forest"></div>
+    <div id="ambienceCafeCard" data-channel="cafe"></div>
+    <div id="ambienceWavesCard" data-channel="waves"></div>
+    <label id="ambienceVolumeLabel" for="ambienceVolumeSlider">Volume</label>
+    <input type="range" id="ambienceVolumeSlider" min="0" max="100" value="50">
+    <span id="ambienceHeaderBtnText">🎧 Ambience</span>
+
+    <!-- Removed Features Safe Placeholders (Null-safety stubs) -->
+    <div id="dictFlashcardsBtn"></div>
+    <div id="headerFlashcardsBtn"></div>
+    <div id="headerHelpDeskBtn"></div>
+    <div id="fabLiveHelpDeskBtn"></div>
+    <div id="userHelpDeskModalOverlay"></div>
+    <div id="mysteryGiftOverlay"></div>
+    <div id="flashcardModalOverlay"></div>
+    <div id="cyber3dNoticeCard"></div>
+
+    <!-- Curated Shelves Section (book curation block) -->
+    <section id="curatedShelvesSection"></section>
+
+    <!-- App Overlays (lockdown / maintenance) -->
+    <div id="appEmergencyLockdownOverlay" data-overlay="lockdown"></div>
+    <div id="appMaintenanceOverlay" data-overlay="maintenance"></div>
+
+    <!-- Floating Mini Capsule (suspended reading resume) -->
+    <div id="floatingMiniCapsule">
+      <img id="miniCapsuleCover" src="" alt="">
+      <span id="miniCapsuleTitle">Resume</span>
+      <div id="miniCapsuleProgressFill" style="width:0%"></div>
+    </div>
+
+    <!-- Mobile DevTools Drawer (alternative to existing modal) -->
+    <aside id="mobileDevToolsDrawer"></aside>
+
+    <!-- Reading Sheet (modal) Pagination -->
+    <input type="range" id="sheetPageSlider" min="0" max="100" value="0">
+    <span id="sheetPageDisplay">0 / 0</span>
+    <span id="sheetPctDisplay">0%</span>
+  </div>
+  <!-- END OF MISSING-IDS PLACEHOLDER BLOCK -->
+
   <!-- Dynamic Chromatic Aurora Background (Apple Music / VisionOS Spatial Glow) -->
   <div id="ambientAuroraBg" class="ambient-aurora-bg">
     <div class="aurora-blob aurora-blob-1"></div>
@@ -8320,22 +8111,9 @@ body {
         <button class="btn" id="headerSpotlightBtn" onclick="openSpotlightModal()" title="Spotlight Teleport (Ctrl+K)" style="background:rgba(99,102,241,0.18); border-color:rgba(99,102,241,0.35); color:#a5b4fc; font-weight:700;">
           ⚡ <span class="desktop-only-txt">Spotlight</span>
         </button>
-        <button class="btn" id="headerSanctuaryBtn" onclick="openSanctuaryMode()" title="Distraction-Zero Sanctuary Mode" style="background:linear-gradient(135deg, rgba(245,158,11,0.18), rgba(239,68,68,0.18)); border-color:rgba(245,158,11,0.35); color:#fbbf24; font-weight:700;">
-          🌌 <span class="desktop-only-txt">Sanctuary</span>
-        </button>
         <button class="btn btn-primary" id="addBookBtn" title="Add a new book to library">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           + Add Book
-        </button>
-        <button class="btn" id="headerFlashcardsBtn" onclick="openFlashcardTrainer()" title="3D Smart Flashcards (Leitner Memory Box)" style="background:linear-gradient(135deg, rgba(236,72,153,0.18), rgba(168,85,247,0.18)); border-color:rgba(236,72,153,0.35); color:#f472b6; font-weight:700;">
-          🎴 <span class="desktop-only-txt">Flashcards</span>
-        </button>
-        <button class="btn" id="headerPomodoroBtn" onclick="openPomodoroModal()" title="25-Min Focus Reading Timer" style="background:rgba(239, 68, 68, 0.15); border-color:rgba(239, 68, 68, 0.35); color:#ef4444; font-weight:700;">
-          ⏱️ <span id="headerPomodoroText">Focus Timer</span>
-        </button>
-        <button type="button" class="btn" id="headerHelpDeskBtn" onclick="openUserHelpDeskModal()" title="Live Help Desk &amp; Chat with Admin" style="background:linear-gradient(135deg, rgba(16,185,129,0.18), rgba(56,189,248,0.18)); border-color:rgba(16,185,129,0.35); color:#34d399; font-weight:700; position:relative;">
-          💬 <span class="desktop-only-txt">Help Desk</span>
-          <span class="chat-unread-dot" id="headerChatDot" style="display:none;"></span>
         </button>
       </div>
     </div>
@@ -8404,11 +8182,6 @@ body {
           <span class="chip-icon">🌌</span>
           <span class="chip-val" id="kpiDnaStars">0 ★</span>
           <span class="chip-lbl">DNA Galaxy</span>
-        </div>
-        <div class="kpi-chip" onclick="openFlashcardTrainer()" style="cursor:pointer; background:linear-gradient(135deg, rgba(236,72,153,0.16), rgba(168,85,247,0.16)); border-color:rgba(236,72,153,0.35);" title="Open 3D Flashcards Leitner Trainer">
-          <span class="chip-icon">🎴</span>
-          <span class="chip-val" id="kpiFlashcardsCount">5 Due</span>
-          <span class="chip-lbl">Flashcards</span>
         </div>
       </div>
     </section>
@@ -9208,7 +8981,7 @@ body {
             </div>
             <div>
               <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Tracker</div>
-              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.6.0 Real App Design &amp; Feature Studio</div>
+              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.8.0 Real App Design &amp; Feature Studio</div>
             </div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn" style="border-radius:12px; padding:0.45rem 0.85rem; font-weight:800;">
@@ -9299,16 +9072,6 @@ body {
               </div>
             </div>
             <span class="settings-row-chevron" id="settingsHapticModeVal">Crisp Click ›</span>
-          </button>
-          <button type="button" class="settings-action-row" onclick="closeSettingsModal(); openPomodoroModal();">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; box-shadow:0 6px 18px rgba(239,68,68,0.4);">⏱️</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Pomodoro Focus Timer</div>
-                <div class="settings-row-sub">25-min interval sprints with audio chimes</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" style="color:#ef4444;">Launch ›</span>
           </button>
         </div>
 
@@ -9488,7 +9251,7 @@ body {
         <div class="update-version-diff-card">
           <div class="version-diff-col">
             <span class="version-diff-label">YOUR APP</span>
-            <span class="version-diff-pill current" id="updateCurrentVersionBadge">v2.0.3</span>
+            <span class="version-diff-pill current" id="updateCurrentVersionBadge">v3.8.0</span>
           </div>
           <div class="version-diff-arrow">➔</div>
           <div class="version-diff-col">
@@ -9497,8 +9260,8 @@ body {
           </div>
         </div>
 
-        <div id="updateModalTitle" style="font-size:1.1rem; font-weight:800; color:var(--text-primary);">Scanning GitHub Cloud Releases...</div>
-        <div id="updateModalDesc" style="font-size:0.82rem; color:var(--text-secondary); line-height:1.5;">
+        <div id="updateModalTitle" style="font-size:1.1rem; font-weight:800; color:var(--text-primary); min-height:1.6rem;">Scanning GitHub Cloud Releases...</div>
+        <div id="updateModalDesc" style="font-size:0.82rem; color:var(--text-secondary); line-height:1.5; min-height:2.8rem;">
           Connecting to GitHub repository to check for seamless over-the-air updates...
         </div>
 
@@ -9649,7 +9412,7 @@ body {
   <div class="modal-overlay" id="streakModalOverlay">
     <div class="modal-content" style="max-width:520px;">
       <div class="modal-header">
-        <h3 class="modal-title">🔥 4D Reading Rings &amp; Streak Sanctuary</h3>
+        <h3 class="modal-title">🔥 4D Reading Rings &amp; Streak Hub</h3>
         <button class="modal-close" onclick="closeStreakModal()">&times;</button>
       </div>
       <div class="modal-body" style="gap:1.25rem;">
@@ -9718,46 +9481,6 @@ body {
     </div>
   </div>
 
-  <!-- Pomodoro Reading Focus Timer Modal -->
-  <div class="modal-overlay" id="pomodoroTimerModalOverlay">
-    <div class="modal-content" style="max-width:440px; text-align:center;">
-      <div class="modal-header">
-        <h3 class="modal-title">⏱️ Pomodoro Focus Reading Timer</h3>
-        <button class="modal-close" onclick="closePomodoroModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="gap:1.25rem; padding:1.5rem 1rem; align-items:center;">
-        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">
-          Read distraction-free for 25 minutes. A gentle bell chime will ring when finished.
-        </p>
-
-        <!-- Big Circular Countdown -->
-        <div style="width:190px; height:190px; border-radius:50%; border:6px solid rgba(239,68,68,0.2); border-top-color:#ef4444; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; box-shadow:0 8px 24px rgba(239,68,68,0.15); margin:0.5rem auto;">
-          <div id="pomodoroTimeDisplay" style="font-size:2.8rem; font-weight:900; color:#ef4444; font-variant-numeric:tabular-nums; line-height:1;">25:00</div>
-          <div id="pomodoroSessionLabel" style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-top:0.35rem; text-transform:uppercase; letter-spacing:0.05em;">Deep Focus</div>
-        </div>
-
-        <!-- Controls -->
-        <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
-          <button type="button" class="btn btn-primary" id="pomodoroToggleBtn" onclick="togglePomodoroTimer()" style="background:#ef4444; border-color:#ef4444; font-weight:800; padding:0.65rem 1.75rem; font-size:1rem;">
-            ▶ Start Focus
-          </button>
-          <button type="button" class="btn" onclick="resetPomodoroTimer()" style="font-weight:600;">
-            🔄 Reset (25m)
-          </button>
-          <button type="button" class="btn" onclick="setPomodoroDuration(15)" style="font-size:0.8rem;">
-            ⚡ Quick 15m
-          </button>
-        </div>
-
-        <div style="font-size:0.75rem; color:var(--text-secondary); display:flex; align-items:center; gap:0.4rem;">
-          <span>💡 Tip:</span> <span>Turn on <b>Ambience Rain 🌧️</b> for 10x deeper concentration!</span>
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content:center;">
-        <button type="button" class="btn" onclick="closePomodoroModal()">Close</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Spotlight Command Island (Instant Teleport Search - Feature 5) -->
   <div class="modal-overlay spotlight-overlay" id="spotlightIslandModal" onclick="handleSpotlightBackdrop(event)">
@@ -9783,57 +9506,6 @@ body {
     </div>
   </div>
 
-  <!-- Deep Sanctuary Focus Mode (Distraction-Zero Reading Room - Feature 9) -->
-  <div id="sanctuaryModeOverlay" class="sanctuary-overlay">
-    <div class="sanctuary-header">
-      <div class="sanctuary-logo">
-        <span class="sanctuary-sparkle">✦</span>
-        <span>READING SANCTUARY</span>
-      </div>
-      <button type="button" class="sanctuary-close-btn" onclick="exitSanctuaryMode()" title="Exit Sanctuary Mode (ESC)">
-        ✕ Exit Sanctuary
-      </button>
-    </div>
-
-    <div class="sanctuary-centerpiece">
-      <div class="sanctuary-aura-halo" id="sanctuaryAuraHalo"></div>
-      <div class="sanctuary-book-stage">
-        <div class="sanctuary-cover-wrap" id="sanctuaryCoverWrap">
-          <!-- Active book cover dynamically injected -->
-        </div>
-        <div class="sanctuary-book-info">
-          <div class="sanctuary-badge" id="sanctuaryCategoryBadge">FOCUS &amp; CLARITY</div>
-          <h1 class="sanctuary-title" id="sanctuaryBookTitle">Active Book</h1>
-          <div class="sanctuary-author" id="sanctuaryBookAuthor">Napoleon Hill</div>
-          
-          <div class="sanctuary-progress-module">
-            <div class="sanctuary-progress-meta">
-              <span id="sanctuaryPagesLabel">Page 0 of 0</span>
-              <span id="sanctuaryPaceLabel" class="sanctuary-pace-badge">~0 hrs left</span>
-            </div>
-            <div class="sanctuary-bar"><div class="sanctuary-bar-fill" id="sanctuaryBarFill" style="width:0%;"></div></div>
-            <div class="sanctuary-quick-steps">
-              <button type="button" onclick="stepSanctuaryPage(10)">+10 Pgs</button>
-              <button type="button" onclick="stepSanctuaryPage(25)">+25 Pgs</button>
-              <button type="button" onclick="stepSanctuaryPage(50)">+50 Pgs</button>
-              <button type="button" onclick="finishSanctuaryBook()" class="sanctuary-finish-btn">🎉 Finished</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sanctuary Focus Pomodoro Timer -->
-      <div class="sanctuary-timer-pod">
-        <div class="sanctuary-timer-display" id="sanctuaryTimerDigits">25:00</div>
-        <div class="sanctuary-timer-controls">
-          <button type="button" class="sanctuary-timer-btn primary" id="sanctuaryTimerToggle" onclick="toggleSanctuaryTimer()">▶ Start 25-Min Sprint</button>
-          <button type="button" class="sanctuary-timer-btn" onclick="resetSanctuaryTimer()">↺ Reset</button>
-          <button type="button" class="sanctuary-timer-btn ambient-btn" id="sanctuaryAmbienceBtn" onclick="toggleAmbienceFromSanctuary()">🎧 Ambience: Off</button>
-        </div>
-        <div class="sanctuary-quote-glow" id="sanctuaryQuoteGlow">"Action is the real measure of intelligence."</div>
-      </div>
-    </div>
-  </div>
 
   <!-- Reading DNA Constellation Modal (Interactive Visual Constellation - Feature 10) -->
   <div class="modal-overlay" id="readingDnaModalOverlay" onclick="handleDnaBackdrop(event)">
@@ -9912,59 +9584,6 @@ body {
             </button>
           </div>
         </div>
-
-        <!-- Card 2: 3D Model Cyber Obsidian & Luminescent Gold Spatial Card (New) -->
-        <div class="cyber-3d-notice-card" id="cyber3dNoticeCard" style="display:none;">
-          <div class="cyber-3d-sheen-sweep"></div>
-          
-          <div class="cyber-3d-status-pill">
-            <div class="cyber-3d-status-dot"></div>
-            <span class="cyber-3d-status-tag">CARD 2 • 3D SPATIAL DIMENSION</span>
-            <span class="cyber-3d-status-chip">3D MODEL</span>
-          </div>
-
-          <!-- Real 3D Spinning Crystal Cube Model -->
-          <div class="cube-3d-stage">
-            <div class="cube-3d-spinner" id="cube3dSpinner">
-              <div class="cube-face front"></div>
-              <div class="cube-face back"></div>
-              <div class="cube-face right"></div>
-              <div class="cube-face left"></div>
-              <div class="cube-face top"></div>
-              <div class="cube-face bottom"></div>
-              <div class="cube-3d-core">
-                <span id="inAppNoticeIcon2">💎</span>
-              </div>
-            </div>
-            <div class="cube-3d-ground-ring"></div>
-            <div class="cube-3d-shadow"></div>
-          </div>
-
-          <h3 class="cyber-3d-title" id="inAppNoticeTitle2">3D Power Alert</h3>
-
-          <div class="cyber-3d-message-vault">
-            <div class="cyber-3d-corner-accent c-tl"></div>
-            <div class="cyber-3d-corner-accent c-tr"></div>
-            <div class="cyber-3d-corner-accent c-bl"></div>
-            <div class="cyber-3d-corner-accent c-br"></div>
-            <div class="cyber-3d-watermark">CARD 2 • SPATIAL 3D ENGINE</div>
-            <div class="cyber-3d-message-text" id="inAppNoticeMessage2">
-              Card 2 Spatial Alert
-            </div>
-          </div>
-
-          <div class="cyber-3d-footer">
-            <div class="cyber-3d-meta-row">
-              <span class="cyber-3d-meta-tag">💎 3D MODEL ROTATION</span>
-              <span class="cyber-3d-meta-tag">✨ REALTIME DEPTH</span>
-            </div>
-            <button type="button" class="cyber-3d-action-btn" id="cyber3dDismissBtn" onclick="dismissInAppNotice(event)">
-              <span class="cyber-3d-btn-glow"></span>
-              <span class="cyber-3d-btn-text" id="inAppNoticeBtnText2">I Am Ready 🏆</span>
-              <span class="cyber-3d-btn-icon">🚀</span>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -9986,9 +9605,6 @@ body {
             <input type="text" id="dictSearchInput" placeholder="Search English or Hindi word..." oninput="onDictSearchInput(this.value)">
             <button type="button" class="dict-search-clear" id="dictSearchClearBtn" onclick="clearDictSearch()" style="display:none;">✕</button>
           </div>
-          <button type="button" class="btn btn-sm" onclick="openFlashcardTrainer()" style="background:linear-gradient(135deg, #ec4899, #8b5cf6); color:#fff; border:none; font-weight:800; border-radius:10px; padding:6px 12px; margin-right:8px; display:inline-flex; align-items:center; gap:4px; font-size:0.8rem; box-shadow:0 4px 12px rgba(236,72,153,0.35);" title="Practice 3D Flashcards">
-            🎴 <span>Flashcards</span>
-          </button>
           <button type="button" class="dict-close-btn" onclick="closeDictionaryBookReader()" title="Close Book (Esc)">✕</button>
         </div>
       </div>
@@ -10031,315 +9647,6 @@ body {
           Turn Next Page ›
         </button>
       </div>
-    </div>
-  </div>
-
-  <!-- 🎁 MYSTERY GOLDEN GIFT BOX DROP OVERLAY (Surprise Reward Engine) -->
-  <div class="mystery-gift-overlay" id="mysteryGiftOverlay">
-    <!-- Full-screen Canvas for Confetti & Crackers -->
-    <canvas id="giftConfettiCanvas" class="gift-confetti-canvas"></canvas>
-
-    <!-- Sky Clouds & Golden Starlight Dust -->
-    <div class="gift-sky-glow" id="giftSkyGlow"></div>
-
-    <!-- The 3D Falling & Floating Golden Gift Box -->
-    <div class="gift-box-stage" id="giftBoxStage" onclick="openGoldenGiftBox(event)">
-      <!-- Pulsing Aura & Shockwave Rings -->
-      <div class="gift-aura-halo"></div>
-      <div class="gift-shockwave-ring sw-1"></div>
-      <div class="gift-shockwave-ring sw-2"></div>
-
-      <!-- 3D Box Container -->
-      <div class="gift-box-3d" id="giftBox3D">
-        <!-- Box Lid (Flies open on click) -->
-        <div class="gift-lid" id="giftLid">
-          <div class="gift-lid-bow">
-            <div class="bow-loop bow-left"></div>
-            <div class="bow-loop bow-right"></div>
-            <div class="bow-ribbon ribbon-left"></div>
-            <div class="bow-ribbon ribbon-right"></div>
-            <div class="bow-knot">✦</div>
-          </div>
-          <div class="gift-lid-top"></div>
-          <div class="gift-lid-side lid-front"></div>
-          <div class="gift-lid-side lid-back"></div>
-          <div class="gift-lid-side lid-left"></div>
-          <div class="gift-lid-side lid-right"></div>
-        </div>
-
-        <!-- Box Body -->
-        <div class="gift-body" id="giftBody">
-          <div class="gift-face face-front">
-            <div class="ribbon-vertical"></div>
-            <div class="ribbon-horizontal"></div>
-            <div class="gift-seal">👑</div>
-          </div>
-          <div class="gift-face face-back">
-            <div class="ribbon-vertical"></div>
-            <div class="ribbon-horizontal"></div>
-          </div>
-          <div class="gift-face face-left">
-            <div class="ribbon-vertical"></div>
-            <div class="ribbon-horizontal"></div>
-          </div>
-          <div class="gift-face face-right">
-            <div class="ribbon-vertical"></div>
-            <div class="ribbon-horizontal"></div>
-          </div>
-          <div class="gift-face face-top">
-            <div class="gift-inner-glow"></div>
-          </div>
-          <div class="gift-face face-bottom"></div>
-        </div>
-      </div>
-
-      <!-- Tap Indicator Prompt -->
-      <div class="gift-tap-prompt" id="giftTapPrompt">
-        <span class="prompt-icon">👆</span>
-        <span class="prompt-text">TAP TO OPEN SURPRISE REWARD!</span>
-        <span class="prompt-sparkle">✨</span>
-      </div>
-    </div>
-
-    <!-- Revealed Reward Modal Dialog -->
-    <div class="gift-reward-modal" id="giftRewardModal">
-      <div class="gift-reward-sheen"></div>
-      <div class="gift-reward-header">
-        <div class="reward-crown-wrap">
-          <span class="reward-crown-icon" id="rewardCrownIcon">👑</span>
-        </div>
-        <span class="reward-pill" id="rewardPillText">SURPRISE REWARD UNLOCKED</span>
-      </div>
-
-      <h2 class="reward-title" id="rewardTitleText">VIP Golden Reader Badge</h2>
-      <div class="reward-badge-preview" id="rewardBadgePreview">
-        <div class="badge-emblem" id="rewardEmblem">🏆</div>
-        <div class="badge-glow-ring"></div>
-      </div>
-
-      <p class="reward-desc" id="rewardDescText">
-        Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!
-      </p>
-
-      <div class="reward-perk-box" id="rewardPerkBox"></div>
-
-      <div class="reward-actions">
-        <button type="button" class="btn-claim-reward" id="btnClaimReward" onclick="claimSurpriseReward()">
-          <span>⚡ Claim Reward Now</span>
-          <span class="claim-arrow">→</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==========================================================================
-       FEATURE: 3D SMART FLASHCARD TRAINER (LEITNER SPACED REPETITION BOX)
-       ========================================================================== -->
-  <div class="modal-overlay" id="flashcardModalOverlay" onclick="handleFlashcardOverlayClick(event)">
-    <div class="flashcard-deck-modal" onclick="event.stopPropagation()">
-      <!-- Deck Top Bar -->
-      <div class="flashcard-deck-header">
-        <div class="deck-header-left">
-          <span class="deck-badge">🎴 3D FLASHCARDS</span>
-          <div class="leitner-boxes-strip">
-            <span class="box-chip chip-box1" id="box1Chip" title="Box 1: Review Today">Box 1: <b id="box1Count">0</b></span>
-            <span class="box-chip chip-box2" id="box2Chip" title="Box 2: Learning">Box 2: <b id="box2Count">0</b></span>
-            <span class="box-chip chip-box3" id="box3Chip" title="Box 3: Mastered">Box 3: <b id="box3Count">0</b></span>
-          </div>
-        </div>
-        <div class="deck-header-right">
-          <span class="deck-progress-indicator" id="deckProgressIndicator">Card 1 of 5</span>
-          <button type="button" class="modal-close" onclick="closeFlashcardTrainer()" title="Close Trainer (Esc)">&times;</button>
-        </div>
-      </div>
-
-      <!-- Main Deck Viewport -->
-      <div id="flashcardActiveDeckView">
-        <!-- 3D Card Arena -->
-        <div class="flashcard-3d-arena" id="flashcard3dArena">
-          <div class="flashcard-3d-card" id="flashcard3dCard" onclick="toggleFlashcardFlip()">
-            <!-- Front Face -->
-            <div class="flashcard-face flashcard-front">
-              <div class="card-ornament top-left">✦</div>
-              <div class="card-ornament top-right">✦</div>
-              <div class="card-top-tag">
-                <span class="card-type-tag" id="fcTypeTag">NOUN</span>
-                <button type="button" class="card-audio-btn" id="fcAudioBtn" onclick="event.stopPropagation(); speakFlashcardWord();" title="Speak Word Pronunciation">
-                  🔊
-                </button>
-              </div>
-              
-              <div class="card-front-center">
-                <h1 class="card-word-title" id="fcWordTitle">Abandon</h1>
-                <div class="card-phonetic-badge" id="fcPhoneticBadge">अबैंडन</div>
-              </div>
-
-              <div class="card-flip-prompt">
-                <span>👆 Tap card to flip &amp; reveal Hindi meaning</span>
-                <span class="flip-hint-icon">🔄</span>
-              </div>
-            </div>
-
-            <!-- Back Face -->
-            <div class="flashcard-face flashcard-back">
-              <div class="card-ornament top-left">✦</div>
-              <div class="card-ornament top-right">✦</div>
-              <div class="card-back-header">
-                <span class="card-back-word" id="fcBackWord">Abandon</span>
-                <span class="card-back-type" id="fcBackType">verb</span>
-              </div>
-
-              <div class="card-meaning-box">
-                <div class="card-hindi-meaning" id="fcHindiMeaning">त्याग देना, छोड़ देना</div>
-                <div class="card-english-def" id="fcEnglishDef">To give up completely; desert or leave behind.</div>
-              </div>
-
-              <div class="card-example-box">
-                <div class="card-example-en" id="fcExampleEn">"Never abandon your reading habits."</div>
-                <div class="card-example-hi" id="fcExampleHi">"अपनी पढ़ने की आदतों को कभी मत छोड़ो।"</div>
-              </div>
-
-              <div class="card-synonyms" id="fcSynonyms">
-                <b>Synonyms:</b> <span id="fcSynList">Desert, Discard, Renounce</span>
-              </div>
-
-              <div class="card-back-tap-hint">
-                <span>👆 Tap to flip back</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Gesture Visual Stamps -->
-          <div class="swipe-stamp stamp-review" id="swipeStampReview">🔁 REVIEW LATER</div>
-          <div class="swipe-stamp stamp-mastered" id="swipeStampMastered">✅ MASTERED!</div>
-        </div>
-
-        <!-- Swipe Tip Guide -->
-        <div class="flashcard-swipe-hint">
-          <span class="hint-left">👈 Swipe Left: Review Later</span>
-          <span class="hint-center">• Tap to Flip •</span>
-          <span class="hint-right">Swipe Right: Mastered 👉</span>
-        </div>
-
-        <!-- Bottom Action Dock -->
-        <div class="flashcard-action-dock">
-          <button type="button" class="btn-card-action btn-review" onclick="handleCardAction('review')" title="Swipe Left or click: Review Later">
-            <span class="action-icon">🔁</span>
-            <div class="action-meta">
-              <span class="action-title">Review Later</span>
-              <span class="action-sub">Box 1</span>
-            </div>
-          </button>
-
-          <button type="button" class="btn-card-action btn-flip" onclick="toggleFlashcardFlip()" title="Flip Card (Tap)">
-            <span class="action-icon">🔄</span>
-            <span class="action-title">Flip Card</span>
-          </button>
-
-          <button type="button" class="btn-card-action btn-master" onclick="handleCardAction('mastered')" title="Swipe Right or click: Mastered">
-            <span class="action-icon">✅</span>
-            <div class="action-meta">
-              <span class="action-title">Mastered</span>
-              <span class="action-sub">Box 2/3</span>
-            </div>
-          </button>
-        </div>
-      </div>
-
-      <!-- Completion Celebration Screen -->
-      <div class="flashcard-completion-view" id="flashcardCompletionView" style="display:none;">
-        <div class="completion-trophy">🏆</div>
-        <h2 class="completion-title">Daily Flashcards Completed!</h2>
-        <p class="completion-desc">Aapne aaj ke saare target words review kar liye hain! Mastery score increase ho gaya hai.</p>
-        <div class="completion-stats-grid">
-          <div class="completion-stat-card">
-            <div class="stat-num" id="compReviewedCount">5</div>
-            <div class="stat-lbl">Cards Practiced</div>
-          </div>
-          <div class="completion-stat-card">
-            <div class="stat-num" id="compMasteredCount">4</div>
-            <div class="stat-lbl">Mastered Today</div>
-          </div>
-          <div class="completion-stat-card">
-            <div class="stat-num" id="compTotalPoints">+100</div>
-            <div class="stat-lbl">Focus XP Earned</div>
-          </div>
-        </div>
-        <div class="completion-actions">
-          <button type="button" class="btn btn-primary" onclick="restartFlashcardsDeck(5)" style="padding:12px 24px; font-weight:800; border-radius:12px; background:linear-gradient(135deg, #ec4899, #8b5cf6); border:none; color:#fff;">
-            🎴 Practice 5 More Words
-          </button>
-          <button type="button" class="btn" onclick="closeFlashcardTrainer()" style="padding:12px 24px; font-weight:700; border-radius:12px;">
-            Close Trainer
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 💬 FLOATING LIVE HELP DESK TRIGGER BUTTON -->
-  <div class="fab-chat-wrapper" id="fabChatWrapper">
-    <button type="button" class="fab-chat-btn" id="fabLiveHelpDeskBtn" onclick="openUserHelpDeskModal()" title="Live Help Desk • Chat with Admin">
-      <span class="fab-chat-icon">💬</span>
-      <span class="fab-chat-ping"></span>
-      <span class="fab-chat-badge" id="userChatUnreadBadge" style="display:none;">0</span>
-    </button>
-  </div>
-
-  <!-- 💬 LIVE IN-APP HELP DESK MODAL (Zomato/Telegram Style Live Support) -->
-  <div class="modal-overlay" id="userHelpDeskModalOverlay" onclick="handleHelpDeskOverlayClick(event)">
-    <div class="modal-content help-desk-modal-dialog" onclick="event.stopPropagation()">
-      <!-- Modal Header -->
-      <div class="help-desk-header">
-        <div class="help-desk-header-info">
-          <div class="help-desk-avatar">👑</div>
-          <div>
-            <div class="help-desk-title-row">
-              <h3 class="help-desk-title">Mind Focus Executive Help Desk</h3>
-              <span class="help-desk-online-badge">🟢 Online</span>
-            </div>
-            <div class="help-desk-subtitle">Direct line to Developer &amp; Admin &bull; Real-time answers</div>
-          </div>
-        </div>
-        <button type="button" class="modal-close" onclick="closeUserHelpDeskModal()">&times;</button>
-      </div>
-
-      <!-- Messages Container -->
-      <div class="help-desk-body" id="userHelpDeskBody">
-        <div class="user-chat-messages-stream" id="userChatMessagesStream">
-          <div class="user-chat-welcome-card">
-            <div style="font-size:36px; margin-bottom:8px;">💬</div>
-            <div style="font-weight:800; color:var(--text-primary); font-size:1.05rem;">Namaste Reader!</div>
-            <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;">
-              Aapko app me koi naya feature chahiye, koi bug report karna hai, ya koi sawaal puchna hai to direct message likhein. Hum live reply karenge! 🙏
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quick Prompt Chips for User -->
-      <div class="user-chat-quick-prompts">
-        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Bhai naya feature kab aayega?')">
-          🚀 Naya feature kab aayega?
-        </button>
-        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Bhai ek nayi book request karni hai!')">
-          📚 Nayi book request
-        </button>
-        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('App me ek bug notice kiya hai.')">
-          🐛 Bug report karna hai
-        </button>
-        <button type="button" class="user-prompt-chip" onclick="insertUserPrompt('Audio reader bohot mast chal raha hai, thank you! 🔥')">
-          🔥 Feedback
-        </button>
-      </div>
-
-      <!-- Message Input Bar -->
-      <form id="userChatForm" class="help-desk-footer" onsubmit="event.preventDefault(); sendUserChatMessage(); return false;">
-        <input type="text" id="userChatInputText" class="user-chat-input" placeholder="Type message to Admin... (e.g. Bhai naya...)" autocomplete="off" autocorrect="on" autocapitalize="sentences" onkeydown="handleUserChatKeydown(event)">
-        <button type="submit" class="btn-user-chat-send" id="btnUserSendChat" onclick="event.preventDefault(); sendUserChatMessage();">
-          <span>✈️ Send</span>
-        </button>
-      </form>
     </div>
   </div>
 
@@ -13343,9 +12650,6 @@ function renderNowReadingHero() {
     '<button class="hero-btn-primary" onclick="openBookDetailSheet(' + origIdx + ')">' +
     '📖 Update Page & Notes' +
     '</button>' +
-    '<button class="hero-btn-ambient" onclick="openSanctuaryMode(' + origIdx + ')" style="background:linear-gradient(135deg, rgba(245,158,11,0.22), rgba(239,68,68,0.22)); border-color:rgba(245,158,11,0.4); color:#fbbf24; font-weight:700;" title="Enter Distraction-Free Reading Sanctuary">' +
-    '🌌 Sanctuary' +
-    '</button>' +
     '<button class="hero-btn-ambient" onclick="openAmbienceModal()">' +
     '🎧 ' + (typeof isAmbiencePlaying !== 'undefined' && isAmbiencePlaying ? 'Ambience Active' : 'Focus Ambience') +
     '</button>' +
@@ -15808,7 +15112,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.7.1';
+const CURRENT_APP_VERSION = 'v3.8.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -16096,11 +15400,13 @@ function triggerInAppUpdate(apkUrl) {
 
   // Animate progress bar simulation
   let pct = 0;
-  const timer = setInterval(() => {
+  if (updateProgressTimer) clearInterval(updateProgressTimer);
+  updateProgressTimer = setInterval(() => {
     pct += Math.floor(Math.random() * 15) + 10;
     if (pct >= 100) {
       pct = 100;
-      clearInterval(timer);
+      clearInterval(updateProgressTimer);
+      updateProgressTimer = null;
       if (textInfo) textInfo.innerText = 'Package Ready! Launching Installer...';
       if (typeof triggerHaptic === 'function') triggerHaptic('success');
     }
@@ -16569,14 +15875,6 @@ function updateAmbienceUI() {
     ring.classList.toggle('active', isAmbiencePlaying);
   });
 
-  // Sync Sanctuary Focus Mode Ambience Button
-  const sanctuaryAmbBtn = document.getElementById('sanctuaryAmbienceBtn');
-  if (sanctuaryAmbBtn) {
-    sanctuaryAmbBtn.innerText = isAmbiencePlaying ? ('🎧 ' + name + ': Playing') : '🎧 Ambience: Off';
-    sanctuaryAmbBtn.style.background = isAmbiencePlaying ? '#10b981' : 'rgba(255, 255, 255, 0.08)';
-    sanctuaryAmbBtn.style.color = isAmbiencePlaying ? '#fff' : 'var(--text-primary)';
-  }
-
   // Update EQ visualizer if modal is active
   if (typeof startSpatialEqVisualizer === 'function') {
     startSpatialEqVisualizer();
@@ -16601,114 +15899,6 @@ function closeAmbienceModal() {
   restoreDockActiveTab();
 }
 
-/* ==========================================================
-   FEATURE: POMODORO FOCUS READING TIMER
-   ========================================================== */
-let pomodoroDuration = 25 * 60; // 25 mins default
-let pomodoroRemaining = 25 * 60;
-let pomodoroTimerInterval = null;
-let isPomodoroRunning = false;
-
-function openPomodoroModal() {
-  updatePomodoroDisplay();
-  const overlay = document.getElementById('pomodoroTimerModalOverlay');
-  if (overlay) overlay.classList.add('active');
-}
-
-function closePomodoroModal() {
-  const overlay = document.getElementById('pomodoroTimerModalOverlay');
-  if (overlay) overlay.classList.remove('active');
-  restoreDockActiveTab();
-}
-
-function updatePomodoroDisplay() {
-  const minutes = Math.floor(pomodoroRemaining / 60);
-  const seconds = pomodoroRemaining % 60;
-  const timeStr = String(minutes).padStart(2, '0') + ':' + String(seconds).padStart(2, '0');
-  
-  const displayEl = document.getElementById('pomodoroTimeDisplay');
-  if (displayEl) displayEl.innerText = timeStr;
-
-  const headerText = document.getElementById('headerPomodoroText');
-  if (headerText) {
-    headerText.innerText = isPomodoroRunning ? timeStr : 'Focus Timer';
-  }
-
-  const toggleBtn = document.getElementById('pomodoroToggleBtn');
-  if (toggleBtn) {
-    if (isPomodoroRunning) {
-      toggleBtn.innerText = '⏸️ Pause';
-      toggleBtn.style.background = '#f59e0b';
-      toggleBtn.style.borderColor = '#f59e0b';
-    } else {
-      toggleBtn.innerText = '▶ Start Focus';
-      toggleBtn.style.background = '#ef4444';
-      toggleBtn.style.borderColor = '#ef4444';
-    }
-  }
-}
-
-function togglePomodoroTimer() {
-  if (isPomodoroRunning) {
-    clearInterval(pomodoroTimerInterval);
-    isPomodoroRunning = false;
-    updatePomodoroDisplay();
-    showToast('Focus timer paused', 'info');
-  } else {
-    isPomodoroRunning = true;
-    updatePomodoroDisplay();
-    showToast('Focus session started! Deep reading time 📖', 'success');
-    if (typeof recordReadingActivity === 'function') recordReadingActivity();
-
-    pomodoroTimerInterval = setInterval(() => {
-      if (pomodoroRemaining > 0) {
-        pomodoroRemaining--;
-        updatePomodoroDisplay();
-      } else {
-        clearInterval(pomodoroTimerInterval);
-        isPomodoroRunning = false;
-        updatePomodoroDisplay();
-        playPomodoroBell();
-        showToast('🎉 25 Min Focus Session Completed! Great reading!', 'success');
-      }
-    }, 1000);
-  }
-}
-
-function resetPomodoroTimer() {
-  clearInterval(pomodoroTimerInterval);
-  isPomodoroRunning = false;
-  pomodoroRemaining = pomodoroDuration;
-  updatePomodoroDisplay();
-  showToast('Timer reset to ' + Math.round(pomodoroDuration / 60) + ' mins', 'info');
-}
-
-function setPomodoroDuration(mins) {
-  clearInterval(pomodoroTimerInterval);
-  isPomodoroRunning = false;
-  pomodoroDuration = mins * 60;
-  pomodoroRemaining = pomodoroDuration;
-  updatePomodoroDisplay();
-  showToast('Set focus timer to ' + mins + ' minutes', 'success');
-}
-
-function playPomodoroBell() {
-  const ctx = getOrCreateAudioContext();
-  if (!ctx) return;
-  try {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(587.33, ctx.currentTime); // D5 pleasant bell
-    gain.gain.setValueAtTime(0.35, ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 2.5);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start();
-    osc.stop(ctx.currentTime + 2.5);
-  } catch (e) {}
-}
-
 // Global window bindings for 100% reliable modal opening and navigation
 window.switchBottomTab = switchBottomTab;
 window.restoreDockActiveTab = restoreDockActiveTab;
@@ -16720,8 +15910,6 @@ window.openSettingsModal = openSettingsModal;
 window.closeSettingsModal = closeSettingsModal;
 window.openPickBookModal = openPickBookModal;
 window.closePickBookModal = closePickBookModal;
-window.openPomodoroModal = openPomodoroModal;
-window.closePomodoroModal = closePomodoroModal;
 window.openBookDetailSheet = openBookDetailSheet;
 window.closeBookDetailSheet = closeBookDetailSheet;
 window.handleSheetPageInput = handleSheetPageInput;
@@ -16731,7 +15919,7 @@ window.insertNoteTemplate = insertNoteTemplate;
 window.filterByStatus = filterByStatus;
 
 /* ==========================================================================
-   MINDFOCUS BOOKS v2.0.0 — SPATIAL LUXURY SANCTUARY EDITION
+   MINDFOCUS BOOKS v3.8.0 — SPATIAL LUXURY EDITION
    10 Futuristic UI/UX Systems Implementation
    ========================================================================== */
 
@@ -16782,7 +15970,7 @@ function init3DCardPhysics() {
   }
   document.addEventListener('pointermove', (e) => {
     if (!e.target || typeof e.target.closest !== 'function') return;
-    const card = e.target.closest('.book-card, .now-reading-hero, .sanctuary-cover-wrap');
+    const card = e.target.closest('.book-card, .now-reading-hero');
     if (!card) return;
     const r = card.getBoundingClientRect();
     const x = e.clientX - r.left;
@@ -16872,7 +16060,6 @@ function initSpotlightIsland() {
       openSpotlightModal();
     } else if (e.key === 'Escape') {
       closeSpotlightModal();
-      exitSanctuaryMode();
       closeReadingDnaModal();
     }
   });
@@ -16925,10 +16112,8 @@ function renderSpotlightResults(q) {
 
   // Quick Action commands
   const actions = [
-    { type: 'action', title: '🌌 Launch Reading Sanctuary Mode', sub: 'Distraction-zero luxury focus environment', icon: '🌌', fn: () => { closeSpotlightModal(); openSanctuaryMode(); } },
     { type: 'action', title: '🎧 Play Ambience (Rain Soundscape)', sub: 'Binaural soothing rain sound', icon: '🌧️', fn: () => { closeSpotlightModal(); selectAmbienceTrack('rain'); startAmbienceAudio('rain'); showToast('Rain soundscape playing 🌧️', 'success'); } },
     { type: 'action', title: '🎧 Play Ambience (Deep Forest)', sub: 'Natural birds & wind soundscape', icon: '🌲', fn: () => { closeSpotlightModal(); selectAmbienceTrack('forest'); startAmbienceAudio('forest'); showToast('Forest soundscape playing 🌲', 'success'); } },
-    { type: 'action', title: '⏱️ Start 25-Min Pomodoro Sprint', sub: 'Focus reading interval with peaceful chime', icon: '⏱️', fn: () => { closeSpotlightModal(); openPomodoroModal(); togglePomodoroTimer(); } },
     { type: 'action', title: '🌌 View Reading DNA Galaxy Constellation', sub: 'Inspect your interactive finished books cosmic map', icon: '✨', fn: () => { closeSpotlightModal(); openReadingDnaModal(); } },
     { type: 'action', title: '🎲 Spin Book Roulette', sub: 'Pick a random unread book from library', icon: '🎲', fn: () => { closeSpotlightModal(); openPickBookModal(); } },
     { type: 'action', title: '🔥 Inspect Daily Reading Streak', sub: 'Track milestone trophies and reading history', icon: '🔥', fn: () => { closeSpotlightModal(); openStreakModal(); } },
@@ -17020,158 +16205,6 @@ function calculatePaceEstimate(book) {
   if (totalMins < 60) return '~' + totalMins + 'm left';
   const hours = (totalMins / 60).toFixed(1);
   return '~' + hours + ' hrs left';
-}
-
-// --- 9. DEEP SANCTUARY FOCUS MODE ---
-let sanctuaryActiveBookIdx = -1;
-let sanctuaryTimerInterval = null;
-let sanctuaryTimerRemaining = 25 * 60;
-let isSanctuaryTimerRunning = false;
-
-function openSanctuaryMode(bookIdx) {
-  if (typeof bookIdx === 'undefined' || bookIdx < 0) {
-    bookIdx = state.books.findIndex(b => b.status === 'READING');
-    if (bookIdx < 0) bookIdx = 0;
-  }
-  sanctuaryActiveBookIdx = bookIdx;
-  const b = state.books[bookIdx];
-  if (!b) return;
-
-  const overlay = document.getElementById('sanctuaryModeOverlay');
-  if (!overlay) return;
-
-  const coverWrap = document.getElementById('sanctuaryCoverWrap');
-  const titleEl = document.getElementById('sanctuaryBookTitle');
-  const authorEl = document.getElementById('sanctuaryBookAuthor');
-  const catBadge = document.getElementById('sanctuaryCategoryBadge');
-  const pagesLabel = document.getElementById('sanctuaryPagesLabel');
-  const paceLabel = document.getElementById('sanctuaryPaceLabel');
-  const barFill = document.getElementById('sanctuaryBarFill');
-  const quoteGlow = document.getElementById('sanctuaryQuoteGlow');
-
-  const coverUrl = getBookCover(b);
-  if (coverWrap) {
-    coverWrap.innerHTML = coverUrl 
-      ? '<img src="' + coverUrl + '" alt="cover">'
-      : '<div style="background:linear-gradient(135deg,#1e3a8a,#3b82f6); width:100%; height:100%; display:flex; align-items:center; justify-content:center; font-size:2.5rem;">📖</div>';
-  }
-
-  const pages = getBookPages(b);
-  if (titleEl) titleEl.innerText = b.title;
-  if (authorEl) authorEl.innerText = 'by ' + b.author;
-  if (catBadge) catBadge.innerText = (b.category || 'Focus').toUpperCase();
-  if (pagesLabel) pagesLabel.innerText = 'Page ' + pages.current + ' of ' + pages.total + ' (' + pages.pct + '%)';
-  if (paceLabel) paceLabel.innerText = calculatePaceEstimate(b);
-  if (barFill) barFill.style.width = pages.pct + '%';
-
-  if (quoteGlow) {
-    quoteGlow.innerText = b.takeaway ? ('"' + b.takeaway + '"') : '"Quiet the mind and the soul will speak."';
-  }
-
-  updateSanctuaryTimerUI();
-  updateDynamicAurora(b);
-  overlay.classList.add('active');
-  showToast('Entered Reading Sanctuary 🌌 Distraction-free focus', 'info');
-}
-
-function exitSanctuaryMode() {
-  const overlay = document.getElementById('sanctuaryModeOverlay');
-  if (overlay) overlay.classList.remove('active');
-  if (isSanctuaryTimerRunning) {
-    clearInterval(sanctuaryTimerInterval);
-    isSanctuaryTimerRunning = false;
-  }
-  renderApp();
-}
-
-function updateSanctuaryTimerUI() {
-  const digits = document.getElementById('sanctuaryTimerDigits');
-  const toggleBtn = document.getElementById('sanctuaryTimerToggle');
-  const mins = Math.floor(sanctuaryTimerRemaining / 60);
-  const secs = sanctuaryTimerRemaining % 60;
-  const timeStr = String(mins).padStart(2, '0') + ':' + String(secs).padStart(2, '0');
-
-  if (digits) digits.innerText = timeStr;
-  if (toggleBtn) {
-    toggleBtn.innerText = isSanctuaryTimerRunning ? '⏸ Pause Sprint' : '▶ Start 25-Min Sprint';
-    toggleBtn.style.background = isSanctuaryTimerRunning ? '#f59e0b' : '#ef4444';
-  }
-}
-
-function toggleSanctuaryTimer() {
-  if (isSanctuaryTimerRunning) {
-    clearInterval(sanctuaryTimerInterval);
-    isSanctuaryTimerRunning = false;
-    updateSanctuaryTimerUI();
-    showToast('Sprint paused', 'info');
-  } else {
-    isSanctuaryTimerRunning = true;
-    updateSanctuaryTimerUI();
-    showToast('Reading sprint active! Deep focus 🕯️', 'success');
-    if (typeof recordReadingActivity === 'function') recordReadingActivity();
-
-    sanctuaryTimerInterval = setInterval(() => {
-      if (sanctuaryTimerRemaining > 0) {
-        sanctuaryTimerRemaining--;
-        updateSanctuaryTimerUI();
-      } else {
-        clearInterval(sanctuaryTimerInterval);
-        isSanctuaryTimerRunning = false;
-        playPomodoroBell();
-        showToast('Sprint complete! Amazing reading session 🌟', 'success');
-        sanctuaryTimerRemaining = 25 * 60;
-        updateSanctuaryTimerUI();
-      }
-    }, 1000);
-  }
-}
-
-function resetSanctuaryTimer() {
-  clearInterval(sanctuaryTimerInterval);
-  isSanctuaryTimerRunning = false;
-  sanctuaryTimerRemaining = 25 * 60;
-  updateSanctuaryTimerUI();
-  showToast('Timer reset to 25 minutes', 'info');
-}
-
-function toggleAmbienceFromSanctuary() {
-  toggleAmbiencePlayback();
-  updateAmbienceUI();
-}
-
-function stepSanctuaryPage(inc) {
-  if (sanctuaryActiveBookIdx < 0) return;
-  const b = state.books[sanctuaryActiveBookIdx];
-  if (!b) return;
-  const pages = getBookPages(b);
-  const newCurr = Math.min(pages.total, pages.current + inc);
-  b.current_page = newCurr;
-  if (newCurr >= pages.total && b.status !== 'DONE') {
-    b.status = 'DONE';
-    if (!b.end_date) b.end_date = new Date().toISOString().split('T')[0];
-    showToast('Book Finished! Masterpiece completed 🏆', 'success');
-  } else if (b.status === 'PENDING') {
-    b.status = 'READING';
-    if (!b.start_date) b.start_date = new Date().toISOString().split('T')[0];
-  }
-  markChange();
-  saveData();
-  openSanctuaryMode(sanctuaryActiveBookIdx);
-  if (typeof recordReadingActivity === 'function') recordReadingActivity();
-}
-
-function finishSanctuaryBook() {
-  if (sanctuaryActiveBookIdx < 0) return;
-  const b = state.books[sanctuaryActiveBookIdx];
-  if (!b) return;
-  const pages = getBookPages(b);
-  b.current_page = pages.total;
-  b.status = 'DONE';
-  if (!b.end_date) b.end_date = new Date().toISOString().split('T')[0];
-  markChange();
-  saveData();
-  openSanctuaryMode(sanctuaryActiveBookIdx);
-  showToast('Congratulations! "' + b.title + '" marked as FINISHED! 🏆', 'success');
 }
 
 // --- 10. READING DNA GALAXY CONSTELLATION ---
@@ -17375,13 +16408,6 @@ window.filterSpotlightCategory = filterSpotlightCategory;
 window.handleSpotlightBackdrop = handleSpotlightBackdrop;
 window.triggerSpotlightItem = triggerSpotlightItem;
 window.handleDynamicIslandClick = handleDynamicIslandClick;
-window.openSanctuaryMode = openSanctuaryMode;
-window.exitSanctuaryMode = exitSanctuaryMode;
-window.stepSanctuaryPage = stepSanctuaryPage;
-window.finishSanctuaryBook = finishSanctuaryBook;
-window.toggleSanctuaryTimer = toggleSanctuaryTimer;
-window.resetSanctuaryTimer = resetSanctuaryTimer;
-window.toggleAmbienceFromSanctuary = toggleAmbienceFromSanctuary;
 window.openReadingDnaModal = openReadingDnaModal;
 window.closeReadingDnaModal = closeReadingDnaModal;
 window.handleDnaBackdrop = handleDnaBackdrop;
@@ -18036,17 +17062,6 @@ function applyFeaturesConfig(feats) {
     updateBtn.style.display = 'none';
   }
 
-  // 7. ⏱️ Zen Sanctuary Timer
-  const timerBtn = document.getElementById('headerPomodoroBtn');
-  if (timerBtn) {
-    timerBtn.style.display = (feats.sanctuaryTimerEnabled === false) ? 'none' : 'inline-flex';
-  }
-  if (feats.sanctuaryTimerEnabled === false) {
-    if (typeof pauseZenTimer === 'function') pauseZenTimer();
-    const pomModal = document.getElementById('pomodoroTimerModalOverlay');
-    if (pomModal) pomModal.classList.remove('active');
-  }
-
   // 8. 🎴 3D Smart Flashcards
   const fcBtn = document.getElementById('headerFlashcardsBtn');
   const fcKpi = document.getElementById('kpiFlashcardsCount');
@@ -18271,7 +17286,7 @@ window.bindCyber3dNoticeTilt = bindCyber3dNoticeTilt;
 window.createNoticeQuantumBurst = createNoticeQuantumBurst;
 
 // ==========================================================================
-// 4D LIVING SPATIAL SANCTUARY APP ENGINES (v3.0.0)
+// 4D LIVING SPATIAL APP ENGINES (v3.8.0)
 // ==========================================================================
 
 /* 1. Hardware Haptic Feedback Engine */
@@ -18415,7 +17430,7 @@ function initPullToRefresh() {
       setTimeout(() => {
         renderApp();
         if (typeof checkRemoteBroadcastNotice === 'function') checkRemoteBroadcastNotice();
-        showToast('✨ Sanctuary Refreshed with Living Glow', 'success');
+        showToast('✨ Library Refreshed with Living Glow', 'success');
         indicator.style.height = '0px';
         indicator.classList.remove('refreshing', 'pulling');
       }, 700);
@@ -18516,7 +17531,13 @@ function updateFloatingMiniCapsule() {
   const fillEl = document.getElementById('miniCapsuleProgressFill');
 
   if (titleEl) titleEl.innerText = book.title || 'Untitled';
-  if (coverEl) coverEl.src = book.cover_image || 'cover_placeholder.jpg';
+  if (coverEl) {
+    coverEl.onerror = function() {
+      this.onerror = null;
+      this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='110' viewBox='0 0 80 110'%3E%3Crect width='80' height='110' fill='%231e293b'/%3E%3Ctext x='40' y='55' fill='%2394a3b8' font-size='24' text-anchor='middle' dominant-baseline='middle'%3E📖%3C/text%3E%3C/svg%3E";
+    };
+    coverEl.src = book.cover_image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='110' viewBox='0 0 80 110'%3E%3Crect width='80' height='110' fill='%231e293b'/%3E%3Ctext x='40' y='55' fill='%2394a3b8' font-size='24' text-anchor='middle' dominant-baseline='middle'%3E📖%3C/text%3E%3C/svg%3E";
+  }
 
   const total = parseInt(book.total_pages) || 280;
   const curr = parseInt(book.current_page) || 0;
@@ -18672,7 +17693,7 @@ function draw3RingActivity() {
   const pagesDone = Math.min(25, totalPagesRead % 25 === 0 && totalPagesRead > 0 ? 25 : (totalPagesRead % 25));
   const pagesPct = Math.min(1.0, pagesDone / pagesGoal);
 
-  // Focus time (Pomodoro session history or streak)
+  // Focus time (Reading activity or streak)
   const minsGoal = 30;
   const minsDone = Math.min(30, 20 + (state.streakCount * 3) % 15);
   const minsPct = Math.min(1.0, minsDone / minsGoal);
@@ -19545,1606 +18566,46 @@ window.speakDictWord = speakDictWord;
 window.playPaperTurnAudio = playPaperTurnAudio;
 
 // =========================================================================
-// 🎁 3D MYSTERY GOLDEN GIFT BOX ENGINE (SURPRISE REWARD ENGINE)
+// REMOVED LEGACY FEATURES (Mystery Gift, Flashcards, Live Help Desk)
+// Clean no-op stubs preserved for backwards compatibility
 // =========================================================================
+function initMysteryGiftEngine() {}
+function triggerMysteryGiftDrop() {}
+function openGoldenGiftBox() {}
+function claimSurpriseReward() {}
+function initFlashcardTrainerEngine() {}
+function openFlashcardTrainer() {}
+function closeFlashcardTrainer() {}
+function flipFlashcard() {}
+function swipeFlashcard() {}
+function initLiveHelpDeskEngine() {}
+function openUserHelpDeskModal() {}
+function closeUserHelpDeskModal() {}
+function sendUserChatMessage() {}
+function handleHelpDeskOverlayClick() {}
+function insertUserPrompt() {}
+function handleUserChatKeydown() {}
+function playUserChatAudioChime() {}
+function setupUserChatEventListeners() {}
 
-let activeGiftBoxOpen = false;
-let currentActiveGiftData = null;
-let confettiAnimFrame = null;
-
-function initMysteryGiftEngine() {
-  try {
-    const isVip = localStorage.getItem('mf_vip_crown') === 'true';
-    const vipBadge = document.getElementById('headerVipBadge');
-    if (vipBadge) {
-      vipBadge.style.display = isVip ? 'inline-flex' : 'none';
-    }
-  } catch (e) {}
-
-  // Handle window resize for confetti canvas
-  window.addEventListener('resize', () => {
-    const canvas = document.getElementById('giftConfettiCanvas');
-    if (canvas && canvas.offsetParent !== null) {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-  });
-}
-
-function playGiftFallSound() {
-  // Silenced per user request: peaceful silent entrance
-  return;
-}
-
-function playGiftCrackersFanfare() {
-  const ctx = getOrCreateAudioContext();
-  if (!ctx) return;
-  try {
-    const now = ctx.currentTime;
-
-    // 1. Crackers Popping Sounds (Rapid Firework Burst)
-    for (let i = 0; i < 7; i++) {
-      const burstDelay = now + (i * 0.07) + (Math.random() * 0.04);
-      const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);
-      const output = noiseBuffer.getChannelData(0);
-      for (let j = 0; j < noiseBuffer.length; j++) {
-        output[j] = (Math.random() * 2 - 1) * Math.exp(-j / (ctx.sampleRate * 0.02));
-      }
-      const whiteNoise = ctx.createBufferSource();
-      whiteNoise.buffer = noiseBuffer;
-      const filter = ctx.createBiquadFilter();
-      filter.type = 'bandpass';
-      filter.frequency.value = 1200 + Math.random() * 800;
-
-      const popGain = ctx.createGain();
-      popGain.gain.setValueAtTime(0.25, burstDelay);
-      popGain.gain.exponentialRampToValueAtTime(0.001, burstDelay + 0.08);
-
-      whiteNoise.connect(filter);
-      filter.connect(popGain);
-      popGain.connect(ctx.destination);
-
-      whiteNoise.start(burstDelay);
-      whiteNoise.stop(burstDelay + 0.09);
-    }
-
-    // 2. Victorious Fanfare Arpeggio (C5 -> E5 -> G5 -> C6)
-    const notes = [523.25, 659.25, 783.99, 1046.50];
-    notes.forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const noteTime = now + 0.15 + (idx * 0.12);
-
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, noteTime);
-
-      gain.setValueAtTime(0.18, noteTime);
-      gain.exponentialRampToValueAtTime(0.001, noteTime + 0.55);
-
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-
-      osc.start(noteTime);
-      osc.stop(noteTime + 0.55);
-    });
-  } catch (e) {}
-}
-
-function playGiftClaimChime() {
-  const ctx = getOrCreateAudioContext();
-  if (!ctx) return;
-  try {
-    const now = ctx.currentTime;
-    [659.25, 830.61, 987.77, 1318.51].forEach((f, i) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const t = now + (i * 0.09);
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(f, t);
-      gain.setValueAtTime(0.14, t);
-      gain.exponentialRampToValueAtTime(0.0001, t + 0.6);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(t);
-      osc.stop(t + 0.65);
-    });
-  } catch (e) {}
-}
-
-function triggerFallingGoldenGiftBox(giftData = {}) {
-  currentActiveGiftData = Object.assign({
-    id: 'gift-' + Date.now(),
-    rewardType: 'vip_badge',
-    title: 'Surprise Golden Gift Box',
-    message: 'Aapko Mind Focus Books Tracker ki taraf se exclusive VIP recognition mili hai!',
-    rewardName: 'VIP Golden Reader Badge',
-    rewardEmblem: '👑'
-  }, giftData);
-
-  activeGiftBoxOpen = false;
-
-  const overlay = document.getElementById('mysteryGiftOverlay');
-  const stage = document.getElementById('giftBoxStage');
-  const rewardModal = document.getElementById('giftRewardModal');
-  const tapPrompt = document.getElementById('giftTapPrompt');
-
-  if (!overlay || !stage) return;
-
-  // Reset stage classes
-  stage.classList.remove('opened');
-  if (rewardModal) rewardModal.classList.remove('active');
-  if (tapPrompt) tapPrompt.style.display = 'flex';
-
-  // Setup reward modal text
-  const rType = currentActiveGiftData.rewardType;
-  const crownIcon = document.getElementById('rewardCrownIcon');
-  const pillText = document.getElementById('rewardPillText');
-  const titleText = document.getElementById('rewardTitleText');
-  const emblem = document.getElementById('rewardEmblem');
-  const descText = document.getElementById('rewardDescText');
-  const perkBox = document.getElementById('rewardPerkBox');
-
-  if (rType === 'secret_book') {
-    if (crownIcon) crownIcon.innerText = '📖';
-    if (pillText) pillText.innerText = 'SECRET BOOK UNLOCKED';
-    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || 'Secret Focus Masterclass Book';
-    if (emblem) emblem.innerText = '🔮';
-    if (descText) descText.innerText = currentActiveGiftData.message || 'You unlocked an exclusive secret masterclass book in your bookshelf!';
-    if (perkBox) {
-      perkBox.innerHTML = `
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Permanent access to Secret Bonus Book in library</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Full summary, Hindi notes &amp; key insights included</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Read anytime offline with zero limits</span></div>
-      `;
-    }
-  } else if (rType === 'golden_notes') {
-    if (crownIcon) crownIcon.innerText = '📜';
-    if (pillText) pillText.innerText = 'EXCLUSIVE WISDOM SCROLL';
-    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || '10 Billionaire Mental Models';
-    if (emblem) emblem.innerText = '⚡';
-    if (descText) descText.innerText = currentActiveGiftData.message || 'Exclusive mental models of Elon Musk, Warren Buffett & Marcus Aurelius unlocked!';
-    if (perkBox) {
-      perkBox.innerHTML = `
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>First-Principles Thinking &amp; Inversion Framework</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Unlocked in your Book Notes Vault</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Daily actionable mental models guide</span></div>
-      `;
-    }
-  } else {
-    // Default: VIP Crown Reader Badge
-    if (crownIcon) crownIcon.innerText = '👑';
-    if (pillText) pillText.innerText = 'VIP MASTER READER AWARD';
-    if (titleText) titleText.innerText = currentActiveGiftData.rewardName || 'VIP Golden Reader Badge';
-    if (emblem) emblem.innerText = currentActiveGiftData.rewardEmblem || '👑';
-    if (descText) descText.innerText = currentActiveGiftData.message || 'Aapko Mind Focus Books Tracker ki taraf se permanent VIP Master Reader recognition mili hai!';
-    if (perkBox) {
-      perkBox.innerHTML = `
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Permanent glowing Golden Crown Badge in App Header</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>VIP Priority on all new book releases &amp; updates</span></div>
-        <div class="reward-perk-item"><span class="reward-perk-icon">✦</span> <span>Reading Streak Protection &amp; Golden Shield</span></div>
-      `;
-    }
-  }
-
-  // Show overlay and start falling
-  overlay.classList.add('active');
-  playGiftFallSound();
-
-  if (typeof triggerHaptic === 'function') triggerHaptic('light');
-}
-
-function openGoldenGiftBox(event) {
-  if (activeGiftBoxOpen) return;
-  activeGiftBoxOpen = true;
-
-  if (event) event.stopPropagation();
-
-  const stage = document.getElementById('giftBoxStage');
-  const rewardModal = document.getElementById('giftRewardModal');
-
-  if (stage) stage.classList.add('opened');
-
-  // Play crackers sound and fanfare
-  playGiftCrackersFanfare();
-  if (typeof triggerHaptic === 'function') triggerHaptic('celebration');
-
-  // Launch fireworks confetti on canvas
-  startConfettiCrackersBurst();
-
-  // Slide up reward card after brief lid burst delay
-  setTimeout(() => {
-    if (rewardModal) rewardModal.classList.add('active');
-  }, 650);
-}
-
-function startConfettiCrackersBurst() {
-  const canvas = document.getElementById('giftConfettiCanvas');
-  if (!canvas) return;
-
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return;
-
-  if (confettiAnimFrame) {
-    cancelAnimationFrame(confettiAnimFrame);
-    confettiAnimFrame = null;
-  }
-
-  const particles = [];
-  const colors = [
-    '#fbbf24', '#f59e0b', '#d97706', // Gold & Amber
-    '#ef4444', '#dc2626',             // Ruby Red
-    '#10b981', '#34d399',             // Emerald
-    '#38bdf8', '#0284c7',             // Cyan
-    '#f8fafc', '#e2e8f0'              // Silver
-  ];
-
-  const originX = canvas.width / 2;
-  const originY = canvas.height / 2;
-
-  // 180 Particles
-  for (let i = 0; i < 180; i++) {
-    const angle = (Math.random() * Math.PI * 2);
-    const speed = 6 + Math.random() * 16;
-    particles.push({
-      x: originX,
-      y: originY,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed - (Math.random() * 6 + 4), // Initial upward pop
-      size: Math.random() * 8 + 5,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      rotation: Math.random() * 360,
-      rotSpeed: (Math.random() - 0.5) * 14,
-      shape: Math.random() > 0.4 ? 'rect' : (Math.random() > 0.5 ? 'circle' : 'ribbon'),
-      ribbonLen: Math.random() * 18 + 10,
-      opacity: 1,
-      decay: Math.random() * 0.008 + 0.005
-    });
-  }
-
-  const startTime = Date.now();
-
-  function renderConfetti() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    let activeCount = 0;
-    particles.forEach(p => {
-      if (p.opacity <= 0) return;
-      activeCount++;
-
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.28; // Gravity
-      p.vx *= 0.985; // Air drag
-      p.rotation += p.rotSpeed;
-      p.opacity -= p.decay;
-
-      ctx.save();
-      ctx.globalAlpha = Math.max(0, p.opacity);
-      ctx.translate(p.x, p.y);
-      ctx.rotate((p.rotation * Math.PI) / 180);
-      ctx.fillStyle = p.color;
-
-      if (p.shape === 'rect') {
-        ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size * 0.7);
-      } else if (p.shape === 'ribbon') {
-        ctx.fillRect(-p.size / 4, -p.ribbonLen / 2, p.size / 2, p.ribbonLen);
-      } else {
-        ctx.beginPath();
-        ctx.arc(0, 0, p.size / 2, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.restore();
-    });
-
-    if (activeCount > 0 && (Date.now() - startTime) < 4500) {
-      confettiAnimFrame = requestAnimationFrame(renderConfetti);
-    } else {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      confettiAnimFrame = null;
-    }
-  }
-
-  confettiAnimFrame = requestAnimationFrame(renderConfetti);
-}
-
-function claimSurpriseReward() {
-  playGiftClaimChime();
-  if (typeof triggerHaptic === 'function') triggerHaptic('success');
-
-  const overlay = document.getElementById('mysteryGiftOverlay');
-  const rewardModal = document.getElementById('giftRewardModal');
-
-  // Save to localStorage
-  if (currentActiveGiftData && currentActiveGiftData.id) {
-    try {
-      localStorage.setItem('mf_claimed_gift_' + currentActiveGiftData.id, 'true');
-    } catch (e) {}
-  }
-
-  const rType = currentActiveGiftData ? currentActiveGiftData.rewardType : 'vip_badge';
-
-  if (rType === 'vip_badge') {
-    try {
-      localStorage.setItem('mf_vip_crown', 'true');
-    } catch (e) {}
-    const vipBadge = document.getElementById('headerVipBadge');
-    if (vipBadge) vipBadge.style.display = 'inline-flex';
-    showToast('👑 VIP Master Reader Badge Activated!');
-  } else if (rType === 'secret_book') {
-    try {
-      localStorage.setItem('mf_secret_book_unlocked', 'true');
-    } catch (e) {}
-    showToast('📖 Secret Bonus Book Added to Library!');
-  } else {
-    try {
-      localStorage.setItem('mf_golden_notes_unlocked', 'true');
-    } catch (e) {}
-    showToast('📜 10 Billionaire Mental Models Unlocked!');
-  }
-
-  // Close overlay with animation
-  if (rewardModal) rewardModal.classList.remove('active');
-  setTimeout(() => {
-    if (overlay) overlay.classList.remove('active');
-    activeGiftBoxOpen = false;
-  }, 400);
-}
-
-// Window bindings for Surprise Mystery Gift
-window.triggerFallingGoldenGiftBox = triggerFallingGoldenGiftBox;
+window.initMysteryGiftEngine = initMysteryGiftEngine;
+window.triggerMysteryGiftDrop = triggerMysteryGiftDrop;
 window.openGoldenGiftBox = openGoldenGiftBox;
 window.claimSurpriseReward = claimSurpriseReward;
-window.startConfettiCrackersBurst = startConfettiCrackersBurst;
-
-// ==========================================
-// 3D SMART FLASHCARD TRAINER (LEITNER BOX)
-// ==========================================
-const LEITNER_STORAGE_KEY = 'mf_flashcard_leitner_v1';
-
-let fcState = {
-  deck: [],
-  currentIndex: 0,
-  isFlipped: false,
-  sessionMastered: 0,
-  sessionReviewed: 0,
-  isDragging: false,
-  startX: 0,
-  startY: 0,
-  currentX: 0,
-  currentY: 0,
-  isAnimatingAction: false
-};
-
-function loadLeitnerBoxes() {
-  try {
-    const raw = localStorage.getItem(LEITNER_STORAGE_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      if (parsed && Array.isArray(parsed.box1) && Array.isArray(parsed.box2) && Array.isArray(parsed.box3)) {
-        return parsed;
-      }
-    }
-  } catch (e) {}
-  return { box1: [], box2: [], box3: [] };
-}
-
-function saveLeitnerBoxes(boxes) {
-  try {
-    localStorage.setItem(LEITNER_STORAGE_KEY, JSON.stringify(boxes));
-  } catch (e) {}
-}
-
-function updateLeitnerChips() {
-  const boxes = loadLeitnerBoxes();
-  const b1 = document.getElementById('box1Count');
-  const b2 = document.getElementById('box2Count');
-  const b3 = document.getElementById('box3Count');
-  if (b1) b1.textContent = boxes.box1.length;
-  if (b2) b2.textContent = boxes.box2.length;
-  if (b3) b3.textContent = boxes.box3.length;
-
-  const kpiChip = document.getElementById('kpiFlashcardsCount');
-  if (kpiChip) {
-    const totalMastered = boxes.box3.length;
-    kpiChip.innerHTML = `🎴 Flashcards: <b>${totalMastered}</b> Mastered`;
-  }
-}
-
-// Web Audio Sound FX for Flashcards
-function playFlashcardFlipSound() {
-  const ctx = getOrCreateAudioContext();
-  if (!ctx) return;
-  try {
-    const now = ctx.currentTime;
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = 'sine';
-    osc.frequency.setValueAtTime(320, now);
-    osc.frequency.exponentialRampToValueAtTime(560, now + 0.08);
-    gain.setValueAtTime(0.08, now);
-    gain.exponentialRampToValueAtTime(0.001, now + 0.08);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(now);
-    osc.stop(now + 0.09);
-  } catch (e) {}
-}
-
-function playFlashcardMasterSound() {
-  const ctx = getOrCreateAudioContext();
-  if (!ctx) return;
-  try {
-    const now = ctx.currentTime;
-    [523.25, 659.25, 783.99, 1046.50].forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const t = now + (idx * 0.07);
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(freq, t);
-      gain.setValueAtTime(0.12, t);
-      gain.exponentialRampToValueAtTime(0.0001, t + 0.35);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(t);
-      osc.stop(t + 0.4);
-    });
-  } catch (e) {}
-}
-
-function playFlashcardReviewSound() {
-  const ctx = getOrCreateAudioContext();
-  if (!ctx) return;
-  try {
-    const now = ctx.currentTime;
-    [440, 369.99].forEach((freq, idx) => {
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      const t = now + (idx * 0.09);
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, t);
-      gain.setValueAtTime(0.1, t);
-      gain.exponentialRampToValueAtTime(0.0001, t + 0.28);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(t);
-      osc.stop(t + 0.32);
-    });
-  } catch (e) {}
-}
-
-function speakFlashcardWord() {
-  if (!fcState.deck || !fcState.deck[fcState.currentIndex]) return;
-  const wordObj = fcState.deck[fcState.currentIndex];
-  const word = wordObj.word || '';
-  if (!word) return;
-
-  if (typeof playDictionaryWordSpeech === 'function') {
-    playDictionaryWordSpeech(word);
-    return;
-  }
-
-  if ('speechSynthesis' in window) {
-    try {
-      window.speechSynthesis.cancel();
-      const utter = new SpeechSynthesisUtterance(word);
-      utter.lang = 'en-US';
-      utter.rate = 0.85;
-      utter.pitch = 1.0;
-      window.speechSynthesis.speak(utter);
-    } catch (e) {}
-  }
-}
-
-function openFlashcardTrainer(customWordList = null) {
-  const overlay = document.getElementById('flashcardModalOverlay');
-  if (!overlay) return;
-
-  const allWords = window.DICTIONARY_WORDS || [];
-  const boxes = loadLeitnerBoxes();
-
-  let targetDeck = [];
-
-  if (Array.isArray(customWordList) && customWordList.length > 0) {
-    customWordList.forEach(item => {
-      if (typeof item === 'string') {
-        const found = allWords.find(w => w.word.toLowerCase() === item.toLowerCase());
-        if (found) targetDeck.push(found);
-        else targetDeck.push({ word: item, phonetic: '', type: 'WORD', hindi: 'अर्थ', definition: item, example: '', syn: '' });
-      } else if (item && item.word) {
-        targetDeck.push(item);
-      }
-    });
-  }
-
-  if (targetDeck.length === 0) {
-    // Leitner Spaced Repetition Priority:
-    // 1. First pick words from Box 1 (Need Review)
-    const b1Candidates = boxes.box1
-      .map(bw => allWords.find(w => w.word.toLowerCase() === bw.toLowerCase()))
-      .filter(Boolean);
-    const shuffledB1 = b1Candidates.sort(() => Math.random() - 0.5);
-    targetDeck.push(...shuffledB1.slice(0, 2));
-
-    // 2. Then pick from Box 2 (Learning)
-    if (targetDeck.length < 5) {
-      const b2Candidates = boxes.box2
-        .map(bw => allWords.find(w => w.word.toLowerCase() === bw.toLowerCase()))
-        .filter(Boolean);
-      const shuffledB2 = b2Candidates.sort(() => Math.random() - 0.5);
-      const needed = 5 - targetDeck.length;
-      targetDeck.push(...shuffledB2.slice(0, needed));
-    }
-
-    // 3. Fill with unseen words (not in box 1, 2, or 3)
-    if (targetDeck.length < 5) {
-      const usedWords = new Set(targetDeck.map(w => w.word.toLowerCase()));
-      const masteredWords = new Set(boxes.box3.map(w => w.toLowerCase()));
-      const unseen = allWords.filter(w => !usedWords.has(w.word.toLowerCase()) && !masteredWords.has(w.word.toLowerCase()));
-      const shuffledUnseen = unseen.sort(() => Math.random() - 0.5);
-      const needed = 5 - targetDeck.length;
-      targetDeck.push(...shuffledUnseen.slice(0, needed));
-    }
-
-    // 4. Fallback: pick any random words
-    if (targetDeck.length < 5 && allWords.length > 0) {
-      const usedWords = new Set(targetDeck.map(w => w.word.toLowerCase()));
-      const pool = allWords.filter(w => !usedWords.has(w.word.toLowerCase()));
-      const shuffledPool = pool.sort(() => Math.random() - 0.5);
-      const needed = 5 - targetDeck.length;
-      targetDeck.push(...shuffledPool.slice(0, needed));
-    }
-  }
-
-  // Absolute fallback if dictionary is not loaded
-  if (targetDeck.length === 0) {
-    targetDeck = [
-      { word: 'Abandon', phonetic: 'अबैंडन', type: 'verb', hindi: 'त्याग देना, छोड़ देना', definition: 'To give up completely; desert or leave behind.', example: 'Never abandon your reading habits.', exampleHindi: 'अपनी पढ़ने की आदतों को कभी मत छोड़ो।', syn: 'Desert, Discard, Renounce' },
-      { word: 'Benevolent', phonetic: 'बेनेवोलेंट', type: 'adjective', hindi: 'दयालु, परोपकारी', definition: 'Well meaning and kindly.', example: 'A benevolent leader inspires trust.', exampleHindi: 'एक दयालु नेता विश्वास जगाता है।', syn: 'Kind, Generous, Compassionate' },
-      { word: 'Cognizant', phonetic: 'कॉग्निज़ैंट', type: 'adjective', hindi: 'अवगत, जानकार', definition: 'Having knowledge or being aware of.', example: 'Be cognizant of your daily habits.', exampleHindi: 'अपनी दैनिक आदतों से अवगत रहें।', syn: 'Aware, Conscious, Mindful' },
-      { word: 'Diligent', phonetic: 'डिलिजेंट', type: 'adjective', hindi: 'परिश्रमी, लगनशील', definition: 'Having or showing care and conscientiousness.', example: 'Diligent effort creates mastery.', exampleHindi: 'लगनशील प्रयास से महारत हासिल होती है।', syn: 'Hardworking, Assiduous, Industrious' },
-      { word: 'Empirical', phonetic: 'एम्पिरिकल', type: 'adjective', hindi: 'अनुभवजन्य, प्रायोगिक', definition: 'Based on observation or experience rather than theory.', example: 'Books provide empirical wisdom.', exampleHindi: 'किताबें अनुभवजन्य ज्ञान प्रदान करती हैं।', syn: 'Observed, Experiential, Practical' }
-    ];
-  }
-
-  fcState = {
-    deck: targetDeck,
-    currentIndex: 0,
-    isFlipped: false,
-    sessionMastered: 0,
-    sessionReviewed: 0,
-    isDragging: false,
-    startX: 0,
-    startY: 0,
-    currentX: 0,
-    currentY: 0,
-    isAnimatingAction: false
-  };
-
-  updateLeitnerChips();
-
-  const deckView = document.getElementById('flashcardActiveDeckView');
-  const compView = document.getElementById('flashcardCompletionView');
-  if (deckView) deckView.style.display = 'block';
-  if (compView) compView.style.display = 'none';
-
-  overlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
-
-  renderCurrentFlashcard();
-}
-
-function renderCurrentFlashcard() {
-  const card = document.getElementById('flashcard3dCard');
-  if (!card) return;
-
-  // Reset transform and flip state
-  card.className = 'flashcard-3d-card';
-  card.style.transform = '';
-  card.style.opacity = '1';
-  card.style.transition = 'transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)';
-  fcState.isFlipped = false;
-  fcState.isAnimatingAction = false;
-
-  const stampR = document.getElementById('swipeStampReview');
-  const stampM = document.getElementById('swipeStampMastered');
-  if (stampR) stampR.style.opacity = '0';
-  if (stampM) stampM.style.opacity = '0';
-
-  if (!fcState.deck || fcState.currentIndex >= fcState.deck.length) {
-    showFlashcardCompletion();
-    return;
-  }
-
-  const wordObj = fcState.deck[fcState.currentIndex];
-
-  const prog = document.getElementById('deckProgressIndicator');
-  if (prog) prog.textContent = `Card ${fcState.currentIndex + 1} of ${fcState.deck.length}`;
-
-  const typeTag = document.getElementById('fcTypeTag');
-  if (typeTag) typeTag.textContent = (wordObj.type || 'WORD').toUpperCase();
-
-  const wordTitle = document.getElementById('fcWordTitle');
-  if (wordTitle) wordTitle.textContent = wordObj.word || '';
-
-  const phoneticBadge = document.getElementById('fcPhoneticBadge');
-  if (phoneticBadge) {
-    if (wordObj.phonetic) {
-      phoneticBadge.textContent = wordObj.phonetic;
-      phoneticBadge.style.display = 'inline-block';
-    } else {
-      phoneticBadge.style.display = 'none';
-    }
-  }
-
-  const backWord = document.getElementById('fcBackWord');
-  if (backWord) backWord.textContent = wordObj.word || '';
-
-  const backType = document.getElementById('fcBackType');
-  if (backType) backType.textContent = wordObj.type || '';
-
-  const hindiMeaning = document.getElementById('fcHindiMeaning');
-  if (hindiMeaning) hindiMeaning.textContent = wordObj.hindi || 'अर्थ उपलब्ध नहीं';
-
-  const englishDef = document.getElementById('fcEnglishDef');
-  if (englishDef) englishDef.textContent = wordObj.definition || '';
-
-  const exampleEn = document.getElementById('fcExampleEn');
-  if (exampleEn) {
-    if (wordObj.example) {
-      exampleEn.textContent = `"${wordObj.example}"`;
-      exampleEn.style.display = 'block';
-    } else {
-      exampleEn.style.display = 'none';
-    }
-  }
-
-  const exampleHi = document.getElementById('fcExampleHi');
-  if (exampleHi) {
-    if (wordObj.exampleHindi) {
-      exampleHi.textContent = `"${wordObj.exampleHindi}"`;
-      exampleHi.style.display = 'block';
-    } else {
-      exampleHi.style.display = 'none';
-    }
-  }
-
-  const synList = document.getElementById('fcSynList');
-  if (synList) synList.textContent = wordObj.syn || 'None listed';
-}
-
-function toggleFlashcardFlip() {
-  if (fcState.isAnimatingAction || fcState.isDragging) return;
-  const card = document.getElementById('flashcard3dCard');
-  if (!card) return;
-
-  fcState.isFlipped = !fcState.isFlipped;
-  card.classList.toggle('is-flipped', fcState.isFlipped);
-  playFlashcardFlipSound();
-  if (typeof triggerHaptic === 'function') triggerHaptic('selection');
-}
-
-function handleCardAction(action) {
-  if (fcState.isAnimatingAction) return;
-  if (!fcState.deck || fcState.currentIndex >= fcState.deck.length) return;
-
-  fcState.isAnimatingAction = true;
-  const currentWord = fcState.deck[fcState.currentIndex].word;
-  const card = document.getElementById('flashcard3dCard');
-  const stampR = document.getElementById('swipeStampReview');
-  const stampM = document.getElementById('swipeStampMastered');
-
-  const boxes = loadLeitnerBoxes();
-  boxes.box1 = boxes.box1.filter(w => w.toLowerCase() !== currentWord.toLowerCase());
-  boxes.box2 = boxes.box2.filter(w => w.toLowerCase() !== currentWord.toLowerCase());
-  boxes.box3 = boxes.box3.filter(w => w.toLowerCase() !== currentWord.toLowerCase());
-
-  if (action === 'mastered') {
-    boxes.box3.push(currentWord);
-    fcState.sessionMastered++;
-    playFlashcardMasterSound();
-    if (typeof triggerHaptic === 'function') triggerHaptic('success');
-    if (stampM) stampM.style.opacity = '1';
-
-    if (card) {
-      card.style.transition = 'transform 0.38s ease-in, opacity 0.38s ease-in';
-      card.style.transform = 'translate3d(120vw, 40px, 0) rotate(24deg)';
-      card.style.opacity = '0';
-    }
-  } else {
-    boxes.box1.push(currentWord);
-    fcState.sessionReviewed++;
-    playFlashcardReviewSound();
-    if (typeof triggerHaptic === 'function') triggerHaptic('warning');
-    if (stampR) stampR.style.opacity = '1';
-
-    if (card) {
-      card.style.transition = 'transform 0.38s ease-in, opacity 0.38s ease-in';
-      card.style.transform = 'translate3d(-120vw, 40px, 0) rotate(-24deg)';
-      card.style.opacity = '0';
-    }
-  }
-
-  saveLeitnerBoxes(boxes);
-  updateLeitnerChips();
-
-  setTimeout(() => {
-    fcState.currentIndex++;
-    if (fcState.currentIndex < fcState.deck.length) {
-      renderCurrentFlashcard();
-    } else {
-      showFlashcardCompletion();
-    }
-  }, 340);
-}
-
-function showFlashcardCompletion() {
-  const deckView = document.getElementById('flashcardActiveDeckView');
-  const compView = document.getElementById('flashcardCompletionView');
-  if (deckView) deckView.style.display = 'none';
-  if (compView) compView.style.display = 'flex';
-
-  const revEl = document.getElementById('compReviewedCount');
-  const mastEl = document.getElementById('compMasteredCount');
-  const ptsEl = document.getElementById('compTotalPoints');
-
-  const total = fcState.deck.length;
-  const mastered = fcState.sessionMastered;
-  const pts = (mastered * 25) + (fcState.sessionReviewed * 10);
-
-  if (revEl) revEl.textContent = total;
-  if (mastEl) mastEl.textContent = mastered;
-  if (ptsEl) ptsEl.textContent = `+${pts} XP`;
-
-  if (typeof startConfettiCrackersBurst === 'function') {
-    startConfettiCrackersBurst();
-  }
-  if (typeof playGiftCrackersFanfare === 'function') {
-    playGiftCrackersFanfare();
-  }
-  if (typeof triggerHaptic === 'function') triggerHaptic('success');
-}
-
-function restartFlashcardsDeck(count = 5) {
-  openFlashcardTrainer();
-}
-
-function closeFlashcardTrainer() {
-  const overlay = document.getElementById('flashcardModalOverlay');
-  if (overlay) overlay.classList.remove('active');
-  document.body.style.overflow = '';
-  if ('speechSynthesis' in window) {
-    try { window.speechSynthesis.cancel(); } catch (e) {}
-  }
-}
-
-function handleFlashcardOverlayClick(event) {
-  if (event.target && event.target.id === 'flashcardModalOverlay') {
-    closeFlashcardTrainer();
-  }
-}
-
-function initFlashcardTrainerEngine() {
-  updateLeitnerChips();
-
-  // Arena Swipe & Touch Gestures
-  const arena = document.getElementById('flashcard3dArena');
-  const card = document.getElementById('flashcard3dCard');
-  if (arena && card) {
-    let startX = 0;
-    let startY = 0;
-    let currentX = 0;
-    let currentY = 0;
-    let isDragging = false;
-    let pointerId = null;
-
-    const stampR = document.getElementById('swipeStampReview');
-    const stampM = document.getElementById('swipeStampMastered');
-
-    arena.addEventListener('pointerdown', (e) => {
-      if (fcState.isAnimatingAction) return;
-      if (e.target && typeof e.target.closest === 'function' && e.target.closest('#fcAudioBtn')) return;
-
-      isDragging = true;
-      pointerId = e.pointerId;
-      startX = e.clientX;
-      startY = e.clientY;
-      currentX = startX;
-      currentY = startY;
-
-      card.style.transition = 'none';
-      try { arena.setPointerCapture(e.pointerId); } catch (err) {}
-    });
-
-    arena.addEventListener('pointermove', (e) => {
-      if (!isDragging || pointerId !== e.pointerId || fcState.isAnimatingAction) return;
-
-      currentX = e.clientX;
-      currentY = e.clientY;
-      const deltaX = currentX - startX;
-      const deltaY = currentY - startY;
-
-      const rotZ = deltaX * 0.08;
-      const flipRot = fcState.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
-      card.style.transform = `translate3d(${deltaX}px, ${deltaY * 0.25}px, 0) rotateZ(${rotZ}deg) ${flipRot}`;
-
-      if (deltaX > 35) {
-        const p = Math.min(1, (deltaX - 35) / 60);
-        if (stampM) stampM.style.opacity = p.toString();
-        if (stampR) stampR.style.opacity = '0';
-      } else if (deltaX < -35) {
-        const p = Math.min(1, (-deltaX - 35) / 60);
-        if (stampR) stampR.style.opacity = p.toString();
-        if (stampM) stampM.style.opacity = '0';
-      } else {
-        if (stampM) stampM.style.opacity = '0';
-        if (stampR) stampR.style.opacity = '0';
-      }
-    });
-
-    const endDrag = (e) => {
-      if (!isDragging || (pointerId !== null && pointerId !== e.pointerId)) return;
-      isDragging = false;
-      try { arena.releasePointerCapture(pointerId); } catch (err) {}
-      pointerId = null;
-
-      if (stampR) stampR.style.opacity = '0';
-      if (stampM) stampM.style.opacity = '0';
-
-      const deltaX = currentX - startX;
-      const deltaY = currentY - startY;
-      const dist = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-
-      if (dist < 10) {
-        toggleFlashcardFlip();
-        return;
-      }
-
-      if (deltaX > 80) {
-        handleCardAction('mastered');
-      } else if (deltaX < -80) {
-        handleCardAction('review');
-      } else {
-        card.style.transition = 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        const flipRot = fcState.isFlipped ? 'rotateY(180deg)' : 'rotateY(0deg)';
-        card.style.transform = `translate3d(0, 0, 0) rotateZ(0deg) ${flipRot}`;
-      }
-    };
-
-    arena.addEventListener('pointerup', endDrag);
-    arena.addEventListener('pointercancel', endDrag);
-  }
-
-  // Keyboard Navigation
-  window.addEventListener('keydown', (e) => {
-    const overlay = document.getElementById('flashcardModalOverlay');
-    if (!overlay || !overlay.classList.contains('active')) return;
-
-    if (e.key === 'Escape') {
-      closeFlashcardTrainer();
-    } else if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-      e.preventDefault();
-      toggleFlashcardFlip();
-    } else if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') {
-      e.preventDefault();
-      handleCardAction('mastered');
-    } else if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') {
-      e.preventDefault();
-      handleCardAction('review');
-    }
-  });
-
-  // Attach launcher buttons
-  const headerBtn = document.getElementById('headerFlashcardsBtn');
-  if (headerBtn) {
-    headerBtn.addEventListener('click', () => openFlashcardTrainer());
-  }
-
-  const kpiChip = document.getElementById('kpiFlashcardsCount');
-  if (kpiChip) {
-    kpiChip.addEventListener('click', () => openFlashcardTrainer());
-  }
-
-  const dictBtn = document.getElementById('dictFlashcardsBtn');
-  if (dictBtn) {
-    dictBtn.addEventListener('click', () => {
-      closeDictionaryBookReader();
-      setTimeout(() => openFlashcardTrainer(), 200);
-    });
-  }
-}
-
-// Global window bindings
+window.initFlashcardTrainerEngine = initFlashcardTrainerEngine;
 window.openFlashcardTrainer = openFlashcardTrainer;
 window.closeFlashcardTrainer = closeFlashcardTrainer;
-window.toggleFlashcardFlip = toggleFlashcardFlip;
-window.handleCardAction = handleCardAction;
-window.speakFlashcardWord = speakFlashcardWord;
-window.restartFlashcardsDeck = restartFlashcardsDeck;
-window.handleFlashcardOverlayClick = handleFlashcardOverlayClick;
-window.initFlashcardTrainerEngine = initFlashcardTrainerEngine;
-
-// ==========================================================================
-// 💬 LIVE IN-APP HELP DESK & CHAT CLIENT ENGINE (Zomato/Telegram Style)
-// ==========================================================================
-
-const HELPDESK_CLOUD_TOPIC = 'mf_helpdesk_ankitburdak05';
-const HELPDESK_RELAY_URL = 'https://ntfy.sh/' + HELPDESK_CLOUD_TOPIC;
-
-let userChatId = null;
-let userChatName = null;
-let userChatDevice = 'Android Reader';
-let userChatData = null;
-let userChatPollTimer = null;
-let userChatBroadcastChannel = null;
-let userChatEventSource = null;
-let lastKnownAdminMsgCount = 0;
-
-function initLiveHelpDeskEngine() {
-  try {
-    userChatId = localStorage.getItem('mindfocus_chat_user_id');
-    if (!userChatId) {
-      userChatId = 'reader_' + Math.random().toString(36).substring(2, 8);
-      localStorage.setItem('mindfocus_chat_user_id', userChatId);
-    }
-
-    userChatName = localStorage.getItem('mindfocus_chat_user_name');
-    if (!userChatName) {
-      userChatName = 'Reader #' + userChatId.slice(-4).toUpperCase();
-      localStorage.setItem('mindfocus_chat_user_name', userChatName);
-    }
-
-    const ua = navigator.userAgent || '';
-    if (ua.includes('Android')) userChatDevice = 'Android App';
-    else if (ua.includes('iPhone') || ua.includes('iPad')) userChatDevice = 'iOS Device';
-    else userChatDevice = 'Web App';
-
-    // 1. Instantly restore chat from local storage so messages NEVER disappear
-    const local = localStorage.getItem('mindfocus_chat_data');
-    if (local) {
-      try {
-        userChatData = JSON.parse(local);
-      } catch (e) {}
-    }
-    if (!userChatData) {
-      userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
-    }
-    if (!userChatData.threads) userChatData.threads = {};
-    if (!userChatData.threads[userChatId]) {
-      userChatData.threads[userChatId] = {
-        userId: userChatId,
-        userName: userChatName,
-        userDevice: userChatDevice,
-        unreadByAdmin: 0,
-        unreadByUser: 0,
-        lastMessage: '',
-        lastTimestamp: new Date().toISOString(),
-        messages: []
-      };
-    }
-  } catch (e) {
-    userChatId = 'reader_guest';
-    userChatName = 'Reader';
-  }
-
-  // 2. Setup Local Zero-Latency BroadcastChannel (0ms sync for same origin/device)
-  try {
-    if (typeof BroadcastChannel !== 'undefined') {
-      userChatBroadcastChannel = new BroadcastChannel('mindfocus_helpdesk_channel');
-      userChatBroadcastChannel.onmessage = (e) => {
-        if (e.data && e.data.type === 'helpdesk_chat_msg') {
-          handleIncomingHelpDeskDirectMessage(e.data);
-        } else if (e.data && e.data.type === 'remote_config_sync') {
-          applyFeaturesConfig(e.data.features);
-        }
-      };
-    }
-  } catch (bcErr) {}
-
-  // 3. LocalStorage storage event listener (cross-tab fallback)
-  window.addEventListener('storage', (e) => {
-    if (e.key === 'mindfocus_chat_last_event' && e.newValue) {
-      try {
-        const item = JSON.parse(e.newValue);
-        if (item && item.payload) {
-          if (item.payload.type === 'helpdesk_chat_msg') {
-            handleIncomingHelpDeskDirectMessage(item.payload);
-          } else if (item.payload.type === 'remote_config_sync') {
-            applyFeaturesConfig(item.payload.features);
-          }
-        }
-      } catch (err) {}
-    }
-  });
-
-  // 4. Connect to Cloud Relay via SSE (Instant live delivery from Control Panel)
-  connectCloudRelaySSE();
-
-  // 5. Initial UI render and background sync poll
-  checkUserChatNotifications();
-  renderUserChatStream();
-  if (typeof setupUserChatEventListeners === 'function') setupUserChatEventListeners();
-
-  fetchAndSyncUserChat(false);
-  setUserChatPollingSpeed(false);
-
-  // Background Thermal Guard: Hibernate SSE & polling when screen is locked or app minimized
-  document.addEventListener('visibilitychange', () => {
-    if (document.hidden || (typeof document.visibilityState !== 'undefined' && document.visibilityState !== 'visible')) {
-      if (userChatEventSource) {
-        userChatEventSource.close();
-        userChatEventSource = null;
-      }
-      if (userChatPollTimer) {
-        clearInterval(userChatPollTimer);
-        userChatPollTimer = null;
-      }
-    } else {
-      connectCloudRelaySSE();
-      const modal = document.getElementById('userHelpDeskModalOverlay');
-      const isChatOpen = modal && modal.classList.contains('active');
-      setUserChatPollingSpeed(isChatOpen);
-      fetchAndSyncUserChat(false);
-    }
-  });
-}
-
-function setUserChatPollingSpeed(isChatOpen) {
-  if (userChatPollTimer) {
-    clearInterval(userChatPollTimer);
-    userChatPollTimer = null;
-  }
-  if (document.hidden) return; // Never poll in background
-  const intervalMs = isChatOpen ? 8000 : 60000;
-  userChatPollTimer = setInterval(() => {
-    if (document.hidden) return;
-    fetchAndSyncUserChat(false);
-  }, intervalMs);
-}
-
-function connectCloudRelaySSE() {
-  if (typeof EventSource === 'undefined') return;
-  if (document.hidden) return;
-  try {
-    if (userChatEventSource) {
-      userChatEventSource.close();
-    }
-    userChatEventSource = new EventSource(HELPDESK_RELAY_URL + '/sse');
-    userChatEventSource.onmessage = (e) => {
-      try {
-        const parsed = JSON.parse(e.data);
-        if (parsed && parsed.message) {
-          const payload = typeof parsed.message === 'string' ? JSON.parse(parsed.message) : parsed.message;
-          if (payload && payload.type === 'helpdesk_chat_msg') {
-            handleIncomingHelpDeskDirectMessage(payload);
-          } else if (payload && payload.type === 'remote_config_sync') {
-            applyFeaturesConfig(payload.features);
-          }
-        }
-      } catch (err) {}
-    };
-    userChatEventSource.onerror = () => {};
-  } catch (e) {}
-}
-
-function handleIncomingHelpDeskDirectMessage(payload) {
-  if (!payload || !payload.threadId || !payload.message) return;
-  if (payload.threadId !== userChatId) return;
-
-  const msg = payload.message;
-  if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
-  if (!userChatData.threads) userChatData.threads = {};
-  if (!userChatData.threads[userChatId]) {
-    userChatData.threads[userChatId] = {
-      userId: userChatId,
-      userName: userChatName,
-      userDevice: userChatDevice,
-      unreadByAdmin: 0,
-      unreadByUser: 0,
-      lastMessage: '',
-      lastTimestamp: new Date().toISOString(),
-      messages: []
-    };
-  }
-
-  const thread = userChatData.threads[userChatId];
-  if (!Array.isArray(thread.messages)) thread.messages = [];
-
-  const exists = thread.messages.some(m => m.id === msg.id || (m.timestamp === msg.timestamp && m.text === msg.text));
-  if (exists) return;
-
-  thread.messages.push(msg);
-  thread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-  thread.lastMessage = msg.text;
-  thread.lastTimestamp = msg.timestamp;
-
-  if (msg.sender === 'admin') {
-    const modal = document.getElementById('userHelpDeskModalOverlay');
-    const isModalOpen = modal && modal.classList.contains('active');
-    if (!isModalOpen) {
-      thread.unreadByUser = (thread.unreadByUser || 0) + 1;
-    }
-    playUserChatAudioChime('receive');
-    if (typeof showToastNotification === 'function') {
-      showToastNotification('👑 Developer/Admin: ' + (msg.text.length > 35 ? msg.text.substring(0, 32) + '...' : msg.text));
-    }
-  }
-
-  saveUserChatDataLocally();
-  checkUserChatNotifications();
-  renderUserChatStream();
-}
-
-function mergeIncomingChatData(data) {
-  if (!data || !data.threads) return;
-  if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
-  if (!userChatData.threads) userChatData.threads = {};
-
-  let updated = false;
-  const myThread = userChatData.threads[userChatId];
-  const remoteThread = data.threads[userChatId];
-
-  if (remoteThread && Array.isArray(remoteThread.messages)) {
-    if (!myThread) {
-      userChatData.threads[userChatId] = remoteThread;
-      updated = true;
-    } else {
-      if (!Array.isArray(myThread.messages)) myThread.messages = [];
-      const existingIds = new Set(myThread.messages.map(m => m.id));
-      remoteThread.messages.forEach(m => {
-        if (!existingIds.has(m.id)) {
-          myThread.messages.push(m);
-          existingIds.add(m.id);
-          updated = true;
-          if (m.sender === 'admin') {
-            playUserChatAudioChime('receive');
-          }
-        }
-      });
-      myThread.messages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
-      if (myThread.messages.length > 0) {
-        const last = myThread.messages[myThread.messages.length - 1];
-        myThread.lastMessage = last.text;
-        myThread.lastTimestamp = last.timestamp;
-      }
-    }
-  }
-
-  if (updated) {
-    saveUserChatDataLocally();
-    checkUserChatNotifications();
-    renderUserChatStream();
-  }
-}
-
-async function fetchAndSyncUserChat(isUserAction = false) {
-  // 1. Fetch from Cloud Relay ntfy.sh
-  try {
-    const pollRes = await fetch(HELPDESK_RELAY_URL + '/json?poll=1&since=5m');
-    if (pollRes.ok) {
-      const text = await pollRes.text();
-      const lines = text.trim().split('\n');
-      for (const line of lines) {
-        if (!line.trim()) continue;
-        try {
-          const item = JSON.parse(line);
-          if (item && item.message) {
-            const payload = typeof item.message === 'string' ? JSON.parse(item.message) : item.message;
-            if (payload && payload.type === 'helpdesk_chat_msg') {
-              handleIncomingHelpDeskDirectMessage(payload);
-            } else if (payload && payload.type === 'remote_config_sync') {
-              applyFeaturesConfig(payload.features);
-            }
-          }
-        } catch (e) {}
-      }
-    }
-  } catch (err) {}
-
-  // 2. Fetch from static/git repository chat-messages.json (non-destructive merge)
-  const cb = Date.now();
-  try {
-    let chatUrl = `chat-messages.json?cb=${cb}`;
-    if (typeof window !== 'undefined' && (window.location.protocol === 'file:' || !window.location.host)) {
-      chatUrl = `https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/chat-messages.json?cb=${cb}`;
-    }
-    let res = await fetch(chatUrl, { cache: 'no-store' });
-    if (!res.ok && chatUrl.startsWith('chat-messages.json')) {
-      res = await fetch(`https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/chat-messages.json?cb=${cb}`, { cache: 'no-store' });
-    }
-    if (res && res.ok) {
-      const data = await res.json();
-      mergeIncomingChatData(data);
-    }
-  } catch (e) {
-    try {
-      const fallbackRes = await fetch(`https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/chat-messages.json?cb=${cb}`, { cache: 'no-store' });
-      if (fallbackRes.ok) {
-        const data = await fallbackRes.json();
-        mergeIncomingChatData(data);
-      }
-    } catch (err2) {}
-  }
-}
-
-function checkUserChatNotifications() {
-  if (!userChatData || !userChatData.threads || !userChatId) return;
-  const thread = userChatData.threads[userChatId];
-  if (!thread) return;
-
-  const unreadCount = thread.unreadByUser || 0;
-  let adminMsgCount = 0;
-  if (Array.isArray(thread.messages)) {
-    thread.messages.forEach(m => {
-      if (m.sender === 'admin') adminMsgCount++;
-    });
-  }
-
-  const badge = document.getElementById('userChatUnreadBadge');
-  const dot = document.getElementById('headerChatDot');
-
-  if (unreadCount > 0) {
-    if (badge) {
-      badge.innerText = unreadCount;
-      badge.style.display = 'inline-block';
-    }
-    if (dot) dot.style.display = 'block';
-
-    if (adminMsgCount > lastKnownAdminMsgCount && lastKnownAdminMsgCount > 0) {
-      playUserChatAudioChime('receive');
-      if (typeof showToastNotification === 'function') {
-        showToastNotification('👑 Developer/Admin ne aapko reply kiya hai!');
-      }
-    }
-  } else {
-    if (badge) badge.style.display = 'none';
-    if (dot) dot.style.display = 'none';
-  }
-
-  lastKnownAdminMsgCount = adminMsgCount;
-}
-
-function openUserHelpDeskModal() {
-  const modal = document.getElementById('userHelpDeskModalOverlay');
-  if (modal) {
-    modal.classList.add('active');
-    modal.style.display = 'flex';
-  }
-
-  setUserChatPollingSpeed(true);
-  fetchAndSyncUserChat(false);
-
-  if (typeof setupUserChatEventListeners === 'function') setupUserChatEventListeners();
-
-  if (userChatData && userChatData.threads && userChatData.threads[userChatId]) {
-    userChatData.threads[userChatId].unreadByUser = 0;
-    saveUserChatDataLocally();
-    const badge = document.getElementById('userChatUnreadBadge');
-    const dot = document.getElementById('headerChatDot');
-    if (badge) badge.style.display = 'none';
-    if (dot) dot.style.display = 'none';
-  }
-
-  renderUserChatStream();
-  setTimeout(() => {
-    const input = document.getElementById('userChatInputText');
-    if (input) input.focus();
-  }, 250);
-}
-
-function closeUserHelpDeskModal() {
-  const modal = document.getElementById('userHelpDeskModalOverlay');
-  if (modal) {
-    modal.classList.remove('active');
-    setTimeout(() => {
-      modal.style.display = 'none';
-    }, 250);
-  }
-  setUserChatPollingSpeed(false);
-}
-
-function handleHelpDeskOverlayClick(e) {
-  if (e.target && e.target.id === 'userHelpDeskModalOverlay') {
-    closeUserHelpDeskModal();
-  }
-}
-
-function playUserChatAudioChime(type = 'receive') {
-  try {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-    if (!AudioContextClass) return;
-    const ctx = new AudioContextClass();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-
-    if (type === 'receive') {
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-      osc.frequency.setValueAtTime(880, ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.18, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.35);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.35);
-    } else {
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(440, ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.14, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
-      osc.start(ctx.currentTime);
-      osc.stop(ctx.currentTime + 0.15);
-    }
-  } catch (e) {
-    // Audio contexts can require user gesture or be unsupported on older webviews
-  }
-}
-
-function setupUserChatEventListeners() {
-  try {
-    const form = document.getElementById('userChatForm');
-    const btn = document.getElementById('btnUserSendChat');
-    const input = document.getElementById('userChatInputText');
-
-    if (form && !form._bound) {
-      form._bound = true;
-      form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        sendUserChatMessage();
-      });
-    }
-
-    if (btn && !btn._bound) {
-      btn._bound = true;
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        sendUserChatMessage();
-      });
-      btn.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        sendUserChatMessage();
-      }, { passive: false });
-    }
-
-    if (input && !input._bound) {
-      input._bound = true;
-      input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') {
-          e.preventDefault();
-          sendUserChatMessage();
-        }
-      });
-    }
-  } catch (e) {
-    console.warn('Error setting up user chat listeners:', e);
-  }
-}
-
-function insertUserPrompt(text) {
-  const input = document.getElementById('userChatInputText');
-  if (input) {
-    input.value = text;
-    input.focus();
-  }
-}
-
-function handleUserChatKeydown(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    sendUserChatMessage();
-  }
-}
-
-function renderUserChatStream() {
-  const stream = document.getElementById('userChatMessagesStream');
-  if (!stream) return;
-
-  if (!userChatData || !userChatData.threads || !userChatData.threads[userChatId]) {
-    stream.innerHTML = `
-      <div class="user-chat-welcome-card">
-        <div style="font-size:36px; margin-bottom:8px;">💬</div>
-        <div style="font-weight:800; color:var(--text-primary); font-size:1.05rem;">Namaste Reader!</div>
-        <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;">
-          Aapko app me koi naya feature chahiye, koi bug report karna hai, ya koi sawaal puchna hai to direct message likhein. Hum live reply karenge! 🙏
-        </div>
-      </div>`;
-    return;
-  }
-
-  const thread = userChatData.threads[userChatId];
-  const messages = thread.messages || [];
-
-  if (messages.length === 0) {
-    stream.innerHTML = `
-      <div class="user-chat-welcome-card">
-        <div style="font-size:36px; margin-bottom:8px;">💬</div>
-        <div style="font-weight:800; color:var(--text-primary); font-size:1.05rem;">Namaste Reader!</div>
-        <div style="font-size:0.85rem; color:var(--text-secondary); margin-top:4px; line-height:1.45;">
-          Niche box me apna message likhein aur send karein! Hum seedha Control Panel se aapse connect honge.
-        </div>
-      </div>`;
-    return;
-  }
-
-  let html = `
-    <div style="text-align:center; margin-bottom:8px;">
-      <span style="font-size:0.68rem; color:var(--text-muted); background:rgba(255,255,255,0.06); padding:2px 10px; border-radius:999px;">
-        Encrypted Direct Help Desk Session
-      </span>
-    </div>`;
-
-  messages.forEach(m => {
-    const isMe = m.sender === 'user';
-    const timeStr = formatUserChatTime(m.timestamp);
-
-    html += `
-      <div class="user-msg-bubble-wrap ${isMe ? 'from-user' : 'from-admin'}">
-        <div class="user-bubble">
-          ${!isMe ? '<div style="font-size:0.72rem; color:#fbbf24; font-weight:800; margin-bottom:2px;">👑 Developer &bull; Admin</div>' : ''}
-          ${escapeHtmlText(m.text)}
-          <div class="user-bubble-meta">
-            <span>${timeStr}</span>
-            ${isMe ? '<span style="color:#a7f3d0;">✓</span>' : ''}
-          </div>
-        </div>
-      </div>`;
-  });
-
-  stream.innerHTML = html;
-  stream.scrollTop = stream.scrollHeight;
-}
-
-let isSendingUserChat = false;
-async function sendUserChatMessage() {
-  if (isSendingUserChat) return;
-
-  const input = document.getElementById('userChatInputText');
-  if (!input) return;
-
-  const text = (input.value || '').trim();
-  if (!text) {
-    input.focus();
-    return;
-  }
-
-  isSendingUserChat = true;
-
-  // Immediate visual feedback on the send button
-  const sendBtn = document.getElementById('btnUserSendChat');
-  let originalBtnHtml = '';
-  if (sendBtn) {
-    originalBtnHtml = sendBtn.innerHTML;
-    sendBtn.disabled = true;
-    sendBtn.innerHTML = '<span>⏳ Sending...</span>';
-    sendBtn.style.opacity = '0.85';
-  }
-
-  try {
-    try {
-      playUserChatAudioChime('send');
-    } catch (audioErr) {}
-
-    // Hardened ID and Name resolution
-    if (!userChatId) {
-      userChatId = localStorage.getItem('mindfocus_chat_user_id') || ('reader_' + Math.random().toString(36).substring(2, 8));
-      localStorage.setItem('mindfocus_chat_user_id', userChatId);
-    }
-    if (!userChatName) {
-      userChatName = localStorage.getItem('mindfocus_chat_user_name') || ('Reader #' + userChatId.slice(-4).toUpperCase());
-      localStorage.setItem('mindfocus_chat_user_name', userChatName);
-    }
-
-    if (!userChatData) userChatData = { version: 1, lastUpdated: new Date().toISOString(), threads: {} };
-    if (!userChatData.threads) userChatData.threads = {};
-
-    if (!userChatData.threads[userChatId]) {
-      userChatData.threads[userChatId] = {
-        userId: userChatId,
-        userName: userChatName,
-        userDevice: userChatDevice,
-        unreadByAdmin: 0,
-        unreadByUser: 0,
-        lastMessage: '',
-        lastTimestamp: new Date().toISOString(),
-        messages: []
-      };
-    }
-
-    const thread = userChatData.threads[userChatId];
-    const newMsg = {
-      id: 'msg_user_' + userChatId + '_' + Date.now(),
-      sender: 'user',
-      text: text,
-      timestamp: new Date().toISOString()
-    };
-
-    if (!Array.isArray(thread.messages)) thread.messages = [];
-    thread.messages.push(newMsg);
-    thread.lastMessage = text;
-    thread.lastTimestamp = newMsg.timestamp;
-    thread.unreadByAdmin = (thread.unreadByAdmin || 0) + 1;
-
-    // Clear input immediately and render locally so user sees message right away!
-    input.value = '';
-    saveUserChatDataLocally();
-    renderUserChatStream();
-
-    const payload = {
-      type: 'helpdesk_chat_msg',
-      threadId: userChatId,
-      userName: userChatName,
-      userDevice: userChatDevice,
-      message: newMsg
-    };
-
-    // 1. Send via local BroadcastChannel (0ms sync for same device/browser)
-    try {
-      if (userChatBroadcastChannel) {
-        userChatBroadcastChannel.postMessage(payload);
-      }
-    } catch (e) {}
-
-    // 2. Trigger localStorage cross-tab event
-    try {
-      localStorage.setItem('mindfocus_chat_last_event', JSON.stringify({
-        t: Date.now(),
-        payload: payload
-      }));
-    } catch (e) {}
-
-    // 3. Post to Cloud Relay (ntfy.sh) using text/plain (CORS safelisted - NO preflight roundtrip)
-    try {
-      fetch(HELPDESK_RELAY_URL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'text/plain'
-        },
-        body: JSON.stringify(payload)
-      }).catch(err => {
-        console.warn('Relay post warning:', err);
-      });
-    } catch (e) {}
-
-    if (typeof showToastNotification === 'function') {
-      showToastNotification('💬 Message sent to Developer / Admin!');
-    }
-  } catch (err) {
-    console.error('Error in sendUserChatMessage:', err);
-  } finally {
-    isSendingUserChat = false;
-    if (sendBtn) {
-      sendBtn.disabled = false;
-      sendBtn.innerHTML = originalBtnHtml || '<span>✈️ Send</span>';
-      sendBtn.style.opacity = '1';
-    }
-    setTimeout(() => {
-      if (input) input.focus();
-    }, 60);
-  }
-}
-
-function saveUserChatDataLocally() {
-  try {
-    localStorage.setItem('mindfocus_chat_data', JSON.stringify(userChatData));
-  } catch (e) {}
-}
-
-function formatUserChatTime(isoStr) {
-  if (!isoStr) return '';
-  try {
-    const d = new Date(isoStr);
-    let hours = d.getHours();
-    const mins = d.getMinutes().toString().padStart(2, '0');
-    const ampm = hours >= 12 ? 'PM' : 'AM';
-    hours = hours % 12 || 12;
-    return `${hours}:${mins} ${ampm}`;
-  } catch (e) {
-    return '';
-  }
-}
+window.flipFlashcard = flipFlashcard;
+window.swipeFlashcard = swipeFlashcard;
+window.initLiveHelpDeskEngine = initLiveHelpDeskEngine;
+window.openUserHelpDeskModal = openUserHelpDeskModal;
+window.closeUserHelpDeskModal = closeUserHelpDeskModal;
+window.sendUserChatMessage = sendUserChatMessage;
+window.handleHelpDeskOverlayClick = handleHelpDeskOverlayClick;
+window.insertUserPrompt = insertUserPrompt;
+window.handleUserChatKeydown = handleUserChatKeydown;
+window.playUserChatAudioChime = playUserChatAudioChime;
+window.setupUserChatEventListeners = setupUserChatEventListeners;
 
 function escapeHtmlText(str) {
   if (!str) return '';
@@ -21154,15 +18615,23 @@ function escapeHtmlText(str) {
             .replace(/"/g, '&quot;');
 }
 
-window.openUserHelpDeskModal = openUserHelpDeskModal;
-window.closeUserHelpDeskModal = closeUserHelpDeskModal;
-window.handleHelpDeskOverlayClick = handleHelpDeskOverlayClick;
-window.insertUserPrompt = insertUserPrompt;
-window.handleUserChatKeydown = handleUserChatKeydown;
-window.sendUserChatMessage = sendUserChatMessage;
-window.initLiveHelpDeskEngine = initLiveHelpDeskEngine;
-window.playUserChatAudioChime = playUserChatAudioChime;
-window.setupUserChatEventListeners = setupUserChatEventListeners;
+// User & Device Telemetry Context for Phone DevTools
+let userChatId = localStorage.getItem('mindfocus_chat_user_id') || ('usr_' + Math.random().toString(36).substring(2, 9));
+let userChatName = localStorage.getItem('mindfocus_chat_user_name') || 'Phone User';
+let userChatDevice = 'Android Phone';
+
+function formatUserChatTime(isoStr) {
+  try {
+    const d = isoStr ? new Date(isoStr) : new Date();
+    let hours = d.getHours();
+    const mins = d.getMinutes().toString().padStart(2, '0');
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12;
+    return `${hours}:${mins} ${ampm}`;
+  } catch (e) {
+    return '';
+  }
+}
 
 // ========================================================
 // 🩺 REAL-TIME PHONE CRASH TELEMETRY & MOBILE DEVTOOLS SUITE

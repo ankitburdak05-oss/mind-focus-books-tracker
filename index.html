@@ -157,15 +157,9 @@
         <button class="btn" id="headerSpotlightBtn" onclick="openSpotlightModal()" title="Spotlight Teleport (Ctrl+K)" style="background:rgba(99,102,241,0.18); border-color:rgba(99,102,241,0.35); color:#a5b4fc; font-weight:700;">
           ⚡ <span class="desktop-only-txt">Spotlight</span>
         </button>
-        <button class="btn" id="headerSanctuaryBtn" onclick="openSanctuaryMode()" title="Distraction-Zero Sanctuary Mode" style="background:linear-gradient(135deg, rgba(245,158,11,0.18), rgba(239,68,68,0.18)); border-color:rgba(245,158,11,0.35); color:#fbbf24; font-weight:700;">
-          🌌 <span class="desktop-only-txt">Sanctuary</span>
-        </button>
         <button class="btn btn-primary" id="addBookBtn" title="Add a new book to library">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           + Add Book
-        </button>
-        <button class="btn" id="headerPomodoroBtn" onclick="openPomodoroModal()" title="25-Min Focus Reading Timer" style="background:rgba(239, 68, 68, 0.15); border-color:rgba(239, 68, 68, 0.35); color:#ef4444; font-weight:700;">
-          ⏱️ <span id="headerPomodoroText">Focus Timer</span>
         </button>
       </div>
     </div>
@@ -1033,7 +1027,7 @@
             </div>
             <div>
               <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Tracker</div>
-              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.7.1 Real App Design &amp; Feature Studio</div>
+              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.8.0 Real App Design &amp; Feature Studio</div>
             </div>
           </div>
           <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn" style="border-radius:12px; padding:0.45rem 0.85rem; font-weight:800;">
@@ -1124,16 +1118,6 @@
               </div>
             </div>
             <span class="settings-row-chevron" id="settingsHapticModeVal">Crisp Click ›</span>
-          </button>
-          <button type="button" class="settings-action-row" onclick="closeSettingsModal(); openPomodoroModal();">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #ef4444, #dc2626); color:#fff; box-shadow:0 6px 18px rgba(239,68,68,0.4);">⏱️</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Pomodoro Focus Timer</div>
-                <div class="settings-row-sub">25-min interval sprints with audio chimes</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" style="color:#ef4444;">Launch ›</span>
           </button>
         </div>
 
@@ -1313,7 +1297,7 @@
         <div class="update-version-diff-card">
           <div class="version-diff-col">
             <span class="version-diff-label">YOUR APP</span>
-            <span class="version-diff-pill current" id="updateCurrentVersionBadge">v3.7.1</span>
+            <span class="version-diff-pill current" id="updateCurrentVersionBadge">v3.8.0</span>
           </div>
           <div class="version-diff-arrow">➔</div>
           <div class="version-diff-col">
@@ -1474,7 +1458,7 @@
   <div class="modal-overlay" id="streakModalOverlay">
     <div class="modal-content" style="max-width:520px;">
       <div class="modal-header">
-        <h3 class="modal-title">🔥 4D Reading Rings &amp; Streak Sanctuary</h3>
+        <h3 class="modal-title">🔥 4D Reading Rings &amp; Streak Hub</h3>
         <button class="modal-close" onclick="closeStreakModal()">&times;</button>
       </div>
       <div class="modal-body" style="gap:1.25rem;">
@@ -1543,46 +1527,6 @@
     </div>
   </div>
 
-  <!-- Pomodoro Reading Focus Timer Modal -->
-  <div class="modal-overlay" id="pomodoroTimerModalOverlay">
-    <div class="modal-content" style="max-width:440px; text-align:center;">
-      <div class="modal-header">
-        <h3 class="modal-title">⏱️ Pomodoro Focus Reading Timer</h3>
-        <button class="modal-close" onclick="closePomodoroModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="gap:1.25rem; padding:1.5rem 1rem; align-items:center;">
-        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">
-          Read distraction-free for 25 minutes. A gentle bell chime will ring when finished.
-        </p>
-
-        <!-- Big Circular Countdown -->
-        <div style="width:190px; height:190px; border-radius:50%; border:6px solid rgba(239,68,68,0.2); border-top-color:#ef4444; display:flex; flex-direction:column; align-items:center; justify-content:center; position:relative; box-shadow:0 8px 24px rgba(239,68,68,0.15); margin:0.5rem auto;">
-          <div id="pomodoroTimeDisplay" style="font-size:2.8rem; font-weight:900; color:#ef4444; font-variant-numeric:tabular-nums; line-height:1;">25:00</div>
-          <div id="pomodoroSessionLabel" style="font-size:0.75rem; font-weight:700; color:var(--text-muted); margin-top:0.35rem; text-transform:uppercase; letter-spacing:0.05em;">Deep Focus</div>
-        </div>
-
-        <!-- Controls -->
-        <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
-          <button type="button" class="btn btn-primary" id="pomodoroToggleBtn" onclick="togglePomodoroTimer()" style="background:#ef4444; border-color:#ef4444; font-weight:800; padding:0.65rem 1.75rem; font-size:1rem;">
-            ▶ Start Focus
-          </button>
-          <button type="button" class="btn" onclick="resetPomodoroTimer()" style="font-weight:600;">
-            🔄 Reset (25m)
-          </button>
-          <button type="button" class="btn" onclick="setPomodoroDuration(15)" style="font-size:0.8rem;">
-            ⚡ Quick 15m
-          </button>
-        </div>
-
-        <div style="font-size:0.75rem; color:var(--text-secondary); display:flex; align-items:center; gap:0.4rem;">
-          <span>💡 Tip:</span> <span>Turn on <b>Ambience Rain 🌧️</b> for 10x deeper concentration!</span>
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content:center;">
-        <button type="button" class="btn" onclick="closePomodoroModal()">Close</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Spotlight Command Island (Instant Teleport Search - Feature 5) -->
   <div class="modal-overlay spotlight-overlay" id="spotlightIslandModal" onclick="handleSpotlightBackdrop(event)">
@@ -1608,57 +1552,6 @@
     </div>
   </div>
 
-  <!-- Deep Sanctuary Focus Mode (Distraction-Zero Reading Room - Feature 9) -->
-  <div id="sanctuaryModeOverlay" class="sanctuary-overlay">
-    <div class="sanctuary-header">
-      <div class="sanctuary-logo">
-        <span class="sanctuary-sparkle">✦</span>
-        <span>READING SANCTUARY</span>
-      </div>
-      <button type="button" class="sanctuary-close-btn" onclick="exitSanctuaryMode()" title="Exit Sanctuary Mode (ESC)">
-        ✕ Exit Sanctuary
-      </button>
-    </div>
-
-    <div class="sanctuary-centerpiece">
-      <div class="sanctuary-aura-halo" id="sanctuaryAuraHalo"></div>
-      <div class="sanctuary-book-stage">
-        <div class="sanctuary-cover-wrap" id="sanctuaryCoverWrap">
-          <!-- Active book cover dynamically injected -->
-        </div>
-        <div class="sanctuary-book-info">
-          <div class="sanctuary-badge" id="sanctuaryCategoryBadge">FOCUS &amp; CLARITY</div>
-          <h1 class="sanctuary-title" id="sanctuaryBookTitle">Active Book</h1>
-          <div class="sanctuary-author" id="sanctuaryBookAuthor">Napoleon Hill</div>
-          
-          <div class="sanctuary-progress-module">
-            <div class="sanctuary-progress-meta">
-              <span id="sanctuaryPagesLabel">Page 0 of 0</span>
-              <span id="sanctuaryPaceLabel" class="sanctuary-pace-badge">~0 hrs left</span>
-            </div>
-            <div class="sanctuary-bar"><div class="sanctuary-bar-fill" id="sanctuaryBarFill" style="width:0%;"></div></div>
-            <div class="sanctuary-quick-steps">
-              <button type="button" onclick="stepSanctuaryPage(10)">+10 Pgs</button>
-              <button type="button" onclick="stepSanctuaryPage(25)">+25 Pgs</button>
-              <button type="button" onclick="stepSanctuaryPage(50)">+50 Pgs</button>
-              <button type="button" onclick="finishSanctuaryBook()" class="sanctuary-finish-btn">🎉 Finished</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Sanctuary Focus Pomodoro Timer -->
-      <div class="sanctuary-timer-pod">
-        <div class="sanctuary-timer-display" id="sanctuaryTimerDigits">25:00</div>
-        <div class="sanctuary-timer-controls">
-          <button type="button" class="sanctuary-timer-btn primary" id="sanctuaryTimerToggle" onclick="toggleSanctuaryTimer()">▶ Start 25-Min Sprint</button>
-          <button type="button" class="sanctuary-timer-btn" onclick="resetSanctuaryTimer()">↺ Reset</button>
-          <button type="button" class="sanctuary-timer-btn ambient-btn" id="sanctuaryAmbienceBtn" onclick="toggleAmbienceFromSanctuary()">🎧 Ambience: Off</button>
-        </div>
-        <div class="sanctuary-quote-glow" id="sanctuaryQuoteGlow">"Action is the real measure of intelligence."</div>
-      </div>
-    </div>
-  </div>
 
   <!-- Reading DNA Constellation Modal (Interactive Visual Constellation - Feature 10) -->
   <div class="modal-overlay" id="readingDnaModalOverlay" onclick="handleDnaBackdrop(event)">
@@ -1925,8 +1818,8 @@
   <script src="jspdf.umd.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'"></script>
   <script src="jspdf.plugin.autotable.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js'"></script>
   <script src="tesseract.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js'"></script>
-  <script src="dictionary-data.js?v=3.7.1"></script>
-  <script src="books-data.js?v=3.7.1"></script>
-  <script src="app.js?v=3.7.1"></script>
+  <script src="dictionary-data.js?v=3.8.0"></script>
+  <script src="books-data.js?v=3.8.0"></script>
+  <script src="app.js?v=3.8.0"></script>
 </body>
 </html>
