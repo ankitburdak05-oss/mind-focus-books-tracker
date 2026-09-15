@@ -1939,9 +1939,27 @@ async function saveRemoteConfigToCloud() {
       pdfExportEnabled: pdfExport
     };
 
-    remoteConfigData.globalBanner.active = bannerActive;
-    remoteConfigData.globalBanner.text = bannerText;
-    remoteConfigData.updatedAt = new Date().toISOString();
+    if (!remoteConfigData.activeRelease || remoteConfigData.activeRelease.version === 'v3.7.0') {
+      remoteConfigData.activeRelease = {
+        version: "v3.7.1",
+        name: "Mind Focus Books v3.7.1 — Ultra-Smooth Stable Edition",
+        apkDownloadUrl: "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.1",
+        features: [
+          "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
+          "🚀 Ultra-Smooth Update Center: Rock-solid, zero shaking/jitter on mobile",
+          "📦 Reliable 1-Tap APK Updater: Direct native download and package installer",
+          "📖 3D Real Book Reader with realistic page curl animations",
+          "🎨 Premium iOS Glassmorphism UI and fluid navigation",
+          "🛡️ 16 Remote Feature Switches & Instant Emergency Pause Control"
+        ],
+        stagedAt: "2026-09-15T03:00:00.000Z",
+        isDeployed: true
+      };
+    }
+
+    if (!remoteConfigData.stagedRelease || remoteConfigData.stagedRelease.version === 'v3.7.0') {
+      remoteConfigData.stagedRelease = Object.assign({}, remoteConfigData.activeRelease);
+    }
 
     const jsonStr = JSON.stringify(remoteConfigData, null, 2);
     await pushFileToGitHub('remote-config.json', jsonStr, 'Admin: Update remote switches & emergency kill-switch');

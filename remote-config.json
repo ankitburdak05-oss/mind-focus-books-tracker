@@ -1,21 +1,37 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-15T02:52:12.416Z",
+  "updatedAt": "2026-09-15T03:00:00.000Z",
   "activeRelease": {
-    "version": "v3.7.0",
-    "name": "Mind Focus Books v3.7.0 — Clean Lightweight Streamlined Edition",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.0",
+    "version": "v3.7.1",
+    "name": "Mind Focus Books v3.7.1 — Ultra-Smooth Stable Edition",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.1",
     "features": [
       "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
+      "🚀 Ultra-Smooth Update Center: Rock-solid, zero shaking/jitter on mobile",
+      "📦 Reliable 1-Tap APK Updater: Direct native download and package installer",
       "📖 3D Real Book Reader with realistic page curl animations",
       "🎨 Premium iOS Glassmorphism UI and fluid navigation",
-      "🚀 Zero Battery Drain & Thermal Freeze: Background engine optimized",
       "🛡️ 16 Remote Feature Switches & Instant Emergency Pause Control"
     ],
-    "stagedAt": "2026-09-14T03:55:00.000Z",
+    "stagedAt": "2026-09-15T03:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.7.1",
+    "name": "Mind Focus Books v3.7.1 — Ultra-Smooth Stable Edition",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.1",
+    "features": [
+      "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
+      "🚀 Ultra-Smooth Update Center: Rock-solid, zero shaking/jitter on mobile",
+      "📦 Reliable 1-Tap APK Updater: Direct native download and package installer",
+      "📖 3D Real Book Reader with realistic page curl animations",
+      "🎨 Premium iOS Glassmorphism UI and fluid navigation",
+      "🛡️ 16 Remote Feature Switches & Instant Emergency Pause Control"
+    ],
+    "stagedAt": "2026-09-15T03:00:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.7.0",
     "name": "Mind Focus Books v3.7.0 — Clean Lightweight Streamlined Edition",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.0",
@@ -27,18 +43,6 @@
       "🛡️ 16 Remote Feature Switches & Instant Emergency Pause Control"
     ],
     "stagedAt": "2026-09-14T03:55:00.000Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
-    "version": "v3.6.0",
-    "name": "Mind Focus Books v3.6.0 — Premium Real-App Studio & UI Redesign",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.6.0",
-    "features": [
-      "🎨 Control Panel Complete Redesign: Real App UI matching Mind Focus Books",
-      "⚡ Zero Battery Drain & Thermal Freeze: Complete background optimization",
-      "🛡️ 16 Remote Feature Switches & Instant Emergency Pause Control"
-    ],
-    "stagedAt": "2026-09-11T02:35:00.000Z",
     "isDeployed": true
   },
   "features": {

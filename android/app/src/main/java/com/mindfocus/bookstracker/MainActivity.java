@@ -220,22 +220,50 @@ public class MainActivity extends AppCompatActivity {
         public void downloadAndInstallApk(String apkUrl) {
             new Thread(() -> {
                 try {
-                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Downloading update... Please wait ⏳", Toast.LENGTH_SHORT).show());
-                    java.net.URL url = new java.net.URL(apkUrl);
-                    java.net.HttpURLConnection connection = (java.net.HttpURLConnection) url.openConnection();
-                    connection.setInstanceFollowRedirects(true);
-                    connection.connect();
-
-                    int status = connection.getResponseCode();
-                    if (status == java.net.HttpURLConnection.HTTP_MOVED_TEMP || status == java.net.HttpURLConnection.HTTP_MOVED_PERM || status == 307 || status == 308) {
-                        String newUrl = connection.getHeaderField("Location");
-                        connection = (java.net.HttpURLConnection) new java.net.URL(newUrl).openConnection();
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Downloading update package... ⏳", Toast.LENGTH_SHORT).show());
+                    
+                    String targetUrl = apkUrl;
+                    java.net.HttpURLConnection connection = null;
+                    int redirects = 0;
+                    
+                    while (redirects < 8) {
+                        java.net.URL url = new java.net.URL(targetUrl);
+                        connection = (java.net.HttpURLConnection) url.openConnection();
+                        connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android " + Build.VERSION.RELEASE + "; " + Build.MODEL + ") MindFocusBooksTracker");
+                        connection.setRequestProperty("Accept", "*/*");
+                        connection.setInstanceFollowRedirects(true);
+                        connection.setConnectTimeout(25000);
+                        connection.setReadTimeout(60000);
                         connection.connect();
+                        
+                        int status = connection.getResponseCode();
+                        if (status == java.net.HttpURLConnection.HTTP_MOVED_TEMP 
+                                || status == java.net.HttpURLConnection.HTTP_MOVED_PERM 
+                                || status == java.net.HttpURLConnection.HTTP_SEE_OTHER 
+                                || status == 307 
+                                || status == 308) {
+                            String redirectUrl = connection.getHeaderField("Location");
+                            if (redirectUrl != null && !redirectUrl.isEmpty()) {
+                                if (!redirectUrl.startsWith("http://") && !redirectUrl.startsWith("https://")) {
+                                    redirectUrl = new java.net.URL(url, redirectUrl).toString();
+                                }
+                                targetUrl = redirectUrl;
+                                connection.disconnect();
+                                redirects++;
+                                continue;
+                            }
+                        }
+                        break;
                     }
 
-                    File cacheDir = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "updates");
-                    if (!cacheDir.exists()) cacheDir.mkdirs();
-                    File apkFile = new File(cacheDir, "MindFocusBooks-Update.apk");
+                    int finalStatus = connection.getResponseCode();
+                    if (finalStatus != java.net.HttpURLConnection.HTTP_OK) {
+                        throw new Exception("Server returned HTTP " + finalStatus);
+                    }
+
+                    File updatesDir = new File(getCacheDir(), "updates");
+                    if (!updatesDir.exists()) updatesDir.mkdirs();
+                    File apkFile = new File(updatesDir, "MindFocusBooks-v3.7.1-Update.apk");
                     if (apkFile.exists()) apkFile.delete();
 
                     try (java.io.InputStream in = connection.getInputStream();
@@ -245,10 +273,27 @@ public class MainActivity extends AppCompatActivity {
                         while ((bytesRead = in.read(buffer)) != -1) {
                             out.write(buffer, 0, bytesRead);
                         }
+                        out.flush();
                     }
+
+                    if (!apkFile.exists() || apkFile.length() < 100000) {
+                        throw new Exception("Downloaded file is empty or corrupted (" + (apkFile.exists() ? apkFile.length() : 0) + " bytes)");
+                    }
+                    apkFile.setReadable(true, false);
 
                     runOnUiThread(() -> {
                         try {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                if (!getPackageManager().canRequestPackageInstalls()) {
+                                    Toast.makeText(MainActivity.this, "⚠️ Kripya 'Allow from this source' enable karein taki update install ho sake", Toast.LENGTH_LONG).show();
+                                    Intent permissionIntent = new Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+                                    permissionIntent.setData(Uri.parse("package:" + getPackageName()));
+                                    permissionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                    startActivity(permissionIntent);
+                                    return;
+                                }
+                            }
+
                             Uri apkUri = androidx.core.content.FileProvider.getUriForFile(
                                     MainActivity.this,
                                     getPackageName() + ".fileprovider",
@@ -259,12 +304,25 @@ public class MainActivity extends AppCompatActivity {
                             installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(installIntent);
+                            Toast.makeText(MainActivity.this, "⚡ Launching Package Installer...", Toast.LENGTH_SHORT).show();
                         } catch (Exception e) {
-                            Toast.makeText(MainActivity.this, "Installation error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Installation error: " + e.getMessage() + ". Opening in browser...", Toast.LENGTH_LONG).show();
+                            try {
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(apkUrl));
+                                browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(browserIntent);
+                            } catch (Exception ignored) {}
                         }
                     });
                 } catch (Exception e) {
-                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Download failed: " + e.getMessage(), Toast.LENGTH_LONG).show());
+                    runOnUiThread(() -> {
+                        Toast.makeText(MainActivity.this, "Download error: " + e.getMessage() + ". Opening in browser...", Toast.LENGTH_LONG).show();
+                        try {
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(apkUrl));
+                            browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(browserIntent);
+                        } catch (Exception ignored) {}
+                    });
                 }
             }).start();
         }

@@ -5382,16 +5382,49 @@ body {
   transform: scale(1.04);
 }
 
-/* 3. Cyber-Radar Quantum Update Center Styles */
+/* 3. Cyber-Radar Quantum Update Center Styles (Jitter-Free & Hardware-Accelerated) */
+body.modal-open {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  touch-action: none !important;
+  height: 100% !important;
+}
+
+#updateCheckerModalOverlay {
+  align-items: flex-start !important;
+  justify-content: center !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
+  padding: max(1.2rem, env(safe-area-inset-top, 20px)) 1rem max(2rem, env(safe-area-inset-bottom, 20px)) !important;
+}
+
+.modal-content.update-modal-content {
+  max-width: 460px !important;
+  width: 100% !important;
+  margin: auto auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  contain: layout paint !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  box-sizing: border-box !important;
+}
+
 .update-radar-container {
   position: relative;
-  width: 120px;
-  height: 120px;
+  width: 110px;
+  height: 110px;
   margin: 0 auto;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  contain: strict;
+  transform: translateZ(0);
 }
 
 .update-radar-ring {
@@ -5419,6 +5452,8 @@ body {
   background: conic-gradient(from 0deg, transparent 60%, rgba(99, 102, 241, 0.35) 90%, rgba(56, 189, 248, 0.7) 100%);
   animation: radarSweepSpin 2s linear infinite;
   pointer-events: none;
+  transform: translateZ(0);
+  will-change: transform;
 }
 
 @keyframes radarSweepSpin {
@@ -5437,13 +5472,14 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 1.6rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 15px rgba(99, 102, 241, 0.5);
-  animation: orbPulse 2s ease-in-out infinite alternate;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5), 0 0 16px rgba(99, 102, 241, 0.5);
+  transform: translateZ(0);
+  animation: orbGlowPulse 2.5s ease-in-out infinite alternate;
 }
 
-@keyframes orbPulse {
-  0% { transform: scale(0.96); box-shadow: 0 0 12px rgba(99, 102, 241, 0.4); }
-  100% { transform: scale(1.06); box-shadow: 0 0 25px rgba(56, 189, 248, 0.7); }
+@keyframes orbGlowPulse {
+  0% { transform: translateZ(0) scale(1); opacity: 0.92; }
+  100% { transform: translateZ(0) scale(1.02); opacity: 1; filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6)); }
 }
 
 /* Version Comparison Diff Card */
@@ -5452,10 +5488,12 @@ body {
   align-items: center;
   justify-content: center;
   gap: 1.25rem;
-  background: rgba(15, 23, 42, 0.7);
+  background: rgba(15, 23, 42, 0.75);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
   padding: 0.75rem 1.25rem;
+  min-height: 56px;
+  box-sizing: border-box;
 }
 
 .version-diff-col {
@@ -5496,22 +5534,27 @@ body {
   color: #818cf8;
   font-size: 1.1rem;
   font-weight: 900;
+  transform: translateZ(0);
   animation: arrowNudge 1.5s infinite;
 }
 
 @keyframes arrowNudge {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(4px); }
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(4px, 0, 0); }
 }
 
 /* Changelog Showcase Card */
 .update-changelog-card {
   text-align: left;
-  background: rgba(15, 23, 42, 0.85);
+  background: rgba(15, 23, 42, 0.88);
   border: 1px solid rgba(99, 102, 241, 0.35);
   border-radius: 14px;
   padding: 0.9rem 1.1rem;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  max-height: 200px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
 }
 
 .changelog-header {

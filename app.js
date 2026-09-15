@@ -3061,15 +3061,22 @@ function closeSettingsModal() {
 }
 
 let latestDetectedRelease = null;
+let updateProgressTimer = null;
 
 function openUpdateCheckerModal() {
   const overlay = document.getElementById('updateCheckerModalOverlay');
   if (overlay) overlay.classList.add('active');
+  document.body.classList.add('modal-open');
 }
 
 function closeUpdateCheckerModal() {
   const overlay = document.getElementById('updateCheckerModalOverlay');
   if (overlay) overlay.classList.remove('active');
+  document.body.classList.remove('modal-open');
+  if (updateProgressTimer) {
+    clearInterval(updateProgressTimer);
+    updateProgressTimer = null;
+  }
   if (latestDetectedRelease && latestDetectedRelease.version) {
     sessionStorage.setItem('mf_update_dismissed_' + latestDetectedRelease.version, 'true');
   }
@@ -3319,11 +3326,13 @@ function triggerInAppUpdate(apkUrl) {
 
   // Animate progress bar simulation
   let pct = 0;
-  const timer = setInterval(() => {
+  if (updateProgressTimer) clearInterval(updateProgressTimer);
+  updateProgressTimer = setInterval(() => {
     pct += Math.floor(Math.random() * 15) + 10;
     if (pct >= 100) {
       pct = 100;
-      clearInterval(timer);
+      clearInterval(updateProgressTimer);
+      updateProgressTimer = null;
       if (textInfo) textInfo.innerText = 'Package Ready! Launching Installer...';
       if (typeof triggerHaptic === 'function') triggerHaptic('success');
     }

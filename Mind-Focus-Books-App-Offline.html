@@ -1506,6 +1506,36 @@ body {
   display: flex !important;
 }
 
+body.modal-open {
+  overflow: hidden !important;
+  overscroll-behavior: none !important;
+  touch-action: none !important;
+  height: 100% !important;
+}
+
+#updateCheckerModalOverlay {
+  align-items: flex-start !important;
+  justify-content: center !important;
+  overflow-y: scroll !important;
+  -webkit-overflow-scrolling: touch !important;
+  overscroll-behavior: contain !important;
+  touch-action: pan-y !important;
+  padding: max(1.2rem, env(safe-area-inset-top, 20px)) 1rem max(2rem, env(safe-area-inset-bottom, 20px)) !important;
+}
+
+.modal-content.update-modal-content {
+  max-width: 460px !important;
+  width: 100% !important;
+  margin: auto auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  contain: layout paint !important;
+  transform: translateZ(0) !important;
+  backface-visibility: hidden !important;
+  -webkit-backface-visibility: hidden !important;
+  box-sizing: border-box !important;
+}
+
 .modal-content {
   background-color: var(--bg-secondary);
   border: 1px solid var(--border-color);
@@ -15778,7 +15808,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.6.0';
+const CURRENT_APP_VERSION = 'v3.7.1';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -15801,15 +15831,22 @@ function closeSettingsModal() {
 }
 
 let latestDetectedRelease = null;
+let updateProgressTimer = null;
 
 function openUpdateCheckerModal() {
   const overlay = document.getElementById('updateCheckerModalOverlay');
   if (overlay) overlay.classList.add('active');
+  document.body.classList.add('modal-open');
 }
 
 function closeUpdateCheckerModal() {
   const overlay = document.getElementById('updateCheckerModalOverlay');
   if (overlay) overlay.classList.remove('active');
+  document.body.classList.remove('modal-open');
+  if (updateProgressTimer) {
+    clearInterval(updateProgressTimer);
+    updateProgressTimer = null;
+  }
   if (latestDetectedRelease && latestDetectedRelease.version) {
     sessionStorage.setItem('mf_update_dismissed_' + latestDetectedRelease.version, 'true');
   }
