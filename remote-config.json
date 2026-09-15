@@ -1,10 +1,10 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-14T04:08:47.425Z",
+  "updatedAt": "2026-09-15T02:49:58.296Z",
   "activeRelease": {
-    "version": "v3.7.1",
-    "name": "Mind Focus Books v3.7.1 — Clean Lightweight Streamlined Edition",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.1",
+    "version": "v3.7.0",
+    "name": "Mind Focus Books v3.7.0 — Clean Lightweight Streamlined Edition",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.0",
     "features": [
       "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
       "📖 3D Real Book Reader with realistic page curl animations",
@@ -16,9 +16,9 @@
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.7.1",
-    "name": "Mind Focus Books v3.7.1 — Clean Lightweight Streamlined Edition",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.1",
+    "version": "v3.7.0",
+    "name": "Mind Focus Books v3.7.0 — Clean Lightweight Streamlined Edition",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.0",
     "features": [
       "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
       "📖 3D Real Book Reader with realistic page curl animations",
@@ -42,26 +42,26 @@
     "isDeployed": true
   },
   "features": {
-    "appEmergencyLockdown": true,
-    "lockdownMessage": "🚨 अभी ऐप को बंद कर दिया गया है। कुछ प्रॉब्लम आ गई है, सभी फीचर के साथ ऐप भी बंद हो गया है। कृपया थोड़ी देर प्रतीक्षा करें।",
-    "maintenanceMode": true,
+    "appEmergencyLockdown": false,
+    "lockdownMessage": "ye app band kardiya gaya hai",
+    "maintenanceMode": false,
     "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
-    "chatHelpDeskEnabled": false,
-    "telemetryEnabled": false,
-    "mobileDevToolsEnabled": false,
-    "broadcastNoticeEnabled": false,
-    "appUpdatesEnabled": false,
-    "streakShieldsEnabled": false,
-    "sanctuaryTimerEnabled": false,
-    "flashcardsEnabled": false,
-    "ambientAudioEnabled": false,
-    "visualPhysicsEnabled": false,
-    "barcodeScannerEnabled": false,
-    "audiobookVoiceEnabled": false,
-    "quotesEnabled": false,
-    "communityBooksSync": false,
-    "dictionaryBookEnabled": false,
-    "pdfExportEnabled": false
+    "chatHelpDeskEnabled": true,
+    "telemetryEnabled": true,
+    "mobileDevToolsEnabled": true,
+    "broadcastNoticeEnabled": true,
+    "appUpdatesEnabled": true,
+    "streakShieldsEnabled": true,
+    "sanctuaryTimerEnabled": true,
+    "flashcardsEnabled": true,
+    "ambientAudioEnabled": true,
+    "visualPhysicsEnabled": true,
+    "barcodeScannerEnabled": true,
+    "audiobookVoiceEnabled": true,
+    "quotesEnabled": true,
+    "communityBooksSync": true,
+    "dictionaryBookEnabled": true,
+    "pdfExportEnabled": true
   },
   "globalBanner": {
     "active": false,
