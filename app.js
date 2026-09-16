@@ -6860,6 +6860,20 @@ function openAddCustomPageModal() {
   const contentInput = document.getElementById('customPageContentInput');
   if (contentInput) contentInput.value = '';
 
+  // Reset Auto-OCR dropzone to clean state
+  const photoInput = document.getElementById('customPagePhotoInput');
+  if (photoInput) photoInput.value = '';
+  const promptEl = document.getElementById('ocrDropzonePrompt');
+  const scanEl = document.getElementById('ocrScanningState');
+  const previewEl = document.getElementById('ocrUploadedPreview');
+  const laserEl = document.getElementById('ocrLaserScanLine');
+  if (promptEl) promptEl.style.display = 'block';
+  if (scanEl) scanEl.style.display = 'none';
+  if (previewEl) previewEl.style.display = 'none';
+  if (laserEl) laserEl.style.display = 'none';
+
+  initCustomPageOcrListeners();
+
   const modal = document.getElementById('addCustomPageModal');
   if (modal) modal.classList.add('active');
 }
@@ -6873,6 +6887,242 @@ function handleAddPageOverlayClick(event) {
   if (event.target.id === 'addCustomPageModal') {
     closeAddCustomPageModal();
   }
+}
+
+// =========================================================================
+// AUTO PHOTO-TO-TEXT (OCR) CONVERTER ENGINE
+// =========================================================================
+let isOcrListenersBound = false;
+
+function initCustomPageOcrListeners() {
+  if (isOcrListenersBound) return;
+  isOcrListenersBound = true;
+
+  const dropzone = document.getElementById('pageOcrDropzone');
+  if (dropzone) {
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('dragover');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const dt = e.dataTransfer;
+      const files = dt ? dt.files : null;
+      if (files && files.length > 0) {
+        processCustomPagePhotoFile(files[0]);
+      }
+    });
+  }
+
+  // Also support pasting an image from clipboard (Ctrl+V)
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) {
+    modal.addEventListener('paste', (e) => {
+      const items = (e.clipboardData || (e.originalEvent && e.originalEvent.clipboardData)) ? (e.clipboardData || e.originalEvent.clipboardData).items : null;
+      if (items) {
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].type && items[i].type.indexOf('image') !== -1) {
+            const blob = items[i].getAsFile();
+            if (blob) {
+              processCustomPagePhotoFile(blob);
+              break;
+            }
+          }
+        }
+      }
+    });
+  }
+}
+
+function handleCustomPagePhotoUpload(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  processCustomPagePhotoFile(file);
+}
+
+function processCustomPagePhotoFile(file) {
+  if (!file || !file.type.startsWith('image/')) {
+    showToast('Kripya ek valid photo chunein!', 'warning');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    // Update thumbnail immediately
+    const thumbEl = document.getElementById('ocrThumbnailImg');
+    if (thumbEl) thumbEl.src = dataUrl;
+
+    // Start auto OCR extraction
+    runAutoPageOcr(dataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+
+function preprocessImageForOcr(dataUrl, callback) {
+  const img = new Image();
+  img.onload = function() {
+    try {
+      const maxDim = 1600; // Optimal performance and recognition
+      let w = img.width;
+      let h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+
+      // Contrast stretching for sharper text recognition
+      const imgData = ctx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+        // Enhance contrast
+        const contrast = 1.15;
+        const adjusted = Math.min(255, Math.max(0, ((gray - 128) * contrast) + 128));
+        d[i] = adjusted;
+        d[i + 1] = adjusted;
+        d[i + 2] = adjusted;
+      }
+      ctx.putImageData(imgData, 0, 0);
+      callback(canvas.toDataURL('image/jpeg', 0.9));
+    } catch (e) {
+      console.warn('Preprocessing fallback to original:', e);
+      callback(dataUrl);
+    }
+  };
+  img.onerror = function() {
+    callback(dataUrl);
+  };
+  img.src = dataUrl;
+}
+
+async function runAutoPageOcr(imageSrc) {
+  const promptEl = document.getElementById('ocrDropzonePrompt');
+  const scanEl = document.getElementById('ocrScanningState');
+  const previewEl = document.getElementById('ocrUploadedPreview');
+  const laserEl = document.getElementById('ocrLaserScanLine');
+  const progressText = document.getElementById('ocrScanProgressText');
+  const progressBar = document.getElementById('ocrScanProgressBar');
+  const statusSub = document.getElementById('ocrScanStatusSub');
+  const contentInput = document.getElementById('customPageContentInput');
+  const headingInput = document.getElementById('customPageHeadingInput');
+  const langSelect = document.getElementById('customPageLangSelect');
+
+  if (promptEl) promptEl.style.display = 'none';
+  if (previewEl) previewEl.style.display = 'none';
+  if (scanEl) scanEl.style.display = 'block';
+  if (laserEl) laserEl.style.display = 'block';
+  if (progressBar) progressBar.style.width = '15%';
+  if (progressText) progressText.innerText = 'Photo process ho rahi hai...';
+  if (statusSub) statusSub.innerText = 'Contrast aur text clarity optimize ki ja rahi hai...';
+
+  if (typeof Tesseract === 'undefined') {
+    if (progressText) progressText.innerText = 'OCR engine shuru ho raha hai...';
+    await new Promise(r => setTimeout(r, 1500));
+    if (typeof Tesseract === 'undefined') {
+      if (progressText) progressText.innerText = 'OCR library load nahi ho payi. Kripya page refresh karein.';
+      if (laserEl) laserEl.style.display = 'none';
+      return;
+    }
+  }
+
+  preprocessImageForOcr(imageSrc, async function(processedUrl) {
+    const chosenLang = (langSelect && langSelect.value) ? langSelect.value : 'hindi';
+    let ocrLang = 'eng';
+    if (chosenLang === 'hindi') {
+      ocrLang = 'hin+eng';
+    }
+
+    try {
+      if (progressBar) progressBar.style.width = '30%';
+      if (progressText) progressText.innerText = 'Akshar pehchane ja rahe hain (Recognizing text)...';
+      if (statusSub) statusSub.innerText = 'Book ke sabhi shabdon ko text mein badla ja raha hai...';
+
+      let res = null;
+      try {
+        res = await Tesseract.recognize(processedUrl, ocrLang, {
+          logger: (m) => {
+            if (m && m.progress) {
+              const pct = Math.round(m.progress * 100);
+              if (progressBar) progressBar.style.width = Math.max(25, pct) + '%';
+              if (progressText) progressText.innerText = 'Scanning: ' + (m.status ? (m.status.charAt(0).toUpperCase() + m.status.slice(1)) : 'Recognizing') + ' (' + pct + '%)...';
+            }
+          }
+        });
+      } catch (langErr) {
+        console.warn('hin+eng language pack offline, falling back to eng:', langErr);
+        if (progressText) progressText.innerText = 'Standard OCR se text extract kiya ja raha hai...';
+        res = await Tesseract.recognize(processedUrl, 'eng', {
+          logger: (m) => {
+            if (m && m.progress) {
+              const pct = Math.round(m.progress * 100);
+              if (progressBar) progressBar.style.width = Math.max(25, pct) + '%';
+            }
+          }
+        });
+      }
+
+      const rawText = (res && res.data && res.data.text) ? res.data.text.trim() : '';
+
+      if (!rawText) {
+        if (scanEl) scanEl.style.display = 'none';
+        if (laserEl) laserEl.style.display = 'none';
+        if (promptEl) promptEl.style.display = 'block';
+        showToast('Photo mein text clear nahi mila. Kripya achhi lighting mein photo lein.', 'warning');
+        return;
+      }
+
+      // Format text into clean paragraphs
+      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+
+      // Auto-detect potential chapter heading from first short line
+      if (lines.length > 1 && lines[0].length <= 50 && headingInput && !headingInput.value.trim()) {
+        headingInput.value = lines[0];
+        const remaining = lines.slice(1).join('\n\n');
+        if (contentInput) contentInput.value = remaining;
+      } else {
+        if (contentInput) contentInput.value = lines.join('\n\n');
+      }
+
+      // Success Display
+      if (progressBar) progressBar.style.width = '100%';
+      if (scanEl) scanEl.style.display = 'none';
+      if (laserEl) laserEl.style.display = 'none';
+      if (previewEl) previewEl.style.display = 'flex';
+
+      showToast('Photo se text safaltapoorvak convert ho gaya! ⚡📝', 'success');
+    } catch (err) {
+      console.error('Auto-OCR recognition error:', err);
+      if (scanEl) scanEl.style.display = 'none';
+      if (laserEl) laserEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('OCR scan error: ' + (err.message || 'Photo text convert nahi ho paya'), 'error');
+    }
+  });
 }
 
 function saveCustomBookPage() {
@@ -7025,6 +7275,9 @@ window.openBookCoverModal = openBookCoverModal;
 window.closeBookCoverModal = closeBookCoverModal;
 window.handleCoverViewerOverlayClick = handleCoverViewerOverlayClick;
 window.switchCoverView = switchCoverView;
+window.handleCustomPagePhotoUpload = handleCustomPagePhotoUpload;
+window.processCustomPagePhotoFile = processCustomPagePhotoFile;
+window.runAutoPageOcr = runAutoPageOcr;
 
 // =========================================================================
 // REMOVED LEGACY FEATURES (Mystery Gift, Flashcards, Live Help Desk)

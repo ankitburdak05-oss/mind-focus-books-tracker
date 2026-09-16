@@ -8729,3 +8729,57 @@ body.modal-open {
     font-size: 0.75rem;
   }
 }
+
+/* ==========================================
+   AUTO-OCR BOOK PAGE PHOTO DROPZONE & SCANNER
+   ========================================== */
+.page-ocr-dropzone {
+  border: 2px dashed rgba(99, 102, 241, 0.45);
+  background: rgba(99, 102, 241, 0.04);
+  border-radius: 14px;
+  padding: 16px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.page-ocr-dropzone:hover,
+.page-ocr-dropzone.dragover {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+}
+
+.ocr-scan-spinner {
+  font-size: 2rem;
+  display: inline-block;
+  animation: ocrPulseAnim 1.2s infinite ease-in-out;
+}
+
+@keyframes ocrPulseAnim {
+  0% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.22); opacity: 1; filter: drop-shadow(0 0 10px #6366f1); }
+  100% { transform: scale(1); opacity: 0.7; }
+}
+
+.ocr-scan-laser {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #6366f1, #10b981, transparent);
+  box-shadow: 0 0 10px #6366f1;
+  animation: ocrLaserScanAnim 1.5s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes ocrLaserScanAnim {
+  0% { top: 0%; opacity: 0.8; }
+  50% { top: 100%; opacity: 1; }
+  100% { top: 0%; opacity: 0.8; }
+}
