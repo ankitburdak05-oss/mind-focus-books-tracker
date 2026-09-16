@@ -243,6 +243,8 @@ function loadData() {
     if (existingIdx !== -1) {
       state.books.splice(existingIdx, 1);
     }
+  }
+
   // Ensure Book 1 (Hyperfocus) has cover_image, price, isbn, and takeaway
   const hyperBook = state.books.find(b => b.title && b.title.toLowerCase().includes('hyperfocus'));
   if (hyperBook) {
@@ -5435,7 +5437,7 @@ function syncCategoryTrackActiveState() {
   });
   // Also sync dropdown
   const dropdown = document.getElementById('categoryFilter');
-  if (dropdown) {
+  if (dropdown && dropdown.options) {
     const found = Array.from(dropdown.options).some(o => o.value === cat);
     dropdown.value = found ? cat : 'ALL';
   }
