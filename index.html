@@ -1684,7 +1684,7 @@
               </div>
             </div>
             <div class="lang-card-action">
-              <span class="lang-pages-count" id="langHindiCountBadge">4 पृष्ठ</span>
+              <span class="lang-pages-count" id="langHindiCountBadge">2 पृष्ठ</span>
               <span class="lang-open-arrow">पढ़ें ›</span>
             </div>
           </button>
@@ -1699,7 +1699,7 @@
               </div>
             </div>
             <div class="lang-card-action">
-              <span class="lang-pages-count" id="langHinglishCountBadge">4 Pages</span>
+              <span class="lang-pages-count" id="langHinglishCountBadge">2 Pages</span>
               <span class="lang-open-arrow">Read ›</span>
             </div>
           </button>
@@ -1714,7 +1714,7 @@
               </div>
             </div>
             <div class="lang-card-action">
-              <span class="lang-pages-count" id="langEnglishCountBadge">4 Pages</span>
+              <span class="lang-pages-count" id="langEnglishCountBadge">2 Pages</span>
               <span class="lang-open-arrow">Read ›</span>
             </div>
           </button>
@@ -1759,6 +1759,8 @@
 
         <!-- Right Controls -->
         <div class="reader-top-right">
+          <!-- View Cover Button -->
+          <button type="button" class="reader-btn-sm" onclick="openBookCoverModal()" title="View Book Cover" style="font-weight:700;">📕 Cover</button>
           <!-- Font Size Adjuster -->
           <div class="reader-font-controls">
             <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(-1)" title="Decrease font size">A-</button>
@@ -1811,8 +1813,8 @@
         </button>
 
         <div class="reader-page-slider-group">
-          <input type="range" class="reader-page-range" id="readerPageSlider" min="1" max="4" value="1" oninput="onReaderSliderChange(this.value)">
-          <span class="reader-page-indicator" id="readerPageIndicator">Page 1 / 4</span>
+          <input type="range" class="reader-page-range" id="readerPageSlider" min="1" max="2" value="1" oninput="onReaderSliderChange(this.value)">
+          <span class="reader-page-indicator" id="readerPageIndicator">Page 1 / 2</span>
         </div>
 
         <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="turnRealBookPage(1)">
@@ -1854,7 +1856,7 @@
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Page Number:</label>
-            <input type="number" id="customPageNoInput" class="form-control" min="1" value="5">
+            <input type="number" id="customPageNoInput" class="form-control" min="1" value="3">
           </div>
           <div class="form-group">
             <label class="form-label">Page Heading / Chapter (Optional):</label>
@@ -1875,6 +1877,34 @@
       <div class="modal-footer" style="justify-content:space-between;">
         <button type="button" class="btn" onclick="closeAddCustomPageModal()">Cancel</button>
         <button type="button" class="btn btn-primary" onclick="saveCustomBookPage()">💾 Save Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Book Cover Viewer Modal -->
+  <div class="modal-overlay" id="bookCoverViewerModal" onclick="handleCoverViewerOverlayClick(event)">
+    <div class="modal-content" style="max-width:460px; text-align:center; padding:1.25rem;" onclick="event.stopPropagation()">
+      <div class="modal-header" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border-color);">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">📕</span>
+          <h3 class="modal-title" id="coverModalTitle">पुस्तक कवर / Book Cover</h3>
+        </div>
+        <button class="modal-close" onclick="closeBookCoverModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:0.8rem 0; gap:0.75rem;">
+        <div style="display:flex; justify-content:center; gap:0.5rem; margin-bottom:0.5rem;">
+          <button type="button" class="btn btn-sm btn-primary" id="coverTabFrontBtn" onclick="switchCoverView('front')">Front Cover</button>
+          <button type="button" class="btn btn-sm" id="coverTabBackBtn" onclick="switchCoverView('back')">Back Cover</button>
+        </div>
+        <div style="max-height:65vh; overflow:hidden; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.03); border-radius:12px; padding:10px;">
+          <img id="coverViewerImg" src="hyperfocus_cover.jpg" alt="Book Cover" style="max-width:100%; max-height:55vh; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.25); object-fit:contain;">
+        </div>
+        <div id="coverViewerCaption" style="font-size:0.82rem; font-weight:600; color:var(--text-secondary); margin-top:0.25rem;">
+          हायपरफ़ोकस (Hyperfocus) • Front Cover
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:center; padding-top:0.5rem; border-top:1px solid var(--border-color);">
+        <button type="button" class="btn" onclick="closeBookCoverModal()">Close</button>
       </div>
     </div>
   </div>

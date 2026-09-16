@@ -10417,7 +10417,7 @@ body.modal-open {
               </div>
             </div>
             <div class="lang-card-action">
-              <span class="lang-pages-count" id="langHindiCountBadge">4 पृष्ठ</span>
+              <span class="lang-pages-count" id="langHindiCountBadge">2 पृष्ठ</span>
               <span class="lang-open-arrow">पढ़ें ›</span>
             </div>
           </button>
@@ -10432,7 +10432,7 @@ body.modal-open {
               </div>
             </div>
             <div class="lang-card-action">
-              <span class="lang-pages-count" id="langHinglishCountBadge">4 Pages</span>
+              <span class="lang-pages-count" id="langHinglishCountBadge">2 Pages</span>
               <span class="lang-open-arrow">Read ›</span>
             </div>
           </button>
@@ -10447,7 +10447,7 @@ body.modal-open {
               </div>
             </div>
             <div class="lang-card-action">
-              <span class="lang-pages-count" id="langEnglishCountBadge">4 Pages</span>
+              <span class="lang-pages-count" id="langEnglishCountBadge">2 Pages</span>
               <span class="lang-open-arrow">Read ›</span>
             </div>
           </button>
@@ -10492,6 +10492,8 @@ body.modal-open {
 
         <!-- Right Controls -->
         <div class="reader-top-right">
+          <!-- View Cover Button -->
+          <button type="button" class="reader-btn-sm" onclick="openBookCoverModal()" title="View Book Cover" style="font-weight:700;">📕 Cover</button>
           <!-- Font Size Adjuster -->
           <div class="reader-font-controls">
             <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(-1)" title="Decrease font size">A-</button>
@@ -10544,8 +10546,8 @@ body.modal-open {
         </button>
 
         <div class="reader-page-slider-group">
-          <input type="range" class="reader-page-range" id="readerPageSlider" min="1" max="4" value="1" oninput="onReaderSliderChange(this.value)">
-          <span class="reader-page-indicator" id="readerPageIndicator">Page 1 / 4</span>
+          <input type="range" class="reader-page-range" id="readerPageSlider" min="1" max="2" value="1" oninput="onReaderSliderChange(this.value)">
+          <span class="reader-page-indicator" id="readerPageIndicator">Page 1 / 2</span>
         </div>
 
         <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="turnRealBookPage(1)">
@@ -10587,7 +10589,7 @@ body.modal-open {
         <div class="form-row">
           <div class="form-group">
             <label class="form-label">Page Number:</label>
-            <input type="number" id="customPageNoInput" class="form-control" min="1" value="5">
+            <input type="number" id="customPageNoInput" class="form-control" min="1" value="3">
           </div>
           <div class="form-group">
             <label class="form-label">Page Heading / Chapter (Optional):</label>
@@ -10608,6 +10610,34 @@ body.modal-open {
       <div class="modal-footer" style="justify-content:space-between;">
         <button type="button" class="btn" onclick="closeAddCustomPageModal()">Cancel</button>
         <button type="button" class="btn btn-primary" onclick="saveCustomBookPage()">💾 Save Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Book Cover Viewer Modal -->
+  <div class="modal-overlay" id="bookCoverViewerModal" onclick="handleCoverViewerOverlayClick(event)">
+    <div class="modal-content" style="max-width:460px; text-align:center; padding:1.25rem;" onclick="event.stopPropagation()">
+      <div class="modal-header" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border-color);">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">📕</span>
+          <h3 class="modal-title" id="coverModalTitle">पुस्तक कवर / Book Cover</h3>
+        </div>
+        <button class="modal-close" onclick="closeBookCoverModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:0.8rem 0; gap:0.75rem;">
+        <div style="display:flex; justify-content:center; gap:0.5rem; margin-bottom:0.5rem;">
+          <button type="button" class="btn btn-sm btn-primary" id="coverTabFrontBtn" onclick="switchCoverView('front')">Front Cover</button>
+          <button type="button" class="btn btn-sm" id="coverTabBackBtn" onclick="switchCoverView('back')">Back Cover</button>
+        </div>
+        <div style="max-height:65vh; overflow:hidden; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.03); border-radius:12px; padding:10px;">
+          <img id="coverViewerImg" src="hyperfocus_cover.jpg" alt="Book Cover" style="max-width:100%; max-height:55vh; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.25); object-fit:contain;">
+        </div>
+        <div id="coverViewerCaption" style="font-size:0.82rem; font-weight:600; color:var(--text-secondary); margin-top:0.25rem;">
+          हायपरफ़ोकस (Hyperfocus) • Front Cover
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:center; padding-top:0.5rem; border-top:1px solid var(--border-color);">
+        <button type="button" class="btn" onclick="closeBookCoverModal()">Close</button>
       </div>
     </div>
   </div>
@@ -11000,25 +11030,6 @@ const BOOK_PAGES_DATA = {
         pages: [
           {
             pageNo: 1,
-            type: 'title',
-            heading: 'हायपरफ़ोकस',
-            content: `
-<div class="reader-title-page">
-  <div class="reader-book-main-title">हायपरफ़ोकस</div>
-  <div class="reader-book-subtitle">कम प्रयास में अधिक सफलता कैसे प्राप्त करें</div>
-  <div class="reader-divider">✦ ✦ ✦</div>
-  <div class="reader-book-author-text">क्रिस बेली</div>
-  <div class="reader-book-translator-text">अनुवाद : अजय तिवारी</div>
-  <div class="reader-publisher-badge">
-    <div class="pub-logo-icon">🦅</div>
-    <div class="pub-name">मंजुल पब्लिशिंग हाउस</div>
-    <div class="pub-sub">MANJUL PUBLISHING HOUSE</div>
-  </div>
-</div>
-`
-          },
-          {
-            pageNo: 2,
             type: 'praise',
             heading: 'पुस्तक की प्रशस्ति',
             content: `
@@ -11033,12 +11044,12 @@ const BOOK_PAGES_DATA = {
 </div>
 <div class="reader-praise-block">
   <p class="reader-quote-text">“यह पुस्तक एक जीवन रेखा है, एक ऐसी दुनिया में जहां पर हम सभी बहुत कुछ करने के लिए व्यग्र हैं और करने के लिए बहुत समय नहीं है। क्रिस बेली की अभूतपूर्व और सामयिक पुस्तक की बदौलत, मुझे लगता है कि मेरे पास अब, वास्तव में इतने वर्षों में पहली बार, सबसे महत्त्वपूर्ण, मूल्य-निर्मित करने वाली चीज़ों पर फ़ोकस करने की क्षमता आ गई है। यदि आप तनाव से राहत पाने के साथ ही अपनी उत्पादकता और ख़ुशी दोनों में बढ़ोतरी करना चाहते हैं तो इस पुस्तक को अवश्य पढ़ें।”</p>
-  <p class="reader-quote-author">— <strong>जेम्स सिट्रिन</strong>, <em>करियर प्लेबुक</em> के लेखक</p>
+  <p class="reader-quote-author">— <strong>जेम्स सिट्रिन</strong>, <em>करियर प्लेブック</em> के लेखक</p>
 </div>
 `
           },
           {
-            pageNo: 3,
+            pageNo: 2,
             type: 'praise',
             heading: 'विश्वप्रसिद्ध विचारकों की राय',
             content: `
@@ -11060,36 +11071,6 @@ const BOOK_PAGES_DATA = {
   <p class="reader-quote-author">— <strong>काई-फ़ू ली</strong>, <em>गूगल चाइना के संस्थापक, सिनोवेशन वेंचर्स के चेयरमैन एवं सीईओ</em></p>
 </div>
 `
-          },
-          {
-            pageNo: 4,
-            type: 'summary',
-            heading: 'पुस्तक का सार (Back Cover)',
-            content: `
-<div class="reader-page-header">पुस्तक का सार एवं मुख्य दर्शन</div>
-<div class="reader-callout-box">
-  <p class="reader-lead-text">“रचनात्मक बनने और सार्थक जीवन जीने के लिए आपके पास जो कुछ है, वह ध्यान ही है।”</p>
-</div>
-<p class="reader-body-para">ध्यान से हमारी उत्पादकता कैसे बढ़ती है। काम आसान नहीं, बल्कि और अधिक कठिन कैसे करते हैं। हम बेहतरीन कार्य तब कर पाते हैं, जब हम एकाग्र होते हैं।</p>
-<p class="reader-body-para">ना ही कभी ध्यान की इतनी कमी रही और न ही कभी उसकी इतनी माँग रही, ऐसा पहले कभी नहीं हुआ कि हम इतने व्यस्त रहे हों और इतना कम काम कर पाए हों।</p>
-<div class="reader-highlight-card">
-  <div class="reader-highlight-title">दिमाग़ की दो मानसिक प्रणालियाँ:</div>
-  <p class="reader-body-para" style="margin-bottom:0.6rem;">क्रिस बेली तर्क करते हैं कि हम अपने ध्यान का प्रबंधन सर्वश्रेष्ठ तरीक़े से कैसे करें, जब हमारा दिमाग़ दो मानसिक प्रणालियों के बीच 'स्विच' करता है :</p>
-  <div class="reader-mode-item">
-    <span class="mode-badge mode-hyper">1. हायपरफ़ोकस (Hyperfocus)</span>
-    <p>यह हमारी <strong>गहन एकाग्रता प्रणाली</strong> होती है। जब हम किसी एक महत्त्वपूर्ण कार्य पर 100% ध्यान लगाकर काम पूरा करते हैं।</p>
-  </div>
-  <div class="reader-mode-item" style="margin-top:0.6rem;">
-    <span class="mode-badge mode-scatter">2. स्कैटरफ़ोकस (Scatterfocus)</span>
-    <p>यह हमारी <strong>रचनात्मक और नवोन्मेषी प्रणाली</strong> होती है। जब दिमाग़ आज़ाद होकर विश्राम करता है और नए विचारों को जोड़ता है।</p>
-  </div>
-  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 अपने कार्य में सबसे रचनात्मक और कुशल बनने की कुंजी इन दोनों प्रणालियों के संयोजन में निहित है।</p>
-</div>
-<div class="reader-meta-footer">
-  <span>ISBN: 978-93-5543-300-8</span>
-  <span>मूल्य: ₹350 (Non-Fiction)</span>
-</div>
-`
           }
         ]
       },
@@ -11102,25 +11083,6 @@ const BOOK_PAGES_DATA = {
         pages: [
           {
             pageNo: 1,
-            type: 'title',
-            heading: 'HYPERFOCUS',
-            content: `
-<div class="reader-title-page">
-  <div class="reader-book-main-title">HYPERFOCUS</div>
-  <div class="reader-book-subtitle">Kam Prayas Mein Adhik Safalta Kaise Prapt Karein</div>
-  <div class="reader-divider">✦ ✦ ✦</div>
-  <div class="reader-book-author-text">Chris Bailey</div>
-  <div class="reader-book-translator-text">Hindi Translation: Ajay Tiwari</div>
-  <div class="reader-publisher-badge">
-    <div class="pub-logo-icon">🦅</div>
-    <div class="pub-name">Manjul Publishing House</div>
-    <div class="pub-sub">HOW TO WORK LESS TO ACHIEVE MORE</div>
-  </div>
-</div>
-`
-          },
-          {
-            pageNo: 2,
             type: 'praise',
             heading: 'Pustak Ki Prashasti & Praises',
             content: `
@@ -11140,7 +11102,7 @@ const BOOK_PAGES_DATA = {
 `
           },
           {
-            pageNo: 3,
+            pageNo: 2,
             type: 'praise',
             heading: 'Top Experts Ki Ray',
             content: `
@@ -11162,35 +11124,6 @@ const BOOK_PAGES_DATA = {
   <p class="reader-quote-author">— <strong>Kai-Fu Lee</strong>, Google China Founder & Sinovation Chairman</p>
 </div>
 `
-          },
-          {
-            pageNo: 4,
-            type: 'summary',
-            heading: 'Core Concept: Dimaag Ke Do Modes',
-            content: `
-<div class="reader-page-header">Core Concept & Mind Modes</div>
-<div class="reader-callout-box">
-  <p class="reader-lead-text">“Creative banne aur meaningful life jeene ke liye aapke paas jo sabse keemti cheez hai, wo hai aapka Dhyan (Attention).”</p>
-</div>
-<p class="reader-body-para">Khabar hai? Na pehle kabhi attention ki itni kami thi, aur na hi itni demand thi. Hum itne busy kabhi nahi rahe, fir bhi din ke aakhir me lagta hai ki kuch khaas kaam hua hi nahi.</p>
-<div class="reader-highlight-card">
-  <div class="reader-highlight-title">Hamare Dimaag Ke 2 Modes:</div>
-  <p class="reader-body-para" style="margin-bottom:0.6rem;">Chris Bailey samjhate hain ki jab hamara mind do systems ke beech switch karta hai:</p>
-  <div class="reader-mode-item">
-    <span class="mode-badge mode-hyper">1. Hyperfocus (गहन एकाग्रता)</span>
-    <p>Jab aap apna poora 100% focus kisi ek high-priority task par lock kar dete ho. Yahan distraction zero hota hai.</p>
-  </div>
-  <div class="reader-mode-item" style="margin-top:0.6rem;">
-    <span class="mode-badge mode-scatter">2. Scatterfocus (रचनात्मक फैलाव)</span>
-    <p>Jab aap dimaag ko aazaad ghoomne dete ho taaki subconscious mind naye ideas aur dots connect kar sake.</p>
-  </div>
-  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 Kam mehnat me double productivity pane ka raaz in dono modes ko switch karna seekhne me hai.</p>
-</div>
-<div class="reader-meta-footer">
-  <span>ISBN: 978-93-5543-300-8</span>
-  <span>Price: ₹350 (Non-Fiction)</span>
-</div>
-`
           }
         ]
       },
@@ -11203,24 +11136,6 @@ const BOOK_PAGES_DATA = {
         pages: [
           {
             pageNo: 1,
-            type: 'title',
-            heading: 'HYPERFOCUS',
-            content: `
-<div class="reader-title-page">
-  <div class="reader-book-main-title">HYPERFOCUS</div>
-  <div class="reader-book-subtitle">How to Work Less and Achieve More</div>
-  <div class="reader-divider">✦ ✦ ✦</div>
-  <div class="reader-book-author-text">Chris Bailey</div>
-  <div class="reader-publisher-badge">
-    <div class="pub-logo-icon">📖</div>
-    <div class="pub-name">Manjul Publishing House</div>
-    <div class="pub-sub">INTERNATIONAL BESTSELLER</div>
-  </div>
-</div>
-`
-          },
-          {
-            pageNo: 2,
             type: 'praise',
             heading: 'Praise for Hyperfocus',
             content: `
@@ -11240,7 +11155,7 @@ const BOOK_PAGES_DATA = {
 `
           },
           {
-            pageNo: 3,
+            pageNo: 2,
             type: 'praise',
             heading: 'Acclaim from Thought Leaders',
             content: `
@@ -11260,35 +11175,6 @@ const BOOK_PAGES_DATA = {
 <div class="reader-praise-block">
   <p class="reader-quote-text">“A fantastic guide to managing attention. It is not just theory, but a rich toolbox of best practices. I can't wait to put these ideas into action.”</p>
   <p class="reader-quote-author">— <strong>Kai-Fu Lee</strong>, Founder of Google China & Chairman of Sinovation</p>
-</div>
-`
-          },
-          {
-            pageNo: 4,
-            type: 'summary',
-            heading: 'The Core Premise (Back Cover)',
-            content: `
-<div class="reader-page-header">The Core Premise</div>
-<div class="reader-callout-box">
-  <p class="reader-lead-text">“The most important tool you have for becoming productive, creative, and living a meaningful life is your attention.”</p>
-</div>
-<p class="reader-body-para">Never has focus been in such short supply, and never has its value been so high. We are constantly busy, yet we feel we achieve far less than we could.</p>
-<div class="reader-highlight-card">
-  <div class="reader-highlight-title">Our Brain Shifts Between Two Modes:</div>
-  <p class="reader-body-para" style="margin-bottom:0.6rem;">Chris Bailey explains how we perform at our best when we understand how our brain toggles between two core networks:</p>
-  <div class="reader-mode-item">
-    <span class="mode-badge mode-hyper">1. Hyperfocus (Deep Concentration)</span>
-    <p>The deep immersion mode where you dedicate 100% of your limited working memory to a single critical objective without distraction.</p>
-  </div>
-  <div class="reader-mode-item" style="margin-top:0.6rem;">
-    <span class="mode-badge mode-scatter">2. Scatterfocus (Creative Expansion)</span>
-    <p>The exploratory, restorative mode where your mind intentionally wanders, sparking creative ideas and connecting distant concepts.</p>
-  </div>
-  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 The master key to extraordinary accomplishment is knowing when and how to seamlessly navigate between both systems.</p>
-</div>
-<div class="reader-meta-footer">
-  <span>ISBN: 978-93-5543-300-8</span>
-  <span>Cover Price: ₹350 (Non-Fiction)</span>
 </div>
 `
           }
@@ -20162,9 +20048,13 @@ function turnRealBookPage(delta) {
   const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
   const totalPages = (data && data.pages && data.pages.length) ? data.pages.length : 1;
 
-  const step = 1;
-  const targetPage = readerState.currentPage + (delta * step);
-  if (targetPage < 1 || targetPage > totalPages) return;
+  const isMobile = window.innerWidth <= 768;
+  const isDualSpread = !isMobile && totalPages > 1;
+
+  const targetPage = readerState.currentPage + delta;
+  if (targetPage < 1) return;
+  if (isDualSpread && targetPage + 1 > totalPages && delta > 0) return;
+  if (!isDualSpread && targetPage > totalPages) return;
 
   readerState.currentPage = targetPage;
   playPaperTurnAudio();
@@ -20247,10 +20137,13 @@ function renderRealBookPages() {
     slider.value = readerState.currentPage;
   }
 
+  const isMobile = window.innerWidth <= 768;
+  const isDualSpread = !isMobile && totalPages > 1;
+
   const prevBtn = document.getElementById('readerPrevPageBtn');
   const nextBtn = document.getElementById('readerNextPageBtn');
   if (prevBtn) prevBtn.disabled = readerState.currentPage <= 1;
-  if (nextBtn) nextBtn.disabled = readerState.currentPage >= totalPages;
+  if (nextBtn) nextBtn.disabled = isDualSpread ? (readerState.currentPage + 1 >= totalPages) : (readerState.currentPage >= totalPages);
 
   const leftSheet = document.getElementById('pageInnerLeft');
   const rightSheet = document.getElementById('pageInnerRight');
@@ -20279,8 +20172,6 @@ function renderRealBookPages() {
     if (indicator) indicator.innerText = 'Page 1 / 1';
     return;
   }
-
-  const isMobile = window.innerWidth <= 768;
 
   if (isMobile) {
     // Single page on mobile
@@ -20341,7 +20232,7 @@ function openAddCustomPageModal() {
 
   const b = state.books[readerState.activeBookIdx];
   const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
-  const nextPg = (data && data.pages) ? (data.pages.length + 1) : 5;
+  const nextPg = (data && data.pages) ? (data.pages.length + 1) : 3;
 
   const noInput = document.getElementById('customPageNoInput');
   if (noInput) noInput.value = nextPg;
@@ -20430,6 +20321,71 @@ function saveCustomBookPage() {
   }
 }
 
+// =========================================================================
+// BOOK COVER VIEWER (Front & Back Covers)
+// =========================================================================
+let currentCoverView = 'front';
+function openBookCoverModal() {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  currentCoverView = 'front';
+
+  const imgEl = document.getElementById('coverViewerImg');
+  const capEl = document.getElementById('coverViewerCaption');
+  const frontBtn = document.getElementById('coverTabFrontBtn');
+  const backBtn = document.getElementById('coverTabBackBtn');
+
+  if (frontBtn && backBtn) {
+    frontBtn.classList.add('btn-primary');
+    backBtn.classList.remove('btn-primary');
+  }
+
+  if (imgEl) {
+    imgEl.src = (b && b.cover) ? b.cover : 'hyperfocus_cover.jpg';
+  }
+  if (capEl) {
+    capEl.innerText = (b ? b.title : 'Hyperfocus') + ' • Front Cover';
+  }
+
+  const modal = document.getElementById('bookCoverViewerModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeBookCoverModal() {
+  const modal = document.getElementById('bookCoverViewerModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleCoverViewerOverlayClick(event) {
+  if (event.target.id === 'bookCoverViewerModal') {
+    closeBookCoverModal();
+  }
+}
+
+function switchCoverView(side) {
+  currentCoverView = side;
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const isHyper = b && b.title && b.title.toLowerCase().includes('hyperfocus');
+
+  const imgEl = document.getElementById('coverViewerImg');
+  const capEl = document.getElementById('coverViewerCaption');
+  const frontBtn = document.getElementById('coverTabFrontBtn');
+  const backBtn = document.getElementById('coverTabBackBtn');
+
+  if (frontBtn && backBtn) {
+    if (side === 'front') {
+      frontBtn.classList.add('btn-primary');
+      backBtn.classList.remove('btn-primary');
+      if (imgEl) imgEl.src = (b && b.cover) ? b.cover : 'hyperfocus_cover.jpg';
+      if (capEl) capEl.innerText = (b ? b.title : 'Hyperfocus') + ' • Front Cover';
+    } else {
+      backBtn.classList.add('btn-primary');
+      frontBtn.classList.remove('btn-primary');
+      if (imgEl) imgEl.src = isHyper ? 'hyperfocus_back.jpg' : ((b && b.cover) ? b.cover : 'hyperfocus_cover.jpg');
+      if (capEl) capEl.innerText = (b ? b.title : 'Hyperfocus') + ' • Back Cover (ISBN / Barcode)';
+    }
+  }
+}
+
 // Bind to window
 window.openLanguageSelectModal = openLanguageSelectModal;
 window.closeLanguageSelectModal = closeLanguageSelectModal;
@@ -20448,6 +20404,10 @@ window.openAddCustomPageModal = openAddCustomPageModal;
 window.closeAddCustomPageModal = closeAddCustomPageModal;
 window.handleAddPageOverlayClick = handleAddPageOverlayClick;
 window.saveCustomBookPage = saveCustomBookPage;
+window.openBookCoverModal = openBookCoverModal;
+window.closeBookCoverModal = closeBookCoverModal;
+window.handleCoverViewerOverlayClick = handleCoverViewerOverlayClick;
+window.switchCoverView = switchCoverView;
 
 // =========================================================================
 // REMOVED LEGACY FEATURES (Mystery Gift, Flashcards, Live Help Desk)

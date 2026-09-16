@@ -6665,9 +6665,13 @@ function turnRealBookPage(delta) {
   const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
   const totalPages = (data && data.pages && data.pages.length) ? data.pages.length : 1;
 
-  const step = 1;
-  const targetPage = readerState.currentPage + (delta * step);
-  if (targetPage < 1 || targetPage > totalPages) return;
+  const isMobile = window.innerWidth <= 768;
+  const isDualSpread = !isMobile && totalPages > 1;
+
+  const targetPage = readerState.currentPage + delta;
+  if (targetPage < 1) return;
+  if (isDualSpread && targetPage + 1 > totalPages && delta > 0) return;
+  if (!isDualSpread && targetPage > totalPages) return;
 
   readerState.currentPage = targetPage;
   playPaperTurnAudio();
@@ -6750,10 +6754,13 @@ function renderRealBookPages() {
     slider.value = readerState.currentPage;
   }
 
+  const isMobile = window.innerWidth <= 768;
+  const isDualSpread = !isMobile && totalPages > 1;
+
   const prevBtn = document.getElementById('readerPrevPageBtn');
   const nextBtn = document.getElementById('readerNextPageBtn');
   if (prevBtn) prevBtn.disabled = readerState.currentPage <= 1;
-  if (nextBtn) nextBtn.disabled = readerState.currentPage >= totalPages;
+  if (nextBtn) nextBtn.disabled = isDualSpread ? (readerState.currentPage + 1 >= totalPages) : (readerState.currentPage >= totalPages);
 
   const leftSheet = document.getElementById('pageInnerLeft');
   const rightSheet = document.getElementById('pageInnerRight');
@@ -6782,8 +6789,6 @@ function renderRealBookPages() {
     if (indicator) indicator.innerText = 'Page 1 / 1';
     return;
   }
-
-  const isMobile = window.innerWidth <= 768;
 
   if (isMobile) {
     // Single page on mobile
@@ -6844,7 +6849,7 @@ function openAddCustomPageModal() {
 
   const b = state.books[readerState.activeBookIdx];
   const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
-  const nextPg = (data && data.pages) ? (data.pages.length + 1) : 5;
+  const nextPg = (data && data.pages) ? (data.pages.length + 1) : 3;
 
   const noInput = document.getElementById('customPageNoInput');
   if (noInput) noInput.value = nextPg;
@@ -6933,6 +6938,71 @@ function saveCustomBookPage() {
   }
 }
 
+// =========================================================================
+// BOOK COVER VIEWER (Front & Back Covers)
+// =========================================================================
+let currentCoverView = 'front';
+function openBookCoverModal() {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  currentCoverView = 'front';
+
+  const imgEl = document.getElementById('coverViewerImg');
+  const capEl = document.getElementById('coverViewerCaption');
+  const frontBtn = document.getElementById('coverTabFrontBtn');
+  const backBtn = document.getElementById('coverTabBackBtn');
+
+  if (frontBtn && backBtn) {
+    frontBtn.classList.add('btn-primary');
+    backBtn.classList.remove('btn-primary');
+  }
+
+  if (imgEl) {
+    imgEl.src = (b && b.cover) ? b.cover : 'hyperfocus_cover.jpg';
+  }
+  if (capEl) {
+    capEl.innerText = (b ? b.title : 'Hyperfocus') + ' • Front Cover';
+  }
+
+  const modal = document.getElementById('bookCoverViewerModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeBookCoverModal() {
+  const modal = document.getElementById('bookCoverViewerModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleCoverViewerOverlayClick(event) {
+  if (event.target.id === 'bookCoverViewerModal') {
+    closeBookCoverModal();
+  }
+}
+
+function switchCoverView(side) {
+  currentCoverView = side;
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const isHyper = b && b.title && b.title.toLowerCase().includes('hyperfocus');
+
+  const imgEl = document.getElementById('coverViewerImg');
+  const capEl = document.getElementById('coverViewerCaption');
+  const frontBtn = document.getElementById('coverTabFrontBtn');
+  const backBtn = document.getElementById('coverTabBackBtn');
+
+  if (frontBtn && backBtn) {
+    if (side === 'front') {
+      frontBtn.classList.add('btn-primary');
+      backBtn.classList.remove('btn-primary');
+      if (imgEl) imgEl.src = (b && b.cover) ? b.cover : 'hyperfocus_cover.jpg';
+      if (capEl) capEl.innerText = (b ? b.title : 'Hyperfocus') + ' • Front Cover';
+    } else {
+      backBtn.classList.add('btn-primary');
+      frontBtn.classList.remove('btn-primary');
+      if (imgEl) imgEl.src = isHyper ? 'hyperfocus_back.jpg' : ((b && b.cover) ? b.cover : 'hyperfocus_cover.jpg');
+      if (capEl) capEl.innerText = (b ? b.title : 'Hyperfocus') + ' • Back Cover (ISBN / Barcode)';
+    }
+  }
+}
+
 // Bind to window
 window.openLanguageSelectModal = openLanguageSelectModal;
 window.closeLanguageSelectModal = closeLanguageSelectModal;
@@ -6951,6 +7021,10 @@ window.openAddCustomPageModal = openAddCustomPageModal;
 window.closeAddCustomPageModal = closeAddCustomPageModal;
 window.handleAddPageOverlayClick = handleAddPageOverlayClick;
 window.saveCustomBookPage = saveCustomBookPage;
+window.openBookCoverModal = openBookCoverModal;
+window.closeBookCoverModal = closeBookCoverModal;
+window.handleCoverViewerOverlayClick = handleCoverViewerOverlayClick;
+window.switchCoverView = switchCoverView;
 
 // =========================================================================
 // REMOVED LEGACY FEATURES (Mystery Gift, Flashcards, Live Help Desk)

@@ -25,25 +25,6 @@ const BOOK_PAGES_DATA = {
         pages: [
           {
             pageNo: 1,
-            type: 'title',
-            heading: 'हायपरफ़ोकस',
-            content: `
-<div class="reader-title-page">
-  <div class="reader-book-main-title">हायपरफ़ोकस</div>
-  <div class="reader-book-subtitle">कम प्रयास में अधिक सफलता कैसे प्राप्त करें</div>
-  <div class="reader-divider">✦ ✦ ✦</div>
-  <div class="reader-book-author-text">क्रिस बेली</div>
-  <div class="reader-book-translator-text">अनुवाद : अजय तिवारी</div>
-  <div class="reader-publisher-badge">
-    <div class="pub-logo-icon">🦅</div>
-    <div class="pub-name">मंजुल पब्लिशिंग हाउस</div>
-    <div class="pub-sub">MANJUL PUBLISHING HOUSE</div>
-  </div>
-</div>
-`
-          },
-          {
-            pageNo: 2,
             type: 'praise',
             heading: 'पुस्तक की प्रशस्ति',
             content: `
@@ -58,12 +39,12 @@ const BOOK_PAGES_DATA = {
 </div>
 <div class="reader-praise-block">
   <p class="reader-quote-text">“यह पुस्तक एक जीवन रेखा है, एक ऐसी दुनिया में जहां पर हम सभी बहुत कुछ करने के लिए व्यग्र हैं और करने के लिए बहुत समय नहीं है। क्रिस बेली की अभूतपूर्व और सामयिक पुस्तक की बदौलत, मुझे लगता है कि मेरे पास अब, वास्तव में इतने वर्षों में पहली बार, सबसे महत्त्वपूर्ण, मूल्य-निर्मित करने वाली चीज़ों पर फ़ोकस करने की क्षमता आ गई है। यदि आप तनाव से राहत पाने के साथ ही अपनी उत्पादकता और ख़ुशी दोनों में बढ़ोतरी करना चाहते हैं तो इस पुस्तक को अवश्य पढ़ें।”</p>
-  <p class="reader-quote-author">— <strong>जेम्स सिट्रिन</strong>, <em>करियर प्लेबुक</em> के लेखक</p>
+  <p class="reader-quote-author">— <strong>जेम्स सिट्रिन</strong>, <em>करियर प्लेブック</em> के लेखक</p>
 </div>
 `
           },
           {
-            pageNo: 3,
+            pageNo: 2,
             type: 'praise',
             heading: 'विश्वप्रसिद्ध विचारकों की राय',
             content: `
@@ -85,36 +66,6 @@ const BOOK_PAGES_DATA = {
   <p class="reader-quote-author">— <strong>काई-फ़ू ली</strong>, <em>गूगल चाइना के संस्थापक, सिनोवेशन वेंचर्स के चेयरमैन एवं सीईओ</em></p>
 </div>
 `
-          },
-          {
-            pageNo: 4,
-            type: 'summary',
-            heading: 'पुस्तक का सार (Back Cover)',
-            content: `
-<div class="reader-page-header">पुस्तक का सार एवं मुख्य दर्शन</div>
-<div class="reader-callout-box">
-  <p class="reader-lead-text">“रचनात्मक बनने और सार्थक जीवन जीने के लिए आपके पास जो कुछ है, वह ध्यान ही है।”</p>
-</div>
-<p class="reader-body-para">ध्यान से हमारी उत्पादकता कैसे बढ़ती है। काम आसान नहीं, बल्कि और अधिक कठिन कैसे करते हैं। हम बेहतरीन कार्य तब कर पाते हैं, जब हम एकाग्र होते हैं।</p>
-<p class="reader-body-para">ना ही कभी ध्यान की इतनी कमी रही और न ही कभी उसकी इतनी माँग रही, ऐसा पहले कभी नहीं हुआ कि हम इतने व्यस्त रहे हों और इतना कम काम कर पाए हों।</p>
-<div class="reader-highlight-card">
-  <div class="reader-highlight-title">दिमाग़ की दो मानसिक प्रणालियाँ:</div>
-  <p class="reader-body-para" style="margin-bottom:0.6rem;">क्रिस बेली तर्क करते हैं कि हम अपने ध्यान का प्रबंधन सर्वश्रेष्ठ तरीक़े से कैसे करें, जब हमारा दिमाग़ दो मानसिक प्रणालियों के बीच 'स्विच' करता है :</p>
-  <div class="reader-mode-item">
-    <span class="mode-badge mode-hyper">1. हायपरफ़ोकस (Hyperfocus)</span>
-    <p>यह हमारी <strong>गहन एकाग्रता प्रणाली</strong> होती है। जब हम किसी एक महत्त्वपूर्ण कार्य पर 100% ध्यान लगाकर काम पूरा करते हैं।</p>
-  </div>
-  <div class="reader-mode-item" style="margin-top:0.6rem;">
-    <span class="mode-badge mode-scatter">2. स्कैटरफ़ोकस (Scatterfocus)</span>
-    <p>यह हमारी <strong>रचनात्मक और नवोन्मेषी प्रणाली</strong> होती है। जब दिमाग़ आज़ाद होकर विश्राम करता है और नए विचारों को जोड़ता है।</p>
-  </div>
-  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 अपने कार्य में सबसे रचनात्मक और कुशल बनने की कुंजी इन दोनों प्रणालियों के संयोजन में निहित है।</p>
-</div>
-<div class="reader-meta-footer">
-  <span>ISBN: 978-93-5543-300-8</span>
-  <span>मूल्य: ₹350 (Non-Fiction)</span>
-</div>
-`
           }
         ]
       },
@@ -127,25 +78,6 @@ const BOOK_PAGES_DATA = {
         pages: [
           {
             pageNo: 1,
-            type: 'title',
-            heading: 'HYPERFOCUS',
-            content: `
-<div class="reader-title-page">
-  <div class="reader-book-main-title">HYPERFOCUS</div>
-  <div class="reader-book-subtitle">Kam Prayas Mein Adhik Safalta Kaise Prapt Karein</div>
-  <div class="reader-divider">✦ ✦ ✦</div>
-  <div class="reader-book-author-text">Chris Bailey</div>
-  <div class="reader-book-translator-text">Hindi Translation: Ajay Tiwari</div>
-  <div class="reader-publisher-badge">
-    <div class="pub-logo-icon">🦅</div>
-    <div class="pub-name">Manjul Publishing House</div>
-    <div class="pub-sub">HOW TO WORK LESS TO ACHIEVE MORE</div>
-  </div>
-</div>
-`
-          },
-          {
-            pageNo: 2,
             type: 'praise',
             heading: 'Pustak Ki Prashasti & Praises',
             content: `
@@ -165,7 +97,7 @@ const BOOK_PAGES_DATA = {
 `
           },
           {
-            pageNo: 3,
+            pageNo: 2,
             type: 'praise',
             heading: 'Top Experts Ki Ray',
             content: `
@@ -187,35 +119,6 @@ const BOOK_PAGES_DATA = {
   <p class="reader-quote-author">— <strong>Kai-Fu Lee</strong>, Google China Founder & Sinovation Chairman</p>
 </div>
 `
-          },
-          {
-            pageNo: 4,
-            type: 'summary',
-            heading: 'Core Concept: Dimaag Ke Do Modes',
-            content: `
-<div class="reader-page-header">Core Concept & Mind Modes</div>
-<div class="reader-callout-box">
-  <p class="reader-lead-text">“Creative banne aur meaningful life jeene ke liye aapke paas jo sabse keemti cheez hai, wo hai aapka Dhyan (Attention).”</p>
-</div>
-<p class="reader-body-para">Khabar hai? Na pehle kabhi attention ki itni kami thi, aur na hi itni demand thi. Hum itne busy kabhi nahi rahe, fir bhi din ke aakhir me lagta hai ki kuch khaas kaam hua hi nahi.</p>
-<div class="reader-highlight-card">
-  <div class="reader-highlight-title">Hamare Dimaag Ke 2 Modes:</div>
-  <p class="reader-body-para" style="margin-bottom:0.6rem;">Chris Bailey samjhate hain ki jab hamara mind do systems ke beech switch karta hai:</p>
-  <div class="reader-mode-item">
-    <span class="mode-badge mode-hyper">1. Hyperfocus (गहन एकाग्रता)</span>
-    <p>Jab aap apna poora 100% focus kisi ek high-priority task par lock kar dete ho. Yahan distraction zero hota hai.</p>
-  </div>
-  <div class="reader-mode-item" style="margin-top:0.6rem;">
-    <span class="mode-badge mode-scatter">2. Scatterfocus (रचनात्मक फैलाव)</span>
-    <p>Jab aap dimaag ko aazaad ghoomne dete ho taaki subconscious mind naye ideas aur dots connect kar sake.</p>
-  </div>
-  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 Kam mehnat me double productivity pane ka raaz in dono modes ko switch karna seekhne me hai.</p>
-</div>
-<div class="reader-meta-footer">
-  <span>ISBN: 978-93-5543-300-8</span>
-  <span>Price: ₹350 (Non-Fiction)</span>
-</div>
-`
           }
         ]
       },
@@ -228,24 +131,6 @@ const BOOK_PAGES_DATA = {
         pages: [
           {
             pageNo: 1,
-            type: 'title',
-            heading: 'HYPERFOCUS',
-            content: `
-<div class="reader-title-page">
-  <div class="reader-book-main-title">HYPERFOCUS</div>
-  <div class="reader-book-subtitle">How to Work Less and Achieve More</div>
-  <div class="reader-divider">✦ ✦ ✦</div>
-  <div class="reader-book-author-text">Chris Bailey</div>
-  <div class="reader-publisher-badge">
-    <div class="pub-logo-icon">📖</div>
-    <div class="pub-name">Manjul Publishing House</div>
-    <div class="pub-sub">INTERNATIONAL BESTSELLER</div>
-  </div>
-</div>
-`
-          },
-          {
-            pageNo: 2,
             type: 'praise',
             heading: 'Praise for Hyperfocus',
             content: `
@@ -265,7 +150,7 @@ const BOOK_PAGES_DATA = {
 `
           },
           {
-            pageNo: 3,
+            pageNo: 2,
             type: 'praise',
             heading: 'Acclaim from Thought Leaders',
             content: `
@@ -285,35 +170,6 @@ const BOOK_PAGES_DATA = {
 <div class="reader-praise-block">
   <p class="reader-quote-text">“A fantastic guide to managing attention. It is not just theory, but a rich toolbox of best practices. I can't wait to put these ideas into action.”</p>
   <p class="reader-quote-author">— <strong>Kai-Fu Lee</strong>, Founder of Google China & Chairman of Sinovation</p>
-</div>
-`
-          },
-          {
-            pageNo: 4,
-            type: 'summary',
-            heading: 'The Core Premise (Back Cover)',
-            content: `
-<div class="reader-page-header">The Core Premise</div>
-<div class="reader-callout-box">
-  <p class="reader-lead-text">“The most important tool you have for becoming productive, creative, and living a meaningful life is your attention.”</p>
-</div>
-<p class="reader-body-para">Never has focus been in such short supply, and never has its value been so high. We are constantly busy, yet we feel we achieve far less than we could.</p>
-<div class="reader-highlight-card">
-  <div class="reader-highlight-title">Our Brain Shifts Between Two Modes:</div>
-  <p class="reader-body-para" style="margin-bottom:0.6rem;">Chris Bailey explains how we perform at our best when we understand how our brain toggles between two core networks:</p>
-  <div class="reader-mode-item">
-    <span class="mode-badge mode-hyper">1. Hyperfocus (Deep Concentration)</span>
-    <p>The deep immersion mode where you dedicate 100% of your limited working memory to a single critical objective without distraction.</p>
-  </div>
-  <div class="reader-mode-item" style="margin-top:0.6rem;">
-    <span class="mode-badge mode-scatter">2. Scatterfocus (Creative Expansion)</span>
-    <p>The exploratory, restorative mode where your mind intentionally wanders, sparking creative ideas and connecting distant concepts.</p>
-  </div>
-  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 The master key to extraordinary accomplishment is knowing when and how to seamlessly navigate between both systems.</p>
-</div>
-<div class="reader-meta-footer">
-  <span>ISBN: 978-93-5543-300-8</span>
-  <span>Cover Price: ₹350 (Non-Fiction)</span>
 </div>
 `
           }
