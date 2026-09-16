@@ -7968,9 +7968,788 @@ body.modal-open {
   word-break: break-all;
 }
 
+/* ==========================================================================
+   FEATURE: MULTI-LANGUAGE REAL BOOK READER & LANGUAGE SELECTOR STYLES
+   ========================================================================== */
 
+/* 1. Language Selector Dialog */
+.lang-select-dialog {
+  max-width: 540px !important;
+  border-radius: 20px !important;
+  background: var(--bg-card) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
 
+.lang-select-book-preview {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 0.9rem;
+  align-items: center;
+}
 
+.lang-select-cover-wrap {
+  width: 72px;
+  height: 104px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #1e293b;
+}
+
+.lang-select-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lang-select-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lang-select-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.lang-options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.lang-option-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-primary);
+  width: 100%;
+}
+
+.lang-option-card:hover {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: #f59e0b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+}
+
+.lang-option-card.active-lang-card {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.06));
+}
+
+.lang-card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.lang-flag {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.lang-card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.lang-card-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.lang-card-sub {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
+.lang-recommended-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: #f59e0b;
+  color: #000;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.lang-hinglish-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.lang-eng-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.lang-card-action {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.lang-pages-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.lang-open-arrow {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+.lang-custom-add-banner {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* 2. Real Book Reader Overlay */
+.real-book-reader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(3, 5, 10, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.real-book-reader-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.real-book-reader-container {
+  width: 100%;
+  max-width: 1100px;
+  height: 94vh;
+  max-height: 880px;
+  display: flex;
+  flex-direction: column;
+  background: #0f1422;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 50px rgba(99, 102, 241, 0.15);
+  overflow: hidden;
+}
+
+/* Reader Top Bar */
+.reader-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(10, 14, 25, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  gap: 10px;
+}
+
+.reader-top-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reader-btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.reader-btn-icon:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.reader-book-identity {
+  display: flex;
+  flex-direction: column;
+}
+
+.reader-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #f59e0b;
+  letter-spacing: 0.05em;
+}
+
+.reader-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+/* Language Switcher Pills */
+.reader-lang-pills {
+  display: flex;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 3px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reader-lang-pill {
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reader-lang-pill:hover {
+  color: #fff;
+}
+
+.reader-lang-pill.active {
+  background: #f59e0b;
+  color: #0b0f19;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+}
+
+.reader-top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reader-font-controls {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2px 4px;
+}
+
+.reader-btn-sm {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reader-btn-sm:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* 3. 3D Open Book Stage */
+.real-book-stage-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: radial-gradient(circle at center, #1b2336 0%, #090c14 100%);
+  perspective: 1800px;
+  overflow: hidden;
+}
+
+.real-book-hardcover {
+  width: 100%;
+  height: 100%;
+  max-width: 980px;
+  background: #3e2723;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.7);
+  display: flex;
+  position: relative;
+}
+
+.real-book-spread {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Bookmark Ribbon */
+.reader-ribbon-bookmark {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 70px;
+  background: linear-gradient(180deg, #dc2626, #991b1b);
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+  pointer-events: none;
+}
+
+/* Page Sheets */
+.reader-page-sheet {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 28px 18px;
+  overflow-y: auto;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Page Sheet Backgrounds & Themes */
+/* Default / Sepia Theme */
+[data-reader-theme="sepia"] .real-book-spread {
+  background: #fbf5e6;
+  color: #2b1f14;
+}
+[data-reader-theme="sepia"] .page-sheet-left {
+  background: linear-gradient(to right, #f4edd8 0%, #fbf5e6 88%, #ede2cb 100%);
+  border-right: 1px solid rgba(139, 90, 43, 0.15);
+}
+[data-reader-theme="sepia"] .page-sheet-right {
+  background: linear-gradient(to left, #f4edd8 0%, #fbf5e6 88%, #ede2cb 100%);
+}
+
+/* Dark Theme */
+[data-reader-theme="dark"] .real-book-spread {
+  background: #141923;
+  color: #e2e8f0;
+}
+[data-reader-theme="dark"] .page-sheet-left {
+  background: linear-gradient(to right, #0e121a 0%, #141923 88%, #090c12 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+[data-reader-theme="dark"] .page-sheet-right {
+  background: linear-gradient(to left, #0e121a 0%, #141923 88%, #090c12 100%);
+}
+
+/* Light / Paper Theme */
+[data-reader-theme="light"] .real-book-spread {
+  background: #ffffff;
+  color: #1e293b;
+}
+[data-reader-theme="light"] .page-sheet-left {
+  background: linear-gradient(to right, #f8fafc 0%, #ffffff 88%, #e2e8f0 100%);
+  border-right: 1px solid #cbd5e1;
+}
+[data-reader-theme="light"] .page-sheet-right {
+  background: linear-gradient(to left, #f8fafc 0%, #ffffff 88%, #e2e8f0 100%);
+}
+
+/* Center Spine Valley */
+.reader-spine-divider {
+  width: 28px;
+  flex-shrink: 0;
+  position: relative;
+  background: linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.05) 45%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.05) 55%, rgba(0,0,0,0.3) 100%);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.reader-spine-crease {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.page-inner-sheet {
+  flex: 1;
+  font-family: 'Merriweather', 'Georgia', 'Noto Serif Devanagari', serif;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.reader-page-number-footer {
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin-top: 14px;
+  font-family: inherit;
+  font-weight: 700;
+}
+
+/* Reader Typography & Layout Elements */
+.reader-title-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 100%;
+  padding: 20px 10px;
+}
+
+.reader-book-main-title {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+
+.reader-book-subtitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  opacity: 0.85;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.reader-divider {
+  letter-spacing: 0.4em;
+  opacity: 0.5;
+  margin: 14px 0 20px;
+  font-size: 0.85rem;
+}
+
+.reader-book-author-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.reader-book-translator-text {
+  font-size: 0.95rem;
+  font-style: italic;
+  opacity: 0.75;
+  margin-bottom: 24px;
+}
+
+.reader-publisher-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  padding-top: 18px;
+  margin-top: 20px;
+  width: 80%;
+}
+
+[data-reader-theme="dark"] .reader-publisher-badge {
+  border-top-color: rgba(255, 255, 255, 0.15);
+}
+
+.pub-logo-icon {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.pub-name {
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.pub-sub {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.reader-page-header {
+  font-size: 1.15rem;
+  font-weight: 800;
+  border-bottom: 2px solid #f59e0b;
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+  display: inline-block;
+}
+
+.reader-praise-block {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+}
+
+[data-reader-theme="dark"] .reader-praise-block {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.reader-quote-text {
+  font-style: italic;
+  margin: 0 0 6px;
+  line-height: 1.55;
+  font-size: 0.92rem;
+}
+
+.reader-quote-author {
+  font-size: 0.82rem;
+  text-align: right;
+  margin: 0;
+  opacity: 0.85;
+}
+
+.reader-callout-box {
+  background: rgba(245, 158, 11, 0.1);
+  border-left: 4px solid #f59e0b;
+  padding: 10px 14px;
+  border-radius: 0 10px 10px 0;
+  margin: 12px 0;
+}
+
+.reader-callout-title {
+  font-weight: 800;
+  font-size: 0.88rem;
+  margin-bottom: 4px;
+}
+
+.reader-highlight-card {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 12px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+[data-reader-theme="dark"] .reader-highlight-card {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.mode-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+.mode-hyper {
+  background: #f59e0b;
+  color: #000;
+}
+
+.mode-scatter {
+  background: #38bdf8;
+  color: #000;
+}
+
+.reader-book-back-summary {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.reader-book-back-price-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 16px;
+}
+
+[data-reader-theme="dark"] .reader-book-back-price-box {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Bottom Reader Bar */
+.reader-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: rgba(10, 14, 25, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.reader-nav-btn {
+  background: #f59e0b;
+  color: #0b0f19;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 8px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reader-nav-btn:hover {
+  background: #d97706;
+  transform: translateY(-1px);
+}
+
+.reader-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.reader-page-slider-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  max-width: 460px;
+}
+
+.reader-page-range {
+  flex: 1;
+  accent-color: #f59e0b;
+  cursor: pointer;
+}
+
+.reader-page-indicator {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  min-width: 80px;
+  text-align: right;
+}
+
+/* Mobile & Tablet Responsiveness */
+@media (max-width: 768px) {
+  .real-book-reader-container {
+    height: 100vh;
+    max-height: none;
+    border-radius: 0;
+    border: none;
+  }
+  
+  .real-book-reader-overlay {
+    padding: 0;
+  }
+
+  .real-book-hardcover {
+    padding: 4px;
+    border-radius: 0;
+  }
+
+  /* Single page view on mobile */
+  .page-sheet-left {
+    display: none;
+  }
+
+  .reader-spine-divider {
+    display: none;
+  }
+
+  .reader-page-sheet {
+    padding: 16px 14px;
+  }
+
+  .reader-top-bar {
+    padding: 8px 10px;
+  }
+
+  .reader-title {
+    max-width: 140px;
+    font-size: 0.85rem;
+  }
+
+  .reader-lang-pill {
+    padding: 4px 8px;
+    font-size: 0.72rem;
+  }
+
+  .reader-bottom-bar {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .reader-nav-btn {
+    padding: 7px 12px;
+    font-size: 0.78rem;
+  }
+
+  .reader-page-indicator {
+    min-width: 60px;
+    font-size: 0.75rem;
+  }
+}
 
 </style>
 </head>
@@ -9589,6 +10368,251 @@ body.modal-open {
   </div>
 
   <!-- ==========================================================================
+       FEATURE: MULTI-LANGUAGE REAL BOOK READER (HINDI / HINGLISH / ENGLISH)
+       ========================================================================== -->
+
+  <!-- 1. Language Selection Modal -->
+  <div class="modal-overlay" id="bookLanguageSelectModal" onclick="handleLangSelectOverlayClick(event)">
+    <div class="modal-content lang-select-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span style="font-size:1.5rem;">📖</span>
+          <div>
+            <h3 class="modal-title" id="langSelectBookTitle">किताब पढ़ें / Read Book</h3>
+            <div style="font-size:0.75rem; color:var(--text-secondary);" id="langSelectBookAuthor">Select Reading Language</div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeLanguageSelectModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:1.25rem; gap:1rem;">
+        <!-- Book Preview Card -->
+        <div class="lang-select-book-preview">
+          <div class="lang-select-cover-wrap">
+            <img id="langSelectCoverImg" src="hyperfocus_cover.jpg" alt="Cover" class="lang-select-cover">
+          </div>
+          <div class="lang-select-info">
+            <span class="lang-select-badge" id="langSelectCategoryBadge">Focus &amp; Productivity</span>
+            <h4 id="langSelectTitleEn" style="margin:0.25rem 0 0.15rem; font-size:1rem; font-weight:800; color:var(--text-primary);">Hyperfocus: How to Work Less to Achieve More</h4>
+            <div class="lang-select-author-txt" id="langSelectAuthorTxt" style="font-size:0.8rem; color:var(--text-secondary);">by Chris Bailey • अनुवाद: अजय तिवारी</div>
+            <div class="lang-select-isbn-row" id="langSelectIsbnRow" style="margin-top:0.4rem; font-size:0.75rem; color:var(--text-muted); display:flex; gap:0.6rem; flex-wrap:wrap;">
+              <span>ISBN: <strong style="color:var(--text-primary);">978-93-5543-300-8</strong></span>
+              <span>• Price: <strong style="color:#10b981;">₹350</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-top:0.1rem; display:flex; justify-content:space-between; align-items:center;">
+          <span>🌐 भाषा चुनें (Choose Language):</span>
+          <span style="font-size:0.72rem; color:var(--text-muted);">1-Tap to Open Real Book</span>
+        </div>
+
+        <div class="lang-options-grid">
+          <!-- Option 1: Hindi -->
+          <button type="button" class="lang-option-card active-lang-card" onclick="selectBookLanguageAndOpen('hindi')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🇮🇳</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">हिंदी (Hindi) <span class="lang-recommended-pill">मूल पुस्तक</span></div>
+                <div class="lang-card-sub">हायपरफ़ोकस: कम प्रयास में अधिक सफलता कैसे प्राप्त करें (अजय तिवारी)</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langHindiCountBadge">4 पृष्ठ</span>
+              <span class="lang-open-arrow">पढ़ें ›</span>
+            </div>
+          </button>
+
+          <!-- Option 2: Hinglish -->
+          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('hinglish')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🔤</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">Hinglish (हिंग्लिश) <span class="lang-hinglish-pill">Roman Hindi</span></div>
+                <div class="lang-card-sub">Simple Roman Hindi me padhein — aasaan aur fast reading experience</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langHinglishCountBadge">4 Pages</span>
+              <span class="lang-open-arrow">Read ›</span>
+            </div>
+          </button>
+
+          <!-- Option 3: English -->
+          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('english')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🇬🇧</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">English <span class="lang-eng-pill">Original</span></div>
+                <div class="lang-card-sub">Hyperfocus: How to Work Less to Achieve More (Original edition)</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langEnglishCountBadge">4 Pages</span>
+              <span class="lang-open-arrow">Read ›</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Add Custom Pages Button -->
+        <div class="lang-custom-add-banner">
+          <div>
+            <div style="font-weight:700; font-size:0.82rem; color:var(--text-primary);">📝 और पेज जोड़ना चाहते हैं? (Add Pages)</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary);">Photo se dekh kar ya type karke naye page jod sakte hain</div>
+          </div>
+          <button type="button" class="btn btn-sm" onclick="openAddCustomPageModal()" style="background:var(--accent-primary); color:#fff; border:none; font-weight:700; border-radius:8px;">
+            ➕ Add Page
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:flex-end;">
+        <button type="button" class="btn" onclick="closeLanguageSelectModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Full-Screen 3D Multi-Language Book Reader Modal -->
+  <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)">
+    <div class="real-book-reader-container" onclick="event.stopPropagation()">
+      <!-- Top Reader Navigation Bar -->
+      <div class="reader-top-bar">
+        <div class="reader-top-left">
+          <button type="button" class="reader-btn-icon" onclick="closeRealBookReader()" title="Close Book">✕</button>
+          <div class="reader-book-identity">
+            <span class="reader-badge" id="readerBookBadge">📖 REAL BOOK</span>
+            <h2 class="reader-title" id="readerBookTitleDisplay">हायपरफ़ोकस</h2>
+          </div>
+        </div>
+
+        <!-- Center Language Switcher Pills -->
+        <div class="reader-lang-pills">
+          <button type="button" class="reader-lang-pill active" id="readerLangPillHindi" onclick="switchReaderLanguage('hindi')">हिंदी</button>
+          <button type="button" class="reader-lang-pill" id="readerLangPillHinglish" onclick="switchReaderLanguage('hinglish')">Hinglish</button>
+          <button type="button" class="reader-lang-pill" id="readerLangPillEnglish" onclick="switchReaderLanguage('english')">English</button>
+        </div>
+
+        <!-- Right Controls -->
+        <div class="reader-top-right">
+          <!-- Font Size Adjuster -->
+          <div class="reader-font-controls">
+            <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(-1)" title="Decrease font size">A-</button>
+            <span id="readerFontSizeDisplay" style="font-size:0.75rem; color:var(--text-muted); min-width:28px; text-align:center;">100%</span>
+            <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(1)" title="Increase font size">A+</button>
+          </div>
+          <!-- Theme Mode: Sepia / Dark / Light -->
+          <button type="button" class="reader-btn-sm" id="readerThemeToggleBtn" onclick="cycleReaderTheme()" title="Reader Paper Tone">📜 Sepia</button>
+          <!-- Add Page Button -->
+          <button type="button" class="reader-btn-sm" onclick="openAddCustomPageModal()" title="Add new page">➕ Add Page</button>
+        </div>
+      </div>
+
+      <!-- 3D Open Book Stage -->
+      <div class="real-book-stage-wrap" id="realBookStageWrap">
+        <div class="real-book-hardcover" id="realBookHardcover">
+          <div class="real-book-spine-groove"></div>
+          <div class="real-book-spread" id="realBookSpread">
+            <!-- Bookmark Ribbon -->
+            <div class="reader-ribbon-bookmark"></div>
+
+            <!-- Left Page (Spread mode on desktop / Tablet) -->
+            <div class="reader-page-sheet page-sheet-left" id="readerPageLeft">
+              <div class="page-inner-sheet" id="pageInnerLeft">
+                <!-- Content rendered dynamically -->
+              </div>
+              <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
+            </div>
+
+            <!-- Center Spine Shadow & Valley -->
+            <div class="reader-spine-divider">
+              <div class="reader-spine-crease"></div>
+            </div>
+
+            <!-- Right Page (Spread mode) / Single page on mobile -->
+            <div class="reader-page-sheet page-sheet-right" id="readerPageRight">
+              <div class="page-inner-sheet" id="pageInnerRight">
+                <!-- Content rendered dynamically -->
+              </div>
+              <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Page Navigation Toolbar -->
+      <div class="reader-bottom-bar">
+        <button type="button" class="reader-nav-btn" id="readerPrevPageBtn" onclick="turnRealBookPage(-1)">
+          ‹ Previous Page
+        </button>
+
+        <div class="reader-page-slider-group">
+          <input type="range" class="reader-page-range" id="readerPageSlider" min="1" max="4" value="1" oninput="onReaderSliderChange(this.value)">
+          <span class="reader-page-indicator" id="readerPageIndicator">Page 1 / 4</span>
+        </div>
+
+        <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="turnRealBookPage(1)">
+          Next Page ›
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Add Custom Book Page Modal -->
+  <div class="modal-overlay" id="addCustomPageModal" onclick="handleAddPageOverlayClick(event)">
+    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ नया बुक पेज जोड़ें (Add Book Page)</h3>
+        <button class="modal-close" onclick="closeAddCustomPageModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:0.9rem;">
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">
+          Aap book ke photo se dekh kar ya book ka text type karke naya page add kar sakte hain:
+        </p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Book Select Karein:</label>
+            <select id="customPageBookSelect" class="form-control">
+              <!-- Populated with books -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Language (भाषा):</label>
+            <select id="customPageLangSelect" class="form-control">
+              <option value="hindi">हिंदी (Hindi)</option>
+              <option value="hinglish">Hinglish (हिंग्लिश)</option>
+              <option value="english">English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Page Number:</label>
+            <input type="number" id="customPageNoInput" class="form-control" min="1" value="5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Page Heading / Chapter (Optional):</label>
+            <input type="text" id="customPageHeadingInput" class="form-control" placeholder="e.g. अध्याय 1: ऑटोपायलट मोड">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Page Content (Text ya Paragraphs):</label>
+            <button type="button" class="btn btn-sm" onclick="openOcrScanner('customPageContentInput')" style="color:#6366f1; border-color:rgba(99,102,241,0.3); font-size:0.75rem;">
+              📸 Photo se OCR Scan
+            </button>
+          </div>
+          <textarea id="customPageContentInput" class="form-control" style="min-height:160px; font-size:0.9rem; line-height:1.5;" placeholder="Type or paste the page text here..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn" onclick="closeAddCustomPageModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveCustomBookPage()">💾 Save Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
        FEATURE: 3D REAL PAGES DICTIONARY BOOK (A-Z ENGLISH-HINDI FOCUS LEXICON)
        ========================================================================== -->
   <div id="dictionaryBookModalOverlay" class="dictionary-modal-overlay" onclick="handleDictOverlayClick(event)">
@@ -9949,6 +10973,396 @@ if (typeof module !== 'undefined' && module.exports) {
 
 </script>
   <script>
+// ==========================================================================
+// MIND FOCUS BOOKS • MULTI-LANGUAGE REAL 3D BOOK PAGES DATA
+// ==========================================================================
+
+const BOOK_PAGES_DATA = {
+  'hyperfocus': {
+    bookNo: 'book 1',
+    title: 'Hyperfocus: How to Work Less to Achieve More',
+    titleHindi: 'हायपरफ़ोकस: कम प्रयास में अधिक सफलता कैसे प्राप्त करें',
+    author: 'Chris Bailey (क्रिस बेली)',
+    translator: 'अजय तिवारी (Ajay Tiwari)',
+    publisher: 'मंजुल पब्लिशिंग हाउस (Manjul Publishing House)',
+    isbn: '978-93-5543-300-8',
+    barcode: '9789355433008',
+    price: 350,
+    cover: 'hyperfocus_cover.jpg',
+    backCover: 'hyperfocus_back.jpg',
+    languages: {
+      hindi: {
+        name: 'हिंदी (Hindi)',
+        code: 'hi',
+        flag: '🇮🇳',
+        badge: 'हिंदी संस्करण',
+        desc: 'शुद्ध हिंदी अनुवाद एवं मूल पृष्ठ',
+        pages: [
+          {
+            pageNo: 1,
+            type: 'title',
+            heading: 'हायपरफ़ोकस',
+            content: `
+<div class="reader-title-page">
+  <div class="reader-book-main-title">हायपरफ़ोकस</div>
+  <div class="reader-book-subtitle">कम प्रयास में अधिक सफलता कैसे प्राप्त करें</div>
+  <div class="reader-divider">✦ ✦ ✦</div>
+  <div class="reader-book-author-text">क्रिस बेली</div>
+  <div class="reader-book-translator-text">अनुवाद : अजय तिवारी</div>
+  <div class="reader-publisher-badge">
+    <div class="pub-logo-icon">🦅</div>
+    <div class="pub-name">मंजुल पब्लिशिंग हाउस</div>
+    <div class="pub-sub">MANJUL PUBLISHING HOUSE</div>
+  </div>
+</div>
+`
+          },
+          {
+            pageNo: 2,
+            type: 'praise',
+            heading: 'पुस्तक की प्रशस्ति',
+            content: `
+<div class="reader-page-header">पुस्तक की प्रशस्ति</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“जीवन में जो आवश्यक है उसे हासिल करने के लिए हमें दो तरह के फ़ोकस की आवश्यकता है : एक संज्ञा के रूप में फ़ोकस (हमारे निश्चित इरादे) और एक सर्वनाम के रूप में फ़ोकस (बिंदुओं को जोड़ने की निरंतर प्रक्रिया)। इसे क्रिस बेली की इस नवीनतम पुस्तक में लेखन और ग्राफ़िक्स दोनों के ही माध्यम से बहुत ही शानदार तरीक़े से चित्रित किया गया है। मुझे पुस्तक बहुत पसंद आई।”</p>
+  <p class="reader-quote-author">— <strong>ग्रेग मैकक्यूवन</strong>, <em>एसेंशियलिज़्म</em> के लेखक</p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“व्यवहारिक, अच्छी तरह लिखी गई और सामयिक। क्रिस बेली ने आज के सबसे महत्त्वपूर्ण विषय को उठाया है क्योंकि हम काम में सफलता चाहते हैं और आधुनिक विश्व में बच्चों की सकारात्मक परवरिश का प्रयास करते हैं। आप जिसमें भाग लेते हैं वह आपकी वास्तविकता बन जाता है। यह पुस्तक एक अनुकूलित वास्तविकता बनाने के लिए हमारे ध्यान का उपयोग करने के लिए एक व्यवहारिक पथ प्रदान करती है। यदि हम महान सफलता और खुशी हासिल करना चाहते हैं, तो हमें इस बात पर फ़ोकस करके शुरुआत करनी होगी कि हमारा दिमाग़ किधर ध्यान दे रहा है।”</p>
+  <p class="reader-quote-author">— <strong>शॉन एकोर</strong>, <em>द हैप्पीनेस एडवांटेज एंड बिग पोटेंशियल</em> के लेखक</p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“यह पुस्तक एक जीवन रेखा है, एक ऐसी दुनिया में जहां पर हम सभी बहुत कुछ करने के लिए व्यग्र हैं और करने के लिए बहुत समय नहीं है। क्रिस बेली की अभूतपूर्व और सामयिक पुस्तक की बदौलत, मुझे लगता है कि मेरे पास अब, वास्तव में इतने वर्षों में पहली बार, सबसे महत्त्वपूर्ण, मूल्य-निर्मित करने वाली चीज़ों पर फ़ोकस करने की क्षमता आ गई है। यदि आप तनाव से राहत पाने के साथ ही अपनी उत्पादकता और ख़ुशी दोनों में बढ़ोतरी करना चाहते हैं तो इस पुस्तक को अवश्य पढ़ें।”</p>
+  <p class="reader-quote-author">— <strong>जेम्स सिट्रिन</strong>, <em>करियर प्लेबुक</em> के लेखक</p>
+</div>
+`
+          },
+          {
+            pageNo: 3,
+            type: 'praise',
+            heading: 'विश्वप्रसिद्ध विचारकों की राय',
+            content: `
+<div class="reader-page-header">विश्वप्रसिद्ध विचारकों की राय</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“एक व्यस्त दुनिया में हायपरफ़ोकस्ड होना एक ऐसा कौशल है जिसे हर प्रोफ़ेशनल व्यक्ति अपने पास चाहता है। क्रिस बेली अपनी इस नई पुस्तक में आपको सिखाएंगे कि किस तरह इसमें महारत हासिल की जाए। सारे नवीनतम विज्ञान का उपयोग करके, बेली ने आपको एक व्यवहारिक और शानदार फ़्रेमवर्क दिया है कि किस तरह आप अपने काम के तरीक़े में बदलाव कर सकते हैं।”</p>
+  <p class="reader-quote-author">— <strong>वैनेसा वैन एडवर्ड्स</strong>, <em>कैप्टिवेट</em> की लेखिका</p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“इस पर कोई सवाल नहीं है : आपका ध्यान (अटेंशन) ही आपकी सबसे महत्त्वपूर्ण संपत्ति है। आपके जीवन की हर वस्तु-जीवन के आपके अनुभव-आपके ध्यान से ही आते हैं। और यह पुस्तक आपको सिखाएगी कि आप इस उपकरण का इस्तेमाल कैसे करें, इसे कैसे निखारें, कैसे इसका लाभ लें और इसका आनंद भी लें। क्रिस बेली की बातों पर ध्यान दें-यह पुस्तक अवश्य पढ़ने लायक़ है।”</p>
+  <p class="reader-quote-author">— <strong>पीटर ब्रेगमैन</strong>, <em>18 मिनट्स</em> के लेखक</p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“ध्यान 21 वीं सदी की सबसे महत्त्वपूर्ण संपत्ति हो सकता है। यह किताब दशकों की वैज्ञानिक अंतर्दृष्टि का उपयोग करती है और उसे व्यवहारिक अनुप्रयोग के साथ मिलाती है और दिखाती है कि अपने ध्यान का प्रबंधन और उसे कई गुना करना कितना बेहतरीन है।”</p>
+  <p class="reader-quote-author">— <strong>डेविड बुरकुस</strong>, <em>अंडर न्यू मैनेजमेंट और फ्रेंड ऑफ़ ए फ्रेंड</em> के लेखक</p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“क्रिस बेली की पुस्तक अपने ध्यान का प्रबंधन करने की एक शानदार गाइड है। उन्होंने एक ऐसी विधि का वर्णन किया है जो हमें फ़ोकस करने और अधिक प्रभावी ढंग से रचना करने में मदद करती है। उनकी पुस्तक महज़ एक सिद्धांत नहीं है, बल्कि प्रैक्टिकल और विस्तृत बेहतरीन अभ्यासों का एक शानदार टूलबॉक्स है। मैं इन आइडिया को आज़माने के लिए इंतज़ार नहीं कर सकता।”</p>
+  <p class="reader-quote-author">— <strong>काई-फ़ू ली</strong>, <em>गूगल चाइना के संस्थापक, सिनोवेशन वेंचर्स के चेयरमैन एवं सीईओ</em></p>
+</div>
+`
+          },
+          {
+            pageNo: 4,
+            type: 'summary',
+            heading: 'पुस्तक का सार (Back Cover)',
+            content: `
+<div class="reader-page-header">पुस्तक का सार एवं मुख्य दर्शन</div>
+<div class="reader-callout-box">
+  <p class="reader-lead-text">“रचनात्मक बनने और सार्थक जीवन जीने के लिए आपके पास जो कुछ है, वह ध्यान ही है।”</p>
+</div>
+<p class="reader-body-para">ध्यान से हमारी उत्पादकता कैसे बढ़ती है। काम आसान नहीं, बल्कि और अधिक कठिन कैसे करते हैं। हम बेहतरीन कार्य तब कर पाते हैं, जब हम एकाग्र होते हैं।</p>
+<p class="reader-body-para">ना ही कभी ध्यान की इतनी कमी रही और न ही कभी उसकी इतनी माँग रही, ऐसा पहले कभी नहीं हुआ कि हम इतने व्यस्त रहे हों और इतना कम काम कर पाए हों।</p>
+<div class="reader-highlight-card">
+  <div class="reader-highlight-title">दिमाग़ की दो मानसिक प्रणालियाँ:</div>
+  <p class="reader-body-para" style="margin-bottom:0.6rem;">क्रिस बेली तर्क करते हैं कि हम अपने ध्यान का प्रबंधन सर्वश्रेष्ठ तरीक़े से कैसे करें, जब हमारा दिमाग़ दो मानसिक प्रणालियों के बीच 'स्विच' करता है :</p>
+  <div class="reader-mode-item">
+    <span class="mode-badge mode-hyper">1. हायपरफ़ोकस (Hyperfocus)</span>
+    <p>यह हमारी <strong>गहन एकाग्रता प्रणाली</strong> होती है। जब हम किसी एक महत्त्वपूर्ण कार्य पर 100% ध्यान लगाकर काम पूरा करते हैं।</p>
+  </div>
+  <div class="reader-mode-item" style="margin-top:0.6rem;">
+    <span class="mode-badge mode-scatter">2. स्कैटरफ़ोकस (Scatterfocus)</span>
+    <p>यह हमारी <strong>रचनात्मक और नवोन्मेषी प्रणाली</strong> होती है। जब दिमाग़ आज़ाद होकर विश्राम करता है और नए विचारों को जोड़ता है।</p>
+  </div>
+  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 अपने कार्य में सबसे रचनात्मक और कुशल बनने की कुंजी इन दोनों प्रणालियों के संयोजन में निहित है।</p>
+</div>
+<div class="reader-meta-footer">
+  <span>ISBN: 978-93-5543-300-8</span>
+  <span>मूल्य: ₹350 (Non-Fiction)</span>
+</div>
+`
+          }
+        ]
+      },
+      hinglish: {
+        name: 'Hinglish (हिंग्लिश)',
+        code: 'hinglish',
+        flag: '💬',
+        badge: 'हिंग्लिश संस्करण',
+        desc: 'आसान बोलचाल भाषा में पढ़ने के लिए',
+        pages: [
+          {
+            pageNo: 1,
+            type: 'title',
+            heading: 'HYPERFOCUS',
+            content: `
+<div class="reader-title-page">
+  <div class="reader-book-main-title">HYPERFOCUS</div>
+  <div class="reader-book-subtitle">Kam Prayas Mein Adhik Safalta Kaise Prapt Karein</div>
+  <div class="reader-divider">✦ ✦ ✦</div>
+  <div class="reader-book-author-text">Chris Bailey</div>
+  <div class="reader-book-translator-text">Hindi Translation: Ajay Tiwari</div>
+  <div class="reader-publisher-badge">
+    <div class="pub-logo-icon">🦅</div>
+    <div class="pub-name">Manjul Publishing House</div>
+    <div class="pub-sub">HOW TO WORK LESS TO ACHIEVE MORE</div>
+  </div>
+</div>
+`
+          },
+          {
+            pageNo: 2,
+            type: 'praise',
+            heading: 'Pustak Ki Prashasti & Praises',
+            content: `
+<div class="reader-page-header">Pustak Ki Prashasti</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“Life me jo zaroori hai use paane ke liye humein do tarah ke focus ki zaroorat hoti hai: ek definite intention (pakka sankalp) ke roop me aur ek dots ko connect karne ki continuous process ke roop me. Chris Bailey ne is novel concept ko graphics aur writing se behad shandar tareeqe se samjhaya hai. Mujhe ye kitaab bohot pasand aayi.”</p>
+  <p class="reader-quote-author">— <strong>Greg McKeown</strong>, <em>Essentialism</em> ke lekhak</p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“Practical, well-written aur bilkul timely kitaab. Chris Bailey ne aaj ke sabse important mudde ko uthaya hai. Aap jisme participate karte hain wahi aapki reality ban jaata hai. Yeh kitaab humein apne dhyan ko master karne ka seedha practical rasta dikhati hai.”</p>
+  <p class="reader-quote-author">— <strong>Shawn Achor</strong>, <em>The Happiness Advantage</em> ke lekhak</p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“Yeh kitaab ek lifeline ki tarah hai, aisi duniya me jahan hum sab bohot kuch karne ke liye bechain hain par time kisi ke paas nahi hai. Maine pehli baar mehsoos kiya ki sach me deep work aur high-value cheezon par focus kaise kiya jata hai.”</p>
+  <p class="reader-quote-author">— <strong>James Citrin</strong>, <em>Career Playbook</em> ke lekhak</p>
+</div>
+`
+          },
+          {
+            pageNo: 3,
+            type: 'praise',
+            heading: 'Top Experts Ki Ray',
+            content: `
+<div class="reader-page-header">Top Experts Ki Ray</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“Itni busy aur notifications se bhari duniya me hyperfocused hona ek aisi superpower hai jo har professional apne paas chahta hai. Chris Bailey aapko isme master banne ka practical framework dete hain.”</p>
+  <p class="reader-quote-author">— <strong>Vanessa Van Edwards</strong>, <em>Captivate</em> ki lekhika</p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“Is par koi shak nahi hai: Aapka Dhyan (Attention) hi aapki sabse keemti sampatti hai. Life ka har experience aapke attention se hi create hota hai. Yeh book sikhayegi ki focus ko kaise use karein aur maze se execute karein.”</p>
+  <p class="reader-quote-author">— <strong>Peter Bregman</strong>, <em>18 Minutes</em> ke lekhak</p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“Attention 21st century ki sabse badi currency hai. Yeh book scientific research aur practical execution ka perfect combination hai.”</p>
+  <p class="reader-quote-author">— <strong>David Burkus</strong>, author of <em>Under New Management</em></p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“Chris Bailey ki kitaab focus management ki best guide hai. Sirf theory nahi, balki practical exercises ka shandar toolbox hai.”</p>
+  <p class="reader-quote-author">— <strong>Kai-Fu Lee</strong>, Google China Founder & Sinovation Chairman</p>
+</div>
+`
+          },
+          {
+            pageNo: 4,
+            type: 'summary',
+            heading: 'Core Concept: Dimaag Ke Do Modes',
+            content: `
+<div class="reader-page-header">Core Concept & Mind Modes</div>
+<div class="reader-callout-box">
+  <p class="reader-lead-text">“Creative banne aur meaningful life jeene ke liye aapke paas jo sabse keemti cheez hai, wo hai aapka Dhyan (Attention).”</p>
+</div>
+<p class="reader-body-para">Khabar hai? Na pehle kabhi attention ki itni kami thi, aur na hi itni demand thi. Hum itne busy kabhi nahi rahe, fir bhi din ke aakhir me lagta hai ki kuch khaas kaam hua hi nahi.</p>
+<div class="reader-highlight-card">
+  <div class="reader-highlight-title">Hamare Dimaag Ke 2 Modes:</div>
+  <p class="reader-body-para" style="margin-bottom:0.6rem;">Chris Bailey samjhate hain ki jab hamara mind do systems ke beech switch karta hai:</p>
+  <div class="reader-mode-item">
+    <span class="mode-badge mode-hyper">1. Hyperfocus (गहन एकाग्रता)</span>
+    <p>Jab aap apna poora 100% focus kisi ek high-priority task par lock kar dete ho. Yahan distraction zero hota hai.</p>
+  </div>
+  <div class="reader-mode-item" style="margin-top:0.6rem;">
+    <span class="mode-badge mode-scatter">2. Scatterfocus (रचनात्मक फैलाव)</span>
+    <p>Jab aap dimaag ko aazaad ghoomne dete ho taaki subconscious mind naye ideas aur dots connect kar sake.</p>
+  </div>
+  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 Kam mehnat me double productivity pane ka raaz in dono modes ko switch karna seekhne me hai.</p>
+</div>
+<div class="reader-meta-footer">
+  <span>ISBN: 978-93-5543-300-8</span>
+  <span>Price: ₹350 (Non-Fiction)</span>
+</div>
+`
+          }
+        ]
+      },
+      english: {
+        name: 'English',
+        code: 'en',
+        flag: '🇬🇧',
+        badge: 'English Edition',
+        desc: 'Original international book text',
+        pages: [
+          {
+            pageNo: 1,
+            type: 'title',
+            heading: 'HYPERFOCUS',
+            content: `
+<div class="reader-title-page">
+  <div class="reader-book-main-title">HYPERFOCUS</div>
+  <div class="reader-book-subtitle">How to Work Less and Achieve More</div>
+  <div class="reader-divider">✦ ✦ ✦</div>
+  <div class="reader-book-author-text">Chris Bailey</div>
+  <div class="reader-publisher-badge">
+    <div class="pub-logo-icon">📖</div>
+    <div class="pub-name">Manjul Publishing House</div>
+    <div class="pub-sub">INTERNATIONAL BESTSELLER</div>
+  </div>
+</div>
+`
+          },
+          {
+            pageNo: 2,
+            type: 'praise',
+            heading: 'Praise for Hyperfocus',
+            content: `
+<div class="reader-page-header">Praise for Hyperfocus</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“To do what is essential, we need two kinds of focus: focus as a noun (our fixed intent) and focus as a verb (the ongoing process of connecting dots). Chris Bailey illustrates this brilliantly through clear writing and models. I loved this book.”</p>
+  <p class="reader-quote-author">— <strong>Greg McKeown</strong>, author of <em>Essentialism</em></p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“Practical, well written, and timely. Chris Bailey tackles one of the most important issues today as we strive for success at work and mindful parenting in the modern world. What you attend to becomes your reality.”</p>
+  <p class="reader-quote-author">— <strong>Shawn Achor</strong>, NYT bestselling author of <em>The Happiness Advantage</em></p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“This book is a lifeline in a world where we are all overwhelmed and starved for time. Thanks to Chris Bailey, I have reclaimed my attention for the things that truly create value.”</p>
+  <p class="reader-quote-author">— <strong>James Citrin</strong>, author of <em>The Career Playbook</em></p>
+</div>
+`
+          },
+          {
+            pageNo: 3,
+            type: 'praise',
+            heading: 'Acclaim from Thought Leaders',
+            content: `
+<div class="reader-page-header">Acclaim from Thought Leaders</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“Being hyperfocused in a busy world is a skill every professional needs. Chris Bailey will show you how to master it with latest cognitive science and actionable frameworks.”</p>
+  <p class="reader-quote-author">— <strong>Vanessa Van Edwards</strong>, author of <em>Captivate</em></p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“There is no question: attention is your most valuable asset. Everything in your life flows from it. This book teaches you how to hone this tool and actually enjoy the process.”</p>
+  <p class="reader-quote-author">— <strong>Peter Bregman</strong>, author of <em>18 Minutes</em></p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“Attention may be the most valuable asset of the 21st century. This book combines decades of scientific insight with practical execution.”</p>
+  <p class="reader-quote-author">— <strong>David Burkus</strong>, author of <em>Under New Management</em></p>
+</div>
+<div class="reader-praise-block">
+  <p class="reader-quote-text">“A fantastic guide to managing attention. It is not just theory, but a rich toolbox of best practices. I can't wait to put these ideas into action.”</p>
+  <p class="reader-quote-author">— <strong>Kai-Fu Lee</strong>, Founder of Google China & Chairman of Sinovation</p>
+</div>
+`
+          },
+          {
+            pageNo: 4,
+            type: 'summary',
+            heading: 'The Core Premise (Back Cover)',
+            content: `
+<div class="reader-page-header">The Core Premise</div>
+<div class="reader-callout-box">
+  <p class="reader-lead-text">“The most important tool you have for becoming productive, creative, and living a meaningful life is your attention.”</p>
+</div>
+<p class="reader-body-para">Never has focus been in such short supply, and never has its value been so high. We are constantly busy, yet we feel we achieve far less than we could.</p>
+<div class="reader-highlight-card">
+  <div class="reader-highlight-title">Our Brain Shifts Between Two Modes:</div>
+  <p class="reader-body-para" style="margin-bottom:0.6rem;">Chris Bailey explains how we perform at our best when we understand how our brain toggles between two core networks:</p>
+  <div class="reader-mode-item">
+    <span class="mode-badge mode-hyper">1. Hyperfocus (Deep Concentration)</span>
+    <p>The deep immersion mode where you dedicate 100% of your limited working memory to a single critical objective without distraction.</p>
+  </div>
+  <div class="reader-mode-item" style="margin-top:0.6rem;">
+    <span class="mode-badge mode-scatter">2. Scatterfocus (Creative Expansion)</span>
+    <p>The exploratory, restorative mode where your mind intentionally wanders, sparking creative ideas and connecting distant concepts.</p>
+  </div>
+  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 The master key to extraordinary accomplishment is knowing when and how to seamlessly navigate between both systems.</p>
+</div>
+<div class="reader-meta-footer">
+  <span>ISBN: 978-93-5543-300-8</span>
+  <span>Cover Price: ₹350 (Non-Fiction)</span>
+</div>
+`
+          }
+        ]
+      }
+    }
+  }
+};
+
+// Helper to look up pages for any book
+function getBookPagesData(bookOrTitle, lang = 'hindi') {
+  if (!bookOrTitle) return null;
+  const titleStr = (typeof bookOrTitle === 'string' ? bookOrTitle : (bookOrTitle.title || '')).toLowerCase();
+  
+  // Check direct key
+  let bookEntry = null;
+  if (BOOK_PAGES_DATA[titleStr]) {
+    bookEntry = BOOK_PAGES_DATA[titleStr];
+  } else {
+    // Partial match
+    const keys = Object.keys(BOOK_PAGES_DATA);
+    for (let k of keys) {
+      if (titleStr.includes(k) || k.includes(titleStr)) {
+        bookEntry = BOOK_PAGES_DATA[k];
+        break;
+      }
+    }
+  }
+
+  // Also check custom localStorage user-added pages
+  try {
+    const customPagesRaw = localStorage.getItem('mindfocus_custom_book_pages');
+    if (customPagesRaw) {
+      const customStore = JSON.parse(customPagesRaw);
+      const matchKey = Object.keys(customStore).find(k => titleStr.includes(k.toLowerCase()) || k.toLowerCase().includes(titleStr));
+      if (matchKey && customStore[matchKey]) {
+        if (!bookEntry) {
+          bookEntry = { title: matchKey, languages: {} };
+        }
+        // Merge custom pages
+        Object.keys(customStore[matchKey]).forEach(l => {
+          if (!bookEntry.languages[l]) {
+            bookEntry.languages[l] = { name: l.toUpperCase(), pages: [] };
+          }
+          bookEntry.languages[l].pages = (bookEntry.languages[l].pages || []).concat(customStore[matchKey][l]);
+        });
+      }
+    }
+  } catch (e) {}
+
+  if (!bookEntry) return null;
+  const langData = bookEntry.languages[lang] || bookEntry.languages['hindi'] || Object.values(bookEntry.languages)[0];
+  return {
+    bookInfo: bookEntry,
+    language: langData,
+    pages: (langData && langData.pages) ? langData.pages : []
+  };
+}
+
+// Check if book has real pages available
+function hasBookPagesAvailable(bookOrTitle) {
+  const data = getBookPagesData(bookOrTitle);
+  return !!(data && data.pages && data.pages.length > 0);
+}
+
+if (typeof window !== 'undefined') {
+  window.BOOK_PAGES_DATA = BOOK_PAGES_DATA;
+  window.getBookPagesData = getBookPagesData;
+  window.hasBookPagesAvailable = hasBookPagesAvailable;
+}
+
+
+</script>
+  <script>
 const DEFAULT_BOOKS = [
   {
     "no": "book 0",
@@ -9976,10 +11390,16 @@ const DEFAULT_BOOKS = [
     "start_date": "2026-08-21",
     "end_date": "2026-09-06",
     "count_days": 16,
-    "rating": "",
+    "rating": "5",
     "category": "Focus & Concentration",
-    "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "takeaway": "कम प्रयास में अधिक सफलता कैसे प्राप्त करें। ध्यान की उत्पादकता: हायपरफ़ोकस (एक काम पर गहरा ध्यान) और स्कैटरफ़ोकस (क्रिएटिव सोच और रिचार्ज)।",
+    "availability": "AVAILABLE",
+    "price": 350,
+    "isbn": "978-93-5543-300-8",
+    "cover_image": "hyperfocus_cover.jpg",
+    "back_cover": "hyperfocus_back.jpg",
+    "total_pages": 240,
+    "current_page": 4
   },
   {
     "no": "book 2",
@@ -12320,6 +13740,14 @@ function loadData() {
     if (existingIdx !== -1) {
       state.books.splice(existingIdx, 1);
     }
+  // Ensure Book 1 (Hyperfocus) has cover_image, price, isbn, and takeaway
+  const hyperBook = state.books.find(b => b.title && b.title.toLowerCase().includes('hyperfocus'));
+  if (hyperBook) {
+    if (!hyperBook.cover_image) hyperBook.cover_image = 'hyperfocus_cover.jpg';
+    if (!hyperBook.back_cover) hyperBook.back_cover = 'hyperfocus_back.jpg';
+    if (!hyperBook.price) hyperBook.price = 350;
+    if (!hyperBook.isbn) hyperBook.isbn = '978-93-5543-300-8';
+    if (!hyperBook.takeaway) hyperBook.takeaway = 'कम प्रयास में अधिक सफलता कैसे प्राप्त करें। ध्यान की उत्पादकता: हायपरफ़ोकस (एक काम पर गहरा ध्यान) और स्कैटरफ़ोकस (क्रिएटिव सोच और रिचार्ज)।';
   }
 
   // Live recalculate days for reading books
@@ -12647,8 +14075,11 @@ function renderNowReadingHero() {
 
     (hasNotes ? '<div class="hero-quote-snippet">💡 "' + escapeHtml(currentBook.takeaway) + '"</div>' : '') +
     '<div class="hero-actions-row">' +
+    '<button class="hero-btn-primary" onclick="openLanguageSelectModal(' + origIdx + ')" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0f19; font-weight:800;">' +
+    '📖 Read Book (3 Langs)' +
+    '</button>' +
     '<button class="hero-btn-primary" onclick="openBookDetailSheet(' + origIdx + ')">' +
-    '📖 Update Page & Notes' +
+    '📝 Page & Notes' +
     '</button>' +
     '<button class="hero-btn-ambient" onclick="openAmbienceModal()">' +
     '🎧 ' + (typeof isAmbiencePlaying !== 'undefined' && isAmbiencePlaying ? 'Ambience Active' : 'Focus Ambience') +
@@ -13531,6 +14962,16 @@ function openBookDetailSheet(origIdx) {
   html += '  <button type="button" class="btn btn-sm" onclick="setSheetStatus(' + origIdx + ', \'PENDING\')" style="flex:1; border-radius:8px; font-weight:700; ' + (isPending ? 'background:rgba(255,255,255,0.15); color:#fff; border-color:var(--border-color);' : 'background:transparent; color:var(--text-muted); border:none;') + '">⏳ Pending</button>';
   html += '  <button type="button" class="btn btn-sm" onclick="setSheetStatus(' + origIdx + ', \'READING\')" style="flex:1; border-radius:8px; font-weight:700; ' + (isReading ? 'background:#3b82f6; color:#fff; border:none;' : 'background:transparent; color:var(--text-muted); border:none;') + '">📖 Reading</button>';
   html += '  <button type="button" class="btn btn-sm" onclick="setSheetStatus(' + origIdx + ', \'DONE\')" style="flex:1; border-radius:8px; font-weight:700; ' + (isDone ? 'background:#10b981; color:#fff; border:none;' : 'background:transparent; color:var(--text-muted); border:none;') + '">✅ Done</button>';
+  html += '</div>';
+
+  // 📖 PRIMARY ACTION: MULTI-LANGUAGE REAL BOOK READER
+  const hasPages = (typeof hasBookPagesAvailable === 'function' && hasBookPagesAvailable(b)) || (b.title && b.title.toLowerCase().includes('hyperfocus'));
+  html += '<div style="margin: 0.75rem 0 0.25rem;">';
+  html += '  <button type="button" class="btn" onclick="openLanguageSelectModal(' + origIdx + ')" style="width:100%; padding:0.85rem 1rem; font-size:1rem; font-weight:800; background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0f19; border:none; border-radius:12px; box-shadow:0 6px 20px rgba(245,158,11,0.38); display:flex; align-items:center; justify-content:center; gap:0.6rem; cursor:pointer;">';
+  html += '    <span style="font-size:1.3rem;">📖</span>';
+  html += '    <span>किताब पढ़ें / Read Book</span>';
+  html += '    <span style="font-size:0.72rem; background:rgba(0,0,0,0.25); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;">' + (hasPages ? 'Hindi • Hinglish • Eng' : '3 Languages') + '</span>';
+  html += '  </button>';
   html += '</div>';
 
   // Interactive Page Progress Card (Compact & Clean)
@@ -18564,6 +20005,447 @@ window.onDictSearchInput = onDictSearchInput;
 window.clearDictSearch = clearDictSearch;
 window.speakDictWord = speakDictWord;
 window.playPaperTurnAudio = playPaperTurnAudio;
+
+/* ==========================================================================
+   FEATURE: MULTI-LANGUAGE REAL BOOK READER CONTROLLER & ENGINE
+   ========================================================================== */
+const readerState = {
+  activeBookIdx: 1,
+  lang: 'hindi', // 'hindi' | 'hinglish' | 'english'
+  currentPage: 1,
+  theme: 'sepia',
+  fontSizePct: 100
+};
+
+function openLanguageSelectModal(origIdx) {
+  readerState.activeBookIdx = (origIdx !== undefined && origIdx !== null) ? origIdx : 1;
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const isHyper = b.title && b.title.toLowerCase().includes('hyperfocus');
+
+  const titleEl = document.getElementById('langSelectBookTitle');
+  if (titleEl) titleEl.innerText = isHyper ? 'हायपरफ़ोकस (किताब पढ़ें)' : (b.title + ' (किताब पढ़ें)');
+
+  const authorEl = document.getElementById('langSelectBookAuthor');
+  if (authorEl) authorEl.innerText = isHyper ? 'Chris Bailey (क्रिस बेली) • 3 Languages Available' : ('by ' + (b.author || 'Author') + ' • Select Reading Language');
+
+  const coverEl = document.getElementById('langSelectCoverImg');
+  if (coverEl) coverEl.src = getBookCover(b) || 'hyperfocus_cover.jpg';
+
+  const badgeEl = document.getElementById('langSelectCategoryBadge');
+  if (badgeEl) badgeEl.innerText = (b.category || 'Focus & Concentration').toUpperCase();
+
+  const titleEnEl = document.getElementById('langSelectTitleEn');
+  if (titleEnEl) titleEnEl.innerText = b.title || 'Hyperfocus';
+
+  const authorTxtEl = document.getElementById('langSelectAuthorTxt');
+  if (authorTxtEl) authorTxtEl.innerText = 'by ' + (b.author || 'Chris Bailey') + (isHyper ? ' • अनुवाद: अजय तिवारी' : '');
+
+  const isbnRowEl = document.getElementById('langSelectIsbnRow');
+  if (isbnRowEl) {
+    const isbn = b.isbn || (isHyper ? '978-93-5543-300-8' : 'N/A');
+    const price = b.price || (isHyper ? 350 : 0);
+    isbnRowEl.innerHTML = '<span>ISBN: <strong style="color:var(--text-primary);">' + escapeHtml(isbn) + '</strong></span><span>• Price: <strong style="color:#10b981;">₹' + price + '</strong></span>';
+  }
+
+  // Count available pages per language
+  if (typeof getBookPagesData === 'function') {
+    const hiData = getBookPagesData(b, 'hindi');
+    const hingData = getBookPagesData(b, 'hinglish');
+    const engData = getBookPagesData(b, 'english');
+
+    const hiBadge = document.getElementById('langHindiCountBadge');
+    if (hiBadge) hiBadge.innerText = (hiData && hiData.pages ? hiData.pages.length : 0) + ' पृष्ठ';
+
+    const hingBadge = document.getElementById('langHinglishCountBadge');
+    if (hingBadge) hingBadge.innerText = (hingData && hingData.pages ? hingData.pages.length : 0) + ' Pages';
+
+    const engBadge = document.getElementById('langEnglishCountBadge');
+    if (engBadge) engBadge.innerText = (engData && engData.pages ? engData.pages.length : 0) + ' Pages';
+  }
+
+  const modal = document.getElementById('bookLanguageSelectModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeLanguageSelectModal() {
+  const modal = document.getElementById('bookLanguageSelectModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleLangSelectOverlayClick(event) {
+  if (event.target.id === 'bookLanguageSelectModal') {
+    closeLanguageSelectModal();
+  }
+}
+
+function selectBookLanguageAndOpen(lang) {
+  readerState.lang = lang || 'hindi';
+  closeLanguageSelectModal();
+  closeBookDetailSheet();
+  openRealBookReader(readerState.activeBookIdx, readerState.lang);
+}
+
+function openRealBookReader(origIdx, lang) {
+  if (origIdx !== undefined && origIdx !== null) {
+    readerState.activeBookIdx = origIdx;
+  }
+  if (lang) {
+    readerState.lang = lang;
+  }
+  readerState.currentPage = 1;
+
+  const modal = document.getElementById('realBookReaderModal');
+  if (!modal) return;
+
+  modal.setAttribute('data-reader-theme', readerState.theme);
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  playPaperTurnAudio();
+  updateReaderLangPills();
+  renderRealBookPages();
+
+  window.addEventListener('keydown', handleReaderKeyNavigation);
+}
+
+function closeRealBookReader() {
+  const modal = document.getElementById('realBookReaderModal');
+  if (!modal) return;
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+  window.removeEventListener('keydown', handleReaderKeyNavigation);
+}
+
+function handleReaderOverlayClick(event) {
+  if (event.target.id === 'realBookReaderModal') {
+    closeRealBookReader();
+  }
+}
+
+function handleReaderKeyNavigation(event) {
+  const modal = document.getElementById('realBookReaderModal');
+  if (!modal || !modal.classList.contains('active')) return;
+  if (event.key === 'ArrowLeft') {
+    turnRealBookPage(-1);
+  } else if (event.key === 'ArrowRight') {
+    turnRealBookPage(1);
+  } else if (event.key === 'Escape') {
+    closeRealBookReader();
+  }
+}
+
+function updateReaderLangPills() {
+  const pillHi = document.getElementById('readerLangPillHindi');
+  const pillHing = document.getElementById('readerLangPillHinglish');
+  const pillEng = document.getElementById('readerLangPillEnglish');
+
+  if (pillHi) pillHi.classList.toggle('active', readerState.lang === 'hindi');
+  if (pillHing) pillHing.classList.toggle('active', readerState.lang === 'hinglish');
+  if (pillEng) pillEng.classList.toggle('active', readerState.lang === 'english');
+}
+
+function switchReaderLanguage(lang) {
+  readerState.lang = lang;
+  updateReaderLangPills();
+  playPaperTurnAudio();
+  renderRealBookPages();
+  const langNames = { hindi: 'हिंदी (Hindi)', hinglish: 'Hinglish (हिंग्लिश)', english: 'English' };
+  showToast('Switched to ' + (langNames[lang] || lang), 'info');
+}
+
+function turnRealBookPage(delta) {
+  const b = state.books[readerState.activeBookIdx];
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const totalPages = (data && data.pages && data.pages.length) ? data.pages.length : 1;
+
+  const step = 1;
+  const targetPage = readerState.currentPage + (delta * step);
+  if (targetPage < 1 || targetPage > totalPages) return;
+
+  readerState.currentPage = targetPage;
+  playPaperTurnAudio();
+
+  const spreadEl = document.getElementById('realBookSpread');
+  if (spreadEl) {
+    spreadEl.style.opacity = '0.75';
+    spreadEl.style.transform = delta > 0 ? 'perspective(1400px) rotateY(-1.5deg)' : 'perspective(1400px) rotateY(1.5deg)';
+    setTimeout(() => {
+      spreadEl.style.opacity = '1';
+      spreadEl.style.transform = 'none';
+    }, 180);
+  }
+
+  renderRealBookPages();
+}
+
+function onReaderSliderChange(val) {
+  readerState.currentPage = parseInt(val) || 1;
+  playPaperTurnAudio();
+  renderRealBookPages();
+}
+
+function adjustReaderFontSize(delta) {
+  readerState.fontSizePct = Math.max(75, Math.min(150, readerState.fontSizePct + (delta * 10)));
+  const disp = document.getElementById('readerFontSizeDisplay');
+  if (disp) disp.innerText = readerState.fontSizePct + '%';
+  renderRealBookPages();
+}
+
+function cycleReaderTheme() {
+  const themes = ['sepia', 'dark', 'light'];
+  const next = themes[(themes.indexOf(readerState.theme) + 1) % themes.length];
+  readerState.theme = next;
+
+  const btn = document.getElementById('readerThemeToggleBtn');
+  if (btn) {
+    if (next === 'sepia') btn.innerText = '📜 Sepia';
+    else if (next === 'dark') btn.innerText = '🌙 Dark';
+    else btn.innerText = '☀️ Light';
+  }
+
+  const modal = document.getElementById('realBookReaderModal');
+  if (modal) modal.setAttribute('data-reader-theme', next);
+}
+
+function renderRealBookPages() {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const isHyper = b.title && b.title.toLowerCase().includes('hyperfocus');
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const pages = (data && data.pages && data.pages.length > 0) ? data.pages : [];
+  const totalPages = pages.length > 0 ? pages.length : 1;
+
+  if (readerState.currentPage > totalPages) readerState.currentPage = totalPages;
+  if (readerState.currentPage < 1) readerState.currentPage = 1;
+
+  // Title display
+  const titleDisplay = document.getElementById('readerBookTitleDisplay');
+  if (titleDisplay) {
+    if (isHyper) {
+      titleDisplay.innerText = readerState.lang === 'hindi' ? 'हायपरफ़ोकस: क्रिस बेली' : 'Hyperfocus: Chris Bailey';
+    } else {
+      titleDisplay.innerText = b.title || 'Real Book';
+    }
+  }
+
+  // Badge
+  const badge = document.getElementById('readerBookBadge');
+  if (badge) {
+    badge.innerText = '📖 ' + (readerState.lang.toUpperCase()) + ' EDITION';
+  }
+
+  // Slider & indicator
+  const slider = document.getElementById('readerPageSlider');
+  if (slider) {
+    slider.min = 1;
+    slider.max = totalPages;
+    slider.value = readerState.currentPage;
+  }
+
+  const prevBtn = document.getElementById('readerPrevPageBtn');
+  const nextBtn = document.getElementById('readerNextPageBtn');
+  if (prevBtn) prevBtn.disabled = readerState.currentPage <= 1;
+  if (nextBtn) nextBtn.disabled = readerState.currentPage >= totalPages;
+
+  const leftSheet = document.getElementById('pageInnerLeft');
+  const rightSheet = document.getElementById('pageInnerRight');
+  const leftFooter = document.getElementById('pageFooterLeft');
+  const rightFooter = document.getElementById('pageFooterRight');
+  const indicator = document.getElementById('readerPageIndicator');
+
+  const fontStyle = (readerState.fontSizePct / 100) + 'rem';
+  if (leftSheet) leftSheet.style.fontSize = fontStyle;
+  if (rightSheet) rightSheet.style.fontSize = fontStyle;
+
+  if (pages.length === 0) {
+    // Empty state fallback with prompt to add pages
+    const placeholder = '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:300px; padding:30px 20px;">' +
+      '<div style="font-size:3rem; margin-bottom:12px;">📖</div>' +
+      '<h3 style="font-size:1.3rem; margin-bottom:8px;">' + escapeHtml(b.title) + '</h3>' +
+      '<p style="color:var(--text-secondary); max-width:400px; font-size:0.9rem; line-height:1.6; margin-bottom:20px;">' +
+      'Iss book ke pages abhi load nahi hue hain. Aap physical book ki photo se OCR karke ya type karke naye page add kar sakte hain!' +
+      '</p>' +
+      '<button type="button" class="btn btn-primary" onclick="openAddCustomPageModal()" style="font-weight:700;">' +
+      '➕ Naya Page Add Karein' +
+      '</button>' +
+      '</div>';
+    if (rightSheet) rightSheet.innerHTML = placeholder;
+    if (leftSheet) leftSheet.innerHTML = placeholder;
+    if (indicator) indicator.innerText = 'Page 1 / 1';
+    return;
+  }
+
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Single page on mobile
+    const currPageObj = pages[readerState.currentPage - 1];
+    if (rightSheet && currPageObj) {
+      rightSheet.innerHTML = currPageObj.content || '';
+    }
+    if (rightFooter) rightFooter.innerText = 'Page ' + readerState.currentPage + ' of ' + totalPages;
+    if (indicator) indicator.innerText = 'Page ' + readerState.currentPage + ' / ' + totalPages;
+  } else {
+    // Dual spread on Desktop
+    const leftPageObj = pages[readerState.currentPage - 1];
+    const rightPageObj = (readerState.currentPage < totalPages) ? pages[readerState.currentPage] : null;
+
+    if (leftSheet && leftPageObj) {
+      leftSheet.innerHTML = leftPageObj.content || '';
+    }
+    if (leftFooter) leftFooter.innerText = 'Page ' + readerState.currentPage;
+
+    if (rightSheet) {
+      if (rightPageObj) {
+        rightSheet.innerHTML = rightPageObj.content || '';
+        if (rightFooter) rightFooter.innerText = 'Page ' + (readerState.currentPage + 1);
+      } else {
+        rightSheet.innerHTML = '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:280px; text-align:center; color:var(--text-muted); opacity:0.6;">' +
+          '<div style="font-size:2.5rem; margin-bottom:8px;">✦</div>' +
+          '<div style="font-style:italic;">End of available pages</div>' +
+          '<div style="font-size:0.8rem; margin-top:10px;">Click ➕ Add Page to add more pages</div>' +
+          '</div>';
+        if (rightFooter) rightFooter.innerText = '';
+      }
+    }
+
+    if (indicator) {
+      if (rightPageObj) {
+        indicator.innerText = 'Pages ' + readerState.currentPage + '-' + (readerState.currentPage + 1) + ' / ' + totalPages;
+      } else {
+        indicator.innerText = 'Page ' + readerState.currentPage + ' / ' + totalPages;
+      }
+    }
+  }
+}
+
+// 3. Custom Page Form Management
+function openAddCustomPageModal() {
+  const select = document.getElementById('customPageBookSelect');
+  if (select) {
+    let opts = '';
+    state.books.forEach((b, idx) => {
+      const sel = idx === readerState.activeBookIdx ? ' selected' : '';
+      opts += '<option value="' + idx + '"' + sel + '>' + escapeHtml(b.no + ' • ' + b.title) + '</option>';
+    });
+    select.innerHTML = opts;
+  }
+
+  const langSelect = document.getElementById('customPageLangSelect');
+  if (langSelect) langSelect.value = readerState.lang || 'hindi';
+
+  const b = state.books[readerState.activeBookIdx];
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const nextPg = (data && data.pages) ? (data.pages.length + 1) : 5;
+
+  const noInput = document.getElementById('customPageNoInput');
+  if (noInput) noInput.value = nextPg;
+
+  const headingInput = document.getElementById('customPageHeadingInput');
+  if (headingInput) headingInput.value = '';
+
+  const contentInput = document.getElementById('customPageContentInput');
+  if (contentInput) contentInput.value = '';
+
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeAddCustomPageModal() {
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleAddPageOverlayClick(event) {
+  if (event.target.id === 'addCustomPageModal') {
+    closeAddCustomPageModal();
+  }
+}
+
+function saveCustomBookPage() {
+  const select = document.getElementById('customPageBookSelect');
+  const bookIdx = select ? parseInt(select.value) : readerState.activeBookIdx;
+  const b = state.books[bookIdx];
+  if (!b) {
+    alert('Please select a book!');
+    return;
+  }
+
+  const lang = document.getElementById('customPageLangSelect').value || 'hindi';
+  const pageNo = parseInt(document.getElementById('customPageNoInput').value) || 1;
+  const heading = document.getElementById('customPageHeadingInput').value.trim();
+  const rawContent = document.getElementById('customPageContentInput').value.trim();
+
+  if (!rawContent) {
+    alert('Please enter or scan some text for the page!');
+    return;
+  }
+
+  // Format content as paragraph HTML if plain text
+  let formattedContent = rawContent;
+  if (!rawContent.includes('<p>') && !rawContent.includes('<div>')) {
+    const paragraphs = rawContent.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    formattedContent = (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+      paragraphs.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+  }
+
+  const newPage = {
+    pageNo: pageNo,
+    type: 'content',
+    heading: heading || ('Page ' + pageNo),
+    content: formattedContent
+  };
+
+  // Persist to localStorage
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const existingRaw = localStorage.getItem(storeKey);
+    if (existingRaw) {
+      store = JSON.parse(existingRaw);
+    }
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!store[bookTitleKey][lang]) store[bookTitleKey][lang] = [];
+
+    store[bookTitleKey][lang].push(newPage);
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error saving custom book page:', e);
+  }
+
+  closeAddCustomPageModal();
+  showToast('Page ' + pageNo + ' added to "' + b.title + '" successfully! 📖', 'success');
+
+  // If reader is currently open for this book, refresh view
+  const readerModal = document.getElementById('realBookReaderModal');
+  if (readerModal && readerModal.classList.contains('active')) {
+    readerState.currentPage = pageNo;
+    renderRealBookPages();
+  }
+}
+
+// Bind to window
+window.openLanguageSelectModal = openLanguageSelectModal;
+window.closeLanguageSelectModal = closeLanguageSelectModal;
+window.handleLangSelectOverlayClick = handleLangSelectOverlayClick;
+window.selectBookLanguageAndOpen = selectBookLanguageAndOpen;
+window.openRealBookReader = openRealBookReader;
+window.closeRealBookReader = closeRealBookReader;
+window.handleReaderOverlayClick = handleReaderOverlayClick;
+window.switchReaderLanguage = switchReaderLanguage;
+window.turnRealBookPage = turnRealBookPage;
+window.onReaderSliderChange = onReaderSliderChange;
+window.adjustReaderFontSize = adjustReaderFontSize;
+window.cycleReaderTheme = cycleReaderTheme;
+window.renderRealBookPages = renderRealBookPages;
+window.openAddCustomPageModal = openAddCustomPageModal;
+window.closeAddCustomPageModal = closeAddCustomPageModal;
+window.handleAddPageOverlayClick = handleAddPageOverlayClick;
+window.saveCustomBookPage = saveCustomBookPage;
 
 // =========================================================================
 // REMOVED LEGACY FEATURES (Mystery Gift, Flashcards, Live Help Desk)

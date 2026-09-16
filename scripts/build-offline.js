@@ -13,6 +13,7 @@ const ROOT_DIR = path.resolve(__dirname, '..');
 const INDEX_HTML_PATH = path.join(ROOT_DIR, 'index.html');
 const STYLE_CSS_PATH = path.join(ROOT_DIR, 'style.css');
 const DICT_JS_PATH = path.join(ROOT_DIR, 'dictionary-data.js');
+const BOOK_PAGES_JS_PATH = path.join(ROOT_DIR, 'book-pages-data.js');
 const BOOKS_JS_PATH = path.join(ROOT_DIR, 'books-data.js');
 const APP_JS_PATH = path.join(ROOT_DIR, 'app.js');
 const OUTPUT_OFFLINE_PATH = path.join(ROOT_DIR, 'Mind-Focus-Books-App-Offline.html');
@@ -23,6 +24,7 @@ try {
   let indexHtml = fs.readFileSync(INDEX_HTML_PATH, 'utf-8');
   const styleCss = fs.readFileSync(STYLE_CSS_PATH, 'utf-8');
   const dictJs = fs.readFileSync(DICT_JS_PATH, 'utf-8');
+  const bookPagesJs = fs.readFileSync(BOOK_PAGES_JS_PATH, 'utf-8');
   const booksJs = fs.readFileSync(BOOKS_JS_PATH, 'utf-8');
   const appJs = fs.readFileSync(APP_JS_PATH, 'utf-8');
 
@@ -43,7 +45,15 @@ try {
     console.warn('⚠️ Warning: dictionary-data.js script tag not matched.');
   }
 
-  // 3. Inline books-data.js
+  // 3. Inline book-pages-data.js
+  const bookPagesScriptRegex = /<script\s+src=["']book-pages-data\.js(?:\?[^"']*)?["']\s*><\/script>/i;
+  if (bookPagesScriptRegex.test(indexHtml)) {
+    indexHtml = indexHtml.replace(bookPagesScriptRegex, `<script>\n${bookPagesJs}\n</script>`);
+  } else {
+    console.warn('⚠️ Warning: book-pages-data.js script tag not matched.');
+  }
+
+  // 4. Inline books-data.js
   const booksScriptRegex = /<script\s+src=["']books-data\.js(?:\?[^"']*)?["']\s*><\/script>/i;
   if (booksScriptRegex.test(indexHtml)) {
     indexHtml = indexHtml.replace(booksScriptRegex, `<script>\n${booksJs}\n</script>`);

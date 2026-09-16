@@ -243,6 +243,14 @@ function loadData() {
     if (existingIdx !== -1) {
       state.books.splice(existingIdx, 1);
     }
+  // Ensure Book 1 (Hyperfocus) has cover_image, price, isbn, and takeaway
+  const hyperBook = state.books.find(b => b.title && b.title.toLowerCase().includes('hyperfocus'));
+  if (hyperBook) {
+    if (!hyperBook.cover_image) hyperBook.cover_image = 'hyperfocus_cover.jpg';
+    if (!hyperBook.back_cover) hyperBook.back_cover = 'hyperfocus_back.jpg';
+    if (!hyperBook.price) hyperBook.price = 350;
+    if (!hyperBook.isbn) hyperBook.isbn = '978-93-5543-300-8';
+    if (!hyperBook.takeaway) hyperBook.takeaway = 'कम प्रयास में अधिक सफलता कैसे प्राप्त करें। ध्यान की उत्पादकता: हायपरफ़ोकस (एक काम पर गहरा ध्यान) और स्कैटरफ़ोकस (क्रिएटिव सोच और रिचार्ज)।';
   }
 
   // Live recalculate days for reading books
@@ -570,8 +578,11 @@ function renderNowReadingHero() {
 
     (hasNotes ? '<div class="hero-quote-snippet">💡 "' + escapeHtml(currentBook.takeaway) + '"</div>' : '') +
     '<div class="hero-actions-row">' +
+    '<button class="hero-btn-primary" onclick="openLanguageSelectModal(' + origIdx + ')" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0f19; font-weight:800;">' +
+    '📖 Read Book (3 Langs)' +
+    '</button>' +
     '<button class="hero-btn-primary" onclick="openBookDetailSheet(' + origIdx + ')">' +
-    '📖 Update Page & Notes' +
+    '📝 Page & Notes' +
     '</button>' +
     '<button class="hero-btn-ambient" onclick="openAmbienceModal()">' +
     '🎧 ' + (typeof isAmbiencePlaying !== 'undefined' && isAmbiencePlaying ? 'Ambience Active' : 'Focus Ambience') +
@@ -1454,6 +1465,16 @@ function openBookDetailSheet(origIdx) {
   html += '  <button type="button" class="btn btn-sm" onclick="setSheetStatus(' + origIdx + ', \'PENDING\')" style="flex:1; border-radius:8px; font-weight:700; ' + (isPending ? 'background:rgba(255,255,255,0.15); color:#fff; border-color:var(--border-color);' : 'background:transparent; color:var(--text-muted); border:none;') + '">⏳ Pending</button>';
   html += '  <button type="button" class="btn btn-sm" onclick="setSheetStatus(' + origIdx + ', \'READING\')" style="flex:1; border-radius:8px; font-weight:700; ' + (isReading ? 'background:#3b82f6; color:#fff; border:none;' : 'background:transparent; color:var(--text-muted); border:none;') + '">📖 Reading</button>';
   html += '  <button type="button" class="btn btn-sm" onclick="setSheetStatus(' + origIdx + ', \'DONE\')" style="flex:1; border-radius:8px; font-weight:700; ' + (isDone ? 'background:#10b981; color:#fff; border:none;' : 'background:transparent; color:var(--text-muted); border:none;') + '">✅ Done</button>';
+  html += '</div>';
+
+  // 📖 PRIMARY ACTION: MULTI-LANGUAGE REAL BOOK READER
+  const hasPages = (typeof hasBookPagesAvailable === 'function' && hasBookPagesAvailable(b)) || (b.title && b.title.toLowerCase().includes('hyperfocus'));
+  html += '<div style="margin: 0.75rem 0 0.25rem;">';
+  html += '  <button type="button" class="btn" onclick="openLanguageSelectModal(' + origIdx + ')" style="width:100%; padding:0.85rem 1rem; font-size:1rem; font-weight:800; background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0f19; border:none; border-radius:12px; box-shadow:0 6px 20px rgba(245,158,11,0.38); display:flex; align-items:center; justify-content:center; gap:0.6rem; cursor:pointer;">';
+  html += '    <span style="font-size:1.3rem;">📖</span>';
+  html += '    <span>किताब पढ़ें / Read Book</span>';
+  html += '    <span style="font-size:0.72rem; background:rgba(0,0,0,0.25); color:#fff; padding:2px 8px; border-radius:10px; font-weight:700;">' + (hasPages ? 'Hindi • Hinglish • Eng' : '3 Languages') + '</span>';
+  html += '  </button>';
   html += '</div>';
 
   // Interactive Page Progress Card (Compact & Clean)
@@ -6487,6 +6508,447 @@ window.onDictSearchInput = onDictSearchInput;
 window.clearDictSearch = clearDictSearch;
 window.speakDictWord = speakDictWord;
 window.playPaperTurnAudio = playPaperTurnAudio;
+
+/* ==========================================================================
+   FEATURE: MULTI-LANGUAGE REAL BOOK READER CONTROLLER & ENGINE
+   ========================================================================== */
+const readerState = {
+  activeBookIdx: 1,
+  lang: 'hindi', // 'hindi' | 'hinglish' | 'english'
+  currentPage: 1,
+  theme: 'sepia',
+  fontSizePct: 100
+};
+
+function openLanguageSelectModal(origIdx) {
+  readerState.activeBookIdx = (origIdx !== undefined && origIdx !== null) ? origIdx : 1;
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const isHyper = b.title && b.title.toLowerCase().includes('hyperfocus');
+
+  const titleEl = document.getElementById('langSelectBookTitle');
+  if (titleEl) titleEl.innerText = isHyper ? 'हायपरफ़ोकस (किताब पढ़ें)' : (b.title + ' (किताब पढ़ें)');
+
+  const authorEl = document.getElementById('langSelectBookAuthor');
+  if (authorEl) authorEl.innerText = isHyper ? 'Chris Bailey (क्रिस बेली) • 3 Languages Available' : ('by ' + (b.author || 'Author') + ' • Select Reading Language');
+
+  const coverEl = document.getElementById('langSelectCoverImg');
+  if (coverEl) coverEl.src = getBookCover(b) || 'hyperfocus_cover.jpg';
+
+  const badgeEl = document.getElementById('langSelectCategoryBadge');
+  if (badgeEl) badgeEl.innerText = (b.category || 'Focus & Concentration').toUpperCase();
+
+  const titleEnEl = document.getElementById('langSelectTitleEn');
+  if (titleEnEl) titleEnEl.innerText = b.title || 'Hyperfocus';
+
+  const authorTxtEl = document.getElementById('langSelectAuthorTxt');
+  if (authorTxtEl) authorTxtEl.innerText = 'by ' + (b.author || 'Chris Bailey') + (isHyper ? ' • अनुवाद: अजय तिवारी' : '');
+
+  const isbnRowEl = document.getElementById('langSelectIsbnRow');
+  if (isbnRowEl) {
+    const isbn = b.isbn || (isHyper ? '978-93-5543-300-8' : 'N/A');
+    const price = b.price || (isHyper ? 350 : 0);
+    isbnRowEl.innerHTML = '<span>ISBN: <strong style="color:var(--text-primary);">' + escapeHtml(isbn) + '</strong></span><span>• Price: <strong style="color:#10b981;">₹' + price + '</strong></span>';
+  }
+
+  // Count available pages per language
+  if (typeof getBookPagesData === 'function') {
+    const hiData = getBookPagesData(b, 'hindi');
+    const hingData = getBookPagesData(b, 'hinglish');
+    const engData = getBookPagesData(b, 'english');
+
+    const hiBadge = document.getElementById('langHindiCountBadge');
+    if (hiBadge) hiBadge.innerText = (hiData && hiData.pages ? hiData.pages.length : 0) + ' पृष्ठ';
+
+    const hingBadge = document.getElementById('langHinglishCountBadge');
+    if (hingBadge) hingBadge.innerText = (hingData && hingData.pages ? hingData.pages.length : 0) + ' Pages';
+
+    const engBadge = document.getElementById('langEnglishCountBadge');
+    if (engBadge) engBadge.innerText = (engData && engData.pages ? engData.pages.length : 0) + ' Pages';
+  }
+
+  const modal = document.getElementById('bookLanguageSelectModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeLanguageSelectModal() {
+  const modal = document.getElementById('bookLanguageSelectModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleLangSelectOverlayClick(event) {
+  if (event.target.id === 'bookLanguageSelectModal') {
+    closeLanguageSelectModal();
+  }
+}
+
+function selectBookLanguageAndOpen(lang) {
+  readerState.lang = lang || 'hindi';
+  closeLanguageSelectModal();
+  closeBookDetailSheet();
+  openRealBookReader(readerState.activeBookIdx, readerState.lang);
+}
+
+function openRealBookReader(origIdx, lang) {
+  if (origIdx !== undefined && origIdx !== null) {
+    readerState.activeBookIdx = origIdx;
+  }
+  if (lang) {
+    readerState.lang = lang;
+  }
+  readerState.currentPage = 1;
+
+  const modal = document.getElementById('realBookReaderModal');
+  if (!modal) return;
+
+  modal.setAttribute('data-reader-theme', readerState.theme);
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+
+  playPaperTurnAudio();
+  updateReaderLangPills();
+  renderRealBookPages();
+
+  window.addEventListener('keydown', handleReaderKeyNavigation);
+}
+
+function closeRealBookReader() {
+  const modal = document.getElementById('realBookReaderModal');
+  if (!modal) return;
+  modal.classList.remove('active');
+  document.body.style.overflow = '';
+  window.removeEventListener('keydown', handleReaderKeyNavigation);
+}
+
+function handleReaderOverlayClick(event) {
+  if (event.target.id === 'realBookReaderModal') {
+    closeRealBookReader();
+  }
+}
+
+function handleReaderKeyNavigation(event) {
+  const modal = document.getElementById('realBookReaderModal');
+  if (!modal || !modal.classList.contains('active')) return;
+  if (event.key === 'ArrowLeft') {
+    turnRealBookPage(-1);
+  } else if (event.key === 'ArrowRight') {
+    turnRealBookPage(1);
+  } else if (event.key === 'Escape') {
+    closeRealBookReader();
+  }
+}
+
+function updateReaderLangPills() {
+  const pillHi = document.getElementById('readerLangPillHindi');
+  const pillHing = document.getElementById('readerLangPillHinglish');
+  const pillEng = document.getElementById('readerLangPillEnglish');
+
+  if (pillHi) pillHi.classList.toggle('active', readerState.lang === 'hindi');
+  if (pillHing) pillHing.classList.toggle('active', readerState.lang === 'hinglish');
+  if (pillEng) pillEng.classList.toggle('active', readerState.lang === 'english');
+}
+
+function switchReaderLanguage(lang) {
+  readerState.lang = lang;
+  updateReaderLangPills();
+  playPaperTurnAudio();
+  renderRealBookPages();
+  const langNames = { hindi: 'हिंदी (Hindi)', hinglish: 'Hinglish (हिंग्लिश)', english: 'English' };
+  showToast('Switched to ' + (langNames[lang] || lang), 'info');
+}
+
+function turnRealBookPage(delta) {
+  const b = state.books[readerState.activeBookIdx];
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const totalPages = (data && data.pages && data.pages.length) ? data.pages.length : 1;
+
+  const step = 1;
+  const targetPage = readerState.currentPage + (delta * step);
+  if (targetPage < 1 || targetPage > totalPages) return;
+
+  readerState.currentPage = targetPage;
+  playPaperTurnAudio();
+
+  const spreadEl = document.getElementById('realBookSpread');
+  if (spreadEl) {
+    spreadEl.style.opacity = '0.75';
+    spreadEl.style.transform = delta > 0 ? 'perspective(1400px) rotateY(-1.5deg)' : 'perspective(1400px) rotateY(1.5deg)';
+    setTimeout(() => {
+      spreadEl.style.opacity = '1';
+      spreadEl.style.transform = 'none';
+    }, 180);
+  }
+
+  renderRealBookPages();
+}
+
+function onReaderSliderChange(val) {
+  readerState.currentPage = parseInt(val) || 1;
+  playPaperTurnAudio();
+  renderRealBookPages();
+}
+
+function adjustReaderFontSize(delta) {
+  readerState.fontSizePct = Math.max(75, Math.min(150, readerState.fontSizePct + (delta * 10)));
+  const disp = document.getElementById('readerFontSizeDisplay');
+  if (disp) disp.innerText = readerState.fontSizePct + '%';
+  renderRealBookPages();
+}
+
+function cycleReaderTheme() {
+  const themes = ['sepia', 'dark', 'light'];
+  const next = themes[(themes.indexOf(readerState.theme) + 1) % themes.length];
+  readerState.theme = next;
+
+  const btn = document.getElementById('readerThemeToggleBtn');
+  if (btn) {
+    if (next === 'sepia') btn.innerText = '📜 Sepia';
+    else if (next === 'dark') btn.innerText = '🌙 Dark';
+    else btn.innerText = '☀️ Light';
+  }
+
+  const modal = document.getElementById('realBookReaderModal');
+  if (modal) modal.setAttribute('data-reader-theme', next);
+}
+
+function renderRealBookPages() {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const isHyper = b.title && b.title.toLowerCase().includes('hyperfocus');
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const pages = (data && data.pages && data.pages.length > 0) ? data.pages : [];
+  const totalPages = pages.length > 0 ? pages.length : 1;
+
+  if (readerState.currentPage > totalPages) readerState.currentPage = totalPages;
+  if (readerState.currentPage < 1) readerState.currentPage = 1;
+
+  // Title display
+  const titleDisplay = document.getElementById('readerBookTitleDisplay');
+  if (titleDisplay) {
+    if (isHyper) {
+      titleDisplay.innerText = readerState.lang === 'hindi' ? 'हायपरफ़ोकस: क्रिस बेली' : 'Hyperfocus: Chris Bailey';
+    } else {
+      titleDisplay.innerText = b.title || 'Real Book';
+    }
+  }
+
+  // Badge
+  const badge = document.getElementById('readerBookBadge');
+  if (badge) {
+    badge.innerText = '📖 ' + (readerState.lang.toUpperCase()) + ' EDITION';
+  }
+
+  // Slider & indicator
+  const slider = document.getElementById('readerPageSlider');
+  if (slider) {
+    slider.min = 1;
+    slider.max = totalPages;
+    slider.value = readerState.currentPage;
+  }
+
+  const prevBtn = document.getElementById('readerPrevPageBtn');
+  const nextBtn = document.getElementById('readerNextPageBtn');
+  if (prevBtn) prevBtn.disabled = readerState.currentPage <= 1;
+  if (nextBtn) nextBtn.disabled = readerState.currentPage >= totalPages;
+
+  const leftSheet = document.getElementById('pageInnerLeft');
+  const rightSheet = document.getElementById('pageInnerRight');
+  const leftFooter = document.getElementById('pageFooterLeft');
+  const rightFooter = document.getElementById('pageFooterRight');
+  const indicator = document.getElementById('readerPageIndicator');
+
+  const fontStyle = (readerState.fontSizePct / 100) + 'rem';
+  if (leftSheet) leftSheet.style.fontSize = fontStyle;
+  if (rightSheet) rightSheet.style.fontSize = fontStyle;
+
+  if (pages.length === 0) {
+    // Empty state fallback with prompt to add pages
+    const placeholder = '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; min-height:300px; padding:30px 20px;">' +
+      '<div style="font-size:3rem; margin-bottom:12px;">📖</div>' +
+      '<h3 style="font-size:1.3rem; margin-bottom:8px;">' + escapeHtml(b.title) + '</h3>' +
+      '<p style="color:var(--text-secondary); max-width:400px; font-size:0.9rem; line-height:1.6; margin-bottom:20px;">' +
+      'Iss book ke pages abhi load nahi hue hain. Aap physical book ki photo se OCR karke ya type karke naye page add kar sakte hain!' +
+      '</p>' +
+      '<button type="button" class="btn btn-primary" onclick="openAddCustomPageModal()" style="font-weight:700;">' +
+      '➕ Naya Page Add Karein' +
+      '</button>' +
+      '</div>';
+    if (rightSheet) rightSheet.innerHTML = placeholder;
+    if (leftSheet) leftSheet.innerHTML = placeholder;
+    if (indicator) indicator.innerText = 'Page 1 / 1';
+    return;
+  }
+
+  const isMobile = window.innerWidth <= 768;
+
+  if (isMobile) {
+    // Single page on mobile
+    const currPageObj = pages[readerState.currentPage - 1];
+    if (rightSheet && currPageObj) {
+      rightSheet.innerHTML = currPageObj.content || '';
+    }
+    if (rightFooter) rightFooter.innerText = 'Page ' + readerState.currentPage + ' of ' + totalPages;
+    if (indicator) indicator.innerText = 'Page ' + readerState.currentPage + ' / ' + totalPages;
+  } else {
+    // Dual spread on Desktop
+    const leftPageObj = pages[readerState.currentPage - 1];
+    const rightPageObj = (readerState.currentPage < totalPages) ? pages[readerState.currentPage] : null;
+
+    if (leftSheet && leftPageObj) {
+      leftSheet.innerHTML = leftPageObj.content || '';
+    }
+    if (leftFooter) leftFooter.innerText = 'Page ' + readerState.currentPage;
+
+    if (rightSheet) {
+      if (rightPageObj) {
+        rightSheet.innerHTML = rightPageObj.content || '';
+        if (rightFooter) rightFooter.innerText = 'Page ' + (readerState.currentPage + 1);
+      } else {
+        rightSheet.innerHTML = '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:280px; text-align:center; color:var(--text-muted); opacity:0.6;">' +
+          '<div style="font-size:2.5rem; margin-bottom:8px;">✦</div>' +
+          '<div style="font-style:italic;">End of available pages</div>' +
+          '<div style="font-size:0.8rem; margin-top:10px;">Click ➕ Add Page to add more pages</div>' +
+          '</div>';
+        if (rightFooter) rightFooter.innerText = '';
+      }
+    }
+
+    if (indicator) {
+      if (rightPageObj) {
+        indicator.innerText = 'Pages ' + readerState.currentPage + '-' + (readerState.currentPage + 1) + ' / ' + totalPages;
+      } else {
+        indicator.innerText = 'Page ' + readerState.currentPage + ' / ' + totalPages;
+      }
+    }
+  }
+}
+
+// 3. Custom Page Form Management
+function openAddCustomPageModal() {
+  const select = document.getElementById('customPageBookSelect');
+  if (select) {
+    let opts = '';
+    state.books.forEach((b, idx) => {
+      const sel = idx === readerState.activeBookIdx ? ' selected' : '';
+      opts += '<option value="' + idx + '"' + sel + '>' + escapeHtml(b.no + ' • ' + b.title) + '</option>';
+    });
+    select.innerHTML = opts;
+  }
+
+  const langSelect = document.getElementById('customPageLangSelect');
+  if (langSelect) langSelect.value = readerState.lang || 'hindi';
+
+  const b = state.books[readerState.activeBookIdx];
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const nextPg = (data && data.pages) ? (data.pages.length + 1) : 5;
+
+  const noInput = document.getElementById('customPageNoInput');
+  if (noInput) noInput.value = nextPg;
+
+  const headingInput = document.getElementById('customPageHeadingInput');
+  if (headingInput) headingInput.value = '';
+
+  const contentInput = document.getElementById('customPageContentInput');
+  if (contentInput) contentInput.value = '';
+
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeAddCustomPageModal() {
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleAddPageOverlayClick(event) {
+  if (event.target.id === 'addCustomPageModal') {
+    closeAddCustomPageModal();
+  }
+}
+
+function saveCustomBookPage() {
+  const select = document.getElementById('customPageBookSelect');
+  const bookIdx = select ? parseInt(select.value) : readerState.activeBookIdx;
+  const b = state.books[bookIdx];
+  if (!b) {
+    alert('Please select a book!');
+    return;
+  }
+
+  const lang = document.getElementById('customPageLangSelect').value || 'hindi';
+  const pageNo = parseInt(document.getElementById('customPageNoInput').value) || 1;
+  const heading = document.getElementById('customPageHeadingInput').value.trim();
+  const rawContent = document.getElementById('customPageContentInput').value.trim();
+
+  if (!rawContent) {
+    alert('Please enter or scan some text for the page!');
+    return;
+  }
+
+  // Format content as paragraph HTML if plain text
+  let formattedContent = rawContent;
+  if (!rawContent.includes('<p>') && !rawContent.includes('<div>')) {
+    const paragraphs = rawContent.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    formattedContent = (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+      paragraphs.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+  }
+
+  const newPage = {
+    pageNo: pageNo,
+    type: 'content',
+    heading: heading || ('Page ' + pageNo),
+    content: formattedContent
+  };
+
+  // Persist to localStorage
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const existingRaw = localStorage.getItem(storeKey);
+    if (existingRaw) {
+      store = JSON.parse(existingRaw);
+    }
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!store[bookTitleKey][lang]) store[bookTitleKey][lang] = [];
+
+    store[bookTitleKey][lang].push(newPage);
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error saving custom book page:', e);
+  }
+
+  closeAddCustomPageModal();
+  showToast('Page ' + pageNo + ' added to "' + b.title + '" successfully! 📖', 'success');
+
+  // If reader is currently open for this book, refresh view
+  const readerModal = document.getElementById('realBookReaderModal');
+  if (readerModal && readerModal.classList.contains('active')) {
+    readerState.currentPage = pageNo;
+    renderRealBookPages();
+  }
+}
+
+// Bind to window
+window.openLanguageSelectModal = openLanguageSelectModal;
+window.closeLanguageSelectModal = closeLanguageSelectModal;
+window.handleLangSelectOverlayClick = handleLangSelectOverlayClick;
+window.selectBookLanguageAndOpen = selectBookLanguageAndOpen;
+window.openRealBookReader = openRealBookReader;
+window.closeRealBookReader = closeRealBookReader;
+window.handleReaderOverlayClick = handleReaderOverlayClick;
+window.switchReaderLanguage = switchReaderLanguage;
+window.turnRealBookPage = turnRealBookPage;
+window.onReaderSliderChange = onReaderSliderChange;
+window.adjustReaderFontSize = adjustReaderFontSize;
+window.cycleReaderTheme = cycleReaderTheme;
+window.renderRealBookPages = renderRealBookPages;
+window.openAddCustomPageModal = openAddCustomPageModal;
+window.closeAddCustomPageModal = closeAddCustomPageModal;
+window.handleAddPageOverlayClick = handleAddPageOverlayClick;
+window.saveCustomBookPage = saveCustomBookPage;
 
 // =========================================================================
 // REMOVED LEGACY FEATURES (Mystery Gift, Flashcards, Live Help Desk)

@@ -18,7 +18,7 @@
       });
     }
   </script>
-  <link rel="stylesheet" href="style.css?v=3.7.1">
+  <link rel="stylesheet" href="style.css?v=3.8.0">
 </head>
 <body>
 
@@ -1635,6 +1635,251 @@
   </div>
 
   <!-- ==========================================================================
+       FEATURE: MULTI-LANGUAGE REAL BOOK READER (HINDI / HINGLISH / ENGLISH)
+       ========================================================================== -->
+
+  <!-- 1. Language Selection Modal -->
+  <div class="modal-overlay" id="bookLanguageSelectModal" onclick="handleLangSelectOverlayClick(event)">
+    <div class="modal-content lang-select-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span style="font-size:1.5rem;">📖</span>
+          <div>
+            <h3 class="modal-title" id="langSelectBookTitle">किताब पढ़ें / Read Book</h3>
+            <div style="font-size:0.75rem; color:var(--text-secondary);" id="langSelectBookAuthor">Select Reading Language</div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeLanguageSelectModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:1.25rem; gap:1rem;">
+        <!-- Book Preview Card -->
+        <div class="lang-select-book-preview">
+          <div class="lang-select-cover-wrap">
+            <img id="langSelectCoverImg" src="hyperfocus_cover.jpg" alt="Cover" class="lang-select-cover">
+          </div>
+          <div class="lang-select-info">
+            <span class="lang-select-badge" id="langSelectCategoryBadge">Focus &amp; Productivity</span>
+            <h4 id="langSelectTitleEn" style="margin:0.25rem 0 0.15rem; font-size:1rem; font-weight:800; color:var(--text-primary);">Hyperfocus: How to Work Less to Achieve More</h4>
+            <div class="lang-select-author-txt" id="langSelectAuthorTxt" style="font-size:0.8rem; color:var(--text-secondary);">by Chris Bailey • अनुवाद: अजय तिवारी</div>
+            <div class="lang-select-isbn-row" id="langSelectIsbnRow" style="margin-top:0.4rem; font-size:0.75rem; color:var(--text-muted); display:flex; gap:0.6rem; flex-wrap:wrap;">
+              <span>ISBN: <strong style="color:var(--text-primary);">978-93-5543-300-8</strong></span>
+              <span>• Price: <strong style="color:#10b981;">₹350</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-top:0.1rem; display:flex; justify-content:space-between; align-items:center;">
+          <span>🌐 भाषा चुनें (Choose Language):</span>
+          <span style="font-size:0.72rem; color:var(--text-muted);">1-Tap to Open Real Book</span>
+        </div>
+
+        <div class="lang-options-grid">
+          <!-- Option 1: Hindi -->
+          <button type="button" class="lang-option-card active-lang-card" onclick="selectBookLanguageAndOpen('hindi')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🇮🇳</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">हिंदी (Hindi) <span class="lang-recommended-pill">मूल पुस्तक</span></div>
+                <div class="lang-card-sub">हायपरफ़ोकस: कम प्रयास में अधिक सफलता कैसे प्राप्त करें (अजय तिवारी)</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langHindiCountBadge">4 पृष्ठ</span>
+              <span class="lang-open-arrow">पढ़ें ›</span>
+            </div>
+          </button>
+
+          <!-- Option 2: Hinglish -->
+          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('hinglish')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🔤</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">Hinglish (हिंग्लिश) <span class="lang-hinglish-pill">Roman Hindi</span></div>
+                <div class="lang-card-sub">Simple Roman Hindi me padhein — aasaan aur fast reading experience</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langHinglishCountBadge">4 Pages</span>
+              <span class="lang-open-arrow">Read ›</span>
+            </div>
+          </button>
+
+          <!-- Option 3: English -->
+          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('english')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🇬🇧</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">English <span class="lang-eng-pill">Original</span></div>
+                <div class="lang-card-sub">Hyperfocus: How to Work Less to Achieve More (Original edition)</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langEnglishCountBadge">4 Pages</span>
+              <span class="lang-open-arrow">Read ›</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Add Custom Pages Button -->
+        <div class="lang-custom-add-banner">
+          <div>
+            <div style="font-weight:700; font-size:0.82rem; color:var(--text-primary);">📝 और पेज जोड़ना चाहते हैं? (Add Pages)</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary);">Photo se dekh kar ya type karke naye page jod sakte hain</div>
+          </div>
+          <button type="button" class="btn btn-sm" onclick="openAddCustomPageModal()" style="background:var(--accent-primary); color:#fff; border:none; font-weight:700; border-radius:8px;">
+            ➕ Add Page
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:flex-end;">
+        <button type="button" class="btn" onclick="closeLanguageSelectModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Full-Screen 3D Multi-Language Book Reader Modal -->
+  <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)">
+    <div class="real-book-reader-container" onclick="event.stopPropagation()">
+      <!-- Top Reader Navigation Bar -->
+      <div class="reader-top-bar">
+        <div class="reader-top-left">
+          <button type="button" class="reader-btn-icon" onclick="closeRealBookReader()" title="Close Book">✕</button>
+          <div class="reader-book-identity">
+            <span class="reader-badge" id="readerBookBadge">📖 REAL BOOK</span>
+            <h2 class="reader-title" id="readerBookTitleDisplay">हायपरफ़ोकस</h2>
+          </div>
+        </div>
+
+        <!-- Center Language Switcher Pills -->
+        <div class="reader-lang-pills">
+          <button type="button" class="reader-lang-pill active" id="readerLangPillHindi" onclick="switchReaderLanguage('hindi')">हिंदी</button>
+          <button type="button" class="reader-lang-pill" id="readerLangPillHinglish" onclick="switchReaderLanguage('hinglish')">Hinglish</button>
+          <button type="button" class="reader-lang-pill" id="readerLangPillEnglish" onclick="switchReaderLanguage('english')">English</button>
+        </div>
+
+        <!-- Right Controls -->
+        <div class="reader-top-right">
+          <!-- Font Size Adjuster -->
+          <div class="reader-font-controls">
+            <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(-1)" title="Decrease font size">A-</button>
+            <span id="readerFontSizeDisplay" style="font-size:0.75rem; color:var(--text-muted); min-width:28px; text-align:center;">100%</span>
+            <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(1)" title="Increase font size">A+</button>
+          </div>
+          <!-- Theme Mode: Sepia / Dark / Light -->
+          <button type="button" class="reader-btn-sm" id="readerThemeToggleBtn" onclick="cycleReaderTheme()" title="Reader Paper Tone">📜 Sepia</button>
+          <!-- Add Page Button -->
+          <button type="button" class="reader-btn-sm" onclick="openAddCustomPageModal()" title="Add new page">➕ Add Page</button>
+        </div>
+      </div>
+
+      <!-- 3D Open Book Stage -->
+      <div class="real-book-stage-wrap" id="realBookStageWrap">
+        <div class="real-book-hardcover" id="realBookHardcover">
+          <div class="real-book-spine-groove"></div>
+          <div class="real-book-spread" id="realBookSpread">
+            <!-- Bookmark Ribbon -->
+            <div class="reader-ribbon-bookmark"></div>
+
+            <!-- Left Page (Spread mode on desktop / Tablet) -->
+            <div class="reader-page-sheet page-sheet-left" id="readerPageLeft">
+              <div class="page-inner-sheet" id="pageInnerLeft">
+                <!-- Content rendered dynamically -->
+              </div>
+              <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
+            </div>
+
+            <!-- Center Spine Shadow & Valley -->
+            <div class="reader-spine-divider">
+              <div class="reader-spine-crease"></div>
+            </div>
+
+            <!-- Right Page (Spread mode) / Single page on mobile -->
+            <div class="reader-page-sheet page-sheet-right" id="readerPageRight">
+              <div class="page-inner-sheet" id="pageInnerRight">
+                <!-- Content rendered dynamically -->
+              </div>
+              <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Page Navigation Toolbar -->
+      <div class="reader-bottom-bar">
+        <button type="button" class="reader-nav-btn" id="readerPrevPageBtn" onclick="turnRealBookPage(-1)">
+          ‹ Previous Page
+        </button>
+
+        <div class="reader-page-slider-group">
+          <input type="range" class="reader-page-range" id="readerPageSlider" min="1" max="4" value="1" oninput="onReaderSliderChange(this.value)">
+          <span class="reader-page-indicator" id="readerPageIndicator">Page 1 / 4</span>
+        </div>
+
+        <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="turnRealBookPage(1)">
+          Next Page ›
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Add Custom Book Page Modal -->
+  <div class="modal-overlay" id="addCustomPageModal" onclick="handleAddPageOverlayClick(event)">
+    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">➕ नया बुक पेज जोड़ें (Add Book Page)</h3>
+        <button class="modal-close" onclick="closeAddCustomPageModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:0.9rem;">
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">
+          Aap book ke photo se dekh kar ya book ka text type karke naya page add kar sakte hain:
+        </p>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Book Select Karein:</label>
+            <select id="customPageBookSelect" class="form-control">
+              <!-- Populated with books -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Language (भाषा):</label>
+            <select id="customPageLangSelect" class="form-control">
+              <option value="hindi">हिंदी (Hindi)</option>
+              <option value="hinglish">Hinglish (हिंग्लिश)</option>
+              <option value="english">English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Page Number:</label>
+            <input type="number" id="customPageNoInput" class="form-control" min="1" value="5">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Page Heading / Chapter (Optional):</label>
+            <input type="text" id="customPageHeadingInput" class="form-control" placeholder="e.g. अध्याय 1: ऑटोपायलट मोड">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Page Content (Text ya Paragraphs):</label>
+            <button type="button" class="btn btn-sm" onclick="openOcrScanner('customPageContentInput')" style="color:#6366f1; border-color:rgba(99,102,241,0.3); font-size:0.75rem;">
+              📸 Photo se OCR Scan
+            </button>
+          </div>
+          <textarea id="customPageContentInput" class="form-control" style="min-height:160px; font-size:0.9rem; line-height:1.5;" placeholder="Type or paste the page text here..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn" onclick="closeAddCustomPageModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveCustomBookPage()">💾 Save Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
        FEATURE: 3D REAL PAGES DICTIONARY BOOK (A-Z ENGLISH-HINDI FOCUS LEXICON)
        ========================================================================== -->
   <div id="dictionaryBookModalOverlay" class="dictionary-modal-overlay" onclick="handleDictOverlayClick(event)">
@@ -1819,6 +2064,7 @@
   <script src="jspdf.plugin.autotable.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js'"></script>
   <script src="tesseract.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js'"></script>
   <script src="dictionary-data.js?v=3.8.0"></script>
+  <script src="book-pages-data.js?v=3.8.0"></script>
   <script src="books-data.js?v=3.8.0"></script>
   <script src="app.js?v=3.8.0"></script>
 </body>

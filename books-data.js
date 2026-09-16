@@ -25,10 +25,16 @@ const DEFAULT_BOOKS = [
     "start_date": "2026-08-21",
     "end_date": "2026-09-06",
     "count_days": 16,
-    "rating": "",
+    "rating": "5",
     "category": "Focus & Concentration",
-    "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "takeaway": "कम प्रयास में अधिक सफलता कैसे प्राप्त करें। ध्यान की उत्पादकता: हायपरफ़ोकस (एक काम पर गहरा ध्यान) और स्कैटरफ़ोकस (क्रिएटिव सोच और रिचार्ज)।",
+    "availability": "AVAILABLE",
+    "price": 350,
+    "isbn": "978-93-5543-300-8",
+    "cover_image": "hyperfocus_cover.jpg",
+    "back_cover": "hyperfocus_back.jpg",
+    "total_pages": 240,
+    "current_page": 4
   },
   {
     "no": "book 2",
