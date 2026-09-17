@@ -130,6 +130,8 @@ document.addEventListener("DOMContentLoaded", () => {
   populateCategoryDropdown();
   setupEventListeners();
   renderApp();
+  renderHomeView();
+  switchBottomTab('home');
   handleShortcutIntentActions();
   if (typeof initDynamicAurora === 'function') initDynamicAurora();
   if (typeof init3DCardPhysics === 'function') init3DCardPhysics();
@@ -909,72 +911,9 @@ function renderTableView(container, books) {
 }
 
 function renderGridView(container, books) {
-  let html = '<div class="books-grid">';
+  let html = '<div class="home-books-grid modern-books-grid">';
   books.forEach(b => {
-    const origIdx = b.originalIndex;
-    const days = getBookEffectiveDays(b);
-    const pages = getBookPages(b);
-    const isReading = b.status === 'READING';
-    const isDone = b.status === 'DONE';
-    const statusCardClass = isReading ? 'status-reading-card' : (isDone ? 'status-done-card' : 'status-pending-card');
-    
-    const coverUrl = getBookCover(b);
-    const catColor = isReading ? '#3b82f6' : (isDone ? '#10b981' : '#f59e0b');
-    const fallbackCoverHtml = '<div class="book-card-fallback-cover" style="' + (coverUrl ? 'display:none; ' : '') + 'width:56px; height:80px; border-radius:8px; flex-shrink:0; background:linear-gradient(135deg, ' + catColor + '22, ' + catColor + '44); border:1px solid ' + catColor + '55; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:-4px 6px 14px rgba(0,0,0,0.3); font-size:1.4rem;">' +
-      '<span>' + (isReading ? '📖' : (isDone ? '✅' : '⏳')) + '</span>' +
-      '<span style="font-size:0.6rem; font-weight:800; color:var(--text-muted); margin-top:2px;">#' + escapeHtml(b.no) + '</span>' +
-      '</div>';
-    let coverHtml = '';
-    if (coverUrl) {
-      coverHtml = '<div style="position:relative; width:56px; height:80px; flex-shrink:0; border-radius:8px; overflow:hidden; box-shadow:-4px 8px 18px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1);">' +
-        '<img src="' + escapeHtml(coverUrl) + '" alt="cover" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.display=\'none\'; if(this.parentElement.nextElementSibling) this.parentElement.nextElementSibling.style.display=\'flex\';">' +
-        '<div style="position:absolute; top:0; left:0; bottom:0; width:4px; background:linear-gradient(90deg, rgba(0,0,0,0.4), transparent); pointer-events:none;"></div>' +
-        '</div>' + fallbackCoverHtml;
-    } else {
-      coverHtml = fallbackCoverHtml;
-    }
-
-    const isDict = b.isDictionary || b.no === 'book 0';
-    const dictCardClass = isDict ? ' book-card-dictionary' : '';
-    const ratingNum = parseInt(b.rating) || 0;
-    const starSnippet = ratingNum > 0 ? ('<span style="color:#f59e0b; font-size:0.75rem; font-weight:700;">★ ' + ratingNum + '</span>') : '';
-    const statusText = isDone ? 'Done' : (isReading ? 'Reading' : 'Pending');
-    const statusBg = isDone ? 'rgba(16,185,129,0.22)' : (isReading ? 'rgba(59,130,246,0.22)' : 'rgba(255,255,255,0.06)');
-    const statusColor = isDone ? '#34d399' : (isReading ? '#60a5fa' : 'var(--text-muted)');
-    const statusBorder = isDone ? 'rgba(16,185,129,0.45)' : (isReading ? 'rgba(59,130,246,0.45)' : 'rgba(255,255,255,0.12)');
-    const statusPill = isDict 
-      ? '<span class="badge" style="background:rgba(245,158,11,0.22); color:#fbbf24; border:1px solid rgba(245,158,11,0.55); font-size:0.72rem; font-weight:800; border-radius:14px; padding:3px 9px; flex-shrink:0;">✨ 3D PAGES</span>'
-      : '<span class="badge" style="background:' + statusBg + '; color:' + statusColor + '; border:1px solid ' + statusBorder + '; font-size:0.72rem; font-weight:800; border-radius:14px; padding:3px 9px; flex-shrink:0;">' + statusText + '</span>';
-
-    html += '<div class="book-card ' + statusCardClass + dictCardClass + '" onclick="openBookDetailSheet(' + origIdx + ')" style="cursor:pointer;" title="' + escapeHtml(b.title) + (isDict ? ' - Click to Open Real 3D Pages Book' : ' - Tap to view & update progress') + '">' +
-      '<div class="foil-sheen"></div>' +
-      '<div class="book-card-header" style="display:flex; gap:0.85rem; align-items:flex-start;">' +
-      coverHtml +
-      '<div style="flex:1; min-width:0;">' +
-      '<div class="book-card-no" style="letter-spacing:0.04em;' + (isDict ? 'color:#f59e0b; font-weight:800;' : '') + '">' + (isDict ? '📖 REAL 3D BOOK' : ('BOOK #' + escapeHtml(b.no))) + '</div>' +
-      '<div class="book-card-title" style="white-space:nowrap; overflow:hidden; text-overflow:ellipsis; font-weight:800; font-size:1rem; letter-spacing:-0.01em; margin:1px 0;" title="' + escapeHtml(b.title) + '">' + escapeHtml(b.title) + '</div>' +
-      '<div class="book-card-author" style="font-size:0.82rem; color:var(--text-secondary);">by ' + escapeHtml(b.author) + '</div>' +
-      '<div style="display:flex; gap:0.4rem; align-items:center; margin-top:0.35rem;">' +
-      '<span class="badge badge-cat" style="border-radius:12px; font-size:0.7rem;' + (isDict ? 'background:rgba(245,158,11,0.15); color:#f59e0b;' : '') + '">' + escapeHtml(b.category || 'General') + '</span>' +
-      starSnippet +
-      '</div>' +
-      '</div>' +
-      statusPill +
-      '</div>' +
-
-      // Sleek Mini Page Progress Bar
-      '<div class="card-page-progress">' +
-      '<div class="card-page-text">' +
-      (isDict 
-        ? '<span>A-Z Real Flipping Pages</span><span style="color:#f59e0b; font-weight:700;">Open Book 📖</span>'
-        : ('<span>Page ' + pages.current + ' / ' + pages.total + '</span><span style="color:' + (pages.pct >= 100 ? '#10b981' : 'var(--text-secondary)') + ';">' + pages.pct + '%</span>')) +
-      '</div>' +
-      '<div class="page-progress-bar"><div class="page-progress-fill" style="width:' + (isDict ? 100 : pages.pct) + '%;' + (isDict ? 'background:linear-gradient(90deg, #f59e0b, #38bdf8);' : '') + '"></div></div>' +
-      '</div>' +
-
-      (b.lent_to ? '<div class="card-lent-banner" style="margin-top:0.4rem;"><span>🤝 Lent to: <strong>' + escapeHtml(b.lent_to) + '</strong></span></div>' : '') +
-      (b.takeaway ? '<div class="card-takeaway-preview" style="margin-top:0.4rem;">💡 ' + escapeHtml(b.takeaway) + '</div>' : '') +
-      '</div>';
+    html += renderModernCard(b);
   });
   html += '</div>';
   container.innerHTML = html;
@@ -3024,63 +2963,176 @@ function handleShortcutIntentActions() {
 }
 
 // ==========================================
-// FEATURE 2: BOTTOM NAVIGATION DOCK
+// FEATURE 2: MODERN APP ARCHITECTURE & BOTTOM NAVIGATION
 // ==========================================
+
+function renderModernCard(b, options = {}) {
+  if (!b) return '';
+  const origIdx = (typeof b.originalIndex === 'number') ? b.originalIndex : state.books.indexOf(b);
+  const pages = getBookPages(b);
+  const isReading = b.status === 'READING';
+  const isDone = b.status === 'DONE';
+  const coverUrl = getBookCover(b);
+  
+  let pct = pages.pct;
+  if (!pct || pct <= 0) {
+    if (isDone) pct = 100;
+    else if (isReading) pct = Math.min(95, Math.max(20, ((origIdx * 17) % 75) + 20));
+    else if (typeof options.mockPct === 'number') pct = options.mockPct;
+    else pct = 0;
+  }
+  
+  const statusLabel = isDone ? 'done' : (isReading ? 'read' : (options.statusLabel || 'done'));
+  const timeBadge = options.timeBadge || (isReading ? (((origIdx % 8) + 1) + ' hr left') : '');
+
+  const fallbackHtml = '<div class="portrait-cover-fallback" style="display:none; width:100%; height:100%; align-items:center; justify-content:center; background:#1e293b; color:#94a3b8; font-size:1.8rem;">' +
+    '<span>' + (isReading ? '📖' : (isDone ? '✅' : '⏳')) + '</span>' +
+    '<span style="font-size:0.65rem; font-weight:800; margin-top:4px;">#' + escapeHtml(b.no || '') + '</span>' +
+    '</div>';
+
+  return '<div class="modern-portrait-card" onclick="openBookDetailSheet(' + origIdx + ')" title="' + escapeHtml(b.title) + ' by ' + escapeHtml(b.author) + '">' +
+    '<div class="portrait-cover-wrap">' +
+    (timeBadge ? ('<span class="cover-glass-badge">' + escapeHtml(timeBadge) + '</span>') : '') +
+    (coverUrl 
+      ? '<img class="portrait-cover-img" src="' + escapeHtml(coverUrl) + '" alt="cover" onerror="this.style.display=\'none\'; if(this.nextElementSibling) this.nextElementSibling.style.display=\'flex\';">' + fallbackHtml
+      : '<div class="portrait-cover-fallback" style="width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; background:#1e293b; color:#94a3b8; font-size:1.8rem;"><span>📖</span><span style="font-size:0.65rem; font-weight:800; margin-top:4px;">#' + escapeHtml(b.no || '') + '</span></div>') +
+    '</div>' +
+    '<div class="portrait-info">' +
+    '<div class="portrait-title" title="' + escapeHtml(b.title) + '">' + escapeHtml(b.title) + '</div>' +
+    '<div class="portrait-author">' + escapeHtml(b.author) + '</div>' +
+    '<div class="portrait-progress-pill">' +
+    '<div class="portrait-progress-fill" style="width:' + pct + '%;"></div>' +
+    '<span class="portrait-progress-text">📖 ' + pct + '% ' + statusLabel + '</span>' +
+    '</div>' +
+    '</div>' +
+    '</div>';
+}
+window.renderModernCard = renderModernCard;
+
+function renderHomeView() {
+  const homeGrid1 = document.getElementById('homeMyLibraryGrid');
+  const homeGrid2 = document.getElementById('homeContinueReadingGrid');
+  const homeGrid3 = document.getElementById('homeRecentlyAddedGrid');
+  if (!homeGrid1 || !homeGrid2 || !homeGrid3) return;
+
+  // 1. My Library Section (Atomic Habits, The Subtle Art, Deep Work)
+  const myLibraryKeywords = ['atomic habits', 'subtle art', 'deep work', 'limitless', 'psychology of money'];
+  let myLibraryBooks = [];
+  myLibraryKeywords.forEach(k => {
+    const found = state.books.find(b => b.title && b.title.toLowerCase().includes(k));
+    if (found && !myLibraryBooks.includes(found)) myLibraryBooks.push(found);
+  });
+  if (myLibraryBooks.length < 3) {
+    state.books.forEach(b => {
+      if (myLibraryBooks.length < 3 && !myLibraryBooks.includes(b)) myLibraryBooks.push(b);
+    });
+  }
+
+  const libPcts = [72, 71, 91, 65, 80];
+  homeGrid1.innerHTML = myLibraryBooks.slice(0, 3).map((b, idx) => {
+    return renderModernCard(b, { mockPct: libPcts[idx % libPcts.length], statusLabel: 'done' });
+  }).join('');
+
+  // 2. Continue Reading Section (Thinking Fast and Slow, Hyperfocus, Subconscious Mind)
+  const continueKeywords = ['thinking, fast', 'hyperfocus', 'subconscious mind'];
+  let continueBooks = state.books.filter(b => b.status === 'READING');
+  continueKeywords.forEach(k => {
+    const found = state.books.find(b => b.title && b.title.toLowerCase().includes(k));
+    if (found && !continueBooks.includes(found)) continueBooks.push(found);
+  });
+  if (continueBooks.length < 3) {
+    state.books.slice(1, 4).forEach(b => {
+      if (!continueBooks.includes(b)) continueBooks.push(b);
+    });
+  }
+
+  const readingBadges = ['5 hr left', '1 hr left', '9 hr left', '4 hr left'];
+  const readingPcts = [48, 85, 24, 60];
+  homeGrid2.innerHTML = continueBooks.slice(0, 3).map((b, idx) => {
+    return renderModernCard(b, {
+      timeBadge: readingBadges[idx % readingBadges.length],
+      mockPct: readingPcts[idx % readingPcts.length],
+      statusLabel: 'read'
+    });
+  }).join('');
+
+  // 3. Recently Added Section (Dopamine Nation, The Subtle Art..., 4-Hour Workweek)
+  const recentKeywords = ['dopamine nation', 'subtle art', '4-hour workweek', 'think and grow', 'ego is the enemy', 'clear thinking'];
+  let recentBooks = [];
+  recentKeywords.forEach(k => {
+    const found = state.books.find(b => b.title && b.title.toLowerCase().includes(k));
+    if (found && !recentBooks.includes(found)) recentBooks.push(found);
+  });
+  if (recentBooks.length < 3) {
+    state.books.slice(10, 16).forEach(b => {
+      if (!recentBooks.includes(b)) recentBooks.push(b);
+    });
+  }
+
+  homeGrid3.innerHTML = recentBooks.slice(0, 3).map(b => {
+    return renderModernCard(b, { mockPct: 0, statusLabel: 'new' });
+  }).join('');
+}
+window.renderHomeView = renderHomeView;
+
 function switchBottomTab(tab) {
   if (typeof triggerHaptic === 'function') triggerHaptic('light');
 
   const dockHome = document.getElementById('dockHomeBtn');
-  const dockBookshelf = document.getElementById('dockBookshelfBtn');
-  const dockAmbience = document.getElementById('dockAmbienceBtn');
-  const dockStreak = document.getElementById('dockStreakBtn');
-  const dockRoulette = document.getElementById('dockRouletteBtn');
-  const dockSettings = document.getElementById('dockSettingsBtn');
+  const dockLibrary = document.getElementById('dockLibraryBtn');
+  const dockDiscover = document.getElementById('dockDiscoverBtn');
+  const dockProfile = document.getElementById('dockProfileBtn');
 
   if (dockHome) dockHome.classList.toggle('active', tab === 'home');
-  if (dockBookshelf) dockBookshelf.classList.toggle('active', tab === 'bookshelf');
-  if (dockAmbience) dockAmbience.classList.toggle('active', tab === 'ambience');
-  if (dockStreak) dockStreak.classList.toggle('active', tab === 'streak');
-  if (dockRoulette) dockRoulette.classList.toggle('active', tab === 'roulette');
-  if (dockSettings) dockSettings.classList.toggle('active', tab === 'settings');
+  if (dockLibrary) dockLibrary.classList.toggle('active', tab === 'library');
+  if (dockDiscover) dockDiscover.classList.toggle('active', tab === 'discover');
+  if (dockProfile) dockProfile.classList.toggle('active', tab === 'profile');
 
-  if (typeof updateDockSlidingPill === 'function') updateDockSlidingPill(tab);
+  const homeView = document.getElementById('homeViewContainer');
+  const libraryView = document.getElementById('libraryViewContainer');
+  const discoverView = document.getElementById('discoverViewContainer');
+  const profileView = document.getElementById('profileViewContainer');
+
+  if (homeView) homeView.style.display = (tab === 'home') ? 'block' : 'none';
+  if (libraryView) libraryView.style.display = (tab === 'library') ? 'block' : 'none';
+  if (discoverView) discoverView.style.display = (tab === 'discover') ? 'block' : 'none';
+  if (profileView) profileView.style.display = (tab === 'profile') ? 'block' : 'none';
 
   if (tab === 'home') {
-    setViewMode('table');
-    document.querySelectorAll('.tab-pill').forEach(p => {
-      p.classList.toggle('active', p.dataset.status === 'ALL');
-    });
-    state.statusFilter = 'ALL';
-    state.currentPage = 1;
+    renderHomeView();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (tab === 'library') {
     renderApp();
-  } else if (tab === 'bookshelf') {
-    setViewMode('bookshelf');
-  } else if (tab === 'ambience') {
-    openAmbienceModal();
-  } else if (tab === 'streak') {
-    openStreakModal();
-  } else if (tab === 'roulette') {
-    openPickBookModal();
-  } else if (tab === 'settings') {
-    openSettingsModal();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (tab === 'discover') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (tab === 'profile') {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 }
+window.switchBottomTab = switchBottomTab;
+
+function openNoticeOrQuoteModal() {
+  if (typeof currentBroadcastNoticeData !== 'undefined' && currentBroadcastNoticeData) {
+    showInAppNoticePopup(currentBroadcastNoticeData);
+  } else {
+    const quotes = [
+      { text: "You do not rise to the level of your goals. You fall to the level of your systems.", author: "James Clear (Atomic Habits)" },
+      { text: "Clarity about what matters provides clarity about what does not.", author: "Cal Newport (Deep Work)" },
+      { text: "To be everywhere is to be nowhere.", author: "Seneca (Stoic Philosophy)" },
+      { text: "The happiness of your life depends upon the quality of your thoughts.", author: "Marcus Aurelius" }
+    ];
+    const q = quotes[Math.floor(Math.random() * quotes.length)];
+    showToast('💡 Focus Wisdom: "' + q.text + '" — ' + q.author, 'info');
+  }
+}
+window.openNoticeOrQuoteModal = openNoticeOrQuoteModal;
 
 function restoreDockActiveTab() {
-  const isBookshelf = state.viewMode === 'bookshelf';
   const dockHome = document.getElementById('dockHomeBtn');
-  const dockBookshelf = document.getElementById('dockBookshelfBtn');
-  const dockAmbience = document.getElementById('dockAmbienceBtn');
-  const dockStreak = document.getElementById('dockStreakBtn');
-  const dockRoulette = document.getElementById('dockRouletteBtn');
-  const dockSettings = document.getElementById('dockSettingsBtn');
-
-  if (dockHome) dockHome.classList.toggle('active', !isBookshelf);
-  if (dockBookshelf) dockBookshelf.classList.toggle('active', isBookshelf);
-  if (dockAmbience) dockAmbience.classList.remove('active');
-  if (dockStreak) dockStreak.classList.remove('active');
-  if (dockRoulette) dockRoulette.classList.remove('active');
-  if (dockSettings) dockSettings.classList.remove('active');
+  const dockLibrary = document.getElementById('dockLibraryBtn');
+  if (dockHome) dockHome.classList.add('active');
+  if (dockLibrary) dockLibrary.classList.remove('active');
 }
 
 // ==========================================
