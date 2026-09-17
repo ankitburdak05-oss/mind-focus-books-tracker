@@ -1,3 +1,4 @@
+const APP_VERSION = '3.9.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -139,6 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof initFlashcardTrainerEngine === 'function') initFlashcardTrainerEngine();
   if (typeof initLiveHelpDeskEngine === 'function') initLiveHelpDeskEngine();
   if (typeof initMobileDevToolsEngine === 'function') initMobileDevToolsEngine();
+  if (typeof cleanupCorruptedCustomPages === 'function') cleanupCorruptedCustomPages();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -6519,7 +6521,9 @@ const readerState = {
   lang: 'hindi', // 'hindi' | 'hinglish' | 'english'
   currentPage: 1,
   theme: 'sepia',
-  fontSizePct: 100
+  fontSizePct: 100,
+  spreadMode: 'spread', // 'spread' | 'single'
+  currentEditingPageNo: null
 };
 
 function openLanguageSelectModal(origIdx) {
@@ -6553,6 +6557,16 @@ function openLanguageSelectModal(origIdx) {
     const price = b.price || (isHyper ? 350 : 0);
     isbnRowEl.innerHTML = '<span>ISBN: <strong style="color:var(--text-primary);">' + escapeHtml(isbn) + '</strong></span><span>• Price: <strong style="color:#10b981;">₹' + price + '</strong></span>';
   }
+
+  // Reset Auto-OCR dropzone in language select modal
+  const langOcrPrompt = document.getElementById('langModalOcrPrompt');
+  const langOcrScan = document.getElementById('langModalOcrScanning');
+  const langOcrSuccess = document.getElementById('langModalOcrSuccess');
+  const langOcrInput = document.getElementById('langModalPhotoInput');
+  if (langOcrPrompt) langOcrPrompt.style.display = 'block';
+  if (langOcrScan) langOcrScan.style.display = 'none';
+  if (langOcrSuccess) langOcrSuccess.style.display = 'none';
+  if (langOcrInput) langOcrInput.value = '';
 
   // Count available pages per language
   if (typeof getBookPagesData === 'function') {
@@ -6660,18 +6674,46 @@ function switchReaderLanguage(lang) {
   showToast('Switched to ' + (langNames[lang] || lang), 'info');
 }
 
+function toggleReaderSpreadMode() {
+  readerState.spreadMode = (readerState.spreadMode === 'spread') ? 'single' : 'spread';
+  const btn = document.getElementById('readerSpreadToggleBtn');
+  const bookEl = document.getElementById('realBookSpread');
+  if (btn) {
+    btn.innerText = readerState.spreadMode === 'spread' ? '📖 Spread' : '📄 Single';
+  }
+  if (bookEl) {
+    bookEl.classList.toggle('single-page-mode', readerState.spreadMode === 'single');
+  }
+  playPaperTurnAudio();
+  renderRealBookPages();
+  showToast(readerState.spreadMode === 'spread' ? 'Spread view (2 Pages)' : 'Single page view (1 Page)', 'info');
+}
+
 function turnRealBookPage(delta) {
   const b = state.books[readerState.activeBookIdx];
   const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
   const totalPages = (data && data.pages && data.pages.length) ? data.pages.length : 1;
 
   const isMobile = window.innerWidth <= 768;
-  const isDualSpread = !isMobile && totalPages > 1;
+  const isDualSpread = !isMobile && readerState.spreadMode === 'spread' && totalPages > 1;
 
-  const targetPage = readerState.currentPage + delta;
-  if (targetPage < 1) return;
-  if (isDualSpread && targetPage + 1 > totalPages && delta > 0) return;
-  if (!isDualSpread && targetPage > totalPages) return;
+  // In dual spread mode, step by 2 pages so Spread (1,2) flips to Spread (3,4) without repeating Page 2!
+  const step = isDualSpread ? 2 : 1;
+  let targetPage = readerState.currentPage + (delta * step);
+
+  if (isDualSpread && targetPage % 2 === 0) {
+    // Keep spreads starting on odd pages (1, 3, 5...)
+    targetPage = Math.max(1, targetPage - 1);
+  }
+
+  if (delta < 0 && targetPage < 1) {
+    if (readerState.currentPage === 1) return;
+    targetPage = 1;
+  }
+  if (delta > 0 && targetPage > totalPages) {
+    return;
+  }
+  if (targetPage < 1) targetPage = 1;
 
   readerState.currentPage = targetPage;
   playPaperTurnAudio();
@@ -6746,6 +6788,12 @@ function renderRealBookPages() {
     badge.innerText = '📖 ' + (readerState.lang.toUpperCase()) + ' EDITION';
   }
 
+  // Spread Mode button text
+  const spreadToggleBtn = document.getElementById('readerSpreadToggleBtn');
+  if (spreadToggleBtn) {
+    spreadToggleBtn.innerText = readerState.spreadMode === 'spread' ? '📖 Spread' : '📄 Single';
+  }
+
   // Slider & indicator
   const slider = document.getElementById('readerPageSlider');
   if (slider) {
@@ -6755,7 +6803,12 @@ function renderRealBookPages() {
   }
 
   const isMobile = window.innerWidth <= 768;
-  const isDualSpread = !isMobile && totalPages > 1;
+  const isDualSpread = !isMobile && (readerState.spreadMode === 'spread') && totalPages > 1;
+
+  const spreadEl = document.getElementById('realBookSpread');
+  if (spreadEl) {
+    spreadEl.classList.toggle('single-page-mode', !isDualSpread);
+  }
 
   const prevBtn = document.getElementById('readerPrevPageBtn');
   const nextBtn = document.getElementById('readerNextPageBtn');
@@ -6766,6 +6819,8 @@ function renderRealBookPages() {
   const rightSheet = document.getElementById('pageInnerRight');
   const leftFooter = document.getElementById('pageFooterLeft');
   const rightFooter = document.getElementById('pageFooterRight');
+  const actionsLeft = document.getElementById('pageActionsLeft');
+  const actionsRight = document.getElementById('pageActionsRight');
   const indicator = document.getElementById('readerPageIndicator');
 
   const fontStyle = (readerState.fontSizePct / 100) + 'rem';
@@ -6786,17 +6841,29 @@ function renderRealBookPages() {
       '</div>';
     if (rightSheet) rightSheet.innerHTML = placeholder;
     if (leftSheet) leftSheet.innerHTML = placeholder;
+    if (leftFooter) leftFooter.innerText = '';
+    if (rightFooter) rightFooter.innerText = '';
+    if (actionsLeft) actionsLeft.style.display = 'none';
+    if (actionsRight) actionsRight.style.display = 'none';
     if (indicator) indicator.innerText = 'Page 1 / 1';
     return;
   }
 
-  if (isMobile) {
-    // Single page on mobile
+  if (!isDualSpread) {
+    // Single page (mobile or single-page view on desktop)
     const currPageObj = pages[readerState.currentPage - 1];
     if (rightSheet && currPageObj) {
       rightSheet.innerHTML = currPageObj.content || '';
     }
-    if (rightFooter) rightFooter.innerText = 'Page ' + readerState.currentPage + ' of ' + totalPages;
+    if (rightFooter && currPageObj) {
+      rightFooter.innerText = 'Page ' + currPageObj.pageNo + ' of ' + totalPages;
+    }
+    if (actionsRight) {
+      actionsRight.style.display = 'inline-flex';
+    }
+    if (actionsLeft) {
+      actionsLeft.style.display = 'none';
+    }
     if (indicator) indicator.innerText = 'Page ' + readerState.currentPage + ' / ' + totalPages;
   } else {
     // Dual spread on Desktop
@@ -6806,12 +6873,18 @@ function renderRealBookPages() {
     if (leftSheet && leftPageObj) {
       leftSheet.innerHTML = leftPageObj.content || '';
     }
-    if (leftFooter) leftFooter.innerText = 'Page ' + readerState.currentPage;
+    if (leftFooter && leftPageObj) {
+      leftFooter.innerText = 'Page ' + leftPageObj.pageNo;
+    }
+    if (actionsLeft) {
+      actionsLeft.style.display = leftPageObj ? 'inline-flex' : 'none';
+    }
 
     if (rightSheet) {
       if (rightPageObj) {
         rightSheet.innerHTML = rightPageObj.content || '';
-        if (rightFooter) rightFooter.innerText = 'Page ' + (readerState.currentPage + 1);
+        if (rightFooter) rightFooter.innerText = 'Page ' + rightPageObj.pageNo;
+        if (actionsRight) actionsRight.style.display = 'inline-flex';
       } else {
         rightSheet.innerHTML = '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:280px; text-align:center; color:var(--text-muted); opacity:0.6;">' +
           '<div style="font-size:2.5rem; margin-bottom:8px;">✦</div>' +
@@ -6819,14 +6892,15 @@ function renderRealBookPages() {
           '<div style="font-size:0.8rem; margin-top:10px;">Click ➕ Add Page to add more pages</div>' +
           '</div>';
         if (rightFooter) rightFooter.innerText = '';
+        if (actionsRight) actionsRight.style.display = 'none';
       }
     }
 
     if (indicator) {
       if (rightPageObj) {
-        indicator.innerText = 'Pages ' + readerState.currentPage + '-' + (readerState.currentPage + 1) + ' / ' + totalPages;
-      } else {
-        indicator.innerText = 'Page ' + readerState.currentPage + ' / ' + totalPages;
+        indicator.innerText = 'Pages ' + leftPageObj.pageNo + '-' + rightPageObj.pageNo + ' / ' + totalPages;
+      } else if (leftPageObj) {
+        indicator.innerText = 'Page ' + leftPageObj.pageNo + ' / ' + totalPages;
       }
     }
   }
@@ -7159,7 +7233,7 @@ function saveCustomBookPage() {
     content: formattedContent
   };
 
-  // Persist to localStorage
+  // Persist to localStorage with deduplication
   try {
     const storeKey = 'mindfocus_custom_book_pages';
     let store = {};
@@ -7169,9 +7243,21 @@ function saveCustomBookPage() {
     }
     const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
     if (!store[bookTitleKey]) store[bookTitleKey] = {};
-    if (!store[bookTitleKey][lang]) store[bookTitleKey][lang] = [];
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
 
-    store[bookTitleKey][lang].push(newPage);
+    const existingIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === pageNo);
+    if (existingIdx >= 0) {
+      store[bookTitleKey][lang][existingIdx] = newPage;
+    } else {
+      store[bookTitleKey][lang].push(newPage);
+    }
+
+    // Remove from deleted list if present
+    const delKey = lang + '_deleted';
+    if (Array.isArray(store[bookTitleKey][delKey])) {
+      store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== pageNo);
+    }
+
     localStorage.setItem(storeKey, JSON.stringify(store));
   } catch (e) {
     console.error('Error saving custom book page:', e);
@@ -7187,6 +7273,592 @@ function saveCustomBookPage() {
     renderRealBookPages();
   }
 }
+
+// =========================================================================
+// PER-PAGE EDIT & DELETE CONTROLLER
+// =========================================================================
+function openEditPageModalForCurrent(side) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const pages = (data && data.pages) ? data.pages : [];
+  const isMobile = window.innerWidth <= 768;
+  const isSingle = isMobile || (readerState.spreadMode === 'single');
+
+  let targetPageNo = 1;
+  if (isSingle) {
+    targetPageNo = readerState.currentPage;
+  } else {
+    targetPageNo = (side === 'left') ? readerState.currentPage : (readerState.currentPage + 1);
+  }
+
+  // Verify page exists
+  const exists = pages.some(p => p.pageNo === targetPageNo);
+  if (!exists) {
+    showToast('Page ' + targetPageNo + ' edit karne ke liye uplabdh nahi hai.', 'warning');
+    return;
+  }
+
+  openEditPageModal(targetPageNo);
+}
+
+function deletePageForCurrent(side) {
+  const isMobile = window.innerWidth <= 768;
+  const isSingle = isMobile || (readerState.spreadMode === 'single');
+
+  let targetPageNo = 1;
+  if (isSingle) {
+    targetPageNo = readerState.currentPage;
+  } else {
+    targetPageNo = (side === 'left') ? readerState.currentPage : (readerState.currentPage + 1);
+  }
+
+  deleteBookPage(targetPageNo);
+}
+
+function openEditPageModal(pageNo) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const pages = (data && data.pages) ? data.pages : [];
+  const pageObj = pages.find(p => p.pageNo === pageNo);
+
+  readerState.currentEditingPageNo = pageNo;
+
+  const modalTitle = document.getElementById('editPageModalTitle');
+  if (modalTitle) {
+    modalTitle.innerText = `पेज ${pageNo} एडिट करें (${readerState.lang.toUpperCase()})`;
+  }
+
+  const noInput = document.getElementById('editPageNoInput');
+  if (noInput) noInput.value = pageNo;
+
+  const langInput = document.getElementById('editPageLangInput');
+  if (langInput) langInput.value = readerState.lang.toUpperCase();
+
+  const headingInput = document.getElementById('editPageHeadingInput');
+  if (headingInput) headingInput.value = (pageObj && pageObj.heading) ? pageObj.heading : ('Page ' + pageNo);
+
+  const contentInput = document.getElementById('editPageContentInput');
+  if (contentInput) {
+    let cleanText = '';
+    if (pageObj && pageObj.content) {
+      cleanText = pageObj.content
+        .replace(/<div class="reader-page-header">[\s\S]*?<\/div>/gi, '')
+        .replace(/<div class="reader-praise-block">/gi, '')
+        .replace(/<\/div>/gi, '')
+        .replace(/<p[^>]*>/gi, '')
+        .replace(/<\/p>/gi, '\n\n')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]+>/g, '')
+        .trim();
+      if (!cleanText) cleanText = pageObj.content;
+    }
+    contentInput.value = cleanText;
+  }
+
+  // Reset OCR dropzone in edit modal
+  const promptEl = document.getElementById('editOcrDropzonePrompt');
+  const scanEl = document.getElementById('editOcrScanningState');
+  const laserEl = document.getElementById('editOcrLaserScanLine');
+  const photoInput = document.getElementById('editPagePhotoInput');
+  if (photoInput) photoInput.value = '';
+  if (promptEl) promptEl.style.display = 'block';
+  if (scanEl) scanEl.style.display = 'none';
+  if (laserEl) laserEl.style.display = 'none';
+
+  const modal = document.getElementById('editBookPageModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeEditBookPageModal() {
+  const modal = document.getElementById('editBookPageModal');
+  if (modal) modal.classList.remove('active');
+  readerState.currentEditingPageNo = null;
+}
+
+function handleEditPageOverlayClick(event) {
+  if (event.target.id === 'editBookPageModal') {
+    closeEditBookPageModal();
+  }
+}
+
+function saveEditedBookPage() {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const pageNo = parseInt(document.getElementById('editPageNoInput').value) || readerState.currentEditingPageNo || 1;
+  const heading = document.getElementById('editPageHeadingInput').value.trim();
+  const rawContent = document.getElementById('editPageContentInput').value.trim();
+
+  if (!rawContent) {
+    alert('Kripya page ke liye kuch text likhein ya photo scan karein!');
+    return;
+  }
+
+  let formattedContent = rawContent;
+  if (!rawContent.includes('<p>') && !rawContent.includes('<div>')) {
+    const paragraphs = rawContent.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    formattedContent = (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+      paragraphs.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+  }
+
+  const updatedPage = {
+    pageNo: pageNo,
+    type: 'content',
+    heading: heading || ('Page ' + pageNo),
+    content: formattedContent
+  };
+
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const raw = localStorage.getItem(storeKey);
+    if (raw) store = JSON.parse(raw);
+
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    const lang = readerState.lang || 'hindi';
+
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+
+    const existingIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === pageNo);
+    if (existingIdx >= 0) {
+      store[bookTitleKey][lang][existingIdx] = updatedPage;
+    } else {
+      store[bookTitleKey][lang].push(updatedPage);
+    }
+
+    const delKey = lang + '_deleted';
+    if (Array.isArray(store[bookTitleKey][delKey])) {
+      store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== pageNo);
+    }
+
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error saving edited page:', e);
+  }
+
+  closeEditBookPageModal();
+  showToast('Page ' + pageNo + ' safaltapoorvak update ho gaya! 💾', 'success');
+  renderRealBookPages();
+}
+
+function deleteBookPage(pageNo) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  if (!confirm('Kya aap sach me Page ' + pageNo + ' delete karna chahte hain?')) {
+    return;
+  }
+
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const raw = localStorage.getItem(storeKey);
+    if (raw) store = JSON.parse(raw);
+
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    const lang = readerState.lang || 'hindi';
+
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+
+    // Remove from custom additions
+    store[bookTitleKey][lang] = store[bookTitleKey][lang].filter(p => p.pageNo !== pageNo);
+
+    // Add to deleted list to hide base pages
+    const delKey = lang + '_deleted';
+    if (!Array.isArray(store[bookTitleKey][delKey])) store[bookTitleKey][delKey] = [];
+    if (!store[bookTitleKey][delKey].includes(pageNo)) {
+      store[bookTitleKey][delKey].push(pageNo);
+    }
+
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error deleting book page:', e);
+  }
+
+  closeEditBookPageModal();
+  showToast('Page ' + pageNo + ' delete kar diya gaya! 🗑️', 'info');
+
+  if (readerState.currentPage > 1) {
+    readerState.currentPage = Math.max(1, readerState.currentPage - 1);
+  }
+  renderRealBookPages();
+}
+
+function confirmDeleteCurrentEditPage() {
+  if (readerState.currentEditingPageNo) {
+    deleteBookPage(readerState.currentEditingPageNo);
+  }
+}
+
+function handleEditPagePhotoUpload(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (!file.type.startsWith('image/')) {
+    showToast('Kripya valid photo chunein!', 'warning');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    runEditPageOcr(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function runEditPageOcr(imageSrc) {
+  const promptEl = document.getElementById('editOcrDropzonePrompt');
+  const scanEl = document.getElementById('editOcrScanningState');
+  const laserEl = document.getElementById('editOcrLaserScanLine');
+  const progressText = document.getElementById('editOcrScanProgressText');
+  const progressBar = document.getElementById('editOcrScanProgressBar');
+  const contentInput = document.getElementById('editPageContentInput');
+  const headingInput = document.getElementById('editPageHeadingInput');
+
+  if (promptEl) promptEl.style.display = 'none';
+  if (scanEl) scanEl.style.display = 'block';
+  if (laserEl) laserEl.style.display = 'block';
+  if (progressBar) progressBar.style.width = '20%';
+  if (progressText) progressText.innerText = 'Photo process ho rahi hai...';
+
+  if (typeof Tesseract === 'undefined') {
+    await new Promise(r => setTimeout(r, 1200));
+    if (typeof Tesseract === 'undefined') {
+      if (progressText) progressText.innerText = 'OCR library load nahi ho saki.';
+      return;
+    }
+  }
+
+  preprocessImageForOcr(imageSrc, async function(processedUrl) {
+    let ocrLang = readerState.lang === 'hindi' ? 'hin+eng' : 'eng';
+    try {
+      if (progressBar) progressBar.style.width = '40%';
+      let res = null;
+      try {
+        res = await Tesseract.recognize(processedUrl, ocrLang, {
+          logger: (m) => {
+            if (m && m.progress) {
+              const pct = Math.round(m.progress * 100);
+              if (progressBar) progressBar.style.width = Math.max(25, pct) + '%';
+            }
+          }
+        });
+      } catch (err) {
+        res = await Tesseract.recognize(processedUrl, 'eng');
+      }
+
+      const rawText = (res && res.data && res.data.text) ? res.data.text.trim() : '';
+      if (!rawText) {
+        if (scanEl) scanEl.style.display = 'none';
+        if (laserEl) laserEl.style.display = 'none';
+        if (promptEl) promptEl.style.display = 'block';
+        showToast('Photo me text nahi pehchana gaya.', 'warning');
+        return;
+      }
+
+      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+      if (lines.length > 1 && lines[0].length <= 50 && (!headingInput || !headingInput.value.trim())) {
+        if (headingInput) headingInput.value = lines[0];
+        if (contentInput) contentInput.value = lines.slice(1).join('\n\n');
+      } else {
+        if (contentInput) contentInput.value = lines.join('\n\n');
+      }
+
+      if (scanEl) scanEl.style.display = 'none';
+      if (laserEl) laserEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('Photo se naya text replace ho gaya! ⚡📝', 'success');
+    } catch (err) {
+      console.error('Edit page OCR error:', err);
+      if (scanEl) scanEl.style.display = 'none';
+      if (laserEl) laserEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('OCR scan error: ' + (err.message || 'Error'), 'error');
+    }
+  });
+}
+
+// =========================================================================
+// DEVANAGARI HINDI TO HINGLISH TRANSLITERATION ENGINE
+// =========================================================================
+function convertHindiToHinglish(hindiText) {
+  if (!hindiText || typeof hindiText !== 'string') return '';
+  const vowels = {
+    'अ': 'a', 'आ': 'aa', 'इ': 'i', 'ई': 'ee', 'उ': 'u', 'ऊ': 'oo',
+    'ऋ': 'ri', 'ए': 'e', 'ऐ': 'ai', 'ओ': 'o', 'औ': 'au', 'अं': 'an', 'अः': 'ah'
+  };
+  const matras = {
+    'ा': 'aa', 'ि': 'i', 'ी': 'ee', 'ु': 'u', 'ू': 'oo', 'ृ': 'ri',
+    'े': 'e', 'ै': 'ai', 'ो': 'o', 'ौ': 'au', 'ं': 'n', 'ँ': 'n', 'ः': 'h', '्': ''
+  };
+  const consonants = {
+    'क': 'k', 'ख': 'kh', 'ग': 'g', 'घ': 'gh', 'ङ': 'ng',
+    'च': 'ch', 'छ': 'chh', 'ज': 'j', 'झ': 'jh', 'ञ': 'ny',
+    'ट': 't', 'ठ': 'th', 'ड': 'd', 'ढ': 'dh', 'ण': 'n',
+    'त': 't', 'थ': 'th', 'द': 'd', 'ध': 'dh', 'न': 'n',
+    'प': 'p', 'फ': 'f', 'ब': 'b', 'भ': 'bh', 'म': 'm',
+    'य': 'y', 'र': 'r', 'ल': 'l', 'व': 'v', 'श': 'sh',
+    'ष': 'sh', 'स': 's', 'ह': 'h', 'क़': 'q', 'ख़': 'kh',
+    'ग़': 'gh', 'ज़': 'z', 'ड़': 'd', 'ढ़': 'dh', 'फ़': 'f'
+  };
+
+  let out = '';
+  const chars = Array.from(hindiText);
+  for (let i = 0; i < chars.length; i++) {
+    const ch = chars[i];
+    const next = chars[i + 1];
+
+    if (vowels[ch]) {
+      out += vowels[ch];
+    } else if (consonants[ch]) {
+      const c = consonants[ch];
+      if (next === '्') {
+        out += c;
+        i++;
+      } else if (next && matras[next] !== undefined) {
+        out += c + matras[next];
+        i++;
+      } else {
+        out += c + 'a';
+      }
+    } else if (matras[ch] !== undefined) {
+      out += matras[ch];
+    } else {
+      out += ch;
+    }
+  }
+  return out
+    .replace(/a\b/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// =========================================================================
+// AUTO-SCAN & CONVERT TO ALL 3 LANGUAGES (LANGUAGE MODAL)
+// =========================================================================
+function handleLangModalAutoOcrAll(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (!file.type.startsWith('image/')) {
+    showToast('Kripya valid photo chunein!', 'warning');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    runAutoOcrForAllLanguages(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function runAutoOcrForAllLanguages(imageSrc) {
+  const promptEl = document.getElementById('langModalOcrPrompt');
+  const scanEl = document.getElementById('langModalOcrScanning');
+  const successEl = document.getElementById('langModalOcrSuccess');
+  const successTxt = document.getElementById('langModalOcrSuccessTxt');
+  const statusEl = document.getElementById('langModalOcrStatus');
+  const progressBar = document.getElementById('langModalOcrProgressBar');
+
+  if (promptEl) promptEl.style.display = 'none';
+  if (successEl) successEl.style.display = 'none';
+  if (scanEl) scanEl.style.display = 'block';
+  if (progressBar) progressBar.style.width = '20%';
+  if (statusEl) statusEl.innerText = 'Photo scan ki ja rahi hai...';
+
+  if (typeof Tesseract === 'undefined') {
+    await new Promise(r => setTimeout(r, 1200));
+    if (typeof Tesseract === 'undefined') {
+      if (statusEl) statusEl.innerText = 'OCR library load nahi ho saki.';
+      return;
+    }
+  }
+
+  preprocessImageForOcr(imageSrc, async function(processedUrl) {
+    try {
+      if (progressBar) progressBar.style.width = '40%';
+      if (statusEl) statusEl.innerText = 'Akshar pehchane ja rahe hain (Text Recognition)...';
+
+      let res = null;
+      try {
+        res = await Tesseract.recognize(processedUrl, 'hin+eng', {
+          logger: (m) => {
+            if (m && m.progress) {
+              const pct = Math.round(m.progress * 100);
+              if (progressBar) progressBar.style.width = Math.max(25, pct) + '%';
+            }
+          }
+        });
+      } catch (err) {
+        res = await Tesseract.recognize(processedUrl, 'eng');
+      }
+
+      const rawText = (res && res.data && res.data.text) ? res.data.text.trim() : '';
+      if (!rawText) {
+        if (scanEl) scanEl.style.display = 'none';
+        if (promptEl) promptEl.style.display = 'block';
+        showToast('Photo me koi readable text nahi mila.', 'warning');
+        return;
+      }
+
+      if (progressBar) progressBar.style.width = '80%';
+      if (statusEl) statusEl.innerText = 'Teeno bhashaon (हिंदी + Hinglish + English) mein convert ho raha hai...';
+
+      const hasDevanagari = /[\u0900-\u097F]/.test(rawText);
+      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+
+      let hindiHeading = 'Naya Adhyay';
+      let hindiBody = rawText;
+      let hinglishHeading = 'Naya Adhyay';
+      let hinglishBody = '';
+      let englishHeading = 'New Chapter';
+      let englishBody = '';
+
+      if (hasDevanagari) {
+        if (lines.length > 1 && lines[0].length <= 60) {
+          hindiHeading = lines[0];
+          hindiBody = lines.slice(1).join('\n\n');
+        }
+        hinglishHeading = convertHindiToHinglish(hindiHeading);
+        hinglishBody = convertHindiToHinglish(hindiBody);
+        englishHeading = 'Hyperfocus • Chapter Excerpt';
+        englishBody = 'Transcribed Page (Hindi/Hinglish Original):\n\n' + hinglishBody;
+      } else {
+        if (lines.length > 1 && lines[0].length <= 60) {
+          englishHeading = lines[0];
+          englishBody = lines.slice(1).join('\n\n');
+        } else {
+          englishBody = rawText;
+        }
+        hinglishHeading = englishHeading;
+        hinglishBody = englishBody;
+        hindiHeading = englishHeading;
+        hindiBody = englishBody;
+      }
+
+      const formatHtml = (heading, body) => {
+        const ps = body.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+        return (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+          ps.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+      };
+
+      const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+      const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+
+      // Find highest page count across all languages
+      const curDataHi = (typeof getBookPagesData === 'function') ? getBookPagesData(b, 'hindi') : null;
+      const curPages = (curDataHi && curDataHi.pages) ? curDataHi.pages.length : 2;
+      const newPageNo = curPages + 1;
+
+      const pageHindi = {
+        pageNo: newPageNo,
+        type: 'content',
+        heading: hindiHeading,
+        content: formatHtml(hindiHeading, hindiBody)
+      };
+
+      const pageHinglish = {
+        pageNo: newPageNo,
+        type: 'content',
+        heading: hinglishHeading,
+        content: formatHtml(hinglishHeading, hinglishBody)
+      };
+
+      const pageEnglish = {
+        pageNo: newPageNo,
+        type: 'content',
+        heading: englishHeading,
+        content: formatHtml(englishHeading, englishBody)
+      };
+
+      const storeKey = 'mindfocus_custom_book_pages';
+      let store = {};
+      const raw = localStorage.getItem(storeKey);
+      if (raw) store = JSON.parse(raw);
+      if (!store[bookTitleKey]) store[bookTitleKey] = {};
+
+      ['hindi', 'hinglish', 'english'].forEach(lang => {
+        if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+        const pageData = lang === 'hindi' ? pageHindi : (lang === 'hinglish' ? pageHinglish : pageEnglish);
+        const exIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === newPageNo);
+        if (exIdx >= 0) {
+          store[bookTitleKey][lang][exIdx] = pageData;
+        } else {
+          store[bookTitleKey][lang].push(pageData);
+        }
+
+        const delKey = lang + '_deleted';
+        if (Array.isArray(store[bookTitleKey][delKey])) {
+          store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== newPageNo);
+        }
+      });
+
+      localStorage.setItem(storeKey, JSON.stringify(store));
+
+      // Refresh badges in modal
+      if (typeof getBookPagesData === 'function') {
+        const hiD = getBookPagesData(b, 'hindi');
+        const hingD = getBookPagesData(b, 'hinglish');
+        const engD = getBookPagesData(b, 'english');
+
+        const hiBadge = document.getElementById('langHindiCountBadge');
+        if (hiBadge) hiBadge.innerText = (hiD && hiD.pages ? hiD.pages.length : 0) + ' पृष्ठ';
+        const hingBadge = document.getElementById('langHinglishCountBadge');
+        if (hingBadge) hingBadge.innerText = (hingD && hingD.pages ? hingD.pages.length : 0) + ' Pages';
+        const engBadge = document.getElementById('langEnglishCountBadge');
+        if (engBadge) engBadge.innerText = (engD && engD.pages ? engD.pages.length : 0) + ' Pages';
+      }
+
+      if (progressBar) progressBar.style.width = '100%';
+      if (scanEl) scanEl.style.display = 'none';
+      if (successEl) successEl.style.display = 'flex';
+      if (successTxt) successTxt.innerText = 'Page ' + newPageNo + ' teeno bhashaon (हिंदी + Hinglish + English) mein add ho gaya!';
+
+      showToast('Page ' + newPageNo + ' teeno bhashaon mein safaltapoorvak save ho gaya! ⚡🎉', 'success');
+    } catch (err) {
+      console.error('Auto OCR all languages error:', err);
+      if (scanEl) scanEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('OCR Error: ' + (err.message || 'Error'), 'error');
+    }
+  });
+}
+
+// Cleanup any duplicate entries in localStorage
+function cleanupCorruptedCustomPages() {
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    const raw = localStorage.getItem(storeKey);
+    if (!raw) return;
+    const store = JSON.parse(raw);
+    let modified = false;
+
+    Object.keys(store).forEach(bookKey => {
+      ['hindi', 'hinglish', 'english'].forEach(lang => {
+        if (Array.isArray(store[bookKey][lang])) {
+          const map = new Map();
+          store[bookKey][lang].forEach(p => {
+            if (p && p.pageNo) {
+              map.set(p.pageNo, p);
+            }
+          });
+          if (map.size !== store[bookKey][lang].length) {
+            store[bookKey][lang] = Array.from(map.values()).sort((a, b) => a.pageNo - b.pageNo);
+            modified = true;
+          }
+        }
+      });
+    });
+
+    if (modified) {
+      localStorage.setItem(storeKey, JSON.stringify(store));
+      console.log('Cleaned up duplicate custom book pages from localStorage');
+    }
+  } catch (e) {
+    console.warn('Error during custom pages cleanup:', e);
+  }
+}
+cleanupCorruptedCustomPages();
 
 // =========================================================================
 // BOOK COVER VIEWER (Front & Back Covers)
@@ -7254,6 +7926,7 @@ function switchCoverView(side) {
 }
 
 // Bind to window
+window.APP_VERSION = APP_VERSION;
 window.openLanguageSelectModal = openLanguageSelectModal;
 window.closeLanguageSelectModal = closeLanguageSelectModal;
 window.handleLangSelectOverlayClick = handleLangSelectOverlayClick;
@@ -7263,6 +7936,7 @@ window.closeRealBookReader = closeRealBookReader;
 window.handleReaderOverlayClick = handleReaderOverlayClick;
 window.switchReaderLanguage = switchReaderLanguage;
 window.turnRealBookPage = turnRealBookPage;
+window.toggleReaderSpreadMode = toggleReaderSpreadMode;
 window.onReaderSliderChange = onReaderSliderChange;
 window.adjustReaderFontSize = adjustReaderFontSize;
 window.cycleReaderTheme = cycleReaderTheme;
@@ -7278,6 +7952,20 @@ window.switchCoverView = switchCoverView;
 window.handleCustomPagePhotoUpload = handleCustomPagePhotoUpload;
 window.processCustomPagePhotoFile = processCustomPagePhotoFile;
 window.runAutoPageOcr = runAutoPageOcr;
+window.openEditPageModalForCurrent = openEditPageModalForCurrent;
+window.deletePageForCurrent = deletePageForCurrent;
+window.openEditPageModal = openEditPageModal;
+window.closeEditBookPageModal = closeEditBookPageModal;
+window.handleEditPageOverlayClick = handleEditPageOverlayClick;
+window.saveEditedBookPage = saveEditedBookPage;
+window.deleteBookPage = deleteBookPage;
+window.confirmDeleteCurrentEditPage = confirmDeleteCurrentEditPage;
+window.handleEditPagePhotoUpload = handleEditPagePhotoUpload;
+window.runEditPageOcr = runEditPageOcr;
+window.convertHindiToHinglish = convertHindiToHinglish;
+window.handleLangModalAutoOcrAll = handleLangModalAutoOcrAll;
+window.runAutoOcrForAllLanguages = runAutoOcrForAllLanguages;
+window.cleanupCorruptedCustomPages = cleanupCorruptedCustomPages;
 
 // =========================================================================
 // REMOVED LEGACY FEATURES (Mystery Gift, Flashcards, Live Help Desk)

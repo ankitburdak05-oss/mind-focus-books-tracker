@@ -179,7 +179,7 @@ const BOOK_PAGES_DATA = {
   }
 };
 
-// Helper to look up pages for any book
+// Helper to look up pages for any book (Immutable & Deduplicated)
 function getBookPagesData(bookOrTitle, lang = 'hindi') {
   if (!bookOrTitle) return null;
   const titleStr = (typeof bookOrTitle === 'string' ? bookOrTitle : (bookOrTitle.title || '')).toLowerCase();
@@ -199,33 +199,57 @@ function getBookPagesData(bookOrTitle, lang = 'hindi') {
     }
   }
 
-  // Also check custom localStorage user-added pages
+  const baseTitle = bookEntry ? bookEntry.title : titleStr;
+  const languagesObj = bookEntry ? bookEntry.languages : {};
+  const baseLangData = languagesObj[lang] || languagesObj['hindi'] || Object.values(languagesObj)[0] || { name: lang.toUpperCase(), pages: [] };
+
+  // 1. Start with an immutable copy of base pages
+  const pageMap = new Map();
+  if (baseLangData && Array.isArray(baseLangData.pages)) {
+    baseLangData.pages.forEach(p => {
+      pageMap.set(p.pageNo, { ...p });
+    });
+  }
+
+  // 2. Check localStorage for user-added / edited / deleted pages
   try {
     const customPagesRaw = localStorage.getItem('mindfocus_custom_book_pages');
     if (customPagesRaw) {
       const customStore = JSON.parse(customPagesRaw);
       const matchKey = Object.keys(customStore).find(k => titleStr.includes(k.toLowerCase()) || k.toLowerCase().includes(titleStr));
       if (matchKey && customStore[matchKey]) {
-        if (!bookEntry) {
-          bookEntry = { title: matchKey, languages: {} };
+        const langStore = customStore[matchKey][lang];
+        
+        // Handle deleted pages list
+        const deletedList = customStore[matchKey][lang + '_deleted'] || customStore[matchKey]['deleted'] || [];
+        if (Array.isArray(deletedList)) {
+          deletedList.forEach(delNo => {
+            pageMap.delete(delNo);
+          });
         }
-        // Merge custom pages
-        Object.keys(customStore[matchKey]).forEach(l => {
-          if (!bookEntry.languages[l]) {
-            bookEntry.languages[l] = { name: l.toUpperCase(), pages: [] };
-          }
-          bookEntry.languages[l].pages = (bookEntry.languages[l].pages || []).concat(customStore[matchKey][l]);
-        });
+
+        // Merge / override pages by pageNo (never duplicate!)
+        if (Array.isArray(langStore)) {
+          langStore.forEach(up => {
+            if (up && up.pageNo) {
+              if (deletedList.includes(up.pageNo)) return;
+              pageMap.set(up.pageNo, { ...up });
+            }
+          });
+        }
       }
     }
-  } catch (e) {}
+  } catch (e) {
+    console.error('Error loading custom pages:', e);
+  }
 
-  if (!bookEntry) return null;
-  const langData = bookEntry.languages[lang] || bookEntry.languages['hindi'] || Object.values(bookEntry.languages)[0];
+  // Sort pages strictly by pageNo ascending
+  const finalPages = Array.from(pageMap.values()).sort((a, b) => (a.pageNo || 0) - (b.pageNo || 0));
+
   return {
-    bookInfo: bookEntry,
-    language: langData,
-    pages: (langData && langData.pages) ? langData.pages : []
+    bookInfo: bookEntry || { title: baseTitle, languages: {} },
+    language: { ...baseLangData, pages: finalPages },
+    pages: finalPages
   };
 }
 

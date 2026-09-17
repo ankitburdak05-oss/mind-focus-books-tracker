@@ -8805,6 +8805,83 @@ body.modal-open {
   100% { top: 0%; opacity: 0.8; }
 }
 
+/* Page Footer Toolbar with Edit/Delete Buttons */
+.reader-page-footer-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: auto;
+  position: relative;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 0 0 8px 8px;
+}
+
+[data-reader-theme="dark"] .reader-page-footer-wrap {
+  border-top-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.reader-page-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.reader-page-act-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  line-height: 1;
+}
+
+[data-reader-theme="dark"] .reader-page-act-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+}
+
+.reader-page-act-btn:hover {
+  background: rgba(99, 102, 241, 0.18);
+  border-color: #6366f1;
+  color: #6366f1;
+  transform: translateY(-1px);
+}
+
+.reader-page-act-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  color: #ef4444;
+  transform: translateY(-1px);
+}
+
+/* Single Page Mode on Desktop */
+.real-book-reader-container.single-page-mode .page-sheet-left {
+  display: none !important;
+}
+
+.real-book-reader-container.single-page-mode .reader-spine-divider {
+  display: none !important;
+}
+
+.real-book-reader-container.single-page-mode .page-sheet-right {
+  width: 100% !important;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+
 </style>
 </head>
 <body>
@@ -8930,6 +9007,7 @@ body.modal-open {
           <div class="brand-title">
             <span>MIND & FOCUS BOOKS TRACKER</span>
             <span class="brand-badge">OFFLINE APP</span>
+            <span class="app-version-pill" style="font-size:0.7rem; font-weight:800; background:rgba(99,102,241,0.25); color:#a5b4fc; border:1px solid rgba(99,102,241,0.4); padding:2px 7px; border-radius:6px; margin-left:4px;">v3.9.0</span>
             <span class="vip-crown-badge" id="headerVipBadge" style="display:none;" title="VIP Master Reader Active">👑 VIP</span>
           </div>
           <div class="brand-subtitle">150 Curated Books Reading System • Zero Internet Required</div>
@@ -10507,11 +10585,46 @@ body.modal-open {
           </button>
         </div>
 
+        <!-- FEATURE: INSTANT SCAN & CONVERT TO ALL LANGUAGES -->
+        <div class="lang-all-ocr-card" style="background:linear-gradient(135deg, rgba(99,102,241,0.09), rgba(16,185,129,0.09)); border:1.5px dashed rgba(99,102,241,0.45); border-radius:14px; padding:12px 14px; text-align:center; position:relative; overflow:hidden;">
+          <input type="file" id="langModalPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleLangModalAutoOcrAll(this)">
+          <div id="langModalOcrPrompt" onclick="document.getElementById('langModalPhotoInput').click()" style="cursor:pointer;">
+            <div style="font-size:1.9rem; line-height:1; margin-bottom:4px;">📸 ⚡</div>
+            <div style="font-weight:800; font-size:0.92rem; color:var(--text-primary);">
+              Book Page ki Photo Dalein (Auto-Add to All Languages)
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
+              ⚡ <strong>1-Click: Photo dalte hi हिंदी + Hinglish + English teeno bhashaon mein naya page ban jayega!</strong>
+            </div>
+            <div style="margin-top:8px;">
+              <span class="btn btn-sm btn-primary" style="font-size:0.74rem; font-weight:700; padding:4px 14px; border-radius:20px; pointer-events:none;">
+                📷 Scan &amp; Convert to All 3 Languages
+              </span>
+            </div>
+          </div>
+
+          <!-- Loading / Scanning State -->
+          <div id="langModalOcrScanning" style="display:none; padding:8px 0; text-align:center;">
+            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
+            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="langModalOcrStatus">
+              Photo scan karke teeno bhashaon mein convert ho raha hai...
+            </div>
+            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
+              <div id="langModalOcrProgressBar" style="width:25%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Success Badge -->
+          <div id="langModalOcrSuccess" style="display:none; align-items:center; gap:8px; justify-content:center; padding:4px 0; font-weight:700; color:#10b981; font-size:0.82rem;">
+            <span>✅</span> <span id="langModalOcrSuccessTxt">Teeno bhashaon mein naya page safaltapoorvak add ho gaya!</span>
+          </div>
+        </div>
+
         <!-- Add Custom Pages Button -->
         <div class="lang-custom-add-banner">
           <div>
-            <div style="font-weight:700; font-size:0.82rem; color:var(--text-primary);">📝 और पेज जोड़ना चाहते हैं? (Add Pages)</div>
-            <div style="font-size:0.75rem; color:var(--text-secondary);">Photo se dekh kar ya type karke naye page jod sakte hain</div>
+            <div style="font-weight:700; font-size:0.82rem; color:var(--text-primary);">📝 Single Page Type/Add Karna Hai?</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary);">Keval ek bhasha mein custom page likhein ya jodein</div>
           </div>
           <button type="button" class="btn btn-sm" onclick="openAddCustomPageModal()" style="background:var(--accent-primary); color:#fff; border:none; font-weight:700; border-radius:8px;">
             ➕ Add Page
@@ -10546,6 +10659,8 @@ body.modal-open {
 
         <!-- Right Controls -->
         <div class="reader-top-right">
+          <!-- View Mode Toggle: Dual Spread vs Single Page -->
+          <button type="button" class="reader-btn-sm" id="readerSpreadToggleBtn" onclick="toggleReaderSpreadMode()" title="Toggle View Mode" style="font-weight:700;">📖 Spread</button>
           <!-- View Cover Button -->
           <button type="button" class="reader-btn-sm" onclick="openBookCoverModal()" title="View Book Cover" style="font-weight:700;">📕 Cover</button>
           <!-- Font Size Adjuster -->
@@ -10574,7 +10689,13 @@ body.modal-open {
               <div class="page-inner-sheet" id="pageInnerLeft">
                 <!-- Content rendered dynamically -->
               </div>
-              <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
+              <div class="reader-page-footer-wrap">
+                <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
+                <div class="reader-page-actions" id="pageActionsLeft">
+                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('left')" title="Edit Page">✏️ Edit</button>
+                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('left')" title="Delete Page">🗑️</button>
+                </div>
+              </div>
             </div>
 
             <!-- Center Spine Shadow & Valley -->
@@ -10587,7 +10708,13 @@ body.modal-open {
               <div class="page-inner-sheet" id="pageInnerRight">
                 <!-- Content rendered dynamically -->
               </div>
-              <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+              <div class="reader-page-footer-wrap">
+                <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+                <div class="reader-page-actions" id="pageActionsRight">
+                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('right')" title="Edit Page">✏️ Edit</button>
+                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('right')" title="Delete Page">🗑️</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -10722,7 +10849,82 @@ body.modal-open {
     </div>
   </div>
 
-  <!-- 4. Book Cover Viewer Modal -->
+  <!-- 4. Edit Book Page Modal (with Photo Re-Scan & OCR) -->
+  <div class="modal-overlay" id="editBookPageModal" onclick="handleEditPageOverlayClick(event)">
+    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">✏️</span>
+          <h3 class="modal-title" id="editPageModalTitle">पेज एडिट करें (Edit Page)</h3>
+        </div>
+        <button class="modal-close" onclick="closeEditBookPageModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:0.9rem;">
+        
+        <!-- AUTO-OCR PHOTO RE-SCAN DROPZONE -->
+        <div class="page-ocr-dropzone" id="editPageOcrDropzone" onclick="document.getElementById('editPagePhotoInput').click()">
+          <input type="file" id="editPagePhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleEditPagePhotoUpload(this)">
+          
+          <div id="editOcrLaserScanLine" class="ocr-scan-laser" style="display:none;"></div>
+
+          <div id="editOcrDropzonePrompt">
+            <div style="font-size:1.8rem; line-height:1; margin-bottom:4px;">📸 🔄</div>
+            <div style="font-weight:800; font-size:0.9rem; color:var(--text-primary);">
+              Nayi Photo se Text Badlein (Re-Scan Photo)
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
+              ⚡ <strong>Photo dalte hi naya text automatically text box mein replace ho jayega!</strong>
+            </div>
+          </div>
+
+          <div id="editOcrScanningState" style="display:none; text-align:center; padding:8px 4px;">
+            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
+            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="editOcrScanProgressText">
+              Photo scan ho rahi hai...
+            </div>
+            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
+              <div id="editOcrScanProgressBar" style="width:20%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Page Number:</label>
+            <input type="number" id="editPageNoInput" class="form-control" min="1" readonly style="background:rgba(0,0,0,0.06); opacity:0.85;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Language:</label>
+            <input type="text" id="editPageLangInput" class="form-control" readonly style="background:rgba(0,0,0,0.06); opacity:0.85;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Page Heading / Title:</label>
+          <input type="text" id="editPageHeadingInput" class="form-control" placeholder="Page heading...">
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Page Content (Text ya HTML):</label>
+            <span style="font-size:0.72rem; color:var(--text-muted);">Editable</span>
+          </div>
+          <textarea id="editPageContentInput" class="form-control" style="min-height:180px; font-size:0.9rem; line-height:1.5;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn btn-danger" onclick="confirmDeleteCurrentEditPage()" style="background:#ef4444; color:#fff; border:none; font-weight:700;">
+          🗑️ Delete Page
+        </button>
+        <div style="display:flex; gap:0.5rem;">
+          <button type="button" class="btn" onclick="closeEditBookPageModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="saveEditedBookPage()">💾 Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Book Cover Viewer Modal -->
   <div class="modal-overlay" id="bookCoverViewerModal" onclick="handleCoverViewerOverlayClick(event)">
     <div class="modal-content" style="max-width:460px; text-align:center; padding:1.25rem;" onclick="event.stopPropagation()">
       <div class="modal-header" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border-color);">
@@ -11292,7 +11494,7 @@ const BOOK_PAGES_DATA = {
   }
 };
 
-// Helper to look up pages for any book
+// Helper to look up pages for any book (Immutable & Deduplicated)
 function getBookPagesData(bookOrTitle, lang = 'hindi') {
   if (!bookOrTitle) return null;
   const titleStr = (typeof bookOrTitle === 'string' ? bookOrTitle : (bookOrTitle.title || '')).toLowerCase();
@@ -11312,33 +11514,57 @@ function getBookPagesData(bookOrTitle, lang = 'hindi') {
     }
   }
 
-  // Also check custom localStorage user-added pages
+  const baseTitle = bookEntry ? bookEntry.title : titleStr;
+  const languagesObj = bookEntry ? bookEntry.languages : {};
+  const baseLangData = languagesObj[lang] || languagesObj['hindi'] || Object.values(languagesObj)[0] || { name: lang.toUpperCase(), pages: [] };
+
+  // 1. Start with an immutable copy of base pages
+  const pageMap = new Map();
+  if (baseLangData && Array.isArray(baseLangData.pages)) {
+    baseLangData.pages.forEach(p => {
+      pageMap.set(p.pageNo, { ...p });
+    });
+  }
+
+  // 2. Check localStorage for user-added / edited / deleted pages
   try {
     const customPagesRaw = localStorage.getItem('mindfocus_custom_book_pages');
     if (customPagesRaw) {
       const customStore = JSON.parse(customPagesRaw);
       const matchKey = Object.keys(customStore).find(k => titleStr.includes(k.toLowerCase()) || k.toLowerCase().includes(titleStr));
       if (matchKey && customStore[matchKey]) {
-        if (!bookEntry) {
-          bookEntry = { title: matchKey, languages: {} };
+        const langStore = customStore[matchKey][lang];
+        
+        // Handle deleted pages list
+        const deletedList = customStore[matchKey][lang + '_deleted'] || customStore[matchKey]['deleted'] || [];
+        if (Array.isArray(deletedList)) {
+          deletedList.forEach(delNo => {
+            pageMap.delete(delNo);
+          });
         }
-        // Merge custom pages
-        Object.keys(customStore[matchKey]).forEach(l => {
-          if (!bookEntry.languages[l]) {
-            bookEntry.languages[l] = { name: l.toUpperCase(), pages: [] };
-          }
-          bookEntry.languages[l].pages = (bookEntry.languages[l].pages || []).concat(customStore[matchKey][l]);
-        });
+
+        // Merge / override pages by pageNo (never duplicate!)
+        if (Array.isArray(langStore)) {
+          langStore.forEach(up => {
+            if (up && up.pageNo) {
+              if (deletedList.includes(up.pageNo)) return;
+              pageMap.set(up.pageNo, { ...up });
+            }
+          });
+        }
       }
     }
-  } catch (e) {}
+  } catch (e) {
+    console.error('Error loading custom pages:', e);
+  }
 
-  if (!bookEntry) return null;
-  const langData = bookEntry.languages[lang] || bookEntry.languages['hindi'] || Object.values(bookEntry.languages)[0];
+  // Sort pages strictly by pageNo ascending
+  const finalPages = Array.from(pageMap.values()).sort((a, b) => (a.pageNo || 0) - (b.pageNo || 0));
+
   return {
-    bookInfo: bookEntry,
-    language: langData,
-    pages: (langData && langData.pages) ? langData.pages : []
+    bookInfo: bookEntry || { title: baseTitle, languages: {} },
+    language: { ...baseLangData, pages: finalPages },
+    pages: finalPages
   };
 }
 
@@ -13489,6 +13715,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
 </script>
   <script>
+const APP_VERSION = '3.9.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -13630,6 +13857,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (typeof initFlashcardTrainerEngine === 'function') initFlashcardTrainerEngine();
   if (typeof initLiveHelpDeskEngine === 'function') initLiveHelpDeskEngine();
   if (typeof initMobileDevToolsEngine === 'function') initMobileDevToolsEngine();
+  if (typeof cleanupCorruptedCustomPages === 'function') cleanupCorruptedCustomPages();
 });
 function initTheme() {
   const saved = localStorage.getItem(THEME_KEY) || 'dark';
@@ -20010,7 +20238,9 @@ const readerState = {
   lang: 'hindi', // 'hindi' | 'hinglish' | 'english'
   currentPage: 1,
   theme: 'sepia',
-  fontSizePct: 100
+  fontSizePct: 100,
+  spreadMode: 'spread', // 'spread' | 'single'
+  currentEditingPageNo: null
 };
 
 function openLanguageSelectModal(origIdx) {
@@ -20044,6 +20274,16 @@ function openLanguageSelectModal(origIdx) {
     const price = b.price || (isHyper ? 350 : 0);
     isbnRowEl.innerHTML = '<span>ISBN: <strong style="color:var(--text-primary);">' + escapeHtml(isbn) + '</strong></span><span>• Price: <strong style="color:#10b981;">₹' + price + '</strong></span>';
   }
+
+  // Reset Auto-OCR dropzone in language select modal
+  const langOcrPrompt = document.getElementById('langModalOcrPrompt');
+  const langOcrScan = document.getElementById('langModalOcrScanning');
+  const langOcrSuccess = document.getElementById('langModalOcrSuccess');
+  const langOcrInput = document.getElementById('langModalPhotoInput');
+  if (langOcrPrompt) langOcrPrompt.style.display = 'block';
+  if (langOcrScan) langOcrScan.style.display = 'none';
+  if (langOcrSuccess) langOcrSuccess.style.display = 'none';
+  if (langOcrInput) langOcrInput.value = '';
 
   // Count available pages per language
   if (typeof getBookPagesData === 'function') {
@@ -20151,18 +20391,46 @@ function switchReaderLanguage(lang) {
   showToast('Switched to ' + (langNames[lang] || lang), 'info');
 }
 
+function toggleReaderSpreadMode() {
+  readerState.spreadMode = (readerState.spreadMode === 'spread') ? 'single' : 'spread';
+  const btn = document.getElementById('readerSpreadToggleBtn');
+  const bookEl = document.getElementById('realBookSpread');
+  if (btn) {
+    btn.innerText = readerState.spreadMode === 'spread' ? '📖 Spread' : '📄 Single';
+  }
+  if (bookEl) {
+    bookEl.classList.toggle('single-page-mode', readerState.spreadMode === 'single');
+  }
+  playPaperTurnAudio();
+  renderRealBookPages();
+  showToast(readerState.spreadMode === 'spread' ? 'Spread view (2 Pages)' : 'Single page view (1 Page)', 'info');
+}
+
 function turnRealBookPage(delta) {
   const b = state.books[readerState.activeBookIdx];
   const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
   const totalPages = (data && data.pages && data.pages.length) ? data.pages.length : 1;
 
   const isMobile = window.innerWidth <= 768;
-  const isDualSpread = !isMobile && totalPages > 1;
+  const isDualSpread = !isMobile && readerState.spreadMode === 'spread' && totalPages > 1;
 
-  const targetPage = readerState.currentPage + delta;
-  if (targetPage < 1) return;
-  if (isDualSpread && targetPage + 1 > totalPages && delta > 0) return;
-  if (!isDualSpread && targetPage > totalPages) return;
+  // In dual spread mode, step by 2 pages so Spread (1,2) flips to Spread (3,4) without repeating Page 2!
+  const step = isDualSpread ? 2 : 1;
+  let targetPage = readerState.currentPage + (delta * step);
+
+  if (isDualSpread && targetPage % 2 === 0) {
+    // Keep spreads starting on odd pages (1, 3, 5...)
+    targetPage = Math.max(1, targetPage - 1);
+  }
+
+  if (delta < 0 && targetPage < 1) {
+    if (readerState.currentPage === 1) return;
+    targetPage = 1;
+  }
+  if (delta > 0 && targetPage > totalPages) {
+    return;
+  }
+  if (targetPage < 1) targetPage = 1;
 
   readerState.currentPage = targetPage;
   playPaperTurnAudio();
@@ -20237,6 +20505,12 @@ function renderRealBookPages() {
     badge.innerText = '📖 ' + (readerState.lang.toUpperCase()) + ' EDITION';
   }
 
+  // Spread Mode button text
+  const spreadToggleBtn = document.getElementById('readerSpreadToggleBtn');
+  if (spreadToggleBtn) {
+    spreadToggleBtn.innerText = readerState.spreadMode === 'spread' ? '📖 Spread' : '📄 Single';
+  }
+
   // Slider & indicator
   const slider = document.getElementById('readerPageSlider');
   if (slider) {
@@ -20246,7 +20520,12 @@ function renderRealBookPages() {
   }
 
   const isMobile = window.innerWidth <= 768;
-  const isDualSpread = !isMobile && totalPages > 1;
+  const isDualSpread = !isMobile && (readerState.spreadMode === 'spread') && totalPages > 1;
+
+  const spreadEl = document.getElementById('realBookSpread');
+  if (spreadEl) {
+    spreadEl.classList.toggle('single-page-mode', !isDualSpread);
+  }
 
   const prevBtn = document.getElementById('readerPrevPageBtn');
   const nextBtn = document.getElementById('readerNextPageBtn');
@@ -20257,6 +20536,8 @@ function renderRealBookPages() {
   const rightSheet = document.getElementById('pageInnerRight');
   const leftFooter = document.getElementById('pageFooterLeft');
   const rightFooter = document.getElementById('pageFooterRight');
+  const actionsLeft = document.getElementById('pageActionsLeft');
+  const actionsRight = document.getElementById('pageActionsRight');
   const indicator = document.getElementById('readerPageIndicator');
 
   const fontStyle = (readerState.fontSizePct / 100) + 'rem';
@@ -20277,17 +20558,29 @@ function renderRealBookPages() {
       '</div>';
     if (rightSheet) rightSheet.innerHTML = placeholder;
     if (leftSheet) leftSheet.innerHTML = placeholder;
+    if (leftFooter) leftFooter.innerText = '';
+    if (rightFooter) rightFooter.innerText = '';
+    if (actionsLeft) actionsLeft.style.display = 'none';
+    if (actionsRight) actionsRight.style.display = 'none';
     if (indicator) indicator.innerText = 'Page 1 / 1';
     return;
   }
 
-  if (isMobile) {
-    // Single page on mobile
+  if (!isDualSpread) {
+    // Single page (mobile or single-page view on desktop)
     const currPageObj = pages[readerState.currentPage - 1];
     if (rightSheet && currPageObj) {
       rightSheet.innerHTML = currPageObj.content || '';
     }
-    if (rightFooter) rightFooter.innerText = 'Page ' + readerState.currentPage + ' of ' + totalPages;
+    if (rightFooter && currPageObj) {
+      rightFooter.innerText = 'Page ' + currPageObj.pageNo + ' of ' + totalPages;
+    }
+    if (actionsRight) {
+      actionsRight.style.display = 'inline-flex';
+    }
+    if (actionsLeft) {
+      actionsLeft.style.display = 'none';
+    }
     if (indicator) indicator.innerText = 'Page ' + readerState.currentPage + ' / ' + totalPages;
   } else {
     // Dual spread on Desktop
@@ -20297,12 +20590,18 @@ function renderRealBookPages() {
     if (leftSheet && leftPageObj) {
       leftSheet.innerHTML = leftPageObj.content || '';
     }
-    if (leftFooter) leftFooter.innerText = 'Page ' + readerState.currentPage;
+    if (leftFooter && leftPageObj) {
+      leftFooter.innerText = 'Page ' + leftPageObj.pageNo;
+    }
+    if (actionsLeft) {
+      actionsLeft.style.display = leftPageObj ? 'inline-flex' : 'none';
+    }
 
     if (rightSheet) {
       if (rightPageObj) {
         rightSheet.innerHTML = rightPageObj.content || '';
-        if (rightFooter) rightFooter.innerText = 'Page ' + (readerState.currentPage + 1);
+        if (rightFooter) rightFooter.innerText = 'Page ' + rightPageObj.pageNo;
+        if (actionsRight) actionsRight.style.display = 'inline-flex';
       } else {
         rightSheet.innerHTML = '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; min-height:280px; text-align:center; color:var(--text-muted); opacity:0.6;">' +
           '<div style="font-size:2.5rem; margin-bottom:8px;">✦</div>' +
@@ -20310,14 +20609,15 @@ function renderRealBookPages() {
           '<div style="font-size:0.8rem; margin-top:10px;">Click ➕ Add Page to add more pages</div>' +
           '</div>';
         if (rightFooter) rightFooter.innerText = '';
+        if (actionsRight) actionsRight.style.display = 'none';
       }
     }
 
     if (indicator) {
       if (rightPageObj) {
-        indicator.innerText = 'Pages ' + readerState.currentPage + '-' + (readerState.currentPage + 1) + ' / ' + totalPages;
-      } else {
-        indicator.innerText = 'Page ' + readerState.currentPage + ' / ' + totalPages;
+        indicator.innerText = 'Pages ' + leftPageObj.pageNo + '-' + rightPageObj.pageNo + ' / ' + totalPages;
+      } else if (leftPageObj) {
+        indicator.innerText = 'Page ' + leftPageObj.pageNo + ' / ' + totalPages;
       }
     }
   }
@@ -20650,7 +20950,7 @@ function saveCustomBookPage() {
     content: formattedContent
   };
 
-  // Persist to localStorage
+  // Persist to localStorage with deduplication
   try {
     const storeKey = 'mindfocus_custom_book_pages';
     let store = {};
@@ -20660,9 +20960,21 @@ function saveCustomBookPage() {
     }
     const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
     if (!store[bookTitleKey]) store[bookTitleKey] = {};
-    if (!store[bookTitleKey][lang]) store[bookTitleKey][lang] = [];
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
 
-    store[bookTitleKey][lang].push(newPage);
+    const existingIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === pageNo);
+    if (existingIdx >= 0) {
+      store[bookTitleKey][lang][existingIdx] = newPage;
+    } else {
+      store[bookTitleKey][lang].push(newPage);
+    }
+
+    // Remove from deleted list if present
+    const delKey = lang + '_deleted';
+    if (Array.isArray(store[bookTitleKey][delKey])) {
+      store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== pageNo);
+    }
+
     localStorage.setItem(storeKey, JSON.stringify(store));
   } catch (e) {
     console.error('Error saving custom book page:', e);
@@ -20678,6 +20990,592 @@ function saveCustomBookPage() {
     renderRealBookPages();
   }
 }
+
+// =========================================================================
+// PER-PAGE EDIT & DELETE CONTROLLER
+// =========================================================================
+function openEditPageModalForCurrent(side) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const pages = (data && data.pages) ? data.pages : [];
+  const isMobile = window.innerWidth <= 768;
+  const isSingle = isMobile || (readerState.spreadMode === 'single');
+
+  let targetPageNo = 1;
+  if (isSingle) {
+    targetPageNo = readerState.currentPage;
+  } else {
+    targetPageNo = (side === 'left') ? readerState.currentPage : (readerState.currentPage + 1);
+  }
+
+  // Verify page exists
+  const exists = pages.some(p => p.pageNo === targetPageNo);
+  if (!exists) {
+    showToast('Page ' + targetPageNo + ' edit karne ke liye uplabdh nahi hai.', 'warning');
+    return;
+  }
+
+  openEditPageModal(targetPageNo);
+}
+
+function deletePageForCurrent(side) {
+  const isMobile = window.innerWidth <= 768;
+  const isSingle = isMobile || (readerState.spreadMode === 'single');
+
+  let targetPageNo = 1;
+  if (isSingle) {
+    targetPageNo = readerState.currentPage;
+  } else {
+    targetPageNo = (side === 'left') ? readerState.currentPage : (readerState.currentPage + 1);
+  }
+
+  deleteBookPage(targetPageNo);
+}
+
+function openEditPageModal(pageNo) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const pages = (data && data.pages) ? data.pages : [];
+  const pageObj = pages.find(p => p.pageNo === pageNo);
+
+  readerState.currentEditingPageNo = pageNo;
+
+  const modalTitle = document.getElementById('editPageModalTitle');
+  if (modalTitle) {
+    modalTitle.innerText = `पेज ${pageNo} एडिट करें (${readerState.lang.toUpperCase()})`;
+  }
+
+  const noInput = document.getElementById('editPageNoInput');
+  if (noInput) noInput.value = pageNo;
+
+  const langInput = document.getElementById('editPageLangInput');
+  if (langInput) langInput.value = readerState.lang.toUpperCase();
+
+  const headingInput = document.getElementById('editPageHeadingInput');
+  if (headingInput) headingInput.value = (pageObj && pageObj.heading) ? pageObj.heading : ('Page ' + pageNo);
+
+  const contentInput = document.getElementById('editPageContentInput');
+  if (contentInput) {
+    let cleanText = '';
+    if (pageObj && pageObj.content) {
+      cleanText = pageObj.content
+        .replace(/<div class="reader-page-header">[\s\S]*?<\/div>/gi, '')
+        .replace(/<div class="reader-praise-block">/gi, '')
+        .replace(/<\/div>/gi, '')
+        .replace(/<p[^>]*>/gi, '')
+        .replace(/<\/p>/gi, '\n\n')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]+>/g, '')
+        .trim();
+      if (!cleanText) cleanText = pageObj.content;
+    }
+    contentInput.value = cleanText;
+  }
+
+  // Reset OCR dropzone in edit modal
+  const promptEl = document.getElementById('editOcrDropzonePrompt');
+  const scanEl = document.getElementById('editOcrScanningState');
+  const laserEl = document.getElementById('editOcrLaserScanLine');
+  const photoInput = document.getElementById('editPagePhotoInput');
+  if (photoInput) photoInput.value = '';
+  if (promptEl) promptEl.style.display = 'block';
+  if (scanEl) scanEl.style.display = 'none';
+  if (laserEl) laserEl.style.display = 'none';
+
+  const modal = document.getElementById('editBookPageModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeEditBookPageModal() {
+  const modal = document.getElementById('editBookPageModal');
+  if (modal) modal.classList.remove('active');
+  readerState.currentEditingPageNo = null;
+}
+
+function handleEditPageOverlayClick(event) {
+  if (event.target.id === 'editBookPageModal') {
+    closeEditBookPageModal();
+  }
+}
+
+function saveEditedBookPage() {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const pageNo = parseInt(document.getElementById('editPageNoInput').value) || readerState.currentEditingPageNo || 1;
+  const heading = document.getElementById('editPageHeadingInput').value.trim();
+  const rawContent = document.getElementById('editPageContentInput').value.trim();
+
+  if (!rawContent) {
+    alert('Kripya page ke liye kuch text likhein ya photo scan karein!');
+    return;
+  }
+
+  let formattedContent = rawContent;
+  if (!rawContent.includes('<p>') && !rawContent.includes('<div>')) {
+    const paragraphs = rawContent.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    formattedContent = (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+      paragraphs.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+  }
+
+  const updatedPage = {
+    pageNo: pageNo,
+    type: 'content',
+    heading: heading || ('Page ' + pageNo),
+    content: formattedContent
+  };
+
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const raw = localStorage.getItem(storeKey);
+    if (raw) store = JSON.parse(raw);
+
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    const lang = readerState.lang || 'hindi';
+
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+
+    const existingIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === pageNo);
+    if (existingIdx >= 0) {
+      store[bookTitleKey][lang][existingIdx] = updatedPage;
+    } else {
+      store[bookTitleKey][lang].push(updatedPage);
+    }
+
+    const delKey = lang + '_deleted';
+    if (Array.isArray(store[bookTitleKey][delKey])) {
+      store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== pageNo);
+    }
+
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error saving edited page:', e);
+  }
+
+  closeEditBookPageModal();
+  showToast('Page ' + pageNo + ' safaltapoorvak update ho gaya! 💾', 'success');
+  renderRealBookPages();
+}
+
+function deleteBookPage(pageNo) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  if (!confirm('Kya aap sach me Page ' + pageNo + ' delete karna chahte hain?')) {
+    return;
+  }
+
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const raw = localStorage.getItem(storeKey);
+    if (raw) store = JSON.parse(raw);
+
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    const lang = readerState.lang || 'hindi';
+
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+
+    // Remove from custom additions
+    store[bookTitleKey][lang] = store[bookTitleKey][lang].filter(p => p.pageNo !== pageNo);
+
+    // Add to deleted list to hide base pages
+    const delKey = lang + '_deleted';
+    if (!Array.isArray(store[bookTitleKey][delKey])) store[bookTitleKey][delKey] = [];
+    if (!store[bookTitleKey][delKey].includes(pageNo)) {
+      store[bookTitleKey][delKey].push(pageNo);
+    }
+
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error deleting book page:', e);
+  }
+
+  closeEditBookPageModal();
+  showToast('Page ' + pageNo + ' delete kar diya gaya! 🗑️', 'info');
+
+  if (readerState.currentPage > 1) {
+    readerState.currentPage = Math.max(1, readerState.currentPage - 1);
+  }
+  renderRealBookPages();
+}
+
+function confirmDeleteCurrentEditPage() {
+  if (readerState.currentEditingPageNo) {
+    deleteBookPage(readerState.currentEditingPageNo);
+  }
+}
+
+function handleEditPagePhotoUpload(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (!file.type.startsWith('image/')) {
+    showToast('Kripya valid photo chunein!', 'warning');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    runEditPageOcr(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function runEditPageOcr(imageSrc) {
+  const promptEl = document.getElementById('editOcrDropzonePrompt');
+  const scanEl = document.getElementById('editOcrScanningState');
+  const laserEl = document.getElementById('editOcrLaserScanLine');
+  const progressText = document.getElementById('editOcrScanProgressText');
+  const progressBar = document.getElementById('editOcrScanProgressBar');
+  const contentInput = document.getElementById('editPageContentInput');
+  const headingInput = document.getElementById('editPageHeadingInput');
+
+  if (promptEl) promptEl.style.display = 'none';
+  if (scanEl) scanEl.style.display = 'block';
+  if (laserEl) laserEl.style.display = 'block';
+  if (progressBar) progressBar.style.width = '20%';
+  if (progressText) progressText.innerText = 'Photo process ho rahi hai...';
+
+  if (typeof Tesseract === 'undefined') {
+    await new Promise(r => setTimeout(r, 1200));
+    if (typeof Tesseract === 'undefined') {
+      if (progressText) progressText.innerText = 'OCR library load nahi ho saki.';
+      return;
+    }
+  }
+
+  preprocessImageForOcr(imageSrc, async function(processedUrl) {
+    let ocrLang = readerState.lang === 'hindi' ? 'hin+eng' : 'eng';
+    try {
+      if (progressBar) progressBar.style.width = '40%';
+      let res = null;
+      try {
+        res = await Tesseract.recognize(processedUrl, ocrLang, {
+          logger: (m) => {
+            if (m && m.progress) {
+              const pct = Math.round(m.progress * 100);
+              if (progressBar) progressBar.style.width = Math.max(25, pct) + '%';
+            }
+          }
+        });
+      } catch (err) {
+        res = await Tesseract.recognize(processedUrl, 'eng');
+      }
+
+      const rawText = (res && res.data && res.data.text) ? res.data.text.trim() : '';
+      if (!rawText) {
+        if (scanEl) scanEl.style.display = 'none';
+        if (laserEl) laserEl.style.display = 'none';
+        if (promptEl) promptEl.style.display = 'block';
+        showToast('Photo me text nahi pehchana gaya.', 'warning');
+        return;
+      }
+
+      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+      if (lines.length > 1 && lines[0].length <= 50 && (!headingInput || !headingInput.value.trim())) {
+        if (headingInput) headingInput.value = lines[0];
+        if (contentInput) contentInput.value = lines.slice(1).join('\n\n');
+      } else {
+        if (contentInput) contentInput.value = lines.join('\n\n');
+      }
+
+      if (scanEl) scanEl.style.display = 'none';
+      if (laserEl) laserEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('Photo se naya text replace ho gaya! ⚡📝', 'success');
+    } catch (err) {
+      console.error('Edit page OCR error:', err);
+      if (scanEl) scanEl.style.display = 'none';
+      if (laserEl) laserEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('OCR scan error: ' + (err.message || 'Error'), 'error');
+    }
+  });
+}
+
+// =========================================================================
+// DEVANAGARI HINDI TO HINGLISH TRANSLITERATION ENGINE
+// =========================================================================
+function convertHindiToHinglish(hindiText) {
+  if (!hindiText || typeof hindiText !== 'string') return '';
+  const vowels = {
+    'अ': 'a', 'आ': 'aa', 'इ': 'i', 'ई': 'ee', 'उ': 'u', 'ऊ': 'oo',
+    'ऋ': 'ri', 'ए': 'e', 'ऐ': 'ai', 'ओ': 'o', 'औ': 'au', 'अं': 'an', 'अः': 'ah'
+  };
+  const matras = {
+    'ा': 'aa', 'ि': 'i', 'ी': 'ee', 'ु': 'u', 'ू': 'oo', 'ृ': 'ri',
+    'े': 'e', 'ै': 'ai', 'ो': 'o', 'ौ': 'au', 'ं': 'n', 'ँ': 'n', 'ः': 'h', '्': ''
+  };
+  const consonants = {
+    'क': 'k', 'ख': 'kh', 'ग': 'g', 'घ': 'gh', 'ङ': 'ng',
+    'च': 'ch', 'छ': 'chh', 'ज': 'j', 'झ': 'jh', 'ञ': 'ny',
+    'ट': 't', 'ठ': 'th', 'ड': 'd', 'ढ': 'dh', 'ण': 'n',
+    'त': 't', 'थ': 'th', 'द': 'd', 'ध': 'dh', 'न': 'n',
+    'प': 'p', 'फ': 'f', 'ब': 'b', 'भ': 'bh', 'म': 'm',
+    'य': 'y', 'र': 'r', 'ल': 'l', 'व': 'v', 'श': 'sh',
+    'ष': 'sh', 'स': 's', 'ह': 'h', 'क़': 'q', 'ख़': 'kh',
+    'ग़': 'gh', 'ज़': 'z', 'ड़': 'd', 'ढ़': 'dh', 'फ़': 'f'
+  };
+
+  let out = '';
+  const chars = Array.from(hindiText);
+  for (let i = 0; i < chars.length; i++) {
+    const ch = chars[i];
+    const next = chars[i + 1];
+
+    if (vowels[ch]) {
+      out += vowels[ch];
+    } else if (consonants[ch]) {
+      const c = consonants[ch];
+      if (next === '्') {
+        out += c;
+        i++;
+      } else if (next && matras[next] !== undefined) {
+        out += c + matras[next];
+        i++;
+      } else {
+        out += c + 'a';
+      }
+    } else if (matras[ch] !== undefined) {
+      out += matras[ch];
+    } else {
+      out += ch;
+    }
+  }
+  return out
+    .replace(/a\b/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// =========================================================================
+// AUTO-SCAN & CONVERT TO ALL 3 LANGUAGES (LANGUAGE MODAL)
+// =========================================================================
+function handleLangModalAutoOcrAll(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (!file.type.startsWith('image/')) {
+    showToast('Kripya valid photo chunein!', 'warning');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    runAutoOcrForAllLanguages(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function runAutoOcrForAllLanguages(imageSrc) {
+  const promptEl = document.getElementById('langModalOcrPrompt');
+  const scanEl = document.getElementById('langModalOcrScanning');
+  const successEl = document.getElementById('langModalOcrSuccess');
+  const successTxt = document.getElementById('langModalOcrSuccessTxt');
+  const statusEl = document.getElementById('langModalOcrStatus');
+  const progressBar = document.getElementById('langModalOcrProgressBar');
+
+  if (promptEl) promptEl.style.display = 'none';
+  if (successEl) successEl.style.display = 'none';
+  if (scanEl) scanEl.style.display = 'block';
+  if (progressBar) progressBar.style.width = '20%';
+  if (statusEl) statusEl.innerText = 'Photo scan ki ja rahi hai...';
+
+  if (typeof Tesseract === 'undefined') {
+    await new Promise(r => setTimeout(r, 1200));
+    if (typeof Tesseract === 'undefined') {
+      if (statusEl) statusEl.innerText = 'OCR library load nahi ho saki.';
+      return;
+    }
+  }
+
+  preprocessImageForOcr(imageSrc, async function(processedUrl) {
+    try {
+      if (progressBar) progressBar.style.width = '40%';
+      if (statusEl) statusEl.innerText = 'Akshar pehchane ja rahe hain (Text Recognition)...';
+
+      let res = null;
+      try {
+        res = await Tesseract.recognize(processedUrl, 'hin+eng', {
+          logger: (m) => {
+            if (m && m.progress) {
+              const pct = Math.round(m.progress * 100);
+              if (progressBar) progressBar.style.width = Math.max(25, pct) + '%';
+            }
+          }
+        });
+      } catch (err) {
+        res = await Tesseract.recognize(processedUrl, 'eng');
+      }
+
+      const rawText = (res && res.data && res.data.text) ? res.data.text.trim() : '';
+      if (!rawText) {
+        if (scanEl) scanEl.style.display = 'none';
+        if (promptEl) promptEl.style.display = 'block';
+        showToast('Photo me koi readable text nahi mila.', 'warning');
+        return;
+      }
+
+      if (progressBar) progressBar.style.width = '80%';
+      if (statusEl) statusEl.innerText = 'Teeno bhashaon (हिंदी + Hinglish + English) mein convert ho raha hai...';
+
+      const hasDevanagari = /[\u0900-\u097F]/.test(rawText);
+      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+
+      let hindiHeading = 'Naya Adhyay';
+      let hindiBody = rawText;
+      let hinglishHeading = 'Naya Adhyay';
+      let hinglishBody = '';
+      let englishHeading = 'New Chapter';
+      let englishBody = '';
+
+      if (hasDevanagari) {
+        if (lines.length > 1 && lines[0].length <= 60) {
+          hindiHeading = lines[0];
+          hindiBody = lines.slice(1).join('\n\n');
+        }
+        hinglishHeading = convertHindiToHinglish(hindiHeading);
+        hinglishBody = convertHindiToHinglish(hindiBody);
+        englishHeading = 'Hyperfocus • Chapter Excerpt';
+        englishBody = 'Transcribed Page (Hindi/Hinglish Original):\n\n' + hinglishBody;
+      } else {
+        if (lines.length > 1 && lines[0].length <= 60) {
+          englishHeading = lines[0];
+          englishBody = lines.slice(1).join('\n\n');
+        } else {
+          englishBody = rawText;
+        }
+        hinglishHeading = englishHeading;
+        hinglishBody = englishBody;
+        hindiHeading = englishHeading;
+        hindiBody = englishBody;
+      }
+
+      const formatHtml = (heading, body) => {
+        const ps = body.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+        return (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+          ps.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+      };
+
+      const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+      const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+
+      // Find highest page count across all languages
+      const curDataHi = (typeof getBookPagesData === 'function') ? getBookPagesData(b, 'hindi') : null;
+      const curPages = (curDataHi && curDataHi.pages) ? curDataHi.pages.length : 2;
+      const newPageNo = curPages + 1;
+
+      const pageHindi = {
+        pageNo: newPageNo,
+        type: 'content',
+        heading: hindiHeading,
+        content: formatHtml(hindiHeading, hindiBody)
+      };
+
+      const pageHinglish = {
+        pageNo: newPageNo,
+        type: 'content',
+        heading: hinglishHeading,
+        content: formatHtml(hinglishHeading, hinglishBody)
+      };
+
+      const pageEnglish = {
+        pageNo: newPageNo,
+        type: 'content',
+        heading: englishHeading,
+        content: formatHtml(englishHeading, englishBody)
+      };
+
+      const storeKey = 'mindfocus_custom_book_pages';
+      let store = {};
+      const raw = localStorage.getItem(storeKey);
+      if (raw) store = JSON.parse(raw);
+      if (!store[bookTitleKey]) store[bookTitleKey] = {};
+
+      ['hindi', 'hinglish', 'english'].forEach(lang => {
+        if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+        const pageData = lang === 'hindi' ? pageHindi : (lang === 'hinglish' ? pageHinglish : pageEnglish);
+        const exIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === newPageNo);
+        if (exIdx >= 0) {
+          store[bookTitleKey][lang][exIdx] = pageData;
+        } else {
+          store[bookTitleKey][lang].push(pageData);
+        }
+
+        const delKey = lang + '_deleted';
+        if (Array.isArray(store[bookTitleKey][delKey])) {
+          store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== newPageNo);
+        }
+      });
+
+      localStorage.setItem(storeKey, JSON.stringify(store));
+
+      // Refresh badges in modal
+      if (typeof getBookPagesData === 'function') {
+        const hiD = getBookPagesData(b, 'hindi');
+        const hingD = getBookPagesData(b, 'hinglish');
+        const engD = getBookPagesData(b, 'english');
+
+        const hiBadge = document.getElementById('langHindiCountBadge');
+        if (hiBadge) hiBadge.innerText = (hiD && hiD.pages ? hiD.pages.length : 0) + ' पृष्ठ';
+        const hingBadge = document.getElementById('langHinglishCountBadge');
+        if (hingBadge) hingBadge.innerText = (hingD && hingD.pages ? hingD.pages.length : 0) + ' Pages';
+        const engBadge = document.getElementById('langEnglishCountBadge');
+        if (engBadge) engBadge.innerText = (engD && engD.pages ? engD.pages.length : 0) + ' Pages';
+      }
+
+      if (progressBar) progressBar.style.width = '100%';
+      if (scanEl) scanEl.style.display = 'none';
+      if (successEl) successEl.style.display = 'flex';
+      if (successTxt) successTxt.innerText = 'Page ' + newPageNo + ' teeno bhashaon (हिंदी + Hinglish + English) mein add ho gaya!';
+
+      showToast('Page ' + newPageNo + ' teeno bhashaon mein safaltapoorvak save ho gaya! ⚡🎉', 'success');
+    } catch (err) {
+      console.error('Auto OCR all languages error:', err);
+      if (scanEl) scanEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('OCR Error: ' + (err.message || 'Error'), 'error');
+    }
+  });
+}
+
+// Cleanup any duplicate entries in localStorage
+function cleanupCorruptedCustomPages() {
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    const raw = localStorage.getItem(storeKey);
+    if (!raw) return;
+    const store = JSON.parse(raw);
+    let modified = false;
+
+    Object.keys(store).forEach(bookKey => {
+      ['hindi', 'hinglish', 'english'].forEach(lang => {
+        if (Array.isArray(store[bookKey][lang])) {
+          const map = new Map();
+          store[bookKey][lang].forEach(p => {
+            if (p && p.pageNo) {
+              map.set(p.pageNo, p);
+            }
+          });
+          if (map.size !== store[bookKey][lang].length) {
+            store[bookKey][lang] = Array.from(map.values()).sort((a, b) => a.pageNo - b.pageNo);
+            modified = true;
+          }
+        }
+      });
+    });
+
+    if (modified) {
+      localStorage.setItem(storeKey, JSON.stringify(store));
+      console.log('Cleaned up duplicate custom book pages from localStorage');
+    }
+  } catch (e) {
+    console.warn('Error during custom pages cleanup:', e);
+  }
+}
+cleanupCorruptedCustomPages();
 
 // =========================================================================
 // BOOK COVER VIEWER (Front & Back Covers)
@@ -20745,6 +21643,7 @@ function switchCoverView(side) {
 }
 
 // Bind to window
+window.APP_VERSION = APP_VERSION;
 window.openLanguageSelectModal = openLanguageSelectModal;
 window.closeLanguageSelectModal = closeLanguageSelectModal;
 window.handleLangSelectOverlayClick = handleLangSelectOverlayClick;
@@ -20754,6 +21653,7 @@ window.closeRealBookReader = closeRealBookReader;
 window.handleReaderOverlayClick = handleReaderOverlayClick;
 window.switchReaderLanguage = switchReaderLanguage;
 window.turnRealBookPage = turnRealBookPage;
+window.toggleReaderSpreadMode = toggleReaderSpreadMode;
 window.onReaderSliderChange = onReaderSliderChange;
 window.adjustReaderFontSize = adjustReaderFontSize;
 window.cycleReaderTheme = cycleReaderTheme;
@@ -20769,6 +21669,20 @@ window.switchCoverView = switchCoverView;
 window.handleCustomPagePhotoUpload = handleCustomPagePhotoUpload;
 window.processCustomPagePhotoFile = processCustomPagePhotoFile;
 window.runAutoPageOcr = runAutoPageOcr;
+window.openEditPageModalForCurrent = openEditPageModalForCurrent;
+window.deletePageForCurrent = deletePageForCurrent;
+window.openEditPageModal = openEditPageModal;
+window.closeEditBookPageModal = closeEditBookPageModal;
+window.handleEditPageOverlayClick = handleEditPageOverlayClick;
+window.saveEditedBookPage = saveEditedBookPage;
+window.deleteBookPage = deleteBookPage;
+window.confirmDeleteCurrentEditPage = confirmDeleteCurrentEditPage;
+window.handleEditPagePhotoUpload = handleEditPagePhotoUpload;
+window.runEditPageOcr = runEditPageOcr;
+window.convertHindiToHinglish = convertHindiToHinglish;
+window.handleLangModalAutoOcrAll = handleLangModalAutoOcrAll;
+window.runAutoOcrForAllLanguages = runAutoOcrForAllLanguages;
+window.cleanupCorruptedCustomPages = cleanupCorruptedCustomPages;
 
 // =========================================================================
 // REMOVED LEGACY FEATURES (Mystery Gift, Flashcards, Live Help Desk)

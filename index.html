@@ -143,6 +143,7 @@
           <div class="brand-title">
             <span>MIND & FOCUS BOOKS TRACKER</span>
             <span class="brand-badge">OFFLINE APP</span>
+            <span class="app-version-pill" style="font-size:0.7rem; font-weight:800; background:rgba(99,102,241,0.25); color:#a5b4fc; border:1px solid rgba(99,102,241,0.4); padding:2px 7px; border-radius:6px; margin-left:4px;">v3.9.0</span>
             <span class="vip-crown-badge" id="headerVipBadge" style="display:none;" title="VIP Master Reader Active">👑 VIP</span>
           </div>
           <div class="brand-subtitle">150 Curated Books Reading System • Zero Internet Required</div>
@@ -1720,11 +1721,46 @@
           </button>
         </div>
 
+        <!-- FEATURE: INSTANT SCAN & CONVERT TO ALL LANGUAGES -->
+        <div class="lang-all-ocr-card" style="background:linear-gradient(135deg, rgba(99,102,241,0.09), rgba(16,185,129,0.09)); border:1.5px dashed rgba(99,102,241,0.45); border-radius:14px; padding:12px 14px; text-align:center; position:relative; overflow:hidden;">
+          <input type="file" id="langModalPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleLangModalAutoOcrAll(this)">
+          <div id="langModalOcrPrompt" onclick="document.getElementById('langModalPhotoInput').click()" style="cursor:pointer;">
+            <div style="font-size:1.9rem; line-height:1; margin-bottom:4px;">📸 ⚡</div>
+            <div style="font-weight:800; font-size:0.92rem; color:var(--text-primary);">
+              Book Page ki Photo Dalein (Auto-Add to All Languages)
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
+              ⚡ <strong>1-Click: Photo dalte hi हिंदी + Hinglish + English teeno bhashaon mein naya page ban jayega!</strong>
+            </div>
+            <div style="margin-top:8px;">
+              <span class="btn btn-sm btn-primary" style="font-size:0.74rem; font-weight:700; padding:4px 14px; border-radius:20px; pointer-events:none;">
+                📷 Scan &amp; Convert to All 3 Languages
+              </span>
+            </div>
+          </div>
+
+          <!-- Loading / Scanning State -->
+          <div id="langModalOcrScanning" style="display:none; padding:8px 0; text-align:center;">
+            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
+            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="langModalOcrStatus">
+              Photo scan karke teeno bhashaon mein convert ho raha hai...
+            </div>
+            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
+              <div id="langModalOcrProgressBar" style="width:25%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Success Badge -->
+          <div id="langModalOcrSuccess" style="display:none; align-items:center; gap:8px; justify-content:center; padding:4px 0; font-weight:700; color:#10b981; font-size:0.82rem;">
+            <span>✅</span> <span id="langModalOcrSuccessTxt">Teeno bhashaon mein naya page safaltapoorvak add ho gaya!</span>
+          </div>
+        </div>
+
         <!-- Add Custom Pages Button -->
         <div class="lang-custom-add-banner">
           <div>
-            <div style="font-weight:700; font-size:0.82rem; color:var(--text-primary);">📝 और पेज जोड़ना चाहते हैं? (Add Pages)</div>
-            <div style="font-size:0.75rem; color:var(--text-secondary);">Photo se dekh kar ya type karke naye page jod sakte hain</div>
+            <div style="font-weight:700; font-size:0.82rem; color:var(--text-primary);">📝 Single Page Type/Add Karna Hai?</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary);">Keval ek bhasha mein custom page likhein ya jodein</div>
           </div>
           <button type="button" class="btn btn-sm" onclick="openAddCustomPageModal()" style="background:var(--accent-primary); color:#fff; border:none; font-weight:700; border-radius:8px;">
             ➕ Add Page
@@ -1759,6 +1795,8 @@
 
         <!-- Right Controls -->
         <div class="reader-top-right">
+          <!-- View Mode Toggle: Dual Spread vs Single Page -->
+          <button type="button" class="reader-btn-sm" id="readerSpreadToggleBtn" onclick="toggleReaderSpreadMode()" title="Toggle View Mode" style="font-weight:700;">📖 Spread</button>
           <!-- View Cover Button -->
           <button type="button" class="reader-btn-sm" onclick="openBookCoverModal()" title="View Book Cover" style="font-weight:700;">📕 Cover</button>
           <!-- Font Size Adjuster -->
@@ -1787,7 +1825,13 @@
               <div class="page-inner-sheet" id="pageInnerLeft">
                 <!-- Content rendered dynamically -->
               </div>
-              <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
+              <div class="reader-page-footer-wrap">
+                <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
+                <div class="reader-page-actions" id="pageActionsLeft">
+                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('left')" title="Edit Page">✏️ Edit</button>
+                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('left')" title="Delete Page">🗑️</button>
+                </div>
+              </div>
             </div>
 
             <!-- Center Spine Shadow & Valley -->
@@ -1800,7 +1844,13 @@
               <div class="page-inner-sheet" id="pageInnerRight">
                 <!-- Content rendered dynamically -->
               </div>
-              <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+              <div class="reader-page-footer-wrap">
+                <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+                <div class="reader-page-actions" id="pageActionsRight">
+                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('right')" title="Edit Page">✏️ Edit</button>
+                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('right')" title="Delete Page">🗑️</button>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1935,7 +1985,82 @@
     </div>
   </div>
 
-  <!-- 4. Book Cover Viewer Modal -->
+  <!-- 4. Edit Book Page Modal (with Photo Re-Scan & OCR) -->
+  <div class="modal-overlay" id="editBookPageModal" onclick="handleEditPageOverlayClick(event)">
+    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">✏️</span>
+          <h3 class="modal-title" id="editPageModalTitle">पेज एडिट करें (Edit Page)</h3>
+        </div>
+        <button class="modal-close" onclick="closeEditBookPageModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:0.9rem;">
+        
+        <!-- AUTO-OCR PHOTO RE-SCAN DROPZONE -->
+        <div class="page-ocr-dropzone" id="editPageOcrDropzone" onclick="document.getElementById('editPagePhotoInput').click()">
+          <input type="file" id="editPagePhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleEditPagePhotoUpload(this)">
+          
+          <div id="editOcrLaserScanLine" class="ocr-scan-laser" style="display:none;"></div>
+
+          <div id="editOcrDropzonePrompt">
+            <div style="font-size:1.8rem; line-height:1; margin-bottom:4px;">📸 🔄</div>
+            <div style="font-weight:800; font-size:0.9rem; color:var(--text-primary);">
+              Nayi Photo se Text Badlein (Re-Scan Photo)
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
+              ⚡ <strong>Photo dalte hi naya text automatically text box mein replace ho jayega!</strong>
+            </div>
+          </div>
+
+          <div id="editOcrScanningState" style="display:none; text-align:center; padding:8px 4px;">
+            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
+            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="editOcrScanProgressText">
+              Photo scan ho rahi hai...
+            </div>
+            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
+              <div id="editOcrScanProgressBar" style="width:20%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Page Number:</label>
+            <input type="number" id="editPageNoInput" class="form-control" min="1" readonly style="background:rgba(0,0,0,0.06); opacity:0.85;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Language:</label>
+            <input type="text" id="editPageLangInput" class="form-control" readonly style="background:rgba(0,0,0,0.06); opacity:0.85;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Page Heading / Title:</label>
+          <input type="text" id="editPageHeadingInput" class="form-control" placeholder="Page heading...">
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Page Content (Text ya HTML):</label>
+            <span style="font-size:0.72rem; color:var(--text-muted);">Editable</span>
+          </div>
+          <textarea id="editPageContentInput" class="form-control" style="min-height:180px; font-size:0.9rem; line-height:1.5;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn btn-danger" onclick="confirmDeleteCurrentEditPage()" style="background:#ef4444; color:#fff; border:none; font-weight:700;">
+          🗑️ Delete Page
+        </button>
+        <div style="display:flex; gap:0.5rem;">
+          <button type="button" class="btn" onclick="closeEditBookPageModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="saveEditedBookPage()">💾 Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Book Cover Viewer Modal -->
   <div class="modal-overlay" id="bookCoverViewerModal" onclick="handleCoverViewerOverlayClick(event)">
     <div class="modal-content" style="max-width:460px; text-align:center; padding:1.25rem;" onclick="event.stopPropagation()">
       <div class="modal-header" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border-color);">

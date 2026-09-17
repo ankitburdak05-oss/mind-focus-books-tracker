@@ -51,6 +51,10 @@ jobs:
         cp jspdf.plugin.autotable.min.js android/app/src/main/assets/
         cp html2canvas.min.js android/app/src/main/assets/
         cp tesseract.min.js android/app/src/main/assets/
+        cp book-pages-data.js android/app/src/main/assets/ || true
+        cp hyperfocus_cover.jpg android/app/src/main/assets/ || true
+        cp hyperfocus_back.jpg android/app/src/main/assets/ || true
+        cp Mind-Focus-Books-App-Offline.html android/app/src/main/assets/ || true
 
     - name: Ensure Permanent Keystore Exists
       working-directory: ./android/app
