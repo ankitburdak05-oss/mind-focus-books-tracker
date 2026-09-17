@@ -10,8 +10,8 @@ android {
         applicationId "com.mindfocus.bookstracker"
         minSdk 21
         targetSdk 34
-        versionCode System.getenv("GITHUB_RUN_NUMBER") ? (Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER")) + 61) : 391
-        versionName "3.9.1"
+        versionCode System.getenv("GITHUB_RUN_NUMBER") ? (Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER")) + 61) : 392
+        versionName "3.9.2"
     }
 
     signingConfigs {

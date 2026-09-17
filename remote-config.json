@@ -1,21 +1,35 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-17T03:30:00.000Z",
+  "updatedAt": "2026-09-17T05:24:10.058Z",
   "activeRelease": {
-    "version": "v3.9.1",
-    "name": "Mind Focus Books v3.9.1 — 100% Clean User Edition (Admin-Free)",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.1",
+    "version": "v3.9.2",
+    "name": "Mind Focus Books v3.9.2 — Real Book Covers & Modern UI Showcase",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.2",
     "features": [
-      "🛡️ 100% Clean & Independent: Saara admin panel aur remote controls permanently removed",
-      "📸 1-Click Auto-Scan: Photo dalte hi Hindi + Hinglish + English teeno bhashaon mein page taiyaar",
-      "📖 Real Book Reader Spread Fix: Page 3 repeating issue permanently resolved",
-      "✏️ Har Page par Edit & Delete: Photo se text replace karein ya custom edit karein",
-      "🏷️ App Version v3.9.1 Release"
+      "📚 Real Book Covers: Sabhi 150 kitabon ke original high-definition cover photos add ho gaye",
+      "🎨 Modern UI Redesign: My Library, Continue Reading, aur Recently Added sleek sections",
+      "📱 4-Tab Mobile Navigation: Home, Library, Discover, Profile clean bottom bar",
+      "⚡ Ultra-Fast 1-Tap Offline Reading & Book Details Sheet",
+      "🏷️ Official v3.9.2 Release"
     ],
-    "stagedAt": "2026-09-17T03:30:00.000Z",
+    "stagedAt": "2026-09-17T05:24:10.111Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.9.2",
+    "name": "Mind Focus Books v3.9.2 — Real Book Covers & Modern UI Showcase",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.2",
+    "features": [
+      "📚 Real Book Covers: Sabhi 150 kitabon ke original high-definition cover photos add ho gaye",
+      "🎨 Modern UI Redesign: My Library, Continue Reading, aur Recently Added sleek sections",
+      "📱 4-Tab Mobile Navigation: Home, Library, Discover, Profile clean bottom bar",
+      "⚡ Ultra-Fast 1-Tap Offline Reading & Book Details Sheet",
+      "🏷️ Official v3.9.2 Release"
+    ],
+    "stagedAt": "2026-09-17T05:24:10.111Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.9.1",
     "name": "Mind Focus Books v3.9.1 — 100% Clean User Edition (Admin-Free)",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.1",
@@ -27,19 +41,6 @@
       "🏷️ App Version v3.9.1 Release"
     ],
     "stagedAt": "2026-09-17T03:30:00.000Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
-    "version": "v3.8.0",
-    "name": "Mind Focus Books v3.8.0 — Super Clean Streamlined Edition",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.8.0",
-    "features": [
-      "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
-      "🚀 Ultra-Smooth Update Center: Rock-solid, zero shaking/jitter on mobile",
-      "📦 Reliable 1-Tap APK Updater: Direct native download and package installer",
-      "📖 3D Real Book Reader with realistic page curl animations"
-    ],
-    "stagedAt": "2026-09-15T04:10:00.000Z",
     "isDeployed": true
   },
   "features": {

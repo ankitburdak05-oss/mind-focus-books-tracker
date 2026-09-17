@@ -1,4 +1,4 @@
-const APP_VERSION = '3.9.1';
+const APP_VERSION = '3.9.2';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -3138,7 +3138,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.9.1';
+const CURRENT_APP_VERSION = 'v3.9.2';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
