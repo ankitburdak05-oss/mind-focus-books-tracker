@@ -1,22 +1,35 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-15T04:10:00.000Z",
+  "updatedAt": "2026-09-17T03:15:00.000Z",
   "activeRelease": {
-    "version": "v3.8.0",
-    "name": "Mind Focus Books v3.8.0 — Super Clean Streamlined Edition",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.8.0",
+    "version": "v3.9.0",
+    "name": "Mind Focus Books v3.9.0 — Auto Photo-to-Text 3 Languages, Spread Fix & Page Editor",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.0",
     "features": [
-      "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
-      "🚀 Ultra-Smooth Update Center: Rock-solid, zero shaking/jitter on mobile",
-      "📦 Reliable 1-Tap APK Updater: Direct native download and package installer",
-      "📖 3D Real Book Reader with realistic page curl animations",
-      "🎨 Premium iOS Glassmorphism UI and fluid navigation",
-      "🛡️ Remote Feature Switches & Instant Emergency Pause Control"
+      "📸 1-Click Auto-Scan: Photo dalte hi Hindi + Hinglish + English teeno bhashaon mein page taiyaar",
+      "📖 Real Book Reader Spread Fix: Page 3 repeating issue permanently resolved",
+      "✏️ Har Page par Edit & Delete: Photo se text replace karein ya custom edit karein",
+      "🏷️ App Version v3.9.0 with enhanced reading experience",
+      "⚡ High-Speed Offline Native Performance"
     ],
-    "stagedAt": "2026-09-15T04:10:00.000Z",
+    "stagedAt": "2026-09-17T03:15:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.9.0",
+    "name": "Mind Focus Books v3.9.0 — Auto Photo-to-Text 3 Languages, Spread Fix & Page Editor",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.0",
+    "features": [
+      "📸 1-Click Auto-Scan: Photo dalte hi Hindi + Hinglish + English teeno bhashaon mein page taiyaar",
+      "📖 Real Book Reader Spread Fix: Page 3 repeating issue permanently resolved",
+      "✏️ Har Page par Edit & Delete: Photo se text replace karein ya custom edit karein",
+      "🏷️ App Version v3.9.0 with enhanced reading experience",
+      "⚡ High-Speed Offline Native Performance"
+    ],
+    "stagedAt": "2026-09-17T03:15:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.8.0",
     "name": "Mind Focus Books v3.8.0 — Super Clean Streamlined Edition",
     "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.8.0",
@@ -24,30 +37,14 @@
       "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
       "🚀 Ultra-Smooth Update Center: Rock-solid, zero shaking/jitter on mobile",
       "📦 Reliable 1-Tap APK Updater: Direct native download and package installer",
-      "📖 3D Real Book Reader with realistic page curl animations",
-      "🎨 Premium iOS Glassmorphism UI and fluid navigation",
-      "🛡️ Remote Feature Switches & Instant Emergency Pause Control"
+      "📖 3D Real Book Reader with realistic page curl animations"
     ],
     "stagedAt": "2026-09-15T04:10:00.000Z",
     "isDeployed": true
   },
-  "previousRelease": {
-    "version": "v3.7.1",
-    "name": "Mind Focus Books v3.7.1 — Ultra-Smooth Stable Edition",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.7.1",
-    "features": [
-      "⚡ Super Clean & Lightweight: Streamlined reading experience with zero bloat",
-      "🚀 Ultra-Smooth Update Center: Rock-solid, zero shaking/jitter on mobile",
-      "📦 Reliable 1-Tap APK Updater: Direct native download and package installer",
-      "📖 3D Real Book Reader with realistic page curl animations",
-      "🎨 Premium iOS Glassmorphism UI and fluid navigation"
-    ],
-    "stagedAt": "2026-09-15T03:00:00.000Z",
-    "isDeployed": true
-  },
   "features": {
-    "appEmergencyLockdown": true,
-    "lockdownMessage": "ye app band kardiya gaya hai",
+    "appEmergencyLockdown": false,
+    "lockdownMessage": "",
     "maintenanceMode": false,
     "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
     "chatHelpDeskEnabled": true,
