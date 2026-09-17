@@ -1,32 +1,32 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-17T03:15:00.000Z",
+  "updatedAt": "2026-09-17T03:30:00.000Z",
   "activeRelease": {
-    "version": "v3.9.0",
-    "name": "Mind Focus Books v3.9.0 — Auto Photo-to-Text 3 Languages, Spread Fix & Page Editor",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.0",
+    "version": "v3.9.1",
+    "name": "Mind Focus Books v3.9.1 — 100% Clean User Edition (Admin-Free)",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.1",
     "features": [
+      "🛡️ 100% Clean & Independent: Saara admin panel aur remote controls permanently removed",
       "📸 1-Click Auto-Scan: Photo dalte hi Hindi + Hinglish + English teeno bhashaon mein page taiyaar",
       "📖 Real Book Reader Spread Fix: Page 3 repeating issue permanently resolved",
       "✏️ Har Page par Edit & Delete: Photo se text replace karein ya custom edit karein",
-      "🏷️ App Version v3.9.0 with enhanced reading experience",
-      "⚡ High-Speed Offline Native Performance"
+      "🏷️ App Version v3.9.1 Release"
     ],
-    "stagedAt": "2026-09-17T03:15:00.000Z",
+    "stagedAt": "2026-09-17T03:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.9.0",
-    "name": "Mind Focus Books v3.9.0 — Auto Photo-to-Text 3 Languages, Spread Fix & Page Editor",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.0",
+    "version": "v3.9.1",
+    "name": "Mind Focus Books v3.9.1 — 100% Clean User Edition (Admin-Free)",
+    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.1",
     "features": [
+      "🛡️ 100% Clean & Independent: Saara admin panel aur remote controls permanently removed",
       "📸 1-Click Auto-Scan: Photo dalte hi Hindi + Hinglish + English teeno bhashaon mein page taiyaar",
       "📖 Real Book Reader Spread Fix: Page 3 repeating issue permanently resolved",
       "✏️ Har Page par Edit & Delete: Photo se text replace karein ya custom edit karein",
-      "🏷️ App Version v3.9.0 with enhanced reading experience",
-      "⚡ High-Speed Offline Native Performance"
+      "🏷️ App Version v3.9.1 Release"
     ],
-    "stagedAt": "2026-09-17T03:15:00.000Z",
+    "stagedAt": "2026-09-17T03:30:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {
