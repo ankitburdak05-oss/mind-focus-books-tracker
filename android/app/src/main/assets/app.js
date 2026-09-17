@@ -71,15 +71,18 @@ function getOfflineCoverGradient(book) {
 }
 
 function getBookCover(book) {
-  // Sirf user-uploaded cover URL use karo — koi internet URL nahi
+  if (!book) return null;
+  // 1. Check local / uploaded cover_image
   if (book.cover_image && book.cover_image.trim().length > 0) {
-    // Agar ye ek external http URL hai aur user ne khud upload nahi kiya (base64 nahi)
-    // toh bhi use karo — user ne manually add kiya hoga
-    return book.cover_image;
+    return book.cover_image.trim();
   }
-  // Koi external internet cover nahi — null return karo, placeholder render hoga
+  // 2. Check real cover_url (Open Library CDN / Web cover)
+  if (book.cover_url && book.cover_url.trim().length > 0) {
+    return book.cover_url.trim();
+  }
   return null;
 }
+
 
 // Offline gradient cover HTML banana (koi img tag nahi, zero internet)
 function buildOfflineCoverHtml(book, sizeClass) {
@@ -255,6 +258,19 @@ function loadData() {
     if (!hyperBook.price) hyperBook.price = 350;
     if (!hyperBook.isbn) hyperBook.isbn = '978-93-5543-300-8';
     if (!hyperBook.takeaway) hyperBook.takeaway = 'कम प्रयास में अधिक सफलता कैसे प्राप्त करें। ध्यान की उत्पादकता: हायपरफ़ोकस (एक काम पर गहरा ध्यान) और स्कैटरफ़ोकस (क्रिएटिव सोच और रिचार्ज)।';
+  }
+
+  // Ensure all books have real cover URLs from DEFAULT_BOOKS
+  if (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) {
+    const defaultCoverMap = {};
+    DEFAULT_BOOKS.forEach(db => {
+      if (db.no) defaultCoverMap[db.no] = db.cover_url;
+    });
+    state.books.forEach(b => {
+      if ((!b.cover_url || b.cover_url.trim().length === 0) && defaultCoverMap[b.no]) {
+        b.cover_url = defaultCoverMap[b.no];
+      }
+    });
   }
 
   // Live recalculate days for reading books
@@ -540,9 +556,12 @@ function renderNowReadingHero() {
   
   let coverHtml = '';
   if (coverUrl) {
-    coverHtml = '<img src="' + coverUrl + '" alt="cover" class="hero-3d-book">';
+    coverHtml = '<img src="' + escapeHtml(coverUrl) + '" alt="cover" class="hero-3d-book" onerror="this.style.display=\'none\'; if(this.nextElementSibling) this.nextElementSibling.style.display=\'block\';">' +
+      '<div class="hero-book-placeholder" style="display:none; overflow:hidden; border-radius:8px;">' +
+      buildOfflineCoverHtml(currentBook, 'hero') +
+      '</div>';
   } else {
-    // Offline gradient cover — internet nahi chahiye
+    // Offline gradient cover
     coverHtml = '<div class="hero-book-placeholder" style="overflow:hidden; border-radius:8px;">' +
       buildOfflineCoverHtml(currentBook, 'hero') +
       '</div>';
@@ -630,8 +649,12 @@ function renderMiniShelfCard(b) {
   }
 
   let cover = '';
-  if (b.cover_image) {
-    cover = '<img src="' + b.cover_image + '" alt="cover" class="mini-card-cover">';
+  const miniCoverUrl = getBookCover(b);
+  if (miniCoverUrl) {
+    cover = '<img src="' + escapeHtml(miniCoverUrl) + '" alt="cover" class="mini-card-cover" onerror="this.style.display=\'none\'; if(this.nextElementSibling) this.nextElementSibling.style.display=\'block\';">' +
+      '<div class="mini-card-placeholder" style="display:none; overflow:hidden;">' +
+      buildOfflineCoverHtml(b, 'small') +
+      '</div>';
   } else {
     cover = '<div class="mini-card-placeholder" style="overflow:hidden;">' +
       buildOfflineCoverHtml(b, 'small') +
@@ -896,18 +919,19 @@ function renderGridView(container, books) {
     const statusCardClass = isReading ? 'status-reading-card' : (isDone ? 'status-done-card' : 'status-pending-card');
     
     const coverUrl = getBookCover(b);
+    const catColor = isReading ? '#3b82f6' : (isDone ? '#10b981' : '#f59e0b');
+    const fallbackCoverHtml = '<div class="book-card-fallback-cover" style="' + (coverUrl ? 'display:none; ' : '') + 'width:56px; height:80px; border-radius:8px; flex-shrink:0; background:linear-gradient(135deg, ' + catColor + '22, ' + catColor + '44); border:1px solid ' + catColor + '55; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:-4px 6px 14px rgba(0,0,0,0.3); font-size:1.4rem;">' +
+      '<span>' + (isReading ? '📖' : (isDone ? '✅' : '⏳')) + '</span>' +
+      '<span style="font-size:0.6rem; font-weight:800; color:var(--text-muted); margin-top:2px;">#' + escapeHtml(b.no) + '</span>' +
+      '</div>';
     let coverHtml = '';
     if (coverUrl) {
       coverHtml = '<div style="position:relative; width:56px; height:80px; flex-shrink:0; border-radius:8px; overflow:hidden; box-shadow:-4px 8px 18px rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.1);">' +
-        '<img src="' + coverUrl + '" alt="cover" style="width:100%; height:100%; object-fit:cover;">' +
+        '<img src="' + escapeHtml(coverUrl) + '" alt="cover" style="width:100%; height:100%; object-fit:cover;" onerror="this.parentElement.style.display=\'none\'; if(this.parentElement.nextElementSibling) this.parentElement.nextElementSibling.style.display=\'flex\';">' +
         '<div style="position:absolute; top:0; left:0; bottom:0; width:4px; background:linear-gradient(90deg, rgba(0,0,0,0.4), transparent); pointer-events:none;"></div>' +
-        '</div>';
+        '</div>' + fallbackCoverHtml;
     } else {
-      const catColor = isReading ? '#3b82f6' : (isDone ? '#10b981' : '#f59e0b');
-      coverHtml = '<div style="width:56px; height:80px; border-radius:8px; flex-shrink:0; background:linear-gradient(135deg, ' + catColor + '22, ' + catColor + '44); border:1px solid ' + catColor + '55; display:flex; flex-direction:column; align-items:center; justify-content:center; box-shadow:-4px 6px 14px rgba(0,0,0,0.3); font-size:1.4rem;">' +
-        '<span>' + (isReading ? '📖' : (isDone ? '✅' : '⏳')) + '</span>' +
-        '<span style="font-size:0.6rem; font-weight:800; color:var(--text-muted); margin-top:2px;">#' + escapeHtml(b.no) + '</span>' +
-        '</div>';
+      coverHtml = fallbackCoverHtml;
     }
 
     const isDict = b.isDictionary || b.no === 'book 0';
@@ -2629,10 +2653,12 @@ function renderBookshelfView(container, books) {
       else if (isReading) statusBadge = '<span class="shelf-book-badge" style="background:#f59e0b;">📖 Reading</span>';
       else if (isDone) statusBadge = '<span class="shelf-book-badge" style="background:#10b981;">✅ Finished</span>';
 
+      const shelfCover = getBookCover(b);
       html += '<div class="shelf-book" onclick="openEditModal(' + origIdx + ')" title="' + escapeHtml(b.title) + ' by ' + escapeHtml(b.author) + ' (Click to view/edit)">' +
         '<div class="shelf-book-inner" style="border-left: 5px solid ' + spineColor + ';">' +
-        (b.cover_image 
-          ? '<img class="shelf-book-cover" src="' + b.cover_image + '" alt="cover">'
+        (shelfCover 
+          ? '<img class="shelf-book-cover" src="' + escapeHtml(shelfCover) + '" alt="cover" onerror="this.style.display=\'none\'; if(this.nextElementSibling) this.nextElementSibling.style.display=\'flex\';">' +
+            '<div class="shelf-book-spine" style="display:none;"><div class="shelf-book-spine-title">' + escapeHtml(b.title) + '</div><div class="shelf-book-spine-author">' + escapeHtml(b.author) + '</div></div>'
           : '<div class="shelf-book-spine"><div class="shelf-book-spine-title">' + escapeHtml(b.title) + '</div><div class="shelf-book-spine-author">' + escapeHtml(b.author) + '</div></div>') +
         statusBadge +
         '</div>' +
@@ -5414,7 +5440,7 @@ function updateFloatingMiniCapsule() {
       this.onerror = null;
       this.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='110' viewBox='0 0 80 110'%3E%3Crect width='80' height='110' fill='%231e293b'/%3E%3Ctext x='40' y='55' fill='%2394a3b8' font-size='24' text-anchor='middle' dominant-baseline='middle'%3E📖%3C/text%3E%3C/svg%3E";
     };
-    coverEl.src = book.cover_image || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='110' viewBox='0 0 80 110'%3E%3Crect width='80' height='110' fill='%231e293b'/%3E%3Ctext x='40' y='55' fill='%2394a3b8' font-size='24' text-anchor='middle' dominant-baseline='middle'%3E📖%3C/text%3E%3C/svg%3E";
+    coverEl.src = getBookCover(book) || "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='110' viewBox='0 0 80 110'%3E%3Crect width='80' height='110' fill='%231e293b'/%3E%3Ctext x='40' y='55' fill='%2394a3b8' font-size='24' text-anchor='middle' dominant-baseline='middle'%3E📖%3C/text%3E%3C/svg%3E";
   }
 
   const total = parseInt(book.total_pages) || 280;

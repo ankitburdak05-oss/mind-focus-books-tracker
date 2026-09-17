@@ -34,7 +34,8 @@ const DEFAULT_BOOKS = [
     "cover_image": "hyperfocus_cover.jpg",
     "back_cover": "hyperfocus_back.jpg",
     "total_pages": 240,
-    "current_page": 4
+    "current_page": 4,
+    "cover_url": "https://covers.openlibrary.org/b/id/10239359-M.jpg"
   },
   {
     "no": "book 2",
@@ -48,7 +49,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/6553019-M.jpg"
   },
   {
     "no": "book 3",
@@ -62,7 +64,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9360116-M.jpg"
   },
   {
     "no": "book 4",
@@ -76,7 +79,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/13290711-M.jpg"
   },
   {
     "no": "book 5",
@@ -90,7 +94,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7988607-M.jpg"
   },
   {
     "no": "book 6",
@@ -104,7 +109,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12539702-M.jpg"
   },
   {
     "no": "book 7",
@@ -118,7 +124,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8188891-M.jpg"
   },
   {
     "no": "book 8",
@@ -132,7 +139,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/14426425-M.jpg"
   },
   {
     "no": "book 9",
@@ -146,7 +154,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/746414-M.jpg"
   },
   {
     "no": "book 10",
@@ -160,7 +169,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9078085-M.jpg"
   },
   {
     "no": "book 11",
@@ -174,7 +184,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/2732975-M.jpg"
   },
   {
     "no": "book 12",
@@ -188,7 +199,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10398270-M.jpg"
   },
   {
     "no": "book 13",
@@ -202,7 +214,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/11041932-M.jpg"
   },
   {
     "no": "book 14",
@@ -216,7 +229,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7309773-M.jpg"
   },
   {
     "no": "book 15",
@@ -230,7 +244,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/813347-M.jpg"
   },
   {
     "no": "book 16",
@@ -244,7 +259,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10467082-M.jpg"
   },
   {
     "no": "book 17",
@@ -258,7 +274,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/6458532-M.jpg"
   },
   {
     "no": "book 18",
@@ -272,7 +289,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7285986-M.jpg"
   },
   {
     "no": "book 19",
@@ -286,7 +304,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9129784-M.jpg"
   },
   {
     "no": "book 20",
@@ -300,7 +319,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/2379210-M.jpg"
   },
   {
     "no": "book 21",
@@ -314,7 +334,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8352403-M.jpg"
   },
   {
     "no": "book 22",
@@ -328,7 +349,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10102079-M.jpg"
   },
   {
     "no": "book 23",
@@ -342,7 +364,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/1333251-M.jpg"
   },
   {
     "no": "book 24",
@@ -356,7 +379,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10021591-M.jpg"
   },
   {
     "no": "book 25",
@@ -370,7 +394,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7438753-M.jpg"
   },
   {
     "no": "book 26",
@@ -384,7 +409,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12664855-M.jpg"
   },
   {
     "no": "book 27",
@@ -398,7 +424,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8507540-M.jpg"
   },
   {
     "no": "book 28",
@@ -412,7 +439,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/475008-M.jpg"
   },
   {
     "no": "book 29",
@@ -426,7 +454,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7561012-M.jpg"
   },
   {
     "no": "book 30",
@@ -440,7 +469,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/14421850-M.jpg"
   },
   {
     "no": "book 31",
@@ -454,7 +484,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/2314080-M.jpg"
   },
   {
     "no": "book 32",
@@ -468,7 +499,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/6404786-M.jpg"
   },
   {
     "no": "book 33",
@@ -482,7 +514,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/3876254-M.jpg"
   },
   {
     "no": "book 34",
@@ -496,7 +529,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8114155-M.jpg"
   },
   {
     "no": "book 35",
@@ -510,7 +544,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8027675-M.jpg"
   },
   {
     "no": "book 36",
@@ -524,7 +559,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/11948223-M.jpg"
   },
   {
     "no": "book 37",
@@ -538,7 +574,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/5547404-M.jpg"
   },
   {
     "no": "book 38",
@@ -552,7 +589,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/6412844-M.jpg"
   },
   {
     "no": "book 39",
@@ -566,7 +604,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12529325-M.jpg"
   },
   {
     "no": "book 40",
@@ -580,7 +619,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/6968365-M.jpg"
   },
   {
     "no": "book 41",
@@ -594,7 +634,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8042539-M.jpg"
   },
   {
     "no": "book 42",
@@ -608,7 +649,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/14420637-M.jpg"
   },
   {
     "no": "book 43",
@@ -622,7 +664,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9475786-M.jpg"
   },
   {
     "no": "book 44",
@@ -636,7 +679,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/431011-M.jpg"
   },
   {
     "no": "book 45",
@@ -650,7 +694,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/6402116-M.jpg"
   },
   {
     "no": "book 46",
@@ -664,7 +709,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/4003663-M.jpg"
   },
   {
     "no": "book 47",
@@ -678,7 +724,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7311247-M.jpg"
   },
   {
     "no": "book 48",
@@ -692,7 +739,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7277740-M.jpg"
   },
   {
     "no": "book 49",
@@ -706,7 +754,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/551262-M.jpg"
   },
   {
     "no": "book 50",
@@ -720,7 +769,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/4002352-M.jpg"
   },
   {
     "no": "book 51",
@@ -734,7 +784,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10079937-M.jpg"
   },
   {
     "no": "book 52",
@@ -748,7 +799,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12690321-M.jpg"
   },
   {
     "no": "book 53",
@@ -762,7 +814,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12447129-M.jpg"
   },
   {
     "no": "book 54",
@@ -776,7 +829,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/14428233-M.jpg"
   },
   {
     "no": "book 55",
@@ -790,7 +844,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/13098570-M.jpg"
   },
   {
     "no": "book 56",
@@ -804,7 +859,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8315355-M.jpg"
   },
   {
     "no": "book 57",
@@ -818,7 +874,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/14542536-M.jpg"
   },
   {
     "no": "book 58",
@@ -832,7 +889,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8539416-M.jpg"
   },
   {
     "no": "book 59",
@@ -846,7 +904,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7079753-M.jpg"
   },
   {
     "no": "book 60",
@@ -860,7 +919,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8186237-M.jpg"
   },
   {
     "no": "book 61",
@@ -874,7 +934,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8782615-M.jpg"
   },
   {
     "no": "book 62",
@@ -888,7 +949,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8231866-M.jpg"
   },
   {
     "no": "book 63",
@@ -902,7 +964,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12372866-M.jpg"
   },
   {
     "no": "book 64",
@@ -916,7 +979,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/109288-M.jpg"
   },
   {
     "no": "book 65",
@@ -930,7 +994,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/847534-M.jpg"
   },
   {
     "no": "book 66",
@@ -944,7 +1009,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10351762-M.jpg"
   },
   {
     "no": "book 67",
@@ -958,7 +1024,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7261122-M.jpg"
   },
   {
     "no": "book 68",
@@ -972,7 +1039,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7084839-M.jpg"
   },
   {
     "no": "book 69",
@@ -986,7 +1054,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/13891159-M.jpg"
   },
   {
     "no": "book 70",
@@ -1000,7 +1069,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7288726-M.jpg"
   },
   {
     "no": "book 71",
@@ -1014,7 +1084,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10156205-M.jpg"
   },
   {
     "no": "book 72",
@@ -1028,7 +1099,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8843804-M.jpg"
   },
   {
     "no": "book 73",
@@ -1042,7 +1114,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9261636-M.jpg"
   },
   {
     "no": "book 74",
@@ -1056,7 +1129,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8814155-M.jpg"
   },
   {
     "no": "book 75",
@@ -1070,7 +1144,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10096454-M.jpg"
   },
   {
     "no": "book 76",
@@ -1084,7 +1159,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9253925-M.jpg"
   },
   {
     "no": "book 77",
@@ -1098,7 +1174,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/1359485-M.jpg"
   },
   {
     "no": "book 78",
@@ -1112,7 +1189,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/374152-M.jpg"
   },
   {
     "no": "book 79",
@@ -1126,7 +1204,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7891426-M.jpg"
   },
   {
     "no": "book 80",
@@ -1140,7 +1219,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9576564-M.jpg"
   },
   {
     "no": "book 81",
@@ -1154,7 +1234,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10201407-M.jpg"
   },
   {
     "no": "book 82",
@@ -1168,7 +1249,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8814831-M.jpg"
   },
   {
     "no": "book 83",
@@ -1182,7 +1264,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10153705-M.jpg"
   },
   {
     "no": "book 84",
@@ -1196,7 +1279,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9778922-M.jpg"
   },
   {
     "no": "book 85",
@@ -1210,7 +1294,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8792782-M.jpg"
   },
   {
     "no": "book 86",
@@ -1224,7 +1309,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10981966-M.jpg"
   },
   {
     "no": "book 87",
@@ -1238,7 +1324,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/11349464-M.jpg"
   },
   {
     "no": "book 88",
@@ -1252,7 +1339,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8270423-M.jpg"
   },
   {
     "no": "book 89",
@@ -1266,7 +1354,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/662363-M.jpg"
   },
   {
     "no": "book 90",
@@ -1280,7 +1369,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7277286-M.jpg"
   },
   {
     "no": "book 91",
@@ -1294,7 +1384,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/298658-M.jpg"
   },
   {
     "no": "book 92",
@@ -1308,7 +1399,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/14368453-M.jpg"
   },
   {
     "no": "book 93",
@@ -1322,7 +1414,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/405381-M.jpg"
   },
   {
     "no": "book 94",
@@ -1336,7 +1429,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/4996607-M.jpg"
   },
   {
     "no": "book 95",
@@ -1350,7 +1444,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/11298531-M.jpg"
   },
   {
     "no": "book 96",
@@ -1364,7 +1459,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9413708-M.jpg"
   },
   {
     "no": "book 97",
@@ -1378,7 +1474,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12938610-M.jpg"
   },
   {
     "no": "book 98",
@@ -1392,7 +1489,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10490161-M.jpg"
   },
   {
     "no": "book 99",
@@ -1406,7 +1504,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8665878-M.jpg"
   },
   {
     "no": "book 100",
@@ -1420,7 +1519,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7381653-M.jpg"
   },
   {
     "no": "book 101",
@@ -1434,7 +1534,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12511799-M.jpg"
   },
   {
     "no": "book 102",
@@ -1448,7 +1549,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/11576434-M.jpg"
   },
   {
     "no": "book 103",
@@ -1462,7 +1564,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12104740-M.jpg"
   },
   {
     "no": "book 104",
@@ -1476,7 +1579,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10026941-M.jpg"
   },
   {
     "no": "book 105",
@@ -1490,7 +1594,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/11456785-M.jpg"
   },
   {
     "no": "book 106",
@@ -1504,7 +1609,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/13521833-M.jpg"
   },
   {
     "no": "book 107",
@@ -1518,7 +1624,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/isbn/9780399158643-M.jpg"
   },
   {
     "no": "book 108",
@@ -1532,7 +1639,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10531822-M.jpg"
   },
   {
     "no": "book 109",
@@ -1546,7 +1654,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10521194-M.jpg"
   },
   {
     "no": "book 110",
@@ -1560,7 +1669,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10520407-M.jpg"
   },
   {
     "no": "book 111",
@@ -1574,7 +1684,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/228276-M.jpg"
   },
   {
     "no": "book 112",
@@ -1588,7 +1699,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/375204-M.jpg"
   },
   {
     "no": "book 113",
@@ -1602,7 +1714,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9825397-M.jpg"
   },
   {
     "no": "book 114",
@@ -1616,7 +1729,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/760118-M.jpg"
   },
   {
     "no": "book 115",
@@ -1630,7 +1744,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8780870-M.jpg"
   },
   {
     "no": "book 116",
@@ -1644,7 +1759,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9264534-M.jpg"
   },
   {
     "no": "book 117",
@@ -1658,7 +1774,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12446457-M.jpg"
   },
   {
     "no": "book 118",
@@ -1672,7 +1789,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/12385574-M.jpg"
   },
   {
     "no": "book 119",
@@ -1686,7 +1804,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9215229-M.jpg"
   },
   {
     "no": "book 120",
@@ -1700,7 +1819,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10839827-M.jpg"
   },
   {
     "no": "book 121",
@@ -1714,7 +1834,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9946226-M.jpg"
   },
   {
     "no": "book 122",
@@ -1728,7 +1849,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/4356371-M.jpg"
   },
   {
     "no": "book 123",
@@ -1742,7 +1864,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/1640577-M.jpg"
   },
   {
     "no": "book 124",
@@ -1756,7 +1879,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10551411-M.jpg"
   },
   {
     "no": "book 125",
@@ -1770,7 +1894,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/11196262-M.jpg"
   },
   {
     "no": "book 126",
@@ -1784,7 +1909,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/15208264-M.jpg"
   },
   {
     "no": "book 127",
@@ -1798,7 +1924,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10961899-M.jpg"
   },
   {
     "no": "book 128",
@@ -1812,7 +1939,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7248784-M.jpg"
   },
   {
     "no": "book 129",
@@ -1826,7 +1954,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8850807-M.jpg"
   },
   {
     "no": "book 130",
@@ -1840,7 +1969,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9269461-M.jpg"
   },
   {
     "no": "book 131",
@@ -1854,7 +1984,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10142388-M.jpg"
   },
   {
     "no": "book 132",
@@ -1868,7 +1999,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8795096-M.jpg"
   },
   {
     "no": "book 133",
@@ -1882,7 +2014,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10247378-M.jpg"
   },
   {
     "no": "book 134",
@@ -1896,7 +2029,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/14417990-M.jpg"
   },
   {
     "no": "book 135",
@@ -1910,7 +2044,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10209199-M.jpg"
   },
   {
     "no": "book 136",
@@ -1924,7 +2059,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/450298-M.jpg"
   },
   {
     "no": "book 137",
@@ -1938,7 +2074,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8678542-M.jpg"
   },
   {
     "no": "book 138",
@@ -1952,7 +2089,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/661199-M.jpg"
   },
   {
     "no": "book 139",
@@ -1966,7 +2104,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/13058021-M.jpg"
   },
   {
     "no": "book 140",
@@ -1980,7 +2119,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7884139-M.jpg"
   },
   {
     "no": "book 141",
@@ -1994,7 +2134,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Habits & Discipline",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/9154494-M.jpg"
   },
   {
     "no": "book 142",
@@ -2008,7 +2149,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/6444265-M.jpg"
   },
   {
     "no": "book 143",
@@ -2022,7 +2164,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7412966-M.jpg"
   },
   {
     "no": "book 144",
@@ -2036,7 +2179,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/7272162-M.jpg"
   },
   {
     "no": "book 145",
@@ -2050,7 +2194,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/isbn/9780735213616-M.jpg"
   },
   {
     "no": "book 146",
@@ -2064,7 +2209,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Focus & Concentration",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/13232559-M.jpg"
   },
   {
     "no": "book 147",
@@ -2078,7 +2224,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Brain Science",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/10204949-M.jpg"
   },
   {
     "no": "book 148",
@@ -2092,7 +2239,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/13224272-M.jpg"
   },
   {
     "no": "book 149",
@@ -2106,7 +2254,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Mindset & Logic",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/8695259-M.jpg"
   },
   {
     "no": "book 150",
@@ -2120,7 +2269,8 @@ const DEFAULT_BOOKS = [
     "rating": "",
     "category": "Memory & Learning",
     "takeaway": "",
-    "availability": "UNAVAILABLE"
+    "availability": "UNAVAILABLE",
+    "cover_url": "https://covers.openlibrary.org/b/id/13230270-M.jpg"
   }
 ];
 
