@@ -3426,6 +3426,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.3/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');
@@ -3453,7 +3454,7 @@ function triggerInAppUpdate(apkUrl) {
     if (pctText) pctText.innerText = pct + '%';
   }, 120);
 
-  const freshApkUrl = apkUrl + (apkUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
+  const freshApkUrl = targetApkUrl + (targetApkUrl.includes('?') ? '&' : '?') + 't=' + Date.now();
   setTimeout(() => {
     if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
       window.Android.downloadAndInstallApk(freshApkUrl);
@@ -3464,6 +3465,11 @@ function triggerInAppUpdate(apkUrl) {
     }
   }, 600);
 }
+
+window.triggerInAppUpdate = triggerInAppUpdate;
+window.triggerOtaApkDownload = function() {
+  triggerInAppUpdate(latestApkDownloadUrl);
+};
 
 /* ==========================================================
    FEATURE 1: DAILY READING STREAK & ACHIEVEMENT BADGES
