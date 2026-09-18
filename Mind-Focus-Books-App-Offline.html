@@ -9259,7 +9259,412 @@ body.modal-open {
   padding-bottom: calc(75px + env(safe-area-inset-bottom, 0px)) !important;
 }
 
+/* ============================================================
+   FEATURE 1 & 2: 3D REALISTIC WOODEN BOOKSHELF & QUICK SWITCHER
+   ============================================================ */
+.quick-view-switcher-bar {
+  display: flex;
+  justify-content: center;
+  margin: 0.5rem 0 1rem 0;
+}
 
+.quick-view-pill-group {
+  display: inline-flex;
+  background: rgba(15, 23, 42, 0.85);
+  padding: 4px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.quick-view-pill {
+  border: none;
+  background: transparent;
+  color: #94a3b8;
+  padding: 6px 16px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.quick-view-pill.active {
+  background: #ffffff;
+  color: #0f172a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+/* Realistic Dark Oak Bookcase Structure */
+.bookshelf-luxury-wrap {
+  background: #1c0d06;
+  background-image: 
+    radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.12) 0%, transparent 70%),
+    linear-gradient(180deg, #2a140a 0%, #170a04 100%);
+  border-radius: 16px;
+  padding: 1.5rem 1rem;
+  box-shadow: 
+    inset 0 0 40px rgba(0, 0, 0, 0.9),
+    0 12px 30px rgba(0, 0, 0, 0.6);
+  border: 8px solid #3d1c0c;
+  border-bottom-width: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.bookshelf-luxury-wrap::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(90deg, rgba(255,255,255,0.015) 0px, rgba(255,255,255,0.015) 80px, rgba(0,0,0,0.1) 81px);
+  pointer-events: none;
+}
+
+.shelf-unit-realistic {
+  margin-bottom: 2.25rem;
+  position: relative;
+}
+
+.shelf-books-row-realistic {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  padding: 10px 16px 2px 16px;
+  min-height: 240px;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  position: relative;
+  z-index: 2;
+}
+
+/* Upright Standing Real Book Spine */
+.shelf-book-standing {
+  width: 58px;
+  min-width: 54px;
+  height: 210px;
+  border-radius: 4px 6px 6px 4px;
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 5px;
+  box-shadow: 
+    -2px 0 4px rgba(0,0,0,0.5),
+    3px 4px 10px rgba(0,0,0,0.7),
+    inset -3px 0 5px rgba(0,0,0,0.4),
+    inset 2px 0 3px rgba(255,255,255,0.25);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+  flex-shrink: 0;
+}
+
+.shelf-book-standing:hover {
+  transform: translateY(-16px) scale(1.06);
+  box-shadow: 
+    0 20px 25px -5px rgba(0,0,0,0.8),
+    0 10px 10px -5px rgba(0,0,0,0.6);
+  z-index: 10;
+}
+
+/* Spine Status Badges */
+.shelf-spine-badge {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 9999px;
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.6);
+  z-index: 4;
+}
+
+.shelf-spine-badge.badge-reading {
+  background: #10b981;
+  color: #064e3b;
+  border: 1px solid #34d399;
+}
+
+.shelf-spine-badge.badge-completed {
+  background: #f59e0b;
+  color: #451a03;
+  border: 1px solid #fbbf24;
+}
+
+.shelf-spine-badge.badge-lent {
+  background: #60a5fa;
+  color: #1e3a8a;
+  border: 1px solid #93c5fd;
+}
+
+.shelf-spine-badge.badge-new {
+  background: #a855f7;
+  color: #3b0764;
+  border: 1px solid #c084fc;
+}
+
+/* Vertical Gold Foil Title */
+.shelf-spine-title {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: #fef08a;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+  max-height: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: auto auto;
+  text-align: center;
+}
+
+.shelf-spine-author {
+  font-size: 0.58rem;
+  color: rgba(255,255,255,0.7);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+/* Heavy Wood Plank Base */
+.shelf-wood-plank {
+  height: 22px;
+  background: linear-gradient(180deg, #6e3713 0%, #4a2107 40%, #291002 100%);
+  border-radius: 4px;
+  box-shadow: 
+    0 10px 20px rgba(0,0,0,0.8),
+    inset 0 3px 2px rgba(255,255,255,0.25),
+    inset 0 -2px 4px rgba(0,0,0,0.8);
+  position: relative;
+  z-index: 1;
+}
+
+.shelf-wood-plank::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 5%;
+  right: 5%;
+  height: 12px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.85) 0%, transparent 80%);
+}
+
+/* ============================================================
+   FEATURE 2: REAL 3D BOOK READER LUXURY DOCK & AMBIENT SOUNDSCAPE
+   ============================================================ */
+.reader-luxury-dock {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(24, 18, 14, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(217, 119, 6, 0.35);
+  border-radius: 20px;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.75),
+    0 0 20px rgba(245, 158, 11, 0.15);
+  z-index: 9999;
+}
+
+.reader-dock-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.reader-dock-label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: #a8a29e;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.reader-font-slider-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reader-font-val-pill {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #fef3c7;
+}
+
+.reader-page-indicator-pill {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fef08a;
+  background: rgba(255, 255, 255, 0.08);
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+.reader-soundscape-toggle {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #d6d3d1;
+  padding: 6px 14px;
+  border-radius: 9999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.reader-soundscape-toggle.active {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #451a03;
+  border-color: #fbbf24;
+  box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+}
+
+/* 3D Paper Curl Corner on right page */
+.reader-paper-curl-corner {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, transparent 50%, #e2d9cc 50%, #f7f3eb 70%, #d8cebe 100%);
+  border-radius: 4px 0 0 0;
+  box-shadow: -2px -2px 5px rgba(0,0,0,0.15);
+  pointer-events: none;
+}
+
+/* ============================================================
+   FEATURE 3: VISION-OS FROSTED GLASS VERSION UPDATE MODAL
+   ============================================================ */
+.update-glass-card {
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 28px !important;
+  box-shadow: 
+    0 25px 60px rgba(0, 0, 0, 0.7),
+    0 0 35px rgba(59, 130, 246, 0.25) !important;
+  color: #ffffff !important;
+  padding: 2rem 1.75rem !important;
+  max-width: 440px !important;
+}
+
+.update-glass-rocket-icon {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 1.25rem auto;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.update-glass-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.update-glass-version-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 3px 12px;
+  border-radius: 9999px;
+  margin-bottom: 0.75rem;
+}
+
+.update-glass-sub {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 1.25rem;
+}
+
+.update-glass-checklist {
+  text-align: left;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1rem 1.2rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.update-glass-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.82rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.update-glass-check {
+  color: #34d399;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.update-glass-btn-cta {
+  width: 100%;
+  padding: 14px 20px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 
+    0 10px 25px rgba(37, 99, 235, 0.45),
+    0 0 15px rgba(124, 58, 237, 0.35);
+  transition: all 0.25s ease;
+}
+
+.update-glass-btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 15px 30px rgba(37, 99, 235, 0.6),
+    0 0 20px rgba(124, 58, 237, 0.5);
+}
 
 </style>
 </head>
@@ -9393,7 +9798,7 @@ body.modal-open {
         <div class="brand-text-wrap">
           <div class="brand-title-main">
             <span>Mind Focus Books</span>
-            <span class="app-version-pill">v3.9.2</span>
+            <span class="app-version-pill">v3.9.3</span>
           </div>
         </div>
       </div>
@@ -9654,7 +10059,17 @@ body.modal-open {
           <div class="category-tags-list" id="categoryTagsContainer"></div>
         </div>
       </div>
-    </section>
+    <!-- Quick View Switcher: Grid vs 3D Bookshelf -->
+    <div class="quick-view-switcher-bar">
+      <div class="quick-view-pill-group">
+        <button type="button" id="quickViewGridBtn" class="quick-view-pill active" onclick="setViewMode('grid')">
+          <span>▦</span> Grid
+        </button>
+        <button type="button" id="quickViewBookshelfBtn" class="quick-view-pill" onclick="setViewMode('bookshelf')">
+          <span>🪵</span> 3D Shelf
+        </button>
+      </div>
+    </div>
 
     <!-- Books Display Area -->
     <div id="booksContentArea"></div>
@@ -9722,7 +10137,7 @@ body.modal-open {
             <div style="font-size:1.15rem; font-weight:800; color:#ffffff;">Reader Profile</div>
             <div style="font-size:0.78rem; color:#94a3b8; margin-top:2px;">Mind Focus Books • Offline Native Edition</div>
             <div style="display:inline-block; font-size:0.7rem; font-weight:800; background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.4); border-radius:6px; padding:2px 8px; margin-top:5px;">
-              v3.9.2 Active
+              v3.9.3 Active
             </div>
           </div>
         </div>
@@ -10631,80 +11046,61 @@ body.modal-open {
     </div>
   </div>
 
-  <!-- Next-Gen Holographic Cyber-Scan Update Center Modal -->
-  <div class="modal-overlay" id="updateCheckerModalOverlay">
-    <div class="modal-content update-modal-content" style="max-width:480px; text-align:center;">
-      <div class="modal-header" style="justify-content:space-between; align-items:center;">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span style="font-size:1.2rem;">⚡</span>
-          <h3 class="modal-title" style="margin:0;">OTA Quantum Update Center</h3>
-        </div>
-        <button class="modal-close" onclick="closeUpdateCheckerModal()">&times;</button>
+  <!-- Vision-OS Frosted Glassmorphism Update Center Modal -->
+  <div class="modal-overlay" id="updateCheckerModalOverlay" onclick="handleUpdateOverlayClick(event)">
+    <div class="modal-content update-glass-card" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:-10px;">
+        <button class="modal-close" style="color:#94a3b8; font-size:1.6rem; cursor:pointer;" onclick="closeUpdateCheckerModal()">&times;</button>
       </div>
-      <div class="modal-body" style="gap:1.2rem; padding:1.25rem 1.4rem;">
-        <!-- Cyber Radar Scanner Visual -->
-        <div class="update-radar-container" id="updateRadarContainer">
-          <div class="update-radar-ring ring-1"></div>
-          <div class="update-radar-ring ring-2"></div>
-          <div class="update-radar-ring ring-3"></div>
-          <div class="update-radar-sweep" id="updateRadarSweep"></div>
-          <div class="update-center-orb" id="updateCenterOrb">
-            <span id="updateModalIcon">🛰️</span>
-          </div>
-        </div>
 
-        <!-- Version Comparison Tracker HUD -->
-        <div class="update-version-diff-card">
-          <div class="version-diff-col">
-            <span class="version-diff-label">YOUR APP</span>
-            <span class="version-diff-pill current" id="updateCurrentVersionBadge">v3.8.0</span>
-          </div>
-          <div class="version-diff-arrow">➔</div>
-          <div class="version-diff-col">
-            <span class="version-diff-label">LATEST CLOUD</span>
-            <span class="version-diff-pill latest" id="updateTargetVersionBadge">Checking...</span>
-          </div>
-        </div>
+      <!-- Glowing Rocket Glass Icon Box -->
+      <div class="update-glass-rocket-icon">
+        🚀
+      </div>
 
-        <div id="updateModalTitle" style="font-size:1.1rem; font-weight:800; color:var(--text-primary); min-height:1.6rem;">Scanning GitHub Cloud Releases...</div>
-        <div id="updateModalDesc" style="font-size:0.82rem; color:var(--text-secondary); line-height:1.5; min-height:2.8rem;">
-          Connecting to GitHub repository to check for seamless over-the-air updates...
-        </div>
+      <div class="update-glass-title" id="updateModalTitle">New Version Update Ready:</div>
+      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.9.3</div>
+      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.9.3 • Clean &amp; Streamlined Edition</div>
 
-        <!-- Changelog Showcase Card -->
-        <div class="update-changelog-card" id="updateChangelogCard" style="display:none;">
-          <div class="changelog-header">
-            <span>🚀 WHAT'S NEW IN THIS VERSION</span>
-            <span class="changelog-tag" id="updateChangelogTag">v3.0.0</span>
-          </div>
-          <ul class="changelog-list" id="updateChangelogList">
-            <li>📳 <b>Hardware Haptic Feedback:</b> Physical vibration on touch</li>
-            <li>🌊 <b>Liquid Dock Pill:</b> Smooth spring pill under tabs</li>
-            <li>🔄 <b>Pull-to-Refresh:</b> Rubber-band pull with Golden Light Sweep</li>
-            <li>🗂️ <b>Category Chips Track:</b> 1-Tap horizontal filter carousel</li>
-            <li>📜 <b>3D Paper Curl &amp; Rustle:</b> Real procedural audio page turns</li>
-            <li>⭕ <b>Apple-Watch 3-Rings:</b> Daily Pages, Focus Mins, Habit Streak</li>
-            <li>🎧 <b>4-Track Spatial DJ Mixer:</b> Rain, Fire, Waves, Forest + EQ</li>
-          </ul>
+      <!-- Feature Checklist matching user photo preview -->
+      <div class="update-glass-checklist">
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>100% Clean: All admin controls removed</span>
         </div>
-
-        <!-- Animated Download Progress Bar -->
-        <div class="update-progress-container" id="updateModalProgress" style="display:none;">
-          <div class="update-progress-info">
-            <span id="updateProgressText">Downloading Signed APK...</span>
-            <span id="updateProgressPct">0%</span>
-          </div>
-          <div class="update-progress-track">
-            <div class="update-progress-fill" id="updateProgressFill"></div>
-          </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>3D Realistic Wooden Bookshelf with Live Status Badges</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>Real Book 3D Reader with Dual-Page Curl &amp; Soundscape</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>1-Click Photo to 3 Languages (Hindi, Hinglish, English)</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>Per-Page Edit &amp; Delete Toolbar</span>
         </div>
       </div>
-      <div class="modal-footer" style="justify-content:center; gap:0.75rem;">
-        <button type="button" class="btn" onclick="closeUpdateCheckerModal()">Close</button>
-        <button type="button" class="btn btn-primary" id="updateModalActionBtn" style="display:none; background:linear-gradient(135deg, #10b981, #059669); border:none; font-weight:800; box-shadow:0 4px 18px rgba(16,185,129,0.45);">
-          ⚡ Download &amp; Install Update
-        </button>
+
+      <!-- Animated Progress Bar (when downloading) -->
+      <div class="update-progress-container" id="updateModalProgress" style="display:none; margin-bottom:1rem;">
+        <div class="update-progress-info" style="color:#cbd5e1; font-size:0.8rem; margin-bottom:4px; display:flex; justify-content:space-between;">
+          <span id="updateProgressText">Downloading Signed APK...</span>
+          <span id="updateProgressPct">0%</span>
+        </div>
+        <div class="update-progress-track" style="height:6px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden;">
+          <div class="update-progress-fill" id="updateProgressFill" style="height:100%; width:0%; background:linear-gradient(90deg, #3b82f6, #10b981); transition:width 0.2s ease;"></div>
+        </div>
       </div>
+
+      <!-- Download Button -->
+      <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerOtaApkDownload()">
+        ⚡ Download &amp; Install v3.9.3 Now
+      </button>
     </div>
   </div>
 
@@ -11203,6 +11599,8 @@ body.modal-open {
               <div class="page-inner-sheet" id="pageInnerRight">
                 <!-- Content rendered dynamically -->
               </div>
+              <!-- 3D Paper Curl Corner Visual -->
+              <div class="reader-paper-curl-corner" title="3D Page Curl"></div>
               <div class="reader-page-footer-wrap">
                 <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
                 <div class="reader-page-actions" id="pageActionsRight">
@@ -11229,6 +11627,30 @@ body.modal-open {
         <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="turnRealBookPage(1)">
           Next Page ›
         </button>
+      </div>
+
+      <!-- Luxury Floating Dock (Matching Photo: Font Size, Page Indicator, Soundscape) -->
+      <div class="reader-luxury-dock" id="readerLuxuryDock">
+        <div class="reader-dock-group">
+          <div class="reader-font-slider-wrap">
+            <span style="font-weight:800; color:#d97706; font-size:1.05rem;">Aa</span>
+            <input type="range" id="readerFontSlider" min="14" max="24" value="18" oninput="setReaderFontSizePx(this.value)" style="width:65px; accent-color:#f59e0b; cursor:pointer;">
+            <span class="reader-font-val-pill" id="readerFontPxDisplay">18px</span>
+          </div>
+          <span class="reader-dock-label">Font Size</span>
+        </div>
+
+        <div class="reader-dock-group">
+          <div class="reader-page-indicator-pill" id="readerDockPagePill">1 / 4</div>
+          <span class="reader-dock-label">Page Indicator</span>
+        </div>
+
+        <div class="reader-dock-group">
+          <button type="button" id="readerSoundscapeBtn" class="reader-soundscape-toggle" onclick="toggleReaderSoundscape()">
+            🔈 Soundscape: OFF
+          </button>
+          <span class="reader-dock-label">Soundscape</span>
+        </div>
       </div>
     </div>
   </div>
@@ -14360,7 +14782,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
 </script>
   <script>
-const APP_VERSION = '3.9.2';
+const APP_VERSION = '3.9.3';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -15418,9 +15840,14 @@ function setViewMode(mode) {
   const tableBtn = document.getElementById('viewTableBtn');
   const gridBtn = document.getElementById('viewGridBtn');
   const shelfBtn = document.getElementById('viewBookshelfBtn');
+  const quickGrid = document.getElementById('quickViewGridBtn');
+  const quickShelf = document.getElementById('quickViewBookshelfBtn');
+
   if (tableBtn) tableBtn.classList.toggle('active', mode === 'table');
   if (gridBtn) gridBtn.classList.toggle('active', mode === 'grid');
   if (shelfBtn) shelfBtn.classList.toggle('active', mode === 'bookshelf');
+  if (quickGrid) quickGrid.classList.toggle('active', mode === 'grid');
+  if (quickShelf) quickShelf.classList.toggle('active', mode === 'bookshelf');
   renderBookList();
 }
 
@@ -16929,45 +17356,53 @@ function renderBookshelfView(container, books) {
     return;
   }
 
-  const booksPerShelf = 6;
+  const spinePalettes = [
+    { bg: 'linear-gradient(180deg, #991b1b, #7f1d1d 60%, #450a0a)', border: '#dc2626', text: '#fef08a' }, // Deep Crimson
+    { bg: 'linear-gradient(180deg, #1e3a8a, #172554 60%, #0f172a)', border: '#3b82f6', text: '#93c5fd' }, // Royal Blue
+    { bg: 'linear-gradient(180deg, #065f46, #064e3b 60%, #022c22)', border: '#10b981', text: '#a7f3d0' }, // Emerald
+    { bg: 'linear-gradient(180deg, #92400e, #78350f 60%, #451a03)', border: '#f59e0b', text: '#fef3c7' }, // Amber Leather
+    { bg: 'linear-gradient(180deg, #581c87, #3b0764 60%, #1e1b4b)', border: '#a855f7', text: '#f3e8ff' }, // Royal Purple
+    { bg: 'linear-gradient(180deg, #1f2937, #111827 60%, #030712)', border: '#64748b', text: '#f8fafc' }, // Slate Dark
+    { bg: 'linear-gradient(180deg, #7c2d12, #431407 60%, #1c0a00)', border: '#ea580c', text: '#fed7aa' }, // Mahogany
+  ];
+
+  const booksPerShelf = window.innerWidth <= 600 ? 5 : 8;
   const shelvesCount = Math.ceil(books.length / booksPerShelf);
-  let html = '<div class="bookshelf-container">';
+  let html = '<div class="bookshelf-luxury-wrap">';
 
   for (let s = 0; s < shelvesCount; s++) {
     const shelfBooks = books.slice(s * booksPerShelf, (s + 1) * booksPerShelf);
-    html += '<div class="shelf-unit"><div class="shelf-books-row">';
+    html += '<div class="shelf-unit-realistic"><div class="shelf-books-row-realistic">';
 
-    shelfBooks.forEach(b => {
-      const origIdx = b.originalIndex;
-      const days = getBookEffectiveDays(b);
+    shelfBooks.forEach((b, idx) => {
+      const origIdx = b.originalIndex !== undefined ? b.originalIndex : idx;
       const isReading = b.status === 'READING';
       const isDone = b.status === 'DONE';
       const isLent = Boolean(b.lent_to);
+      const isNew = origIdx >= 140;
 
-      let spineColor = '#3b82f6';
-      if (isDone) spineColor = '#10b981';
-      else if (isReading) spineColor = '#f59e0b';
-      else if (isLent) spineColor = '#8b5cf6';
+      const palette = spinePalettes[(origIdx + s) % spinePalettes.length];
+      const spineHeight = 195 + ((origIdx * 7) % 35); // Realistic varied book heights: 195px to 230px
 
       let statusBadge = '';
-      if (isLent) statusBadge = '<span class="shelf-book-badge" style="background:#8b5cf6;">🤝 Lent</span>';
-      else if (isReading) statusBadge = '<span class="shelf-book-badge" style="background:#f59e0b;">📖 Reading</span>';
-      else if (isDone) statusBadge = '<span class="shelf-book-badge" style="background:#10b981;">✅ Finished</span>';
+      if (isReading) {
+        statusBadge = '<span class="shelf-spine-badge badge-reading">Reading</span>';
+      } else if (isDone) {
+        statusBadge = '<span class="shelf-spine-badge badge-completed">Completed</span>';
+      } else if (isLent) {
+        statusBadge = '<span class="shelf-spine-badge badge-lent">Lent</span>';
+      } else if (isNew) {
+        statusBadge = '<span class="shelf-spine-badge badge-new">New</span>';
+      }
 
-      const shelfCover = getBookCover(b);
-      html += '<div class="shelf-book" onclick="openEditModal(' + origIdx + ')" title="' + escapeHtml(b.title) + ' by ' + escapeHtml(b.author) + ' (Click to view/edit)">' +
-        '<div class="shelf-book-inner" style="border-left: 5px solid ' + spineColor + ';">' +
-        (shelfCover 
-          ? '<img class="shelf-book-cover" src="' + escapeHtml(shelfCover) + '" alt="cover" onerror="this.style.display=\'none\'; if(this.nextElementSibling) this.nextElementSibling.style.display=\'flex\';">' +
-            '<div class="shelf-book-spine" style="display:none;"><div class="shelf-book-spine-title">' + escapeHtml(b.title) + '</div><div class="shelf-book-spine-author">' + escapeHtml(b.author) + '</div></div>'
-          : '<div class="shelf-book-spine"><div class="shelf-book-spine-title">' + escapeHtml(b.title) + '</div><div class="shelf-book-spine-author">' + escapeHtml(b.author) + '</div></div>') +
+      html += '<div class="shelf-book-standing" onclick="openRealBookReader(' + origIdx + ', \'hindi\')" style="height:' + spineHeight + 'px; background:' + palette.bg + '; border-left:3px solid ' + palette.border + ';" title="' + escapeHtml(b.title) + ' by ' + escapeHtml(b.author || 'Author') + ' (Click to Read in 3D)">' +
         statusBadge +
-        '</div>' +
-        '<div class="shelf-book-label">' + escapeHtml(b.title) + '</div>' +
-        '</div>';
+        '<div class="shelf-spine-title" style="color:' + palette.text + ';">' + escapeHtml(b.title) + '</div>' +
+        '<div class="shelf-spine-author">' + escapeHtml(b.author || 'Focus') + '</div>' +
+      '</div>';
     });
 
-    html += '</div><div class="shelf-wood"></div></div>';
+    html += '</div><div class="shelf-wood-plank"></div></div>';
   }
 
   html += '</div>';
@@ -17500,7 +17935,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.9.2';
+const CURRENT_APP_VERSION = 'v3.9.3';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -21107,10 +21542,116 @@ function onReaderSliderChange(val) {
   renderRealBookPages();
 }
 
+// ==========================================
+// OFFLINE AMBIENT FOCUS SOUNDSCAPE ENGINE
+// ==========================================
+let soundscapeCtx = null;
+let soundscapeGain = null;
+let isSoundscapePlaying = false;
+
+function toggleReaderSoundscape() {
+  if (isSoundscapePlaying) {
+    stopReaderSoundscape();
+  } else {
+    startReaderSoundscape();
+  }
+}
+
+function startReaderSoundscape() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!soundscapeCtx) soundscapeCtx = new AudioCtx();
+    if (soundscapeCtx.state === 'suspended') soundscapeCtx.resume();
+
+    const bufferSize = soundscapeCtx.sampleRate * 2;
+    const noiseBuffer = soundscapeCtx.createBuffer(1, bufferSize, soundscapeCtx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+      b6 = white * 0.115926;
+    }
+
+    const whiteNoise = soundscapeCtx.createBufferSource();
+    whiteNoise.buffer = noiseBuffer;
+    whiteNoise.loop = true;
+
+    const filter = soundscapeCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 800;
+
+    soundscapeGain = soundscapeCtx.createGain();
+    soundscapeGain.gain.setValueAtTime(0.01, soundscapeCtx.currentTime);
+    soundscapeGain.gain.exponentialRampToValueAtTime(0.22, soundscapeCtx.currentTime + 1.2);
+
+    whiteNoise.connect(filter);
+    filter.connect(soundscapeGain);
+    soundscapeGain.connect(soundscapeCtx.destination);
+
+    whiteNoise.start();
+    soundscapeCtx._noiseNode = whiteNoise;
+    isSoundscapePlaying = true;
+    updateSoundscapeButtonUI(true);
+    showToast('🎵 Ambient Focus Soundscape: ON', 'info');
+  } catch(e) {
+    console.warn('Soundscape audio error:', e);
+  }
+}
+
+function stopReaderSoundscape() {
+  if (soundscapeGain && soundscapeCtx) {
+    soundscapeGain.gain.exponentialRampToValueAtTime(0.001, soundscapeCtx.currentTime + 0.6);
+    setTimeout(() => {
+      if (soundscapeCtx._noiseNode) {
+        try { soundscapeCtx._noiseNode.stop(); } catch(e){}
+        soundscapeCtx._noiseNode = null;
+      }
+      isSoundscapePlaying = false;
+      updateSoundscapeButtonUI(false);
+      showToast('🔇 Ambient Soundscape: OFF', 'info');
+    }, 650);
+  } else {
+    isSoundscapePlaying = false;
+    updateSoundscapeButtonUI(false);
+  }
+}
+
+function updateSoundscapeButtonUI(active) {
+  const btn = document.getElementById('readerSoundscapeBtn');
+  if (btn) {
+    btn.classList.toggle('active', active);
+    btn.innerHTML = active ? '🔊 Soundscape: ON' : '🔈 Soundscape: OFF';
+  }
+}
+
+function setReaderFontSizePx(px) {
+  const val = parseInt(px) || 18;
+  readerState.fontSizePct = Math.round((val / 16) * 100);
+  const disp = document.getElementById('readerFontSizeDisplay');
+  if (disp) disp.innerText = readerState.fontSizePct + '%';
+  const pxDisp = document.getElementById('readerFontPxDisplay');
+  if (pxDisp) pxDisp.innerText = val + 'px';
+  renderRealBookPages();
+}
+
+window.toggleReaderSoundscape = toggleReaderSoundscape;
+window.setReaderFontSizePx = setReaderFontSizePx;
+
 function adjustReaderFontSize(delta) {
   readerState.fontSizePct = Math.max(75, Math.min(150, readerState.fontSizePct + (delta * 10)));
   const disp = document.getElementById('readerFontSizeDisplay');
   if (disp) disp.innerText = readerState.fontSizePct + '%';
+  const pxDisp = document.getElementById('readerFontPxDisplay');
+  if (pxDisp) pxDisp.innerText = Math.round((readerState.fontSizePct / 100) * 16) + 'px';
+  const slider = document.getElementById('readerFontSlider');
+  if (slider) slider.value = Math.round((readerState.fontSizePct / 100) * 16);
   renderRealBookPages();
 }
 
@@ -21273,6 +21814,11 @@ function renderRealBookPages() {
         indicator.innerText = 'Page ' + leftPageObj.pageNo + ' / ' + totalPages;
       }
     }
+  }
+
+  const dockPagePill = document.getElementById('readerDockPagePill');
+  if (dockPagePill) {
+    dockPagePill.innerText = readerState.currentPage + ' / ' + totalPages;
   }
 }
 

@@ -1,4 +1,4 @@
-const APP_VERSION = '3.9.2';
+const APP_VERSION = '3.9.3';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -1056,9 +1056,14 @@ function setViewMode(mode) {
   const tableBtn = document.getElementById('viewTableBtn');
   const gridBtn = document.getElementById('viewGridBtn');
   const shelfBtn = document.getElementById('viewBookshelfBtn');
+  const quickGrid = document.getElementById('quickViewGridBtn');
+  const quickShelf = document.getElementById('quickViewBookshelfBtn');
+
   if (tableBtn) tableBtn.classList.toggle('active', mode === 'table');
   if (gridBtn) gridBtn.classList.toggle('active', mode === 'grid');
   if (shelfBtn) shelfBtn.classList.toggle('active', mode === 'bookshelf');
+  if (quickGrid) quickGrid.classList.toggle('active', mode === 'grid');
+  if (quickShelf) quickShelf.classList.toggle('active', mode === 'bookshelf');
   renderBookList();
 }
 
@@ -2567,45 +2572,53 @@ function renderBookshelfView(container, books) {
     return;
   }
 
-  const booksPerShelf = 6;
+  const spinePalettes = [
+    { bg: 'linear-gradient(180deg, #991b1b, #7f1d1d 60%, #450a0a)', border: '#dc2626', text: '#fef08a' }, // Deep Crimson
+    { bg: 'linear-gradient(180deg, #1e3a8a, #172554 60%, #0f172a)', border: '#3b82f6', text: '#93c5fd' }, // Royal Blue
+    { bg: 'linear-gradient(180deg, #065f46, #064e3b 60%, #022c22)', border: '#10b981', text: '#a7f3d0' }, // Emerald
+    { bg: 'linear-gradient(180deg, #92400e, #78350f 60%, #451a03)', border: '#f59e0b', text: '#fef3c7' }, // Amber Leather
+    { bg: 'linear-gradient(180deg, #581c87, #3b0764 60%, #1e1b4b)', border: '#a855f7', text: '#f3e8ff' }, // Royal Purple
+    { bg: 'linear-gradient(180deg, #1f2937, #111827 60%, #030712)', border: '#64748b', text: '#f8fafc' }, // Slate Dark
+    { bg: 'linear-gradient(180deg, #7c2d12, #431407 60%, #1c0a00)', border: '#ea580c', text: '#fed7aa' }, // Mahogany
+  ];
+
+  const booksPerShelf = window.innerWidth <= 600 ? 5 : 8;
   const shelvesCount = Math.ceil(books.length / booksPerShelf);
-  let html = '<div class="bookshelf-container">';
+  let html = '<div class="bookshelf-luxury-wrap">';
 
   for (let s = 0; s < shelvesCount; s++) {
     const shelfBooks = books.slice(s * booksPerShelf, (s + 1) * booksPerShelf);
-    html += '<div class="shelf-unit"><div class="shelf-books-row">';
+    html += '<div class="shelf-unit-realistic"><div class="shelf-books-row-realistic">';
 
-    shelfBooks.forEach(b => {
-      const origIdx = b.originalIndex;
-      const days = getBookEffectiveDays(b);
+    shelfBooks.forEach((b, idx) => {
+      const origIdx = b.originalIndex !== undefined ? b.originalIndex : idx;
       const isReading = b.status === 'READING';
       const isDone = b.status === 'DONE';
       const isLent = Boolean(b.lent_to);
+      const isNew = origIdx >= 140;
 
-      let spineColor = '#3b82f6';
-      if (isDone) spineColor = '#10b981';
-      else if (isReading) spineColor = '#f59e0b';
-      else if (isLent) spineColor = '#8b5cf6';
+      const palette = spinePalettes[(origIdx + s) % spinePalettes.length];
+      const spineHeight = 195 + ((origIdx * 7) % 35); // Realistic varied book heights: 195px to 230px
 
       let statusBadge = '';
-      if (isLent) statusBadge = '<span class="shelf-book-badge" style="background:#8b5cf6;">🤝 Lent</span>';
-      else if (isReading) statusBadge = '<span class="shelf-book-badge" style="background:#f59e0b;">📖 Reading</span>';
-      else if (isDone) statusBadge = '<span class="shelf-book-badge" style="background:#10b981;">✅ Finished</span>';
+      if (isReading) {
+        statusBadge = '<span class="shelf-spine-badge badge-reading">Reading</span>';
+      } else if (isDone) {
+        statusBadge = '<span class="shelf-spine-badge badge-completed">Completed</span>';
+      } else if (isLent) {
+        statusBadge = '<span class="shelf-spine-badge badge-lent">Lent</span>';
+      } else if (isNew) {
+        statusBadge = '<span class="shelf-spine-badge badge-new">New</span>';
+      }
 
-      const shelfCover = getBookCover(b);
-      html += '<div class="shelf-book" onclick="openEditModal(' + origIdx + ')" title="' + escapeHtml(b.title) + ' by ' + escapeHtml(b.author) + ' (Click to view/edit)">' +
-        '<div class="shelf-book-inner" style="border-left: 5px solid ' + spineColor + ';">' +
-        (shelfCover 
-          ? '<img class="shelf-book-cover" src="' + escapeHtml(shelfCover) + '" alt="cover" onerror="this.style.display=\'none\'; if(this.nextElementSibling) this.nextElementSibling.style.display=\'flex\';">' +
-            '<div class="shelf-book-spine" style="display:none;"><div class="shelf-book-spine-title">' + escapeHtml(b.title) + '</div><div class="shelf-book-spine-author">' + escapeHtml(b.author) + '</div></div>'
-          : '<div class="shelf-book-spine"><div class="shelf-book-spine-title">' + escapeHtml(b.title) + '</div><div class="shelf-book-spine-author">' + escapeHtml(b.author) + '</div></div>') +
+      html += '<div class="shelf-book-standing" onclick="openRealBookReader(' + origIdx + ', \'hindi\')" style="height:' + spineHeight + 'px; background:' + palette.bg + '; border-left:3px solid ' + palette.border + ';" title="' + escapeHtml(b.title) + ' by ' + escapeHtml(b.author || 'Author') + ' (Click to Read in 3D)">' +
         statusBadge +
-        '</div>' +
-        '<div class="shelf-book-label">' + escapeHtml(b.title) + '</div>' +
-        '</div>';
+        '<div class="shelf-spine-title" style="color:' + palette.text + ';">' + escapeHtml(b.title) + '</div>' +
+        '<div class="shelf-spine-author">' + escapeHtml(b.author || 'Focus') + '</div>' +
+      '</div>';
     });
 
-    html += '</div><div class="shelf-wood"></div></div>';
+    html += '</div><div class="shelf-wood-plank"></div></div>';
   }
 
   html += '</div>';
@@ -3138,7 +3151,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.9.2';
+const CURRENT_APP_VERSION = 'v3.9.3';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -6745,10 +6758,116 @@ function onReaderSliderChange(val) {
   renderRealBookPages();
 }
 
+// ==========================================
+// OFFLINE AMBIENT FOCUS SOUNDSCAPE ENGINE
+// ==========================================
+let soundscapeCtx = null;
+let soundscapeGain = null;
+let isSoundscapePlaying = false;
+
+function toggleReaderSoundscape() {
+  if (isSoundscapePlaying) {
+    stopReaderSoundscape();
+  } else {
+    startReaderSoundscape();
+  }
+}
+
+function startReaderSoundscape() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!soundscapeCtx) soundscapeCtx = new AudioCtx();
+    if (soundscapeCtx.state === 'suspended') soundscapeCtx.resume();
+
+    const bufferSize = soundscapeCtx.sampleRate * 2;
+    const noiseBuffer = soundscapeCtx.createBuffer(1, bufferSize, soundscapeCtx.sampleRate);
+    const output = noiseBuffer.getChannelData(0);
+    let b0 = 0, b1 = 0, b2 = 0, b3 = 0, b4 = 0, b5 = 0, b6 = 0;
+    for (let i = 0; i < bufferSize; i++) {
+      const white = Math.random() * 2 - 1;
+      b0 = 0.99886 * b0 + white * 0.0555179;
+      b1 = 0.99332 * b1 + white * 0.0750759;
+      b2 = 0.96900 * b2 + white * 0.1538520;
+      b3 = 0.86650 * b3 + white * 0.3104856;
+      b4 = 0.55000 * b4 + white * 0.5329522;
+      b5 = -0.7616 * b5 - white * 0.0168980;
+      output[i] = (b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362) * 0.04;
+      b6 = white * 0.115926;
+    }
+
+    const whiteNoise = soundscapeCtx.createBufferSource();
+    whiteNoise.buffer = noiseBuffer;
+    whiteNoise.loop = true;
+
+    const filter = soundscapeCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 800;
+
+    soundscapeGain = soundscapeCtx.createGain();
+    soundscapeGain.gain.setValueAtTime(0.01, soundscapeCtx.currentTime);
+    soundscapeGain.gain.exponentialRampToValueAtTime(0.22, soundscapeCtx.currentTime + 1.2);
+
+    whiteNoise.connect(filter);
+    filter.connect(soundscapeGain);
+    soundscapeGain.connect(soundscapeCtx.destination);
+
+    whiteNoise.start();
+    soundscapeCtx._noiseNode = whiteNoise;
+    isSoundscapePlaying = true;
+    updateSoundscapeButtonUI(true);
+    showToast('🎵 Ambient Focus Soundscape: ON', 'info');
+  } catch(e) {
+    console.warn('Soundscape audio error:', e);
+  }
+}
+
+function stopReaderSoundscape() {
+  if (soundscapeGain && soundscapeCtx) {
+    soundscapeGain.gain.exponentialRampToValueAtTime(0.001, soundscapeCtx.currentTime + 0.6);
+    setTimeout(() => {
+      if (soundscapeCtx._noiseNode) {
+        try { soundscapeCtx._noiseNode.stop(); } catch(e){}
+        soundscapeCtx._noiseNode = null;
+      }
+      isSoundscapePlaying = false;
+      updateSoundscapeButtonUI(false);
+      showToast('🔇 Ambient Soundscape: OFF', 'info');
+    }, 650);
+  } else {
+    isSoundscapePlaying = false;
+    updateSoundscapeButtonUI(false);
+  }
+}
+
+function updateSoundscapeButtonUI(active) {
+  const btn = document.getElementById('readerSoundscapeBtn');
+  if (btn) {
+    btn.classList.toggle('active', active);
+    btn.innerHTML = active ? '🔊 Soundscape: ON' : '🔈 Soundscape: OFF';
+  }
+}
+
+function setReaderFontSizePx(px) {
+  const val = parseInt(px) || 18;
+  readerState.fontSizePct = Math.round((val / 16) * 100);
+  const disp = document.getElementById('readerFontSizeDisplay');
+  if (disp) disp.innerText = readerState.fontSizePct + '%';
+  const pxDisp = document.getElementById('readerFontPxDisplay');
+  if (pxDisp) pxDisp.innerText = val + 'px';
+  renderRealBookPages();
+}
+
+window.toggleReaderSoundscape = toggleReaderSoundscape;
+window.setReaderFontSizePx = setReaderFontSizePx;
+
 function adjustReaderFontSize(delta) {
   readerState.fontSizePct = Math.max(75, Math.min(150, readerState.fontSizePct + (delta * 10)));
   const disp = document.getElementById('readerFontSizeDisplay');
   if (disp) disp.innerText = readerState.fontSizePct + '%';
+  const pxDisp = document.getElementById('readerFontPxDisplay');
+  if (pxDisp) pxDisp.innerText = Math.round((readerState.fontSizePct / 100) * 16) + 'px';
+  const slider = document.getElementById('readerFontSlider');
+  if (slider) slider.value = Math.round((readerState.fontSizePct / 100) * 16);
   renderRealBookPages();
 }
 
@@ -6911,6 +7030,11 @@ function renderRealBookPages() {
         indicator.innerText = 'Page ' + leftPageObj.pageNo + ' / ' + totalPages;
       }
     }
+  }
+
+  const dockPagePill = document.getElementById('readerDockPagePill');
+  if (dockPagePill) {
+    dockPagePill.innerText = readerState.currentPage + ' / ' + totalPages;
   }
 }
 
