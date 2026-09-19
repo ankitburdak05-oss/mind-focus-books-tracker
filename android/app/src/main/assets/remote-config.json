@@ -2,29 +2,33 @@
   "version": "1.0.0",
   "updatedAt": "2026-09-17T05:24:10.058Z",
   "activeRelease": {
-    "version": "v3.9.4",
-    "name": "Mind Focus Books v3.9.4 — 100% Exact 3D Luxury Mahogany Bookshelf Edition",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.4/MindFocusBooks-Native.apk",
+    "version": "v3.9.5",
+    "name": "Mind Focus Books v3.9.5 — 150 Books Live on 3D Luxury Mahogany Shelves",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.5/MindFocusBooks-Native.apk",
     "features": [
-      "🪵 100% Exact 3D Mahogany Bookshelf: Identical design with rich mahogany planks, gold-embossed Alchemist & Dune, upright dense spines, and status badges",
-      "🪟 Frosted White Floating Dock: 5-item luxury navigation (Home, My Library, Focus, Profile, Settings)",
-      "📖 Real 3D Interactive Book Reader: Dual-page spread with audio focus soundscape",
-      "🏷️ Official v3.9.4 Release"
+      "📚 All 150 Library Books on 3D Shelves: Real titles, real library colors, and gilded ribs for all books",
+      "🏆 Completed Books Box (Shelf 1): User's finished books with green COMPLETED badges and luxury blocks",
+      "📖 Currently Reading Box (Shelf 2): Live Reading books with burgundy badges and New ribbons",
+      "🗂️ Category Wooden Boxes: Dedicated shelves for Focus, Mindset, Brain Science, Habits, Memory, and Vocabulary",
+      "🪟 Frosted White Floating Dock & 3D Reader Integration",
+      "🏷️ Official v3.9.5 Release"
     ],
-    "stagedAt": "2026-09-18T08:30:00.000Z",
+    "stagedAt": "2026-09-19T12:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.9.4",
-    "name": "Mind Focus Books v3.9.4 — 100% Exact 3D Luxury Mahogany Bookshelf Edition",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.4/MindFocusBooks-Native.apk",
+    "version": "v3.9.5",
+    "name": "Mind Focus Books v3.9.5 — 150 Books Live on 3D Luxury Mahogany Shelves",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.5/MindFocusBooks-Native.apk",
     "features": [
-      "🪵 100% Exact 3D Mahogany Bookshelf: Identical design with rich mahogany planks, gold-embossed Alchemist & Dune, upright dense spines, and status badges",
-      "🪟 Frosted White Floating Dock: 5-item luxury navigation (Home, My Library, Focus, Profile, Settings)",
-      "📖 Real 3D Interactive Book Reader: Dual-page spread with audio focus soundscape",
-      "🏷️ Official v3.9.4 Release"
+      "📚 All 150 Library Books on 3D Shelves: Real titles, real library colors, and gilded ribs for all books",
+      "🏆 Completed Books Box (Shelf 1): User's finished books with green COMPLETED badges and luxury blocks",
+      "📖 Currently Reading Box (Shelf 2): Live Reading books with burgundy badges and New ribbons",
+      "🗂️ Category Wooden Boxes: Dedicated shelves for Focus, Mindset, Brain Science, Habits, Memory, and Vocabulary",
+      "🪟 Frosted White Floating Dock & 3D Reader Integration",
+      "🏷️ Official v3.9.5 Release"
     ],
-    "stagedAt": "2026-09-18T08:30:00.000Z",
+    "stagedAt": "2026-09-19T12:00:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {
