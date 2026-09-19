@@ -9666,6 +9666,449 @@ body.modal-open {
     0 0 20px rgba(124, 58, 237, 0.5);
 }
 
+/* ============================================================
+   EXACT 3D MAHOGANY LUXURY BOOKSHELF (Match design_wooden_shelf)
+   ============================================================ */
+.mahogany-bookshelf-container {
+  background: #190c05;
+  background-image: 
+    radial-gradient(ellipse at 50% -20%, rgba(245, 158, 11, 0.22) 0%, transparent 65%),
+    linear-gradient(180deg, #2c1407 0%, #170a03 50%, #0d0502 100%);
+  border-left: 8px solid #361607;
+  border-right: 8px solid #361607;
+  box-shadow: 
+    inset 0 0 50px rgba(0, 0, 0, 0.95),
+    0 10px 40px rgba(0, 0, 0, 0.8);
+  min-height: 100vh;
+  padding: 0 0 95px 0;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.mahogany-bookshelf-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(90deg, 
+    rgba(0, 0, 0, 0.4) 0px, 
+    rgba(0, 0, 0, 0.4) 1px, 
+    transparent 1px, 
+    transparent 42px, 
+    rgba(255, 255, 255, 0.02) 43px, 
+    transparent 44px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Top Wood Frieze & Filter Pills */
+.shelf-frieze-bar {
+  background: linear-gradient(180deg, #3d1c0c 0%, #291105 100%);
+  padding: 8px 14px 10px 14px;
+  border-bottom: 2px solid #1a0802;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 10;
+}
+
+.shelf-filter-pills-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shelf-frieze-pill {
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  background: rgba(38, 17, 8, 0.85);
+  color: #d4a373;
+  backdrop-filter: blur(6px);
+}
+
+.shelf-frieze-pill:hover {
+  background: rgba(65, 28, 14, 0.95);
+  color: #fef08a;
+  border-color: rgba(245, 158, 11, 0.5);
+}
+
+.shelf-frieze-pill.active {
+  background: #ffffff !important;
+  color: #170903 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  font-weight: 800 !important;
+}
+
+/* Shelf Row */
+.mahogany-shelf-row {
+  position: relative;
+  padding: 0 6px;
+  margin-bottom: 0;
+  z-index: 2;
+}
+
+.mahogany-shelf-books {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 16px 8px 0px 8px;
+  min-height: 225px;
+  position: relative;
+  z-index: 2;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 8px;
+}
+.mahogany-shelf-books::-webkit-scrollbar { display: none; }
+
+/* Heavy Beveled Wood Plank Base */
+.mahogany-plank {
+  height: 24px;
+  background: linear-gradient(180deg, #7c4019 0%, #56270b 35%, #351403 85%, #1c0800 100%);
+  border-radius: 4px;
+  box-shadow: 
+    0 12px 24px rgba(0,0,0,0.85),
+    inset 0 3px 2px rgba(254, 215, 170, 0.45),
+    inset 0 -3px 4px rgba(0,0,0,0.9);
+  position: relative;
+  z-index: 5;
+  margin: 0 -2px;
+}
+
+.mahogany-plank::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 2%;
+  right: 2%;
+  height: 14px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.92) 0%, transparent 80%);
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------
+   Shelf 1: THE ALCHEMIST'S PATH + LEANING BOOKS + DUNE
+   ------------------------------------------------------------- */
+.book-alchemist-block {
+  width: 145px;
+  min-width: 135px;
+  height: 215px;
+  background: linear-gradient(145deg, #3d1c10 0%, #251007 50%, #150803 100%);
+  border: 1px solid #6e371a;
+  border-radius: 4px 8px 8px 4px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    -3px 0 6px rgba(0,0,0,0.7),
+    4px 6px 16px rgba(0,0,0,0.8),
+    inset 3px 0 5px rgba(255,255,255,0.12),
+    inset -3px 0 6px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+.book-alchemist-block:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.9);
+}
+
+.book-title-gold-emboss {
+  font-family: 'Bookerly', Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  color: #fef08a;
+  text-shadow: 
+    0 1px 1px #000,
+    0 -1px 1px rgba(255,255,255,0.2),
+    0 2px 4px rgba(0,0,0,0.9);
+  text-transform: uppercase;
+}
+
+/* Status Badges */
+.badge-pill-reading {
+  background: #581c1c;
+  color: #fef08a;
+  border: 1px solid #991b1b;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: fit-content;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.badge-pill-completed {
+  background: #14532d;
+  color: #bbf7d0;
+  border: 1px solid #16a34a;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: fit-content;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.badge-pill-lent {
+  background: #78350f;
+  color: #fde68a;
+  border: 1px solid #d97706;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: fit-content;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* Leaning Books Cluster */
+.leaning-books-group {
+  display: flex;
+  align-items: flex-end;
+  height: 220px;
+  position: relative;
+  margin: 0 4px;
+}
+
+.leaning-book-spine {
+  width: 24px;
+  height: 200px;
+  transform-origin: bottom right;
+  transform: rotate(11deg);
+  border-radius: 3px 5px 5px 3px;
+  box-shadow: 2px 4px 10px rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+.leaning-book-spine:hover {
+  transform: rotate(0deg) translateY(-8px);
+}
+
+/* Shelf 1 Right: DUNE */
+.book-dune-block {
+  width: 125px;
+  min-width: 115px;
+  height: 205px;
+  background: linear-gradient(145deg, #1c271e 0%, #111a12 60%, #090e0a 100%);
+  border: 1px solid #2d4533;
+  border-radius: 4px 8px 8px 4px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    -3px 0 6px rgba(0,0,0,0.7),
+    4px 6px 16px rgba(0,0,0,0.8),
+    inset 3px 0 5px rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+.book-dune-block:hover {
+  transform: translateY(-10px) scale(1.03);
+}
+
+/* -------------------------------------------------------------
+   Shelf 2: STORMLIGHT ARCHIVE + MINDFULNESS & FOCUS
+   ------------------------------------------------------------- */
+.book-stormlight-block {
+  width: 135px;
+  min-width: 125px;
+  height: 200px;
+  background: linear-gradient(145deg, #23192e 0%, #170f20 60%, #0d0812 100%);
+  border: 1px solid #4a3461;
+  border-radius: 4px 8px 8px 4px;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: -3px 0 6px rgba(0,0,0,0.7), 4px 6px 14px rgba(0,0,0,0.8);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.corner-tag-blue {
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  background: #38bdf8;
+  color: #032b44;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.book-mindfulness-block {
+  width: 165px;
+  min-width: 150px;
+  height: 195px;
+  background: linear-gradient(145deg, #7c5332 0%, #5e3b1f 60%, #3d2310 100%);
+  border: 1px solid #a16e45;
+  border-radius: 4px 8px 8px 4px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    -3px 0 6px rgba(0,0,0,0.7),
+    4px 6px 16px rgba(0,0,0,0.8),
+    inset 3px 0 5px rgba(255,255,255,0.18);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.corner-tag-tan {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  background: #d4a373;
+  color: #3b1d0c;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+/* Upright Standing Spines */
+.spine-vertical-realistic {
+  width: 32px;
+  min-width: 26px;
+  height: 195px;
+  border-radius: 3px 5px 5px 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 2px;
+  box-shadow: 
+    -2px 0 4px rgba(0,0,0,0.6),
+    3px 4px 10px rgba(0,0,0,0.7),
+    inset -2px 0 4px rgba(0,0,0,0.4),
+    inset 2px 0 2px rgba(255,255,255,0.22);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+.spine-vertical-realistic:hover {
+  transform: translateY(-14px) scale(1.08);
+  box-shadow: 0 16px 25px rgba(0,0,0,0.85);
+  z-index: 10;
+}
+
+.spine-title-vertical {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fef08a;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+  max-height: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* -------------------------------------------------------------
+   Frosted White Floating Dock (Exact Match to design_wooden_shelf)
+   ------------------------------------------------------------- */
+.bottom-nav-dock {
+  position: fixed !important;
+  bottom: 12px !important;
+  left: 12px !important;
+  right: 12px !important;
+  max-width: 480px !important;
+  margin: 0 auto !important;
+  height: 64px !important;
+  background: rgba(246, 246, 248, 0.94) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-radius: 36px !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0,0,0,0.15) !important;
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+  padding: 0 8px !important;
+  z-index: 9999 !important;
+}
+
+.bottom-nav-dock .dock-item {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: none !important;
+  border: none !important;
+  color: #64748b !important;
+  cursor: pointer !important;
+  padding: 4px 0 !important;
+  position: relative !important;
+  transition: all 0.2s ease !important;
+  min-width: 0 !important;
+  gap: 3px !important;
+}
+
+.bottom-nav-dock .dock-item.active {
+  color: #0f172a !important;
+}
+
+.bottom-nav-dock .dock-item .dock-svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke: #64748b !important;
+  transition: all 0.2s ease !important;
+}
+
+.bottom-nav-dock .dock-item.active .dock-svg {
+  stroke: #0f172a !important;
+  transform: translateY(-1px) !important;
+}
+
+.bottom-nav-dock .dock-item .dock-label {
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  color: #64748b !important;
+  letter-spacing: 0.01em !important;
+}
+
+.bottom-nav-dock .dock-item.active .dock-label {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+.bottom-nav-dock .dock-item .dock-active-line {
+  display: none !important;
+}
+
+
 </style>
 </head>
 <body>
@@ -9792,32 +10235,23 @@ body.modal-open {
   <header class="app-header">
     <div class="header-inner">
       <div class="brand-section" onclick="switchBottomTab('home')" style="cursor:pointer;" title="Mind Focus Books Home">
-        <div class="brand-logo-cube">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+        <div class="shelf-brand-icon-wrap" style="width:34px; height:34px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.25); border-radius:10px; margin-right:10px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
         </div>
-        <div class="brand-text-wrap">
-          <div class="brand-title-main">
-            <span>Mind Focus Books</span>
-            <span class="app-version-pill">v3.9.3</span>
-          </div>
+        <div class="brand-text-wrap" style="display:flex; flex-direction:column; line-height:1.15;">
+          <div class="brand-title-main" style="font-size:1.15rem; font-weight:800; color:#ffffff; letter-spacing:-0.01em;">Mind Focus</div>
+          <div class="brand-subtitle" style="font-size:0.82rem; font-weight:600; color:#fed7aa; letter-spacing:0.02em;">Books</div>
         </div>
       </div>
       
-      <div class="header-actions">
-        <!-- Spotlight Search -->
-        <button type="button" class="header-icon-btn" onclick="openSpotlightModal()" title="Search books (Ctrl+K)">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      <div class="header-actions" style="display:flex; align-items:center; gap:8px;">
+        <!-- User Profile Avatar (Circular button from design) -->
+        <button type="button" class="shelf-circle-header-btn" onclick="switchBottomTab('profile')" title="Profile & Reading Stats" style="width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.05rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         </button>
-        <!-- Notification Bell with red badge -->
-        <button type="button" class="header-icon-btn header-bell-btn" id="headerNoticeBellBtn" onclick="openNoticeOrQuoteModal()" title="Notices & Daily Focus Wisdom">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
-          <span class="bell-red-dot"></span>
-        </button>
-        <!-- User Profile Avatar -->
-        <button type="button" class="header-icon-btn header-profile-btn" onclick="switchBottomTab('profile')" title="Profile & App Settings">
-          <div class="profile-avatar-circle">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-          </div>
+        <!-- Spotlight Search (Circular button from design) -->
+        <button type="button" class="shelf-circle-header-btn" onclick="openSpotlightModal()" title="Search Library (Ctrl+K)" style="width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.22); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.05rem;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </button>
       </div>
     </div>
@@ -9837,42 +10271,15 @@ body.modal-open {
     <!-- Golden Light Sweep Beam Overlay -->
     <div class="golden-sweep-overlay" id="goldenSweepOverlay"></div>
 
-    <!-- TAB VIEW 1: HOME (Modern App Home from Screenshot) -->
+    <!-- TAB VIEW 1: HOME (Exact 3D Luxury Mahogany Bookshelf matching design_wooden_shelf_1789786873826.jpg) -->
     <div id="homeViewContainer" class="app-tab-view">
-      <!-- Section 1: My Library -->
-      <section class="home-section" id="homeMyLibrarySection">
-        <div class="home-section-header">
-          <h2 class="home-section-title">My Library</h2>
-        </div>
-        <div class="home-books-grid" id="homeMyLibraryGrid">
-          <!-- Populated by JS -->
-        </div>
-      </section>
-
-      <!-- Section 2: Continue Reading -->
-      <section class="home-section" id="homeContinueReadingSection">
-        <div class="home-section-header">
-          <h2 class="home-section-title">Continue Reading</h2>
-          <button type="button" class="home-show-all-btn" onclick="switchBottomTab('library'); filterByStatus('READING');">Show All</button>
-        </div>
-        <div class="home-shelf-wrap">
-          <div class="home-books-grid" id="homeContinueReadingGrid">
-            <!-- Populated by JS -->
-          </div>
-          <div class="home-shelf-wood"></div>
-        </div>
-      </section>
-
-      <!-- Section 3: Recently Added -->
-      <section class="home-section" id="homeRecentlyAddedSection">
-        <div class="home-section-header">
-          <h2 class="home-section-title">Recently Added</h2>
-          <button type="button" class="home-show-all-btn" onclick="switchBottomTab('library');">Show All</button>
-        </div>
-        <div class="home-books-grid" id="homeRecentlyAddedGrid">
-          <!-- Populated by JS -->
-        </div>
-      </section>
+      <div class="mahogany-bookshelf-container" id="mahoganyBookshelfContainer">
+        <!-- Rendered dynamically by renderHomeBookshelf() in app.js -->
+      </div>
+      <!-- Hidden legacy elements for safety -->
+      <div style="display:none;" id="homeMyLibraryGrid"></div>
+      <div style="display:none;" id="homeContinueReadingGrid"></div>
+      <div style="display:none;" id="homeRecentlyAddedGrid"></div>
     </div>
 
     <!-- TAB VIEW 2: LIBRARY (Full Catalog with Search & Shelves) -->
@@ -10777,27 +11184,27 @@ body.modal-open {
     </div>
   </div>
 
-  <!-- Bottom Navigation Bar (Modern Mobile App Bar matching screenshot) -->
+  <!-- Bottom Navigation Bar (Frosted White Luxury Dock matching design_wooden_shelf) -->
   <nav class="bottom-nav-dock" id="bottomNavDock">
     <button type="button" class="dock-item active" id="dockHomeBtn" onclick="switchBottomTab('home')">
-      <div class="dock-active-line"></div>
-      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <svg class="dock-svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       <span class="dock-label">Home</span>
     </button>
     <button type="button" class="dock-item" id="dockLibraryBtn" onclick="switchBottomTab('library')">
-      <div class="dock-active-line"></div>
       <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-      <span class="dock-label">Library</span>
+      <span class="dock-label">My Library</span>
     </button>
-    <button type="button" class="dock-item" id="dockDiscoverBtn" onclick="switchBottomTab('discover')">
-      <div class="dock-active-line"></div>
-      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-      <span class="dock-label">Discover</span>
+    <button type="button" class="dock-item" id="dockDiscoverBtn" onclick="openAmbienceModal()">
+      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="4"></circle><line x1="12" y1="2" x2="12" y2="4"></line><line x1="12" y1="20" x2="12" y2="22"></line><line x1="2" y1="12" x2="4" y2="12"></line><line x1="20" y1="12" x2="22" y2="12"></line></svg>
+      <span class="dock-label">Focus</span>
     </button>
     <button type="button" class="dock-item" id="dockProfileBtn" onclick="switchBottomTab('profile')">
-      <div class="dock-active-line"></div>
-      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
       <span class="dock-label">Profile</span>
+    </button>
+    <button type="button" class="dock-item" id="dockSettingsBtn" onclick="openSettingsModal()">
+      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      <span class="dock-label">Settings</span>
     </button>
   </nav>
 
@@ -14782,7 +15189,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
 </script>
   <script>
-const APP_VERSION = '3.9.3';
+const APP_VERSION = '3.9.4';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -17806,69 +18213,212 @@ function renderModernCard(b, options = {}) {
 }
 window.renderModernCard = renderModernCard;
 
+let currentShelfFilter = 'ALL';
+
+function filterHomeShelf(filter) {
+  if (typeof triggerHaptic === 'function') triggerHaptic('selection');
+  currentShelfFilter = filter;
+  renderHomeBookshelf(filter);
+}
+window.filterHomeShelf = filterHomeShelf;
+
+function renderHomeBookshelf(activeFilter = 'ALL') {
+  currentShelfFilter = activeFilter;
+  const container = document.getElementById('mahoganyBookshelfContainer');
+  if (!container) return;
+
+  // Find target books for exact match
+  const findBook = (titlePart, defaultIdx) => {
+    const idx = state.books.findIndex(b => b && b.title && b.title.toLowerCase().includes(titlePart.toLowerCase()));
+    if (idx !== -1) return { book: state.books[idx], index: idx };
+    const b = state.books[defaultIdx] || { title: titlePart, author: 'Focus Author' };
+    return { book: b, index: defaultIdx };
+  };
+
+  const alchemist = findBook('alchemist', 13);
+  const dune = findBook('dune', 15);
+  const stormlight = findBook('stormlight', 22);
+  const mindfulness = findBook('mindfulness', 2);
+  const meditations = findBook('meditations', 3);
+  const powerOfNow = findBook('power of now', 4);
+  const ikigai = findBook('ikigai', 5);
+  const atomicHabits = findBook('atomic habits', 6);
+  const deepWork = findBook('deep work', 7);
+  const thinkGrow = findBook('think and grow', 8);
+  const psychMoney = findBook('psychology of money', 9);
+  const sapiens = findBook('sapiens', 10);
+  const fourHour = findBook('4-hour workweek', 11);
+  const gita = findBook('bhagavad gita', 0);
+  const warrior = findBook('warrior', 12);
+
+  // Dense standing spines matching the photo's Shelf 3
+  const denseSpinesData = [
+    { title: 'MEDITATIONS', author: 'Marcus Aurelius', bg: 'linear-gradient(180deg, #fef3c7, #fde68a 60%, #d97706)', text: '#78350f', border: '#b45309', height: 218, bIdx: meditations.index },
+    { title: 'THE POWER OF NOW', author: 'Eckhart Tolle', bg: 'linear-gradient(180deg, #991b1b, #7f1d1d 60%, #450a0a)', text: '#fef08a', border: '#b91c1c', height: 210, bIdx: powerOfNow.index },
+    { title: 'THE POWER OF NOW', author: 'Eckhart Tolle', bg: 'linear-gradient(180deg, #831843, #701a75 60%, #4a044e)', text: '#fbcfe8', border: '#a21caf', height: 214, bIdx: powerOfNow.index },
+    { title: 'IKIGAI', author: 'Héctor García', bg: 'linear-gradient(180deg, #92400e, #78350f 60%, #451a03)', text: '#fef3c7', border: '#d97706', height: 205, bIdx: ikigai.index },
+    { title: 'ATOMIC HABITS', author: 'James Clear', bg: 'linear-gradient(180deg, #f8fafc, #f1f5f9 60%, #cbd5e1)', text: '#0f172a', border: '#94a3b8', height: 215, leaning: true, bIdx: atomicHabits.index },
+    { title: 'MINDFULNESS & FOCUS', author: 'Mind Focus', bg: 'linear-gradient(180deg, #1e3a8a, #172554 60%, #030712)', text: '#bfdbfe', border: '#3b82f6', height: 222, bIdx: mindfulness.index },
+    { title: 'DEEP WORK', author: 'Cal Newport', bg: 'linear-gradient(180deg, #1f2937, #111827 60%, #030712)', text: '#fde047', border: '#eab308', height: 212, bIdx: deepWork.index },
+    { title: 'THINK & GROW RICH', author: 'Napoleon Hill', bg: 'linear-gradient(180deg, #7c2d12, #431407 60%, #1c0a00)', text: '#fed7aa', border: '#ea580c', height: 216, bIdx: thinkGrow.index },
+    { title: 'PSYCHOLOGY OF MONEY', author: 'Morgan Housel', bg: 'linear-gradient(180deg, #065f46, #064e3b 60%, #022c22)', text: '#a7f3d0', border: '#10b981', height: 208, bIdx: psychMoney.index },
+    { title: 'SAPIENS', author: 'Yuval Noah Harari', bg: 'linear-gradient(180deg, #374151, #1f2937 60%, #111827)', text: '#f3f4f6', border: '#6b7280', height: 220, bIdx: sapiens.index },
+    { title: '4-HOUR WORKWEEK', author: 'Tim Ferriss', bg: 'linear-gradient(180deg, #1d4ed8, #1e40af 60%, #172554)', text: '#dbeafe', border: '#3b82f6', height: 206, bIdx: fourHour.index },
+    { title: 'BHAGAVAD GITA', author: 'Vyasa', bg: 'linear-gradient(180deg, #b91c1c, #991b1b 60%, #450a0a)', text: '#fef08a', border: '#f59e0b', height: 225, bIdx: gita.index },
+  ];
+
+  let html = '';
+
+  // Top Wood Frieze Filter Bar matching design_wooden_shelf
+  html += '<div class="shelf-frieze-bar">' +
+    '<div class="shelf-filter-pills-wrap">' +
+      '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'LENT' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'LENT\')">Lent</button>' +
+      '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'DONE' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'DONE\')">Completed</button>' +
+      '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'READING' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'READING\')">Reading</button>' +
+      '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'ALL' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'ALL\')">All Books</button>' +
+    '</div>' +
+  '</div>';
+
+  // -------------------------------------------------------------
+  // SHELF 1: THE ALCHEMIST'S PATH + LEANING BOOKS + DUNE
+  // -------------------------------------------------------------
+  html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
+  
+  // Book 1: THE ALCHEMIST'S PATH
+  html += '<div class="book-alchemist-block" onclick="openRealBookReader(' + alchemist.index + ', \'hindi\')" title="Read The Alchemist\'s Path">' +
+    '<div class="book-title-gold-emboss">THE<br>ALCHEMIST\'S<br>PATH</div>' +
+    '<span class="badge-pill-reading">READING</span>' +
+  '</div>';
+
+  // Leaning books group next to Alchemist
+  html += '<div class="leaning-books-group">' +
+    '<div class="leaning-book-spine" onclick="openRealBookReader(' + meditations.index + ', \'hindi\')" style="background:linear-gradient(180deg, #fde68a, #d97706); border-left:2px solid #b45309;" title="Meditations">' +
+      '<div class="spine-title-vertical" style="color:#78350f; font-size:0.58rem;">MEDITATIONS</div>' +
+    '</div>' +
+    '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + warrior.index + ', \'hindi\')" style="width:20px; height:205px; background:linear-gradient(180deg, #991b1b, #450a0a); border-left:2px solid #ea580c;" title="Warrior">' +
+      '<div class="spine-title-vertical" style="font-size:0.55rem;">WARRIOR</div>' +
+    '</div>' +
+  '</div>';
+
+  // Book 2: DUNE
+  html += '<div class="book-dune-block" onclick="openRealBookReader(' + dune.index + ', \'hindi\')" title="Read Dune">' +
+    '<div class="book-title-gold-emboss" style="font-size:1.45rem; letter-spacing:0.06em;">DUNE</div>' +
+    '<span class="badge-pill-completed">COMPLETED</span>' +
+  '</div>';
+
+  // Upright Spines on far right
+  html += '<div style="display:flex; align-items:flex-end; gap:6px;">' +
+    '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + powerOfNow.index + ', \'hindi\')" style="width:28px; height:220px; background:linear-gradient(180deg, #065f46, #022c22); border-left:2px solid #34d399;" title="The Power of Now">' +
+      '<div class="spine-title-vertical" style="color:#6ee7b7;">THE POWER OF NOW</div>' +
+    '</div>' +
+    '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + gita.index + ', \'hindi\')" style="width:26px; height:215px; background:linear-gradient(180deg, #0f766e, #134e4a); border-left:2px solid #2dd4bf;" title="Gita">' +
+      '<div class="spine-title-vertical" style="color:#99f6e4;">BHAGAVAD GITA</div>' +
+    '</div>' +
+  '</div>';
+
+  html += '</div><div class="mahogany-plank"></div></div>';
+
+  // -------------------------------------------------------------
+  // SHELF 2: STORMLIGHT ARCHIVE + MINDFULNESS & FOCUS
+  // -------------------------------------------------------------
+  html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
+
+  // Upright spines on left
+  html += '<div style="display:flex; align-items:flex-end; gap:5px;">' +
+    '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + meditations.index + ', \'hindi\')" style="width:25px; height:205px; background:linear-gradient(180deg, #374151, #111827); border-left:2px solid #9ca3af;" title="Meditations">' +
+      '<div class="spine-title-vertical">MEDITATIONS</div>' +
+    '</div>' +
+  '</div>';
+
+  // Book 3: STORMLIGHT ARCHIVE
+  html += '<div class="book-stormlight-block" onclick="openRealBookReader(' + stormlight.index + ', \'hindi\')" title="Read Stormlight Archive">' +
+    '<span class="corner-tag-blue">New</span>' +
+    '<div class="book-title-gold-emboss" style="font-size:1.02rem;">STORMLIGHT<br>ARCHIVE</div>' +
+    '<span class="badge-pill-completed">COMPLETED</span>' +
+  '</div>';
+
+  // Book 4: MINDFULNESS & FOCUS (Tan leather block)
+  html += '<div class="book-mindfulness-block" onclick="openRealBookReader(' + mindfulness.index + ', \'hindi\')" title="Mindfulness & Focus">' +
+    '<span class="corner-tag-tan">New</span>' +
+    '<div class="book-title-gold-emboss" style="font-size:1.05rem;">MINDFULNESS<br>& FOCUS</div>' +
+    '<span class="badge-pill-lent">LENT</span>' +
+  '</div>';
+
+  // Upright spines on far right
+  html += '<div style="display:flex; align-items:flex-end; gap:5px;">' +
+    '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + thinkGrow.index + ', \'hindi\')" style="width:28px; height:210px; background:linear-gradient(180deg, #7c2d12, #1c0a00); border-left:2px solid #ea580c;" title="Think & Grow Rich">' +
+      '<div class="spine-title-vertical">THINK & GROW</div>' +
+    '</div>' +
+  '</div>';
+
+  html += '</div><div class="mahogany-plank"></div></div>';
+
+  // -------------------------------------------------------------
+  // SHELF 3: DENSE STANDING LIBRARY SPINES (12-14 books)
+  // -------------------------------------------------------------
+  html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:flex-start; gap:6px;">';
+
+  denseSpinesData.forEach(s => {
+    const leaningStyle = s.leaning 
+      ? 'transform: rotate(11deg) translateY(-4px); margin-right: 12px; z-index: 4;' 
+      : '';
+    html += '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + s.bIdx + ', \'hindi\')" style="width:30px; height:' + s.height + 'px; background:' + s.bg + '; border-left:2px solid ' + s.border + '; ' + leaningStyle + '" title="' + escapeHtml(s.title) + ' by ' + escapeHtml(s.author) + '">' +
+      '<div class="spine-title-vertical" style="color:' + s.text + ';">' + escapeHtml(s.title) + '</div>' +
+    '</div>';
+  });
+
+  html += '</div><div class="mahogany-plank"></div></div>';
+
+  // -------------------------------------------------------------
+  // SHELF 4: COLLECTOR\'S EDITIONS & MATCHED SET
+  // -------------------------------------------------------------
+  html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:space-between; gap:6px;">';
+
+  // Ornate volumes on left
+  const collectorSpines = [
+    { title: 'BHAGAVAD GITA', bg: 'linear-gradient(180deg, #991b1b, #450a0a)', border: '#f59e0b', text: '#fef08a', bIdx: gita.index },
+    { title: 'WAR & PEACE', bg: 'linear-gradient(180deg, #3f6212, #1a2e05)', border: '#84cc16', text: '#ecfccb', bIdx: warrior.index },
+    { title: 'STORMLIGHT I', bg: 'linear-gradient(180deg, #1e1b4b, #030712)', border: '#6366f1', text: '#e0e7ff', bIdx: stormlight.index },
+    { title: 'STORMLIGHT II', bg: 'linear-gradient(180deg, #312e81, #0f172a)', border: '#818cf8', text: '#e0e7ff', bIdx: stormlight.index },
+  ];
+  collectorSpines.forEach(s => {
+    html += '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + s.bIdx + ', \'hindi\')" style="width:32px; height:215px; background:' + s.bg + '; border-left:3px solid ' + s.border + ';" title="' + escapeHtml(s.title) + '">' +
+      '<div class="spine-title-vertical" style="color:' + s.text + ';">' + escapeHtml(s.title) + '</div>' +
+    '</div>';
+  });
+
+  // Matched cream collector set on right
+  const matchedDune = [
+    { vol: 'DUNE I', bIdx: dune.index },
+    { vol: 'DUNE II', bIdx: dune.index },
+    { vol: 'DUNE III', bIdx: dune.index },
+    { vol: 'FOCUS', bIdx: mindfulness.index },
+    { vol: 'WISDOM', bIdx: meditations.index },
+  ];
+  matchedDune.forEach(d => {
+    html += '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + d.bIdx + ', \'hindi\')" style="width:28px; height:210px; background:linear-gradient(180deg, #fafaf9, #e7e5e4 70%, #d6d3d1); border-left:2px solid #ca8a04;" title="' + d.vol + '">' +
+      '<div class="spine-title-vertical" style="color:#292524; font-size:0.62rem;">' + d.vol + '</div>' +
+    '</div>';
+  });
+
+  html += '</div><div class="mahogany-plank"></div></div>';
+
+  // -------------------------------------------------------------
+  // SHELF 5: BOTTOM SUBTLE PEEK
+  // -------------------------------------------------------------
+  html += '<div class="mahogany-shelf-row" style="opacity:0.65;"><div class="mahogany-shelf-books" style="min-height:90px; padding-top:6px;">';
+  for (let i = 0; i < 10; i++) {
+    const pBook = state.books[(i * 9 + 3) % state.books.length] || { title: 'Focus Book' };
+    html += '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + ((i * 9 + 3) % state.books.length) + ', \'hindi\')" style="width:30px; height:80px; background:linear-gradient(180deg, #78350f, #291002); border-top:3px solid #d97706;" title="' + escapeHtml(pBook.title) + '"></div>';
+  }
+  html += '</div></div>';
+
+  container.innerHTML = html;
+}
+window.renderHomeBookshelf = renderHomeBookshelf;
+
 function renderHomeView() {
-  const homeGrid1 = document.getElementById('homeMyLibraryGrid');
-  const homeGrid2 = document.getElementById('homeContinueReadingGrid');
-  const homeGrid3 = document.getElementById('homeRecentlyAddedGrid');
-  if (!homeGrid1 || !homeGrid2 || !homeGrid3) return;
-
-  // 1. My Library Section (Atomic Habits, The Subtle Art, Deep Work)
-  const myLibraryKeywords = ['atomic habits', 'subtle art', 'deep work', 'limitless', 'psychology of money'];
-  let myLibraryBooks = [];
-  myLibraryKeywords.forEach(k => {
-    const found = state.books.find(b => b.title && b.title.toLowerCase().includes(k));
-    if (found && !myLibraryBooks.includes(found)) myLibraryBooks.push(found);
-  });
-  if (myLibraryBooks.length < 3) {
-    state.books.forEach(b => {
-      if (myLibraryBooks.length < 3 && !myLibraryBooks.includes(b)) myLibraryBooks.push(b);
-    });
-  }
-
-  const libPcts = [72, 71, 91, 65, 80];
-  homeGrid1.innerHTML = myLibraryBooks.slice(0, 3).map((b, idx) => {
-    return renderModernCard(b, { mockPct: libPcts[idx % libPcts.length], statusLabel: 'done' });
-  }).join('');
-
-  // 2. Continue Reading Section (Thinking Fast and Slow, Hyperfocus, Subconscious Mind)
-  const continueKeywords = ['thinking, fast', 'hyperfocus', 'subconscious mind'];
-  let continueBooks = state.books.filter(b => b.status === 'READING');
-  continueKeywords.forEach(k => {
-    const found = state.books.find(b => b.title && b.title.toLowerCase().includes(k));
-    if (found && !continueBooks.includes(found)) continueBooks.push(found);
-  });
-  if (continueBooks.length < 3) {
-    state.books.slice(1, 4).forEach(b => {
-      if (!continueBooks.includes(b)) continueBooks.push(b);
-    });
-  }
-
-  const readingBadges = ['5 hr left', '1 hr left', '9 hr left', '4 hr left'];
-  const readingPcts = [48, 85, 24, 60];
-  homeGrid2.innerHTML = continueBooks.slice(0, 3).map((b, idx) => {
-    return renderModernCard(b, {
-      timeBadge: readingBadges[idx % readingBadges.length],
-      mockPct: readingPcts[idx % readingPcts.length],
-      statusLabel: 'read'
-    });
-  }).join('');
-
-  // 3. Recently Added Section (Dopamine Nation, The Subtle Art..., 4-Hour Workweek)
-  const recentKeywords = ['dopamine nation', 'subtle art', '4-hour workweek', 'think and grow', 'ego is the enemy', 'clear thinking'];
-  let recentBooks = [];
-  recentKeywords.forEach(k => {
-    const found = state.books.find(b => b.title && b.title.toLowerCase().includes(k));
-    if (found && !recentBooks.includes(found)) recentBooks.push(found);
-  });
-  if (recentBooks.length < 3) {
-    state.books.slice(10, 16).forEach(b => {
-      if (!recentBooks.includes(b)) recentBooks.push(b);
-    });
-  }
-
-  homeGrid3.innerHTML = recentBooks.slice(0, 3).map(b => {
-    return renderModernCard(b, { mockPct: 0, statusLabel: 'new' });
-  }).join('');
+  renderHomeBookshelf(currentShelfFilter || 'ALL');
 }
 window.renderHomeView = renderHomeView;
 

@@ -9644,3 +9644,446 @@ body.modal-open {
     0 15px 30px rgba(37, 99, 235, 0.6),
     0 0 20px rgba(124, 58, 237, 0.5);
 }
+
+/* ============================================================
+   EXACT 3D MAHOGANY LUXURY BOOKSHELF (Match design_wooden_shelf)
+   ============================================================ */
+.mahogany-bookshelf-container {
+  background: #190c05;
+  background-image: 
+    radial-gradient(ellipse at 50% -20%, rgba(245, 158, 11, 0.22) 0%, transparent 65%),
+    linear-gradient(180deg, #2c1407 0%, #170a03 50%, #0d0502 100%);
+  border-left: 8px solid #361607;
+  border-right: 8px solid #361607;
+  box-shadow: 
+    inset 0 0 50px rgba(0, 0, 0, 0.95),
+    0 10px 40px rgba(0, 0, 0, 0.8);
+  min-height: 100vh;
+  padding: 0 0 95px 0;
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.mahogany-bookshelf-container::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(90deg, 
+    rgba(0, 0, 0, 0.4) 0px, 
+    rgba(0, 0, 0, 0.4) 1px, 
+    transparent 1px, 
+    transparent 42px, 
+    rgba(255, 255, 255, 0.02) 43px, 
+    transparent 44px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Top Wood Frieze & Filter Pills */
+.shelf-frieze-bar {
+  background: linear-gradient(180deg, #3d1c0c 0%, #291105 100%);
+  padding: 8px 14px 10px 14px;
+  border-bottom: 2px solid #1a0802;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.6);
+  display: flex;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 10;
+}
+
+.shelf-filter-pills-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shelf-frieze-pill {
+  padding: 5px 14px;
+  border-radius: 999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  background: rgba(38, 17, 8, 0.85);
+  color: #d4a373;
+  backdrop-filter: blur(6px);
+}
+
+.shelf-frieze-pill:hover {
+  background: rgba(65, 28, 14, 0.95);
+  color: #fef08a;
+  border-color: rgba(245, 158, 11, 0.5);
+}
+
+.shelf-frieze-pill.active {
+  background: #ffffff !important;
+  color: #170903 !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+  font-weight: 800 !important;
+}
+
+/* Shelf Row */
+.mahogany-shelf-row {
+  position: relative;
+  padding: 0 6px;
+  margin-bottom: 0;
+  z-index: 2;
+}
+
+.mahogany-shelf-books {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 16px 8px 0px 8px;
+  min-height: 225px;
+  position: relative;
+  z-index: 2;
+  overflow-x: auto;
+  scrollbar-width: none;
+  gap: 8px;
+}
+.mahogany-shelf-books::-webkit-scrollbar { display: none; }
+
+/* Heavy Beveled Wood Plank Base */
+.mahogany-plank {
+  height: 24px;
+  background: linear-gradient(180deg, #7c4019 0%, #56270b 35%, #351403 85%, #1c0800 100%);
+  border-radius: 4px;
+  box-shadow: 
+    0 12px 24px rgba(0,0,0,0.85),
+    inset 0 3px 2px rgba(254, 215, 170, 0.45),
+    inset 0 -3px 4px rgba(0,0,0,0.9);
+  position: relative;
+  z-index: 5;
+  margin: 0 -2px;
+}
+
+.mahogany-plank::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 2%;
+  right: 2%;
+  height: 14px;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.92) 0%, transparent 80%);
+  pointer-events: none;
+}
+
+/* -------------------------------------------------------------
+   Shelf 1: THE ALCHEMIST'S PATH + LEANING BOOKS + DUNE
+   ------------------------------------------------------------- */
+.book-alchemist-block {
+  width: 145px;
+  min-width: 135px;
+  height: 215px;
+  background: linear-gradient(145deg, #3d1c10 0%, #251007 50%, #150803 100%);
+  border: 1px solid #6e371a;
+  border-radius: 4px 8px 8px 4px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    -3px 0 6px rgba(0,0,0,0.7),
+    4px 6px 16px rgba(0,0,0,0.8),
+    inset 3px 0 5px rgba(255,255,255,0.12),
+    inset -3px 0 6px rgba(0,0,0,0.6);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+.book-alchemist-block:hover {
+  transform: translateY(-10px) scale(1.03);
+  box-shadow: 0 16px 30px rgba(0,0,0,0.9);
+}
+
+.book-title-gold-emboss {
+  font-family: 'Bookerly', Georgia, 'Times New Roman', serif;
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: 0.04em;
+  color: #fef08a;
+  text-shadow: 
+    0 1px 1px #000,
+    0 -1px 1px rgba(255,255,255,0.2),
+    0 2px 4px rgba(0,0,0,0.9);
+  text-transform: uppercase;
+}
+
+/* Status Badges */
+.badge-pill-reading {
+  background: #581c1c;
+  color: #fef08a;
+  border: 1px solid #991b1b;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: fit-content;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.badge-pill-completed {
+  background: #14532d;
+  color: #bbf7d0;
+  border: 1px solid #16a34a;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: fit-content;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+.badge-pill-lent {
+  background: #78350f;
+  color: #fde68a;
+  border: 1px solid #d97706;
+  font-size: 0.62rem;
+  font-weight: 800;
+  padding: 3px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: fit-content;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+}
+
+/* Leaning Books Cluster */
+.leaning-books-group {
+  display: flex;
+  align-items: flex-end;
+  height: 220px;
+  position: relative;
+  margin: 0 4px;
+}
+
+.leaning-book-spine {
+  width: 24px;
+  height: 200px;
+  transform-origin: bottom right;
+  transform: rotate(11deg);
+  border-radius: 3px 5px 5px 3px;
+  box-shadow: 2px 4px 10px rgba(0,0,0,0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+.leaning-book-spine:hover {
+  transform: rotate(0deg) translateY(-8px);
+}
+
+/* Shelf 1 Right: DUNE */
+.book-dune-block {
+  width: 125px;
+  min-width: 115px;
+  height: 205px;
+  background: linear-gradient(145deg, #1c271e 0%, #111a12 60%, #090e0a 100%);
+  border: 1px solid #2d4533;
+  border-radius: 4px 8px 8px 4px;
+  padding: 16px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    -3px 0 6px rgba(0,0,0,0.7),
+    4px 6px 16px rgba(0,0,0,0.8),
+    inset 3px 0 5px rgba(255,255,255,0.1);
+  cursor: pointer;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  flex-shrink: 0;
+}
+.book-dune-block:hover {
+  transform: translateY(-10px) scale(1.03);
+}
+
+/* -------------------------------------------------------------
+   Shelf 2: STORMLIGHT ARCHIVE + MINDFULNESS & FOCUS
+   ------------------------------------------------------------- */
+.book-stormlight-block {
+  width: 135px;
+  min-width: 125px;
+  height: 200px;
+  background: linear-gradient(145deg, #23192e 0%, #170f20 60%, #0d0812 100%);
+  border: 1px solid #4a3461;
+  border-radius: 4px 8px 8px 4px;
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: -3px 0 6px rgba(0,0,0,0.7), 4px 6px 14px rgba(0,0,0,0.8);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.corner-tag-blue {
+  position: absolute;
+  top: -10px;
+  left: 12px;
+  background: #38bdf8;
+  color: #032b44;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 999px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+.book-mindfulness-block {
+  width: 165px;
+  min-width: 150px;
+  height: 195px;
+  background: linear-gradient(145deg, #7c5332 0%, #5e3b1f 60%, #3d2310 100%);
+  border: 1px solid #a16e45;
+  border-radius: 4px 8px 8px 4px;
+  padding: 14px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 
+    -3px 0 6px rgba(0,0,0,0.7),
+    4px 6px 16px rgba(0,0,0,0.8),
+    inset 3px 0 5px rgba(255,255,255,0.18);
+  cursor: pointer;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.corner-tag-tan {
+  position: absolute;
+  top: -10px;
+  right: 12px;
+  background: #d4a373;
+  color: #3b1d0c;
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 2px 8px;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+
+/* Upright Standing Spines */
+.spine-vertical-realistic {
+  width: 32px;
+  min-width: 26px;
+  height: 195px;
+  border-radius: 3px 5px 5px 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 2px;
+  box-shadow: 
+    -2px 0 4px rgba(0,0,0,0.6),
+    3px 4px 10px rgba(0,0,0,0.7),
+    inset -2px 0 4px rgba(0,0,0,0.4),
+    inset 2px 0 2px rgba(255,255,255,0.22);
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease;
+  position: relative;
+  flex-shrink: 0;
+}
+.spine-vertical-realistic:hover {
+  transform: translateY(-14px) scale(1.08);
+  box-shadow: 0 16px 25px rgba(0,0,0,0.85);
+  z-index: 10;
+}
+
+.spine-title-vertical {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fef08a;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.9);
+  max-height: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* -------------------------------------------------------------
+   Frosted White Floating Dock (Exact Match to design_wooden_shelf)
+   ------------------------------------------------------------- */
+.bottom-nav-dock {
+  position: fixed !important;
+  bottom: 12px !important;
+  left: 12px !important;
+  right: 12px !important;
+  max-width: 480px !important;
+  margin: 0 auto !important;
+  height: 64px !important;
+  background: rgba(246, 246, 248, 0.94) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-radius: 36px !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0,0,0,0.15) !important;
+  display: flex !important;
+  justify-content: space-around !important;
+  align-items: center !important;
+  padding: 0 8px !important;
+  z-index: 9999 !important;
+}
+
+.bottom-nav-dock .dock-item {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: none !important;
+  border: none !important;
+  color: #64748b !important;
+  cursor: pointer !important;
+  padding: 4px 0 !important;
+  position: relative !important;
+  transition: all 0.2s ease !important;
+  min-width: 0 !important;
+  gap: 3px !important;
+}
+
+.bottom-nav-dock .dock-item.active {
+  color: #0f172a !important;
+}
+
+.bottom-nav-dock .dock-item .dock-svg {
+  width: 20px !important;
+  height: 20px !important;
+  stroke: #64748b !important;
+  transition: all 0.2s ease !important;
+}
+
+.bottom-nav-dock .dock-item.active .dock-svg {
+  stroke: #0f172a !important;
+  transform: translateY(-1px) !important;
+}
+
+.bottom-nav-dock .dock-item .dock-label {
+  font-size: 0.65rem !important;
+  font-weight: 600 !important;
+  color: #64748b !important;
+  letter-spacing: 0.01em !important;
+}
+
+.bottom-nav-dock .dock-item.active .dock-label {
+  color: #0f172a !important;
+  font-weight: 800 !important;
+}
+
+.bottom-nav-dock .dock-item .dock-active-line {
+  display: none !important;
+}
+

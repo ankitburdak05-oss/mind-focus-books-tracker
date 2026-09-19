@@ -2,29 +2,27 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-09-17T05:24:10.058Z",
   "activeRelease": {
-    "version": "v3.9.3",
-    "name": "Mind Focus Books v3.9.3 — 3D Bookshelf, Real Book Reader & Glassmorphism Updates",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.3/MindFocusBooks-Native.apk",
+    "version": "v3.9.4",
+    "name": "Mind Focus Books v3.9.4 — 100% Exact 3D Luxury Mahogany Bookshelf Edition",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.4/MindFocusBooks-Native.apk",
     "features": [
-      "🪵 3D Wooden Bookshelf: Classic lakdi ki almari view with upright books and live status badges",
-      "📖 Real 3D Book Reader: Dual-page paper curl, font size controls aur built-in focus Soundscape",
-      "🚀 VisionOS Frosted Glass Updater: 1-Tap fast updates with crystal clear changelog",
-      "📷 1-Click Photo to 3 Languages (Hindi, Hinglish, English)",
-      "🏷️ Official v3.9.3 Release"
+      "🪵 100% Exact 3D Mahogany Bookshelf: Identical design with rich mahogany planks, gold-embossed Alchemist & Dune, upright dense spines, and status badges",
+      "🪟 Frosted White Floating Dock: 5-item luxury navigation (Home, My Library, Focus, Profile, Settings)",
+      "📖 Real 3D Interactive Book Reader: Dual-page spread with audio focus soundscape",
+      "🏷️ Official v3.9.4 Release"
     ],
     "stagedAt": "2026-09-18T08:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.9.3",
-    "name": "Mind Focus Books v3.9.3 — 3D Bookshelf, Real Book Reader & Glassmorphism Updates",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.3/MindFocusBooks-Native.apk",
+    "version": "v3.9.4",
+    "name": "Mind Focus Books v3.9.4 — 100% Exact 3D Luxury Mahogany Bookshelf Edition",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.4/MindFocusBooks-Native.apk",
     "features": [
-      "🪵 3D Wooden Bookshelf: Classic lakdi ki almari view with upright books and live status badges",
-      "📖 Real 3D Book Reader: Dual-page paper curl, font size controls aur built-in focus Soundscape",
-      "🚀 VisionOS Frosted Glass Updater: 1-Tap fast updates with crystal clear changelog",
-      "📷 1-Click Photo to 3 Languages (Hindi, Hinglish, English)",
-      "🏷️ Official v3.9.3 Release"
+      "🪵 100% Exact 3D Mahogany Bookshelf: Identical design with rich mahogany planks, gold-embossed Alchemist & Dune, upright dense spines, and status badges",
+      "🪟 Frosted White Floating Dock: 5-item luxury navigation (Home, My Library, Focus, Profile, Settings)",
+      "📖 Real 3D Interactive Book Reader: Dual-page spread with audio focus soundscape",
+      "🏷️ Official v3.9.4 Release"
     ],
     "stagedAt": "2026-09-18T08:30:00.000Z",
     "isDeployed": true

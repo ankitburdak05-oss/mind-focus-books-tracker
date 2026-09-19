@@ -1,4 +1,4 @@
-const APP_VERSION = '3.9.3';
+const APP_VERSION = '3.9.4';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -3022,69 +3022,212 @@ function renderModernCard(b, options = {}) {
 }
 window.renderModernCard = renderModernCard;
 
+let currentShelfFilter = 'ALL';
+
+function filterHomeShelf(filter) {
+  if (typeof triggerHaptic === 'function') triggerHaptic('selection');
+  currentShelfFilter = filter;
+  renderHomeBookshelf(filter);
+}
+window.filterHomeShelf = filterHomeShelf;
+
+function renderHomeBookshelf(activeFilter = 'ALL') {
+  currentShelfFilter = activeFilter;
+  const container = document.getElementById('mahoganyBookshelfContainer');
+  if (!container) return;
+
+  // Find target books for exact match
+  const findBook = (titlePart, defaultIdx) => {
+    const idx = state.books.findIndex(b => b && b.title && b.title.toLowerCase().includes(titlePart.toLowerCase()));
+    if (idx !== -1) return { book: state.books[idx], index: idx };
+    const b = state.books[defaultIdx] || { title: titlePart, author: 'Focus Author' };
+    return { book: b, index: defaultIdx };
+  };
+
+  const alchemist = findBook('alchemist', 13);
+  const dune = findBook('dune', 15);
+  const stormlight = findBook('stormlight', 22);
+  const mindfulness = findBook('mindfulness', 2);
+  const meditations = findBook('meditations', 3);
+  const powerOfNow = findBook('power of now', 4);
+  const ikigai = findBook('ikigai', 5);
+  const atomicHabits = findBook('atomic habits', 6);
+  const deepWork = findBook('deep work', 7);
+  const thinkGrow = findBook('think and grow', 8);
+  const psychMoney = findBook('psychology of money', 9);
+  const sapiens = findBook('sapiens', 10);
+  const fourHour = findBook('4-hour workweek', 11);
+  const gita = findBook('bhagavad gita', 0);
+  const warrior = findBook('warrior', 12);
+
+  // Dense standing spines matching the photo's Shelf 3
+  const denseSpinesData = [
+    { title: 'MEDITATIONS', author: 'Marcus Aurelius', bg: 'linear-gradient(180deg, #fef3c7, #fde68a 60%, #d97706)', text: '#78350f', border: '#b45309', height: 218, bIdx: meditations.index },
+    { title: 'THE POWER OF NOW', author: 'Eckhart Tolle', bg: 'linear-gradient(180deg, #991b1b, #7f1d1d 60%, #450a0a)', text: '#fef08a', border: '#b91c1c', height: 210, bIdx: powerOfNow.index },
+    { title: 'THE POWER OF NOW', author: 'Eckhart Tolle', bg: 'linear-gradient(180deg, #831843, #701a75 60%, #4a044e)', text: '#fbcfe8', border: '#a21caf', height: 214, bIdx: powerOfNow.index },
+    { title: 'IKIGAI', author: 'Héctor García', bg: 'linear-gradient(180deg, #92400e, #78350f 60%, #451a03)', text: '#fef3c7', border: '#d97706', height: 205, bIdx: ikigai.index },
+    { title: 'ATOMIC HABITS', author: 'James Clear', bg: 'linear-gradient(180deg, #f8fafc, #f1f5f9 60%, #cbd5e1)', text: '#0f172a', border: '#94a3b8', height: 215, leaning: true, bIdx: atomicHabits.index },
+    { title: 'MINDFULNESS & FOCUS', author: 'Mind Focus', bg: 'linear-gradient(180deg, #1e3a8a, #172554 60%, #030712)', text: '#bfdbfe', border: '#3b82f6', height: 222, bIdx: mindfulness.index },
+    { title: 'DEEP WORK', author: 'Cal Newport', bg: 'linear-gradient(180deg, #1f2937, #111827 60%, #030712)', text: '#fde047', border: '#eab308', height: 212, bIdx: deepWork.index },
+    { title: 'THINK & GROW RICH', author: 'Napoleon Hill', bg: 'linear-gradient(180deg, #7c2d12, #431407 60%, #1c0a00)', text: '#fed7aa', border: '#ea580c', height: 216, bIdx: thinkGrow.index },
+    { title: 'PSYCHOLOGY OF MONEY', author: 'Morgan Housel', bg: 'linear-gradient(180deg, #065f46, #064e3b 60%, #022c22)', text: '#a7f3d0', border: '#10b981', height: 208, bIdx: psychMoney.index },
+    { title: 'SAPIENS', author: 'Yuval Noah Harari', bg: 'linear-gradient(180deg, #374151, #1f2937 60%, #111827)', text: '#f3f4f6', border: '#6b7280', height: 220, bIdx: sapiens.index },
+    { title: '4-HOUR WORKWEEK', author: 'Tim Ferriss', bg: 'linear-gradient(180deg, #1d4ed8, #1e40af 60%, #172554)', text: '#dbeafe', border: '#3b82f6', height: 206, bIdx: fourHour.index },
+    { title: 'BHAGAVAD GITA', author: 'Vyasa', bg: 'linear-gradient(180deg, #b91c1c, #991b1b 60%, #450a0a)', text: '#fef08a', border: '#f59e0b', height: 225, bIdx: gita.index },
+  ];
+
+  let html = '';
+
+  // Top Wood Frieze Filter Bar matching design_wooden_shelf
+  html += '<div class="shelf-frieze-bar">' +
+    '<div class="shelf-filter-pills-wrap">' +
+      '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'LENT' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'LENT\')">Lent</button>' +
+      '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'DONE' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'DONE\')">Completed</button>' +
+      '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'READING' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'READING\')">Reading</button>' +
+      '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'ALL' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'ALL\')">All Books</button>' +
+    '</div>' +
+  '</div>';
+
+  // -------------------------------------------------------------
+  // SHELF 1: THE ALCHEMIST'S PATH + LEANING BOOKS + DUNE
+  // -------------------------------------------------------------
+  html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
+  
+  // Book 1: THE ALCHEMIST'S PATH
+  html += '<div class="book-alchemist-block" onclick="openRealBookReader(' + alchemist.index + ', \'hindi\')" title="Read The Alchemist\'s Path">' +
+    '<div class="book-title-gold-emboss">THE<br>ALCHEMIST\'S<br>PATH</div>' +
+    '<span class="badge-pill-reading">READING</span>' +
+  '</div>';
+
+  // Leaning books group next to Alchemist
+  html += '<div class="leaning-books-group">' +
+    '<div class="leaning-book-spine" onclick="openRealBookReader(' + meditations.index + ', \'hindi\')" style="background:linear-gradient(180deg, #fde68a, #d97706); border-left:2px solid #b45309;" title="Meditations">' +
+      '<div class="spine-title-vertical" style="color:#78350f; font-size:0.58rem;">MEDITATIONS</div>' +
+    '</div>' +
+    '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + warrior.index + ', \'hindi\')" style="width:20px; height:205px; background:linear-gradient(180deg, #991b1b, #450a0a); border-left:2px solid #ea580c;" title="Warrior">' +
+      '<div class="spine-title-vertical" style="font-size:0.55rem;">WARRIOR</div>' +
+    '</div>' +
+  '</div>';
+
+  // Book 2: DUNE
+  html += '<div class="book-dune-block" onclick="openRealBookReader(' + dune.index + ', \'hindi\')" title="Read Dune">' +
+    '<div class="book-title-gold-emboss" style="font-size:1.45rem; letter-spacing:0.06em;">DUNE</div>' +
+    '<span class="badge-pill-completed">COMPLETED</span>' +
+  '</div>';
+
+  // Upright Spines on far right
+  html += '<div style="display:flex; align-items:flex-end; gap:6px;">' +
+    '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + powerOfNow.index + ', \'hindi\')" style="width:28px; height:220px; background:linear-gradient(180deg, #065f46, #022c22); border-left:2px solid #34d399;" title="The Power of Now">' +
+      '<div class="spine-title-vertical" style="color:#6ee7b7;">THE POWER OF NOW</div>' +
+    '</div>' +
+    '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + gita.index + ', \'hindi\')" style="width:26px; height:215px; background:linear-gradient(180deg, #0f766e, #134e4a); border-left:2px solid #2dd4bf;" title="Gita">' +
+      '<div class="spine-title-vertical" style="color:#99f6e4;">BHAGAVAD GITA</div>' +
+    '</div>' +
+  '</div>';
+
+  html += '</div><div class="mahogany-plank"></div></div>';
+
+  // -------------------------------------------------------------
+  // SHELF 2: STORMLIGHT ARCHIVE + MINDFULNESS & FOCUS
+  // -------------------------------------------------------------
+  html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
+
+  // Upright spines on left
+  html += '<div style="display:flex; align-items:flex-end; gap:5px;">' +
+    '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + meditations.index + ', \'hindi\')" style="width:25px; height:205px; background:linear-gradient(180deg, #374151, #111827); border-left:2px solid #9ca3af;" title="Meditations">' +
+      '<div class="spine-title-vertical">MEDITATIONS</div>' +
+    '</div>' +
+  '</div>';
+
+  // Book 3: STORMLIGHT ARCHIVE
+  html += '<div class="book-stormlight-block" onclick="openRealBookReader(' + stormlight.index + ', \'hindi\')" title="Read Stormlight Archive">' +
+    '<span class="corner-tag-blue">New</span>' +
+    '<div class="book-title-gold-emboss" style="font-size:1.02rem;">STORMLIGHT<br>ARCHIVE</div>' +
+    '<span class="badge-pill-completed">COMPLETED</span>' +
+  '</div>';
+
+  // Book 4: MINDFULNESS & FOCUS (Tan leather block)
+  html += '<div class="book-mindfulness-block" onclick="openRealBookReader(' + mindfulness.index + ', \'hindi\')" title="Mindfulness & Focus">' +
+    '<span class="corner-tag-tan">New</span>' +
+    '<div class="book-title-gold-emboss" style="font-size:1.05rem;">MINDFULNESS<br>& FOCUS</div>' +
+    '<span class="badge-pill-lent">LENT</span>' +
+  '</div>';
+
+  // Upright spines on far right
+  html += '<div style="display:flex; align-items:flex-end; gap:5px;">' +
+    '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + thinkGrow.index + ', \'hindi\')" style="width:28px; height:210px; background:linear-gradient(180deg, #7c2d12, #1c0a00); border-left:2px solid #ea580c;" title="Think & Grow Rich">' +
+      '<div class="spine-title-vertical">THINK & GROW</div>' +
+    '</div>' +
+  '</div>';
+
+  html += '</div><div class="mahogany-plank"></div></div>';
+
+  // -------------------------------------------------------------
+  // SHELF 3: DENSE STANDING LIBRARY SPINES (12-14 books)
+  // -------------------------------------------------------------
+  html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:flex-start; gap:6px;">';
+
+  denseSpinesData.forEach(s => {
+    const leaningStyle = s.leaning 
+      ? 'transform: rotate(11deg) translateY(-4px); margin-right: 12px; z-index: 4;' 
+      : '';
+    html += '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + s.bIdx + ', \'hindi\')" style="width:30px; height:' + s.height + 'px; background:' + s.bg + '; border-left:2px solid ' + s.border + '; ' + leaningStyle + '" title="' + escapeHtml(s.title) + ' by ' + escapeHtml(s.author) + '">' +
+      '<div class="spine-title-vertical" style="color:' + s.text + ';">' + escapeHtml(s.title) + '</div>' +
+    '</div>';
+  });
+
+  html += '</div><div class="mahogany-plank"></div></div>';
+
+  // -------------------------------------------------------------
+  // SHELF 4: COLLECTOR\'S EDITIONS & MATCHED SET
+  // -------------------------------------------------------------
+  html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:space-between; gap:6px;">';
+
+  // Ornate volumes on left
+  const collectorSpines = [
+    { title: 'BHAGAVAD GITA', bg: 'linear-gradient(180deg, #991b1b, #450a0a)', border: '#f59e0b', text: '#fef08a', bIdx: gita.index },
+    { title: 'WAR & PEACE', bg: 'linear-gradient(180deg, #3f6212, #1a2e05)', border: '#84cc16', text: '#ecfccb', bIdx: warrior.index },
+    { title: 'STORMLIGHT I', bg: 'linear-gradient(180deg, #1e1b4b, #030712)', border: '#6366f1', text: '#e0e7ff', bIdx: stormlight.index },
+    { title: 'STORMLIGHT II', bg: 'linear-gradient(180deg, #312e81, #0f172a)', border: '#818cf8', text: '#e0e7ff', bIdx: stormlight.index },
+  ];
+  collectorSpines.forEach(s => {
+    html += '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + s.bIdx + ', \'hindi\')" style="width:32px; height:215px; background:' + s.bg + '; border-left:3px solid ' + s.border + ';" title="' + escapeHtml(s.title) + '">' +
+      '<div class="spine-title-vertical" style="color:' + s.text + ';">' + escapeHtml(s.title) + '</div>' +
+    '</div>';
+  });
+
+  // Matched cream collector set on right
+  const matchedDune = [
+    { vol: 'DUNE I', bIdx: dune.index },
+    { vol: 'DUNE II', bIdx: dune.index },
+    { vol: 'DUNE III', bIdx: dune.index },
+    { vol: 'FOCUS', bIdx: mindfulness.index },
+    { vol: 'WISDOM', bIdx: meditations.index },
+  ];
+  matchedDune.forEach(d => {
+    html += '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + d.bIdx + ', \'hindi\')" style="width:28px; height:210px; background:linear-gradient(180deg, #fafaf9, #e7e5e4 70%, #d6d3d1); border-left:2px solid #ca8a04;" title="' + d.vol + '">' +
+      '<div class="spine-title-vertical" style="color:#292524; font-size:0.62rem;">' + d.vol + '</div>' +
+    '</div>';
+  });
+
+  html += '</div><div class="mahogany-plank"></div></div>';
+
+  // -------------------------------------------------------------
+  // SHELF 5: BOTTOM SUBTLE PEEK
+  // -------------------------------------------------------------
+  html += '<div class="mahogany-shelf-row" style="opacity:0.65;"><div class="mahogany-shelf-books" style="min-height:90px; padding-top:6px;">';
+  for (let i = 0; i < 10; i++) {
+    const pBook = state.books[(i * 9 + 3) % state.books.length] || { title: 'Focus Book' };
+    html += '<div class="spine-vertical-realistic" onclick="openRealBookReader(' + ((i * 9 + 3) % state.books.length) + ', \'hindi\')" style="width:30px; height:80px; background:linear-gradient(180deg, #78350f, #291002); border-top:3px solid #d97706;" title="' + escapeHtml(pBook.title) + '"></div>';
+  }
+  html += '</div></div>';
+
+  container.innerHTML = html;
+}
+window.renderHomeBookshelf = renderHomeBookshelf;
+
 function renderHomeView() {
-  const homeGrid1 = document.getElementById('homeMyLibraryGrid');
-  const homeGrid2 = document.getElementById('homeContinueReadingGrid');
-  const homeGrid3 = document.getElementById('homeRecentlyAddedGrid');
-  if (!homeGrid1 || !homeGrid2 || !homeGrid3) return;
-
-  // 1. My Library Section (Atomic Habits, The Subtle Art, Deep Work)
-  const myLibraryKeywords = ['atomic habits', 'subtle art', 'deep work', 'limitless', 'psychology of money'];
-  let myLibraryBooks = [];
-  myLibraryKeywords.forEach(k => {
-    const found = state.books.find(b => b.title && b.title.toLowerCase().includes(k));
-    if (found && !myLibraryBooks.includes(found)) myLibraryBooks.push(found);
-  });
-  if (myLibraryBooks.length < 3) {
-    state.books.forEach(b => {
-      if (myLibraryBooks.length < 3 && !myLibraryBooks.includes(b)) myLibraryBooks.push(b);
-    });
-  }
-
-  const libPcts = [72, 71, 91, 65, 80];
-  homeGrid1.innerHTML = myLibraryBooks.slice(0, 3).map((b, idx) => {
-    return renderModernCard(b, { mockPct: libPcts[idx % libPcts.length], statusLabel: 'done' });
-  }).join('');
-
-  // 2. Continue Reading Section (Thinking Fast and Slow, Hyperfocus, Subconscious Mind)
-  const continueKeywords = ['thinking, fast', 'hyperfocus', 'subconscious mind'];
-  let continueBooks = state.books.filter(b => b.status === 'READING');
-  continueKeywords.forEach(k => {
-    const found = state.books.find(b => b.title && b.title.toLowerCase().includes(k));
-    if (found && !continueBooks.includes(found)) continueBooks.push(found);
-  });
-  if (continueBooks.length < 3) {
-    state.books.slice(1, 4).forEach(b => {
-      if (!continueBooks.includes(b)) continueBooks.push(b);
-    });
-  }
-
-  const readingBadges = ['5 hr left', '1 hr left', '9 hr left', '4 hr left'];
-  const readingPcts = [48, 85, 24, 60];
-  homeGrid2.innerHTML = continueBooks.slice(0, 3).map((b, idx) => {
-    return renderModernCard(b, {
-      timeBadge: readingBadges[idx % readingBadges.length],
-      mockPct: readingPcts[idx % readingPcts.length],
-      statusLabel: 'read'
-    });
-  }).join('');
-
-  // 3. Recently Added Section (Dopamine Nation, The Subtle Art..., 4-Hour Workweek)
-  const recentKeywords = ['dopamine nation', 'subtle art', '4-hour workweek', 'think and grow', 'ego is the enemy', 'clear thinking'];
-  let recentBooks = [];
-  recentKeywords.forEach(k => {
-    const found = state.books.find(b => b.title && b.title.toLowerCase().includes(k));
-    if (found && !recentBooks.includes(found)) recentBooks.push(found);
-  });
-  if (recentBooks.length < 3) {
-    state.books.slice(10, 16).forEach(b => {
-      if (!recentBooks.includes(b)) recentBooks.push(b);
-    });
-  }
-
-  homeGrid3.innerHTML = recentBooks.slice(0, 3).map(b => {
-    return renderModernCard(b, { mockPct: 0, statusLabel: 'new' });
-  }).join('');
+  renderHomeBookshelf(currentShelfFilter || 'ALL');
 }
 window.renderHomeView = renderHomeView;
 
