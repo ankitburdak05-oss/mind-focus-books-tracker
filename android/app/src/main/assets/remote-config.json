@@ -1,22 +1,39 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-29T18:15:00.000Z",
+  "updatedAt": "2026-09-29T18:45:00.000Z",
   "activeRelease": {
-    "version": "v3.11.0",
-    "name": "Mind Focus Books v3.11.0 — 250+ World Masterpieces & 16 Categories",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.11.0/MindFocusBooks-Native.apk",
+    "version": "v3.12.0",
+    "name": "Mind Focus Books v3.12.0 — 300+ World Masterpieces & 26 Categories",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.12.0/MindFocusBooks-Native.apk",
     "features": [
-      "📚 250+ World Masterpieces: 100 new world-famous books added across 16 categories",
-      "🧠 16 Distinct Categories: Dark Psychology, Philosophy, Stoicism, Wealth, Biographies, Classics, Strategy, etc.",
-      "🔄 Auto-Merge Library: New books automatically merge into your shelf without touching your reading progress",
-      "🏆 Strict Completed & Reading Shelves: No fake books, genuine library tracking only",
-      "🖥️ 100% Full-Screen Edge-to-Edge Wooden Library View",
-      "🏷️ Official v3.11.0 Release"
+      "📚 300+ World Masterpieces: Full comprehensive global library covering all major fields",
+      "🔮 Dark Secrets, The Luminaries, Initiation & Hermetic Wisdom added",
+      "🌐 26 Distinct Categories: Sci-Fi, World History, AI & Future, Mysticism, Geopolitics, Art & True Crime",
+      "🔄 Non-Destructive Auto-Merge: Seamlessly merges new books without touching user progress",
+      "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
+      "🖥️ Edge-to-Edge Full-Screen Luxury Mahogany Wooden Shelves",
+      "🏷️ Official v3.12.0 Release"
     ],
-    "stagedAt": "2026-09-29T18:15:00.000Z",
+    "stagedAt": "2026-09-29T18:45:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.12.0",
+    "name": "Mind Focus Books v3.12.0 — 300+ World Masterpieces & 26 Categories",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.12.0/MindFocusBooks-Native.apk",
+    "features": [
+      "📚 300+ World Masterpieces: Full comprehensive global library covering all major fields",
+      "🔮 Dark Secrets, The Luminaries, Initiation & Hermetic Wisdom added",
+      "🌐 26 Distinct Categories: Sci-Fi, World History, AI & Future, Mysticism, Geopolitics, Art & True Crime",
+      "🔄 Non-Destructive Auto-Merge: Seamlessly merges new books without touching user progress",
+      "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
+      "🖥️ Edge-to-Edge Full-Screen Luxury Mahogany Wooden Shelves",
+      "🏷️ Official v3.12.0 Release"
+    ],
+    "stagedAt": "2026-09-29T18:45:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.11.0",
     "name": "Mind Focus Books v3.11.0 — 250+ World Masterpieces & 16 Categories",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.11.0/MindFocusBooks-Native.apk",
@@ -29,21 +46,6 @@
       "🏷️ Official v3.11.0 Release"
     ],
     "stagedAt": "2026-09-29T18:15:00.000Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
-    "version": "v3.10.0",
-    "name": "Mind Focus Books v3.10.0 — Strict Completed & Reading Shelves + Category Shelves",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.10.0/MindFocusBooks-Native.apk",
-    "features": [
-      "🏆 Strict Completed Shelf: Only finished books appear on Shelf 1 with clean empty trophy showcase",
-      "📖 Strict Reading Shelf: Only actively reading books on Shelf 2 (zero fake badges)",
-      "🤝 Zero Fake Lent: No Lent books until user actually lends a book to someone",
-      "📚 Category-Wise Shelves: Focus, Mindset, Brain Science, Habits, Memory, Language alag alag shelves par",
-      "🖥️ 100% Full-Screen Browser View: Edge-to-edge luxury mahogany wood display",
-      "🏷️ Official v3.10.0 Release"
-    ],
-    "stagedAt": "2026-09-29T05:30:00.000Z",
     "isDeployed": true
   },
   "features": {

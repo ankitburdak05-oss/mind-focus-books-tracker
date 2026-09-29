@@ -1,4 +1,4 @@
-const APP_VERSION = '3.11.0';
+const APP_VERSION = '3.12.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -42,6 +42,27 @@ const ICONS = {
 const CATEGORY_COVER_GRADIENTS = {
   'Dark Psychology': [['#0f172a', '#1e1b4b', '#450a0a'], '🎭'],
   'Strategy':        [['#18181b', '#3b0764', '#1e1b4b'], '♟️'],
+  'Mysticism':       [['#2a0845', '#6441a5', '#9b51e0'], '🔮'],
+  'Esotericism':     [['#1b1035', '#4e2870', '#8a4baf'], '✨'],
+  'Thriller':        [['#1a0000', '#590000', '#800000'], '🕵️'],
+  'Mystery':         [['#0a1128', '#1c2541', '#3a506b'], '🔍'],
+  'Science Fiction': [['#03071e', '#370617', '#6a040f'], '🌌'],
+  'Futurism':        [['#023e8a', '#0077b6', '#0096c7'], '🚀'],
+  'History':         [['#3c2f2f', '#855845', '#be8a60'], '📜'],
+  'Civilizations':   [['#4a3525', '#8c6239', '#c49a45'], '🏛️'],
+  'Technology':      [['#0a192f', '#172a45', '#64ffda'], '🤖'],
+  'AI':              [['#0b132b', '#1c2541', '#48cae4'], '💻'],
+  'Geopolitics':     [['#1b263b', '#415a77', '#778da9'], '🌍'],
+  'Creativity':      [['#581845', '#900c3f', '#c70039'], '🎨'],
+  'Art':             [['#3d0c02', '#8b0000', '#ff4500'], '🖌️'],
+  'Design':          [['#1d3557', '#457b9d', '#a8dadc'], '📐'],
+  'True Crime':      [['#1e2022', '#52616b', '#c9d6df'], '🩸'],
+  'Forensic':        [['#2b2d42', '#8d99ae', '#edf2f4'], '🔎'],
+  'Cosmos':          [['#03071e', '#10002b', '#240046'], '🪐'],
+  'Universe':        [['#000814', '#001d3d', '#003566'], '✨'],
+  'Nature':          [['#132a13', '#31572c', '#4f772d'], '🌿'],
+  'Mythology':       [['#3e1f47', '#7209b7', '#b5179e'], '⚡'],
+  'Epics':           [['#480ca8', '#3f37c9', '#4361ee'], '🛡️'],
   'Wealth':          [['#022c22', '#065f46', '#10b981'], '💰'],
   'Finance':         [['#064e3b', '#047857', '#34d399'], '💵'],
   'Philosophy':      [['#1c1917', '#44403c', '#a8a29e'], '🏛️'],
@@ -3377,6 +3398,16 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
   if (activeFilter === 'ALL') {
     const preferredOrder = [
       'Dark Psychology & Strategy',
+      'Mysticism & Esotericism',
+      'Psychological Thriller & Mystery',
+      'Science Fiction & Futurism',
+      'World History & Civilizations',
+      'Technology, AI & The Future',
+      'Geopolitics & Global Affairs',
+      'Art, Creativity & Design',
+      'True Crime & Forensic Mind',
+      'Nature, Cosmos & Universe',
+      'Mythology & Ancient Epics',
       'Wealth & Finance',
       'Philosophy & Stoicism',
       'Productivity & Time',
@@ -3396,6 +3427,16 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
 
     const categoryIcons = {
       'Dark Psychology & Strategy': '🎭',
+      'Mysticism & Esotericism': '🔮',
+      'Psychological Thriller & Mystery': '🕵️',
+      'Science Fiction & Futurism': '🌌',
+      'World History & Civilizations': '📜',
+      'Technology, AI & The Future': '🤖',
+      'Geopolitics & Global Affairs': '🌍',
+      'Art, Creativity & Design': '🎨',
+      'True Crime & Forensic Mind': '🩸',
+      'Nature, Cosmos & Universe': '🪐',
+      'Mythology & Ancient Epics': '⚡',
       'Wealth & Finance': '💰',
       'Philosophy & Stoicism': '🏛️',
       'Productivity & Time': '⏳',
@@ -3546,7 +3587,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.11.0';
+const CURRENT_APP_VERSION = 'v3.12.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3821,7 +3862,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.11.0/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.12.0/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');
