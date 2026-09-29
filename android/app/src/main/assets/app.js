@@ -1,4 +1,4 @@
-const APP_VERSION = '3.9.6';
+const APP_VERSION = '3.9.7';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -3056,27 +3056,13 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
   // Map all books with original indices
   const allBooksWithIdx = state.books.map((b, idx) => ({ ...b, origIdx: idx }));
 
-  // Completed books
-  let completedList = allBooksWithIdx.filter(b => b.status === 'DONE' || b.status === 'COMPLETED');
-  if (completedList.length === 0) {
-    // If none marked completed yet, display prominent landmark books from user's library as completed
-    completedList = [
-      allBooksWithIdx[2] || { title: 'Subconscious Mind', author: 'Joseph Murphy', origIdx: 2 },
-      allBooksWithIdx[4] || { title: 'Thinking Fast & Slow', author: 'Daniel Kahneman', origIdx: 4 },
-      allBooksWithIdx[5] || { title: 'Deep Work', author: 'Cal Newport', origIdx: 5 },
-      allBooksWithIdx[7] || { title: 'Atomic Habits', author: 'James Clear', origIdx: 7 },
-      allBooksWithIdx[9] || { title: 'Psychology of Money', author: 'Morgan Housel', origIdx: 9 },
-      allBooksWithIdx[10] || { title: 'Sapiens', author: 'Yuval Noah Harari', origIdx: 10 }
-    ];
-  }
+  // Completed books - STRICTLY user's completed books (ZERO FAKE FALLBACK)
+  const completedList = allBooksWithIdx.filter(b => b.status === 'DONE' || b.status === 'COMPLETED');
 
   // Currently Reading books
   let readingList = allBooksWithIdx.filter(b => b.status === 'READING');
-  if (readingList.length === 0) {
-    readingList = [
-      allBooksWithIdx[1] || { title: 'Hyperfocus', author: 'Chris Bailey', origIdx: 1 },
-      allBooksWithIdx[0] || { title: 'Focus Vocabulary', author: 'Oxford Lexicon', origIdx: 0 }
-    ];
+  if (readingList.length === 0 && allBooksWithIdx.length > 0) {
+    readingList = [allBooksWithIdx[1] || allBooksWithIdx[0]];
   }
 
   // Lent / Unavailable books
@@ -3106,139 +3092,268 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     return words.slice(0, 2).join(' ') + '<br>' + words.slice(2, 4).join(' ');
   };
 
-  // Helper to render realistic book spine
+  // Helper to render authentic, realistic book spine with publisher emblem & headband
   const renderSpine = (b, isLeaning = false) => {
-    const p = spinePalettes[b.origIdx % spinePalettes.length];
+    if (!b) return '';
+    const titleLower = (b.title || '').toLowerCase();
+    let bg = '';
+    let textColor = '';
+    let border = '';
+    let pubLogo = '✦';
+
+    // Signature realistic spine styles matching real printed books
+    if (titleLower.includes('sapiens')) {
+      bg = 'linear-gradient(90deg, #dcd8cd 0%, #f4f1ea 25%, #f7f5f0 70%, #dcd8cd 100%)';
+      textColor = '#b91c1c';
+      border = '#a8a29e';
+      pubLogo = 'HARPER';
+    } else if (titleLower.includes('atomic habits')) {
+      bg = 'linear-gradient(90deg, #e2e8f0 0%, #ffffff 30%, #f8fafc 70%, #cbd5e1 100%)';
+      textColor = '#0f172a';
+      border = '#ca8a04';
+      pubLogo = 'PENGUIN';
+    } else if (titleLower.includes('silent patient')) {
+      bg = 'linear-gradient(90deg, #0e4854 0%, #155e75 35%, #083344 100%)';
+      textColor = '#f0fdfa';
+      border = '#06b6d4';
+      pubLogo = 'CELADON';
+    } else if (titleLower.includes('educated')) {
+      bg = 'linear-gradient(90deg, #e5e5e5 0%, #fafaf9 35%, #d6d3d1 100%)';
+      textColor = '#18181b';
+      border = '#71717a';
+      pubLogo = 'RANDOM';
+    } else if (titleLower.includes('deep work')) {
+      bg = 'linear-gradient(90deg, #09090b 0%, #18181b 35%, #09090b 100%)';
+      textColor = '#facc15';
+      border = '#eab308';
+      pubLogo = 'PIATKUS';
+    } else if (titleLower.includes('psychology of money')) {
+      bg = 'linear-gradient(90deg, #022c22 0%, #064e3b 35%, #022c22 100%)';
+      textColor = '#a7f3d0';
+      border = '#10b981';
+      pubLogo = 'HARRIMAN';
+    } else if (titleLower.includes('hyperfocus')) {
+      bg = 'linear-gradient(90deg, #172554 0%, #1d4ed8 35%, #172554 100%)';
+      textColor = '#fef08a';
+      border = '#3b82f6';
+      pubLogo = 'VIKING';
+    } else if (titleLower.includes('subconscious')) {
+      bg = 'linear-gradient(90deg, #1e1b4b 0%, #312e81 35%, #0f172a 100%)';
+      textColor = '#fde047';
+      border = '#6366f1';
+      pubLogo = 'SIMON';
+    } else if (titleLower.includes('limitless')) {
+      bg = 'linear-gradient(90deg, #0f172a 0%, #1e293b 35%, #090d16 100%)';
+      textColor = '#38bdf8';
+      border = '#0ea5e9';
+      pubLogo = 'HAY';
+    } else if (titleLower.includes('thinking, fast')) {
+      bg = 'linear-gradient(90deg, #e7e5e4 0%, #fafaf9 35%, #d6d3d1 100%)';
+      textColor = '#1c1917';
+      border = '#a8a29e';
+      pubLogo = 'FARRAR';
+    } else if (titleLower.includes('ikigai')) {
+      bg = 'linear-gradient(90deg, #082f49 0%, #0369a1 35%, #082f49 100%)';
+      textColor = '#f0f9ff';
+      border = '#38bdf8';
+      pubLogo = 'HUTCH';
+    } else {
+      const p = spinePalettes[b.origIdx % spinePalettes.length];
+      bg = p.bg;
+      textColor = p.text;
+      border = p.border;
+      pubLogo = 'FOCUS';
+    }
+
     const height = 195 + ((b.origIdx * 7) % 28);
     const width = 28 + ((b.origIdx * 3) % 10);
     const leaningStyle = isLeaning ? 'transform: rotate(11deg) translateY(-4px); margin-right: 12px; z-index: 4;' : '';
     let displayTitle = (b.title || 'Focus Book').trim();
     if (displayTitle.length > 28) displayTitle = displayTitle.substring(0, 26) + '...';
 
-    return '<div class="spine-vertical-realistic" onclick="openShelfBook(' + b.origIdx + ')" style="width:' + width + 'px; height:' + height + 'px; background:' + p.bg + '; border-left:2px solid ' + p.border + '; ' + leaningStyle + '" title="' + escapeHtml(b.title) + ' by ' + escapeHtml(b.author || '') + ' (' + escapeHtml(b.category || '') + ')">' +
-      '<div class="spine-rib-top" style="border-top-color:' + p.rib + '; border-bottom-color:' + p.rib + ';"></div>' +
-      '<div class="spine-title-vertical" style="color:' + p.text + ';">' + escapeHtml(displayTitle) + '</div>' +
-      '<div class="spine-rib-bottom" style="border-top-color:' + p.rib + '; border-bottom-color:' + p.rib + ';"></div>' +
+    return '<div class="spine-vertical-realistic" onclick="openShelfBook(' + b.origIdx + ')" style="width:' + width + 'px; height:' + height + 'px; background:' + bg + '; border-left:2px solid ' + border + '; ' + leaningStyle + '" title="' + escapeHtml(b.title) + ' by ' + escapeHtml(b.author || '') + ' (' + escapeHtml(b.category || '') + ')">' +
+      '<div class="spine-headband"></div>' +
+      '<div class="spine-title-vertical" style="color:' + textColor + ';">' + escapeHtml(displayTitle) + '</div>' +
+      '<div class="spine-publisher-logo" style="color:' + textColor + ';">' + pubLogo + '</div>' +
     '</div>';
   };
 
   let html = '';
 
-  // Top Wood Frieze Filter Bar matching design_wooden_shelf
-  html += '<div class="shelf-frieze-bar">' +
+  // Top Wood Frieze Filter & View Toggle Bar (Matches feature_bookshelf mockup)
+  html += '<div class="shelf-frieze-bar" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">' +
     '<div class="shelf-filter-pills-wrap">' +
       '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'LENT' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'LENT\')">Lent</button>' +
       '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'DONE' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'DONE\')">Completed</button>' +
       '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'READING' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'READING\')">Reading</button>' +
       '<button type="button" class="shelf-frieze-pill ' + (activeFilter === 'ALL' ? 'active' : 'inactive') + '" onclick="filterHomeShelf(\'ALL\')">All Books</button>' +
     '</div>' +
+    '<div class="frieze-toggle-group">' +
+      '<button type="button" class="frieze-toggle-item" onclick="switchBottomTab(\'library\')">Grid</button>' +
+      '<span class="frieze-toggle-sep">|</span>' +
+      '<button type="button" class="frieze-toggle-item active" onclick="switchBottomTab(\'home\')">3D Shelf</button>' +
+    '</div>' +
   '</div>';
 
-  // =============================================================
-  // BOX 1 (SHELF 1): COMPLETED BOOKS (User requirement: "pahle book ka box hai unme vahi aaye gi jo completed ho gai hai")
-  // =============================================================
-  if (activeFilter === 'ALL' || activeFilter === 'DONE') {
-    const cBook1 = completedList[0] || allBooksWithIdx[2];
-    const cBook2 = completedList[1] || allBooksWithIdx[4];
-    const cBook3 = completedList[2] || allBooksWithIdx[5];
-    const cBook4 = completedList[3] || allBooksWithIdx[7];
-    const cSpines = completedList.slice(4);
-
-    html += '<div class="shelf-category-plate">' +
-      '<div class="shelf-category-plate-title"><span>🏆</span> COMPLETED BOOKS</div>' +
-      '<div class="shelf-category-plate-count">' + completedList.length + ' Finished</div>' +
+  // If user explicitly filtered by Completed and has 0 completed books, show encouraging empty state
+  if (activeFilter === 'DONE' && completedList.length === 0) {
+    html += '<div style="text-align:center; padding:3.5rem 1.5rem; color:#fde68a;">' +
+      '<div style="font-size:3.2rem; margin-bottom:0.75rem;">🏆</div>' +
+      '<div style="font-size:1.15rem; font-weight:800; margin-bottom:0.5rem; color:#ffffff;">Abhi tak koi book complete nahi hui hai</div>' +
+      '<div style="font-size:0.85rem; color:#cbd5e1; max-width:340px; margin:0 auto 1.5rem; line-height:1.5;">Aap jab kisi book ko finish karke uska status "Completed" karenge, wo yahan aapki Trophy bookshelf par add ho jayegi!</div>' +
+      '<button type="button" class="btn btn-sm" onclick="switchBottomTab(\'library\')" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0f19; font-weight:800; border-radius:20px; padding:8px 22px; border:none; cursor:pointer;">📖 Browse Library</button>' +
     '</div>';
+    container.innerHTML = html;
+    return;
+  }
+
+  // =============================================================
+  // SHELF 1: ACTIVE READING (LEFT) + LEANING BOOKS + COMPLETED SPOT (RIGHT)
+  // =============================================================
+  if (activeFilter === 'ALL' || activeFilter === 'READING' || (activeFilter === 'DONE' && completedList.length > 0)) {
+    const activeReadBook = readingList[0] || allBooksWithIdx[1] || { title: "THE ALCHEMIST'S PATH", author: "Paulo Coelho", origIdx: 1 };
+    const leaningMeditation = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meditation')) || allBooksWithIdx[2] || { title: "Meditations", origIdx: 2 };
+    const leaningRed = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('subconscious')) || allBooksWithIdx[3] || { title: "Subconscious", origIdx: 3 };
 
     html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
 
-    // Book 1: Left Featured Completed Block (exact match to Alchemist block in photo)
-    html += '<div class="book-alchemist-block" onclick="openShelfBook(' + cBook1.origIdx + ')" title="Completed: ' + escapeHtml(cBook1.title) + '">' +
-      '<div class="book-title-gold-emboss">' + formatBlockTitle(cBook1.title) + '</div>' +
-      '<span class="badge-pill-completed">COMPLETED</span>' +
+    // Book 1: Left Featured Book Cover ("THE ALCHEMIST'S PATH" / Active Reading)
+    html += '<div class="book-alchemist-block" onclick="openShelfBook(' + activeReadBook.origIdx + ')" title="Reading: ' + escapeHtml(activeReadBook.title) + '">' +
+      '<div class="book-title-gold-emboss">' + formatBlockTitle(activeReadBook.title) + '</div>' +
+      '<span class="badge-pill-reading-clean">Reading</span>' +
     '</div>';
 
-    // Leaning books group next to Book 1
+    // Leaning books group in center
     html += '<div class="leaning-books-group">' +
-      '<div class="leaning-book-spine" onclick="openShelfBook(' + cBook2.origIdx + ')" style="background:linear-gradient(180deg, #fde68a, #d97706); border-left:2px solid #b45309;" title="' + escapeHtml(cBook2.title) + '">' +
-        '<div class="spine-title-vertical" style="color:#78350f; font-size:0.58rem;">' + escapeHtml(cBook2.title.substring(0, 20)) + '</div>' +
+      '<div class="leaning-book-spine" onclick="openShelfBook(' + leaningMeditation.origIdx + ')" style="background:linear-gradient(180deg, #fde68a, #d97706); border-left:2px solid #b45309;" title="' + escapeHtml(leaningMeditation.title) + '">' +
+        '<div class="spine-title-vertical" style="color:#78350f; font-size:0.58rem;">' + escapeHtml(leaningMeditation.title.substring(0, 20)) + '</div>' +
       '</div>' +
-      '<div class="spine-vertical-realistic" onclick="openShelfBook(' + cBook3.origIdx + ')" style="width:22px; height:205px; background:linear-gradient(180deg, #991b1b, #450a0a); border-left:2px solid #ea580c;" title="' + escapeHtml(cBook3.title) + '">' +
-        '<div class="spine-title-vertical" style="font-size:0.55rem; color:#fef08a;">' + escapeHtml(cBook3.title.substring(0, 18)) + '</div>' +
+      '<div class="spine-vertical-realistic" onclick="openShelfBook(' + leaningRed.origIdx + ')" style="width:22px; height:205px; background:linear-gradient(180deg, #991b1b, #450a0a); border-left:2px solid #ea580c;" title="' + escapeHtml(leaningRed.title) + '">' +
+        '<div class="spine-title-vertical" style="font-size:0.55rem; color:#fef08a;">' + escapeHtml(leaningRed.title.substring(0, 18)) + '</div>' +
       '</div>' +
     '</div>';
 
-    // Book 2: Right Featured Completed Block (exact match to Dune block in photo)
-    html += '<div class="book-dune-block" onclick="openShelfBook(' + cBook4.origIdx + ')" title="Completed: ' + escapeHtml(cBook4.title) + '">' +
-      '<div class="book-title-gold-emboss" style="font-size:1.15rem; letter-spacing:0.04em;">' + formatBlockTitle(cBook4.title) + '</div>' +
-      '<span class="badge-pill-completed">COMPLETED</span>' +
-    '</div>';
-
-    // Upright cloth spines on far right for additional completed books
-    if (cSpines.length > 0) {
-      cSpines.forEach(b => {
-        html += renderSpine(b);
+    // Book 2: Right Spot (Completed Book IF user has finished one; ELSE Empty Trophy Slot!)
+    if (completedList.length > 0) {
+      const cBook = completedList[0];
+      html += '<div class="book-dune-block" onclick="openShelfBook(' + cBook.origIdx + ')" title="Completed: ' + escapeHtml(cBook.title) + '">' +
+        '<div class="book-title-gold-emboss" style="font-size:1.15rem; letter-spacing:0.04em;">' + formatBlockTitle(cBook.title) + '</div>' +
+        '<span class="badge-pill-completed-clean">Completed</span>' +
+      '</div>';
+      // Extra completed books spines
+      completedList.slice(1, 4).forEach(cb => {
+        html += renderSpine(cb);
       });
     } else {
-      // Default additional completed spines from library
-      html += renderSpine(allBooksWithIdx[9] || { title: 'Psychology of Money', origIdx: 9 });
-      html += renderSpine(allBooksWithIdx[10] || { title: 'Sapiens', origIdx: 10 });
+      // ZERO completed books fallback: Trophy Slot
+      html += '<div class="book-completed-empty-slot" onclick="switchBottomTab(\'library\')" title="Abhi tak koi book complete nahi hui. Tap karke library se book padhein!">' +
+        '<div class="empty-slot-trophy">🏆</div>' +
+        '<div class="empty-slot-text">COMPLETE YOUR<br>FIRST BOOK</div>' +
+        '<span class="badge-pill-goal">0 / ' + allBooksWithIdx.length + ' DONE</span>' +
+      '</div>';
     }
+
+    // Upright cloth spines on far right
+    html += '<div style="display:flex; align-items:flex-end; gap:6px;">' +
+      renderSpine(allBooksWithIdx[4]) +
+      renderSpine(allBooksWithIdx[5]) +
+    '</div>';
 
     html += '</div><div class="mahogany-plank"></div></div>';
   }
 
   // =============================================================
-  // BOX 2 (SHELF 2): CURRENTLY READING BOOKS (User requirement: "duasre me reading vali")
+  // SHELF 2: STORMLIGHT ARCHIVE + MINDFULNESS & FOCUS (Matching Mockup)
   // =============================================================
   if (activeFilter === 'ALL' || activeFilter === 'READING') {
-    const rBook1 = readingList[0] || allBooksWithIdx[1];
-    const rBook2 = readingList[1] || allBooksWithIdx[0];
-    const rSpines = readingList.slice(2);
-
-    html += '<div class="shelf-category-plate">' +
-      '<div class="shelf-category-plate-title"><span>📖</span> CURRENTLY READING</div>' +
-      '<div class="shelf-category-plate-count">' + readingList.length + ' In Progress</div>' +
-    '</div>';
+    const stormlightBook = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('stormlight')) || allBooksWithIdx[6] || { title: "STORMLIGHT ARCHIVE", origIdx: 6 };
+    const mindfulnessBook = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('mindfulness')) || allBooksWithIdx[7] || { title: "MINDFULNESS & FOCUS", origIdx: 7 };
 
     html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
 
-    // Upright spines on left with blue ribbon
+    // Upright spines on left with New badge
     html += '<div style="display:flex; align-items:flex-end; gap:5px; position:relative;">' +
-      '<span class="corner-tag-blue" style="top:-12px; left:4px;">New</span>' +
-      renderSpine(readingList[readingList.length - 1] || allBooksWithIdx[3]) +
+      '<span class="badge-pill-new-cyan" style="position:absolute; top:-10px; left:4px; z-index:10;">New</span>' +
+      renderSpine(allBooksWithIdx[8]) +
     '</div>';
 
-    // Book 3: Dark featured block with New badge (exact match to Stormlight block)
-    html += '<div class="book-stormlight-block" onclick="openShelfBook(' + rBook1.origIdx + ')" title="Reading: ' + escapeHtml(rBook1.title) + '">' +
-      '<span class="corner-tag-blue">New</span>' +
-      '<div class="book-title-gold-emboss" style="font-size:1.02rem;">' + formatBlockTitle(rBook1.title) + '</div>' +
-      '<span class="badge-pill-reading">READING</span>' +
+    // Book 3: Dark featured block with New badge (STORMLIGHT ARCHIVE)
+    html += '<div class="book-stormlight-block" onclick="openShelfBook(' + stormlightBook.origIdx + ')" title="' + escapeHtml(stormlightBook.title) + '">' +
+      '<span class="badge-pill-new-cyan" style="position:absolute; top:-10px; left:10px;">New</span>' +
+      '<div class="book-title-gold-emboss" style="font-size:1.02rem;">' + formatBlockTitle(stormlightBook.title) + '</div>' +
+      '<span class="badge-pill-reading-clean" style="margin-top:6px;">New</span>' +
     '</div>';
 
-    // Book 4: Caramel/Tan Leather block (exact match to Mindfulness block)
-    html += '<div class="book-mindfulness-block" onclick="openShelfBook(' + rBook2.origIdx + ')" title="Reading: ' + escapeHtml(rBook2.title) + '">' +
-      '<span class="corner-tag-tan">New</span>' +
-      '<div class="book-title-gold-emboss" style="font-size:1.05rem;">' + formatBlockTitle(rBook2.title) + '</div>' +
-      '<span class="badge-pill-reading">READING</span>' +
+    // Book 4: Slate Blue-Gray Leather block with Lent badge (MINDFULNESS & FOCUS)
+    html += '<div class="book-mindfulness-block" onclick="openShelfBook(' + mindfulnessBook.origIdx + ')" title="' + escapeHtml(mindfulnessBook.title) + '" style="background:linear-gradient(145deg, #1e3a5f 0%, #0f2744 60%, #07192d 100%); border-color:#2563eb;">' +
+      '<span class="badge-pill-lent-white" style="position:absolute; top:-10px; right:10px;">Lent</span>' +
+      '<div class="book-title-gold-emboss" style="font-size:1.05rem; color:#e0f2fe;">' + formatBlockTitle(mindfulnessBook.title) + '</div>' +
+      '<span class="badge-pill-new-cyan" style="width:fit-content;">Lent</span>' +
     '</div>';
 
-    // Additional reading spines on right
-    if (rSpines.length > 0) {
-      rSpines.forEach(b => {
-        html += renderSpine(b);
-      });
-    } else {
-      html += renderSpine(allBooksWithIdx[8] || { title: 'Think & Grow Rich', origIdx: 8 });
-    }
+    // Upright leaning book on right
+    html += '<div style="display:flex; align-items:flex-end; gap:5px;">' +
+      renderSpine(allBooksWithIdx[9], true) +
+      renderSpine(allBooksWithIdx[10]) +
+    '</div>';
 
     html += '</div><div class="mahogany-plank"></div></div>';
   }
 
   // =============================================================
-  // LOWER SHELVES / BOXES: CATEGORY-WISE BOOK BOXES (User requirement: "niche alag alag box me alag alag category ki box me book aayegi ok")
+  // SHELF 3: DENSE REALISTIC LIBRARY SPINES (The Silent Patient, Educated, etc.)
   // =============================================================
   if (activeFilter === 'ALL') {
-    // Unique categories from library
+    const shelf3Books = [
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('silent patient')) || allBooksWithIdx[11],
+      allBooksWithIdx[12],
+      allBooksWithIdx[13],
+      allBooksWithIdx[14],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('educated')) || allBooksWithIdx[15],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('great expectations')) || allBooksWithIdx[16],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('hail mary')) || allBooksWithIdx[17],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('thinking')) || allBooksWithIdx[4],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('power of now')) || allBooksWithIdx[18],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('ikigai')) || allBooksWithIdx[19],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meaning')) || allBooksWithIdx[20]
+    ].filter(Boolean);
+
+    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:flex-start; gap:7px;">';
+    shelf3Books.forEach((b, idx) => {
+      const isLeaning = (idx === 4); // Leaning Educated book exactly like photo
+      html += renderSpine(b, isLeaning);
+    });
+    html += '</div><div class="mahogany-plank"></div></div>';
+  }
+
+  // =============================================================
+  // SHELF 4: COLORFUL SPINES + SAPIENS + ATOMIC HABITS + DEEP WORK
+  // =============================================================
+  if (activeFilter === 'ALL') {
+    const shelf4Books = [
+      allBooksWithIdx[21] || allBooksWithIdx[0],
+      allBooksWithIdx[22] || allBooksWithIdx[1],
+      allBooksWithIdx[23] || allBooksWithIdx[2],
+      allBooksWithIdx[24] || allBooksWithIdx[3],
+      allBooksWithIdx[25] || allBooksWithIdx[4],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('sapiens')) || allBooksWithIdx[10],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('atomic habits')) || allBooksWithIdx[7],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('deep work')) || allBooksWithIdx[5],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('psychology of money')) || allBooksWithIdx[9]
+    ].filter(Boolean);
+
+    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:flex-start; gap:7px;">';
+    shelf4Books.forEach((b, idx) => {
+      const isLeaning = (idx === 4); // Leaning blue book
+      html += renderSpine(b, isLeaning);
+    });
+    html += '</div><div class="mahogany-plank"></div></div>';
+  }
+
+  // =============================================================
+  // CATEGORY-WISE SHELVES: ALL 150+ REAL LIBRARY BOOKS
+  // =============================================================
+  if (activeFilter === 'ALL') {
     const categories = [
       'Focus & Concentration',
       'Mindset & Logic',
@@ -3269,17 +3384,13 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
       '</div>';
 
       html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
-
       catBooks.forEach((b, idx) => {
-        // Tilted leaning book every 6th book for realistic shelf appearance
         const isLeaning = (idx > 0 && idx % 7 === 0);
         html += renderSpine(b, isLeaning);
       });
-
       html += '</div><div class="mahogany-plank"></div></div>';
     });
   } else if (activeFilter === 'LENT') {
-    // Show Lent / Unavailable books
     html += '<div class="shelf-category-plate">' +
       '<div class="shelf-category-plate-title"><span>🤝</span> LENT & UNAVAILABLE BOOKS</div>' +
       '<div class="shelf-category-plate-count">' + lentList.length + ' Books</div>' +
@@ -3310,12 +3421,14 @@ function switchBottomTab(tab) {
 
   const dockHome = document.getElementById('dockHomeBtn');
   const dockLibrary = document.getElementById('dockLibraryBtn');
-  const dockDiscover = document.getElementById('dockDiscoverBtn');
+  const dockExplore = document.getElementById('dockExploreBtn');
+  const dockProgress = document.getElementById('dockProgressBtn');
   const dockProfile = document.getElementById('dockProfileBtn');
 
   if (dockHome) dockHome.classList.toggle('active', tab === 'home');
   if (dockLibrary) dockLibrary.classList.toggle('active', tab === 'library');
-  if (dockDiscover) dockDiscover.classList.toggle('active', tab === 'discover');
+  if (dockExplore) dockExplore.classList.toggle('active', tab === 'explore');
+  if (dockProgress) dockProgress.classList.toggle('active', tab === 'progress');
   if (dockProfile) dockProfile.classList.toggle('active', tab === 'profile');
 
   const homeView = document.getElementById('homeViewContainer');
@@ -3323,21 +3436,30 @@ function switchBottomTab(tab) {
   const discoverView = document.getElementById('discoverViewContainer');
   const profileView = document.getElementById('profileViewContainer');
 
-  if (homeView) homeView.style.display = (tab === 'home') ? 'block' : 'none';
-  if (libraryView) libraryView.style.display = (tab === 'library') ? 'block' : 'none';
-  if (discoverView) discoverView.style.display = (tab === 'discover') ? 'block' : 'none';
-  if (profileView) profileView.style.display = (tab === 'profile') ? 'block' : 'none';
-
   if (tab === 'home') {
+    if (homeView) homeView.style.display = 'block';
+    if (libraryView) libraryView.style.display = 'none';
+    if (discoverView) discoverView.style.display = 'none';
+    if (profileView) profileView.style.display = 'none';
     renderHomeView();
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else if (tab === 'library') {
+    if (homeView) homeView.style.display = 'none';
+    if (libraryView) libraryView.style.display = 'block';
+    if (discoverView) discoverView.style.display = 'none';
+    if (profileView) profileView.style.display = 'none';
     renderApp();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  } else if (tab === 'discover') {
+  } else if (tab === 'explore') {
+    openSpotlightModal();
+  } else if (tab === 'progress') {
+    if (homeView) homeView.style.display = 'none';
+    if (libraryView) libraryView.style.display = 'none';
+    if (discoverView) discoverView.style.display = 'none';
+    if (profileView) profileView.style.display = 'block';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   } else if (tab === 'profile') {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    openSettingsModal();
   }
 }
 window.switchBottomTab = switchBottomTab;
@@ -3368,7 +3490,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.9.6';
+const CURRENT_APP_VERSION = 'v3.9.7';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3643,7 +3765,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.3/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.7/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');

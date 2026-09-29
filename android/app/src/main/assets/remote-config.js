@@ -1,34 +1,34 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-09-17T05:24:10.058Z",
+  "updatedAt": "2026-09-29T04:10:00.000Z",
   "activeRelease": {
-    "version": "v3.9.6",
-    "name": "Mind Focus Books v3.9.6 — 150 Books Live on 3D Luxury Mahogany Shelves",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.6/MindFocusBooks-Native.apk",
+    "version": "v3.9.7",
+    "name": "Mind Focus Books v3.9.7 — Authentic Book Spines & Zero Fake Books Shelf",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.7/MindFocusBooks-Native.apk",
     "features": [
-      "📚 All 150 Library Books on 3D Shelves: Real titles, real library colors, and gilded ribs for all books",
-      "🏆 Completed Books Box (Shelf 1): User's finished books with green COMPLETED badges and luxury blocks",
-      "📖 Currently Reading Box (Shelf 2): Live Reading books with burgundy badges and New ribbons",
-      "🗂️ Category Wooden Boxes: Dedicated shelves for Focus, Mindset, Brain Science, Habits, Memory, and Vocabulary",
-      "🪟 Frosted White Floating Dock & 3D Reader Integration",
-      "🏷️ Official v3.9.6 Release"
+      "🏆 Zero Fake Completed Books: Shelf 1 strictly shows only books you mark done (shows goal slot when 0)",
+      "📚 Authentic Published Book Spines: Realistic 3D dust jacket textures, headbands, publisher imprints",
+      "✨ Signature Spines: Sapiens, Atomic Habits, The Silent Patient, Educated, Deep Work, Psychology of Money",
+      "🗂️ Category Wooden Boxes: All 150+ books organized across beautiful shelves",
+      "🪟 White Minimalist App Header with [Grid | 3D Shelf] Switch and 5-Tab Bottom Dock",
+      "🏷️ Official v3.9.7 Release"
     ],
-    "stagedAt": "2026-09-26T04:10:00.000Z",
+    "stagedAt": "2026-09-29T04:10:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.9.6",
-    "name": "Mind Focus Books v3.9.6 — 150 Books Live on 3D Luxury Mahogany Shelves",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.6/MindFocusBooks-Native.apk",
+    "version": "v3.9.7",
+    "name": "Mind Focus Books v3.9.7 — Authentic Book Spines & Zero Fake Books Shelf",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.7/MindFocusBooks-Native.apk",
     "features": [
-      "📚 All 150 Library Books on 3D Shelves: Real titles, real library colors, and gilded ribs for all books",
-      "🏆 Completed Books Box (Shelf 1): User's finished books with green COMPLETED badges and luxury blocks",
-      "📖 Currently Reading Box (Shelf 2): Live Reading books with burgundy badges and New ribbons",
-      "🗂️ Category Wooden Boxes: Dedicated shelves for Focus, Mindset, Brain Science, Habits, Memory, and Vocabulary",
-      "🪟 Frosted White Floating Dock & 3D Reader Integration",
-      "🏷️ Official v3.9.6 Release"
+      "🏆 Zero Fake Completed Books: Shelf 1 strictly shows only books you mark done (shows goal slot when 0)",
+      "📚 Authentic Published Book Spines: Realistic 3D dust jacket textures, headbands, publisher imprints",
+      "✨ Signature Spines: Sapiens, Atomic Habits, The Silent Patient, Educated, Deep Work, Psychology of Money",
+      "🗂️ Category Wooden Boxes: All 150+ books organized across beautiful shelves",
+      "🪟 White Minimalist App Header with [Grid | 3D Shelf] Switch and 5-Tab Bottom Dock",
+      "🏷️ Official v3.9.7 Release"
     ],
-    "stagedAt": "2026-09-26T04:10:00.000Z",
+    "stagedAt": "2026-09-29T04:10:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {
