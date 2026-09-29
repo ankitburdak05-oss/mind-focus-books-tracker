@@ -1,22 +1,37 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-09-29T04:30:00.000Z",
+  "updatedAt": "2026-09-29T18:15:00.000Z",
   "activeRelease": {
-    "version": "v3.10.0",
-    "name": "Mind Focus Books v3.10.0 — Strict Completed & Reading Shelves + Category Shelves",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.10.0/MindFocusBooks-Native.apk",
+    "version": "v3.11.0",
+    "name": "Mind Focus Books v3.11.0 — 250+ World Masterpieces & 16 Categories",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.11.0/MindFocusBooks-Native.apk",
     "features": [
-      "🏆 Strict Completed Shelf: Only finished books appear on Shelf 1 with clean empty trophy showcase",
-      "📖 Strict Reading Shelf: Only actively reading books on Shelf 2 (zero fake badges)",
-      "🤝 Zero Fake Lent: No Lent books until user actually lends a book to someone",
-      "📚 Category-Wise Shelves: Focus, Mindset, Brain Science, Habits, Memory, Language alag alag shelves par",
-      "🖥️ 100% Full-Screen Browser View: Edge-to-edge luxury mahogany wood display",
-      "🏷️ Official v3.10.0 Release"
+      "📚 250+ World Masterpieces: 100 new world-famous books added across 16 categories",
+      "🧠 16 Distinct Categories: Dark Psychology, Philosophy, Stoicism, Wealth, Biographies, Classics, Strategy, etc.",
+      "🔄 Auto-Merge Library: New books automatically merge into your shelf without touching your reading progress",
+      "🏆 Strict Completed & Reading Shelves: No fake books, genuine library tracking only",
+      "🖥️ 100% Full-Screen Edge-to-Edge Wooden Library View",
+      "🏷️ Official v3.11.0 Release"
     ],
-    "stagedAt": "2026-09-29T05:30:00.000Z",
+    "stagedAt": "2026-09-29T18:15:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.11.0",
+    "name": "Mind Focus Books v3.11.0 — 250+ World Masterpieces & 16 Categories",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.11.0/MindFocusBooks-Native.apk",
+    "features": [
+      "📚 250+ World Masterpieces: 100 new world-famous books added across 16 categories",
+      "🧠 16 Distinct Categories: Dark Psychology, Philosophy, Stoicism, Wealth, Biographies, Classics, Strategy, etc.",
+      "🔄 Auto-Merge Library: New books automatically merge into your shelf without touching your reading progress",
+      "🏆 Strict Completed & Reading Shelves: No fake books, genuine library tracking only",
+      "🖥️ 100% Full-Screen Edge-to-Edge Wooden Library View",
+      "🏷️ Official v3.11.0 Release"
+    ],
+    "stagedAt": "2026-09-29T18:15:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.10.0",
     "name": "Mind Focus Books v3.10.0 — Strict Completed & Reading Shelves + Category Shelves",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.10.0/MindFocusBooks-Native.apk",
@@ -29,20 +44,6 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
       "🏷️ Official v3.10.0 Release"
     ],
     "stagedAt": "2026-09-29T05:30:00.000Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
-    "version": "v3.9.1",
-    "name": "Mind Focus Books v3.9.1 — 100% Clean User Edition (Admin-Free)",
-    "apkDownloadUrl": "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/MindFocusBooks-Native.apk?v=3.9.1",
-    "features": [
-      "🛡️ 100% Clean & Independent: Saara admin panel aur remote controls permanently removed",
-      "📸 1-Click Auto-Scan: Photo dalte hi Hindi + Hinglish + English teeno bhashaon mein page taiyaar",
-      "📖 Real Book Reader Spread Fix: Page 3 repeating issue permanently resolved",
-      "✏️ Har Page par Edit & Delete: Photo se text replace karein ya custom edit karein",
-      "🏷️ App Version v3.9.1 Release"
-    ],
-    "stagedAt": "2026-09-17T03:30:00.000Z",
     "isDeployed": true
   },
   "features": {

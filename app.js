@@ -1,4 +1,4 @@
-const APP_VERSION = '3.10.0';
+const APP_VERSION = '3.11.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -40,17 +40,32 @@ const ICONS = {
 // Fix 1: Sab external internet URLs remove kar diye — 100% offline
 // Pehle user-uploaded cover check hoga, baaki sab offline gradient placeholder
 const CATEGORY_COVER_GRADIENTS = {
-  'Focus':       [['#1e3a5f', '#3b82f6', '#06b6d4'], '⚡'],
-  'Habits':      [['#1c1917', '#d97706', '#f59e0b'], '🔥'],
-  'Wealth':      [['#052e16', '#16a34a', '#34d399'], '💰'],
-  'Psychology':  [['#2e1065', '#7c3aed', '#a78bfa'], '🧠'],
-  'Philosophy':  [['#1c1917', '#78716c', '#d6d3d1'], '🏛️'],
-  'Biographies': [['#1e1b4b', '#4338ca', '#818cf8'], '👑'],
-  'Memory':      [['#042f2e', '#0d9488', '#5eead4'], '🧩'],
-  'Mindset':     [['#450a0a', '#dc2626', '#fca5a5'], '💪'],
-  'Leadership':  [['#1a1a2e', '#6366f1', '#c7d2fe'], '🎯'],
-  'Science':     [['#0c1445', '#2563eb', '#93c5fd'], '🔬'],
-  'default':     [['#0f172a', '#334155', '#64748b'], '📖'],
+  'Dark Psychology': [['#0f172a', '#1e1b4b', '#450a0a'], '🎭'],
+  'Strategy':        [['#18181b', '#3b0764', '#1e1b4b'], '♟️'],
+  'Wealth':          [['#022c22', '#065f46', '#10b981'], '💰'],
+  'Finance':         [['#064e3b', '#047857', '#34d399'], '💵'],
+  'Philosophy':      [['#1c1917', '#44403c', '#a8a29e'], '🏛️'],
+  'Stoicism':        [['#292524', '#57534e', '#d6d3d1'], '⚔️'],
+  'Productivity':    [['#172554', '#1e40af', '#3b82f6'], '⏳'],
+  'Time':            [['#0c4a6e', '#0284c7', '#38bdf8'], '⏱️'],
+  'Communication':   [['#3b0764', '#7e22ce', '#c084fc'], '🗣️'],
+  'Influence':       [['#4a044e', '#a21caf', '#e879f9'], '🎯'],
+  'Biographies':     [['#1e1b4b', '#4338ca', '#818cf8'], '👑'],
+  'Spirituality':    [['#451a03', '#b45309', '#f59e0b'], '🕉️'],
+  'Wisdom':          [['#450a0a', '#b91c1c', '#f87171'], '🧘'],
+  'Leadership':      [['#1a1a2e', '#6366f1', '#c7d2fe'], '🚀'],
+  'Business':        [['#0f172a', '#1d4ed8', '#60a5fa'], '💼'],
+  'Health':          [['#064e3b', '#059669', '#6ee7b7'], '🌱'],
+  'Longevity':       [['#042f2e', '#0f766e', '#2dd4bf'], '🧬'],
+  'Classics':        [['#3f2e18', '#784c1f', '#d97706'], '📜'],
+  'Literature':      [['#2b1810', '#5c2c16', '#b45309'], '📖'],
+  'Focus':           [['#1e3a5f', '#3b82f6', '#06b6d4'], '⚡'],
+  'Habits':          [['#1c1917', '#d97706', '#f59e0b'], '🔥'],
+  'Psychology':      [['#2e1065', '#7c3aed', '#a78bfa'], '🧠'],
+  'Memory':          [['#042f2e', '#0d9488', '#5eead4'], '🧩'],
+  'Mindset':         [['#450a0a', '#dc2626', '#fca5a5'], '💪'],
+  'Science':         [['#0c1445', '#2563eb', '#93c5fd'], '🔬'],
+  'default':         [['#0f172a', '#334155', '#64748b'], '📖'],
 };
 
 function getOfflineCoverGradient(book) {
@@ -227,6 +242,18 @@ function loadData() {
     }
   } else {
     state.books = (typeof DEFAULT_BOOKS !== 'undefined') ? [...DEFAULT_BOOKS] : [];
+  }
+
+  // Automatic Safe Merge: Add newly introduced default books without overwriting user progress
+  if (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) {
+    const existingTitles = new Set(state.books.map(b => (b.title || '').trim().toLowerCase()));
+    DEFAULT_BOOKS.forEach(db => {
+      const t = (db.title || '').trim().toLowerCase();
+      if (!existingTitles.has(t)) {
+        state.books.push({ ...db });
+        existingTitles.add(t);
+      }
+    });
   }
 
   // Control Book 0 (Dictionary Book) presence based on panel feature flag
@@ -3345,10 +3372,20 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
   }
 
   // =============================================================
-  // CATEGORY-WISE SHELVES: ALL 150+ REAL LIBRARY BOOKS
+  // CATEGORY-WISE SHELVES: 250+ REAL WORLD BOOKS ACROSS 16 CATEGORIES
   // =============================================================
   if (activeFilter === 'ALL') {
-    const categories = [
+    const preferredOrder = [
+      'Dark Psychology & Strategy',
+      'Wealth & Finance',
+      'Philosophy & Stoicism',
+      'Productivity & Time',
+      'Communication & Influence',
+      'Biographies & Great Lives',
+      'Spirituality & Wisdom',
+      'Leadership & Business',
+      'Health & Longevity',
+      'World Classics & Literature',
       'Focus & Concentration',
       'Mindset & Logic',
       'Brain Science',
@@ -3358,6 +3395,16 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     ];
 
     const categoryIcons = {
+      'Dark Psychology & Strategy': '🎭',
+      'Wealth & Finance': '💰',
+      'Philosophy & Stoicism': '🏛️',
+      'Productivity & Time': '⏳',
+      'Communication & Influence': '🗣️',
+      'Biographies & Great Lives': '👑',
+      'Spirituality & Wisdom': '🕉️',
+      'Leadership & Business': '🚀',
+      'Health & Longevity': '🌱',
+      'World Classics & Literature': '📜',
       'Focus & Concentration': '🎯',
       'Mindset & Logic': '🧠',
       'Brain Science': '🔬',
@@ -3366,7 +3413,15 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
       'Vocabulary & Language': '📖'
     };
 
-    categories.forEach(cat => {
+    // Extract all distinct categories from actual books
+    const bookCats = Array.from(new Set(allBooksWithIdx.map(b => b.category).filter(Boolean)));
+    // Sort according to preferredOrder, then any remaining alphabetically
+    const sortedCategories = [
+      ...preferredOrder.filter(c => bookCats.some(bc => bc.toLowerCase() === c.toLowerCase())),
+      ...bookCats.filter(bc => !preferredOrder.some(po => po.toLowerCase() === bc.toLowerCase())).sort()
+    ];
+
+    sortedCategories.forEach(cat => {
       const catBooks = allBooksWithIdx.filter(b => (b.category || '').toLowerCase() === cat.toLowerCase());
       if (catBooks.length === 0) return;
 
@@ -3491,7 +3546,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.10.0';
+const CURRENT_APP_VERSION = 'v3.11.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3766,7 +3821,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.10.0/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.11.0/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');
