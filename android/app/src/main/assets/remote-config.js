@@ -1,34 +1,34 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-09-29T04:10:00.000Z",
+  "updatedAt": "2026-09-29T04:30:00.000Z",
   "activeRelease": {
-    "version": "v3.9.7",
-    "name": "Mind Focus Books v3.9.7 — Authentic Book Spines & Zero Fake Books Shelf",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.7/MindFocusBooks-Native.apk",
+    "version": "v3.9.8",
+    "name": "Mind Focus Books v3.9.8 — Full Edge-to-Edge Packed 3D Wooden Shelves & Authentic Titles",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.8/MindFocusBooks-Native.apk",
     "features": [
-      "🏆 Zero Fake Completed Books: Shelf 1 strictly shows only books you mark done (shows goal slot when 0)",
-      "📚 Authentic Published Book Spines: Realistic 3D dust jacket textures, headbands, publisher imprints",
-      "✨ Signature Spines: Sapiens, Atomic Habits, The Silent Patient, Educated, Deep Work, Psychology of Money",
-      "🗂️ Category Wooden Boxes: All 150+ books organized across beautiful shelves",
-      "🪟 White Minimalist App Header with [Grid | 3D Shelf] Switch and 5-Tab Bottom Dock",
-      "🏷️ Official v3.9.7 Release"
+      "🪵 100% Packed Edge-to-Edge Shelves: Zero empty gaps across all 3D wooden shelves",
+      "📚 Real Vertical Book Titles: Bold, embossed, highly legible spine typography along every book",
+      "✍️ Real Author Surnames & Publisher Marks on every book spine",
+      "🏆 Zero Fake Completed Books: Shelf 1 strictly tracks real progress",
+      "🪟 Authentic Dark Luxury Walnut Header matching design_wooden_shelf",
+      "🏷️ Official v3.9.8 Release"
     ],
-    "stagedAt": "2026-09-29T04:10:00.000Z",
+    "stagedAt": "2026-09-29T04:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.9.7",
-    "name": "Mind Focus Books v3.9.7 — Authentic Book Spines & Zero Fake Books Shelf",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.7/MindFocusBooks-Native.apk",
+    "version": "v3.9.8",
+    "name": "Mind Focus Books v3.9.8 — Full Edge-to-Edge Packed 3D Wooden Shelves & Authentic Titles",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.8/MindFocusBooks-Native.apk",
     "features": [
-      "🏆 Zero Fake Completed Books: Shelf 1 strictly shows only books you mark done (shows goal slot when 0)",
-      "📚 Authentic Published Book Spines: Realistic 3D dust jacket textures, headbands, publisher imprints",
-      "✨ Signature Spines: Sapiens, Atomic Habits, The Silent Patient, Educated, Deep Work, Psychology of Money",
-      "🗂️ Category Wooden Boxes: All 150+ books organized across beautiful shelves",
-      "🪟 White Minimalist App Header with [Grid | 3D Shelf] Switch and 5-Tab Bottom Dock",
-      "🏷️ Official v3.9.7 Release"
+      "🪵 100% Packed Edge-to-Edge Shelves: Zero empty gaps across all 3D wooden shelves",
+      "📚 Real Vertical Book Titles: Bold, embossed, highly legible spine typography along every book",
+      "✍️ Real Author Surnames & Publisher Marks on every book spine",
+      "🏆 Zero Fake Completed Books: Shelf 1 strictly tracks real progress",
+      "🪟 Authentic Dark Luxury Walnut Header matching design_wooden_shelf",
+      "🏷️ Official v3.9.8 Release"
     ],
-    "stagedAt": "2026-09-29T04:10:00.000Z",
+    "stagedAt": "2026-09-29T04:30:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {

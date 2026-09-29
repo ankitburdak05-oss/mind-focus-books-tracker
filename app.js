@@ -1,4 +1,4 @@
-const APP_VERSION = '3.9.7';
+const APP_VERSION = '3.9.8';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -3092,6 +3092,28 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     return words.slice(0, 2).join(' ') + '<br>' + words.slice(2, 4).join(' ');
   };
 
+  // Helper to format clean readable spine title
+  const formatSpineTitle = (title) => {
+    if (!title) return 'FOCUS BOOK';
+    let t = title.trim();
+    if (t.includes(':')) t = t.split(':')[0].trim();
+    else if (t.includes('—')) t = t.split('—')[0].trim();
+    t = t.replace(/\s+/g, ' ').toUpperCase();
+    if (t.length > 22) t = t.substring(0, 20) + '..';
+    return t;
+  };
+
+  // Helper to extract author surname for realistic spine footer
+  const formatSpineAuthor = (author, defLogo = 'PENGUIN') => {
+    if (!author) return defLogo;
+    const clean = author.replace(/^(by|dr\.|prof\.)\s+/i, '').trim();
+    const parts = clean.split(/\s+/).filter(Boolean);
+    if (parts.length === 0) return defLogo;
+    let last = parts[parts.length - 1].replace(/[^\w]/g, '').toUpperCase();
+    if (last.length > 9) last = last.substring(0, 8);
+    return last || defLogo;
+  };
+
   // Helper to render authentic, realistic book spine with publisher emblem & headband
   const renderSpine = (b, isLeaning = false) => {
     if (!b) return '';
@@ -3099,82 +3121,127 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     let bg = '';
     let textColor = '';
     let border = '';
-    let pubLogo = '✦';
+    let authorOrLogo = formatSpineAuthor(b.author);
 
     // Signature realistic spine styles matching real printed books
     if (titleLower.includes('sapiens')) {
-      bg = 'linear-gradient(90deg, #dcd8cd 0%, #f4f1ea 25%, #f7f5f0 70%, #dcd8cd 100%)';
+      bg = 'linear-gradient(90deg, #d6d1c4 0%, #f4f1ea 25%, #f7f5f0 70%, #d6d1c4 100%)';
       textColor = '#b91c1c';
       border = '#a8a29e';
-      pubLogo = 'HARPER';
+      authorOrLogo = 'HARARI';
     } else if (titleLower.includes('atomic habits')) {
       bg = 'linear-gradient(90deg, #e2e8f0 0%, #ffffff 30%, #f8fafc 70%, #cbd5e1 100%)';
       textColor = '#0f172a';
       border = '#ca8a04';
-      pubLogo = 'PENGUIN';
+      authorOrLogo = 'CLEAR';
     } else if (titleLower.includes('silent patient')) {
       bg = 'linear-gradient(90deg, #0e4854 0%, #155e75 35%, #083344 100%)';
       textColor = '#f0fdfa';
       border = '#06b6d4';
-      pubLogo = 'CELADON';
+      authorOrLogo = 'MICHAELIDES';
     } else if (titleLower.includes('educated')) {
       bg = 'linear-gradient(90deg, #e5e5e5 0%, #fafaf9 35%, #d6d3d1 100%)';
       textColor = '#18181b';
       border = '#71717a';
-      pubLogo = 'RANDOM';
+      authorOrLogo = 'WESTOVER';
     } else if (titleLower.includes('deep work')) {
       bg = 'linear-gradient(90deg, #09090b 0%, #18181b 35%, #09090b 100%)';
       textColor = '#facc15';
       border = '#eab308';
-      pubLogo = 'PIATKUS';
+      authorOrLogo = 'NEWPORT';
     } else if (titleLower.includes('psychology of money')) {
       bg = 'linear-gradient(90deg, #022c22 0%, #064e3b 35%, #022c22 100%)';
       textColor = '#a7f3d0';
       border = '#10b981';
-      pubLogo = 'HARRIMAN';
+      authorOrLogo = 'HOUSEL';
+    } else if (titleLower.includes('power of now')) {
+      bg = 'linear-gradient(90deg, #450a0a 0%, #7f1d1d 35%, #300606 100%)';
+      textColor = '#fef08a';
+      border = '#b91c1c';
+      authorOrLogo = 'TOLLE';
+    } else if (titleLower.includes('meditation')) {
+      bg = 'linear-gradient(90deg, #d6d1c4 0%, #faf8f5 35%, #ede8dc 100%)';
+      textColor = '#1c1917';
+      border = '#a8a29e';
+      authorOrLogo = 'AURELIUS';
+    } else if (titleLower.includes('meaning')) {
+      bg = 'linear-gradient(90deg, #451a03 0%, #9a3412 35%, #321002 100%)';
+      textColor = '#fef3c7';
+      border = '#d97706';
+      authorOrLogo = 'FRANKL';
     } else if (titleLower.includes('hyperfocus')) {
       bg = 'linear-gradient(90deg, #172554 0%, #1d4ed8 35%, #172554 100%)';
       textColor = '#fef08a';
       border = '#3b82f6';
-      pubLogo = 'VIKING';
+      authorOrLogo = 'BAILEY';
     } else if (titleLower.includes('subconscious')) {
       bg = 'linear-gradient(90deg, #1e1b4b 0%, #312e81 35%, #0f172a 100%)';
       textColor = '#fde047';
       border = '#6366f1';
-      pubLogo = 'SIMON';
+      authorOrLogo = 'MURPHY';
     } else if (titleLower.includes('limitless')) {
       bg = 'linear-gradient(90deg, #0f172a 0%, #1e293b 35%, #090d16 100%)';
       textColor = '#38bdf8';
       border = '#0ea5e9';
-      pubLogo = 'HAY';
+      authorOrLogo = 'KWIK';
     } else if (titleLower.includes('thinking, fast')) {
-      bg = 'linear-gradient(90deg, #e7e5e4 0%, #fafaf9 35%, #d6d3d1 100%)';
-      textColor = '#1c1917';
-      border = '#a8a29e';
-      pubLogo = 'FARRAR';
+      bg = 'linear-gradient(90deg, #18181b 0%, #27272a 35%, #09090b 100%)';
+      textColor = '#fde047';
+      border = '#ca8a04';
+      authorOrLogo = 'KAHNEMAN';
     } else if (titleLower.includes('ikigai')) {
       bg = 'linear-gradient(90deg, #082f49 0%, #0369a1 35%, #082f49 100%)';
       textColor = '#f0f9ff';
       border = '#38bdf8';
-      pubLogo = 'HUTCH';
+      authorOrLogo = 'GARCIA';
+    } else if (titleLower.includes('dune')) {
+      bg = 'linear-gradient(90deg, #fef3c7 0%, #fffbeb 35%, #fde68a 100%)';
+      textColor = '#78350f';
+      border = '#b45309';
+      authorOrLogo = 'HERBERT';
+    } else if (titleLower.includes('rich dad')) {
+      bg = 'linear-gradient(90deg, #3b0764 0%, #6b21a8 35%, #2e1065 100%)';
+      textColor = '#fef08a';
+      border = '#a855f7';
+      authorOrLogo = 'KIYOSAKI';
+    } else if (titleLower.includes('outliers')) {
+      bg = 'linear-gradient(90deg, #0c4a6e 0%, #0369a1 35%, #082f49 100%)';
+      textColor = '#bae6fd';
+      border = '#0284c7';
+      authorOrLogo = 'GLADWELL';
+    } else if (titleLower.includes('start with why')) {
+      bg = 'linear-gradient(90deg, #581c1c 0%, #991b1b 35%, #3b0d0d 100%)';
+      textColor = '#ffffff';
+      border = '#dc2626';
+      authorOrLogo = 'SINEK';
+    } else if (titleLower.includes('subtle art')) {
+      bg = 'linear-gradient(90deg, #7c2d12 0%, #c2410c 35%, #431407 100%)';
+      textColor = '#ffedd5';
+      border = '#ea580c';
+      authorOrLogo = 'MANSON';
+    } else if (titleLower.includes('ego is the enemy')) {
+      bg = 'linear-gradient(90deg, #292524 0%, #44403c 35%, #1c1917 100%)';
+      textColor = '#fef08a';
+      border = '#a8a29e';
+      authorOrLogo = 'HOLIDAY';
     } else {
       const p = spinePalettes[b.origIdx % spinePalettes.length];
       bg = p.bg;
       textColor = p.text;
       border = p.border;
-      pubLogo = 'FOCUS';
     }
 
-    const height = 195 + ((b.origIdx * 7) % 28);
-    const width = 28 + ((b.origIdx * 3) % 10);
-    const leaningStyle = isLeaning ? 'transform: rotate(11deg) translateY(-4px); margin-right: 12px; z-index: 4;' : '';
-    let displayTitle = (b.title || 'Focus Book').trim();
-    if (displayTitle.length > 28) displayTitle = displayTitle.substring(0, 26) + '...';
+    const height = 198 + ((b.origIdx * 7) % 22);
+    const width = 31 + ((b.origIdx * 3) % 7);
+    const leaningStyle = isLeaning ? 'transform: rotate(11deg) translateY(-2px); margin-right: 14px; z-index: 4;' : '';
+    const displayTitle = formatSpineTitle(b.title);
 
     return '<div class="spine-vertical-realistic" onclick="openShelfBook(' + b.origIdx + ')" style="width:' + width + 'px; height:' + height + 'px; background:' + bg + '; border-left:2px solid ' + border + '; ' + leaningStyle + '" title="' + escapeHtml(b.title) + ' by ' + escapeHtml(b.author || '') + ' (' + escapeHtml(b.category || '') + ')">' +
       '<div class="spine-headband"></div>' +
+      '<div class="spine-rib-accent"></div>' +
       '<div class="spine-title-vertical" style="color:' + textColor + ';">' + escapeHtml(displayTitle) + '</div>' +
-      '<div class="spine-publisher-logo" style="color:' + textColor + ';">' + pubLogo + '</div>' +
+      '<div class="spine-rib-accent"></div>' +
+      '<div class="spine-publisher-logo" style="color:' + textColor + ';">' + escapeHtml(authorOrLogo) + '</div>' +
     '</div>';
   };
 
@@ -3215,7 +3282,7 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     const leaningMeditation = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meditation')) || allBooksWithIdx[2] || { title: "Meditations", origIdx: 2 };
     const leaningRed = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('subconscious')) || allBooksWithIdx[3] || { title: "Subconscious", origIdx: 3 };
 
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
+    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:space-between; width:100%;">';
 
     // Book 1: Left Featured Book Cover ("THE ALCHEMIST'S PATH" / Active Reading)
     html += '<div class="book-alchemist-block" onclick="openShelfBook(' + activeReadBook.origIdx + ')" title="Reading: ' + escapeHtml(activeReadBook.title) + '">' +
@@ -3225,12 +3292,14 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
 
     // Leaning books group in center
     html += '<div class="leaning-books-group">' +
-      '<div class="leaning-book-spine" onclick="openShelfBook(' + leaningMeditation.origIdx + ')" style="background:linear-gradient(180deg, #fde68a, #d97706); border-left:2px solid #b45309;" title="' + escapeHtml(leaningMeditation.title) + '">' +
-        '<div class="spine-title-vertical" style="color:#78350f; font-size:0.58rem;">' + escapeHtml(leaningMeditation.title.substring(0, 20)) + '</div>' +
+      '<div class="leaning-book-spine" onclick="openShelfBook(' + leaningMeditation.origIdx + ')" style="background:linear-gradient(90deg, #cfc9bb 0%, #faf8f5 35%, #d6d1c4 100%); border-left:2px solid #a8a29e;" title="' + escapeHtml(leaningMeditation.title) + '">' +
+        '<div class="spine-headband"></div>' +
+        '<div class="spine-rib-accent"></div>' +
+        '<div class="spine-title-vertical" style="color:#1c1917; font-size:0.62rem;">' + escapeHtml(formatSpineTitle(leaningMeditation.title)) + '</div>' +
+        '<div class="spine-rib-accent"></div>' +
+        '<div class="spine-publisher-logo" style="color:#1c1917;">AURELIUS</div>' +
       '</div>' +
-      '<div class="spine-vertical-realistic" onclick="openShelfBook(' + leaningRed.origIdx + ')" style="width:22px; height:205px; background:linear-gradient(180deg, #991b1b, #450a0a); border-left:2px solid #ea580c;" title="' + escapeHtml(leaningRed.title) + '">' +
-        '<div class="spine-title-vertical" style="font-size:0.55rem; color:#fef08a;">' + escapeHtml(leaningRed.title.substring(0, 18)) + '</div>' +
-      '</div>' +
+      renderSpine(leaningRed) +
     '</div>';
 
     // Book 2: Right Spot (Completed Book IF user has finished one; ELSE Empty Trophy Slot!)
@@ -3240,7 +3309,6 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
         '<div class="book-title-gold-emboss" style="font-size:1.15rem; letter-spacing:0.04em;">' + formatBlockTitle(cBook.title) + '</div>' +
         '<span class="badge-pill-completed-clean">Completed</span>' +
       '</div>';
-      // Extra completed books spines
       completedList.slice(1, 4).forEach(cb => {
         html += renderSpine(cb);
       });
@@ -3254,7 +3322,7 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     }
 
     // Upright cloth spines on far right
-    html += '<div style="display:flex; align-items:flex-end; gap:6px;">' +
+    html += '<div style="display:flex; align-items:flex-end; gap:5px;">' +
       renderSpine(allBooksWithIdx[4]) +
       renderSpine(allBooksWithIdx[5]) +
     '</div>';
@@ -3269,11 +3337,11 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     const stormlightBook = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('stormlight')) || allBooksWithIdx[6] || { title: "STORMLIGHT ARCHIVE", origIdx: 6 };
     const mindfulnessBook = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('mindfulness')) || allBooksWithIdx[7] || { title: "MINDFULNESS & FOCUS", origIdx: 7 };
 
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
+    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:space-between; width:100%;">';
 
     // Upright spines on left with New badge
     html += '<div style="display:flex; align-items:flex-end; gap:5px; position:relative;">' +
-      '<span class="badge-pill-new-cyan" style="position:absolute; top:-10px; left:4px; z-index:10;">New</span>' +
+      '<span class="badge-pill-new-cyan" style="position:absolute; top:-12px; left:2px; z-index:10;">New</span>' +
       renderSpine(allBooksWithIdx[8]) +
     '</div>';
 
@@ -3281,14 +3349,14 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     html += '<div class="book-stormlight-block" onclick="openShelfBook(' + stormlightBook.origIdx + ')" title="' + escapeHtml(stormlightBook.title) + '">' +
       '<span class="badge-pill-new-cyan" style="position:absolute; top:-10px; left:10px;">New</span>' +
       '<div class="book-title-gold-emboss" style="font-size:1.02rem;">' + formatBlockTitle(stormlightBook.title) + '</div>' +
-      '<span class="badge-pill-reading-clean" style="margin-top:6px;">New</span>' +
+      '<span class="badge-pill-completed-clean" style="margin-top:6px;">Completed</span>' +
     '</div>';
 
     // Book 4: Slate Blue-Gray Leather block with Lent badge (MINDFULNESS & FOCUS)
-    html += '<div class="book-mindfulness-block" onclick="openShelfBook(' + mindfulnessBook.origIdx + ')" title="' + escapeHtml(mindfulnessBook.title) + '" style="background:linear-gradient(145deg, #1e3a5f 0%, #0f2744 60%, #07192d 100%); border-color:#2563eb;">' +
-      '<span class="badge-pill-lent-white" style="position:absolute; top:-10px; right:10px;">Lent</span>' +
-      '<div class="book-title-gold-emboss" style="font-size:1.05rem; color:#e0f2fe;">' + formatBlockTitle(mindfulnessBook.title) + '</div>' +
-      '<span class="badge-pill-new-cyan" style="width:fit-content;">Lent</span>' +
+    html += '<div class="book-mindfulness-block" onclick="openShelfBook(' + mindfulnessBook.origIdx + ')" title="' + escapeHtml(mindfulnessBook.title) + '">' +
+      '<span class="corner-tag-tan">New</span>' +
+      '<div class="book-title-gold-emboss" style="font-size:1.05rem;">' + formatBlockTitle(mindfulnessBook.title) + '</div>' +
+      '<span class="badge-pill-lent" style="width:fit-content;">Lent</span>' +
     '</div>';
 
     // Upright leaning book on right
@@ -3301,24 +3369,31 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
   }
 
   // =============================================================
-  // SHELF 3: DENSE REALISTIC LIBRARY SPINES (The Silent Patient, Educated, etc.)
+  // SHELF 3: DENSE REALISTIC LIBRARY SPINES (100% Packed Edge to Edge)
   // =============================================================
   if (activeFilter === 'ALL') {
     const shelf3Books = [
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('silent patient')) || allBooksWithIdx[11],
-      allBooksWithIdx[12],
-      allBooksWithIdx[13],
-      allBooksWithIdx[14],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meditation')) || allBooksWithIdx[12],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('power of now')) || allBooksWithIdx[13],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meaning')) || allBooksWithIdx[14],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('educated')) || allBooksWithIdx[15],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('great expectations')) || allBooksWithIdx[16],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('hail mary')) || allBooksWithIdx[17],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('thinking')) || allBooksWithIdx[4],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('power of now')) || allBooksWithIdx[18],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('ikigai')) || allBooksWithIdx[19],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meaning')) || allBooksWithIdx[20]
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('thinking, fast')) || allBooksWithIdx[4],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('ikigai')) || allBooksWithIdx[18],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('atomic habits')) || allBooksWithIdx[19],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('deep work')) || allBooksWithIdx[20],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('sapiens')) || allBooksWithIdx[21],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('psychology of money')) || allBooksWithIdx[22],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('essentialism')) || allBooksWithIdx[23],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('quiet')) || allBooksWithIdx[24],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('grit')) || allBooksWithIdx[25],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('hurt me')) || allBooksWithIdx[26],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('subconscious')) || allBooksWithIdx[27]
     ].filter(Boolean);
 
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:flex-start; gap:7px;">';
+    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
     shelf3Books.forEach((b, idx) => {
       const isLeaning = (idx === 4); // Leaning Educated book exactly like photo
       html += renderSpine(b, isLeaning);
@@ -3327,24 +3402,33 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
   }
 
   // =============================================================
-  // SHELF 4: COLORFUL SPINES + SAPIENS + ATOMIC HABITS + DEEP WORK
+  // SHELF 4: DENSE LIBRARY CLASSICS & BESTSELLERS (100% Packed Edge to Edge)
   // =============================================================
   if (activeFilter === 'ALL') {
     const shelf4Books = [
-      allBooksWithIdx[21] || allBooksWithIdx[0],
-      allBooksWithIdx[22] || allBooksWithIdx[1],
-      allBooksWithIdx[23] || allBooksWithIdx[2],
-      allBooksWithIdx[24] || allBooksWithIdx[3],
-      allBooksWithIdx[25] || allBooksWithIdx[4],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('sapiens')) || allBooksWithIdx[10],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('atomic habits')) || allBooksWithIdx[7],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('deep work')) || allBooksWithIdx[5],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('psychology of money')) || allBooksWithIdx[9]
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('dune')) || allBooksWithIdx[28],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('rich dad')) || allBooksWithIdx[29],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('outliers')) || allBooksWithIdx[30],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('start with why')) || allBooksWithIdx[31],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('lean startup')) || allBooksWithIdx[32],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('subtle art')) || allBooksWithIdx[33],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('ego is the enemy')) || allBooksWithIdx[34],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('hyperfocus')) || allBooksWithIdx[35],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('limitless')) || allBooksWithIdx[36],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('blink')) || allBooksWithIdx[37],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('flow')) || allBooksWithIdx[38],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('digital minimalism')) || allBooksWithIdx[39],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('show your work')) || allBooksWithIdx[40],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('steal like an artist')) || allBooksWithIdx[41],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('make time')) || allBooksWithIdx[42],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('stolen focus')) || allBooksWithIdx[43],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('zero to one')) || allBooksWithIdx[44],
+      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('principles')) || allBooksWithIdx[45]
     ].filter(Boolean);
 
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:flex-start; gap:7px;">';
+    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
     shelf4Books.forEach((b, idx) => {
-      const isLeaning = (idx === 4); // Leaning blue book
+      const isLeaning = (idx === 6); // Leaning book
       html += renderSpine(b, isLeaning);
     });
     html += '</div><div class="mahogany-plank"></div></div>';
@@ -3490,7 +3574,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.9.7';
+const CURRENT_APP_VERSION = 'v3.9.8';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3765,7 +3849,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.7/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.8/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');
