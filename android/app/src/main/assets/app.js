@@ -1,4 +1,4 @@
-const APP_VERSION = '3.9.9';
+const APP_VERSION = '3.10.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -3059,14 +3059,11 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
   // Completed books - STRICTLY user's completed books (ZERO FAKE FALLBACK)
   const completedList = allBooksWithIdx.filter(b => b.status === 'DONE' || b.status === 'COMPLETED');
 
-  // Currently Reading books
-  let readingList = allBooksWithIdx.filter(b => b.status === 'READING');
-  if (readingList.length === 0 && allBooksWithIdx.length > 0) {
-    readingList = [allBooksWithIdx[1] || allBooksWithIdx[0]];
-  }
+  // Currently Reading books - STRICTLY user's active reading books
+  const readingList = allBooksWithIdx.filter(b => b.status === 'READING');
 
-  // Lent / Unavailable books
-  const lentList = allBooksWithIdx.filter(b => b.availability === 'UNAVAILABLE' || b.status === 'LENT');
+  // Lent books - STRICTLY books marked as LENT (ZERO fake fallback)
+  const lentList = allBooksWithIdx.filter(b => b.status === 'LENT');
 
   // Realistic spine color palettes
   const spinePalettes = [
@@ -3262,186 +3259,89 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     '</div>' +
   '</div>';
 
-  // If user explicitly filtered by Completed and has 0 completed books, show encouraging empty state
-  if (activeFilter === 'DONE' && completedList.length === 0) {
-    html += '<div style="text-align:center; padding:3.5rem 1.5rem; color:#fde68a;">' +
-      '<div style="font-size:3.2rem; margin-bottom:0.75rem;">🏆</div>' +
-      '<div style="font-size:1.15rem; font-weight:800; margin-bottom:0.5rem; color:#ffffff;">Abhi tak koi book complete nahi hui hai</div>' +
-      '<div style="font-size:0.85rem; color:#cbd5e1; max-width:340px; margin:0 auto 1.5rem; line-height:1.5;">Aap jab kisi book ko finish karke uska status "Completed" karenge, wo yahan aapki Trophy bookshelf par add ho jayegi!</div>' +
-      '<button type="button" class="btn btn-sm" onclick="switchBottomTab(\'library\')" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#0b0f19; font-weight:800; border-radius:20px; padding:8px 22px; border:none; cursor:pointer;">📖 Browse Library</button>' +
-    '</div>';
-    container.innerHTML = html;
-    return;
-  }
-
   // =============================================================
-  // SHELF 1: ACTIVE READING (LEFT) + LEANING BOOKS + COMPLETED SPOT (RIGHT)
+  // BOX 1: COMPLETED BOOKS SHELF (Pehle Box me Wahi Jo Complete Hui Hain)
   // =============================================================
-  if (activeFilter === 'ALL' || activeFilter === 'READING' || (activeFilter === 'DONE' && completedList.length > 0)) {
-    const activeReadBook = readingList[0] || allBooksWithIdx[1] || { title: "THE ALCHEMIST'S PATH", author: "Paulo Coelho", origIdx: 1 };
-    const leaningMeditation = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meditation')) || allBooksWithIdx[2] || { title: "Meditations", origIdx: 2 };
-    const leaningRed = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('subconscious')) || allBooksWithIdx[3] || { title: "Subconscious", origIdx: 3 };
-
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:space-between; width:100%;">';
-
-    // Book 1: Left Featured Book Cover ("THE ALCHEMIST'S PATH" / Active Reading)
-    html += '<div class="book-alchemist-block" onclick="openShelfBook(' + activeReadBook.origIdx + ')" title="Reading: ' + escapeHtml(activeReadBook.title) + '">' +
-      '<div class="book-title-gold-emboss">' + formatBlockTitle(activeReadBook.title) + '</div>' +
-      '<span class="badge-pill-reading-clean">Reading</span>' +
+  if (activeFilter === 'ALL' || activeFilter === 'DONE') {
+    html += '<div class="shelf-category-plate">' +
+      '<div class="shelf-category-plate-title"><span>🏆</span> COMPLETED BOOKS</div>' +
+      '<div class="shelf-category-plate-count">' + completedList.length + ' Done</div>' +
     '</div>';
 
-    // Leaning books group in center
-    html += '<div class="leaning-books-group">' +
-      '<div class="leaning-book-spine" onclick="openShelfBook(' + leaningMeditation.origIdx + ')" style="background:linear-gradient(90deg, #cfc9bb 0%, #faf8f5 35%, #d6d1c4 100%); border-left:2px solid #a8a29e;" title="' + escapeHtml(leaningMeditation.title) + '">' +
-        '<div class="spine-headband"></div>' +
-        '<div class="spine-rib-accent"></div>' +
-        '<div class="spine-title-vertical" style="color:#1c1917; font-size:0.62rem;">' + escapeHtml(formatSpineTitle(leaningMeditation.title)) + '</div>' +
-        '<div class="spine-rib-accent"></div>' +
-        '<div class="spine-publisher-logo" style="color:#1c1917;">AURELIUS</div>' +
-      '</div>' +
-      renderSpine(leaningRed) +
-    '</div>';
-
-    // Book 2: Right Spot (Completed Book IF user has finished one; ELSE Empty Trophy Slot!)
-    if (completedList.length > 0) {
-      const cBook = completedList[0];
-      html += '<div class="book-dune-block" onclick="openShelfBook(' + cBook.origIdx + ')" title="Completed: ' + escapeHtml(cBook.title) + '">' +
-        '<div class="book-title-gold-emboss" style="font-size:1.15rem; letter-spacing:0.04em;">' + formatBlockTitle(cBook.title) + '</div>' +
-        '<span class="badge-pill-completed-clean">Completed</span>' +
+    html += '<div class="mahogany-shelf-row">';
+    if (completedList.length === 0) {
+      // 0 Completed Books: ONLY Empty Trophy Showcase (NO EXTRA BOOKS)
+      html += '<div class="mahogany-shelf-books" style="justify-content:center; align-items:center;">' +
+        '<div class="book-completed-empty-slot" onclick="switchBottomTab(\'library\')" style="width:280px; max-width:92%; height:185px;" title="Abhi tak koi book complete nahi hui. Tap karke library se book padhein!">' +
+          '<div class="empty-slot-trophy">🏆</div>' +
+          '<div class="empty-slot-text">COMPLETE YOUR FIRST BOOK</div>' +
+          '<span class="badge-pill-goal">0 / ' + allBooksWithIdx.length + ' COMPLETED</span>' +
+          '<div style="font-size:0.68rem; color:#cbd5e1; margin-top:3px;">Book finish hone par automatically yahan add hogi</div>' +
+        '</div>' +
       '</div>';
-      completedList.slice(1, 4).forEach(cb => {
-        html += renderSpine(cb);
-      });
     } else {
-      // ZERO completed books fallback: Trophy Slot
-      html += '<div class="book-completed-empty-slot" onclick="switchBottomTab(\'library\')" title="Abhi tak koi book complete nahi hui. Tap karke library se book padhein!">' +
-        '<div class="empty-slot-trophy">🏆</div>' +
-        '<div class="empty-slot-text">COMPLETE YOUR<br>FIRST BOOK</div>' +
-        '<span class="badge-pill-goal">0 / ' + allBooksWithIdx.length + ' DONE</span>' +
-      '</div>';
+      // ONLY Completed Books
+      html += '<div class="mahogany-shelf-books">';
+      completedList.forEach((b, idx) => {
+        if (idx === 0) {
+          html += '<div class="book-dune-block" onclick="openShelfBook(' + b.origIdx + ')" title="Completed: ' + escapeHtml(b.title) + '">' +
+            '<div class="book-title-gold-emboss" style="font-size:1.1rem;">' + formatBlockTitle(b.title) + '</div>' +
+            '<span class="badge-pill-completed-clean">Completed</span>' +
+          '</div>';
+        } else {
+          html += '<div style="display:flex; flex-direction:column; align-items:center; gap:4px;">' +
+            renderSpine(b) +
+            '<span class="badge-pill-completed-clean" style="font-size:0.58rem; padding:1px 6px;">Completed</span>' +
+          '</div>';
+        }
+      });
+      html += '</div>';
     }
-
-    // Upright cloth spines on right - 25 books so wide browser screens are completely filled edge-to-edge!
-    const shelf1ExtraBooks = allBooksWithIdx.slice(4, 28);
-    shelf1ExtraBooks.forEach((b, idx) => {
-      const isLeaning = (idx === 6 || idx === 14 || idx === 20);
-      html += renderSpine(b, isLeaning);
-    });
-
-    html += '</div><div class="mahogany-plank"></div></div>';
+    html += '<div class="mahogany-plank"></div></div>';
   }
 
   // =============================================================
-  // SHELF 2: STORMLIGHT ARCHIVE + MINDFULNESS & FOCUS (Matching Mockup)
+  // BOX 2: CURRENTLY READING SHELF (Dusre Box me Reading Wali)
   // =============================================================
   if (activeFilter === 'ALL' || activeFilter === 'READING') {
-    const stormlightBook = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('stormlight')) || allBooksWithIdx[6] || { title: "STORMLIGHT ARCHIVE", origIdx: 6 };
-    const mindfulnessBook = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('mindfulness')) || allBooksWithIdx[7] || { title: "MINDFULNESS & FOCUS", origIdx: 7 };
-
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:flex-start; width:100%;">';
-
-    // Upright spines on left with New badge
-    html += '<div style="display:flex; align-items:flex-end; gap:5px; position:relative;">' +
-      '<span class="badge-pill-new-cyan" style="position:absolute; top:-12px; left:2px; z-index:10;">New</span>' +
-      renderSpine(allBooksWithIdx[8]) +
+    html += '<div class="shelf-category-plate">' +
+      '<div class="shelf-category-plate-title"><span>📖</span> CURRENTLY READING</div>' +
+      '<div class="shelf-category-plate-count">' + readingList.length + ' Reading</div>' +
     '</div>';
 
-    // Book 3: Dark featured block with New badge (STORMLIGHT ARCHIVE)
-    html += '<div class="book-stormlight-block" onclick="openShelfBook(' + stormlightBook.origIdx + ')" title="' + escapeHtml(stormlightBook.title) + '">' +
-      '<span class="badge-pill-new-cyan" style="position:absolute; top:-10px; left:10px;">New</span>' +
-      '<div class="book-title-gold-emboss" style="font-size:1.02rem;">' + formatBlockTitle(stormlightBook.title) + '</div>' +
-      '<span class="badge-pill-completed-clean" style="margin-top:6px;">Completed</span>' +
-    '</div>';
-
-    // Book 4: Slate Blue-Gray Leather block with Lent badge (MINDFULNESS & FOCUS)
-    html += '<div class="book-mindfulness-block" onclick="openShelfBook(' + mindfulnessBook.origIdx + ')" title="' + escapeHtml(mindfulnessBook.title) + '">' +
-      '<span class="corner-tag-tan">New</span>' +
-      '<div class="book-title-gold-emboss" style="font-size:1.05rem;">' + formatBlockTitle(mindfulnessBook.title) + '</div>' +
-      '<span class="badge-pill-lent" style="width:fit-content;">Lent</span>' +
-    '</div>';
-
-    // Upright spines on right - 25 books so wide browser screens are completely filled edge-to-edge!
-    const shelf2ExtraBooks = allBooksWithIdx.slice(28, 54);
-    shelf2ExtraBooks.forEach((b, idx) => {
-      const isLeaning = (idx === 4 || idx === 12 || idx === 20);
-      html += renderSpine(b, isLeaning);
-    });
-
-    html += '</div><div class="mahogany-plank"></div></div>';
-  }
-
-  // =============================================================
-  // SHELF 3: DENSE REALISTIC LIBRARY SPINES (50+ Books Fills Any Screen Width)
-  // =============================================================
-  if (activeFilter === 'ALL') {
-    const signatureShelf3 = [
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('silent patient')) || allBooksWithIdx[11],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meditation')) || allBooksWithIdx[12],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('power of now')) || allBooksWithIdx[13],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meaning')) || allBooksWithIdx[14],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('educated')) || allBooksWithIdx[15],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('great expectations')) || allBooksWithIdx[16],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('hail mary')) || allBooksWithIdx[17],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('thinking, fast')) || allBooksWithIdx[4],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('ikigai')) || allBooksWithIdx[18],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('atomic habits')) || allBooksWithIdx[19],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('deep work')) || allBooksWithIdx[20],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('sapiens')) || allBooksWithIdx[21],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('psychology of money')) || allBooksWithIdx[22],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('essentialism')) || allBooksWithIdx[23],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('quiet')) || allBooksWithIdx[24],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('grit')) || allBooksWithIdx[25],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('hurt me')) || allBooksWithIdx[26],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('subconscious')) || allBooksWithIdx[27]
-    ].filter(Boolean);
-
-    // Merge signature books with additional library books up to 50 books total
-    const shelf3Rest = allBooksWithIdx.filter(b => !signatureShelf3.some(sb => sb.origIdx === b.origIdx)).slice(0, 32);
-    const shelf3Books = signatureShelf3.concat(shelf3Rest);
-
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
-    shelf3Books.forEach((b, idx) => {
-      const isLeaning = (idx % 7 === 4); // Leaning books placed rhythmically
-      html += renderSpine(b, isLeaning);
-    });
-    html += '</div><div class="mahogany-plank"></div></div>';
-  }
-
-  // =============================================================
-  // SHELF 4: DENSE LIBRARY CLASSICS & BESTSELLERS (50+ Books Fills Any Screen Width)
-  // =============================================================
-  if (activeFilter === 'ALL') {
-    const signatureShelf4 = [
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('dune')) || allBooksWithIdx[28],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('rich dad')) || allBooksWithIdx[29],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('outliers')) || allBooksWithIdx[30],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('start with why')) || allBooksWithIdx[31],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('lean startup')) || allBooksWithIdx[32],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('subtle art')) || allBooksWithIdx[33],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('ego is the enemy')) || allBooksWithIdx[34],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('hyperfocus')) || allBooksWithIdx[35],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('limitless')) || allBooksWithIdx[36],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('blink')) || allBooksWithIdx[37],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('flow')) || allBooksWithIdx[38],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('digital minimalism')) || allBooksWithIdx[39],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('show your work')) || allBooksWithIdx[40],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('steal like an artist')) || allBooksWithIdx[41],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('make time')) || allBooksWithIdx[42],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('stolen focus')) || allBooksWithIdx[43],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('zero to one')) || allBooksWithIdx[44],
-      allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('principles')) || allBooksWithIdx[45]
-    ].filter(Boolean);
-
-    // Merge signature books with additional library books up to 50 books total
-    const shelf4Rest = allBooksWithIdx.filter(b => !signatureShelf4.some(sb => sb.origIdx === b.origIdx)).slice(25, 57);
-    const shelf4Books = signatureShelf4.concat(shelf4Rest);
-
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
-    shelf4Books.forEach((b, idx) => {
-      const isLeaning = (idx % 8 === 5); // Leaning books placed rhythmically
-      html += renderSpine(b, isLeaning);
-    });
-    html += '</div><div class="mahogany-plank"></div></div>';
+    html += '<div class="mahogany-shelf-row">';
+    if (readingList.length === 0) {
+      // 0 Reading Books: Empty State
+      html += '<div class="mahogany-shelf-books" style="justify-content:center; align-items:center;">' +
+        '<div class="book-completed-empty-slot" onclick="switchBottomTab(\'library\')" style="width:280px; max-width:92%; height:185px; border-color:rgba(56, 189, 248, 0.45);" title="Abhi koi book reading me nahi hai. Tap karke library se shuru karein!">' +
+          '<div style="font-size:2.2rem; filter:drop-shadow(0 2px 8px rgba(56, 189, 248, 0.5));">📖</div>' +
+          '<div class="empty-slot-text" style="color:#38bdf8;">START READING A BOOK</div>' +
+          '<span class="badge-pill-reading-clean">0 In Reading</span>' +
+          '<div style="font-size:0.68rem; color:#cbd5e1; margin-top:3px;">Tap karke library se book choose karein</div>' +
+        '</div>' +
+      '</div>';
+    } else {
+      // ONLY Reading Books (NO Lent, NO Completed, NO extra dummy books)
+      html += '<div class="mahogany-shelf-books">';
+      readingList.forEach((b, idx) => {
+        if (idx === 0) {
+          html += '<div class="book-alchemist-block" onclick="openShelfBook(' + b.origIdx + ')" title="Reading: ' + escapeHtml(b.title) + '">' +
+            '<div class="book-title-gold-emboss">' + formatBlockTitle(b.title) + '</div>' +
+            '<div style="display:flex; justify-content:space-between; align-items:center; width:100%; margin-top:auto;">' +
+              '<span class="badge-pill-reading-clean">Reading</span>' +
+              '<span style="font-size:0.68rem; color:#cbd5e1; font-weight:700;">' + (b.current_page || 0) + ' p.</span>' +
+            '</div>' +
+          '</div>';
+        } else {
+          html += '<div style="display:flex; flex-direction:column; align-items:center; gap:4px;">' +
+            renderSpine(b) +
+            '<span class="badge-pill-reading-clean" style="font-size:0.58rem; padding:1px 6px;">Reading</span>' +
+          '</div>';
+        }
+      });
+      html += '</div>';
+    }
+    html += '<div class="mahogany-plank"></div></div>';
   }
 
   // =============================================================
@@ -3486,16 +3386,23 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     });
   } else if (activeFilter === 'LENT') {
     html += '<div class="shelf-category-plate">' +
-      '<div class="shelf-category-plate-title"><span>🤝</span> LENT & UNAVAILABLE BOOKS</div>' +
+      '<div class="shelf-category-plate-title"><span>🤝</span> LENT BOOKS</div>' +
       '<div class="shelf-category-plate-count">' + lentList.length + ' Books</div>' +
     '</div>';
 
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
+    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:center; align-items:center; min-height:170px;">';
     if (lentList.length === 0) {
-      html += '<div style="color:#d4a373; font-size:0.9rem; padding:2rem 1rem;">No books currently marked as Lent.</div>';
+      html += '<div style="text-align:center; padding:2.5rem 1.5rem; color:#cbd5e1;">' +
+        '<div style="font-size:3rem; margin-bottom:0.75rem;">🤝</div>' +
+        '<div style="font-size:1.1rem; font-weight:800; color:#ffffff; margin-bottom:4px;">Aapne abhi kisi ko bhi koi book nahi di hai</div>' +
+        '<div style="font-size:0.82rem; color:#94a3b8;">Lent books list khali hai (0 Books).</div>' +
+      '</div>';
     } else {
       lentList.forEach(b => {
-        html += renderSpine(b);
+        html += '<div style="display:flex; flex-direction:column; align-items:center; gap:4px;">' +
+          renderSpine(b) +
+          '<span class="badge-pill-lent" style="width:fit-content;">Lent</span>' +
+        '</div>';
       });
     }
     html += '</div><div class="mahogany-plank"></div></div>';
@@ -3584,7 +3491,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.9.9';
+const CURRENT_APP_VERSION = 'v3.10.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3859,7 +3766,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.9/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.10.0/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');

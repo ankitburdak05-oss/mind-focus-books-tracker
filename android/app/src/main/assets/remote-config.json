@@ -2,33 +2,33 @@
   "version": "1.0.0",
   "updatedAt": "2026-09-29T04:30:00.000Z",
   "activeRelease": {
-    "version": "v3.9.9",
-    "name": "Mind Focus Books v3.9.9 — Full Screen Browser & 100% Packed 3D Wooden Shelves",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.9/MindFocusBooks-Native.apk",
+    "version": "v3.10.0",
+    "name": "Mind Focus Books v3.10.0 — Strict Completed & Reading Shelves + Category Shelves",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.10.0/MindFocusBooks-Native.apk",
     "features": [
-      "🖥️ 100% Full-Screen Browser Layout: Edge-to-edge view on all desktop screens and browser windows",
-      "🪵 50+ Real Books Per Shelf: Continuous dense row of cloth and leather spines filling any screen width",
-      "📚 Real Vertical Book Titles: Bold embossed typography, author names, and gilded ribs",
-      "🏆 Zero Fake Completed Books: Shelf 1 strictly tracks real progress with empty trophy showcase",
-      "🧭 Floating Dock Centered: Perfectly balanced navigation dock across mobile and desktop",
-      "🏷️ Official v3.9.9 Release"
+      "🏆 Strict Completed Shelf: Only finished books appear on Shelf 1 with clean empty trophy showcase",
+      "📖 Strict Reading Shelf: Only actively reading books on Shelf 2 (zero fake badges)",
+      "🤝 Zero Fake Lent: No Lent books until user actually lends a book to someone",
+      "📚 Category-Wise Shelves: Focus, Mindset, Brain Science, Habits, Memory, Language alag alag shelves par",
+      "🖥️ 100% Full-Screen Browser View: Edge-to-edge luxury mahogany wood display",
+      "🏷️ Official v3.10.0 Release"
     ],
-    "stagedAt": "2026-09-29T05:00:00.000Z",
+    "stagedAt": "2026-09-29T05:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.9.9",
-    "name": "Mind Focus Books v3.9.9 — Full Screen Browser & 100% Packed 3D Wooden Shelves",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.9/MindFocusBooks-Native.apk",
+    "version": "v3.10.0",
+    "name": "Mind Focus Books v3.10.0 — Strict Completed & Reading Shelves + Category Shelves",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.10.0/MindFocusBooks-Native.apk",
     "features": [
-      "🖥️ 100% Full-Screen Browser Layout: Edge-to-edge view on all desktop screens and browser windows",
-      "🪵 50+ Real Books Per Shelf: Continuous dense row of cloth and leather spines filling any screen width",
-      "📚 Real Vertical Book Titles: Bold embossed typography, author names, and gilded ribs",
-      "🏆 Zero Fake Completed Books: Shelf 1 strictly tracks real progress with empty trophy showcase",
-      "🧭 Floating Dock Centered: Perfectly balanced navigation dock across mobile and desktop",
-      "🏷️ Official v3.9.9 Release"
+      "🏆 Strict Completed Shelf: Only finished books appear on Shelf 1 with clean empty trophy showcase",
+      "📖 Strict Reading Shelf: Only actively reading books on Shelf 2 (zero fake badges)",
+      "🤝 Zero Fake Lent: No Lent books until user actually lends a book to someone",
+      "📚 Category-Wise Shelves: Focus, Mindset, Brain Science, Habits, Memory, Language alag alag shelves par",
+      "🖥️ 100% Full-Screen Browser View: Edge-to-edge luxury mahogany wood display",
+      "🏷️ Official v3.10.0 Release"
     ],
-    "stagedAt": "2026-09-29T05:00:00.000Z",
+    "stagedAt": "2026-09-29T05:30:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {
