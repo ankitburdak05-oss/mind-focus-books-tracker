@@ -1,4 +1,4 @@
-const APP_VERSION = '3.9.8';
+const APP_VERSION = '3.9.9';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -3321,11 +3321,12 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
       '</div>';
     }
 
-    // Upright cloth spines on far right
-    html += '<div style="display:flex; align-items:flex-end; gap:5px;">' +
-      renderSpine(allBooksWithIdx[4]) +
-      renderSpine(allBooksWithIdx[5]) +
-    '</div>';
+    // Upright cloth spines on right - 25 books so wide browser screens are completely filled edge-to-edge!
+    const shelf1ExtraBooks = allBooksWithIdx.slice(4, 28);
+    shelf1ExtraBooks.forEach((b, idx) => {
+      const isLeaning = (idx === 6 || idx === 14 || idx === 20);
+      html += renderSpine(b, isLeaning);
+    });
 
     html += '</div><div class="mahogany-plank"></div></div>';
   }
@@ -3337,7 +3338,7 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     const stormlightBook = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('stormlight')) || allBooksWithIdx[6] || { title: "STORMLIGHT ARCHIVE", origIdx: 6 };
     const mindfulnessBook = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('mindfulness')) || allBooksWithIdx[7] || { title: "MINDFULNESS & FOCUS", origIdx: 7 };
 
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:space-between; width:100%;">';
+    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:flex-start; width:100%;">';
 
     // Upright spines on left with New badge
     html += '<div style="display:flex; align-items:flex-end; gap:5px; position:relative;">' +
@@ -3359,20 +3360,21 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
       '<span class="badge-pill-lent" style="width:fit-content;">Lent</span>' +
     '</div>';
 
-    // Upright leaning book on right
-    html += '<div style="display:flex; align-items:flex-end; gap:5px;">' +
-      renderSpine(allBooksWithIdx[9], true) +
-      renderSpine(allBooksWithIdx[10]) +
-    '</div>';
+    // Upright spines on right - 25 books so wide browser screens are completely filled edge-to-edge!
+    const shelf2ExtraBooks = allBooksWithIdx.slice(28, 54);
+    shelf2ExtraBooks.forEach((b, idx) => {
+      const isLeaning = (idx === 4 || idx === 12 || idx === 20);
+      html += renderSpine(b, isLeaning);
+    });
 
     html += '</div><div class="mahogany-plank"></div></div>';
   }
 
   // =============================================================
-  // SHELF 3: DENSE REALISTIC LIBRARY SPINES (100% Packed Edge to Edge)
+  // SHELF 3: DENSE REALISTIC LIBRARY SPINES (50+ Books Fills Any Screen Width)
   // =============================================================
   if (activeFilter === 'ALL') {
-    const shelf3Books = [
+    const signatureShelf3 = [
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('silent patient')) || allBooksWithIdx[11],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meditation')) || allBooksWithIdx[12],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('power of now')) || allBooksWithIdx[13],
@@ -3393,19 +3395,23 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('subconscious')) || allBooksWithIdx[27]
     ].filter(Boolean);
 
+    // Merge signature books with additional library books up to 50 books total
+    const shelf3Rest = allBooksWithIdx.filter(b => !signatureShelf3.some(sb => sb.origIdx === b.origIdx)).slice(0, 32);
+    const shelf3Books = signatureShelf3.concat(shelf3Rest);
+
     html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
     shelf3Books.forEach((b, idx) => {
-      const isLeaning = (idx === 4); // Leaning Educated book exactly like photo
+      const isLeaning = (idx % 7 === 4); // Leaning books placed rhythmically
       html += renderSpine(b, isLeaning);
     });
     html += '</div><div class="mahogany-plank"></div></div>';
   }
 
   // =============================================================
-  // SHELF 4: DENSE LIBRARY CLASSICS & BESTSELLERS (100% Packed Edge to Edge)
+  // SHELF 4: DENSE LIBRARY CLASSICS & BESTSELLERS (50+ Books Fills Any Screen Width)
   // =============================================================
   if (activeFilter === 'ALL') {
-    const shelf4Books = [
+    const signatureShelf4 = [
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('dune')) || allBooksWithIdx[28],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('rich dad')) || allBooksWithIdx[29],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('outliers')) || allBooksWithIdx[30],
@@ -3426,9 +3432,13 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('principles')) || allBooksWithIdx[45]
     ].filter(Boolean);
 
+    // Merge signature books with additional library books up to 50 books total
+    const shelf4Rest = allBooksWithIdx.filter(b => !signatureShelf4.some(sb => sb.origIdx === b.origIdx)).slice(25, 57);
+    const shelf4Books = signatureShelf4.concat(shelf4Rest);
+
     html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
     shelf4Books.forEach((b, idx) => {
-      const isLeaning = (idx === 6); // Leaning book
+      const isLeaning = (idx % 8 === 5); // Leaning books placed rhythmically
       html += renderSpine(b, isLeaning);
     });
     html += '</div><div class="mahogany-plank"></div></div>';
@@ -3574,7 +3584,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.9.8';
+const CURRENT_APP_VERSION = 'v3.9.9';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3849,7 +3859,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.8/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.9/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');

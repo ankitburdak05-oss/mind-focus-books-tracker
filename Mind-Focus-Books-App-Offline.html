@@ -9684,8 +9684,9 @@ body.modal-open {
   position: relative;
   overflow-x: hidden;
   box-sizing: border-box;
-  max-width: 480px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
 }
 
 .mahogany-bookshelf-container::before {
@@ -10281,11 +10282,12 @@ body.modal-open {
    ------------------------------------------------------------- */
 .bottom-nav-dock {
   position: fixed !important;
-  bottom: 12px !important;
-  left: 12px !important;
-  right: 12px !important;
-  max-width: 480px !important;
-  margin: 0 auto !important;
+  bottom: 14px !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 32px) !important;
+  max-width: 520px !important;
   height: 64px !important;
   background: rgba(246, 246, 248, 0.94) !important;
   backdrop-filter: blur(24px) !important;
@@ -10473,8 +10475,8 @@ body.modal-open {
   </aside>
 
   <!-- App Header (Matching design_wooden_shelf_1789786873826.jpg) -->
-  <header class="app-header" style="background: linear-gradient(180deg, #2a1307 0%, #1c0a03 100%); border-bottom: 2px solid #140702; box-shadow: 0 4px 18px rgba(0,0,0,0.7); padding: 10px 16px;">
-    <div class="header-inner" style="display:flex; justify-content:space-between; align-items:center; max-width:480px; margin:0 auto;">
+  <header class="app-header" style="background: linear-gradient(180deg, #2a1307 0%, #1c0a03 100%); border-bottom: 2px solid #140702; box-shadow: 0 4px 18px rgba(0,0,0,0.7); padding: 10px 20px; width:100%; box-sizing:border-box;">
+    <div class="header-inner" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
       <div class="brand-section" onclick="switchBottomTab('home')" style="cursor:pointer; display:flex; align-items:center;" title="Mind Focus Books Home">
         <div class="shelf-brand-icon-wrap" style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); border-radius:10px; margin-right:10px; box-shadow:0 2px 8px rgba(0,0,0,0.5);">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
@@ -10785,7 +10787,7 @@ body.modal-open {
             <div style="font-size:1.15rem; font-weight:800; color:#ffffff;">Reader Profile</div>
             <div style="font-size:0.78rem; color:#94a3b8; margin-top:2px;">Mind Focus Books • Offline Native Edition</div>
             <div style="display:inline-block; font-size:0.7rem; font-weight:800; background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.4); border-radius:6px; padding:2px 8px; margin-top:5px;">
-              v3.9.8 Active
+              v3.9.9 Active
             </div>
           </div>
         </div>
@@ -11707,30 +11709,30 @@ body.modal-open {
       </div>
 
       <div class="update-glass-title" id="updateModalTitle">New Version Update Ready:</div>
-      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.9.8</div>
-      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.9.8 • Clean &amp; Streamlined Edition</div>
+      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.9.9</div>
+      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.9.9 • Full Screen Browser &amp; 100% Packed 3D Shelves</div>
 
       <!-- Feature Checklist matching user photo preview -->
       <div class="update-glass-checklist">
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>100% Clean: All admin controls removed</span>
+          <span>100% Full-Screen Browser Layout (Edge-to-Edge)</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>3D Realistic Wooden Bookshelf with Live Status Badges</span>
+          <span>50+ Realistic Cloth &amp; Leather Spines per Wooden Shelf</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>Real Book 3D Reader with Dual-Page Curl &amp; Soundscape</span>
+          <span>Embossed Vertical Titles, Author Surnames &amp; Gilded Ribs</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>Floating Dock Centered on all Screen Sizes</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
           <span>1-Click Photo to 3 Languages (Hindi, Hinglish, English)</span>
-        </div>
-        <div class="update-glass-item">
-          <span class="update-glass-check">✓</span>
-          <span>Per-Page Edit &amp; Delete Toolbar</span>
         </div>
       </div>
 
@@ -11747,7 +11749,7 @@ body.modal-open {
 
       <!-- Download Button -->
       <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerInAppUpdate()">
-        ⚡ Download &amp; Install v3.9.8 Now
+        ⚡ Download &amp; Install v3.9.9 Now
       </button>
     </div>
   </div>
@@ -15430,7 +15432,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
 </script>
   <script>
-const APP_VERSION = '3.9.8';
+const APP_VERSION = '3.9.9';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -18753,11 +18755,12 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
       '</div>';
     }
 
-    // Upright cloth spines on far right
-    html += '<div style="display:flex; align-items:flex-end; gap:5px;">' +
-      renderSpine(allBooksWithIdx[4]) +
-      renderSpine(allBooksWithIdx[5]) +
-    '</div>';
+    // Upright cloth spines on right - 25 books so wide browser screens are completely filled edge-to-edge!
+    const shelf1ExtraBooks = allBooksWithIdx.slice(4, 28);
+    shelf1ExtraBooks.forEach((b, idx) => {
+      const isLeaning = (idx === 6 || idx === 14 || idx === 20);
+      html += renderSpine(b, isLeaning);
+    });
 
     html += '</div><div class="mahogany-plank"></div></div>';
   }
@@ -18769,7 +18772,7 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
     const stormlightBook = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('stormlight')) || allBooksWithIdx[6] || { title: "STORMLIGHT ARCHIVE", origIdx: 6 };
     const mindfulnessBook = allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('mindfulness')) || allBooksWithIdx[7] || { title: "MINDFULNESS & FOCUS", origIdx: 7 };
 
-    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:space-between; width:100%;">';
+    html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books" style="justify-content:flex-start; width:100%;">';
 
     // Upright spines on left with New badge
     html += '<div style="display:flex; align-items:flex-end; gap:5px; position:relative;">' +
@@ -18791,20 +18794,21 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
       '<span class="badge-pill-lent" style="width:fit-content;">Lent</span>' +
     '</div>';
 
-    // Upright leaning book on right
-    html += '<div style="display:flex; align-items:flex-end; gap:5px;">' +
-      renderSpine(allBooksWithIdx[9], true) +
-      renderSpine(allBooksWithIdx[10]) +
-    '</div>';
+    // Upright spines on right - 25 books so wide browser screens are completely filled edge-to-edge!
+    const shelf2ExtraBooks = allBooksWithIdx.slice(28, 54);
+    shelf2ExtraBooks.forEach((b, idx) => {
+      const isLeaning = (idx === 4 || idx === 12 || idx === 20);
+      html += renderSpine(b, isLeaning);
+    });
 
     html += '</div><div class="mahogany-plank"></div></div>';
   }
 
   // =============================================================
-  // SHELF 3: DENSE REALISTIC LIBRARY SPINES (100% Packed Edge to Edge)
+  // SHELF 3: DENSE REALISTIC LIBRARY SPINES (50+ Books Fills Any Screen Width)
   // =============================================================
   if (activeFilter === 'ALL') {
-    const shelf3Books = [
+    const signatureShelf3 = [
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('silent patient')) || allBooksWithIdx[11],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('meditation')) || allBooksWithIdx[12],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('power of now')) || allBooksWithIdx[13],
@@ -18825,19 +18829,23 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('subconscious')) || allBooksWithIdx[27]
     ].filter(Boolean);
 
+    // Merge signature books with additional library books up to 50 books total
+    const shelf3Rest = allBooksWithIdx.filter(b => !signatureShelf3.some(sb => sb.origIdx === b.origIdx)).slice(0, 32);
+    const shelf3Books = signatureShelf3.concat(shelf3Rest);
+
     html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
     shelf3Books.forEach((b, idx) => {
-      const isLeaning = (idx === 4); // Leaning Educated book exactly like photo
+      const isLeaning = (idx % 7 === 4); // Leaning books placed rhythmically
       html += renderSpine(b, isLeaning);
     });
     html += '</div><div class="mahogany-plank"></div></div>';
   }
 
   // =============================================================
-  // SHELF 4: DENSE LIBRARY CLASSICS & BESTSELLERS (100% Packed Edge to Edge)
+  // SHELF 4: DENSE LIBRARY CLASSICS & BESTSELLERS (50+ Books Fills Any Screen Width)
   // =============================================================
   if (activeFilter === 'ALL') {
-    const shelf4Books = [
+    const signatureShelf4 = [
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('dune')) || allBooksWithIdx[28],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('rich dad')) || allBooksWithIdx[29],
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('outliers')) || allBooksWithIdx[30],
@@ -18858,9 +18866,13 @@ function renderHomeBookshelf(activeFilter = 'ALL') {
       allBooksWithIdx.find(b => (b.title || '').toLowerCase().includes('principles')) || allBooksWithIdx[45]
     ].filter(Boolean);
 
+    // Merge signature books with additional library books up to 50 books total
+    const shelf4Rest = allBooksWithIdx.filter(b => !signatureShelf4.some(sb => sb.origIdx === b.origIdx)).slice(25, 57);
+    const shelf4Books = signatureShelf4.concat(shelf4Rest);
+
     html += '<div class="mahogany-shelf-row"><div class="mahogany-shelf-books">';
     shelf4Books.forEach((b, idx) => {
-      const isLeaning = (idx === 6); // Leaning book
+      const isLeaning = (idx % 8 === 5); // Leaning books placed rhythmically
       html += renderSpine(b, isLeaning);
     });
     html += '</div><div class="mahogany-plank"></div></div>';
@@ -19006,7 +19018,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.9.8';
+const CURRENT_APP_VERSION = 'v3.9.9';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -19281,7 +19293,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.8/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.9.9/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');

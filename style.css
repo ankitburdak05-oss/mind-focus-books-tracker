@@ -9663,8 +9663,9 @@ body.modal-open {
   position: relative;
   overflow-x: hidden;
   box-sizing: border-box;
-  max-width: 480px;
-  margin: 0 auto;
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
 }
 
 .mahogany-bookshelf-container::before {
@@ -10260,11 +10261,12 @@ body.modal-open {
    ------------------------------------------------------------- */
 .bottom-nav-dock {
   position: fixed !important;
-  bottom: 12px !important;
-  left: 12px !important;
-  right: 12px !important;
-  max-width: 480px !important;
-  margin: 0 auto !important;
+  bottom: 14px !important;
+  left: 50% !important;
+  right: auto !important;
+  transform: translateX(-50%) !important;
+  width: calc(100% - 32px) !important;
+  max-width: 520px !important;
   height: 64px !important;
   background: rgba(246, 246, 248, 0.94) !important;
   backdrop-filter: blur(24px) !important;
