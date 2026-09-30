@@ -139,7 +139,7 @@
           </div>
           <div class="stat-meta">
             <div class="stat-label">Reading Streak</div>
-            <div class="stat-val" id="statReadingStreak">7 days</div>
+            <div class="stat-val" id="statReadingStreak">0 days</div>
           </div>
         </div>
 
@@ -152,15 +152,18 @@
           </div>
           <div class="stat-meta">
             <div class="stat-label">Total Reading Time</div>
-            <div class="stat-val" id="statReadingTime">124h 30m</div>
+            <div class="stat-val" id="statReadingTime">0h 0m</div>
           </div>
         </div>
       </div>
 
-      <!-- Recent Books Section -->
+      <!-- Featured Masterpieces Section -->
       <div class="section-container">
         <div class="section-header">
-          <h2 class="section-title">Recent Books</h2>
+          <div>
+            <h2 class="section-title">Featured Masterpieces</h2>
+            <p class="view-sub-title" style="margin-top: 2px;">Curated gems from your 313 book library</p>
+          </div>
           <button type="button" class="section-link-btn" onclick="switchTab('library')">View all &rarr;</button>
         </div>
         <div class="recent-books-scroll" id="homeRecentBooksList">
@@ -290,35 +293,51 @@
           <h2 class="section-title">Popular Categories</h2>
         </div>
         <div class="popular-categories-grid">
-          <div class="category-tile cat-productivity" onclick="filterExploreGenre('Productivity')">
-            <div class="cat-icon-badge purple">⚡</div>
+          <div class="category-tile cat-productivity" onclick="filterExploreGenre('Mindset & Logic')">
+            <div class="cat-icon-badge purple">🧠</div>
             <div class="cat-info">
-              <div class="cat-name">Productivity</div>
-              <div class="cat-count" id="catCountProductivity">15 books</div>
+              <div class="cat-name">Mindset & Logic</div>
+              <div class="cat-count" id="catCountMindset">66 books</div>
             </div>
           </div>
 
-          <div class="category-tile cat-selfhelp" onclick="filterExploreGenre('Self Help')">
-            <div class="cat-icon-badge gold">💡</div>
+          <div class="category-tile cat-selfhelp" onclick="filterExploreGenre('Brain Science')">
+            <div class="cat-icon-badge gold">🔬</div>
             <div class="cat-info">
-              <div class="cat-name">Self Help</div>
-              <div class="cat-count" id="catCountSelfHelp">25 books</div>
+              <div class="cat-name">Brain Science</div>
+              <div class="cat-count" id="catCountBrain">30 books</div>
             </div>
           </div>
 
-          <div class="category-tile cat-fiction" onclick="filterExploreGenre('Fiction')">
-            <div class="cat-icon-badge blue">📖</div>
+          <div class="category-tile cat-fiction" onclick="filterExploreGenre('Memory & Learning')">
+            <div class="cat-icon-badge blue">💡</div>
             <div class="cat-info">
-              <div class="cat-name">Fiction</div>
-              <div class="cat-count" id="catCountFiction">20 books</div>
+              <div class="cat-name">Memory & Learning</div>
+              <div class="cat-count" id="catCountMemory">23 books</div>
             </div>
           </div>
 
-          <div class="category-tile cat-business" onclick="filterExploreGenre('Business')">
-            <div class="cat-icon-badge rose">💼</div>
+          <div class="category-tile cat-business" onclick="filterExploreGenre('Focus & Concentration')">
+            <div class="cat-icon-badge rose">🎯</div>
             <div class="cat-info">
-              <div class="cat-name">Business</div>
-              <div class="cat-count" id="catCountBusiness">18 books</div>
+              <div class="cat-name">Focus & Concentration</div>
+              <div class="cat-count" id="catCountFocus">20 books</div>
+            </div>
+          </div>
+
+          <div class="category-tile cat-strategy" onclick="filterExploreGenre('Dark Psychology & Strategy')">
+            <div class="cat-icon-badge teal">♟️</div>
+            <div class="cat-info">
+              <div class="cat-name">Dark Psychology</div>
+              <div class="cat-count" id="catCountPsychology">15 books</div>
+            </div>
+          </div>
+
+          <div class="category-tile cat-wealth" onclick="filterExploreGenre('Wealth & Finance')">
+            <div class="cat-icon-badge gold">💰</div>
+            <div class="cat-info">
+              <div class="cat-name">Wealth & Finance</div>
+              <div class="cat-count" id="catCountWealth">12 books</div>
             </div>
           </div>
         </div>
@@ -348,6 +367,20 @@
             <option value="1y">This Year</option>
             <option value="all">All Time</option>
           </select>
+        </div>
+      </div>
+
+      <!-- Reading Goal Card -->
+      <div class="reading-goal-card">
+        <div class="rg-header">
+          <div class="rg-info">
+            <span class="rg-title">🎯 2026 Annual Reading Goal</span>
+            <span class="rg-sub" id="rgGoalSubtitle">0 of 25 books read (0%)</span>
+          </div>
+          <button type="button" class="rg-edit-btn" onclick="openSetGoalPrompt()">Edit Goal</button>
+        </div>
+        <div class="rg-progress-track">
+          <div class="rg-progress-bar" id="rgProgressBar" style="width: 0%;"></div>
         </div>
       </div>
 
@@ -423,7 +456,7 @@
         </div>
         <div class="profile-stat-divider"></div>
         <div class="profile-stat-item">
-          <div class="psi-val" id="profileStatStreak">7</div>
+          <div class="psi-val" id="profileStatStreak">0</div>
           <div class="psi-lbl">Day Streak</div>
         </div>
       </div>
@@ -489,7 +522,7 @@
         <div class="backup-card">
           <div class="backup-meta">
             <div class="backup-title">Data Backup</div>
-            <div class="backup-sub" id="lastBackupText">Last backup: Today • Auto-saved</div>
+            <div class="backup-sub" id="lastBackupText">No manual backup yet • Tap 'Backup Now'</div>
           </div>
           <div class="backup-actions">
             <button type="button" class="btn-backup-now" onclick="exportDataJSON()">
@@ -552,8 +585,8 @@
           <div class="privacy-card">
             <div class="priv-icon">🛡️</div>
             <div class="priv-info">
-              <div class="priv-title">Data Encryption</div>
-              <div class="priv-desc">100% Encrypted & Local Offline Storage</div>
+              <div class="priv-title">Device Privacy & Security</div>
+              <div class="priv-desc">4-Digit Security PIN & 100% Offline Storage</div>
             </div>
           </div>
         </div>
@@ -587,6 +620,16 @@
             <span class="star-icon">⭐</span>
             <span id="detailRatingVal">0.0 (Unrated)</span>
           </div>
+        </div>
+      </div>
+
+      <!-- 1-Tap Reading Status Selector Chips -->
+      <div class="detail-status-chips-bar">
+        <span class="status-chips-label">Tracking Status:</span>
+        <div class="status-chips-wrap">
+          <button type="button" class="status-chip-btn" id="chipReading" onclick="quickSetBookStatus('READING')">📖 Reading</button>
+          <button type="button" class="status-chip-btn" id="chipCompleted" onclick="quickSetBookStatus('DONE')">✅ Finished</button>
+          <button type="button" class="status-chip-btn" id="chipWishlist" onclick="quickSetBookStatus('PENDING')">🔖 Want to Read</button>
         </div>
       </div>
 
@@ -864,6 +907,17 @@
         <button type="button" class="modal-close-btn" onclick="closeEditModal()">&times;</button>
       </div>
       <div class="modal-body">
+        <!-- Quick Catalog Search & Auto-Fill -->
+        <div class="form-group quick-autofill-box" id="quickAutofillGroup">
+          <label style="color: var(--accent-gold); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+            <span>⚡</span> Quick Search & Auto-Fill from Library / Classics
+          </label>
+          <div style="position: relative;">
+            <input type="text" id="quickCatalogSearchInput" placeholder="Search title or author (e.g. Atomic Habits, Deep Work)..." oninput="onQuickCatalogSearch(this.value)" autocomplete="off">
+            <div id="quickCatalogDropdown" class="quick-autofill-dropdown" style="display: none;"></div>
+          </div>
+        </div>
+
         <div class="form-row">
           <div class="form-group flex-1">
             <label>Book No</label>

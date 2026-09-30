@@ -39,9 +39,9 @@ let state = {
     avatar: 'ankit_avatar.png'
   },
   stats: {
-    readingStreak: 7,
-    totalMinutesRead: 7470, // ~124h 30m
-    lastReadDate: new Date().toISOString().split('T')[0]
+    readingStreak: 0,
+    totalMinutesRead: 0,
+    lastReadDate: ''
   }
 };
 
@@ -135,7 +135,13 @@ function loadStats() {
   try {
     const saved = localStorage.getItem(STATS_KEY);
     if (saved) {
-      state.stats = Object.assign(state.stats, JSON.parse(saved));
+      const parsed = JSON.parse(saved);
+      // Clean up legacy hardcoded 7470 / 7 streak if user hasn't finished books
+      if (parsed.totalMinutesRead === 7470 && parsed.readingStreak === 7) {
+        parsed.totalMinutesRead = 0;
+        parsed.readingStreak = 0;
+      }
+      state.stats = Object.assign(state.stats, parsed);
     }
   } catch (e) {}
 }
@@ -144,6 +150,26 @@ function saveStats() {
   try {
     localStorage.setItem(STATS_KEY, JSON.stringify(state.stats));
   } catch (e) {}
+}
+
+function recordReadingSession(minutes) {
+  if (!minutes || minutes <= 0) return;
+  state.stats.totalMinutesRead = (state.stats.totalMinutesRead || 0) + minutes;
+  
+  const today = new Date().toISOString().split('T')[0];
+  if (state.stats.lastReadDate !== today) {
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    if (state.stats.lastReadDate === yesterday) {
+      state.stats.readingStreak = (state.stats.readingStreak || 0) + 1;
+    } else {
+      state.stats.readingStreak = 1;
+    }
+    state.stats.lastReadDate = today;
+  }
+  saveStats();
+  renderHomeStats();
+  const elS = document.getElementById('profileStatStreak');
+  if (elS) elS.innerText = state.stats.readingStreak || 0;
 }
 
 function loadBooks() {
@@ -319,13 +345,15 @@ function renderHomeStats() {
   const statFin = document.getElementById('statFinishedBooks');
   if (statFin) statFin.innerText = finished;
   
+  const streak = state.stats.readingStreak != null ? state.stats.readingStreak : 0;
   const statStreak = document.getElementById('statReadingStreak');
-  if (statStreak) statStreak.innerText = `${state.stats.readingStreak || 7} days`;
+  if (statStreak) statStreak.innerText = `${streak} days`;
   
   const statTime = document.getElementById('statReadingTime');
   if (statTime) {
-    const hours = Math.floor(state.stats.totalMinutesRead / 60);
-    const mins = state.stats.totalMinutesRead % 60;
+    const totalMins = state.stats.totalMinutesRead || 0;
+    const hours = Math.floor(totalMins / 60);
+    const mins = totalMins % 60;
     statTime.innerText = `${hours}h ${mins}m`;
   }
 }
@@ -334,16 +362,21 @@ function renderHomeRecentBooks() {
   const list = document.getElementById('homeRecentBooksList');
   if (!list) return;
   
-  const recent = state.books.slice(0, 12);
-  list.innerHTML = recent.map((book, idx) => `
-    <div class="recent-book-card" onclick="openBookDetailViewByIndex(${idx})">
+  const currentTitle = state.currentBook ? state.currentBook.title : '';
+  const filtered = state.books.filter(b => b.title !== currentTitle);
+  const recent = filtered.slice(0, 12);
+  list.innerHTML = recent.map((book) => {
+    const originalIndex = state.books.indexOf(book);
+    return `
+    <div class="recent-book-card" onclick="openBookDetailViewByIndex(${originalIndex >= 0 ? originalIndex : 0})">
       <div class="recent-cover-box">
         <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.src='cover_placeholder.jpg'">
       </div>
       <div class="recent-book-title">${escapeHtml(book.title)}</div>
       <div class="recent-book-cat">${escapeHtml(book.category || 'General')}</div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 // ================= VIEW 2: LIBRARY =================
@@ -448,7 +481,11 @@ function renderLibraryGrid() {
     filtered = filtered.filter(b => 
       (b.title && b.title.toLowerCase().includes(state.searchQuery)) ||
       (b.author && b.author.toLowerCase().includes(state.searchQuery)) ||
-      (b.category && b.category.toLowerCase().includes(state.searchQuery))
+      (b.category && b.category.toLowerCase().includes(state.searchQuery)) ||
+      (b.takeaway && b.takeaway.toLowerCase().includes(state.searchQuery)) ||
+      (b.notes && b.notes.toLowerCase().includes(state.searchQuery)) ||
+      (b.no && b.no.toLowerCase().includes(state.searchQuery)) ||
+      (b.tags && Array.isArray(b.tags) && b.tags.some(t => t.toLowerCase().includes(state.searchQuery)))
     );
   }
   
@@ -507,22 +544,27 @@ function renderExploreView() {
 }
 
 function renderPopularCategoryCounts() {
-  const productivity = state.books.filter(b => b.category === 'Productivity' || b.category === 'Focus & Concentration').length;
-  const selfhelp = state.books.filter(b => b.category === 'Self Help' || b.category === 'Mindset & Logic').length;
-  const fiction = state.books.filter(b => b.category === 'Fiction' || b.category === 'Sci-Fi').length;
-  const business = state.books.filter(b => b.category === 'Business' || b.category === 'Finance').length;
+  const countCat = (catPattern) => {
+    return state.books.filter(b => b.category && b.category.toLowerCase().includes(catPattern.toLowerCase())).length;
+  };
   
-  const elP = document.getElementById('catCountProductivity');
-  if (elP) elP.innerText = `${productivity || 15} books`;
+  const elMindset = document.getElementById('catCountMindset');
+  if (elMindset) elMindset.innerText = `${countCat('Mindset')} books`;
   
-  const elS = document.getElementById('catCountSelfHelp');
-  if (elS) elS.innerText = `${selfhelp || 25} books`;
+  const elBrain = document.getElementById('catCountBrain');
+  if (elBrain) elBrain.innerText = `${countCat('Brain Science')} books`;
   
-  const elF = document.getElementById('catCountFiction');
-  if (elF) elF.innerText = `${fiction || 20} books`;
+  const elMemory = document.getElementById('catCountMemory');
+  if (elMemory) elMemory.innerText = `${countCat('Memory')} books`;
   
-  const elB = document.getElementById('catCountBusiness');
-  if (elB) elB.innerText = `${business || 18} books`;
+  const elFocus = document.getElementById('catCountFocus');
+  if (elFocus) elFocus.innerText = `${countCat('Focus')} books`;
+  
+  const elPsych = document.getElementById('catCountPsychology');
+  if (elPsych) elPsych.innerText = `${countCat('Dark Psychology')} books`;
+  
+  const elWealth = document.getElementById('catCountWealth');
+  if (elWealth) elWealth.innerText = `${countCat('Wealth')} books`;
 }
 
 function filterExploreGenre(genre) {
@@ -596,7 +638,30 @@ function renderExploreBooksGrid() {
 
 // ================= VIEW 4: PROGRESS & ANALYTICS =================
 function renderProgressView() {
+  renderReadingGoal();
   renderProgressCharts();
+}
+
+function renderReadingGoal() {
+  const goal = parseInt(localStorage.getItem('mf_reading_goal_2026') || '25', 10);
+  const finished = state.books.filter(b => b.status === 'DONE').length;
+  const pct = Math.min(100, Math.round((finished / goal) * 100));
+  
+  const sub = document.getElementById('rgGoalSubtitle');
+  if (sub) sub.innerText = `${finished} of ${goal} books read (${pct}%)`;
+  
+  const bar = document.getElementById('rgProgressBar');
+  if (bar) bar.style.width = `${pct}%`;
+}
+
+function openSetGoalPrompt() {
+  const currentGoal = localStorage.getItem('mf_reading_goal_2026') || '25';
+  const val = prompt('Set your 2026 Reading Goal (number of books):', currentGoal);
+  if (val && !isNaN(val) && parseInt(val, 10) > 0) {
+    localStorage.setItem('mf_reading_goal_2026', parseInt(val, 10));
+    renderReadingGoal();
+    showToast(`2026 Reading Goal set to ${val} books! 🎯`);
+  }
 }
 
 function renderProgressCharts() {
@@ -704,7 +769,7 @@ function renderGenreDonutChart() {
 function renderProfileView() {
   const total = state.books.length;
   const completed = state.books.filter(b => b.status === 'DONE').length;
-  const streak = state.stats.readingStreak || 7;
+  const streak = state.stats.readingStreak != null ? state.stats.readingStreak : 0;
   
   const elB = document.getElementById('profileStatBooks');
   if (elB) elB.innerText = total;
@@ -718,6 +783,19 @@ function renderProfileView() {
   const pinStatusText = document.getElementById('pinStatusSubText');
   if (pinStatusText) {
     pinStatusText.innerText = state.pin ? 'PIN Lock Active • Protected' : 'PIN Lock disabled • Set PIN';
+  }
+  
+  updateLastBackupDisplay();
+}
+
+function updateLastBackupDisplay() {
+  const el = document.getElementById('lastBackupText');
+  if (!el) return;
+  const lastTime = localStorage.getItem('mf_last_backup_time');
+  if (lastTime) {
+    el.innerText = `Last backup: ${lastTime} • Exported`;
+  } else {
+    el.innerText = `No manual backup yet • Tap 'Backup Now'`;
   }
 }
 
@@ -836,6 +914,9 @@ function openBookDetailView(book) {
       `;
     }
     
+    // Update 1-Tap Status Chips
+    updateStatusChipsUI(book.status);
+
     // Switch view to Detail
     document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
     const detailView = document.getElementById('viewBookDetail');
@@ -846,6 +927,59 @@ function openBookDetailView(book) {
     console.error('Error opening book detail:', err);
     showToast('Could not open book details');
   }
+}
+
+function updateStatusChipsUI(status) {
+  const normStatus = (status || 'PENDING').toUpperCase();
+  const chipReading = document.getElementById('chipReading');
+  const chipCompleted = document.getElementById('chipCompleted');
+  const chipWishlist = document.getElementById('chipWishlist');
+  
+  if (chipReading) chipReading.classList.toggle('active', normStatus === 'READING');
+  if (chipCompleted) chipCompleted.classList.toggle('active', normStatus === 'DONE' || normStatus === 'COMPLETED');
+  if (chipWishlist) chipWishlist.classList.toggle('active', normStatus === 'PENDING' || normStatus === 'WISHLIST' || normStatus === 'UNREAD');
+}
+
+function quickSetBookStatus(newStatus) {
+  if (!state.currentBook) return;
+  state.currentBook.status = newStatus;
+  if (newStatus === 'DONE') {
+    state.currentBook.current_page = state.currentBook.pages || state.currentBook.total_pages || 250;
+    state.currentBook.completed_date = new Date().toISOString().split('T')[0];
+  } else if (newStatus === 'READING') {
+    if (!state.currentBook.current_page || state.currentBook.current_page === 0) {
+      state.currentBook.current_page = 1;
+    }
+  } else if (newStatus === 'PENDING') {
+    state.currentBook.current_page = 0;
+  }
+  saveBooks();
+  updateStatusChipsUI(newStatus);
+  
+  // Update status badge in detail
+  const elStat = document.getElementById('detailStatusVal');
+  if (elStat) elStat.innerText = newStatus;
+  
+  // Recompute progress in detail
+  const total = state.currentBook.pages || state.currentBook.total_pages || 200;
+  const current = state.currentBook.current_page || 0;
+  const pct = Math.min(100, Math.round((current / total) * 100));
+  const progPct = document.getElementById('detailProgressPercent');
+  if (progPct) progPct.innerText = `${pct}% completed`;
+  const progPages = document.getElementById('detailPagesRatio');
+  if (progPages) progPages.innerText = `${current} / ${total} pages`;
+  const progFill = document.getElementById('detailProgressFill');
+  if (progFill) progFill.style.width = `${pct}%`;
+
+  renderHomeView();
+  renderLibraryFilters();
+  
+  const statusLabels = {
+    'DONE': '✅ Finished & Completed!',
+    'READING': '📖 Now Currently Reading!',
+    'PENDING': '🔖 Added to Wishlist!'
+  };
+  showToast(statusLabels[newStatus] || `Status updated to ${newStatus}`);
 }
 
 function closeBookDetailView() {
@@ -910,10 +1044,8 @@ function toggleReadingTimer() {
     if (icon) icon.innerText = '⏱️';
     
     const minutesAdded = Math.max(1, Math.round(state.timerSeconds / 60));
-    state.stats.totalMinutesRead = (state.stats.totalMinutesRead || 0) + minutesAdded;
-    saveStats();
+    recordReadingSession(minutesAdded);
     showToast(`Session logged! +${minutesAdded} min added! 🔥`);
-    renderHomeStats();
   }
 }
 
@@ -940,8 +1072,14 @@ function saveQuickLogPages() {
   const pageInput = document.getElementById('quickLogPageInput');
   if (!pageInput || !state.currentBook) return;
   
+  const oldPage = state.currentBook.current_page || 0;
   const newPage = parseInt(pageInput.value, 10) || 0;
   state.currentBook.current_page = newPage;
+  
+  if (newPage > oldPage) {
+    const pagesRead = newPage - oldPage;
+    recordReadingSession(Math.round(pagesRead * 1.5));
+  }
   
   const total = state.currentBook.pages || state.currentBook.total_pages || 200;
   if (newPage >= total) {
@@ -1345,6 +1483,12 @@ function openAddBookModal() {
   document.getElementById('editCountDays').value = 0;
   document.getElementById('editBookTakeaway').value = '';
   
+  // Reset quick catalog search
+  const quickSearch = document.getElementById('quickCatalogSearchInput');
+  if (quickSearch) quickSearch.value = '';
+  const quickDrop = document.getElementById('quickCatalogDropdown');
+  if (quickDrop) { quickDrop.style.display = 'none'; quickDrop.innerHTML = ''; }
+  
   updateCoverPreviewBox('');
   document.getElementById('editBookModalOverlay')?.classList.add('active');
 }
@@ -1362,6 +1506,12 @@ function openEditModal(index) {
   
   const title = document.getElementById('editBookModalTitle');
   if (title) title.innerText = 'Edit Book Details';
+  
+  // Reset quick catalog search
+  const quickSearch = document.getElementById('quickCatalogSearchInput');
+  if (quickSearch) quickSearch.value = '';
+  const quickDrop = document.getElementById('quickCatalogDropdown');
+  if (quickDrop) { quickDrop.style.display = 'none'; quickDrop.innerHTML = ''; }
   
   document.getElementById('editBookNo').value = book.no || book.book_no || `book ${index + 1}`;
   document.getElementById('editBookLanguage').value = book.language || 'ENGLISH';
@@ -1428,6 +1578,76 @@ function updateCoverPreviewBox(url) {
     if (placeholder) placeholder.style.display = 'block';
     if (removeBtn) removeBtn.style.display = 'none';
   }
+}
+
+function onQuickCatalogSearch(val) {
+  const dropdown = document.getElementById('quickCatalogDropdown');
+  if (!dropdown) return;
+  const q = val.trim().toLowerCase();
+  if (!q) {
+    dropdown.style.display = 'none';
+    dropdown.innerHTML = '';
+    return;
+  }
+  
+  const pool = (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) ? DEFAULT_BOOKS : state.books;
+  const matches = pool.filter(b => 
+    (b.title && b.title.toLowerCase().includes(q)) ||
+    (b.author && b.author.toLowerCase().includes(q))
+  ).slice(0, 8);
+  
+  if (matches.length === 0) {
+    dropdown.innerHTML = `<div style="padding: 10px; font-size: 0.8rem; color: var(--text-secondary); text-align: center;">No matches found. Enter details manually below!</div>`;
+    dropdown.style.display = 'block';
+    return;
+  }
+  
+  dropdown.innerHTML = matches.map(b => `
+    <div class="quick-autofill-item" onclick="selectQuickCatalogBook('${escapeHtml(b.title).replace(/'/g, "\\'")}')">
+      <img src="${getBookCoverUrl(b)}" class="quick-autofill-thumb" onerror="this.src='cover_placeholder.jpg'">
+      <div class="quick-autofill-meta">
+        <div class="quick-autofill-title">${escapeHtml(b.title)}</div>
+        <div class="quick-autofill-author">${escapeHtml(b.author || 'Unknown Author')} • ${escapeHtml(b.category || 'General')}</div>
+      </div>
+    </div>
+  `).join('');
+  dropdown.style.display = 'block';
+}
+
+function selectQuickCatalogBook(bookTitle) {
+  const pool = (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) ? DEFAULT_BOOKS : state.books;
+  const found = pool.find(b => b.title && b.title.toLowerCase() === bookTitle.toLowerCase());
+  if (!found) return;
+  
+  const elTitle = document.getElementById('editBookTitle');
+  if (elTitle) elTitle.value = found.title || '';
+  
+  const elAuthor = document.getElementById('editBookAuthor');
+  if (elAuthor) elAuthor.value = found.author || '';
+  
+  const elCat = document.getElementById('editBookCategory');
+  if (elCat) elCat.value = found.category || '';
+  
+  const elLang = document.getElementById('editBookLanguage');
+  if (elLang) elLang.value = found.language || 'ENGLISH';
+  
+  const elPages = document.getElementById('editTotalPages');
+  if (elPages) elPages.value = found.pages || found.total_pages || 250;
+  
+  const coverUrl = found.cover_image || found.cover_url || '';
+  state.currentEditingCoverUrl = coverUrl;
+  const elCover = document.getElementById('editBookCover');
+  if (elCover) elCover.value = coverUrl;
+  updateCoverPreviewBox(coverUrl);
+  
+  if (found.takeaway || found.notes) {
+    const elTakeaway = document.getElementById('editBookTakeaway');
+    if (elTakeaway) elTakeaway.value = found.takeaway || found.notes;
+  }
+  
+  const dropdown = document.getElementById('quickCatalogDropdown');
+  if (dropdown) dropdown.style.display = 'none';
+  showToast(`Auto-filled: ${found.title}! ⚡`);
 }
 
 function calculateCountDays() {
@@ -1658,6 +1878,9 @@ function exportDataJSON() {
     a.download = `MindFocusBooks_Backup_${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
+    const nowStr = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    localStorage.setItem('mf_last_backup_time', nowStr);
+    updateLastBackupDisplay();
     showToast('JSON Backup downloaded! 💾');
   } catch (e) {
     showToast('Error exporting JSON backup');
