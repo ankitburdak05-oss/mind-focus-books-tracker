@@ -1,24 +1,43 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-09-30T08:40:00.000Z",
+  "updatedAt": "2026-09-30T13:45:00.000Z",
   "activeRelease": {
-    "version": "v3.15.0",
-    "name": "Mind Focus Books v3.15.0 — Real HD Covers & Uncropped Natural Editorial Grid",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.15.0/MindFocusBooks-Native.apk",
+    "version": "v3.16.0",
+    "name": "Mind Focus Books v3.16.0 — Edit Modal Cover Safe-Save & Real HD Book Covers",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.16.0/MindFocusBooks-Native.apk",
     "features": [
-      "🖼️ 100% Full Uncropped Covers: Book covers are never cropped or cut off",
+      "🛡️ Edit Modal Cover Safe-Save: Editing book details never erases the cover; auto-populates and preserves cover_url",
+      "🖼️ Real HD Book Covers: High-definition (-L.jpg) authentic covers across all 313 World Masterpieces",
+      "📝 Live Cover Input & Preview: Book edit dialog displays current cover URL and live image preview",
       "✨ Crystal-Clear Titles: High-contrast legible typography below cover with author & category",
-      "HD Real High-Definition (-L.jpg) Book Covers across all 313 World Masterpieces",
-      "🎨 Organic Magnific.ai 'Upr-Neeche' Masonry Stagger Flow with Natural Aspect Ratios",
+      "🎨 Organic Magnific.ai 'Upr-Neeche' Masonry Stagger Flow with Natural Aspect Ratios (Home 2)",
       "🔄 1-Tap Home Switcher: Wood Shelves (Home 1) ⟷ AI Editorial Grid (Home 2)",
       "📱 Native Navigation Dock: Direct Home 2 tab without floating clutter",
       "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
-      "🏷️ Official v3.15.0 Release"
+      "🏷️ Official v3.16.0 Release"
     ],
-    "stagedAt": "2026-09-30T08:40:00.000Z",
+    "stagedAt": "2026-09-30T13:45:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.16.0",
+    "name": "Mind Focus Books v3.16.0 — Edit Modal Cover Safe-Save & Real HD Book Covers",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.16.0/MindFocusBooks-Native.apk",
+    "features": [
+      "🛡️ Edit Modal Cover Safe-Save: Editing book details never erases the cover; auto-populates and preserves cover_url",
+      "🖼️ Real HD Book Covers: High-definition (-L.jpg) authentic covers across all 313 World Masterpieces",
+      "📝 Live Cover Input & Preview: Book edit dialog displays current cover URL and live image preview",
+      "✨ Crystal-Clear Titles: High-contrast legible typography below cover with author & category",
+      "🎨 Organic Magnific.ai 'Upr-Neeche' Masonry Stagger Flow with Natural Aspect Ratios (Home 2)",
+      "🔄 1-Tap Home Switcher: Wood Shelves (Home 1) ⟷ AI Editorial Grid (Home 2)",
+      "📱 Native Navigation Dock: Direct Home 2 tab without floating clutter",
+      "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
+      "🏷️ Official v3.16.0 Release"
+    ],
+    "stagedAt": "2026-09-30T13:45:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.15.0",
     "name": "Mind Focus Books v3.15.0 — Real HD Covers & Uncropped Natural Editorial Grid",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.15.0/MindFocusBooks-Native.apk",
@@ -32,17 +51,6 @@
       "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
       "🏷️ Official v3.15.0 Release"
     ],
-    "stagedAt": "2026-09-30T08:40:00.000Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
-    "version": "v3.14.0",
-    "name": "Mind Focus Books v3.14.0 — Staggered Magnific.ai Editorial Grid & 313 Books",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.14.0/MindFocusBooks-Native.apk",
-    "features": [
-      "📚 300+ World Masterpieces: Full comprehensive global library covering all major fields",
-      "🔮 Dark Secrets, The Luminaries, Initiation & Hermetic Wisdom added",
-      "🌐 26 Distinct Categories: Sci-Fi, World History, AI & Future, Mysticism, Geopolitics, Art & True Crime",
       "🔄 Non-Destructive Auto-Merge: Seamlessly merges new books without touching user progress",
       "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
       "🖥️ Edge-to-Edge Full-Screen Luxury Mahogany Wooden Shelves",

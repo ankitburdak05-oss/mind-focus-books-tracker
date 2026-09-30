@@ -1,4 +1,4 @@
-const APP_VERSION = '3.15.0';
+const APP_VERSION = '3.16.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -1277,6 +1277,8 @@ window.showKnowledgeValueBreakdown = showKnowledgeValueBreakdown;
 function openAddModal() {
   state.editingBookIndex = -1;
   state.currentEditingCoverImage = '';
+  const coverInput = document.getElementById('editBookCover');
+  if (coverInput) coverInput.value = '';
   updateCoverPreview();
   document.getElementById('bookModalTitle').innerText = 'Add New Book';
   document.getElementById('editBookNo').value = 'book ' + (state.books.length + 1);
@@ -1302,7 +1304,11 @@ function openEditModal(index) {
   const book = state.books[index];
   if (!book) return;
 
-  state.currentEditingCoverImage = book.cover_image || '';
+  const currentCover = (book.cover_image && book.cover_image.trim()) || (book.cover_url && book.cover_url.trim()) || '';
+  state.currentEditingCoverImage = currentCover;
+
+  const coverInput = document.getElementById('editBookCover');
+  if (coverInput) coverInput.value = currentCover;
   updateCoverPreview();
 
   const pages = getBookPages(book);
@@ -1342,7 +1348,23 @@ function saveBookModal() {
   const totP = parseInt(document.getElementById('editTotalPages').value);
   const existing = state.editingBookIndex >= 0 ? state.books[state.editingBookIndex] : {};
 
+  // Preserve cover: check input field, state.currentEditingCoverImage, and existing fields
+  const inputCoverVal = document.getElementById('editBookCover') ? document.getElementById('editBookCover').value.trim() : '';
+  const finalCover = inputCoverVal || state.currentEditingCoverImage || existing.cover_image || existing.cover_url || '';
+
+  let finalCoverImage = existing.cover_image || '';
+  let finalCoverUrl = existing.cover_url || '';
+
+  if (finalCover) {
+    if (finalCover.startsWith('data:') || (!finalCover.startsWith('http://') && !finalCover.startsWith('https://'))) {
+      finalCoverImage = finalCover;
+    } else {
+      finalCoverUrl = finalCover;
+    }
+  }
+
   const bookData = {
+    ...existing,
     no: document.getElementById('editBookNo').value.trim() || ('book ' + (state.books.length + 1)),
     title: title,
     author: document.getElementById('editBookAuthor').value.trim() || 'Unknown',
@@ -1358,7 +1380,8 @@ function saveBookModal() {
     price: (!isNaN(priceVal) && priceVal >= 0) ? priceVal : 0,
     availability: document.getElementById('editBookAvailability').value,
     takeaway: document.getElementById('editBookTakeaway').value.trim(),
-    cover_image: state.currentEditingCoverImage || existing.cover_image || '',
+    cover_image: finalCoverImage,
+    cover_url: finalCoverUrl,
     lent_to: existing.lent_to || '',
     lent_date: existing.lent_date || '',
     lent_expected: existing.lent_expected || '',
@@ -1378,6 +1401,7 @@ function saveBookModal() {
   populateCategoryDropdown();
   closeBookModal();
   renderApp();
+  if (typeof renderHome2View === 'function') renderHome2View();
 }
 
 function deleteBook(index) {
@@ -3839,7 +3863,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.15.0';
+const CURRENT_APP_VERSION = 'v3.16.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -4114,7 +4138,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.15.0/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.16.0/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');

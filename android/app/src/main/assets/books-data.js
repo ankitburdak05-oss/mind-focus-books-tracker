@@ -2306,7 +2306,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 624,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8813247-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10170095-L.jpg"
   },
   {
     "no": "book 153",
@@ -2324,7 +2324,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 180,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8235116-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/4849549-L.jpg"
   },
   {
     "no": "book 154",
@@ -2432,7 +2432,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 210,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/12141289-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/15131420-L.jpg"
   },
   {
     "no": "book 160",
@@ -2450,7 +2450,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 272,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/7214199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12188068-L.jpg"
   },
   {
     "no": "book 161",
@@ -2468,7 +2468,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 216,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8214155-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8281189-L.jpg"
   },
   {
     "no": "book 162",
@@ -2486,7 +2486,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 576,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/6914177-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/1538373-L.jpg"
   },
   {
     "no": "book 163",
@@ -2504,7 +2504,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10214188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8315603-L.jpg"
   },
   {
     "no": "book 164",
@@ -2522,7 +2522,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 256,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10514199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10389354-L.jpg"
   },
   {
     "no": "book 165",
@@ -2558,7 +2558,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 640,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8214190-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/36434-L.jpg"
   },
   {
     "no": "book 167",
@@ -2594,7 +2594,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 368,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8414166-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6975229-L.jpg"
   },
   {
     "no": "book 169",
@@ -2612,7 +2612,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 224,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8014155-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/492620-L.jpg"
   },
   {
     "no": "book 170",
@@ -2630,7 +2630,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 352,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8914188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6305971-L.jpg"
   },
   {
     "no": "book 171",
@@ -2648,7 +2648,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 242,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/11141255-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10449931-L.jpg"
   },
   {
     "no": "book 172",
@@ -2666,7 +2666,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 240,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/11214177-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10433791-L.jpg"
   },
   {
     "no": "book 173",
@@ -2684,7 +2684,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/7914144-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/788750-L.jpg"
   },
   {
     "no": "book 174",
@@ -2702,7 +2702,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6497216-L.jpg"
   },
   {
     "no": "book 175",
@@ -2720,7 +2720,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 256,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231991-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13202688-L.jpg"
   },
   {
     "no": "book 176",
@@ -2738,7 +2738,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 254,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/7814122-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/103759-L.jpg"
   },
   {
     "no": "book 177",
@@ -2756,7 +2756,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8114188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12985050-L.jpg"
   },
   {
     "no": "book 178",
@@ -2774,7 +2774,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 184,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231922-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8516506-L.jpg"
   },
   {
     "no": "book 179",
@@ -2792,7 +2792,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 240,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8114166-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8245356-L.jpg"
   },
   {
     "no": "book 180",
@@ -2810,7 +2810,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 416,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8014190-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14418448-L.jpg"
   },
   {
     "no": "book 181",
@@ -2846,7 +2846,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 123,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314155-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13151269-L.jpg"
   },
   {
     "no": "book 183",
@@ -2864,7 +2864,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8414199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6958019-L.jpg"
   },
   {
     "no": "book 184",
@@ -2882,7 +2882,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 160,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8514133-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/662232-L.jpg"
   },
   {
     "no": "book 185",
@@ -2918,7 +2918,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8914177-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13226874-L.jpg"
   },
   {
     "no": "book 187",
@@ -2936,7 +2936,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10814199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11990973-L.jpg"
   },
   {
     "no": "book 188",
@@ -2954,7 +2954,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 272,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9114122-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7285986-L.jpg"
   },
   {
     "no": "book 189",
@@ -2972,7 +2972,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9214133-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14179816-L.jpg"
   },
   {
     "no": "book 190",
@@ -2990,7 +2990,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 224,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9314144-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7284188-L.jpg"
   },
   {
     "no": "book 191",
@@ -3026,7 +3026,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231999-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13314878-L.jpg"
   },
   {
     "no": "book 193",
@@ -3044,7 +3044,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9514166-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8365942-L.jpg"
   },
   {
     "no": "book 194",
@@ -3062,7 +3062,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9614177-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/1711809-L.jpg"
   },
   {
     "no": "book 195",
@@ -3080,7 +3080,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9714188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7316010-L.jpg"
   },
   {
     "no": "book 196",
@@ -3098,7 +3098,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10214199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10105591-L.jpg"
   },
   {
     "no": "book 197",
@@ -3116,7 +3116,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 220,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9814122-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/940686-L.jpg"
   },
   {
     "no": "book 198",
@@ -3134,7 +3134,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9914133-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10951273-L.jpg"
   },
   {
     "no": "book 199",
@@ -3170,7 +3170,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 148,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10114155-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/15092604-L.jpg"
   },
   {
     "no": "book 201",
@@ -3188,7 +3188,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 350,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10314177-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8028304-L.jpg"
   },
   {
     "no": "book 202",
@@ -3224,7 +3224,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 688,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/12914188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14420016-L.jpg"
   },
   {
     "no": "book 204",
@@ -3242,7 +3242,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 400,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314111-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8858487-L.jpg"
   },
   {
     "no": "book 205",
@@ -3260,7 +3260,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 520,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8114199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/805448-L.jpg"
   },
   {
     "no": "book 206",
@@ -3278,7 +3278,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 180,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/7914188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9153819-L.jpg"
   },
   {
     "no": "book 207",
@@ -3296,7 +3296,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 656,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8014166-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12702407-L.jpg"
   },
   {
     "no": "book 208",
@@ -3314,7 +3314,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 624,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8414155-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8087691-L.jpg"
   },
   {
     "no": "book 209",
@@ -3332,7 +3332,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 364,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10414166-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8305903-L.jpg"
   },
   {
     "no": "book 210",
@@ -3350,7 +3350,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 976,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8514177-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6916021-L.jpg"
   },
   {
     "no": "book 211",
@@ -3368,7 +3368,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 832,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8614188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8261375-L.jpg"
   },
   {
     "no": "book 212",
@@ -3386,7 +3386,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 400,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231944-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11157767-L.jpg"
   },
   {
     "no": "book 213",
@@ -3422,7 +3422,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 208,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231977-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7414780-L.jpg"
   },
   {
     "no": "book 215",
@@ -3440,7 +3440,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 200,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8714199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10630553-L.jpg"
   },
   {
     "no": "book 216",
@@ -3476,7 +3476,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 160,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8814188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/924521-L.jpg"
   },
   {
     "no": "book 218",
@@ -3494,7 +3494,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 1100,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8914199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13090537-L.jpg"
   },
   {
     "no": "book 219",
@@ -3512,7 +3512,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 128,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9014122-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/418324-L.jpg"
   },
   {
     "no": "book 220",
@@ -3566,7 +3566,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 224,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232001-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9002334-L.jpg"
   },
   {
     "no": "book 223",
@@ -3584,7 +3584,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232012-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7104760-L.jpg"
   },
   {
     "no": "book 224",
@@ -3602,7 +3602,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 592,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232023-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8315355-L.jpg"
   },
   {
     "no": "book 225",
@@ -3620,7 +3620,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9314166-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12835042-L.jpg"
   },
   {
     "no": "book 226",
@@ -3638,7 +3638,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 272,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9414177-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/421244-L.jpg"
   },
   {
     "no": "book 227",
@@ -3674,7 +3674,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 352,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9514188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8246311-L.jpg"
   },
   {
     "no": "book 229",
@@ -3692,7 +3692,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9614199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7279515-L.jpg"
   },
   {
     "no": "book 230",
@@ -3710,7 +3710,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9714122-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10706481-L.jpg"
   },
   {
     "no": "book 231",
@@ -3746,7 +3746,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 368,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232045-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8814155-L.jpg"
   },
   {
     "no": "book 233",
@@ -3764,7 +3764,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10514188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10096454-L.jpg"
   },
   {
     "no": "book 234",
@@ -3782,7 +3782,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 432,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9814133-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8780421-L.jpg"
   },
   {
     "no": "book 235",
@@ -3872,7 +3872,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10314188-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10601237-L.jpg"
   },
   {
     "no": "book 240",
@@ -3890,7 +3890,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10414199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7367677-L.jpg"
   },
   {
     "no": "book 241",
@@ -3908,7 +3908,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 328,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232056-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9267242-L.jpg"
   },
   {
     "no": "book 242",
@@ -3926,7 +3926,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232067-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231823-L.jpg"
   },
   {
     "no": "book 243",
@@ -3944,7 +3944,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 688,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232078-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11481354-L.jpg"
   },
   {
     "no": "book 244",
@@ -3962,7 +3962,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 545,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232089-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9411873-L.jpg"
   },
   {
     "no": "book 245",
@@ -3980,7 +3980,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 100,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232090-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12820198-L.jpg"
   },
   {
     "no": "book 246",
@@ -3998,7 +3998,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 464,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232101-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8634250-L.jpg"
   },
   {
     "no": "book 247",
@@ -4016,7 +4016,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 180,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232112-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10590366-L.jpg"
   },
   {
     "no": "book 248",
@@ -4034,7 +4034,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232123-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14351077-L.jpg"
   },
   {
     "no": "book 249",
@@ -4052,7 +4052,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 140,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232134-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11261770-L.jpg"
   },
   {
     "no": "book 250",
