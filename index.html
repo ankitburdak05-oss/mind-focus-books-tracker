@@ -11,7 +11,8 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="stylesheet" href="style.css?v=3.17.0">
+  <link rel="stylesheet" href="style.css?v=3.17.1">
+  <script src="book-pages-data.js"></script>
 </head>
 <body>
 
@@ -67,17 +68,20 @@
               <circle class="radial-bg" cx="40" cy="40" r="34"></circle>
               <circle class="radial-bar" id="homeCrRadialBar" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="123.8"></circle>
             </svg>
-            <span class="radial-percent-text" id="homeCrPercentText">42%</span>
+            <span class="radial-percent-text" id="homeCrPercentText">0%</span>
           </div>
         </div>
         <div class="cr-info">
           <div class="cr-badge">Currently Reading</div>
-          <h3 class="cr-title" id="homeCrTitle">The Silent Path</h3>
-          <div class="cr-subtitle" id="homeCrSubtitle">42% completed</div>
-          <button type="button" class="btn-gold-pill" id="homeCrContinueBtn" onclick="openCurrentReadingDetail()">Continue Reading</button>
+          <h3 class="cr-title" id="homeCrTitle">Hyperfocus</h3>
+          <div class="cr-subtitle" id="homeCrSubtitle">0% completed</div>
+          <div style="display:flex; gap:6px; flex-wrap:wrap;">
+            <button type="button" class="btn-gold-pill" onclick="openCurrentReadingDetail()">View Details</button>
+            <button type="button" class="btn-read-now-sm" onclick="openRealBookReaderForCurrent()">📖 Read Pages</button>
+          </div>
         </div>
-        <div class="cr-cover-wrap">
-          <img id="homeCrCoverImg" src="https://covers.openlibrary.org/b/id/13202688-L.jpg" alt="Book Cover" onerror="this.src='cover_placeholder.jpg'">
+        <div class="cr-cover-wrap" onclick="openCurrentReadingDetail()" style="cursor:pointer;">
+          <img id="homeCrCoverImg" src="https://covers.openlibrary.org/b/id/10239359-L.jpg" alt="Book Cover" onerror="this.src='cover_placeholder.jpg'">
         </div>
       </div>
 
@@ -92,7 +96,7 @@
           </div>
           <div class="stat-meta">
             <div class="stat-label">Total Books</div>
-            <div class="stat-val" id="statTotalBooks">48</div>
+            <div class="stat-val" id="statTotalBooks">313</div>
           </div>
         </div>
 
@@ -104,7 +108,7 @@
           </div>
           <div class="stat-meta">
             <div class="stat-label">Finished</div>
-            <div class="stat-val" id="statFinishedBooks">16</div>
+            <div class="stat-val" id="statFinishedBooks">0</div>
           </div>
         </div>
 
@@ -173,10 +177,10 @@
 
       <!-- Status Filter Tabs -->
       <div class="filter-chips-scroll">
-        <button type="button" class="filter-chip active" id="chipStatusAll" onclick="filterByStatus('ALL')">All (<span id="countAll">48</span>)</button>
-        <button type="button" class="filter-chip" id="chipStatusReading" onclick="filterByStatus('READING')">Reading (<span id="countReading">12</span>)</button>
-        <button type="button" class="filter-chip" id="chipStatusCompleted" onclick="filterByStatus('DONE')">Completed (<span id="countCompleted">16</span>)</button>
-        <button type="button" class="filter-chip" id="chipStatusWishlist" onclick="filterByStatus('WISHLIST')">Wishlist (<span id="countWishlist">20</span>)</button>
+        <button type="button" class="filter-chip active" id="chipStatusAll" onclick="filterByStatus('ALL')">All (<span id="countAll">313</span>)</button>
+        <button type="button" class="filter-chip" id="chipStatusReading" onclick="filterByStatus('READING')">Reading (<span id="countReading">1</span>)</button>
+        <button type="button" class="filter-chip" id="chipStatusCompleted" onclick="filterByStatus('DONE')">Completed (<span id="countCompleted">0</span>)</button>
+        <button type="button" class="filter-chip" id="chipStatusWishlist" onclick="filterByStatus('WISHLIST')">Wishlist (<span id="countWishlist">312</span>)</button>
       </div>
 
       <!-- Secondary Controls: Sort & Category Filter -->
@@ -243,18 +247,20 @@
         </div>
         <div class="featured-book-hero" id="exploreFeaturedCard">
           <div class="featured-cover-wrap">
-            <img id="featuredCoverImg" src="https://covers.openlibrary.org/b/id/8315603-L.jpg" alt="Featured Book" onerror="this.src='cover_placeholder.jpg'">
+            <img id="featuredCoverImg" src="https://covers.openlibrary.org/b/id/10239359-L.jpg" alt="Featured Book" onerror="this.src='cover_placeholder.jpg'">
           </div>
           <div class="featured-details">
-            <h3 class="featured-title" id="featuredTitle">The Power of Small Steps</h3>
-            <div class="featured-author" id="featuredAuthor">R. Sharma</div>
+            <h3 class="featured-title" id="featuredTitle">Hyperfocus</h3>
+            <div class="featured-author" id="featuredAuthor">Chris Bailey</div>
             <div class="featured-rating">
-              <span class="star-icon">★</span>
-              <span id="featuredRatingVal">4.8</span>
-              <span class="rating-count">(2.4k)</span>
+              <span class="star-icon">☆</span>
+              <span id="featuredRatingVal">0.0 (Unrated)</span>
             </div>
-            <p class="featured-desc" id="featuredDesc">Small changes. Big results. A practical guide to building better habits and a focused life.</p>
-            <button type="button" class="btn-gold-pill" id="featuredActionBtn" onclick="addFeaturedToLibrary()">Add to Library</button>
+            <p class="featured-desc" id="featuredDesc">How to Work Less to Achieve More. Practical framework for mastering deep focus and scatterfocus creative recharge.</p>
+            <div style="display:flex; gap:8px;">
+              <button type="button" class="btn-gold-pill" onclick="openCurrentReadingDetail()">View Details</button>
+              <button type="button" class="btn-read-now-sm" onclick="openRealBookReaderForCurrent()">📖 Read Pages</button>
+            </div>
           </div>
         </div>
       </div>
@@ -269,7 +275,7 @@
             <div class="cat-icon-badge purple">⚡</div>
             <div class="cat-info">
               <div class="cat-name">Productivity</div>
-              <div class="cat-count" id="catCountProductivity">12 books</div>
+              <div class="cat-count" id="catCountProductivity">15 books</div>
             </div>
           </div>
 
@@ -277,7 +283,7 @@
             <div class="cat-icon-badge gold">💡</div>
             <div class="cat-info">
               <div class="cat-name">Self Help</div>
-              <div class="cat-count" id="catCountSelfHelp">10 books</div>
+              <div class="cat-count" id="catCountSelfHelp">25 books</div>
             </div>
           </div>
 
@@ -285,7 +291,7 @@
             <div class="cat-icon-badge blue">📖</div>
             <div class="cat-info">
               <div class="cat-name">Fiction</div>
-              <div class="cat-count" id="catCountFiction">14 books</div>
+              <div class="cat-count" id="catCountFiction">20 books</div>
             </div>
           </div>
 
@@ -293,7 +299,7 @@
             <div class="cat-icon-badge rose">💼</div>
             <div class="cat-info">
               <div class="cat-name">Business</div>
-              <div class="cat-count" id="catCountBusiness">8 books</div>
+              <div class="cat-count" id="catCountBusiness">18 books</div>
             </div>
           </div>
         </div>
@@ -330,18 +336,18 @@
       <div class="progress-stats-row">
         <div class="prog-metric-card blue">
           <div class="prog-metric-icon">📖</div>
-          <div class="prog-metric-val" id="progBooksRead">12</div>
+          <div class="prog-metric-val" id="progBooksRead">0</div>
           <div class="prog-metric-lbl">Books Read</div>
         </div>
         <div class="prog-metric-card gold">
           <div class="prog-metric-icon">⭐</div>
-          <div class="prog-metric-val" id="progAvgRating">4.8</div>
+          <div class="prog-metric-val" id="progAvgRating">0.0</div>
           <div class="prog-metric-lbl">Avg. Rating</div>
         </div>
         <div class="prog-metric-card emerald">
           <div class="prog-metric-icon">📄</div>
-          <div class="prog-metric-val" id="progPagesMonth">324</div>
-          <div class="prog-metric-lbl">Pages/Month</div>
+          <div class="prog-metric-val" id="progPagesMonth">0</div>
+          <div class="prog-metric-lbl">Pages Read</div>
         </div>
       </div>
 
@@ -388,12 +394,12 @@
       <!-- 3 Stat Badges -->
       <div class="profile-stat-strip">
         <div class="profile-stat-item">
-          <div class="psi-val" id="profileStatBooks">48</div>
+          <div class="psi-val" id="profileStatBooks">313</div>
           <div class="psi-lbl">Books</div>
         </div>
         <div class="profile-stat-divider"></div>
         <div class="profile-stat-item">
-          <div class="psi-val" id="profileStatCompleted">16</div>
+          <div class="psi-val" id="profileStatCompleted">0</div>
           <div class="psi-lbl">Completed</div>
         </div>
         <div class="profile-stat-divider"></div>
@@ -436,7 +442,7 @@
           <div class="pmi-icon emerald">🛡️</div>
           <div class="pmi-text">
             <div class="pmi-title">Privacy & Security</div>
-            <div class="pmi-sub" id="pinStatusSubText">PIN Lock, data encryption</div>
+            <div class="pmi-sub" id="pinStatusSubText">PIN Lock, data protection</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
@@ -445,7 +451,7 @@
           <div class="pmi-icon blue">ℹ️</div>
           <div class="pmi-text">
             <div class="pmi-title">About App</div>
-            <div class="pmi-sub">Version 3.17.0, check updates, support</div>
+            <div class="pmi-sub">Version 3.17.1, check updates, support</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
@@ -544,8 +550,8 @@
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
         </button>
-        <span class="detail-nav-title">Currently Reading</span>
-        <button type="button" class="btn-detail-edit" onclick="openEditCurrentBookModal()">Edit</button>
+        <span class="detail-nav-title" id="detailNavBookNo">Book Details</span>
+        <button type="button" class="btn-detail-edit" onclick="openEditCurrentBookModal()">✏️ Edit Details</button>
       </div>
 
       <div class="detail-hero-section">
@@ -556,32 +562,24 @@
           <h2 class="detail-book-title" id="detailBookTitle">Book Title</h2>
           <div class="detail-book-author" id="detailBookAuthor">Author Name</div>
           <div class="detail-genre-tags" id="detailCategoryTags">
-            <span class="detail-tag">Self Help</span>
+            <span class="detail-tag">Category</span>
           </div>
           <div class="detail-rating-row">
-            <span class="star-icon">★</span>
-            <span id="detailRatingVal">4.8</span>
-            <span class="reviews-count" id="detailReviewsCount">(1.2k reviews)</span>
+            <span class="star-icon">⭐</span>
+            <span id="detailRatingVal">0.0 (Unrated)</span>
           </div>
         </div>
       </div>
 
-      <!-- Reading Progress Bar -->
-      <div class="detail-progress-card">
-        <div class="dpc-header">
-          <span class="dpc-percent" id="detailProgressPercent">42% completed</span>
-          <span class="dpc-pages" id="detailPagesRatio">84 / 200 pages</span>
-        </div>
-        <div class="dpc-track">
-          <div class="dpc-fill" id="detailProgressFill" style="width: 42%;"></div>
-        </div>
-      </div>
-
-      <!-- Action Buttons Row -->
+      <!-- Two Big Action Buttons -->
       <div class="detail-actions-row">
-        <button type="button" class="btn-gold-pill flex-1" id="detailContinueBtn" onclick="toggleReadingTimer()">
+        <button type="button" class="btn-gold-pill flex-1" onclick="openRealBookReaderForCurrent()">
+          <span>📖</span>
+          <span>Read Book Pages</span>
+        </button>
+        <button type="button" class="btn-secondary-action flex-1" id="detailContinueBtn" onclick="toggleReadingTimer()">
           <span id="detailTimerIcon">⏱️</span>
-          <span id="detailTimerBtnText">Continue Reading</span>
+          <span id="detailTimerBtnText">Focus Timer</span>
         </button>
         <button type="button" class="btn-circle-add" onclick="openQuickLogModal()" title="Log Pages">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -591,38 +589,69 @@
         </button>
       </div>
 
+      <!-- Reading Progress Bar -->
+      <div class="detail-progress-card">
+        <div class="dpc-header">
+          <span class="dpc-percent" id="detailProgressPercent">0% completed</span>
+          <span class="dpc-pages" id="detailPagesRatio">0 / 200 pages</span>
+        </div>
+        <div class="dpc-track">
+          <div class="dpc-fill" id="detailProgressFill" style="width: 0%;"></div>
+        </div>
+      </div>
+
       <!-- Tabs Navigation -->
       <div class="detail-tabs-bar">
         <button type="button" class="detail-tab-btn active" id="tabBtnOverview" onclick="switchDetailTab('overview')">Overview</button>
-        <button type="button" class="detail-tab-btn" id="tabBtnNotes" onclick="switchDetailTab('notes')">Notes</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnNotes" onclick="switchDetailTab('notes')">Takeaways</button>
         <button type="button" class="detail-tab-btn" id="tabBtnChapters" onclick="switchDetailTab('chapters')">Chapters</button>
-        <button type="button" class="detail-tab-btn" id="tabBtnReviews" onclick="switchDetailTab('reviews')">Reviews</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnReviews" onclick="switchDetailTab('reviews')">Rating & Price</button>
       </div>
 
       <!-- Tab Content: Overview -->
       <div class="detail-tab-content active" id="tabContentOverview">
         <div class="detail-card-box">
           <h4 class="box-title">About this book</h4>
-          <p class="box-text" id="detailAboutText">A transformative journey into personal mastery, focus, and clarity.</p>
+          <p class="box-text" id="detailAboutText">Master the wisdom, discipline, and clarity detailed in this book.</p>
         </div>
 
         <div class="detail-card-box">
-          <h4 class="box-title">Reading Details</h4>
+          <h4 class="box-title">Reading & Inventory Details</h4>
           <div class="reading-meta-list">
             <div class="rm-item">
+              <span class="rm-icon">🔢</span>
+              <span class="rm-label">Book No</span>
+              <span class="rm-val" id="detailBookNoVal">-</span>
+            </div>
+            <div class="rm-item">
+              <span class="rm-icon">🌐</span>
+              <span class="rm-label">Language</span>
+              <span class="rm-val" id="detailLanguageVal">ENGLISH</span>
+            </div>
+            <div class="rm-item">
+              <span class="rm-icon">📌</span>
+              <span class="rm-label">Status</span>
+              <span class="rm-val" id="detailStatusVal">PENDING</span>
+            </div>
+            <div class="rm-item">
+              <span class="rm-icon">📦</span>
+              <span class="rm-label">Availability</span>
+              <span class="rm-val" id="detailAvailabilityVal">AVAILABLE</span>
+            </div>
+            <div class="rm-item">
               <span class="rm-icon">📅</span>
-              <span class="rm-label">Started</span>
-              <span class="rm-val" id="detailDateStarted">Apr 12, 2025</span>
+              <span class="rm-label">Start Date</span>
+              <span class="rm-val" id="detailDateStarted">Not Started Yet</span>
             </div>
             <div class="rm-item">
               <span class="rm-icon">🎯</span>
-              <span class="rm-label">Target Finish</span>
-              <span class="rm-val" id="detailDateTarget">Apr 30, 2025</span>
+              <span class="rm-label">End / Target Date</span>
+              <span class="rm-val" id="detailDateTarget">In Progress</span>
             </div>
             <div class="rm-item">
-              <span class="rm-icon">📖</span>
-              <span class="rm-label">Daily Goal</span>
-              <span class="rm-val" id="detailDailyGoal">20 pages</span>
+              <span class="rm-icon">⏳</span>
+              <span class="rm-label">Days Spent</span>
+              <span class="rm-val" id="detailDaysSpent">-</span>
             </div>
           </div>
         </div>
@@ -643,18 +672,28 @@
         </div>
       </div>
 
-      <!-- Tab Content: Reviews -->
+      <!-- Tab Content: Reviews & Price -->
       <div class="detail-tab-content" id="tabContentReviews">
         <div class="detail-card-box">
-          <h4 class="box-title">My Rating & Review</h4>
+          <h4 class="box-title">My Rating (Tap star to rate)</h4>
           <div class="rating-stars-picker" id="detailRatingPicker">
             <span class="star-pick" onclick="setBookRating(1)">★</span>
             <span class="star-pick" onclick="setBookRating(2)">★</span>
             <span class="star-pick" onclick="setBookRating(3)">★</span>
             <span class="star-pick" onclick="setBookRating(4)">★</span>
             <span class="star-pick" onclick="setBookRating(5)">★</span>
+            <button type="button" class="btn-clear-rating" onclick="setBookRating(0)" title="Reset Rating">Clear</button>
           </div>
-          <p class="box-text" id="detailReviewText">Share your verdict on this masterpiece.</p>
+          <p class="box-text" id="detailReviewText">No rating given yet. Tap any star when you read!</p>
+        </div>
+
+        <div class="detail-card-box">
+          <h4 class="box-title">Purchase Price & Budget</h4>
+          <div class="rm-item">
+            <span class="rm-icon">💰</span>
+            <span class="rm-label">Price Paid</span>
+            <span class="rm-val" id="detailPriceVal">Not Added</span>
+          </div>
         </div>
       </div>
     </section>
@@ -705,62 +744,212 @@
     </button>
   </nav>
 
-  <!-- ================= EDIT / ADD BOOK MODAL (SAFE-SAVE) ================= -->
+  <!-- ================= REAL 3D MULTI-LANGUAGE BOOK READER MODAL ================= -->
+  <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)">
+    <div class="real-book-reader-container" onclick="event.stopPropagation()">
+      <!-- Top Reader Navigation Bar -->
+      <div class="reader-top-bar">
+        <div class="reader-top-left">
+          <button type="button" class="reader-btn-icon" onclick="closeRealBookReader()" title="Close Book">✕</button>
+          <div class="reader-book-identity">
+            <span class="reader-badge" id="readerBookBadge">📖 REAL BOOK</span>
+            <h2 class="reader-title" id="readerBookTitleDisplay">Book Title</h2>
+          </div>
+        </div>
+
+        <!-- Center Language Switcher Pills -->
+        <div class="reader-lang-pills">
+          <button type="button" class="reader-lang-pill active" id="readerLangPillHindi" onclick="switchReaderLanguage('hindi')">हिंदी</button>
+          <button type="button" class="reader-lang-pill" id="readerLangPillHinglish" onclick="switchReaderLanguage('hinglish')">Hinglish</button>
+          <button type="button" class="reader-lang-pill" id="readerLangPillEnglish" onclick="switchReaderLanguage('english')">English</button>
+        </div>
+
+        <!-- Right Controls -->
+        <div class="reader-top-right">
+          <button type="button" class="reader-btn-sm" id="readerSpreadToggleBtn" onclick="toggleReaderSpreadMode()" title="Toggle Spread / Single Page">📖 Spread</button>
+          <div class="reader-font-controls">
+            <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(-1)" title="Smaller font">A-</button>
+            <span id="readerFontSizeDisplay" style="font-size:0.75rem; color:var(--text-muted); min-width:28px; text-align:center;">100%</span>
+            <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(1)" title="Larger font">A+</button>
+          </div>
+          <button type="button" class="reader-btn-sm" id="readerThemeToggleBtn" onclick="cycleReaderTheme()" title="Reader Paper Tone">📜 Sepia</button>
+        </div>
+      </div>
+
+      <!-- 3D Open Book Stage -->
+      <div class="real-book-stage-wrap" id="realBookStageWrap">
+        <div class="real-book-hardcover" id="realBookHardcover">
+          <div class="real-book-spread" id="realBookSpread">
+            <div class="reader-ribbon-bookmark"></div>
+
+            <!-- Left Page (Spread mode) -->
+            <div class="reader-page-sheet page-sheet-left" id="readerPageLeft">
+              <div class="page-inner-sheet" id="pageInnerLeft">
+                <!-- Content dynamically rendered -->
+              </div>
+              <div class="reader-page-footer-wrap">
+                <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
+              </div>
+            </div>
+
+            <!-- Center Spine Shadow -->
+            <div class="reader-spine-divider">
+              <div class="reader-spine-crease"></div>
+            </div>
+
+            <!-- Right Page -->
+            <div class="reader-page-sheet page-sheet-right" id="readerPageRight">
+              <div class="page-inner-sheet" id="pageInnerRight">
+                <!-- Content dynamically rendered -->
+              </div>
+              <div class="reader-page-footer-wrap">
+                <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bottom Reader Bar -->
+      <div class="reader-bottom-bar">
+        <button type="button" class="reader-nav-btn" id="readerPrevPageBtn" onclick="prevReaderPage()">◀ Prev</button>
+        <div class="reader-page-slider-group">
+          <input type="range" class="reader-page-range" id="readerPageSlider" min="1" max="10" value="1" oninput="onReaderSliderInput(this.value)">
+          <span class="reader-page-indicator" id="readerPageIndicator">Page 1 / 4</span>
+        </div>
+        <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="nextReaderPage()">Next ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= COMPREHENSIVE EDIT / ADD BOOK MODAL (ALL 16 FIELDS) ================= -->
   <div class="modal-overlay" id="editBookModalOverlay">
     <div class="modal-card">
       <div class="modal-header">
-        <h3 class="modal-title" id="editBookModalTitle">Edit Book</h3>
+        <h3 class="modal-title" id="editBookModalTitle">Edit Book Details</h3>
         <button type="button" class="modal-close-btn" onclick="closeEditModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <div class="form-group">
-          <label>Book Title *</label>
-          <input type="text" id="modalBookTitle" placeholder="e.g. Atomic Habits">
-        </div>
-        <div class="form-group">
-          <label>Author *</label>
-          <input type="text" id="modalBookAuthor" placeholder="e.g. James Clear">
-        </div>
         <div class="form-row">
           <div class="form-group flex-1">
-            <label>Category</label>
-            <input type="text" id="modalBookCategory" placeholder="e.g. Productivity">
+            <label>Book No</label>
+            <input type="text" id="editBookNo" placeholder="e.g. book 151">
           </div>
           <div class="form-group flex-1">
+            <label>Language</label>
+            <input type="text" id="editBookLanguage" placeholder="e.g. HINDI, ENGLISH">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Book Title *</label>
+          <input type="text" id="editBookTitle" placeholder="Enter book title">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Author</label>
+            <input type="text" id="editBookAuthor" placeholder="Author name">
+          </div>
+          <div class="form-group flex-1">
+            <label>Category</label>
+            <input type="text" id="editBookCategory" placeholder="e.g. Productivity">
+          </div>
+        </div>
+
+        <!-- Book Cover Photo with Preview & Safe-Save Upload -->
+        <div class="form-group">
+          <label>Book Cover Photo</label>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div id="coverPreviewBox" class="cover-preview-box">
+              <span id="coverPlaceholderText" style="font-size:0.75rem; color:var(--text-muted);">No Cover</span>
+              <img id="coverPreviewImg" src="" alt="Cover" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:4px;">
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px; flex:1;">
+              <input type="text" id="editBookCover" placeholder="Paste Image URL or choose file below" oninput="onEditBookCoverUrlInput(this.value)">
+              <div style="display:flex; gap:6px; align-items:center;">
+                <label class="btn-restore" style="cursor:pointer; padding:4px 10px; font-size:11px;">
+                  📁 Upload Photo
+                  <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverImageUpload(this)">
+                </label>
+                <button type="button" class="btn-cancel" id="removeCoverBtn" onclick="removeCoverPhoto()" style="display:none; padding:4px 8px; font-size:11px;">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
             <label>Status</label>
-            <select id="modalBookStatus">
-              <option value="READING">Reading</option>
-              <option value="DONE">Completed</option>
-              <option value="UNREAD">Wishlist</option>
+            <select id="editBookStatus">
+              <option value="PENDING">⏳ PENDING</option>
+              <option value="READING">📖 READING</option>
+              <option value="DONE">✅ DONE</option>
+              <option value="LENT">👥 LENT OUT</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Availability</label>
+            <select id="editBookAvailability">
+              <option value="AVAILABLE">Available</option>
+              <option value="UNAVAILABLE">Unavailable</option>
             </select>
           </div>
         </div>
+
+        <!-- Pages Tracking -->
         <div class="form-row">
           <div class="form-group flex-1">
             <label>Current Page</label>
-            <input type="number" id="modalBookCurrentPage" value="0" min="0">
+            <input type="number" id="editCurrentPage" min="0" placeholder="e.g. 0">
           </div>
           <div class="form-group flex-1">
             <label>Total Pages</label>
-            <input type="number" id="modalBookTotalPages" value="200" min="1">
+            <input type="number" id="editTotalPages" min="1" placeholder="e.g. 250">
           </div>
         </div>
-        <div class="form-group">
-          <label>Cover Image URL / Real HD Cover Link</label>
-          <input type="text" id="modalBookCoverUrl" placeholder="https://covers.openlibrary.org/b/id/...-L.jpg" oninput="updateModalCoverPreview(this.value)">
-          <div class="modal-cover-preview" id="modalCoverPreview">
-            <img id="modalCoverPreviewImg" src="" alt="Cover Preview" onerror="this.src='cover_placeholder.jpg'">
+
+        <!-- Price & Rating -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Price (₹ Purchase Cost - Optional)</label>
+            <input type="number" id="editBookPrice" min="0" placeholder="Leave blank if not added">
+          </div>
+          <div class="form-group flex-1">
+            <label>Rating</label>
+            <select id="editBookRating">
+              <option value="0">☆☆☆☆☆ (No Rating / 0)</option>
+              <option value="1">★☆☆☆☆ (1 Star)</option>
+              <option value="2">★★☆☆☆ (2 Stars)</option>
+              <option value="3">★★★☆☆ (3 Stars)</option>
+              <option value="4">★★★★☆ (4 Stars)</option>
+              <option value="5">★★★★★ (5 Stars)</option>
+            </select>
           </div>
         </div>
+
+        <!-- Dates & Count Days -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Start Date</label>
+            <input type="date" id="editStartDate" onchange="calculateCountDays()">
+          </div>
+          <div class="form-group flex-1">
+            <label>End Date</label>
+            <input type="date" id="editEndDate" onchange="calculateCountDays()">
+          </div>
+        </div>
+
         <div class="form-group">
-          <label>Rating (1 to 5 Stars)</label>
-          <select id="modalBookRating">
-            <option value="5">★★★★★ (5 Stars)</option>
-            <option value="4">★★★★☆ (4 Stars)</option>
-            <option value="3">★★★☆☆ (3 Stars)</option>
-            <option value="2">★★☆☆☆ (2 Stars)</option>
-            <option value="1">★☆☆☆☆ (1 Star)</option>
-          </select>
+          <label>Count Days (Auto-calculated)</label>
+          <input type="number" id="editCountDays" placeholder="0" min="0">
+        </div>
+
+        <div class="form-group">
+          <label>Key Learnings, Quotes & Takeaways</label>
+          <textarea id="editBookTakeaway" placeholder="What are the key learnings, quotes, or actionable insights from this book?"></textarea>
         </div>
       </div>
       <div class="modal-footer">
@@ -778,10 +967,10 @@
         <button type="button" class="modal-close-btn" onclick="closeQuickLogModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <p class="quick-log-sub" id="quickLogBookName">The Silent Path</p>
+        <p class="quick-log-sub" id="quickLogBookName">Book Name</p>
         <div class="form-group">
           <label>Current Page Read</label>
-          <input type="number" id="quickLogPageInput" min="0" value="84">
+          <input type="number" id="quickLogPageInput" min="0" value="0">
         </div>
       </div>
       <div class="modal-footer">
@@ -863,24 +1052,23 @@
       </div>
       <div class="modal-body">
         <div class="update-status-row">
-          <span class="update-badge" id="currentVerBadge">v3.17.0</span>
+          <span class="update-badge" id="currentVerBadge">v3.17.1</span>
           <span class="update-status-text" id="updateStatusText">You have the latest version</span>
         </div>
         <div class="changelog-box">
-          <h4>What's New in v3.17.0:</h4>
+          <h4>What's New in v3.17.1:</h4>
           <ul class="changelog-list" id="changelogFeatures">
-            <li>✨ 100% Brand-New Ultra-Clean Mobile Design (Home, Library, Explore, Progress, Profile)</li>
-            <li>🗑️ Deleted all legacy obsolete code for maximum speed and zero phone crashes</li>
-            <li>📖 Beautiful Reading Detail Screen with tabs, daily goals & timer</li>
-            <li>📊 Native Interactive Monthly Progress Bar Chart & Genre Donut Chart</li>
-            <li>🛡️ Safe-Save Book Editor with live HD cover preview</li>
-            <li>💾 One-Tap Backup & Restore (JSON, CSV, PDF)</li>
+            <li>📖 Real 3D Book Page Reader with multi-language (Hindi, Hinglish, English) page flip!</li>
+            <li>✏️ Full 16-Field Edit Modal: Book No, Language, Dates, Count Days, Price, Rating, Status, Availability, Takeaways</li>
+            <li>⭐ 100% Honest Ratings: Unrated books default to 0.0 (no fake ratings)</li>
+            <li>📅 Real Dates: Books show "Not Started Yet" until you actually begin reading</li>
+            <li>⚡ Fast & Smooth: 1-click book details everywhere</li>
           </ul>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-cancel" onclick="closeUpdateModal()">Close</button>
-        <a id="downloadApkBtn" href="https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.0/MindFocusBooks-Native.apk" class="btn-save-gold" download>Download APK</a>
+        <a id="downloadApkBtn" href="https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.1/MindFocusBooks-Native.apk" class="btn-save-gold" download>Download APK</a>
       </div>
     </div>
   </div>

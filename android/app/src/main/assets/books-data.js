@@ -5,10 +5,10 @@ const DEFAULT_BOOKS = [
     "author": "Oxford Focus Lexicon",
     "language": "ENG / HIN",
     "status": "READING",
-    "start_date": "2026-09-08",
+    "start_date": "",
     "end_date": "",
-    "count_days": 1,
-    "rating": "5",
+    "count_days": 0,
+    "rating": 0,
     "category": "Vocabulary & Language",
     "takeaway": "Real 3D Interactive Flipping Pages Dictionary with English words, Hindi meanings, pronunciations, audio speech, and examples.",
     "availability": "AVAILABLE",
@@ -22,14 +22,14 @@ const DEFAULT_BOOKS = [
     "author": "Chris Bailey",
     "language": "HINDI",
     "status": "READING",
-    "start_date": "2026-08-21",
-    "end_date": "2026-09-06",
-    "count_days": 16,
-    "rating": "5",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "कम प्रयास में अधिक सफलता कैसे प्राप्त करें। ध्यान की उत्पादकता: हायपरफ़ोकस (एक काम पर गहरा ध्यान) और स्कैटरफ़ोकस (क्रिएटिव सोच और रिचार्ज)।",
     "availability": "AVAILABLE",
-    "price": 350,
+    "price": 0,
     "isbn": "978-93-5543-300-8",
     "cover_image": "hyperfocus_cover.jpg",
     "back_cover": "hyperfocus_back.jpg",
@@ -46,11 +46,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6553019-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6553019-L.jpg",
+    "price": 0
   },
   {
     "no": "book 3",
@@ -61,11 +62,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9360116-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9360116-L.jpg",
+    "price": 0
   },
   {
     "no": "book 4",
@@ -76,11 +78,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13290711-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13290711-L.jpg",
+    "price": 0
   },
   {
     "no": "book 5",
@@ -90,12 +93,13 @@ const DEFAULT_BOOKS = [
     "status": "PENDING",
     "start_date": "",
     "end_date": "",
-    "count_days": "",
-    "rating": "",
+    "count_days": 0,
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7988607-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7988607-L.jpg",
+    "price": 0
   },
   {
     "no": "book 6",
@@ -106,11 +110,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12539702-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12539702-L.jpg",
+    "price": 0
   },
   {
     "no": "book 7",
@@ -121,11 +126,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8188891-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8188891-L.jpg",
+    "price": 0
   },
   {
     "no": "book 8",
@@ -136,11 +142,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14426425-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14426425-L.jpg",
+    "price": 0
   },
   {
     "no": "book 9",
@@ -151,11 +158,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/746414-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/746414-L.jpg",
+    "price": 0
   },
   {
     "no": "book 10",
@@ -166,11 +174,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9078085-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9078085-L.jpg",
+    "price": 0
   },
   {
     "no": "book 11",
@@ -181,11 +190,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/2732975-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/2732975-L.jpg",
+    "price": 0
   },
   {
     "no": "book 12",
@@ -196,11 +206,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10398270-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10398270-L.jpg",
+    "price": 0
   },
   {
     "no": "book 13",
@@ -211,11 +222,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11041932-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11041932-L.jpg",
+    "price": 0
   },
   {
     "no": "book 14",
@@ -226,11 +238,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7309773-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7309773-L.jpg",
+    "price": 0
   },
   {
     "no": "book 15",
@@ -241,11 +254,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/813347-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/813347-L.jpg",
+    "price": 0
   },
   {
     "no": "book 16",
@@ -256,11 +270,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10467082-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10467082-L.jpg",
+    "price": 0
   },
   {
     "no": "book 17",
@@ -271,11 +286,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6458532-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6458532-L.jpg",
+    "price": 0
   },
   {
     "no": "book 18",
@@ -286,11 +302,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7285986-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7285986-L.jpg",
+    "price": 0
   },
   {
     "no": "book 19",
@@ -301,11 +318,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9129784-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9129784-L.jpg",
+    "price": 0
   },
   {
     "no": "book 20",
@@ -316,11 +334,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/2379210-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/2379210-L.jpg",
+    "price": 0
   },
   {
     "no": "book 21",
@@ -331,11 +350,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8352403-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8352403-L.jpg",
+    "price": 0
   },
   {
     "no": "book 22",
@@ -346,11 +366,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10102079-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10102079-L.jpg",
+    "price": 0
   },
   {
     "no": "book 23",
@@ -361,11 +382,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/1333251-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/1333251-L.jpg",
+    "price": 0
   },
   {
     "no": "book 24",
@@ -376,11 +398,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10021591-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10021591-L.jpg",
+    "price": 0
   },
   {
     "no": "book 25",
@@ -391,11 +414,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7438753-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7438753-L.jpg",
+    "price": 0
   },
   {
     "no": "book 26",
@@ -406,11 +430,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12664855-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12664855-L.jpg",
+    "price": 0
   },
   {
     "no": "book 27",
@@ -421,11 +446,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8507540-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8507540-L.jpg",
+    "price": 0
   },
   {
     "no": "book 28",
@@ -436,11 +462,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/475008-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/475008-L.jpg",
+    "price": 0
   },
   {
     "no": "book 29",
@@ -451,11 +478,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7561012-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7561012-L.jpg",
+    "price": 0
   },
   {
     "no": "book 30",
@@ -466,11 +494,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14421850-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14421850-L.jpg",
+    "price": 0
   },
   {
     "no": "book 31",
@@ -481,11 +510,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/2314080-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/2314080-L.jpg",
+    "price": 0
   },
   {
     "no": "book 32",
@@ -496,11 +526,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6404786-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6404786-L.jpg",
+    "price": 0
   },
   {
     "no": "book 33",
@@ -511,11 +542,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/3876254-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/3876254-L.jpg",
+    "price": 0
   },
   {
     "no": "book 34",
@@ -526,11 +558,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8114155-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8114155-L.jpg",
+    "price": 0
   },
   {
     "no": "book 35",
@@ -541,11 +574,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8027675-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8027675-L.jpg",
+    "price": 0
   },
   {
     "no": "book 36",
@@ -556,11 +590,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11948223-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11948223-L.jpg",
+    "price": 0
   },
   {
     "no": "book 37",
@@ -571,11 +606,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/5547404-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/5547404-L.jpg",
+    "price": 0
   },
   {
     "no": "book 38",
@@ -586,11 +622,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6412844-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6412844-L.jpg",
+    "price": 0
   },
   {
     "no": "book 39",
@@ -601,11 +638,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12529325-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12529325-L.jpg",
+    "price": 0
   },
   {
     "no": "book 40",
@@ -616,11 +654,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6968365-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6968365-L.jpg",
+    "price": 0
   },
   {
     "no": "book 41",
@@ -631,11 +670,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8042539-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8042539-L.jpg",
+    "price": 0
   },
   {
     "no": "book 42",
@@ -646,11 +686,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14420637-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14420637-L.jpg",
+    "price": 0
   },
   {
     "no": "book 43",
@@ -661,11 +702,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9475786-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9475786-L.jpg",
+    "price": 0
   },
   {
     "no": "book 44",
@@ -676,11 +718,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/431011-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/431011-L.jpg",
+    "price": 0
   },
   {
     "no": "book 45",
@@ -691,11 +734,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6402116-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6402116-L.jpg",
+    "price": 0
   },
   {
     "no": "book 46",
@@ -706,11 +750,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/4003663-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/4003663-L.jpg",
+    "price": 0
   },
   {
     "no": "book 47",
@@ -721,11 +766,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7311247-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7311247-L.jpg",
+    "price": 0
   },
   {
     "no": "book 48",
@@ -736,11 +782,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7277740-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7277740-L.jpg",
+    "price": 0
   },
   {
     "no": "book 49",
@@ -751,11 +798,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/551262-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/551262-L.jpg",
+    "price": 0
   },
   {
     "no": "book 50",
@@ -766,11 +814,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/4002352-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/4002352-L.jpg",
+    "price": 0
   },
   {
     "no": "book 51",
@@ -781,11 +830,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10079937-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10079937-L.jpg",
+    "price": 0
   },
   {
     "no": "book 52",
@@ -796,11 +846,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12690321-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12690321-L.jpg",
+    "price": 0
   },
   {
     "no": "book 53",
@@ -811,11 +862,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12447129-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12447129-L.jpg",
+    "price": 0
   },
   {
     "no": "book 54",
@@ -826,11 +878,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14428233-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14428233-L.jpg",
+    "price": 0
   },
   {
     "no": "book 55",
@@ -841,11 +894,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13098570-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13098570-L.jpg",
+    "price": 0
   },
   {
     "no": "book 56",
@@ -856,11 +910,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8315355-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8315355-L.jpg",
+    "price": 0
   },
   {
     "no": "book 57",
@@ -871,11 +926,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14542536-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14542536-L.jpg",
+    "price": 0
   },
   {
     "no": "book 58",
@@ -886,11 +942,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8539416-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8539416-L.jpg",
+    "price": 0
   },
   {
     "no": "book 59",
@@ -901,11 +958,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7079753-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7079753-L.jpg",
+    "price": 0
   },
   {
     "no": "book 60",
@@ -916,11 +974,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8186237-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8186237-L.jpg",
+    "price": 0
   },
   {
     "no": "book 61",
@@ -931,11 +990,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8782615-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8782615-L.jpg",
+    "price": 0
   },
   {
     "no": "book 62",
@@ -946,11 +1006,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8231866-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231866-L.jpg",
+    "price": 0
   },
   {
     "no": "book 63",
@@ -961,11 +1022,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12372866-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12372866-L.jpg",
+    "price": 0
   },
   {
     "no": "book 64",
@@ -976,11 +1038,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/109288-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/109288-L.jpg",
+    "price": 0
   },
   {
     "no": "book 65",
@@ -991,11 +1054,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/847534-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/847534-L.jpg",
+    "price": 0
   },
   {
     "no": "book 66",
@@ -1006,11 +1070,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10351762-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10351762-L.jpg",
+    "price": 0
   },
   {
     "no": "book 67",
@@ -1021,11 +1086,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7261122-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7261122-L.jpg",
+    "price": 0
   },
   {
     "no": "book 68",
@@ -1036,11 +1102,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7084839-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7084839-L.jpg",
+    "price": 0
   },
   {
     "no": "book 69",
@@ -1051,11 +1118,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13891159-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13891159-L.jpg",
+    "price": 0
   },
   {
     "no": "book 70",
@@ -1066,11 +1134,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7288726-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7288726-L.jpg",
+    "price": 0
   },
   {
     "no": "book 71",
@@ -1081,11 +1150,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10156205-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10156205-L.jpg",
+    "price": 0
   },
   {
     "no": "book 72",
@@ -1096,11 +1166,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8843804-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8843804-L.jpg",
+    "price": 0
   },
   {
     "no": "book 73",
@@ -1111,11 +1182,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9261636-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9261636-L.jpg",
+    "price": 0
   },
   {
     "no": "book 74",
@@ -1126,11 +1198,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8814155-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8814155-L.jpg",
+    "price": 0
   },
   {
     "no": "book 75",
@@ -1141,11 +1214,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10096454-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10096454-L.jpg",
+    "price": 0
   },
   {
     "no": "book 76",
@@ -1156,11 +1230,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9253925-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9253925-L.jpg",
+    "price": 0
   },
   {
     "no": "book 77",
@@ -1171,11 +1246,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/1359485-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/1359485-L.jpg",
+    "price": 0
   },
   {
     "no": "book 78",
@@ -1186,11 +1262,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/374152-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/374152-L.jpg",
+    "price": 0
   },
   {
     "no": "book 79",
@@ -1201,11 +1278,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7891426-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7891426-L.jpg",
+    "price": 0
   },
   {
     "no": "book 80",
@@ -1216,11 +1294,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9576564-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9576564-L.jpg",
+    "price": 0
   },
   {
     "no": "book 81",
@@ -1231,11 +1310,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10201407-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10201407-L.jpg",
+    "price": 0
   },
   {
     "no": "book 82",
@@ -1246,11 +1326,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8814831-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8814831-L.jpg",
+    "price": 0
   },
   {
     "no": "book 83",
@@ -1261,11 +1342,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10153705-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10153705-L.jpg",
+    "price": 0
   },
   {
     "no": "book 84",
@@ -1276,11 +1358,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9778922-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9778922-L.jpg",
+    "price": 0
   },
   {
     "no": "book 85",
@@ -1291,11 +1374,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8792782-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8792782-L.jpg",
+    "price": 0
   },
   {
     "no": "book 86",
@@ -1306,11 +1390,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10981966-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10981966-L.jpg",
+    "price": 0
   },
   {
     "no": "book 87",
@@ -1321,11 +1406,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11349464-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11349464-L.jpg",
+    "price": 0
   },
   {
     "no": "book 88",
@@ -1336,11 +1422,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8270423-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8270423-L.jpg",
+    "price": 0
   },
   {
     "no": "book 89",
@@ -1351,11 +1438,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/662363-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/662363-L.jpg",
+    "price": 0
   },
   {
     "no": "book 90",
@@ -1366,11 +1454,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7277286-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7277286-L.jpg",
+    "price": 0
   },
   {
     "no": "book 91",
@@ -1381,11 +1470,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/298658-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/298658-L.jpg",
+    "price": 0
   },
   {
     "no": "book 92",
@@ -1396,11 +1486,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14368453-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14368453-L.jpg",
+    "price": 0
   },
   {
     "no": "book 93",
@@ -1411,11 +1502,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/405381-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/405381-L.jpg",
+    "price": 0
   },
   {
     "no": "book 94",
@@ -1426,11 +1518,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/4996607-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/4996607-L.jpg",
+    "price": 0
   },
   {
     "no": "book 95",
@@ -1441,11 +1534,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11298531-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11298531-L.jpg",
+    "price": 0
   },
   {
     "no": "book 96",
@@ -1456,11 +1550,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9413708-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9413708-L.jpg",
+    "price": 0
   },
   {
     "no": "book 97",
@@ -1471,11 +1566,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12938610-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12938610-L.jpg",
+    "price": 0
   },
   {
     "no": "book 98",
@@ -1486,11 +1582,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10490161-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10490161-L.jpg",
+    "price": 0
   },
   {
     "no": "book 99",
@@ -1501,11 +1598,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8665878-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8665878-L.jpg",
+    "price": 0
   },
   {
     "no": "book 100",
@@ -1516,11 +1614,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7381653-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7381653-L.jpg",
+    "price": 0
   },
   {
     "no": "book 101",
@@ -1531,11 +1630,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12511799-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12511799-L.jpg",
+    "price": 0
   },
   {
     "no": "book 102",
@@ -1546,11 +1646,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11576434-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11576434-L.jpg",
+    "price": 0
   },
   {
     "no": "book 103",
@@ -1561,11 +1662,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12104740-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12104740-L.jpg",
+    "price": 0
   },
   {
     "no": "book 104",
@@ -1576,11 +1678,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10026941-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10026941-L.jpg",
+    "price": 0
   },
   {
     "no": "book 105",
@@ -1591,11 +1694,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11456785-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11456785-L.jpg",
+    "price": 0
   },
   {
     "no": "book 106",
@@ -1606,11 +1710,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13521833-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13521833-L.jpg",
+    "price": 0
   },
   {
     "no": "book 107",
@@ -1621,11 +1726,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/isbn/9780399158643-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/isbn/9780399158643-L.jpg",
+    "price": 0
   },
   {
     "no": "book 108",
@@ -1636,11 +1742,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10531822-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10531822-L.jpg",
+    "price": 0
   },
   {
     "no": "book 109",
@@ -1651,11 +1758,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10521194-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10521194-L.jpg",
+    "price": 0
   },
   {
     "no": "book 110",
@@ -1666,11 +1774,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10520407-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10520407-L.jpg",
+    "price": 0
   },
   {
     "no": "book 111",
@@ -1681,11 +1790,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/228276-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/228276-L.jpg",
+    "price": 0
   },
   {
     "no": "book 112",
@@ -1696,11 +1806,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/375204-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/375204-L.jpg",
+    "price": 0
   },
   {
     "no": "book 113",
@@ -1711,11 +1822,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9825397-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9825397-L.jpg",
+    "price": 0
   },
   {
     "no": "book 114",
@@ -1726,11 +1838,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/760118-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/760118-L.jpg",
+    "price": 0
   },
   {
     "no": "book 115",
@@ -1741,11 +1854,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8780870-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8780870-L.jpg",
+    "price": 0
   },
   {
     "no": "book 116",
@@ -1756,11 +1870,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9264534-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9264534-L.jpg",
+    "price": 0
   },
   {
     "no": "book 117",
@@ -1771,11 +1886,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12446457-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12446457-L.jpg",
+    "price": 0
   },
   {
     "no": "book 118",
@@ -1786,11 +1902,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12385574-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12385574-L.jpg",
+    "price": 0
   },
   {
     "no": "book 119",
@@ -1801,11 +1918,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9215229-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9215229-L.jpg",
+    "price": 0
   },
   {
     "no": "book 120",
@@ -1816,11 +1934,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10839827-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10839827-L.jpg",
+    "price": 0
   },
   {
     "no": "book 121",
@@ -1831,11 +1950,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9946226-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9946226-L.jpg",
+    "price": 0
   },
   {
     "no": "book 122",
@@ -1846,11 +1966,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/4356371-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/4356371-L.jpg",
+    "price": 0
   },
   {
     "no": "book 123",
@@ -1861,11 +1982,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/1640577-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/1640577-L.jpg",
+    "price": 0
   },
   {
     "no": "book 124",
@@ -1876,11 +1998,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10551411-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10551411-L.jpg",
+    "price": 0
   },
   {
     "no": "book 125",
@@ -1891,11 +2014,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11196262-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11196262-L.jpg",
+    "price": 0
   },
   {
     "no": "book 126",
@@ -1906,11 +2030,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/15208264-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/15208264-L.jpg",
+    "price": 0
   },
   {
     "no": "book 127",
@@ -1921,11 +2046,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10961899-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10961899-L.jpg",
+    "price": 0
   },
   {
     "no": "book 128",
@@ -1936,11 +2062,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7248784-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7248784-L.jpg",
+    "price": 0
   },
   {
     "no": "book 129",
@@ -1951,11 +2078,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8850807-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8850807-L.jpg",
+    "price": 0
   },
   {
     "no": "book 130",
@@ -1966,11 +2094,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9269461-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9269461-L.jpg",
+    "price": 0
   },
   {
     "no": "book 131",
@@ -1981,11 +2110,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10142388-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10142388-L.jpg",
+    "price": 0
   },
   {
     "no": "book 132",
@@ -1996,11 +2126,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8795096-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8795096-L.jpg",
+    "price": 0
   },
   {
     "no": "book 133",
@@ -2011,11 +2142,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10247378-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10247378-L.jpg",
+    "price": 0
   },
   {
     "no": "book 134",
@@ -2026,11 +2158,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14417990-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14417990-L.jpg",
+    "price": 0
   },
   {
     "no": "book 135",
@@ -2041,11 +2174,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10209199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10209199-L.jpg",
+    "price": 0
   },
   {
     "no": "book 136",
@@ -2056,11 +2190,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/450298-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/450298-L.jpg",
+    "price": 0
   },
   {
     "no": "book 137",
@@ -2071,11 +2206,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8678542-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8678542-L.jpg",
+    "price": 0
   },
   {
     "no": "book 138",
@@ -2086,11 +2222,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/661199-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/661199-L.jpg",
+    "price": 0
   },
   {
     "no": "book 139",
@@ -2101,11 +2238,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13058021-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13058021-L.jpg",
+    "price": 0
   },
   {
     "no": "book 140",
@@ -2116,11 +2254,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7884139-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7884139-L.jpg",
+    "price": 0
   },
   {
     "no": "book 141",
@@ -2131,11 +2270,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9154494-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9154494-L.jpg",
+    "price": 0
   },
   {
     "no": "book 142",
@@ -2146,11 +2286,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6444265-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6444265-L.jpg",
+    "price": 0
   },
   {
     "no": "book 143",
@@ -2161,11 +2302,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7412966-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7412966-L.jpg",
+    "price": 0
   },
   {
     "no": "book 144",
@@ -2176,11 +2318,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7272162-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7272162-L.jpg",
+    "price": 0
   },
   {
     "no": "book 145",
@@ -2191,11 +2334,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/isbn/9780735213616-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/isbn/9780735213616-L.jpg",
+    "price": 0
   },
   {
     "no": "book 146",
@@ -2206,11 +2350,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13232559-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13232559-L.jpg",
+    "price": 0
   },
   {
     "no": "book 147",
@@ -2221,11 +2366,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10204949-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10204949-L.jpg",
+    "price": 0
   },
   {
     "no": "book 148",
@@ -2236,11 +2382,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13224272-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13224272-L.jpg",
+    "price": 0
   },
   {
     "no": "book 149",
@@ -2251,11 +2398,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8695259-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8695259-L.jpg",
+    "price": 0
   },
   {
     "no": "book 150",
@@ -2266,11 +2414,12 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "",
+    "rating": 0,
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13230270-L.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13230270-L.jpg",
+    "price": 0
   },
   {
     "no": "book 151",
@@ -2281,11 +2430,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "शक्ति, प्रभाव और रणनीति के 48 सार्वभौमिक नियम। कैसे अपने इरादों को छुपाएं और लोगों की मनोवैज्ञानिक चालों से खुद को सुरक्षित रखें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 452,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8231856-L.jpg"
@@ -2299,11 +2448,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "मानव स्वभाव के अंधेरे पहलुओं को समझें। अहंकार, ईर्ष्या, दिखावा और लोगों के मुखौटों के पीछे छिपी असली नीयत को पहचानना सीखें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 624,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10170095-L.jpg"
@@ -2317,11 +2466,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "युद्ध और कूटनीति का प्राचीन महाग्रंथ। बिना लड़े दुश्मन को हराना ही सबसे बड़ी कला है। अपने प्रतिद्वंद्वी की सोच को पहले से भांपें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 180,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/4849549-L.jpg"
@@ -2335,11 +2484,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "यथार्थवादी राजनीति और नियंत्रण का सबसे पुराना मास्टरक्लास। सत्ता कैसे हासिल की जाती है और उसे कैसे संभाला जाता है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 140,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7984916-L.jpg"
@@ -2353,11 +2502,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "दैनिक जीवन, करियर और रिश्तों में मनोवैज्ञानिक लड़ाइयों को जीतने और तनाव से बाहर निकलने की 33 रणनीतियां।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 496,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8114125-L.jpg"
@@ -2371,11 +2520,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "आकर्षण और करिश्मे का मनोविज्ञान। लोग तर्क से नहीं भावनाओं और कल्पनाओं से प्रभावित होते हैं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 468,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8314126-L.jpg"
@@ -2389,11 +2538,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "मीठी बातें करने वाले और मासूम बनकर दूसरों को नियंत्रित करने वाले (Covert-Aggressive) लोगों की पहचान और मनोवैज्ञानिक सुरक्षा।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 200,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/6814120-L.jpg"
@@ -2407,11 +2556,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "जो लोग दूसरों की सहानुभूति और अच्छाई का फायदा उठाते हैं, उनसे अपने मानसिक संतुलन और आत्मसम्मान की रक्षा कैसे करें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10141285-L.jpg"
@@ -2425,11 +2574,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "गैसलाइटिंग, माइंड मैनिपुलेशन और भावनात्मक ब्लैकमेल से बचने की व्यावहारिक तकनीकों का संपूर्ण विश्लेषण।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 210,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/15131420-L.jpg"
@@ -2443,11 +2592,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "सीआईए (CIA) के पूर्व जासूसों द्वारा सिखाई गई झूठ पकड़ने की वैज्ञानिक विधि। किसी के चेहरे और आवाज़ से सच जानना।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 272,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/12188068-L.jpg"
@@ -2461,11 +2610,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "अचेतन रूप से लोग एक-दूसरे के साथ कौन से मनोवैज्ञानिक खेल खेलते हैं। लेनदेन विश्लेषण (Transactional Analysis)।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 216,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8281189-L.jpg"
@@ -2479,11 +2628,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "स्टैनफोर्ड जेल प्रयोग के शोधकर्ता द्वारा: कैसे सामान्य इंसान भी परिस्थितियों और सत्ता के दबाव में क्रूर बन जाते हैं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 576,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/1538373-L.jpg"
@@ -2497,11 +2646,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "अमीर बनने के लिए पैसे के लिए काम मत करो, पैसे को अपने लिए काम पर लगाओ। संपत्ति (Asset) और दायित्व (Liability) का असली अंतर।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 336,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8315603-L.jpg"
@@ -2515,11 +2664,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "धन कमाना इस बात पर निर्भर नहीं करता कि आप कितने बुद्धिमान हैं, बल्कि इस पर निर्भर करता है कि आपका व्यवहार कैसा है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 256,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10389354-L.jpg"
@@ -2533,11 +2682,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "पारंपरिक 40 साल की नौकरी की धीमी लेन छोड़कर संपत्ति निर्माण और स्वतंत्रता की तेज़ लेन में कैसे कदम रखें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 336,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8314178-L.jpg"
@@ -2551,11 +2700,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "वैल्यू इन्वेस्टिंग की बाइबिल। मिस्टर मार्केट के भावनात्मक उतार-चढ़ाव से बचें और सुरक्षा के मार्जिन (Margin of Safety) पर ध्यान दें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 640,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/36434-L.jpg"
@@ -2569,11 +2718,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "प्राचीन बेबीलोन की कथाओं से धन संग्रह के सरल नियम: अपनी कमाई का 10% पहले खुद के लिए बचाएं और समझदारी से निवेश करें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 144,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8114133-L.jpg"
@@ -2587,11 +2736,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "अपने जीवन की ऊर्जा (Life Energy) के बदले पैसे खर्च करना बंद करें। वित्तीय स्वतंत्रता और मानसिक शांति की दिशा में 9 कदम।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 368,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/6975229-L.jpg"
@@ -2605,11 +2754,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "आपके अवचेतन मन का मनी ब्लूप्रिंट ही आपकी वित्तीय स्थिति तय करता है। अमीरों की सोचने की 17 आदतें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 224,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/492620-L.jpg"
@@ -2623,11 +2772,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "बिना कंजूसी किए अपनी पसंद की चीज़ों पर खुलकर खर्च करें और बाकी सब कुछ स्वचालित (Automate) करके अमीर बनें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 352,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/6305971-L.jpg"
@@ -2641,11 +2790,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "बिना किस्मत के अमीर कैसे बनें। विशिष्ट ज्ञान (Specific Knowledge), लीवरेज और लंबे समय तक चलने वाले कंपाउंडिंग गेम्स।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 242,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10449931-L.jpg"
@@ -2659,11 +2808,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "पैसे को केवल तिजोरी में रखने के बजाय जीवन के अनुभवों और यादगार पलों में समय रहते सही तरीके से खर्च करना सीखें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 240,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10433791-L.jpg"
@@ -2677,11 +2826,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "महान कंपनियों को पहचानने के 15 सिद्धांत। स्कटलबाट (Scuttlebutt) तकनीक से कंपनियों के आंतरिक सच को जानना।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 320,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/788750-L.jpg"
@@ -2695,11 +2844,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Wealth & Finance",
     "takeaway": "वॉरेन बफेट के पत्रों का संकलन: कॉर्पोरेट गवर्नेंस, बिजनेस वैल्यूएशन और दीर्घकालिक निवेश का अमूल्य खजाना।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 336,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/6497216-L.jpg"
@@ -2713,11 +2862,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Philosophy & Stoicism",
     "takeaway": "रोमन सम्राट की निजी डायरी। जो चीज़ें आपके नियंत्रण में नहीं हैं उनकी चिंता छोड़ें और अपने कर्म व चरित्र पर ध्यान केंद्रित करें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 256,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/13202688-L.jpg"
@@ -2731,11 +2880,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Philosophy & Stoicism",
     "takeaway": "समय की कीमत, मृत्यु का भय मिटाने और जीवन की उथल-पुथल में अचल मन की शांति बनाए रखने के व्यावहारिक दार्शनिक पत्र।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 254,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/103759-L.jpg"
@@ -2749,11 +2898,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Philosophy & Stoicism",
     "takeaway": "एक पूर्व गुलाम द्वारा दिया गया स्वतंत्रता का संदेश: परिस्थितियां इंसान को दुखी नहीं करतीं, बल्कि उन पर उसका नज़रिया दुखी करता है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 304,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/12985050-L.jpg"
@@ -2767,11 +2916,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Philosophy & Stoicism",
     "takeaway": "नाजी शिविरों की भयावहता के बीच जीवन का अर्थ खोजना। जिसके पास जीने की कोई वजह (Why) है, वह हर कष्ट (How) सह सकता है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 184,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8516506-L.jpg"
@@ -2785,11 +2934,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Philosophy & Stoicism",
     "takeaway": "पारंपरिक नैतिकता और पाखंड पर करारी चोट। अपनी खुद की दृष्टि और आत्म-शक्ति (Will to Power) को जगाने का दार्शनिक आह्वान।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 240,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8245356-L.jpg"
@@ -2803,11 +2952,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Philosophy & Stoicism",
     "takeaway": "न्याय, आदर्श समाज और गुफा के रूपक (Allegory of the Cave) के माध्यम से सत्य और अज्ञान के अंतर को समझाती अमर कृति।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 416,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/14418448-L.jpg"
@@ -2821,11 +2970,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Philosophy & Stoicism",
     "takeaway": "सुपरमैन (Übermensch) की अवधारणा: समाज की भेड़-चाल से बाहर निकलकर अपने खुद के मूल्यों का सृजन करना।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 352,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8214177-L.jpg"
@@ -2839,11 +2988,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Philosophy & Stoicism",
     "takeaway": "एब्सर्डिज़्म (Absurdism) का मास्टरपीस: जब दुनिया में कोई अर्थ नहीं दिखता, तब इंसान को ईमानदारी से अपनी वास्तविकता स्वीकारनी चाहिए।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 123,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/13151269-L.jpg"
@@ -2857,11 +3006,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Philosophy & Stoicism",
     "takeaway": "नकारात्मक दृश्यीकरण (Negative Visualization) और आधुनिक जीवन में स्टोइक दर्शन का उपयोग करके स्थाई आनंद पाने की कला।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 336,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/6958019-L.jpg"
@@ -2875,11 +3024,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Philosophy & Stoicism",
     "takeaway": "ताओ का मार्ग: सहज प्रवाह (Wu Wei), पानी की तरह लचीलापन और बिना जबरदस्ती किए प्रकृति के साथ एकरूप होकर जीना।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 160,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/662232-L.jpg"
@@ -2893,11 +3042,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Productivity & Time",
     "takeaway": "दिमाग सोचने के लिए है, बातें याद रखने के लिए नहीं। तनावमुक्त उत्पादकता के लिए सभी कार्यों को कैप्चर और प्रोसेस करने की प्रणाली।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 352,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8814166-L.jpg"
@@ -2911,11 +3060,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Productivity & Time",
     "takeaway": "आपके 80% परिणाम केवल 20% प्रयासों से आते हैं। उन 20% महत्वपूर्ण कामों को पहचानें और बाकी अनावश्यक काम छोड़ दें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 336,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/13226874-L.jpg"
@@ -2929,11 +3078,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Productivity & Time",
     "takeaway": "औसत मानव जीवन में केवल 4000 हफ्ते होते हैं। सब कुछ करने की अंधी दौड़ छोड़ें और जो सचमुच मायने रखता है उसे चुनें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/11990973-L.jpg"
@@ -2947,11 +3096,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Productivity & Time",
     "takeaway": "कम लेकिन बेहतर (Less but better)। हर किसी को खुश करने के बजाय ना कहना सीखें और अपनी असली प्राथमिकताओं पर अडिग रहें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 272,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7285986-L.jpg"
@@ -2965,11 +3114,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Productivity & Time",
     "takeaway": "स्मार्टफोन और डिजिटल भटकावों से अपनी ऊर्जा वापस छीनने और दिन के मुख्य आकर्षण (Daily Highlight) को पूरा करने का ढांचा।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 304,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/14179816-L.jpg"
@@ -2983,11 +3132,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Productivity & Time",
     "takeaway": "अकेले कमरे में गुमनाम रहने के बजाय अपने काम की प्रक्रिया को दुनिया के साथ साझा करें और अवसर खुद चलकर आपके पास आएंगे।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 224,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7284188-L.jpg"
@@ -3001,11 +3150,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Productivity & Time",
     "takeaway": "पैशन के पीछे भागना बंद करें। दुर्लभ और मूल्यवान कौशल (Career Capital) विकसित करें, जिससे सफलता और संतोष खुद मिलेंगे।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 304,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9414155-L.jpg"
@@ -3019,11 +3168,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Communication & Influence",
     "takeaway": "संबंध बनाने और सम्मान पाने का अमर ग्रंथ: दूसरों में सच्ची रुचि लें, उनकी तारीफ करें और उन्हें महत्वपूर्ण महसूस कराएं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/13314878-L.jpg"
@@ -3037,11 +3186,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Communication & Influence",
     "takeaway": "एफबीआई के शीर्ष बंधक वार्ताकार द्वारा: सामरिक सहानुभूति (Tactical Empathy), मिररिंग और कैलिब्रेटेड प्रश्नों से हर बातचीत जीतें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8365942-L.jpg"
@@ -3055,11 +3204,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Communication & Influence",
     "takeaway": "जब दांव ऊंचे हों और राय अलग हों, तब बिना गुस्सा हुए या पीछे हटे सुरक्षित माहौल बनाकर सच बोलने की कला।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/1711809-L.jpg"
@@ -3073,11 +3222,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Communication & Influence",
     "takeaway": "दुनिया के सबसे बेहतरीन वक्ताओं के रहस्य: कहानी सुनाने की ताकत, अप्रत्याशित क्षण और 18 मिनट का नियम।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7316010-L.jpg"
@@ -3091,11 +3240,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Communication & Influence",
     "takeaway": "4 रंगीन व्यक्तित्व प्रकार (लाल, पीला, हरा, नीला)। समझें कि सामने वाला कैसा सोचता है और उससे उसकी ही भाषा में बात करें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 304,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10105591-L.jpg"
@@ -3109,11 +3258,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Communication & Influence",
     "takeaway": "दोषारोपण और आक्रामकता के बिना अपनी जरूरतें व्यक्त करने और दूसरों की भावनाओं को बिना आहत हुए सुनने की सहानुभूतिपूर्ण पद्धति।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 220,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/940686-L.jpg"
@@ -3127,11 +3276,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Communication & Influence",
     "takeaway": "बॉडी लैंग्वेज, माइक्रो-एक्सप्रेशंस और बातचीत के हैक्स से किसी भी सामाजिक माहौल में तुरंत प्रभाव छोड़ने का विज्ञान।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 320,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10951273-L.jpg"
@@ -3145,11 +3294,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Communication & Influence",
     "takeaway": "नाराज़, अड़ियल या रक्षात्मक लोगों की दीवार को भेदकर उनके दिल तक पहुंचने और सार्थक संवाद स्थापित करने की कला।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 256,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10014144-L.jpg"
@@ -3163,11 +3312,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Communication & Influence",
     "takeaway": "वह जादुई शब्द और वाक्यांश जो बातचीत की दिशा को बिना किसी दबाव के तुरंत आपके पक्ष में मोड़ देते हैं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 148,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/15092604-L.jpg"
@@ -3181,11 +3330,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Communication & Influence",
     "takeaway": "एलएबी प्रोफाइल (Language and Behavior) का उपयोग करके समझें कि लोग निर्णय कैसे लेते हैं और उन्हें प्रेरित कैसे करें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 350,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8028304-L.jpg"
@@ -3199,11 +3348,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Biographies & Great Lives",
     "takeaway": "एप्पल के संस्थापक का विस्मयकारी जीवन। रचनात्मकता, जुनून, चरम परफेक्शनिज़्म और रियलिटी डिस्टॉर्शन फील्ड की सच्ची कहानी।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 656,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8231933-L.jpg"
@@ -3217,11 +3366,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Biographies & Great Lives",
     "takeaway": "टेस्ला और स्पेसएक्स के निर्माता की साहसी यात्रा। पहले सिद्धांतों (First Principles) से सोचना और असंभव लक्ष्यों को संभव बनाना।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 688,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/14420016-L.jpg"
@@ -3235,11 +3384,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Biographies & Great Lives",
     "takeaway": "नाइकी के संस्थापक का संघर्षपूर्ण सफर। दिवालिया होने के कगार से उठकर दुनिया का सबसे बड़ा स्पोर्ट्स ब्रांड खड़ा करने का रोमांचक सफर।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 400,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8858487-L.jpg"
@@ -3253,11 +3402,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Biographies & Great Lives",
     "takeaway": "भारत के महान आध्यात्मिक योगी की जीवनगाथा जिसने स्टीव जॉब्स सहित दुनिया भर के लाखों लोगों का जीवन बदल दिया।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 520,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/805448-L.jpg"
@@ -3271,11 +3420,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Biographies & Great Lives",
     "takeaway": "भारत के मिसाइल मैन और पूर्व राष्ट्रपति का प्रेरणादायक सफर: रामेश्वरम के साधारण परिवार से विज्ञान व नेतृत्व के शिखर तक।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 180,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9153819-L.jpg"
@@ -3289,11 +3438,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Biographies & Great Lives",
     "takeaway": "27 साल की कठिन जेल यातना के बाद भी बिना बदले की भावना के दक्षिण अफ्रीका को आज़ादी और एकता दिलाने वाले नायक की कहानी।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 656,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/12702407-L.jpg"
@@ -3307,11 +3456,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Biographies & Great Lives",
     "takeaway": "मानव इतिहास के सबसे जिज्ञासु मस्तिष्क का जीवन: कला और विज्ञान के संगम से प्रकृति के रहस्यों को समझने की असीम लालसा।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 624,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8087691-L.jpg"
@@ -3325,11 +3474,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Biographies & Great Lives",
     "takeaway": "जब आपका दिमाग कहता है कि बस अब और नहीं, तब आप अपनी वास्तविक क्षमता का केवल 40% उपयोग कर रहे होते हैं। मानसिक फौलाद बनना।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 364,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8305903-L.jpg"
@@ -3343,11 +3492,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Biographies & Great Lives",
     "takeaway": "दुनिया के सबसे सफल निवेशक का संपूर्ण जीवन: सादगी, ईमानदारी और सात दशकों के धैर्यपूर्वक कंपाउंडिंग की शक्ति।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 976,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/6916021-L.jpg"
@@ -3361,11 +3510,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Biographies & Great Lives",
     "takeaway": "एक अनाथ आप्रवासी का अमेरिका के आधुनिक वित्तीय तंत्र और संविधान के निर्माण में असाधारण योगदान की रोमांचक दास्तान।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 832,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8261375-L.jpg"
@@ -3379,11 +3528,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Spirituality & Wisdom",
     "takeaway": "कुरुक्षेत्र के मैदान में भगवान कृष्ण का अमर उपदेश: निष्काम कर्म योग, आसक्ति रहित कर्तव्य और आत्मा की अमरता का ज्ञान।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 400,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/11157767-L.jpg"
@@ -3397,11 +3546,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Spirituality & Wisdom",
     "takeaway": "आत्मज्ञान की तलाश में निकले एक साधक की यात्रा: ज्ञान सिखाया जा सकता है, लेकिन बुद्धिमत्ता केवल स्वयं अनुभव की जाती है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 152,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8231966-L.jpg"
@@ -3415,11 +3564,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Spirituality & Wisdom",
     "takeaway": "जब आप दिल से किसी चीज़ को चाहते हैं, तो पूरी कायनात उसे आपसे मिलाने की साज़िश में लग जाती है। अपने सपनों का पीछा करें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 208,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7414780-L.jpg"
@@ -3433,11 +3582,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Spirituality & Wisdom",
     "takeaway": "अपने अंदर लगातार बड़बड़ाने वाले मन की आवाज़ के गवाह (Witness) बनें। आंतरिक रुकावटों को छोड़ें और असीम चेतना का आनंद लें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 200,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10630553-L.jpg"
@@ -3451,11 +3600,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Spirituality & Wisdom",
     "takeaway": "जैसे तकनीक बाहरी दुनिया को आसान बनाती है, वैसे ही योग और आंतरिक विज्ञान आपके मन और शरीर को आनंद की पराकाष्ठा तक ले जाता है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9114177-L.jpg"
@@ -3469,11 +3618,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Spirituality & Wisdom",
     "takeaway": "टॉल्टेक ज्ञान के 4 समझौते: अपने शब्दों में त्रुटिहीन रहें, बातों को व्यक्तिगत न लें, धारणाएं न बनाएं और हमेशा अपना सर्वश्रेष्ठ दें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 160,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/924521-L.jpg"
@@ -3487,11 +3636,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Spirituality & Wisdom",
     "takeaway": "विज्ञान भैरव तंत्र के 112 ध्यान सूत्रों की व्याख्या: सांस, होश और साक्षी भाव के माध्यम से अपनी आंतरिक शक्ति को जगाने का मार्ग।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 1100,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/13090537-L.jpg"
@@ -3505,11 +3654,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Spirituality & Wisdom",
     "takeaway": "प्रेम, विवाह, कार्य, दुख और स्वतंत्रता पर जीवन के सबसे गहरे और काव्यात्मक दार्शनिक विचार।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 128,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/418324-L.jpg"
@@ -3523,11 +3672,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Spirituality & Wisdom",
     "takeaway": "अहंकार (Ego) की कैद से बाहर निकलकर चेतना के उच्च स्तर पर कैसे प्रवेश करें और व्यक्तिगत व वैश्विक शांति का मार्ग प्रशस्त करें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 336,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9214155-L.jpg"
@@ -3541,11 +3690,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Leadership & Business",
     "takeaway": "अच्छी कंपनियां महान कंपनियां कैसे बनती हैं: लेवल 5 लीडरशिप, पहले सही लोग बाद में दिशा (First Who, Then What) और हेजहॉग कॉन्सेप्ट।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 320,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8231988-L.jpg"
@@ -3559,11 +3708,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Leadership & Business",
     "takeaway": "प्रतिस्पर्धा से बचें और एकाधिकार (Monopoly) बनाएं। 1 से n बनाने के बजाय दुनिया में कुछ बिल्कुल नया और अनूठा शून्य से एक बनाएं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 224,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9002334-L.jpg"
@@ -3577,11 +3726,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Leadership & Business",
     "takeaway": "मिनिमम वायेबल प्रोडक्ट (MVP), त्वरित प्रयोग और धुरी बदलने (Pivot) की पद्धति से कम संसाधनों में सफल स्टार्टअप कैसे बनाएं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 336,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7104760-L.jpg"
@@ -3595,11 +3744,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Leadership & Business",
     "takeaway": "ब्रिजवाटर के संस्थापक के सिद्धांत: चरम सत्य और चरम पारदर्शिता (Radical Truth and Radical Transparency) और आइडिया मेरिटोक्रेसी।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 592,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8315355-L.jpg"
@@ -3613,11 +3762,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Leadership & Business",
     "takeaway": "सच्चे नेता किसी को दोष नहीं देते। हर विफलता की 100% जिम्मेदारी लेना और टीम को मिशन पर केंद्रित रखना ही असली नेतृत्व है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 320,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/12835042-L.jpg"
@@ -3631,11 +3780,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Leadership & Business",
     "takeaway": "इंटेल के पूर्व सीईओ की क्लासिक गाइड: एक मैनेजर का आउटपुट उसके अधीन काम करने वाली टीम के कुल उत्पादन से मापा जाता है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 272,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/421244-L.jpg"
@@ -3649,11 +3798,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Leadership & Business",
     "takeaway": "महान नेता लोगों को प्रेरित करते हैं क्योंकि वे हमेशा 'क्यों' (Why) से शुरुआत करते हैं। गोल्डन सर्कल का शक्तिशाली सिद्धांत।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 256,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8232034-L.jpg"
@@ -3667,11 +3816,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Leadership & Business",
     "takeaway": "सुरक्षा का दायरा (Circle of Safety) बनाएं। जब टीम के सदस्य खुद को सुरक्षित महसूस करते हैं, तो वे असाधारण परिणाम देते हैं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 352,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8246311-L.jpg"
@@ -3685,11 +3834,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Leadership & Business",
     "takeaway": "जब सब कुछ बिखर रहा हो तब कंपनी कैसे चलाएं। सिलिकॉन वैली के शीर्ष वीसी के सबसे ईमानदार और कड़वे बिजनेस सबक।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 304,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7279515-L.jpg"
@@ -3703,11 +3852,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Leadership & Business",
     "takeaway": "गूगल, इंटेल और बिल गेट्स द्वारा उपयोग की जाने वाली ओकेआर (Objectives & Key Results) प्रणाली से अजेय लक्ष्य हासिल करें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 320,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10706481-L.jpg"
@@ -3721,11 +3870,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Health & Longevity",
     "takeaway": "दीर्घायु का आधुनिक विज्ञान: केवल अधिक साल जीना नहीं बल्कि शारीरिक, संज्ञानात्मक और भावनात्मक स्वास्थ्य के साथ युवा बने रहना।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 496,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/13214155-L.jpg"
@@ -3739,11 +3888,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Health & Longevity",
     "takeaway": "नींद केवल आराम नहीं, बल्कि मस्तिष्क की सफाई, याददाश्त को मजबूत करने और बीमारियों से बचाने वाली प्रकृति की सबसे बड़ी दवा है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 368,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8814155-L.jpg"
@@ -3757,11 +3906,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Health & Longevity",
     "takeaway": "नाक से सही तरीके से सांस लेने का महत्व: फेफड़ों की क्षमता, ऊर्जा स्तर और मानसिक शांति को दोगुना करने का वैज्ञानिक रहस्य।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 304,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10096454-L.jpg"
@@ -3775,11 +3924,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Health & Longevity",
     "takeaway": "हार्वर्ड के आनुवंशिकीविद् द्वारा: बुढ़ापा एक बीमारी है जिसका इलाज संभव है। सेलुलर रीप्रोग्रामिंग और दीर्घायु जीन की सक्रियता।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 432,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8780421-L.jpg"
@@ -3793,11 +3942,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Health & Longevity",
     "takeaway": "मोटापे की असली वजह कैलोरी नहीं बल्कि इंसुलिन हार्मोन का स्तर है। इंटरमिटेंट फास्टिंग से वजन और मेटाबॉलिज्म को नियंत्रित करें।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9914144-L.jpg"
@@ -3811,11 +3960,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Health & Longevity",
     "takeaway": "हृदयरोग, मधुमेह और कैंसर जैसी प्रमुख बीमारियों को खानपान और स्वस्थ जीवनशैली से रोकने और ठीक करने के वैज्ञानिक प्रमाण।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 576,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10014155-L.jpg"
@@ -3829,11 +3978,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Health & Longevity",
     "takeaway": "वैज्ञानिक तरीके से मांसपेशियों का निर्माण और वसा घटाना: प्रोग्रेसिव ओवरलोड, सही पोषण और जिम के भ्रमों से मुक्ति।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 396,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10114166-L.jpg"
@@ -3847,11 +3996,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Health & Longevity",
     "takeaway": "शारीरिक ट्रांसफॉर्मेशन के असामान्य शॉर्टकट्स: न्यूनतम प्रभावी खुराक (MED) के साथ तेजी से फैट लॉस और स्ट्रेंथ गेन।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 592,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10214177-L.jpg"
@@ -3865,11 +4014,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Health & Longevity",
     "takeaway": "बुलेटप्रूफ कॉफी के आविष्कारक द्वारा: उपवास को भूख की लड़ाई बनाने के बजाय असीम मानसिक ऊर्जा और ऑटोफैगी का स्रोत बनाएं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 320,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10601237-L.jpg"
@@ -3883,11 +4032,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Health & Longevity",
     "takeaway": "पेट का स्वास्थ्य ही दिमाग का स्वास्थ्य है। गट माइक्रोबायोम (Gut Microbiome) को पोषण देकर अवसाद और अल्जाइमर से सुरक्षा।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 320,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7367677-L.jpg"
@@ -3901,11 +4050,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World Classics & Literature",
     "takeaway": "निरंकुश सत्ता, निगरानी राज्य और बिग ब्रदर की डराने वाली भविष्यवाणी। जब सच को झूठ और झूठ को सच बना दिया जाता है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 328,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9267242-L.jpg"
@@ -3919,11 +4068,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World Classics & Literature",
     "takeaway": "एक ऐसा भविष्य जहां इंसानों को दर्द से नहीं, बल्कि सुख और मनोरंजन के अत्यधिक उपभोग से गुलाम बना दिया जाता है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8231823-L.jpg"
@@ -3937,11 +4086,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World Classics & Literature",
     "takeaway": "रेगिस्तानी ग्रह अर्राकिस पर सत्ता, धर्म, पारिस्थितिकी और मसीहा के जटिल मनोविज्ञान की अमर विज्ञान कथा गाथा।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 688,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/11481354-L.jpg"
@@ -3955,11 +4104,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World Classics & Literature",
     "takeaway": "अपराध, अपराधबोध और अंतरात्मा की नैतिक अदालत। रास्कोलनिकोव के आंतरिक द्वंद्व और मोक्ष की अमर मनोवैज्ञानिक दास्तान।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 545,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9411873-L.jpg"
@@ -3973,11 +4122,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World Classics & Literature",
     "takeaway": "ग्रेगर साम्सा का एक कीड़े में बदल जाना: आधुनिक समाज में उपयोगिता खत्म होते ही परिवार और समाज की बदलती संवेदनाओं का आईना।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 100,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/12820198-L.jpg"
@@ -3991,11 +4140,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World Classics & Literature",
     "takeaway": "एक तुच्छ वानर से पृथ्वी का स्वामी बनने तक मानव जाति का इतिहास: कल्पनाएं गढ़ने और कहानियों पर विश्वास करने की असाधारण शक्ति।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 464,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8634250-L.jpg"
@@ -4009,11 +4158,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World Classics & Literature",
     "takeaway": "अमेरिकन ड्रीम, दौलत की चकाचौंध और एकतरफा प्रेम का दुखद अंत: हम भूतकाल में खींचे चले जाने वाले नाविक हैं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 180,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10590366-L.jpg"
@@ -4027,11 +4176,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World Classics & Literature",
     "takeaway": "नस्लवाद और पूर्वाग्रहों के खिलाफ न्याय और सहानुभूति की लड़ाई: किसी व्यक्ति को तब तक मत समझो जब तक उसके जूते में पैर न रखो।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 336,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/14351077-L.jpg"
@@ -4045,11 +4194,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World Classics & Literature",
     "takeaway": "क्रांति और सत्ता के नशे का रूपक: 'सभी जानवर बराबर हैं, लेकिन कुछ जानवर दूसरों से अधिक बराबर हैं।' राजनीतिक व्यंग्य।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 140,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/11261770-L.jpg"
@@ -4063,11 +4212,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World Classics & Literature",
     "takeaway": "एक ऐसा समाज जहां किताबें जलाना कानून है: ज्ञान, स्वतंत्र विचार और पठन संस्कृति को बचाने का शाश्वत संदेश।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 256,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/12993656-L.jpg"
@@ -4081,11 +4230,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "कवर इमोशनल मैनिपुलेशन, गैसलाइटिंग, बॉडी लैंग्वेज और माइंड कंट्रोल की तकनीकों को बेनकाब करने और उनसे अपना बचाव करने की गाइड।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 240,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/13234695-L.jpg"
@@ -4099,11 +4248,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "दुनिया के सबसे प्रसिद्ध हैकर द्वारा: सोशल इंजीनियरिंग और यह रहस्य कि कैसे इंसानी विश्वास को बिना किसी कंप्यूटर कोड के हैक किया जाता है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 368,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/6454262-L.jpg"
@@ -4117,11 +4266,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Dark Psychology & Strategy",
     "takeaway": "नार्सिसिस्ट, सोशियोपैथ और जहरीले इंसानों के भावनात्मक शोषण और उनके मनोवैज्ञानिक चक्रव्यूह से पूरी तरह बाहर निकलने का मार्ग।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/12635627-L.jpg"
@@ -4135,11 +4284,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mysticism & Esotericism",
     "takeaway": "प्राचीन मिस्र के गुप्त मंदिरों में दीक्षा, पुनर्जन्म, कर्म, टेलीपैथी और मानव चेतना के सबसे गहरे आध्यात्मिक रहस्यों की क्लासिक आत्मकथा।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 368,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/392203-L.jpg"
@@ -4153,11 +4302,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mysticism & Esotericism",
     "takeaway": "हर्मेटिक गुप्त विद्या का व्यावहारिक मार्ग: मन, शरीर और आत्मा के चार तत्वों (अग्नि, जल, वायु, पृथ्वी) पर नियंत्रण और मानसिक विकास।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 356,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/2685468-L.jpg"
@@ -4171,11 +4320,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mysticism & Esotericism",
     "takeaway": "हर्मेटिक दर्शन के 7 सार्वभौमिक नियम: मानसिकवाद, अनुरूपता, कंपन, ध्रुवीयता, लय, कारण व प्रभाव, और लिंग का नियम।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 224,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8801364-L.jpg"
@@ -4189,11 +4338,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mysticism & Esotericism",
     "takeaway": "प्राचीन सभ्यताओं के गुप्त दर्शन, सिंबल, रोसीक्रूसियन, फ्रीमेसनरी और अलकेमी के रहस्यों का विश्वकोश।",
     "availability": "AVAILABLE",
-    "price": 699,
+    "price": 0,
     "total_pages": 750,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/2982064-L.jpg"
@@ -4207,11 +4356,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mysticism & Esotericism",
     "takeaway": "थियोसोफिकल दर्शन का आधारभूत ग्रंथ: ब्रह्मांड की उत्पत्ति और चेतना के विकास का गूढ़ विज्ञान।",
     "availability": "AVAILABLE",
-    "price": 599,
+    "price": 0,
     "total_pages": 880,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8244525-L.jpg"
@@ -4225,11 +4374,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mysticism & Esotericism",
     "takeaway": "मिस्र के ज्ञान के देवता थोथ के प्रतीक, टैरो की दार्शनिक व्याख्या और प्राचीन प्रतीकात्मक ज्ञान।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/704446-L.jpg"
@@ -4243,11 +4392,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Psychological Thriller & Mystery",
     "takeaway": "मैन बुकर पुरस्कार विजेता कृति: 19वीं सदी के गोल्ड रश में 12 ज्योतिषीय राशियों और ग्रहों के आधार पर बुना गया गहरा रहस्य और धोखे का ताना-बाना।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 848,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7268574-L.jpg"
@@ -4261,11 +4410,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Psychological Thriller & Mystery",
     "takeaway": "सिम्बोलॉजिस्ट रॉबर्ट लैंगडन का पेरिस के लूवर म्यूजियम से शुरू हुआ प्राचीन धार्मिक रहस्यों और गुप्त समाजों की खोज का रोमांच।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 480,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9255229-L.jpg"
@@ -4279,11 +4428,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Psychological Thriller & Mystery",
     "takeaway": "रहस्य साहित्य की सर्वकालिक सर्वश्रेष्ठ किताब: एक सुनसान द्वीप पर 10 अजनबी और एक-एक करके रहस्यमयी हत्याएं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 272,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/11172296-L.jpg"
@@ -4297,11 +4446,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Psychological Thriller & Mystery",
     "takeaway": "पति की हत्या के बाद एक शब्द भी न बोलने वाली महिला और उसकी चुप्पी का सच जानने की कोशिश करने वाले मनोचिकित्सक का दिमागी खेल।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 336,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9407338-L.jpg"
@@ -4315,11 +4464,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Psychological Thriller & Mystery",
     "takeaway": "विवाह के पीछे छिपा छल, मीडिया मैनिपुलेशन और एक पत्नी के गायब होने के बाद सामने आता गहरा मनोवैज्ञानिक षड्यंत्र।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 432,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8368314-L.jpg"
@@ -4333,11 +4482,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Psychological Thriller & Mystery",
     "takeaway": "प्रतिभाशाली हैकर लिस्बेथ सालेंडर और खोजी पत्रकार मिकेल ब्लोमक्विस्ट द्वारा 40 साल पुराने पारिवारिक गायब होने के मामले की जांच।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 480,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9274740-L.jpg"
@@ -4351,11 +4500,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Science Fiction & Futurism",
     "takeaway": "रेगिस्तानी ग्रह अर्राकिस पर स्पाइस, राजनीति, पारिस्थितिकी और मानव चेतना के विस्तार की सर्वकालिक महानतम साइंस फिक्शन गाथा।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 688,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/11481354-L.jpg"
@@ -4369,11 +4518,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Science Fiction & Futurism",
     "takeaway": "साइकोहिस्ट्री का विज्ञान: गणित के जरिए अरबों इंसानों के भविष्य और साम्राज्य के पतन व पुनरुत्थान की भविष्यवाणी।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 256,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/14612610-L.jpg"
@@ -4387,11 +4536,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Science Fiction & Futurism",
     "takeaway": "साइबरपंक विधा को जन्म देने वाला उपन्यास: साइबरस्पेस, मैट्रिक्स, आर्टिफिशियल इंटेलिजेंस और इंसानी सीमाओं का सम्मिश्रण।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 271,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/283860-L.jpg"
@@ -4405,11 +4554,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Science Fiction & Futurism",
     "takeaway": "सूर्य और पृथ्वी को विलुप्त होने से बचाने के लिए एक अकेले वैज्ञानिक का अंतरिक्ष मिशन और विज्ञान के बल पर जीवित रहने की संघर्ष-गाथा।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 496,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/11200092-L.jpg"
@@ -4423,11 +4572,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Science Fiction & Futurism",
     "takeaway": "ह्यूगो पुरस्कार विजेता मास्टरपीस: सुदूर एलियन सभ्यता से पहला संपर्क और ब्रह्मांड के डार्क फॉरेस्ट सिद्धांत का खुलासा।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 400,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9157544-L.jpg"
@@ -4441,11 +4590,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Science Fiction & Futurism",
     "takeaway": "एक जीवित महासागर वाले ग्रह पर वैज्ञानिकों की अंतर्मन की गहराइयों और अज्ञात चेतना के साथ टकराव की दार्शनिक कहानी।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 224,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/12313764-L.jpg"
@@ -4459,11 +4608,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World History & Civilizations",
     "takeaway": "संज्ञानात्मक क्रांति, कृषि क्रांति और वैज्ञानिक क्रांति: कैसे एक साधारण वानर पूरी पृथ्वी का मालिक बन बैठा।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 464,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8634250-L.jpg"
@@ -4477,11 +4626,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World History & Civilizations",
     "takeaway": "पुलित्जर पुरस्कार विजेता शोध: भूगोल और पर्यावरण ने मानव इतिहास में विभिन्न महाद्वीपों के विकास को कैसे तय किया।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 528,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7884018-L.jpg"
@@ -4495,11 +4644,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World History & Civilizations",
     "takeaway": "विश्व इतिहास का नया केंद्र बिंदु: पूर्व और मध्य एशिया के व्यापारिक रेशम मार्गों ने दुनिया की अर्थव्यवस्था और धर्मों को कैसे गढ़ा।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 656,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8963642-L.jpg"
@@ -4513,11 +4662,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World History & Civilizations",
     "takeaway": "रोमन साम्राज्य की वास्तविक कहानी: सीनेट, सम्राट, नागरिकता, दासता और पश्चिमी सभ्यता के निर्माण की नींव।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 608,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7418788-L.jpg"
@@ -4531,11 +4680,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World History & Civilizations",
     "takeaway": "बिग बैंग से लेकर मानव सभ्यता तक: ब्रह्मांड, भूविज्ञान, जीवविज्ञान और भौतिकी की सबसे रोचक और ज्ञानवर्धक यात्रा।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 560,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/12725620-L.jpg"
@@ -4549,11 +4698,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "World History & Civilizations",
     "takeaway": "5000 वर्षों के मानव इतिहास का निचोड़: युद्ध, अर्थशास्त्र, चरित्र, धर्म और सभ्यताओं के अनिवार्य नियम।",
     "availability": "AVAILABLE",
-    "price": 350,
+    "price": 0,
     "total_pages": 128,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7240225-L.jpg"
@@ -4567,11 +4716,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Technology, AI & The Future",
     "takeaway": "जब मशीनें इंसानों से कई गुना बुद्धिमान हो जाएंगी तो क्या होगा? एआई अलाइनमेंट, सुरक्षा और मानव अस्तित्व का सबसे बड़ा सवाल।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 352,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8039542-L.jpg"
@@ -4585,11 +4734,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Technology, AI & The Future",
     "takeaway": "आर्टिफिशियल इंटेलिजेंस के युग में मानव जीवन: चेतना, रोजगार, युद्ध और ब्रह्मांड में जीवन के अगले चरण का खाका।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 384,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10239283-L.jpg"
@@ -4603,11 +4752,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Technology, AI & The Future",
     "takeaway": "फाइनेंशियल टाइम्स बुक ऑफ द ईयर: सेमीकंडक्टर चिप्स की वैश्विक दौड़ जो दुनिया की आर्थिक और सैन्य शक्ति तय कर रही है।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 464,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/12968901-L.jpg"
@@ -4621,11 +4770,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Technology, AI & The Future",
     "takeaway": "एक्सपोनेंशियल टेक्नोलॉजी और वह क्षण जब कंप्यूटर और इंसानी जैविक दिमाग का विलय हो जाएगा।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 672,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/400518-L.jpg"
@@ -4639,11 +4788,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Technology, AI & The Future",
     "takeaway": "मशीन लर्निंग के 5 मुख्य स्कूल (सिंबॉलिस्ट, कनेक्शनेस्ट, इवोल्यूशनरी, बायेशियन, एनालॉगाइज़र) और यूनिवर्सल एल्गोरिद्म की खोज।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 352,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9321915-L.jpg"
@@ -4657,11 +4806,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Technology, AI & The Future",
     "takeaway": "जेनरेटिव एआई के साथ सोचना और काम करना: एआई को सहकर्मी (co-worker) बनाकर अपनी उत्पादकता को 10 गुना बढ़ाने की रणनीति।",
     "availability": "AVAILABLE",
-    "price": 420,
+    "price": 0,
     "total_pages": 256,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/15226155-L.jpg"
@@ -4675,11 +4824,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Geopolitics & Global Affairs",
     "takeaway": "10 नक्शे जो दुनिया की राजनीति को समझाते हैं: नदियां, पहाड़ और समुद्र कैसे किसी देश के भाग्य और युद्ध को तय करते हैं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 320,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8900233-L.jpg"
@@ -4693,11 +4842,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Geopolitics & Global Affairs",
     "takeaway": "नोबेल पुरस्कार विजेता विचार: देश भूगोल या संस्कृति से नहीं, बल्कि समावेशी (Inclusive) बनाम शोषक (Extractive) संस्थाओं से समृद्ध या गरीब बनते हैं।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 544,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7253519-L.jpg"
@@ -4711,11 +4860,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Geopolitics & Global Affairs",
     "takeaway": "21वीं सदी का वैश्वीकरण: इंटरनेट, आउटसोर्सिंग और सप्लाई चेन ने दुनिया को एक समान खेल का मैदान (Flat World) कैसे बना दिया।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 672,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10160383-L.jpg"
@@ -4729,11 +4878,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Geopolitics & Global Affairs",
     "takeaway": "शीत युद्ध के बाद वैश्विक राजनीति का भविष्य: राष्ट्रों के बीच टकराव विचारधारा से नहीं बल्कि सांस्कृतिक और धार्मिक पहचान से होगा।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 368,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/472725-L.jpg"
@@ -4747,11 +4896,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Geopolitics & Global Affairs",
     "takeaway": "यूरेशिया, मध्य पूर्व और चीन की भौगोलिक स्थिति आने वाले समय में विश्व व्यवस्था को कैसे प्रभावित करेगी।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 448,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/9065634-L.jpg"
@@ -4765,11 +4914,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Geopolitics & Global Affairs",
     "takeaway": "वेस्टफेलिया की शांति से लेकर आधुनिक युग तक: विभिन्न सभ्यताओं के शक्ति संतुलन और अंतरराष्ट्रीय कूटनीति का विश्लेषण।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 432,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10452559-L.jpg"
@@ -4783,11 +4932,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Art, Creativity & Design",
     "takeaway": "रचनात्मकता का सबसे बड़ा दुश्मन 'प्रतिरोध' (Resistance): टालमटोल और आत्म-संदेह को हराकर एक पेशेवर की तरह काम कैसे करें।",
     "availability": "AVAILABLE",
-    "price": 350,
+    "price": 0,
     "total_pages": 190,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/288439-L.jpg"
@@ -4801,11 +4950,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Art, Creativity & Design",
     "takeaway": "कुछ भी 100% मौलिक नहीं है: अपने पसंदीदा कलाकारों के विचारों को मिलाकर अपनी अनूठी आवाज और कला कैसे बनाएं।",
     "availability": "AVAILABLE",
-    "price": 299,
+    "price": 0,
     "total_pages": 160,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7244512-L.jpg"
@@ -4819,11 +4968,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Art, Creativity & Design",
     "takeaway": "यूजर एक्सपीरियंस और डिजाइन का क्लासिक ग्रंथ: दरवाजे के हैंडल से लेकर सॉफ्टवेयर तक, अच्छी डिजाइन इंसानी मनोविज्ञान को कैसे समझती है।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 368,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10007224-L.jpg"
@@ -4837,11 +4986,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Art, Creativity & Design",
     "takeaway": "डर से परे रचनात्मक जीवन: प्रेरणा के रहस्यों को समझना और बिना किसी तनाव के अपने भीतर की कला को बाहर लाना।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7434843-L.jpg"
@@ -4855,11 +5004,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Art, Creativity & Design",
     "takeaway": "कला और छवियों को देखने का नजरिया: कला में सत्ता, लिंग, वर्ग और उपभोक्तावाद का छुपा प्रभाव।",
     "availability": "AVAILABLE",
-    "price": 350,
+    "price": 0,
     "total_pages": 176,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/95272-L.jpg"
@@ -4873,11 +5022,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Art, Creativity & Design",
     "takeaway": "IDEO और स्टैनफोर्ड डी.स्कूल के संस्थापकों द्वारा: डिज़ाइन थिंकिंग के जरिए हर इंसान में रचनात्मक आत्मविश्वास जगाने का खाका।",
     "availability": "AVAILABLE",
-    "price": 420,
+    "price": 0,
     "total_pages": 304,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10534005-L.jpg"
@@ -4891,11 +5040,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "True Crime & Forensic Mind",
     "takeaway": "एफबीआई की कुख्यात बिहेवियरल एनालिसिस यूनिट (BAU) का जन्म: सीरियल किलर्स के दिमाग में झांकने और आपराधिक प्रोफाइलिंग की सच्ची दास्तान।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 400,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/490333-L.jpg"
@@ -4909,11 +5058,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "True Crime & Forensic Mind",
     "takeaway": "ट्रू-क्राइम शैली की जनक मास्टरपीस: 1959 में एक पूरे परिवार की नृशंस हत्या और हत्यारों की मानसिकता की गहराई से खोज।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 343,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/228066-L.jpg"
@@ -4927,11 +5076,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "True Crime & Forensic Mind",
     "takeaway": "गोल्डन स्टेट किलर की 30 साल तक चली गुप्त खोज और एक पत्रकार का समर्पण जिसने अंततः कातिल को सलाखों के पीछे पहुंचाया।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 352,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8351551-L.jpg"
@@ -4945,11 +5094,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "True Crime & Forensic Mind",
     "takeaway": "टेड बंडी की साथी और क्राइम रिपोर्टर द्वारा लिखा गया रोंगटे खड़े कर देने वाला विवरण: जिसे वह अपना दोस्त समझती थी, वह क्रूर कातिल निकला।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 560,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/292770-L.jpg"
@@ -4963,11 +5112,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "True Crime & Forensic Mind",
     "takeaway": "अपराध के पीछे की असली प्रेरणा: गुस्सा, लालच, वासना और शक्ति की प्यास का मनोवैज्ञानिक विश्लेषण।",
     "availability": "AVAILABLE",
-    "price": 420,
+    "price": 0,
     "total_pages": 304,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7437718-L.jpg"
@@ -4981,11 +5130,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Nature, Cosmos & Universe",
     "takeaway": "ब्रह्मांडीय परिप्रेक्ष्य: 15 अरब वर्षों का ब्रह्मांडीय विकास, विज्ञान का इतिहास और सितारों की धूल से बने हम इंसानों की चेतना।",
     "availability": "AVAILABLE",
-    "price": 499,
+    "price": 0,
     "total_pages": 384,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8283901-L.jpg"
@@ -4999,11 +5148,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Nature, Cosmos & Universe",
     "takeaway": "ब्लैक होल्स, बिग बैंग, समय की दिशा और सामान्य सापेक्षता व क्वांटम यांत्रिकी को जोड़ने वाले ब्रह्मांडीय रहस्यों की व्याख्या।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 256,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/10432365-L.jpg"
@@ -5017,11 +5166,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Nature, Cosmos & Universe",
     "takeaway": "व्यस्त दिनचर्या में खगोल भौतिकी: डार्क मैटर, डार्क एनर्जी और क्वांटम दुनिया के आश्चर्यों का सरल भाषा में विवरण।",
     "availability": "AVAILABLE",
-    "price": 350,
+    "price": 0,
     "total_pages": 224,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7984709-L.jpg"
@@ -5035,11 +5184,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Nature, Cosmos & Universe",
     "takeaway": "जंगल का सामाजिक नेटवर्क: पेड़ आपस में बात करते हैं, खतरे की चेतावनी देते हैं और फंगस के जालों के जरिए एक-दूसरे को पोषण देते हैं।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 288,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8064205-L.jpg"
@@ -5053,11 +5202,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Nature, Cosmos & Universe",
     "takeaway": "पर्यावरण आंदोलन की आधारशिला: कीटनाशकों का पारिस्थितिकी तंत्र और पक्षियों पर घातक प्रभाव और पृथ्वी को बचाने की पुकार।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 400,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/3825693-L.jpg"
@@ -5071,11 +5220,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Nature, Cosmos & Universe",
     "takeaway": "समय का वास्तविक स्वभाव: आधुनिक भौतिकी बताती है कि भूत, वर्तमान और भविष्य की धारणा एक इंसानी भ्रम है।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 240,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8177373-L.jpg"
@@ -5089,11 +5238,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mythology & Ancient Epics",
     "takeaway": "मोनोमिथ (नायक की यात्रा): दुनिया भर की पौराणिक कथाओं में एक ही सार्वभौमिक पैटर्न—आह्वान, पाताल यात्रा और आत्मज्ञान के साथ वापसी।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 432,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/443668-L.jpg"
@@ -5107,11 +5256,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mythology & Ancient Epics",
     "takeaway": "ग्रीक, रोमन और नॉर्स पौराणिक कथाओं का शाश्वत संकलन: देवताओं, नायकों और प्राचीन गाथाओं का प्रामाणिक संसार।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 496,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8765912-L.jpg"
@@ -5125,11 +5274,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mythology & Ancient Epics",
     "takeaway": "ओडिन, थोर और लोकी की रोमांचक गाथा: नौ लोकों की उत्पत्ति से लेकर रैग्नारोक (देवताओं के अंतिम विनाश) तक।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 304,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/7898682-L.jpg"
@@ -5143,11 +5292,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mythology & Ancient Epics",
     "takeaway": "'Follow your bliss' (अपने आनंद का अनुसरण करो): मिथक जीवन के आंतरिक रहस्यों को जीने का नक्शा हैं।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 320,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/240505-L.jpg"
@@ -5161,11 +5310,11 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mythology & Ancient Epics",
     "takeaway": "ग्रीक मिथकों का आधुनिक हास्य और बुद्धि से भरा रूपांतरण: अराजकता (Chaos) से ओलंपस पर्वत के देवताओं तक का सफ़र।",
     "availability": "AVAILABLE",
-    "price": 450,
+    "price": 0,
     "total_pages": 448,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8238803-L.jpg"
@@ -5179,17 +5328,13 @@ const DEFAULT_BOOKS = [
     "start_date": "",
     "end_date": "",
     "count_days": 0,
-    "rating": "5",
+    "rating": 0,
     "category": "Mythology & Ancient Epics",
     "takeaway": "ग्रीक जादूगरनी सर्क की दृष्टि से ओडिसी की पौराणिक गाथा: निर्वासन, आत्म-खोज और अमरता के बीच इंसानी विकल्प।",
     "availability": "AVAILABLE",
-    "price": 399,
+    "price": 0,
     "total_pages": 400,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8739376-L.jpg"
   }
 ];
-
-if (typeof module !== "undefined") {
-  module.exports = { DEFAULT_BOOKS };
-}
