@@ -51,11 +51,6 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
       "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
       "🏷️ Official v3.15.0 Release"
     ],
-      "🔄 Non-Destructive Auto-Merge: Seamlessly merges new books without touching user progress",
-      "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
-      "🖥️ Edge-to-Edge Full-Screen Luxury Mahogany Wooden Shelves",
-      "🏷️ Official v3.12.0 Release"
-    ],
     "stagedAt": "2026-09-29T18:45:00.000Z",
     "isDeployed": true
   },
