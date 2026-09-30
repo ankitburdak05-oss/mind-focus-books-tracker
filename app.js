@@ -1,4 +1,4 @@
-const APP_VERSION = '3.14.0';
+const APP_VERSION = '3.15.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -114,7 +114,15 @@ function getBookCover(book) {
   }
   // 2. Check real cover_url (Open Library CDN / Web cover)
   if (book.cover_url && book.cover_url.trim().length > 0) {
-    return book.cover_url.trim();
+    let url = book.cover_url.trim();
+    // Upgrade OpenLibrary covers from low-res -M.jpg to high-definition -L.jpg
+    if (url.includes('covers.openlibrary.org') && url.endsWith('-M.jpg')) {
+      url = url.replace('-M.jpg', '-L.jpg');
+    }
+    if (url.includes('images.unsplash.com') && url.includes('w=400')) {
+      url = url.replace('w=400', 'w=800');
+    }
+    return url;
   }
   return null;
 }
@@ -310,15 +318,23 @@ function loadData() {
     if (!hyperBook.takeaway) hyperBook.takeaway = 'कम प्रयास में अधिक सफलता कैसे प्राप्त करें। ध्यान की उत्पादकता: हायपरफ़ोकस (एक काम पर गहरा ध्यान) और स्कैटरफ़ोकस (क्रिएटिव सोच और रिचार्ज)।';
   }
 
-  // Ensure all books have real cover URLs from DEFAULT_BOOKS
+  // Ensure all books have real HD cover URLs from DEFAULT_BOOKS
   if (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) {
     const defaultCoverMap = {};
+    const defaultTitleMap = {};
     DEFAULT_BOOKS.forEach(db => {
       if (db.no) defaultCoverMap[db.no] = db.cover_url;
+      if (db.title) defaultTitleMap[db.title.trim().toLowerCase()] = db.cover_url;
     });
     state.books.forEach(b => {
-      if ((!b.cover_url || b.cover_url.trim().length === 0) && defaultCoverMap[b.no]) {
-        b.cover_url = defaultCoverMap[b.no];
+      const dbCover = defaultCoverMap[b.no] || defaultTitleMap[(b.title || '').trim().toLowerCase()];
+      if (dbCover) {
+        if (!b.cover_url || b.cover_url.endsWith('-M.jpg') || b.cover_url.includes('8314') || b.cover_url.includes('8232')) {
+          b.cover_url = dbCover;
+        }
+      }
+      if (b.cover_url && b.cover_url.endsWith('-M.jpg')) {
+        b.cover_url = b.cover_url.replace('-M.jpg', '-L.jpg');
       }
     });
   }
@@ -3638,25 +3654,10 @@ function renderHome2View(filterCategory = null) {
     numCols = 2;
   }
 
-  // Column-specific height rhythms so adjacent columns NEVER line up horizontally ("upr-neeche")!
-  // Col 0: starts compact (170px/215px), then tall (330px/420px), then square (220px/280px), then supertall (410px/520px)...
-  // Col 1: starts supertall (410px/520px), then compact (170px/215px), then tall (330px/420px), then med (265px/340px)...
-  // Col 2: starts med (265px/340px), then supertall (410px/520px), then compact (170px/215px), then square (220px/280px)...
-  // Col 3: starts tall (330px/420px), then square (220px/280px), then supertall (410px/520px), then compact (170px/215px)...
-  const colRhythms = [
-    ['poster-compact', 'poster-tall', 'poster-square', 'poster-supertall', 'poster-med', 'poster-compact', 'poster-tall'],
-    ['poster-supertall', 'poster-compact', 'poster-tall', 'poster-med', 'poster-supertall', 'poster-square', 'poster-compact'],
-    ['poster-med', 'poster-supertall', 'poster-compact', 'poster-tall', 'poster-square', 'poster-supertall', 'poster-med'],
-    ['poster-tall', 'poster-square', 'poster-supertall', 'poster-compact', 'poster-med', 'poster-tall', 'poster-supertall']
-  ];
-
   const colCards = Array.from({ length: numCols }, () => []);
 
   filtered.forEach((book, i) => {
     const colIndex = i % numCols;
-    const itemInColIndex = Math.floor(i / numCols);
-    const rhythm = colRhythms[colIndex % colRhythms.length];
-    const heightClass = rhythm[itemInColIndex % rhythm.length];
 
     const coverUrl = getBookCover(book);
     const { colors, emoji } = getOfflineCoverGradient(book);
@@ -3674,28 +3675,39 @@ function renderHome2View(filterCategory = null) {
 
     const bookNoTag = (book.no || '').replace(/\D/g, '');
 
-    // Background visual
-    let bgHtml = '';
+    // Full unclipped natural cover with fallback
+    let mediaHtml = '';
     if (coverUrl) {
-      bgHtml = `<img src="${escapeHtml(coverUrl)}" class="editorial-poster-bg" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-        <div class="editorial-poster-fallback-art" style="display:none; background:linear-gradient(145deg, ${colors[0]}, ${colors[1]}, ${colors[2]});">${emoji}</div>`;
+      mediaHtml = `
+        <img src="${escapeHtml(coverUrl)}" class="editorial-poster-art" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <div class="editorial-poster-fallback-art" style="display:none; background:linear-gradient(145deg, ${colors[0]}, ${colors[1]}, ${colors[2]});">
+          <div>${emoji}</div>
+          <div class="editorial-poster-fallback-title">${escapeHtml(book.title)}</div>
+        </div>
+      `;
     } else {
-      bgHtml = `<div class="editorial-poster-fallback-art" style="background:linear-gradient(145deg, ${colors[0]}, ${colors[1]}, ${colors[2]});">${emoji}</div>`;
+      mediaHtml = `
+        <div class="editorial-poster-fallback-art" style="background:linear-gradient(145deg, ${colors[0]}, ${colors[1]}, ${colors[2]});">
+          <div>${emoji}</div>
+          <div class="editorial-poster-fallback-title">${escapeHtml(book.title)}</div>
+        </div>
+      `;
     }
 
     const cardHtml = `
-      <div class="editorial-poster-card ${heightClass}" onclick="openRealBookReader(${book.origIdx})">
-        ${bgHtml}
-        <div class="editorial-poster-overlay"></div>
-        <div class="editorial-poster-top">
-          ${statusPill}
-          <span class="editorial-top-pill" style="opacity:0.85;">#${bookNoTag || (book.origIdx + 1)}</span>
+      <div class="editorial-poster-card" onclick="openRealBookReader(${book.origIdx})">
+        <div class="editorial-card-media">
+          ${mediaHtml}
+          <div class="editorial-poster-top">
+            ${statusPill}
+            <span class="editorial-top-pill" style="opacity:0.9;">#${bookNoTag || (book.origIdx + 1)}</span>
+          </div>
         </div>
-        <div class="editorial-poster-body">
-          <div class="editorial-poster-title">${escapeHtml(book.title)}</div>
+        <div class="editorial-poster-info">
+          <div class="editorial-poster-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
           <div class="editorial-poster-author">✍️ ${escapeHtml(book.author || 'Author')}</div>
           <div class="editorial-poster-meta">
-            <span class="meta-cat">${escapeHtml(book.category || 'World Masterpiece')}</span>
+            <span class="meta-cat">${escapeHtml((book.category || 'World Masterpiece').split('&')[0].trim())}</span>
             <span class="meta-rating">★ ${escapeHtml(book.rating || '5')}</span>
           </div>
         </div>
@@ -3827,7 +3839,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.14.0';
+const CURRENT_APP_VERSION = 'v3.15.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -4102,7 +4114,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.14.0/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.15.0/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');

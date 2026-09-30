@@ -35,7 +35,7 @@ const DEFAULT_BOOKS = [
     "back_cover": "hyperfocus_back.jpg",
     "total_pages": 240,
     "current_page": 4,
-    "cover_url": "https://covers.openlibrary.org/b/id/10239359-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10239359-L.jpg"
   },
   {
     "no": "book 2",
@@ -50,7 +50,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6553019-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6553019-L.jpg"
   },
   {
     "no": "book 3",
@@ -65,7 +65,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9360116-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9360116-L.jpg"
   },
   {
     "no": "book 4",
@@ -80,7 +80,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13290711-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13290711-L.jpg"
   },
   {
     "no": "book 5",
@@ -95,7 +95,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7988607-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7988607-L.jpg"
   },
   {
     "no": "book 6",
@@ -110,7 +110,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12539702-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12539702-L.jpg"
   },
   {
     "no": "book 7",
@@ -125,7 +125,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8188891-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8188891-L.jpg"
   },
   {
     "no": "book 8",
@@ -140,7 +140,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14426425-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14426425-L.jpg"
   },
   {
     "no": "book 9",
@@ -155,7 +155,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/746414-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/746414-L.jpg"
   },
   {
     "no": "book 10",
@@ -170,7 +170,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9078085-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9078085-L.jpg"
   },
   {
     "no": "book 11",
@@ -185,7 +185,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/2732975-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/2732975-L.jpg"
   },
   {
     "no": "book 12",
@@ -200,7 +200,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10398270-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10398270-L.jpg"
   },
   {
     "no": "book 13",
@@ -215,7 +215,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11041932-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11041932-L.jpg"
   },
   {
     "no": "book 14",
@@ -230,7 +230,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7309773-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7309773-L.jpg"
   },
   {
     "no": "book 15",
@@ -245,7 +245,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/813347-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/813347-L.jpg"
   },
   {
     "no": "book 16",
@@ -260,7 +260,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10467082-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10467082-L.jpg"
   },
   {
     "no": "book 17",
@@ -275,7 +275,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6458532-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6458532-L.jpg"
   },
   {
     "no": "book 18",
@@ -290,7 +290,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7285986-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7285986-L.jpg"
   },
   {
     "no": "book 19",
@@ -305,7 +305,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9129784-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9129784-L.jpg"
   },
   {
     "no": "book 20",
@@ -320,7 +320,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/2379210-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/2379210-L.jpg"
   },
   {
     "no": "book 21",
@@ -335,7 +335,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8352403-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8352403-L.jpg"
   },
   {
     "no": "book 22",
@@ -350,7 +350,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10102079-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10102079-L.jpg"
   },
   {
     "no": "book 23",
@@ -365,7 +365,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/1333251-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/1333251-L.jpg"
   },
   {
     "no": "book 24",
@@ -380,7 +380,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10021591-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10021591-L.jpg"
   },
   {
     "no": "book 25",
@@ -395,7 +395,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7438753-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7438753-L.jpg"
   },
   {
     "no": "book 26",
@@ -410,7 +410,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12664855-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12664855-L.jpg"
   },
   {
     "no": "book 27",
@@ -425,7 +425,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8507540-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8507540-L.jpg"
   },
   {
     "no": "book 28",
@@ -440,7 +440,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/475008-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/475008-L.jpg"
   },
   {
     "no": "book 29",
@@ -455,7 +455,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7561012-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7561012-L.jpg"
   },
   {
     "no": "book 30",
@@ -470,7 +470,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14421850-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14421850-L.jpg"
   },
   {
     "no": "book 31",
@@ -485,7 +485,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/2314080-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/2314080-L.jpg"
   },
   {
     "no": "book 32",
@@ -500,7 +500,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6404786-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6404786-L.jpg"
   },
   {
     "no": "book 33",
@@ -515,7 +515,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/3876254-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/3876254-L.jpg"
   },
   {
     "no": "book 34",
@@ -530,7 +530,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8114155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8114155-L.jpg"
   },
   {
     "no": "book 35",
@@ -545,7 +545,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8027675-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8027675-L.jpg"
   },
   {
     "no": "book 36",
@@ -560,7 +560,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11948223-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11948223-L.jpg"
   },
   {
     "no": "book 37",
@@ -575,7 +575,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/5547404-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/5547404-L.jpg"
   },
   {
     "no": "book 38",
@@ -590,7 +590,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6412844-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6412844-L.jpg"
   },
   {
     "no": "book 39",
@@ -605,7 +605,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12529325-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12529325-L.jpg"
   },
   {
     "no": "book 40",
@@ -620,7 +620,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6968365-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6968365-L.jpg"
   },
   {
     "no": "book 41",
@@ -635,7 +635,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8042539-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8042539-L.jpg"
   },
   {
     "no": "book 42",
@@ -650,7 +650,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14420637-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14420637-L.jpg"
   },
   {
     "no": "book 43",
@@ -665,7 +665,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9475786-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9475786-L.jpg"
   },
   {
     "no": "book 44",
@@ -680,7 +680,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/431011-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/431011-L.jpg"
   },
   {
     "no": "book 45",
@@ -695,7 +695,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6402116-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6402116-L.jpg"
   },
   {
     "no": "book 46",
@@ -710,7 +710,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/4003663-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/4003663-L.jpg"
   },
   {
     "no": "book 47",
@@ -725,7 +725,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7311247-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7311247-L.jpg"
   },
   {
     "no": "book 48",
@@ -740,7 +740,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7277740-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7277740-L.jpg"
   },
   {
     "no": "book 49",
@@ -755,7 +755,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/551262-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/551262-L.jpg"
   },
   {
     "no": "book 50",
@@ -770,7 +770,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/4002352-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/4002352-L.jpg"
   },
   {
     "no": "book 51",
@@ -785,7 +785,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10079937-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10079937-L.jpg"
   },
   {
     "no": "book 52",
@@ -800,7 +800,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12690321-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12690321-L.jpg"
   },
   {
     "no": "book 53",
@@ -815,7 +815,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12447129-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12447129-L.jpg"
   },
   {
     "no": "book 54",
@@ -830,7 +830,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14428233-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14428233-L.jpg"
   },
   {
     "no": "book 55",
@@ -845,7 +845,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13098570-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13098570-L.jpg"
   },
   {
     "no": "book 56",
@@ -860,7 +860,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8315355-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8315355-L.jpg"
   },
   {
     "no": "book 57",
@@ -875,7 +875,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14542536-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14542536-L.jpg"
   },
   {
     "no": "book 58",
@@ -890,7 +890,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8539416-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8539416-L.jpg"
   },
   {
     "no": "book 59",
@@ -905,7 +905,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7079753-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7079753-L.jpg"
   },
   {
     "no": "book 60",
@@ -920,7 +920,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8186237-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8186237-L.jpg"
   },
   {
     "no": "book 61",
@@ -935,7 +935,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8782615-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8782615-L.jpg"
   },
   {
     "no": "book 62",
@@ -950,7 +950,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8231866-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231866-L.jpg"
   },
   {
     "no": "book 63",
@@ -965,7 +965,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12372866-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12372866-L.jpg"
   },
   {
     "no": "book 64",
@@ -980,7 +980,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/109288-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/109288-L.jpg"
   },
   {
     "no": "book 65",
@@ -995,7 +995,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/847534-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/847534-L.jpg"
   },
   {
     "no": "book 66",
@@ -1010,7 +1010,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10351762-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10351762-L.jpg"
   },
   {
     "no": "book 67",
@@ -1025,7 +1025,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7261122-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7261122-L.jpg"
   },
   {
     "no": "book 68",
@@ -1040,7 +1040,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7084839-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7084839-L.jpg"
   },
   {
     "no": "book 69",
@@ -1055,7 +1055,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13891159-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13891159-L.jpg"
   },
   {
     "no": "book 70",
@@ -1070,7 +1070,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7288726-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7288726-L.jpg"
   },
   {
     "no": "book 71",
@@ -1085,7 +1085,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10156205-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10156205-L.jpg"
   },
   {
     "no": "book 72",
@@ -1100,7 +1100,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8843804-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8843804-L.jpg"
   },
   {
     "no": "book 73",
@@ -1115,7 +1115,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9261636-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9261636-L.jpg"
   },
   {
     "no": "book 74",
@@ -1130,7 +1130,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8814155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8814155-L.jpg"
   },
   {
     "no": "book 75",
@@ -1145,7 +1145,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10096454-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10096454-L.jpg"
   },
   {
     "no": "book 76",
@@ -1160,7 +1160,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9253925-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9253925-L.jpg"
   },
   {
     "no": "book 77",
@@ -1175,7 +1175,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/1359485-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/1359485-L.jpg"
   },
   {
     "no": "book 78",
@@ -1190,7 +1190,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/374152-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/374152-L.jpg"
   },
   {
     "no": "book 79",
@@ -1205,7 +1205,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7891426-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7891426-L.jpg"
   },
   {
     "no": "book 80",
@@ -1220,7 +1220,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9576564-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9576564-L.jpg"
   },
   {
     "no": "book 81",
@@ -1235,7 +1235,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10201407-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10201407-L.jpg"
   },
   {
     "no": "book 82",
@@ -1250,7 +1250,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8814831-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8814831-L.jpg"
   },
   {
     "no": "book 83",
@@ -1265,7 +1265,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10153705-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10153705-L.jpg"
   },
   {
     "no": "book 84",
@@ -1280,7 +1280,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9778922-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9778922-L.jpg"
   },
   {
     "no": "book 85",
@@ -1295,7 +1295,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8792782-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8792782-L.jpg"
   },
   {
     "no": "book 86",
@@ -1310,7 +1310,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10981966-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10981966-L.jpg"
   },
   {
     "no": "book 87",
@@ -1325,7 +1325,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11349464-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11349464-L.jpg"
   },
   {
     "no": "book 88",
@@ -1340,7 +1340,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8270423-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8270423-L.jpg"
   },
   {
     "no": "book 89",
@@ -1355,7 +1355,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/662363-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/662363-L.jpg"
   },
   {
     "no": "book 90",
@@ -1370,7 +1370,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7277286-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7277286-L.jpg"
   },
   {
     "no": "book 91",
@@ -1385,7 +1385,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/298658-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/298658-L.jpg"
   },
   {
     "no": "book 92",
@@ -1400,7 +1400,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14368453-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14368453-L.jpg"
   },
   {
     "no": "book 93",
@@ -1415,7 +1415,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/405381-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/405381-L.jpg"
   },
   {
     "no": "book 94",
@@ -1430,7 +1430,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/4996607-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/4996607-L.jpg"
   },
   {
     "no": "book 95",
@@ -1445,7 +1445,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11298531-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11298531-L.jpg"
   },
   {
     "no": "book 96",
@@ -1460,7 +1460,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9413708-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9413708-L.jpg"
   },
   {
     "no": "book 97",
@@ -1475,7 +1475,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12938610-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12938610-L.jpg"
   },
   {
     "no": "book 98",
@@ -1490,7 +1490,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10490161-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10490161-L.jpg"
   },
   {
     "no": "book 99",
@@ -1505,7 +1505,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8665878-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8665878-L.jpg"
   },
   {
     "no": "book 100",
@@ -1520,7 +1520,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7381653-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7381653-L.jpg"
   },
   {
     "no": "book 101",
@@ -1535,7 +1535,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12511799-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12511799-L.jpg"
   },
   {
     "no": "book 102",
@@ -1550,7 +1550,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11576434-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11576434-L.jpg"
   },
   {
     "no": "book 103",
@@ -1565,7 +1565,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12104740-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12104740-L.jpg"
   },
   {
     "no": "book 104",
@@ -1580,7 +1580,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10026941-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10026941-L.jpg"
   },
   {
     "no": "book 105",
@@ -1595,7 +1595,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11456785-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11456785-L.jpg"
   },
   {
     "no": "book 106",
@@ -1610,7 +1610,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13521833-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13521833-L.jpg"
   },
   {
     "no": "book 107",
@@ -1625,7 +1625,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/isbn/9780399158643-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/isbn/9780399158643-L.jpg"
   },
   {
     "no": "book 108",
@@ -1640,7 +1640,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10531822-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10531822-L.jpg"
   },
   {
     "no": "book 109",
@@ -1655,7 +1655,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10521194-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10521194-L.jpg"
   },
   {
     "no": "book 110",
@@ -1670,7 +1670,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10520407-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10520407-L.jpg"
   },
   {
     "no": "book 111",
@@ -1685,7 +1685,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/228276-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/228276-L.jpg"
   },
   {
     "no": "book 112",
@@ -1700,7 +1700,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/375204-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/375204-L.jpg"
   },
   {
     "no": "book 113",
@@ -1715,7 +1715,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9825397-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9825397-L.jpg"
   },
   {
     "no": "book 114",
@@ -1730,7 +1730,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/760118-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/760118-L.jpg"
   },
   {
     "no": "book 115",
@@ -1745,7 +1745,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8780870-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8780870-L.jpg"
   },
   {
     "no": "book 116",
@@ -1760,7 +1760,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9264534-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9264534-L.jpg"
   },
   {
     "no": "book 117",
@@ -1775,7 +1775,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12446457-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12446457-L.jpg"
   },
   {
     "no": "book 118",
@@ -1790,7 +1790,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/12385574-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12385574-L.jpg"
   },
   {
     "no": "book 119",
@@ -1805,7 +1805,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9215229-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9215229-L.jpg"
   },
   {
     "no": "book 120",
@@ -1820,7 +1820,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10839827-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10839827-L.jpg"
   },
   {
     "no": "book 121",
@@ -1835,7 +1835,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9946226-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9946226-L.jpg"
   },
   {
     "no": "book 122",
@@ -1850,7 +1850,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/4356371-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/4356371-L.jpg"
   },
   {
     "no": "book 123",
@@ -1865,7 +1865,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/1640577-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/1640577-L.jpg"
   },
   {
     "no": "book 124",
@@ -1880,7 +1880,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10551411-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10551411-L.jpg"
   },
   {
     "no": "book 125",
@@ -1895,7 +1895,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/11196262-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11196262-L.jpg"
   },
   {
     "no": "book 126",
@@ -1910,7 +1910,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/15208264-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/15208264-L.jpg"
   },
   {
     "no": "book 127",
@@ -1925,7 +1925,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10961899-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10961899-L.jpg"
   },
   {
     "no": "book 128",
@@ -1940,7 +1940,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7248784-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7248784-L.jpg"
   },
   {
     "no": "book 129",
@@ -1955,7 +1955,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8850807-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8850807-L.jpg"
   },
   {
     "no": "book 130",
@@ -1970,7 +1970,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9269461-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9269461-L.jpg"
   },
   {
     "no": "book 131",
@@ -1985,7 +1985,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10142388-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10142388-L.jpg"
   },
   {
     "no": "book 132",
@@ -2000,7 +2000,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8795096-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8795096-L.jpg"
   },
   {
     "no": "book 133",
@@ -2015,7 +2015,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10247378-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10247378-L.jpg"
   },
   {
     "no": "book 134",
@@ -2030,7 +2030,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/14417990-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14417990-L.jpg"
   },
   {
     "no": "book 135",
@@ -2045,7 +2045,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10209199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10209199-L.jpg"
   },
   {
     "no": "book 136",
@@ -2060,7 +2060,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/450298-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/450298-L.jpg"
   },
   {
     "no": "book 137",
@@ -2075,7 +2075,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8678542-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8678542-L.jpg"
   },
   {
     "no": "book 138",
@@ -2090,7 +2090,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/661199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/661199-L.jpg"
   },
   {
     "no": "book 139",
@@ -2105,7 +2105,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13058021-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13058021-L.jpg"
   },
   {
     "no": "book 140",
@@ -2120,7 +2120,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7884139-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7884139-L.jpg"
   },
   {
     "no": "book 141",
@@ -2135,7 +2135,7 @@ const DEFAULT_BOOKS = [
     "category": "Habits & Discipline",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/9154494-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9154494-L.jpg"
   },
   {
     "no": "book 142",
@@ -2150,7 +2150,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/6444265-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6444265-L.jpg"
   },
   {
     "no": "book 143",
@@ -2165,7 +2165,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7412966-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7412966-L.jpg"
   },
   {
     "no": "book 144",
@@ -2180,7 +2180,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/7272162-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7272162-L.jpg"
   },
   {
     "no": "book 145",
@@ -2195,7 +2195,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/isbn/9780735213616-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/isbn/9780735213616-L.jpg"
   },
   {
     "no": "book 146",
@@ -2210,7 +2210,7 @@ const DEFAULT_BOOKS = [
     "category": "Focus & Concentration",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13232559-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13232559-L.jpg"
   },
   {
     "no": "book 147",
@@ -2225,7 +2225,7 @@ const DEFAULT_BOOKS = [
     "category": "Brain Science",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/10204949-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10204949-L.jpg"
   },
   {
     "no": "book 148",
@@ -2240,7 +2240,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13224272-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13224272-L.jpg"
   },
   {
     "no": "book 149",
@@ -2255,7 +2255,7 @@ const DEFAULT_BOOKS = [
     "category": "Mindset & Logic",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/8695259-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8695259-L.jpg"
   },
   {
     "no": "book 150",
@@ -2270,7 +2270,7 @@ const DEFAULT_BOOKS = [
     "category": "Memory & Learning",
     "takeaway": "",
     "availability": "UNAVAILABLE",
-    "cover_url": "https://covers.openlibrary.org/b/id/13230270-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13230270-L.jpg"
   },
   {
     "no": "book 151",
@@ -2288,7 +2288,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 452,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231856-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231856-L.jpg"
   },
   {
     "no": "book 152",
@@ -2306,7 +2306,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 624,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8813247-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8813247-L.jpg"
   },
   {
     "no": "book 153",
@@ -2324,7 +2324,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 180,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8235116-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8235116-L.jpg"
   },
   {
     "no": "book 154",
@@ -2342,7 +2342,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 140,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/7984916-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7984916-L.jpg"
   },
   {
     "no": "book 155",
@@ -2360,7 +2360,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 496,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8114125-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8114125-L.jpg"
   },
   {
     "no": "book 156",
@@ -2378,7 +2378,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 468,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314126-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8314126-L.jpg"
   },
   {
     "no": "book 157",
@@ -2396,7 +2396,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 200,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/6814120-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6814120-L.jpg"
   },
   {
     "no": "book 158",
@@ -2414,7 +2414,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10141285-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10141285-L.jpg"
   },
   {
     "no": "book 159",
@@ -2432,7 +2432,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 210,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/12141289-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12141289-L.jpg"
   },
   {
     "no": "book 160",
@@ -2450,7 +2450,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 272,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/7214199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7214199-L.jpg"
   },
   {
     "no": "book 161",
@@ -2468,7 +2468,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 216,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8214155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8214155-L.jpg"
   },
   {
     "no": "book 162",
@@ -2486,7 +2486,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 576,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/6914177-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6914177-L.jpg"
   },
   {
     "no": "book 163",
@@ -2504,7 +2504,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10214188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10214188-L.jpg"
   },
   {
     "no": "book 164",
@@ -2522,7 +2522,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 256,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10514199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10514199-L.jpg"
   },
   {
     "no": "book 165",
@@ -2540,7 +2540,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314178-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8314178-L.jpg"
   },
   {
     "no": "book 166",
@@ -2558,7 +2558,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 640,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8214190-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8214190-L.jpg"
   },
   {
     "no": "book 167",
@@ -2576,7 +2576,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 144,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8114133-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8114133-L.jpg"
   },
   {
     "no": "book 168",
@@ -2594,7 +2594,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 368,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8414166-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8414166-L.jpg"
   },
   {
     "no": "book 169",
@@ -2612,7 +2612,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 224,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8014155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8014155-L.jpg"
   },
   {
     "no": "book 170",
@@ -2630,7 +2630,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 352,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8914188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8914188-L.jpg"
   },
   {
     "no": "book 171",
@@ -2648,7 +2648,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 242,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/11141255-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11141255-L.jpg"
   },
   {
     "no": "book 172",
@@ -2666,7 +2666,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 240,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/11214177-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11214177-L.jpg"
   },
   {
     "no": "book 173",
@@ -2684,7 +2684,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/7914144-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7914144-L.jpg"
   },
   {
     "no": "book 174",
@@ -2702,7 +2702,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8314199-L.jpg"
   },
   {
     "no": "book 175",
@@ -2720,7 +2720,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 256,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231991-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231991-L.jpg"
   },
   {
     "no": "book 176",
@@ -2738,7 +2738,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 254,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/7814122-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7814122-L.jpg"
   },
   {
     "no": "book 177",
@@ -2756,7 +2756,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8114188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8114188-L.jpg"
   },
   {
     "no": "book 178",
@@ -2774,7 +2774,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 184,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231922-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231922-L.jpg"
   },
   {
     "no": "book 179",
@@ -2792,7 +2792,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 240,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8114166-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8114166-L.jpg"
   },
   {
     "no": "book 180",
@@ -2810,7 +2810,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 416,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8014190-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8014190-L.jpg"
   },
   {
     "no": "book 181",
@@ -2828,7 +2828,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 352,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8214177-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8214177-L.jpg"
   },
   {
     "no": "book 182",
@@ -2846,7 +2846,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 123,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8314155-L.jpg"
   },
   {
     "no": "book 183",
@@ -2864,7 +2864,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8414199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8414199-L.jpg"
   },
   {
     "no": "book 184",
@@ -2882,7 +2882,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 160,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8514133-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8514133-L.jpg"
   },
   {
     "no": "book 185",
@@ -2900,7 +2900,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 352,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8814166-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8814166-L.jpg"
   },
   {
     "no": "book 186",
@@ -2918,7 +2918,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8914177-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8914177-L.jpg"
   },
   {
     "no": "book 187",
@@ -2936,7 +2936,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10814199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10814199-L.jpg"
   },
   {
     "no": "book 188",
@@ -2954,7 +2954,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 272,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9114122-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9114122-L.jpg"
   },
   {
     "no": "book 189",
@@ -2972,7 +2972,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9214133-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9214133-L.jpg"
   },
   {
     "no": "book 190",
@@ -2990,7 +2990,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 224,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9314144-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9314144-L.jpg"
   },
   {
     "no": "book 191",
@@ -3008,7 +3008,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9414155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9414155-L.jpg"
   },
   {
     "no": "book 192",
@@ -3026,7 +3026,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231999-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231999-L.jpg"
   },
   {
     "no": "book 193",
@@ -3044,7 +3044,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9514166-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9514166-L.jpg"
   },
   {
     "no": "book 194",
@@ -3062,7 +3062,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9614177-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9614177-L.jpg"
   },
   {
     "no": "book 195",
@@ -3080,7 +3080,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9714188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9714188-L.jpg"
   },
   {
     "no": "book 196",
@@ -3098,7 +3098,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10214199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10214199-L.jpg"
   },
   {
     "no": "book 197",
@@ -3116,7 +3116,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 220,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9814122-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9814122-L.jpg"
   },
   {
     "no": "book 198",
@@ -3134,7 +3134,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9914133-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9914133-L.jpg"
   },
   {
     "no": "book 199",
@@ -3152,7 +3152,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 256,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10014144-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10014144-L.jpg"
   },
   {
     "no": "book 200",
@@ -3170,7 +3170,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 148,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10114155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10114155-L.jpg"
   },
   {
     "no": "book 201",
@@ -3188,7 +3188,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 350,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10314177-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10314177-L.jpg"
   },
   {
     "no": "book 202",
@@ -3206,7 +3206,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 656,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231933-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231933-L.jpg"
   },
   {
     "no": "book 203",
@@ -3224,7 +3224,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 688,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/12914188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12914188-L.jpg"
   },
   {
     "no": "book 204",
@@ -3242,7 +3242,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 400,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314111-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8314111-L.jpg"
   },
   {
     "no": "book 205",
@@ -3260,7 +3260,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 520,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8114199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8114199-L.jpg"
   },
   {
     "no": "book 206",
@@ -3278,7 +3278,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 180,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/7914188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7914188-L.jpg"
   },
   {
     "no": "book 207",
@@ -3296,7 +3296,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 656,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8014166-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8014166-L.jpg"
   },
   {
     "no": "book 208",
@@ -3314,7 +3314,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 624,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8414155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8414155-L.jpg"
   },
   {
     "no": "book 209",
@@ -3332,7 +3332,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 364,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10414166-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10414166-L.jpg"
   },
   {
     "no": "book 210",
@@ -3350,7 +3350,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 976,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8514177-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8514177-L.jpg"
   },
   {
     "no": "book 211",
@@ -3368,7 +3368,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 832,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8614188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8614188-L.jpg"
   },
   {
     "no": "book 212",
@@ -3386,7 +3386,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 400,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231944-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231944-L.jpg"
   },
   {
     "no": "book 213",
@@ -3404,7 +3404,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 152,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231966-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231966-L.jpg"
   },
   {
     "no": "book 214",
@@ -3422,7 +3422,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 208,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231977-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231977-L.jpg"
   },
   {
     "no": "book 215",
@@ -3440,7 +3440,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 200,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8714199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8714199-L.jpg"
   },
   {
     "no": "book 216",
@@ -3458,7 +3458,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9114177-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9114177-L.jpg"
   },
   {
     "no": "book 217",
@@ -3476,7 +3476,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 160,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8814188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8814188-L.jpg"
   },
   {
     "no": "book 218",
@@ -3494,7 +3494,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 1100,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8914199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8914199-L.jpg"
   },
   {
     "no": "book 219",
@@ -3512,7 +3512,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 128,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9014122-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9014122-L.jpg"
   },
   {
     "no": "book 220",
@@ -3530,7 +3530,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9214155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9214155-L.jpg"
   },
   {
     "no": "book 221",
@@ -3548,7 +3548,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8231988-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8231988-L.jpg"
   },
   {
     "no": "book 222",
@@ -3566,7 +3566,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 224,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232001-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232001-L.jpg"
   },
   {
     "no": "book 223",
@@ -3584,7 +3584,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232012-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232012-L.jpg"
   },
   {
     "no": "book 224",
@@ -3602,7 +3602,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 592,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232023-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232023-L.jpg"
   },
   {
     "no": "book 225",
@@ -3620,7 +3620,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9314166-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9314166-L.jpg"
   },
   {
     "no": "book 226",
@@ -3638,7 +3638,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 272,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9414177-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9414177-L.jpg"
   },
   {
     "no": "book 227",
@@ -3656,7 +3656,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 256,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232034-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232034-L.jpg"
   },
   {
     "no": "book 228",
@@ -3674,7 +3674,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 352,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9514188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9514188-L.jpg"
   },
   {
     "no": "book 229",
@@ -3692,7 +3692,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9614199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9614199-L.jpg"
   },
   {
     "no": "book 230",
@@ -3710,7 +3710,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9714122-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9714122-L.jpg"
   },
   {
     "no": "book 231",
@@ -3728,7 +3728,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 496,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/13214155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13214155-L.jpg"
   },
   {
     "no": "book 232",
@@ -3746,7 +3746,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 368,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232045-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232045-L.jpg"
   },
   {
     "no": "book 233",
@@ -3764,7 +3764,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10514188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10514188-L.jpg"
   },
   {
     "no": "book 234",
@@ -3782,7 +3782,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 432,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9814133-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9814133-L.jpg"
   },
   {
     "no": "book 235",
@@ -3800,7 +3800,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/9914144-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9914144-L.jpg"
   },
   {
     "no": "book 236",
@@ -3818,7 +3818,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 576,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10014155-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10014155-L.jpg"
   },
   {
     "no": "book 237",
@@ -3836,7 +3836,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 396,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10114166-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10114166-L.jpg"
   },
   {
     "no": "book 238",
@@ -3854,7 +3854,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 592,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10214177-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10214177-L.jpg"
   },
   {
     "no": "book 239",
@@ -3872,7 +3872,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10314188-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10314188-L.jpg"
   },
   {
     "no": "book 240",
@@ -3890,7 +3890,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10414199-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10414199-L.jpg"
   },
   {
     "no": "book 241",
@@ -3908,7 +3908,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 328,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232056-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232056-L.jpg"
   },
   {
     "no": "book 242",
@@ -3926,7 +3926,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232067-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232067-L.jpg"
   },
   {
     "no": "book 243",
@@ -3944,7 +3944,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 688,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232078-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232078-L.jpg"
   },
   {
     "no": "book 244",
@@ -3962,7 +3962,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 545,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232089-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232089-L.jpg"
   },
   {
     "no": "book 245",
@@ -3980,7 +3980,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 100,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232090-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232090-L.jpg"
   },
   {
     "no": "book 246",
@@ -3998,7 +3998,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 464,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232101-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232101-L.jpg"
   },
   {
     "no": "book 247",
@@ -4016,7 +4016,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 180,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232112-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232112-L.jpg"
   },
   {
     "no": "book 248",
@@ -4034,7 +4034,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232123-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232123-L.jpg"
   },
   {
     "no": "book 249",
@@ -4052,7 +4052,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 140,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232134-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8232134-L.jpg"
   },
   {
     "no": "book 250",
@@ -4070,9 +4070,8 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 256,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8232145-M.jpg"
-  }
-,
+    "cover_url": "https://covers.openlibrary.org/b/id/12993656-L.jpg"
+  },
   {
     "no": "book 251",
     "title": "Dark Psychology Secrets",
@@ -4089,7 +4088,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 240,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/10534211-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/13234695-L.jpg"
   },
   {
     "no": "book 252",
@@ -4107,7 +4106,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 368,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314112-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/6454262-L.jpg"
   },
   {
     "no": "book 253",
@@ -4125,7 +4124,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314120-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12635627-L.jpg"
   },
   {
     "no": "book 254",
@@ -4143,7 +4142,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 368,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314130-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/392203-L.jpg"
   },
   {
     "no": "book 255",
@@ -4161,7 +4160,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 356,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314140-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/2685468-L.jpg"
   },
   {
     "no": "book 256",
@@ -4179,7 +4178,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 224,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314150-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8801364-L.jpg"
   },
   {
     "no": "book 257",
@@ -4197,7 +4196,7 @@ const DEFAULT_BOOKS = [
     "price": 699,
     "total_pages": 750,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314160-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/2982064-L.jpg"
   },
   {
     "no": "book 258",
@@ -4215,7 +4214,7 @@ const DEFAULT_BOOKS = [
     "price": 599,
     "total_pages": 880,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314170-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8244525-L.jpg"
   },
   {
     "no": "book 259",
@@ -4233,7 +4232,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314180-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/704446-L.jpg"
   },
   {
     "no": "book 260",
@@ -4251,7 +4250,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 848,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314190-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7268574-L.jpg"
   },
   {
     "no": "book 261",
@@ -4269,7 +4268,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 480,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314200-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9255229-L.jpg"
   },
   {
     "no": "book 262",
@@ -4287,7 +4286,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 272,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314210-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11172296-L.jpg"
   },
   {
     "no": "book 263",
@@ -4305,7 +4304,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 336,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314220-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9407338-L.jpg"
   },
   {
     "no": "book 264",
@@ -4323,7 +4322,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 432,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314230-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8368314-L.jpg"
   },
   {
     "no": "book 265",
@@ -4341,7 +4340,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 480,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314240-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9274740-L.jpg"
   },
   {
     "no": "book 266",
@@ -4359,7 +4358,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 688,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314250-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11481354-L.jpg"
   },
   {
     "no": "book 267",
@@ -4377,7 +4376,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 256,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314260-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/14612610-L.jpg"
   },
   {
     "no": "book 268",
@@ -4395,7 +4394,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 271,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314270-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/283860-L.jpg"
   },
   {
     "no": "book 269",
@@ -4413,7 +4412,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 496,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314280-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/11200092-L.jpg"
   },
   {
     "no": "book 270",
@@ -4431,7 +4430,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 400,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314290-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9157544-L.jpg"
   },
   {
     "no": "book 271",
@@ -4449,7 +4448,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 224,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314300-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12313764-L.jpg"
   },
   {
     "no": "book 272",
@@ -4467,7 +4466,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 464,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314310-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8634250-L.jpg"
   },
   {
     "no": "book 273",
@@ -4485,7 +4484,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 528,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314320-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7884018-L.jpg"
   },
   {
     "no": "book 274",
@@ -4503,7 +4502,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 656,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314330-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8963642-L.jpg"
   },
   {
     "no": "book 275",
@@ -4521,7 +4520,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 608,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314340-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7418788-L.jpg"
   },
   {
     "no": "book 276",
@@ -4539,7 +4538,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 560,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314350-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12725620-L.jpg"
   },
   {
     "no": "book 277",
@@ -4557,7 +4556,7 @@ const DEFAULT_BOOKS = [
     "price": 350,
     "total_pages": 128,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314360-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7240225-L.jpg"
   },
   {
     "no": "book 278",
@@ -4575,7 +4574,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 352,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314370-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8039542-L.jpg"
   },
   {
     "no": "book 279",
@@ -4593,7 +4592,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 384,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314380-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10239283-L.jpg"
   },
   {
     "no": "book 280",
@@ -4611,7 +4610,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 464,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314390-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/12968901-L.jpg"
   },
   {
     "no": "book 281",
@@ -4629,7 +4628,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 672,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314400-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/400518-L.jpg"
   },
   {
     "no": "book 282",
@@ -4647,7 +4646,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 352,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314410-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9321915-L.jpg"
   },
   {
     "no": "book 283",
@@ -4665,7 +4664,7 @@ const DEFAULT_BOOKS = [
     "price": 420,
     "total_pages": 256,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314420-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/15226155-L.jpg"
   },
   {
     "no": "book 284",
@@ -4683,7 +4682,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314430-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8900233-L.jpg"
   },
   {
     "no": "book 285",
@@ -4701,7 +4700,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 544,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314440-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7253519-L.jpg"
   },
   {
     "no": "book 286",
@@ -4719,7 +4718,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 672,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314450-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10160383-L.jpg"
   },
   {
     "no": "book 287",
@@ -4737,7 +4736,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 368,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314460-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/472725-L.jpg"
   },
   {
     "no": "book 288",
@@ -4755,7 +4754,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 448,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314470-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/9065634-L.jpg"
   },
   {
     "no": "book 289",
@@ -4773,7 +4772,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 432,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314480-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10452559-L.jpg"
   },
   {
     "no": "book 290",
@@ -4791,7 +4790,7 @@ const DEFAULT_BOOKS = [
     "price": 350,
     "total_pages": 190,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314490-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/288439-L.jpg"
   },
   {
     "no": "book 291",
@@ -4809,7 +4808,7 @@ const DEFAULT_BOOKS = [
     "price": 299,
     "total_pages": 160,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314500-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7244512-L.jpg"
   },
   {
     "no": "book 292",
@@ -4827,7 +4826,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 368,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314510-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10007224-L.jpg"
   },
   {
     "no": "book 293",
@@ -4845,7 +4844,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314520-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7434843-L.jpg"
   },
   {
     "no": "book 294",
@@ -4863,7 +4862,7 @@ const DEFAULT_BOOKS = [
     "price": 350,
     "total_pages": 176,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314530-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/95272-L.jpg"
   },
   {
     "no": "book 295",
@@ -4881,7 +4880,7 @@ const DEFAULT_BOOKS = [
     "price": 420,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314540-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10534005-L.jpg"
   },
   {
     "no": "book 296",
@@ -4899,7 +4898,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 400,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314550-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/490333-L.jpg"
   },
   {
     "no": "book 297",
@@ -4917,7 +4916,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 343,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314560-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/228066-L.jpg"
   },
   {
     "no": "book 298",
@@ -4935,7 +4934,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 352,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314570-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8351551-L.jpg"
   },
   {
     "no": "book 299",
@@ -4953,7 +4952,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 560,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314580-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/292770-L.jpg"
   },
   {
     "no": "book 300",
@@ -4971,7 +4970,7 @@ const DEFAULT_BOOKS = [
     "price": 420,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314590-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7437718-L.jpg"
   },
   {
     "no": "book 301",
@@ -4989,7 +4988,7 @@ const DEFAULT_BOOKS = [
     "price": 499,
     "total_pages": 384,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314600-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8283901-L.jpg"
   },
   {
     "no": "book 302",
@@ -5007,7 +5006,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 256,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314610-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/10432365-L.jpg"
   },
   {
     "no": "book 303",
@@ -5025,7 +5024,7 @@ const DEFAULT_BOOKS = [
     "price": 350,
     "total_pages": 224,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314620-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7984709-L.jpg"
   },
   {
     "no": "book 304",
@@ -5043,7 +5042,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 288,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314630-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8064205-L.jpg"
   },
   {
     "no": "book 305",
@@ -5061,7 +5060,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 400,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314640-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/3825693-L.jpg"
   },
   {
     "no": "book 306",
@@ -5079,7 +5078,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 240,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314650-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8177373-L.jpg"
   },
   {
     "no": "book 307",
@@ -5097,7 +5096,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 432,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314660-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/443668-L.jpg"
   },
   {
     "no": "book 308",
@@ -5115,7 +5114,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 496,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314670-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8765912-L.jpg"
   },
   {
     "no": "book 309",
@@ -5133,7 +5132,7 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 304,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314680-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/7898682-L.jpg"
   },
   {
     "no": "book 310",
@@ -5151,7 +5150,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 320,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314690-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/240505-L.jpg"
   },
   {
     "no": "book 311",
@@ -5169,7 +5168,7 @@ const DEFAULT_BOOKS = [
     "price": 450,
     "total_pages": 448,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314700-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8238803-L.jpg"
   },
   {
     "no": "book 312",
@@ -5187,10 +5186,10 @@ const DEFAULT_BOOKS = [
     "price": 399,
     "total_pages": 400,
     "current_page": 0,
-    "cover_url": "https://covers.openlibrary.org/b/id/8314710-M.jpg"
+    "cover_url": "https://covers.openlibrary.org/b/id/8739376-L.jpg"
   }
 ];
 
-if (typeof module !== 'undefined' && module.exports) {
+if (typeof module !== "undefined") {
   module.exports = { DEFAULT_BOOKS };
 }

@@ -1,42 +1,44 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-09-30T07:55:00.000Z",
+  "updatedAt": "2026-09-30T08:40:00.000Z",
   "activeRelease": {
-    "version": "v3.14.0",
-    "name": "Mind Focus Books v3.14.0 — Staggered Magnific.ai Editorial Grid & 313 Books",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.14.0/MindFocusBooks-Native.apk",
+    "version": "v3.15.0",
+    "name": "Mind Focus Books v3.15.0 — Real HD Covers & Uncropped Natural Editorial Grid",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.15.0/MindFocusBooks-Native.apk",
     "features": [
-      "✨ Home 2: Authentic Staggered 'Upr-Neeche' Masonry Grid (Magnific.ai / Pinterest rhythm)",
-      "📐 Dynamic Multi-Column Flex Layout with High-Contrast Aspect Ratios & Varied Heights",
+      "🖼️ 100% Full Uncropped Covers: Book covers are never cropped or cut off",
+      "✨ Crystal-Clear Titles: High-contrast legible typography below cover with author & category",
+      "HD Real High-Definition (-L.jpg) Book Covers across all 313 World Masterpieces",
+      "🎨 Organic Magnific.ai 'Upr-Neeche' Masonry Stagger Flow with Natural Aspect Ratios",
       "🔄 1-Tap Home Switcher: Wood Shelves (Home 1) ⟷ AI Editorial Grid (Home 2)",
       "📱 Native Navigation Dock: Direct Home 2 tab without floating clutter",
-      "📚 313 World Masterpieces across 26 Global Categories",
       "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
-      "🏷️ Official v3.14.0 Release"
+      "🏷️ Official v3.15.0 Release"
     ],
-    "stagedAt": "2026-09-30T07:55:00.000Z",
+    "stagedAt": "2026-09-30T08:40:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.14.0",
-    "name": "Mind Focus Books v3.14.0 — Staggered Magnific.ai Editorial Grid & 313 Books",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.14.0/MindFocusBooks-Native.apk",
+    "version": "v3.15.0",
+    "name": "Mind Focus Books v3.15.0 — Real HD Covers & Uncropped Natural Editorial Grid",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.15.0/MindFocusBooks-Native.apk",
     "features": [
-      "✨ Home 2: Authentic Staggered 'Upr-Neeche' Masonry Grid (Magnific.ai / Pinterest rhythm)",
-      "📐 Dynamic Multi-Column Flex Layout with High-Contrast Aspect Ratios & Varied Heights",
+      "🖼️ 100% Full Uncropped Covers: Book covers are never cropped or cut off",
+      "✨ Crystal-Clear Titles: High-contrast legible typography below cover with author & category",
+      "HD Real High-Definition (-L.jpg) Book Covers across all 313 World Masterpieces",
+      "🎨 Organic Magnific.ai 'Upr-Neeche' Masonry Stagger Flow with Natural Aspect Ratios",
       "🔄 1-Tap Home Switcher: Wood Shelves (Home 1) ⟷ AI Editorial Grid (Home 2)",
       "📱 Native Navigation Dock: Direct Home 2 tab without floating clutter",
-      "📚 313 World Masterpieces across 26 Global Categories",
       "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
-      "🏷️ Official v3.14.0 Release"
+      "🏷️ Official v3.15.0 Release"
     ],
-    "stagedAt": "2026-09-30T07:55:00.000Z",
+    "stagedAt": "2026-09-30T08:40:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {
-    "version": "v3.13.0",
-    "name": "Mind Focus Books v3.13.0 — Home 2 AI Editorial Grid & 313 Books",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.13.0/MindFocusBooks-Native.apk",
+    "version": "v3.14.0",
+    "name": "Mind Focus Books v3.14.0 — Staggered Magnific.ai Editorial Grid & 313 Books",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.14.0/MindFocusBooks-Native.apk",
     "features": [
       "📚 300+ World Masterpieces: Full comprehensive global library covering all major fields",
       "🔮 Dark Secrets, The Luminaries, Initiation & Hermetic Wisdom added",
