@@ -786,6 +786,7 @@ function renderProfileView() {
   }
   
   updateLastBackupDisplay();
+  updateProfileReaderToneDisplay();
 }
 
 function updateLastBackupDisplay() {
@@ -797,6 +798,31 @@ function updateLastBackupDisplay() {
   } else {
     el.innerText = `No manual backup yet • Tap 'Backup Now'`;
   }
+}
+
+function cycleReaderThemeFromProfile() {
+  const themes = ['sepia', 'dark', 'light'];
+  const curIdx = themes.indexOf(readerState.theme || 'sepia');
+  const nextTheme = themes[(curIdx + 1) % themes.length];
+  setReaderTheme(nextTheme);
+  updateProfileReaderToneDisplay();
+  const names = {
+    'sepia': '📜 Sepia Paper (#fbf5e6)',
+    'dark': '🌙 Dark Night (#121824)',
+    'light': '☀️ Crisp Light (#ffffff)'
+  };
+  showToast(`Default Reader Mode: ${names[nextTheme] || nextTheme}`);
+}
+
+function updateProfileReaderToneDisplay() {
+  const el = document.getElementById('profileReaderToneSubText');
+  if (!el) return;
+  const names = {
+    'sepia': 'Default: 📜 Sepia Paper (#fbf5e6)',
+    'dark': 'Default: 🌙 Dark Night (#121824)',
+    'light': 'Default: ☀️ Crisp Light (#ffffff)'
+  };
+  el.innerText = names[readerState.theme || 'sepia'] || `Default: ${readerState.theme}`;
 }
 
 // ================= VIEW 6: BOOK READING DETAIL VIEW =================
@@ -916,6 +942,17 @@ function openBookDetailView(book) {
     
     // Update 1-Tap Status Chips
     updateStatusChipsUI(book.status);
+
+    // Update Reader Mode Hint Name
+    const modeNameEl = document.getElementById('detailReaderModeName');
+    if (modeNameEl) {
+      const toneNames = {
+        'sepia': 'Sepia Paper Mode (#fbf5e6)',
+        'dark': 'Dark Night Mode (#121824)',
+        'light': 'Crisp Light Mode (#ffffff)'
+      };
+      modeNameEl.innerText = toneNames[readerState.theme || 'sepia'] || 'Sepia Paper Mode (#fbf5e6)';
+    }
 
     // Switch view to Detail
     document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));

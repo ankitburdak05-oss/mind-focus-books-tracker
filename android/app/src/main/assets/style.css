@@ -2932,4 +2932,79 @@ body {
   transition: width 0.4s ease;
 }
 
+/* Reader Mode Hint Banner in Book Detail View */
+.reader-mode-hint-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reader-mode-hint-banner:hover {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: var(--accent-gold);
+}
+
+.rmh-icon {
+  font-size: 1.4rem;
+}
+
+.rmh-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.rmh-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.rmh-title strong {
+  color: var(--accent-gold);
+}
+
+.rmh-sub {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.rmh-open-btn {
+  background: var(--accent-gold);
+  color: #0b0f19;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.reader-pill-btn.active#readerToneSepia {
+  background: #f59e0b !important;
+  color: #2b1f14 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+}
+
+.reader-pill-btn.active#readerToneDark {
+  background: #374151 !important;
+  color: #f3f4f6 !important;
+  font-weight: 800 !important;
+}
+
+.reader-pill-btn.active#readerToneLight {
+  background: #ffffff !important;
+  color: #111827 !important;
+  font-weight: 800 !important;
+}
+
+
 

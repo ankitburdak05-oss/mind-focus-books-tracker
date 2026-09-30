@@ -481,6 +481,15 @@
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
 
+        <div class="profile-menu-item" onclick="cycleReaderThemeFromProfile()">
+          <div class="pmi-icon gold">📜</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Reader Paper Tone</div>
+            <div class="pmi-sub" id="profileReaderToneSubText">Default: 📜 Sepia Paper (#fbf5e6)</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
         <div class="profile-menu-item" onclick="showNotificationSettings()">
           <div class="pmi-icon orange">🔔</div>
           <div class="pmi-text">
@@ -649,6 +658,16 @@
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
         </button>
+      </div>
+
+      <!-- Real Book Reader Mode Indicator Banner -->
+      <div class="reader-mode-hint-banner" onclick="openRealBookReaderForCurrent()">
+        <span class="rmh-icon">📜</span>
+        <div class="rmh-text">
+          <div class="rmh-title">Real Book Reader Mode: <strong id="detailReaderModeName">Sepia Paper Mode (#fbf5e6)</strong></div>
+          <div class="rmh-sub">Warm vintage paper & dark brown ink • Dual Spread & Single Page</div>
+        </div>
+        <button type="button" class="rmh-open-btn">Read Now &rarr;</button>
       </div>
 
       <!-- Reading Progress Bar -->

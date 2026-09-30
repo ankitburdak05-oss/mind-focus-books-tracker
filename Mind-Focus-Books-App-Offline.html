@@ -2946,6 +2946,81 @@ body {
   transition: width 0.4s ease;
 }
 
+/* Reader Mode Hint Banner in Book Detail View */
+.reader-mode-hint-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  margin-top: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reader-mode-hint-banner:hover {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: var(--accent-gold);
+}
+
+.rmh-icon {
+  font-size: 1.4rem;
+}
+
+.rmh-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.rmh-title {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.rmh-title strong {
+  color: var(--accent-gold);
+}
+
+.rmh-sub {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.rmh-open-btn {
+  background: var(--accent-gold);
+  color: #0b0f19;
+  border: none;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.reader-pill-btn.active#readerToneSepia {
+  background: #f59e0b !important;
+  color: #2b1f14 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+}
+
+.reader-pill-btn.active#readerToneDark {
+  background: #374151 !important;
+  color: #f3f4f6 !important;
+  font-weight: 800 !important;
+}
+
+.reader-pill-btn.active#readerToneLight {
+  background: #ffffff !important;
+  color: #111827 !important;
+  font-weight: 800 !important;
+}
+
+
 
 
 </style>
@@ -3687,6 +3762,15 @@ if (typeof window !== 'undefined') {
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
 
+        <div class="profile-menu-item" onclick="cycleReaderThemeFromProfile()">
+          <div class="pmi-icon gold">📜</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Reader Paper Tone</div>
+            <div class="pmi-sub" id="profileReaderToneSubText">Default: 📜 Sepia Paper (#fbf5e6)</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
         <div class="profile-menu-item" onclick="showNotificationSettings()">
           <div class="pmi-icon orange">🔔</div>
           <div class="pmi-text">
@@ -3855,6 +3939,16 @@ if (typeof window !== 'undefined') {
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
         </button>
+      </div>
+
+      <!-- Real Book Reader Mode Indicator Banner -->
+      <div class="reader-mode-hint-banner" onclick="openRealBookReaderForCurrent()">
+        <span class="rmh-icon">📜</span>
+        <div class="rmh-text">
+          <div class="rmh-title">Real Book Reader Mode: <strong id="detailReaderModeName">Sepia Paper Mode (#fbf5e6)</strong></div>
+          <div class="rmh-sub">Warm vintage paper & dark brown ink • Dual Spread & Single Page</div>
+        </div>
+        <button type="button" class="rmh-open-btn">Read Now &rarr;</button>
       </div>
 
       <!-- Reading Progress Bar -->
@@ -10511,6 +10605,7 @@ function renderProfileView() {
   }
   
   updateLastBackupDisplay();
+  updateProfileReaderToneDisplay();
 }
 
 function updateLastBackupDisplay() {
@@ -10522,6 +10617,31 @@ function updateLastBackupDisplay() {
   } else {
     el.innerText = `No manual backup yet • Tap 'Backup Now'`;
   }
+}
+
+function cycleReaderThemeFromProfile() {
+  const themes = ['sepia', 'dark', 'light'];
+  const curIdx = themes.indexOf(readerState.theme || 'sepia');
+  const nextTheme = themes[(curIdx + 1) % themes.length];
+  setReaderTheme(nextTheme);
+  updateProfileReaderToneDisplay();
+  const names = {
+    'sepia': '📜 Sepia Paper (#fbf5e6)',
+    'dark': '🌙 Dark Night (#121824)',
+    'light': '☀️ Crisp Light (#ffffff)'
+  };
+  showToast(`Default Reader Mode: ${names[nextTheme] || nextTheme}`);
+}
+
+function updateProfileReaderToneDisplay() {
+  const el = document.getElementById('profileReaderToneSubText');
+  if (!el) return;
+  const names = {
+    'sepia': 'Default: 📜 Sepia Paper (#fbf5e6)',
+    'dark': 'Default: 🌙 Dark Night (#121824)',
+    'light': 'Default: ☀️ Crisp Light (#ffffff)'
+  };
+  el.innerText = names[readerState.theme || 'sepia'] || `Default: ${readerState.theme}`;
 }
 
 // ================= VIEW 6: BOOK READING DETAIL VIEW =================
@@ -10641,6 +10761,17 @@ function openBookDetailView(book) {
     
     // Update 1-Tap Status Chips
     updateStatusChipsUI(book.status);
+
+    // Update Reader Mode Hint Name
+    const modeNameEl = document.getElementById('detailReaderModeName');
+    if (modeNameEl) {
+      const toneNames = {
+        'sepia': 'Sepia Paper Mode (#fbf5e6)',
+        'dark': 'Dark Night Mode (#121824)',
+        'light': 'Crisp Light Mode (#ffffff)'
+      };
+      modeNameEl.innerText = toneNames[readerState.theme || 'sepia'] || 'Sepia Paper Mode (#fbf5e6)';
+    }
 
     // Switch view to Detail
     document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
