@@ -67,6 +67,18 @@
         </div>
       </div>
 
+      <!-- In-App Version Update Alert Card (shows automatically when a new update is detected) -->
+      <div class="home-update-banner" id="homeUpdateCard" style="display:none;" onclick="openUpdateModal()">
+        <div class="hub-left">
+          <div class="hub-icon-wrap">🚀</div>
+          <div class="hub-info">
+            <div class="hub-title" id="homeUpdateTitle">New Version Update Available!</div>
+            <div class="hub-sub" id="homeUpdateSub">Mind Focus Books update is ready to install</div>
+          </div>
+        </div>
+        <button type="button" class="hub-action-btn" onclick="event.stopPropagation(); downloadAppUpdate();">⚡ Update</button>
+      </div>
+
       <!-- Currently Reading Hero Card -->
       <div class="currently-reading-hero" id="homeCurrentlyReadingCard">
         <div class="cr-left">
@@ -458,7 +470,7 @@
           <div class="pmi-icon blue">ℹ️</div>
           <div class="pmi-text">
             <div class="pmi-title">About App</div>
-            <div class="pmi-sub">Version 3.17.1, check updates, support</div>
+            <div class="pmi-sub" id="aboutAppSubText">Version 3.18.0, check updates, download APK</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
@@ -1066,31 +1078,36 @@
   </div>
 
   <!-- ================= IN-APP UPDATE CHECKER MODAL ================= -->
-  <div class="modal-overlay" id="inAppUpdateModalOverlay">
-    <div class="modal-card">
+  <div class="modal-overlay" id="inAppUpdateModalOverlay" onclick="handleUpdateOverlayClick(event)">
+    <div class="modal-card update-modal-card" onclick="event.stopPropagation()">
       <div class="modal-header">
-        <h3 class="modal-title">Mind & Focus Updates</h3>
+        <h3 class="modal-title">🚀 Mind & Focus Updates</h3>
         <button type="button" class="modal-close-btn" onclick="closeUpdateModal()">&times;</button>
       </div>
       <div class="modal-body">
         <div class="update-status-row">
-          <span class="update-badge" id="currentVerBadge">v3.17.1</span>
-          <span class="update-status-text" id="updateStatusText">You have the latest version</span>
+          <span class="update-badge" id="currentVerBadge">v3.18.0</span>
+          <span class="update-status-text" id="updateStatusText">You have the latest version (v3.18.0)</span>
         </div>
         <div class="changelog-box">
-          <h4>What's New in v3.17.1:</h4>
+          <h4 id="changelogHeader">What's New in v3.18.0:</h4>
           <ul class="changelog-list" id="changelogFeatures">
-            <li>📖 Real 3D Book Page Reader with multi-language (Hindi, Hinglish, English) page flip!</li>
-            <li>✏️ Full 16-Field Edit Modal: Book No, Language, Dates, Count Days, Price, Rating, Status, Availability, Takeaways</li>
-            <li>⭐ 100% Honest Ratings: Unrated books default to 0.0 (no fake ratings)</li>
-            <li>📅 Real Dates: Books show "Not Started Yet" until you actually begin reading</li>
-            <li>⚡ Fast & Smooth: 1-click book details everywhere</li>
+            <li>📜 <strong>Sepia Paper Mode</strong>: Authentic vintage yellowish paper (#fbf5e6) with warm brown ink for zero eye strain</li>
+            <li>🌙 <strong>Dark Night Mode</strong>: Deep anti-glare dark paper (#121824) with soft silver text for night reading</li>
+            <li>☀️ <strong>Light Paper Mode</strong>: Crisp printed book white paper (#ffffff) with sharp slate typography</li>
+            <li>📖 <strong>Dual Spread Mode</strong>: Open physical 2-page book spread with 3D spine crease, shadow fold & silk red ribbon bookmark</li>
+            <li>📄 <strong>Single Page Mode</strong>: Focused single page reader for quick and distraction-free mobile reading</li>
+            <li>🖥️ <strong>Browser Fullscreen & Widescreen Desktop</strong>: 1440px desktop grid layout with one-click Fullscreen toggle (F11)</li>
+            <li>⚡ <strong>Native APK Downloader & Installer</strong>: Direct 1-tap download and installation in About App</li>
           </ul>
+        </div>
+        <div class="update-download-notice" id="updateDownloadNotice" style="display:none; font-size:0.82rem; color:var(--accent-gold-light); margin-top:12px; text-align:center; padding:8px; background:rgba(245,158,11,0.1); border-radius:8px;">
+          ⏳ Starting APK download package... The Android Package Installer will open once complete!
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-cancel" onclick="closeUpdateModal()">Close</button>
-        <a id="downloadApkBtn" href="https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.1/MindFocusBooks-Native.apk" class="btn-save-gold" download>Download APK</a>
+        <button type="button" id="downloadApkBtn" class="btn-save-gold" onclick="downloadAppUpdate()">⚡ Download & Install APK</button>
       </div>
     </div>
   </div>

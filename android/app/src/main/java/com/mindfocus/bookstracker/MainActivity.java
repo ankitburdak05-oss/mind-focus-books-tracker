@@ -63,12 +63,38 @@ public class MainActivity extends AppCompatActivity {
         settings.setDisplayZoomControls(false);
 
         // Add native JavaScript bridge for Downloads and Cloud Sharing
-        webView.addJavascriptInterface(new WebAppInterface(), "Android");
+        WebAppInterface webAppInterface = new WebAppInterface();
+        webView.addJavascriptInterface(webAppInterface, "Android");
+
+        // Handle file and APK downloads from WebView
+        webView.setDownloadListener((url, userAgent, contentDisposition, mimetype, contentLength) -> {
+            if (url != null && (url.endsWith(".apk") || url.contains("/releases/download/"))) {
+                webAppInterface.downloadAndInstallApk(url);
+            } else if (url != null) {
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                    browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(browserIntent);
+                } catch (Exception ignored) {}
+            }
+        });
 
         // Keep all navigation inside the webview - PURE NATIVE STANDALONE APP
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url != null && (url.endsWith(".apk") || url.contains("/releases/download/"))) {
+                    webAppInterface.downloadAndInstallApk(url);
+                    return true;
+                }
+                if (url != null && (url.startsWith("http://") || url.startsWith("https://"))) {
+                    try {
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(browserIntent);
+                        return true;
+                    } catch (Exception ignored) {}
+                }
                 view.loadUrl(url);
                 return true;
             }

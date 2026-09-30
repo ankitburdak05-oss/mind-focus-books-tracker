@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.17.1)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.0)
 // ==========================================================================
 
-const APP_VERSION = '3.17.1';
-const CURRENT_APP_VERSION = 'v3.17.1';
+const APP_VERSION = '3.18.0';
+const CURRENT_APP_VERSION = 'v3.18.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -1768,23 +1768,122 @@ function exportDataPDF() {
   }
 }
 
-// ================= IN-APP UPDATE CHECKER =================
+// ================= IN-APP UPDATE CHECKER & DOWNLOADER =================
 function openUpdateModal() {
-  document.getElementById('inAppUpdateModalOverlay')?.classList.add('active');
+  const modal = document.getElementById('inAppUpdateModalOverlay');
+  if (!modal) return;
+  
+  const curBadge = document.getElementById('currentVerBadge');
+  if (curBadge) curBadge.innerText = CURRENT_APP_VERSION;
+  
+  const statusText = document.getElementById('updateStatusText');
+  const changelogHeader = document.getElementById('changelogHeader');
+  const changelogList = document.getElementById('changelogFeatures');
+  const downloadBtn = document.getElementById('downloadApkBtn');
+  const notice = document.getElementById('updateDownloadNotice');
+  if (notice) notice.style.display = 'none';
+  
+  const cfg = (typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') ? window.__DEFAULT_REMOTE_CONFIG__ : null;
+  if (cfg && cfg.activeRelease) {
+    const rel = cfg.activeRelease;
+    const isNew = rel.version && (rel.version !== CURRENT_APP_VERSION);
+    
+    if (statusText) {
+      statusText.innerText = isNew 
+        ? `🔥 New Update ${rel.version} Available!` 
+        : `✅ You have the latest version (${CURRENT_APP_VERSION})`;
+    }
+    if (changelogHeader) {
+      changelogHeader.innerText = `What's New in ${rel.version || CURRENT_APP_VERSION}:`;
+    }
+    if (changelogList && rel.features && Array.isArray(rel.features)) {
+      changelogList.innerHTML = rel.features.map(f => `<li>${escapeHtml(f)}</li>`).join('');
+    }
+    if (downloadBtn) {
+      downloadBtn.innerText = isNew ? `⚡ Download & Install ${rel.version} Now` : `📥 Re-download APK (${CURRENT_APP_VERSION})`;
+    }
+  }
+  
+  modal.classList.add('active');
 }
 
 function closeUpdateModal() {
   document.getElementById('inAppUpdateModalOverlay')?.classList.remove('active');
 }
 
+function handleUpdateOverlayClick(event) {
+  if (event.target.id === 'inAppUpdateModalOverlay') {
+    closeUpdateModal();
+  }
+}
+
+function downloadAppUpdate() {
+  const cfg = (typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') ? window.__DEFAULT_REMOTE_CONFIG__ : null;
+  const apkUrl = (cfg && cfg.activeRelease && cfg.activeRelease.apkDownloadUrl) 
+    ? cfg.activeRelease.apkDownloadUrl 
+    : "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.0/MindFocusBooks-Native.apk";
+  
+  showToast("Downloading update package... ⏳");
+  
+  const notice = document.getElementById('updateDownloadNotice');
+  if (notice) {
+    notice.style.display = 'block';
+    notice.innerText = "⏳ Downloading APK package... Launching installer!";
+  }
+  
+  // 1. Android Native App Bridge
+  if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
+    try {
+      window.Android.downloadAndInstallApk(apkUrl);
+      return;
+    } catch (e) {
+      console.warn("Android bridge call failed:", e);
+    }
+  }
+  
+  // 2. Direct browser fallback
+  try {
+    const a = document.createElement('a');
+    a.href = apkUrl;
+    a.setAttribute('download', 'MindFocusBooks-Native.apk');
+    a.target = '_blank';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch (e) {
+    window.location.href = apkUrl;
+  }
+}
+
 function checkForBackgroundUpdates() {
-  if (typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') {
-    const cfg = window.__DEFAULT_REMOTE_CONFIG__;
-    if (cfg && cfg.activeRelease && cfg.activeRelease.version) {
-      const downloadBtn = document.getElementById('downloadApkBtn');
-      if (downloadBtn && cfg.activeRelease.apkDownloadUrl) {
-        downloadBtn.href = cfg.activeRelease.apkDownloadUrl;
-      }
+  const cfg = (typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') ? window.__DEFAULT_REMOTE_CONFIG__ : null;
+  if (!cfg || !cfg.activeRelease || !cfg.activeRelease.version) return;
+  
+  const activeRel = cfg.activeRelease;
+  const isNew = activeRel.version !== CURRENT_APP_VERSION;
+  
+  const homeCard = document.getElementById('homeUpdateCard');
+  const homeTitle = document.getElementById('homeUpdateTitle');
+  const homeSub = document.getElementById('homeUpdateSub');
+  
+  if (homeCard) {
+    if (isNew) {
+      homeCard.style.display = 'flex';
+      if (homeTitle) homeTitle.innerText = `🔥 Update ${activeRel.version} Available!`;
+      if (homeSub) homeSub.innerText = activeRel.name || `${activeRel.version} is ready to download and install`;
+    } else {
+      homeCard.style.display = 'none';
+    }
+  }
+  
+  // Also show update modal on startup if new version exists and not dismissed this session
+  if (isNew) {
+    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + activeRel.version);
+    if (!dismissed) {
+      setTimeout(() => {
+        openUpdateModal();
+        sessionStorage.setItem('mf_update_dismissed_' + activeRel.version, '1');
+      }, 1200);
     }
   }
 }
