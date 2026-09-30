@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.0)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.1)
 // ==========================================================================
 
-const APP_VERSION = '3.18.0';
-const CURRENT_APP_VERSION = 'v3.18.0';
+const APP_VERSION = '3.18.1';
+const CURRENT_APP_VERSION = 'v3.18.1';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -1169,6 +1169,7 @@ function openRealBookReader(bookIdx, lang) {
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
   
+  setReaderTheme(readerState.theme || 'sepia');
   updateReaderLangPills();
   renderRealBookPages();
 }
@@ -1210,13 +1211,104 @@ function setReaderTheme(theme) {
   const modal = document.getElementById('realBookReaderModal');
   if (modal) modal.setAttribute('data-reader-theme', theme);
   
-  document.getElementById('readerToneSepia')?.classList.toggle('active', theme === 'sepia');
-  document.getElementById('readerToneDark')?.classList.toggle('active', theme === 'dark');
-  document.getElementById('readerToneLight')?.classList.toggle('active', theme === 'light');
+  const themesConfig = {
+    sepia: {
+      bg: '#fbf5e6',
+      textColor: '#2b1f14',
+      headerColor: '#5c3d22',
+      hardcover: '#2b1b17',
+      spine: 'linear-gradient(to right, rgba(60,40,20,0.25) 0%, rgba(60,40,20,0.04) 45%, rgba(40,25,10,0.45) 50%, rgba(60,40,20,0.04) 55%, rgba(60,40,20,0.25) 100%)',
+      borderColor: 'rgba(92, 61, 34, 0.2)'
+    },
+    dark: {
+      bg: '#121824',
+      textColor: '#cbd5e1',
+      headerColor: '#f59e0b',
+      hardcover: '#090d16',
+      spine: 'linear-gradient(to right, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 45%, rgba(0,0,0,0.85) 50%, rgba(0,0,0,0.1) 55%, rgba(0,0,0,0.6) 100%)',
+      borderColor: 'rgba(255, 255, 255, 0.1)'
+    },
+    light: {
+      bg: '#ffffff',
+      textColor: '#1e293b',
+      headerColor: '#0f172a',
+      hardcover: '#1e293b',
+      spine: 'linear-gradient(to right, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.02) 45%, rgba(0,0,0,0.25) 50%, rgba(0,0,0,0.02) 55%, rgba(0,0,0,0.15) 100%)',
+      borderColor: '#e2e8f0'
+    }
+  };
+  
+  const cfg = themesConfig[theme] || themesConfig.sepia;
+  
+  const spread = document.getElementById('realBookSpread');
+  if (spread) {
+    spread.style.backgroundColor = cfg.bg;
+    spread.style.color = cfg.textColor;
+  }
+  
+  const hardcover = document.getElementById('realBookHardcover');
+  if (hardcover) {
+    hardcover.style.backgroundColor = cfg.hardcover;
+  }
+  
+  const leftPage = document.getElementById('readerPageLeft');
+  if (leftPage) {
+    leftPage.style.backgroundColor = cfg.bg;
+    leftPage.style.color = cfg.textColor;
+    leftPage.style.borderRightColor = cfg.borderColor;
+  }
+  
+  const rightPage = document.getElementById('readerPageRight');
+  if (rightPage) {
+    rightPage.style.backgroundColor = cfg.bg;
+    rightPage.style.color = cfg.textColor;
+  }
+  
+  const spineDivider = document.querySelector('.reader-spine-divider');
+  if (spineDivider) {
+    spineDivider.style.background = cfg.spine;
+  }
+  
+  // Highlight the active button
+  const btnSepia = document.getElementById('readerToneSepia');
+  const btnDark = document.getElementById('readerToneDark');
+  const btnLight = document.getElementById('readerToneLight');
+  
+  if (btnSepia) {
+    btnSepia.classList.toggle('active', theme === 'sepia');
+    btnSepia.style.background = theme === 'sepia' ? '#f59e0b' : '';
+    btnSepia.style.color = theme === 'sepia' ? '#2b1f14' : '';
+    btnSepia.style.boxShadow = theme === 'sepia' ? '0 0 12px rgba(245, 158, 11, 0.7)' : '';
+  }
+  if (btnDark) {
+    btnDark.classList.toggle('active', theme === 'dark');
+    btnDark.style.background = theme === 'dark' ? '#374151' : '';
+    btnDark.style.color = theme === 'dark' ? '#f3f4f6' : '';
+    btnDark.style.boxShadow = '';
+  }
+  if (btnLight) {
+    btnLight.classList.toggle('active', theme === 'light');
+    btnLight.style.background = theme === 'light' ? '#ffffff' : '';
+    btnLight.style.color = theme === 'light' ? '#111827' : '';
+    btnLight.style.boxShadow = '';
+  }
   
   try {
     localStorage.setItem('mf_reader_theme', theme);
   } catch (e) {}
+  
+  updateProfileReaderToneDisplay();
+  
+  // Update detail badge if present
+  const modeNameEl = document.getElementById('detailReaderModeName');
+  if (modeNameEl) {
+    const toneNames = {
+      'sepia': 'Sepia Paper Mode (#fbf5e6)',
+      'dark': 'Dark Night Mode (#121824)',
+      'light': 'Crisp Light Mode (#ffffff)'
+    };
+    modeNameEl.innerText = toneNames[theme] || 'Sepia Paper Mode (#fbf5e6)';
+  }
 }
 
 function setReaderSpreadMode(mode) {
@@ -2116,23 +2208,28 @@ function downloadAppUpdate() {
 }
 
 function checkForBackgroundUpdates() {
+  const homeCard = document.getElementById('homeUpdateCard');
+  const homeTitle = document.getElementById('homeUpdateTitle');
+  const homeSub = document.getElementById('homeUpdateSub');
+  
+  if (homeCard) {
+    homeCard.style.display = 'flex';
+  }
+  
   const cfg = (typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') ? window.__DEFAULT_REMOTE_CONFIG__ : null;
   if (!cfg || !cfg.activeRelease || !cfg.activeRelease.version) return;
   
   const activeRel = cfg.activeRelease;
   const isNew = activeRel.version !== CURRENT_APP_VERSION;
   
-  const homeCard = document.getElementById('homeUpdateCard');
-  const homeTitle = document.getElementById('homeUpdateTitle');
-  const homeSub = document.getElementById('homeUpdateSub');
-  
   if (homeCard) {
+    homeCard.style.display = 'flex';
     if (isNew) {
-      homeCard.style.display = 'flex';
       if (homeTitle) homeTitle.innerText = `🔥 Update ${activeRel.version} Available!`;
       if (homeSub) homeSub.innerText = activeRel.name || `${activeRel.version} is ready to download and install`;
     } else {
-      homeCard.style.display = 'none';
+      if (homeTitle) homeTitle.innerText = `🚀 Mind Focus Books ${CURRENT_APP_VERSION} Active`;
+      if (homeSub) homeSub.innerText = `📜 Sepia Paper Mode & All Features Ready • Tap to Update or Re-download APK`;
     }
   }
   
