@@ -2,2439 +2,897 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>🧠 Mind & Focus Books Tracker (150 Books)</title>
-      <link rel="manifest" href="manifest.json">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Mind & Focus — Books Tracker</title>
+  <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
   <link rel="apple-touch-icon" href="icon-192.png">
   <meta name="theme-color" content="#0b0f19">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <script>
-    if ('serviceWorker' in navigator && window.location.protocol.startsWith('http')) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
-      });
-    }
-  </script>
-  <link rel="stylesheet" href="style.css?v=3.8.0">
+  <link rel="stylesheet" href="style.css?v=3.17.0">
 </head>
 <body>
 
-  <!-- ==========================================================================
-       HIDDEN PLACEHOLDER IDS (FIX FOR MISSING ELEMENTS)
-       Iss block ko koi delete nahi karna - yeh missing IDs provide karta hai
-       jo app.js me getElementById() se reference ho rahi hain.
-       Yeh elements visual layout me nahi dikhte (display:none), but JS
-       safely read/write kar sakta hai bina error throw kiye.
-       ========================================================================== -->
-  <div id="missingIdsPlaceholderRoot" style="display:none !important; visibility:hidden; position:absolute; left:-9999px; top:-9999px; width:0; height:0; overflow:hidden;" aria-hidden="true">
-    <!-- KPI / Metrics -->
-    <span id="kpiAvgDays">0</span>
-    <span id="kpiTotalDays">0</span>
-    <span id="kpiHoursInvested">0</span>
-    <span id="kpiMoneySubtext">Library Value</span>
-    <div id="progressBarFill" style="width:0%"></div>
-
-    <!-- Toast / Notifications Container -->
-    <div id="toastContainer" role="status" aria-live="polite"></div>
-
-    <!-- Theme Toggle (header shortcut) -->
-    <button type="button" id="themeToggleBtn">
-      <span id="themeToggleIcon">🌙</span>
-      <span id="themeToggleBtnText">Theme</span>
-    </button>
-
-    <!-- Daily Quote / Global Banner -->
-    <div id="dailyQuoteContainer"></div>
-    <div id="globalTopBanner"></div>
-
-    <!-- PWA / App Lock -->
-    <button type="button" id="installAppBtn" title="Install App">📲 Install</button>
-    <button type="button" id="privacyLockBtn" title="Lock">🔒</button>
-
-    <!-- Header Streak Count -->
-    <span id="headerStreakCount">0</span>
-
-    <!-- Ambience Cards (4 channels) -->
-    <div id="ambienceRainCard" data-channel="rain"></div>
-    <div id="ambienceForestCard" data-channel="forest"></div>
-    <div id="ambienceCafeCard" data-channel="cafe"></div>
-    <div id="ambienceWavesCard" data-channel="waves"></div>
-    <label id="ambienceVolumeLabel" for="ambienceVolumeSlider">Volume</label>
-    <input type="range" id="ambienceVolumeSlider" min="0" max="100" value="50">
-    <span id="ambienceHeaderBtnText">🎧 Ambience</span>
-
-    <!-- Removed Features Safe Placeholders (Null-safety stubs) -->
-    <div id="dictFlashcardsBtn"></div>
-    <div id="headerFlashcardsBtn"></div>
-    <div id="headerHelpDeskBtn"></div>
-    <div id="fabLiveHelpDeskBtn"></div>
-    <div id="userHelpDeskModalOverlay"></div>
-    <div id="mysteryGiftOverlay"></div>
-    <div id="flashcardModalOverlay"></div>
-    <div id="cyber3dNoticeCard"></div>
-
-    <!-- Curated Shelves Section (book curation block) -->
-    <section id="curatedShelvesSection"></section>
-    <div id="dockBookshelfBtn"></div>
-    <div id="dockAmbienceBtn"></div>
-    <div id="dockStreakBtn"></div>
-    <div id="dockRouletteBtn"></div>
-    <div id="dockSettingsBtn"></div>
-    <div id="dockSlidingPill"></div>
-
-    <!-- App Overlays (lockdown / maintenance) -->
-    <div id="appEmergencyLockdownOverlay" data-overlay="lockdown"></div>
-    <div id="appMaintenanceOverlay" data-overlay="maintenance"></div>
-
-    <!-- Floating Mini Capsule (suspended reading resume) -->
-    <div id="floatingMiniCapsule">
-      <img id="miniCapsuleCover" src="" alt="">
-      <span id="miniCapsuleTitle">Resume</span>
-      <div id="miniCapsuleProgressFill" style="width:0%"></div>
-    </div>
-
-    <!-- Mobile DevTools Drawer (alternative to existing modal) -->
-    <aside id="mobileDevToolsDrawer"></aside>
-
-    <!-- Reading Sheet (modal) Pagination -->
-    <input type="range" id="sheetPageSlider" min="0" max="100" value="0">
-    <span id="sheetPageDisplay">0 / 0</span>
-    <span id="sheetPctDisplay">0%</span>
-  </div>
-  <!-- END OF MISSING-IDS PLACEHOLDER BLOCK -->
-
-  <!-- Dynamic Chromatic Aurora Background (Apple Music / VisionOS Spatial Glow) -->
-  <div id="ambientAuroraBg" class="ambient-aurora-bg">
-    <div class="aurora-blob aurora-blob-1"></div>
-    <div class="aurora-blob aurora-blob-2"></div>
-    <div class="aurora-blob aurora-blob-3"></div>
-  </div>
-
-  <!-- Dynamic Island Capsule HUD (Smart Floating Pill) -->
-  <aside id="dynamicIslandHud" class="dynamic-island-hud" onclick="handleDynamicIslandClick(event)" role="complementary" aria-label="Dynamic Island Quick Controls">
-    <div class="island-pill-inner">
-      <div class="island-left" id="islandLeftItem" onclick="event.stopPropagation(); openStreakModal();" title="Reading Streak">
-        <span class="island-icon" id="islandStreakIcon">🔥</span>
-        <span class="island-text" id="islandStreakText">1d Streak</span>
+  <!-- ================= APP HEADER ================= -->
+  <header class="app-header" id="appHeader">
+    <div class="header-left">
+      <div class="app-logo-badge">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
       </div>
-      <div class="island-divider"></div>
-      <div class="island-center" id="islandCenterItem" title="Tap to expand or update progress">
-        <div class="island-book-mini-progress">
-          <span class="island-book-title" id="islandBookTitle">MindFocus Reading</span>
-          <div class="island-mini-bar"><div class="island-mini-fill" id="islandMiniFill" style="width: 0%;"></div></div>
-          <span class="island-pct" id="islandPctText">0%</span>
-        </div>
-      </div>
-      <div class="island-divider"></div>
-      <div class="island-right" id="islandRightItem">
-        <div class="island-soundwave" id="islandSoundwave" onclick="event.stopPropagation(); openAmbienceModal();" title="Ambience Soundscape">
-          <span class="sw-bar"></span><span class="sw-bar"></span><span class="sw-bar"></span>
-        </div>
-        <button type="button" class="island-search-trigger" onclick="event.stopPropagation(); openSpotlightModal();" title="Spotlight Teleport Search (Ctrl+K)">
-          ⚡
-        </button>
+      <div class="header-titles">
+        <h1 class="app-title">Mind & Focus</h1>
+        <span class="app-subtitle">Books Tracker</span>
       </div>
     </div>
-  </aside>
-
-  <!-- App Header (Matching design_wooden_shelf_1789786873826.jpg) -->
-  <header class="app-header" style="background: linear-gradient(180deg, #2a1307 0%, #1c0a03 100%); border-bottom: 2px solid #140702; box-shadow: 0 4px 18px rgba(0,0,0,0.7); padding: 10px 20px; width:100%; box-sizing:border-box;">
-    <div class="header-inner" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
-      <div class="brand-section" onclick="switchBottomTab('home')" style="cursor:pointer; display:flex; align-items:center;" title="Mind Focus Books Home">
-        <div class="shelf-brand-icon-wrap" style="width:36px; height:36px; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); border-radius:10px; margin-right:10px; box-shadow:0 2px 8px rgba(0,0,0,0.5);">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-        </div>
-        <div class="brand-text-wrap" style="display:flex; flex-direction:column; line-height:1.15;">
-          <div class="brand-title-main" style="font-size:1.15rem; font-weight:800; color:#ffffff; letter-spacing:-0.01em;">Mind Focus</div>
-          <div class="brand-subtitle" style="font-size:0.82rem; font-weight:700; color:#fde68a; letter-spacing:0.02em;">Books</div>
-        </div>
-      </div>
-      
-      <div class="header-actions" style="display:flex; align-items:center; gap:8px;">
-        <!-- User Profile Avatar (Circular glass button from design) -->
-        <button type="button" class="shelf-circle-header-btn" onclick="switchBottomTab('profile')" title="Profile & Reading Stats" style="width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); color:#ffffff; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.05rem; box-shadow:0 2px 6px rgba(0,0,0,0.4);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </button>
-        <!-- Spotlight Search (Circular glass button from design) -->
-        <button type="button" class="shelf-circle-header-btn" onclick="openSpotlightModal()" title="Search Library (Ctrl+K)" style="width:38px; height:38px; border-radius:50%; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.18); color:#ffffff; display:flex; align-items:center; justify-content:center; cursor:pointer; font-size:1.05rem; box-shadow:0 2px 6px rgba(0,0,0,0.4);">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
+    <div class="header-right">
+      <button type="button" class="header-icon-btn" id="headerSearchBtn" title="Search Books" onclick="focusSearch()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
+      </button>
+      <div class="header-avatar-wrap" id="headerProfileAvatar" onclick="switchTab('profile')" title="View Profile">
+        <img src="ankit_avatar.png" alt="Ankit Burdak" id="headerAvatarImg" onerror="this.src='icon-192.png'">
       </div>
     </div>
   </header>
 
-  <!-- Main Container -->
-  <main class="main-container" id="mainContainer">
+  <!-- ================= MAIN VIEWS CONTAINER ================= -->
+  <main class="main-content" id="mainContent">
 
-    <!-- 4D Elastic Pull-to-Refresh Indicator -->
-    <div class="pull-to-refresh-indicator" id="pullToRefreshIndicator">
-      <div class="ptr-spinner-orb">
-        <span class="ptr-compass-icon">🧭</span>
-      </div>
-      <span class="ptr-label" id="ptrLabel">Pull down to refresh library...</span>
-    </div>
-
-    <!-- Golden Light Sweep Beam Overlay -->
-    <div class="golden-sweep-overlay" id="goldenSweepOverlay"></div>
-
-    <!-- TAB VIEW 1: HOME (Exact 3D Luxury Mahogany Bookshelf matching design_wooden_shelf_1789786873826.jpg) -->
-    <div id="homeViewContainer" class="app-tab-view">
-      <!-- Home 1 vs Home 2 Switcher Capsule -->
-      <div class="home-switcher-wrap">
-        <div class="home-switcher-capsule">
-          <button type="button" class="home-switcher-btn active" id="switcherBtnHome1" onclick="switchBottomTab('home')">
-            <span>🪵</span> <span>Wood Shelves (Home 1)</span>
-          </button>
-          <button type="button" class="home-switcher-btn" id="switcherBtnHome2" onclick="switchBottomTab('home2')">
-            <span>✨</span> <span>AI Editorial (Home 2)</span>
-          </button>
+    <!-- ================= VIEW 1: HOME ================= -->
+    <section id="viewHome" class="app-view active">
+      <!-- Greeting Banner -->
+      <div class="home-greeting-banner">
+        <div class="greeting-content">
+          <div class="greeting-pre">Good Evening,</div>
+          <div class="greeting-name">
+            <span id="homeUserGreetingName">Ankit Burdak</span>
+            <span class="greeting-emoji">🌅</span>
+          </div>
+          <div class="greeting-quote">Better Books • Sharper Mind • Brighter Future</div>
         </div>
       </div>
 
-      <div class="mahogany-bookshelf-container" id="mahoganyBookshelfContainer">
-        <!-- Rendered dynamically by renderHomeBookshelf() in app.js -->
+      <!-- Currently Reading Hero Card -->
+      <div class="currently-reading-hero" id="homeCurrentlyReadingCard">
+        <div class="cr-left">
+          <div class="radial-progress-wrap">
+            <svg class="radial-progress-svg" viewBox="0 0 80 80">
+              <circle class="radial-bg" cx="40" cy="40" r="34"></circle>
+              <circle class="radial-bar" id="homeCrRadialBar" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="123.8"></circle>
+            </svg>
+            <span class="radial-percent-text" id="homeCrPercentText">42%</span>
+          </div>
+        </div>
+        <div class="cr-info">
+          <div class="cr-badge">Currently Reading</div>
+          <h3 class="cr-title" id="homeCrTitle">The Silent Path</h3>
+          <div class="cr-subtitle" id="homeCrSubtitle">42% completed</div>
+          <button type="button" class="btn-gold-pill" id="homeCrContinueBtn" onclick="openCurrentReadingDetail()">Continue Reading</button>
+        </div>
+        <div class="cr-cover-wrap">
+          <img id="homeCrCoverImg" src="https://covers.openlibrary.org/b/id/13202688-L.jpg" alt="Book Cover" onerror="this.src='cover_placeholder.jpg'">
+        </div>
       </div>
-      <!-- Hidden legacy elements for safety -->
-      <div style="display:none;" id="homeMyLibraryGrid"></div>
-      <div style="display:none;" id="homeContinueReadingGrid"></div>
-      <div style="display:none;" id="homeRecentlyAddedGrid"></div>
-    </div>
 
-    <!-- TAB VIEW 1B: HOME 2 (Cinematic AI Editorial Masonry Grid inspired by Magnific.ai / Midjourney) -->
-    <div id="home2ViewContainer" class="app-tab-view" style="display:none;">
-      <div class="home2-editorial-wrap">
-        <!-- Home 1 vs Home 2 Switcher Capsule -->
-        <div class="home-switcher-wrap">
-          <div class="home-switcher-capsule">
-            <button type="button" class="home-switcher-btn" id="switcherBtnHome1Alt" onclick="switchBottomTab('home')">
-              <span>🪵</span> <span>Wood Shelves (Home 1)</span>
-            </button>
-            <button type="button" class="home-switcher-btn active" id="switcherBtnHome2Alt" onclick="switchBottomTab('home2')">
-              <span>✨</span> <span>AI Editorial (Home 2)</span>
-            </button>
+      <!-- 4 Stats Cards (2x2 Grid) -->
+      <div class="home-stats-grid">
+        <div class="stat-card stat-teal" onclick="switchTab('library')">
+          <div class="stat-icon-wrap teal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+            </svg>
+          </div>
+          <div class="stat-meta">
+            <div class="stat-label">Total Books</div>
+            <div class="stat-val" id="statTotalBooks">48</div>
           </div>
         </div>
 
-        <!-- Editorial Hero Header -->
-        <div class="editorial-hero-banner">
-          <div>
-            <div class="editorial-hero-title">
-              <span>✨</span> Mind Focus Editorial
-            </div>
-            <div class="editorial-hero-sub">
-              Cinematic AI Showcase • 313 Masterpieces Across 26 World Categories
-            </div>
+        <div class="stat-card stat-emerald" onclick="filterByStatus('DONE')">
+          <div class="stat-icon-wrap emerald">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
           </div>
-          <div id="home2ActiveCategoryPill" style="font-size:0.75rem; font-weight:800; color:#38bdf8; background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); border-radius:999px; padding:4px 12px;">
-            Showing All Books (313)
+          <div class="stat-meta">
+            <div class="stat-label">Finished</div>
+            <div class="stat-val" id="statFinishedBooks">16</div>
           </div>
         </div>
 
-        <!-- Category Horizontal Filter Bar -->
-        <div class="editorial-category-bar" id="editorialCategoryBar">
-          <!-- Dynamically populated in app.js -->
+        <div class="stat-card stat-orange">
+          <div class="stat-icon-wrap orange">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2c1.5 3 4 5.5 4 9.5 0 4.14-3.36 7.5-7.5 7.5S1 15.64 1 11.5c0-4 4-7.5 4-7.5s-.5 2 1.5 3.5C8 9 9.5 6 12 2z"></path>
+            </svg>
+          </div>
+          <div class="stat-meta">
+            <div class="stat-label">Reading Streak</div>
+            <div class="stat-val" id="statReadingStreak">7 days</div>
+          </div>
         </div>
 
-        <!-- Multi-Column Masonry Grid -->
-        <div class="editorial-masonry-grid" id="editorialMasonryGrid">
-          <!-- Dynamically populated in app.js -->
-        </div>
-      </div>
-    </div>
-
-    <!-- TAB VIEW 2: LIBRARY (Full Catalog with Search & Shelves) -->
-    <div id="libraryViewContainer" class="app-tab-view" style="display:none;">
-      <!-- Luxury Showcase: Now Reading Hero Spotlight -->
-      <section id="nowReadingHeroSection"></section>
-
-    <!-- Compact Luxury KPI & Progress Strip (Ultra-Clean & De-cluttered) -->
-    <section class="compact-kpi-strip">
-      <div class="kpi-strip-item kpi-progress-item" onclick="filterByStatus('DONE')" style="cursor:pointer;" title="Tap to view Finished Books">
-        <div class="kpi-ring-wrap">
-          <svg viewBox="0 0 36 36" class="circular-chart">
-            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-            <path class="circle" id="kpiRingFill" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-          </svg>
-          <span class="kpi-ring-pct" id="kpiRingPct">0%</span>
-        </div>
-        <div class="kpi-strip-meta">
-          <div class="kpi-strip-title" id="progressSubText">0 / 150 Finished</div>
-          <div class="kpi-strip-sub" id="progressPctText">0.0% Completed</div>
+        <div class="stat-card stat-gold">
+          <div class="stat-icon-wrap gold">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div class="stat-meta">
+            <div class="stat-label">Total Reading Time</div>
+            <div class="stat-val" id="statReadingTime">124h 30m</div>
+          </div>
         </div>
       </div>
 
-      <div class="kpi-strip-chips">
-        <div class="kpi-chip" id="chipReading" onclick="filterByStatus('READING')" style="cursor:pointer;" title="Tap to view Currently Reading books">
-          <span class="chip-icon">📖</span>
-          <span class="chip-val" id="kpiCurrentlyReading">1</span>
-          <span class="chip-lbl">Reading</span>
+      <!-- Recent Books Section -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Recent Books</h2>
+          <button type="button" class="section-link-btn" onclick="switchTab('library')">View all &rarr;</button>
         </div>
-        <div class="kpi-chip" id="chipDone" onclick="filterByStatus('DONE')" style="cursor:pointer;" title="Tap to view Finished books">
-          <span class="chip-icon">✅</span>
-          <span class="chip-val" id="kpiBooksDone">0</span>
-          <span class="chip-lbl">Done</span>
-        </div>
-        <div class="kpi-chip" onclick="openStreakModal()" style="cursor:pointer;" title="Daily Reading Streak">
-          <span class="chip-icon">🔥</span>
-          <span class="chip-val" id="kpiStreakValue">1 Day</span>
-          <span class="chip-lbl">Streak</span>
-        </div>
-        <div class="kpi-chip" onclick="filterByStatus('ALL')" style="cursor:pointer;" title="Total Books in Library - Tap to view All">
-          <span class="chip-icon">📚</span>
-          <span class="chip-val" id="kpiTotalBooks">150</span>
-          <span class="chip-lbl">Total</span>
-        </div>
-        <div class="kpi-chip" onclick="showKnowledgeValueBreakdown()" style="cursor:pointer;" title="Tap to view Library Value Breakdown">
-          <span class="chip-icon">💰</span>
-          <span class="chip-val" id="kpiMoneySaved">₹0</span>
-          <span class="chip-lbl">Value</span>
-        </div>
-        <div class="kpi-chip" onclick="openReadingDnaModal()" style="cursor:pointer; background:linear-gradient(135deg, rgba(99,102,241,0.16), rgba(168,85,247,0.16)); border-color:rgba(168,85,247,0.35);" title="Open Reading DNA Galaxy Constellation">
-          <span class="chip-icon">🌌</span>
-          <span class="chip-val" id="kpiDnaStars">0 ★</span>
-          <span class="chip-lbl">DNA Galaxy</span>
+        <div class="recent-books-scroll" id="homeRecentBooksList">
+          <!-- Populated by JS -->
         </div>
       </div>
     </section>
 
-    <!-- Search & Controls Bar -->
-    <section class="controls-card">
-      <div class="controls-top">
-        <div class="search-box">
-          <span class="search-icon">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-          </span>
-          <input type="text" id="searchInput" class="search-input" placeholder="Search books by title, author, category, or notes...">
-          <button id="clearSearchBtn" class="clear-search-btn" title="Clear search">✕</button>
-        </div>
+    <!-- ================= VIEW 2: LIBRARY ================= -->
+    <section id="viewLibrary" class="app-view">
+      <div class="view-header-block">
+        <h2 class="view-main-title">My Library</h2>
+        <p class="view-sub-title">Your personal collection of books</p>
       </div>
 
-      <!-- Arrow Toggle Button (Teer 🔽) directly below Search Box -->
-      <div class="search-drawer-toggle-row">
-        <button type="button" class="search-drawer-toggle-btn" id="toggleFiltersDrawerBtn" onclick="toggleSearchOptionsDrawer()" title="Click to show/hide all filters and view options">
-          <span class="sdt-label">⚙️ Filter &amp; View Options</span>
-          <span class="sdt-arrow" id="sdtArrowIcon">▼</span>
+      <!-- Search & Filter Bar -->
+      <div class="search-bar-wrap">
+        <div class="search-input-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="librarySearchInput" placeholder="Search books, authors..." oninput="handleSearch(this.value)">
+          <button type="button" class="search-clear-btn" id="librarySearchClearBtn" onclick="clearSearch()" style="display:none;">&times;</button>
+        </div>
+        <button type="button" class="filter-toggle-btn" onclick="openAddBookModal()" title="Add New Book">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
         </button>
       </div>
 
-      <!-- 4D Horizontal Swipeable Category Carousel -->
-      <div class="swipeable-category-track-wrap">
-        <div class="swipeable-category-track" id="swipeableCategoryTrack">
-          <button type="button" class="category-pill-chip active" data-cat="ALL" onclick="selectCategoryChip('ALL', this)">
-            <span class="chip-emoji">✨</span> All Books
-          </button>
-          <button type="button" class="category-pill-chip" data-cat="Focus" onclick="selectCategoryChip('Focus', this)">
-            <span class="chip-emoji">⚡</span> Focus &amp; Mind
-          </button>
-          <button type="button" class="category-pill-chip" data-cat="Habits" onclick="selectCategoryChip('Habits', this)">
-            <span class="chip-emoji">🔥</span> Habits &amp; Routine
-          </button>
-          <button type="button" class="category-pill-chip" data-cat="Wealth" onclick="selectCategoryChip('Wealth', this)">
-            <span class="chip-emoji">💰</span> Wealth &amp; Money
-          </button>
-          <button type="button" class="category-pill-chip" data-cat="Psychology" onclick="selectCategoryChip('Psychology', this)">
-            <span class="chip-emoji">🧠</span> Psychology
-          </button>
-          <button type="button" class="category-pill-chip" data-cat="Philosophy" onclick="selectCategoryChip('Philosophy', this)">
-            <span class="chip-emoji">🏛️</span> Philosophy &amp; Stoic
-          </button>
-          <button type="button" class="category-pill-chip" data-cat="Biographies" onclick="selectCategoryChip('Biographies', this)">
-            <span class="chip-emoji">👑</span> Biographies
-          </button>
-        </div>
+      <!-- Status Filter Tabs -->
+      <div class="filter-chips-scroll">
+        <button type="button" class="filter-chip active" id="chipStatusAll" onclick="filterByStatus('ALL')">All (<span id="countAll">48</span>)</button>
+        <button type="button" class="filter-chip" id="chipStatusReading" onclick="filterByStatus('READING')">Reading (<span id="countReading">12</span>)</button>
+        <button type="button" class="filter-chip" id="chipStatusCompleted" onclick="filterByStatus('DONE')">Completed (<span id="countCompleted">16</span>)</button>
+        <button type="button" class="filter-chip" id="chipStatusWishlist" onclick="filterByStatus('WISHLIST')">Wishlist (<span id="countWishlist">20</span>)</button>
       </div>
 
-      <!-- Collapsible Options Drawer -->
-      <div class="search-options-drawer" id="searchOptionsDrawer">
-        <div class="controls-btn-group" style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
-          <button id="scanBarcodeBtn" class="btn" style="background: linear-gradient(135deg, #059669, #10b981); color:#ffffff; border:none; font-weight:700;" title="Scan physical book barcode / ISBN with camera">
-            📷 Scan ISBN
-          </button>
-          <button id="pickNextBookBtn" class="btn" style="background: linear-gradient(135deg, #4f46e5, #7c3aed); color:#ffffff; border:none; font-weight:700;" title="Can't decide? Let the app pick your next best read!">
-            🎲 Pick Next Book
-          </button>
-
-          <div class="view-toggles">
-            <button id="viewGridBtn" class="view-btn active" title="Library Grid View">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-              Showcase
-            </button>
-            <button id="viewTableBtn" class="view-btn" title="Spreadsheet Table View">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line></svg>
-              Table
-            </button>
-            <button id="viewBookshelfBtn" class="view-btn" title="Realistic 3D Wooden Bookshelf View">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-              Bookshelf
-            </button>
-          </div>
-        </div>
-
-        <div class="filters-row">
-          <div class="tab-pills">
-            <button class="tab-pill active" data-status="ALL">
-              All <span class="pill-count" id="countAll">150</span>
-            </button>
-            <button class="tab-pill" data-status="READING">
-              📖 Reading <span class="pill-count" id="countReading">1</span>
-            </button>
-            <button class="tab-pill" data-status="DONE">
-              ✅ Finished <span class="pill-count" id="countDone">0</span>
-            </button>
-            <button class="tab-pill" data-status="PENDING">
-              ⏳ Pending <span class="pill-count" id="countPending">149</span>
-            </button>
-            <button class="tab-pill" data-status="LENT" title="Books lent to friends or relatives">
-              👥 Lent Out <span class="pill-count" id="countLent">0</span>
-            </button>
-          </div>
-
-          <div class="filter-selects">
-            <select id="categoryFilter" class="select-input">
-              <option value="ALL">All Categories</option>
-            </select>
-
-            <select id="availabilityFilter" class="select-input">
-              <option value="ALL">All Availability</option>
-              <option value="AVAILABLE">Available</option>
-              <option value="UNAVAILABLE">Unavailable</option>
-            </select>
-
-            <select id="sortSelect" class="select-input">
-              <option value="no_asc">Sort: Book Number (1-150)</option>
-              <option value="no_desc">Sort: Book Number (150-1)</option>
-              <option value="title_asc">Sort: Title (A - Z)</option>
-              <option value="title_desc">Sort: Title (Z - A)</option>
-              <option value="author_asc">Sort: Author Name</option>
-              <option value="rating_desc">Sort: Highest Rating</option>
-              <option value="days_desc">Sort: Most Days Read</option>
-              <option value="price_desc">Sort: Highest Price (₹)</option>
-              <option value="price_asc">Sort: Lowest Price (₹)</option>
-            </select>
-
-            <select id="pageSizeSelect" class="select-input">
-              <option value="25">25 per page</option>
-              <option value="50">50 per page</option>
-              <option value="100">100 per page</option>
-              <option value="150">All (150)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Quick Category Pills -->
-        <div class="category-summary-bar">
-          <div class="category-tags-list" id="categoryTagsContainer"></div>
-        </div>
-      </div>
-    <!-- Quick View Switcher: Grid vs 3D Bookshelf -->
-    <div class="quick-view-switcher-bar">
-      <div class="quick-view-pill-group">
-        <button type="button" id="quickViewGridBtn" class="quick-view-pill active" onclick="setViewMode('grid')">
-          <span>▦</span> Grid
-        </button>
-        <button type="button" id="quickViewBookshelfBtn" class="quick-view-pill" onclick="setViewMode('bookshelf')">
-          <span>🪵</span> 3D Shelf
-        </button>
-      </div>
-    </div>
-
-    <!-- Books Display Area -->
-    <div id="booksContentArea"></div>
-    <!-- Pagination -->
-    <div id="paginationArea"></div>
-    </div> <!-- END OF LIBRARY VIEW CONTAINER -->
-
-    <!-- TAB VIEW 3: DISCOVER -->
-    <div id="discoverViewContainer" class="app-tab-view" style="display:none;">
-      <section class="home-section">
-        <div class="home-section-header">
-          <h2 class="home-section-title">Explore & Discover</h2>
-        </div>
-        <div class="discover-hero-card" onclick="openPickBookModal()" style="background:linear-gradient(135deg, rgba(99,102,241,0.25), rgba(168,85,247,0.2)); border:1px solid rgba(168,85,247,0.4); border-radius:18px; padding:1.2rem; cursor:pointer; margin-bottom:1rem; box-shadow:0 8px 24px rgba(0,0,0,0.4);">
-          <div style="font-size:2rem; margin-bottom:6px;">🎲</div>
-          <div style="font-size:1.15rem; font-weight:800; color:#ffffff; margin-bottom:4px;">Pick My Next Book</div>
-          <div style="font-size:0.8rem; color:#cbd5e1; line-height:1.4;">Can't decide what to read next? Tap here for an instant personalized focus book recommendation.</div>
-        </div>
-
-        <div class="discover-actions-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:0.75rem; margin-bottom:1.5rem;">
-          <div class="discover-action-tile" onclick="openAmbienceModal()" style="background:#161c28; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:1rem; cursor:pointer; text-align:center;">
-            <div style="font-size:1.8rem; margin-bottom:4px;">🎧</div>
-            <div style="font-weight:700; font-size:0.9rem; color:#f8fafc;">Ambience</div>
-            <div style="font-size:0.7rem; color:#94a3b8;">Rain, Forest, Cafe</div>
-          </div>
-          <div class="discover-action-tile" onclick="openReadingDnaModal()" style="background:#161c28; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:1rem; cursor:pointer; text-align:center;">
-            <div style="font-size:1.8rem; margin-bottom:4px;">🌌</div>
-            <div style="font-weight:700; font-size:0.9rem; color:#f8fafc;">Reading DNA</div>
-            <div style="font-size:0.7rem; color:#94a3b8;">Galaxy Constellation</div>
-          </div>
-        </div>
-
-        <div class="home-section-header">
-          <h2 class="home-section-title">Popular Categories</h2>
-        </div>
-        <div class="discover-categories-list" style="display:flex; flex-direction:column; gap:0.6rem;">
-          <div class="category-discover-item" onclick="switchBottomTab('library'); selectCategoryChip('Focus', this);" style="background:#161c28; border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:0.85rem 1rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
-            <div style="display:flex; align-items:center; gap:0.75rem;"><span style="font-size:1.4rem;">⚡</span><span style="font-weight:700; font-size:0.92rem; color:#f8fafc;">Focus &amp; Concentration</span></div>
-            <span style="color:#10b981; font-weight:700; font-size:0.85rem;">Explore &rarr;</span>
-          </div>
-          <div class="category-discover-item" onclick="switchBottomTab('library'); selectCategoryChip('Habits', this);" style="background:#161c28; border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:0.85rem 1rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
-            <div style="display:flex; align-items:center; gap:0.75rem;"><span style="font-size:1.4rem;">🔥</span><span style="font-weight:700; font-size:0.92rem; color:#f8fafc;">Habits &amp; Routine Mastery</span></div>
-            <span style="color:#10b981; font-weight:700; font-size:0.85rem;">Explore &rarr;</span>
-          </div>
-          <div class="category-discover-item" onclick="switchBottomTab('library'); selectCategoryChip('Wealth', this);" style="background:#161c28; border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:0.85rem 1rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
-            <div style="display:flex; align-items:center; gap:0.75rem;"><span style="font-size:1.4rem;">💰</span><span style="font-weight:700; font-size:0.92rem; color:#f8fafc;">Wealth &amp; Financial Mindset</span></div>
-            <span style="color:#10b981; font-weight:700; font-size:0.85rem;">Explore &rarr;</span>
-          </div>
-          <div class="category-discover-item" onclick="switchBottomTab('library'); selectCategoryChip('Psychology', this);" style="background:#161c28; border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:0.85rem 1rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer;">
-            <div style="display:flex; align-items:center; gap:0.75rem;"><span style="font-size:1.4rem;">🧠</span><span style="font-weight:700; font-size:0.92rem; color:#f8fafc;">Mindset &amp; Human Psychology</span></div>
-            <span style="color:#10b981; font-weight:700; font-size:0.85rem;">Explore &rarr;</span>
-          </div>
-        </div>
-      </section>
-    </div>
-
-    <!-- TAB VIEW 4: PROFILE -->
-    <div id="profileViewContainer" class="app-tab-view" style="display:none;">
-      <section class="home-section">
-        <div class="profile-header-card" style="background:linear-gradient(135deg, #1e293b, #0f172a); border:1px solid rgba(255,255,255,0.1); border-radius:20px; padding:1.25rem; display:flex; align-items:center; gap:1rem; margin-bottom:1.25rem; box-shadow:0 10px 28px rgba(0,0,0,0.5);">
-          <div style="width:60px; height:60px; border-radius:50%; background:linear-gradient(135deg, #10b981, #059669); display:flex; align-items:center; justify-content:center; font-size:1.8rem; box-shadow:0 4px 14px rgba(16,185,129,0.4); flex-shrink:0;">
-            👤
-          </div>
-          <div style="flex:1;">
-            <div style="font-size:1.15rem; font-weight:800; color:#ffffff;">Reader Profile</div>
-            <div style="font-size:0.78rem; color:#94a3b8; margin-top:2px;">Mind Focus Books • Offline Native Edition</div>
-            <div style="display:inline-block; font-size:0.7rem; font-weight:800; background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.4); border-radius:6px; padding:2px 8px; margin-top:5px;">
-              v3.16.0 Active
-            </div>
-          </div>
-        </div>
-
-        <div class="profile-actions-list" style="display:flex; flex-direction:column; gap:0.75rem;">
-          <button type="button" class="profile-row-btn" onclick="openStreakModal()" style="background:#161c28; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:1rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer; color:#ffffff; font-weight:700; width:100%; text-align:left;">
-            <div style="display:flex; align-items:center; gap:0.75rem;"><span style="font-size:1.4rem;">🔥</span><span>Daily Reading Streak &amp; Stats</span></div>
-            <span style="color:#f59e0b;">View &rarr;</span>
-          </button>
-          <button type="button" class="profile-row-btn" onclick="openReadingDnaModal()" style="background:#161c28; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:1rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer; color:#ffffff; font-weight:700; width:100%; text-align:left;">
-            <div style="display:flex; align-items:center; gap:0.75rem;"><span style="font-size:1.4rem;">🌌</span><span>Reading DNA Galaxy &amp; Badges</span></div>
-            <span style="color:#a78bfa;">Explore &rarr;</span>
-          </button>
-          <button type="button" class="profile-row-btn" onclick="openSettingsModal()" style="background:#161c28; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:1rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer; color:#ffffff; font-weight:700; width:100%; text-align:left;">
-            <div style="display:flex; align-items:center; gap:0.75rem;"><span style="font-size:1.4rem;">⚙️</span><span>App Settings, Theme &amp; Typography</span></div>
-            <span style="color:#38bdf8;">Configure &rarr;</span>
-          </button>
-          <button type="button" class="profile-row-btn" onclick="openBackupModal()" style="background:#161c28; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:1rem; display:flex; justify-content:space-between; align-items:center; cursor:pointer; color:#ffffff; font-weight:700; width:100%; text-align:left;">
-            <div style="display:flex; align-items:center; gap:0.75rem;"><span style="font-size:1.4rem;">💾</span><span>Backup &amp; Export Reading Data</span></div>
-            <span style="color:#10b981;">Export &rarr;</span>
-          </button>
-        </div>
-      </section>
-    </div>
-
-  </main>
-  <!-- 1-Tap Luxury Book Detail Sheet (Apple Books / Blinkist Style) -->
-  <div class="modal-overlay" id="bookDetailSheetOverlay">
-    <div class="modal-content book-detail-sheet-content" style="max-width:540px;">
-      <div class="sheet-drag-handle"></div>
-      <div class="modal-header" style="border-bottom:none; padding:1.2rem 1.5rem 0.25rem;">
-        <span class="sheet-category-badge" id="sheetCategoryBadge">Category</span>
-        <button class="modal-close" onclick="closeBookDetailSheet()">&times;</button>
-      </div>
-      <div class="modal-body" id="bookDetailSheetBody" style="padding:0.75rem 1.25rem 2.8rem; gap:0.85rem; overflow-y:auto; -webkit-overflow-scrolling:touch; max-height:76vh;">
-        <!-- Dynamically rendered by JS -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Add / Edit Book Modal -->
-  <div class="modal-overlay" id="bookModalOverlay">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title" id="bookModalTitle">Edit Book</h3>
-        <button class="modal-close" onclick="closeBookModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Book No</label>
-            <input type="text" id="editBookNo" class="form-control" placeholder="e.g. book 151">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Language</label>
-            <input type="text" id="editBookLanguage" class="form-control" placeholder="e.g. HINDI, ENGLISH">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Book Title *</label>
-          <input type="text" id="editBookTitle" class="form-control" placeholder="Enter book title">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Author</label>
-            <input type="text" id="editBookAuthor" class="form-control" placeholder="Author name">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Category</label>
-            <input type="text" id="editBookCategory" class="form-control" placeholder="e.g. Focus & Concentration">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Book Cover Photo</label>
-          <div style="display:flex; gap:1rem; align-items:center;">
-            <div id="coverPreviewBox" class="cover-preview-box">
-              <span id="coverPlaceholderText" style="font-size:0.75rem; color:var(--text-muted);">No Cover</span>
-              <img id="coverPreviewImg" src="" alt="Cover" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:4px;">
-            </div>
-            <div style="display:flex; flex-direction:column; gap:0.5rem; flex:1;">
-              <input type="text" id="editBookCover" class="form-control" placeholder="Paste Image URL or choose file below" oninput="onEditBookCoverUrlInput(this.value)">
-              <div style="display:flex; gap:0.5rem; align-items:center;">
-                <label class="btn btn-sm" style="cursor:pointer; margin:0;">
-                  📁 Upload Photo
-                  <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverImageUpload(this)">
-                </label>
-                <button type="button" class="btn btn-sm btn-danger" id="removeCoverBtn" onclick="removeCoverPhoto()" style="display:none;">
-                  Remove
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Status</label>
-            <select id="editBookStatus" class="form-control">
-              <option value="PENDING">⏳ PENDING</option>
-              <option value="READING">📖 READING</option>
-              <option value="DONE">✅ DONE</option>
-              <option value="LENT">👥 LENT OUT</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Availability</label>
-            <select id="editBookAvailability" class="form-control">
-              <option value="AVAILABLE">Available</option>
-              <option value="UNAVAILABLE">Unavailable</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Book Reading Page Tracking -->
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Current Page</label>
-            <input type="number" id="editCurrentPage" class="form-control" placeholder="e.g. 85" min="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Total Pages</label>
-            <input type="number" id="editTotalPages" class="form-control" placeholder="e.g. 280" min="1">
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Price (₹ Purchase Cost)</label>
-            <input type="number" id="editBookPrice" class="form-control" placeholder="e.g. 299" min="0">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Rating (1 to 5 Stars)</label>
-            <select id="editBookRating" class="form-control">
-              <option value="">No Rating</option>
-              <option value="1">1 Star ★</option>
-              <option value="2">2 Stars ★★</option>
-              <option value="3">3 Stars ★★★</option>
-              <option value="4">4 Stars ★★★★</option>
-              <option value="5">5 Stars ★★★★★</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Start Date</label>
-            <input type="date" id="editStartDate" class="form-control">
-          </div>
-          <div class="form-group">
-            <label class="form-label">End Date</label>
-            <input type="date" id="editEndDate" class="form-control">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Count Days (Auto-calculated)</label>
-          <input type="number" id="editCountDays" class="form-control" min="0">
-        </div>
-
-        <div class="form-group">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
-            <label class="form-label" style="margin:0;">Key Learning / Takeaway</label>
-            <button type="button" class="btn btn-sm" onclick="openOcrScanner('editBookTakeaway')" style="color:#6366f1; border-color:rgba(99,102,241,0.3); font-size:0.75rem;">
-              📸 Scan Page (OCR)
-            </button>
-          </div>
-          <textarea id="editBookTakeaway" class="form-control" placeholder="What are the key learnings, quotes, or actionable insights from this book?"></textarea>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn" onclick="closeBookModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveBookModal()">Save Changes</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Takeaway Notes Modal -->
-  <div class="modal-overlay" id="takeawayModalOverlay">
-    <div class="modal-content" style="max-width:560px;">
-      <div class="modal-header">
-        <h3 class="modal-title">💡 Key Learnings & Notes</h3>
-        <button class="modal-close" onclick="closeTakeawayModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div id="takeawayBookTitle" style="font-weight:700; color:var(--text-primary); font-size:1.05rem;"></div>
-        
-        <!-- Note Formatting Template Chips -->
-        <div class="note-template-chips">
-          <button type="button" class="chip-action-btn" onclick="insertNoteTemplate('takeaway')">💡 Key Takeaway</button>
-          <button type="button" class="chip-action-btn" onclick="insertNoteTemplate('chapter')">🔖 Chapter Note</button>
-          <button type="button" class="chip-action-btn" onclick="insertNoteTemplate('quote')">⭐ Golden Quote</button>
-          <button type="button" class="chip-action-btn" onclick="insertNoteTemplate('action')">🎯 Action Step</button>
-        </div>
-
-        <div class="form-group">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
-            <label class="form-label" style="margin:0;">Your Insights, Action Items & Summary:</label>
-            <button type="button" class="btn btn-sm" onclick="openOcrScanner('takeawayTextarea')" style="color:#6366f1; border-color:rgba(99,102,241,0.3); font-size:0.8rem; font-weight:600;">
-              📸 Scan Page (OCR)
-            </button>
-          </div>
-          <textarea id="takeawayTextarea" class="form-control" style="min-height:220px;" placeholder="Write down key takeaways, life lessons, or summary of this book..."></textarea>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn" onclick="closeTakeawayModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveTakeawayModal()">Save Notes</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Pick Next Book Modal (Feature 2) -->
-  <div class="modal-overlay" id="pickBookModalOverlay">
-    <div class="modal-content" style="max-width: 520px; text-align: center;">
-      <div class="modal-header">
-        <h3 class="modal-title">🎲 Pick Your Next Book</h3>
-        <button class="modal-close" onclick="closePickBookModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="gap: 1.25rem; padding: 1.5rem;">
-        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 0.25rem;">
-          Select what you want to focus on, or let fate decide your next read:
-        </p>
-
-        <div style="display:flex; gap:0.5rem; justify-content:center;">
-          <select id="pickMoodCategory" class="select-input" style="width:100%; max-width:320px; font-size:0.92rem; padding:0.6rem;">
-            <option value="ALL">✨ Any Category (Surprise Me)</option>
+      <!-- Secondary Controls: Sort & Category Filter -->
+      <div class="library-controls-bar">
+        <div class="sort-select-wrap">
+          <span class="sort-prefix">Sort by:</span>
+          <select id="librarySortSelect" onchange="handleSortChange(this.value)">
+            <option value="recent">Recently Added</option>
+            <option value="title_asc">Title (A-Z)</option>
+            <option value="progress_desc">Reading Progress</option>
+            <option value="rating_desc">Highest Rated</option>
+            <option value="pages_desc">Page Count</option>
           </select>
         </div>
-
-        <div id="spinnerDisplayCard" style="background: var(--bg-primary); border: 2px dashed var(--border-color); border-radius: var(--radius-md); padding: 1.5rem; min-height: 140px; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 0.5rem;">
-          <div style="font-size: 2.25rem;" id="spinnerIcon">📚</div>
-          <div id="spinnerText" style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary);">
-            Ready to find your next great book?
-          </div>
-          <div id="spinnerSubText" style="font-size: 0.85rem; color: var(--text-muted);">
-            Click Spin below to pick from your pending books
-          </div>
-        </div>
-
-        <div id="pickedBookActions" style="display:none; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
-          <button class="btn btn-success" id="startReadingPickedBtn" style="background:#10b981; border-color:#10b981; color:#fff; font-weight:700;">
-            📖 Start Reading Now
-          </button>
-          <button class="btn" onclick="spinForNextBook()">
-            🔄 Spin Again
-          </button>
+        <div class="filter-category-wrap">
+          <select id="libraryCategorySelect" onchange="handleCategoryChange(this.value)">
+            <option value="ALL">All Categories</option>
+            <!-- Categories injected dynamically -->
+          </select>
         </div>
       </div>
-      <div class="modal-footer" style="justify-content: center;">
-        <button class="btn btn-primary" id="spinNowBtn" onclick="spinForNextBook()" style="padding: 0.65rem 1.75rem; font-size: 1rem; font-weight: 700;">
-          🎲 Spin & Pick Book!
+
+      <!-- 3-Column Books Grid -->
+      <div class="library-books-grid" id="libraryBooksGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- ================= VIEW 3: EXPLORE ================= -->
+    <section id="viewExplore" class="app-view">
+      <div class="view-header-block">
+        <h2 class="view-main-title">Explore</h2>
+        <p class="view-sub-title">Discover new books, authors and ideas</p>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="search-bar-wrap">
+        <div class="search-input-box">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="exploreSearchInput" placeholder="Search books, authors, genres..." oninput="handleExploreSearch(this.value)">
+        </div>
+      </div>
+
+      <!-- Genre Pills -->
+      <div class="filter-chips-scroll" id="exploreGenreChips">
+        <button type="button" class="filter-chip active" onclick="filterExploreGenre('ALL')">All</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Productivity')">Productivity</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Self Help')">Self Help</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Fiction')">Fiction</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Business')">Business</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Technology')">Technology</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Dark Psychology')">Dark Psychology</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Philosophy')">Philosophy</button>
+      </div>
+
+      <!-- Featured Book Hero Card -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Featured Books</h2>
+          <button type="button" class="section-link-btn" onclick="switchTab('library')">View all &rarr;</button>
+        </div>
+        <div class="featured-book-hero" id="exploreFeaturedCard">
+          <div class="featured-cover-wrap">
+            <img id="featuredCoverImg" src="https://covers.openlibrary.org/b/id/8315603-L.jpg" alt="Featured Book" onerror="this.src='cover_placeholder.jpg'">
+          </div>
+          <div class="featured-details">
+            <h3 class="featured-title" id="featuredTitle">The Power of Small Steps</h3>
+            <div class="featured-author" id="featuredAuthor">R. Sharma</div>
+            <div class="featured-rating">
+              <span class="star-icon">★</span>
+              <span id="featuredRatingVal">4.8</span>
+              <span class="rating-count">(2.4k)</span>
+            </div>
+            <p class="featured-desc" id="featuredDesc">Small changes. Big results. A practical guide to building better habits and a focused life.</p>
+            <button type="button" class="btn-gold-pill" id="featuredActionBtn" onclick="addFeaturedToLibrary()">Add to Library</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popular Categories (2x2 Grid) -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Popular Categories</h2>
+        </div>
+        <div class="popular-categories-grid">
+          <div class="category-tile cat-productivity" onclick="filterExploreGenre('Productivity')">
+            <div class="cat-icon-badge purple">⚡</div>
+            <div class="cat-info">
+              <div class="cat-name">Productivity</div>
+              <div class="cat-count" id="catCountProductivity">12 books</div>
+            </div>
+          </div>
+
+          <div class="category-tile cat-selfhelp" onclick="filterExploreGenre('Self Help')">
+            <div class="cat-icon-badge gold">💡</div>
+            <div class="cat-info">
+              <div class="cat-name">Self Help</div>
+              <div class="cat-count" id="catCountSelfHelp">10 books</div>
+            </div>
+          </div>
+
+          <div class="category-tile cat-fiction" onclick="filterExploreGenre('Fiction')">
+            <div class="cat-icon-badge blue">📖</div>
+            <div class="cat-info">
+              <div class="cat-name">Fiction</div>
+              <div class="cat-count" id="catCountFiction">14 books</div>
+            </div>
+          </div>
+
+          <div class="category-tile cat-business" onclick="filterExploreGenre('Business')">
+            <div class="cat-icon-badge rose">💼</div>
+            <div class="cat-info">
+              <div class="cat-name">Business</div>
+              <div class="cat-count" id="catCountBusiness">8 books</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explore Books Grid -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title" id="exploreGridHeaderTitle">Explore Recommendations</h2>
+        </div>
+        <div class="library-books-grid" id="exploreBooksGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 4: PROGRESS / ANALYTICS ================= -->
+    <section id="viewProgress" class="app-view">
+      <div class="view-header-block flex-between">
+        <div>
+          <h2 class="view-main-title">Reading Progress</h2>
+          <p class="view-sub-title">Your reading journey at a glance</p>
+        </div>
+        <div class="time-filter-dropdown">
+          <select id="progressTimeRange" onchange="renderProgressCharts()">
+            <option value="6m">Last 6 Months</option>
+            <option value="1y">This Year</option>
+            <option value="all">All Time</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 3 Key Metric Badges -->
+      <div class="progress-stats-row">
+        <div class="prog-metric-card blue">
+          <div class="prog-metric-icon">📖</div>
+          <div class="prog-metric-val" id="progBooksRead">12</div>
+          <div class="prog-metric-lbl">Books Read</div>
+        </div>
+        <div class="prog-metric-card gold">
+          <div class="prog-metric-icon">⭐</div>
+          <div class="prog-metric-val" id="progAvgRating">4.8</div>
+          <div class="prog-metric-lbl">Avg. Rating</div>
+        </div>
+        <div class="prog-metric-card emerald">
+          <div class="prog-metric-icon">📄</div>
+          <div class="prog-metric-val" id="progPagesMonth">324</div>
+          <div class="prog-metric-lbl">Pages/Month</div>
+        </div>
+      </div>
+
+      <!-- Monthly Reading Progress Bar Chart -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3 class="chart-title">Monthly Reading Progress</h3>
+        </div>
+        <div class="bar-chart-container" id="monthlyBarChartWrap">
+          <!-- Injected via SVG -->
+        </div>
+      </div>
+
+      <!-- Reading by Genre Donut Chart -->
+      <div class="chart-card">
+        <div class="chart-card-header">
+          <h3 class="chart-title">Reading by Genre</h3>
+        </div>
+        <div class="donut-chart-container">
+          <div class="donut-svg-wrap" id="genreDonutSvgWrap">
+            <!-- Injected via SVG -->
+          </div>
+          <div class="donut-legend-wrap" id="genreDonutLegend">
+            <!-- Injected via JS -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 5: PROFILE & SETTINGS ================= -->
+    <section id="viewProfile" class="app-view">
+      <!-- Profile Hero Card -->
+      <div class="profile-hero-card">
+        <div class="profile-avatar-large">
+          <img src="ankit_avatar.png" alt="Profile" id="profilePageAvatarImg" onerror="this.src='icon-192.png'">
+        </div>
+        <div class="profile-hero-info">
+          <h2 class="profile-name" id="profilePageName">Ankit Burdak</h2>
+          <div class="profile-handle" id="profilePageHandle">@ankitburdak</div>
+        </div>
+        <button type="button" class="btn-edit-profile" onclick="openEditProfileModal()">Edit Profile</button>
+      </div>
+
+      <!-- 3 Stat Badges -->
+      <div class="profile-stat-strip">
+        <div class="profile-stat-item">
+          <div class="psi-val" id="profileStatBooks">48</div>
+          <div class="psi-lbl">Books</div>
+        </div>
+        <div class="profile-stat-divider"></div>
+        <div class="profile-stat-item">
+          <div class="psi-val" id="profileStatCompleted">16</div>
+          <div class="psi-lbl">Completed</div>
+        </div>
+        <div class="profile-stat-divider"></div>
+        <div class="profile-stat-item">
+          <div class="psi-val" id="profileStatStreak">7</div>
+          <div class="psi-lbl">Day Streak</div>
+        </div>
+      </div>
+
+      <!-- Menu Items List -->
+      <div class="profile-menu-group">
+        <div class="profile-menu-item" onclick="openEditProfileModal()">
+          <div class="pmi-icon gold">👤</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Account Settings</div>
+            <div class="pmi-sub">Personal info, profile photo</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="toggleAppTheme()">
+          <div class="pmi-icon purple">🎨</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Appearance</div>
+            <div class="pmi-sub" id="appearanceSubText">Theme: Dark Modern Luxury</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="showNotificationSettings()">
+          <div class="pmi-icon orange">🔔</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Notifications</div>
+            <div class="pmi-sub">Reading streak reminders, daily alerts</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="openPinSetupModal()">
+          <div class="pmi-icon emerald">🛡️</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Privacy & Security</div>
+            <div class="pmi-sub" id="pinStatusSubText">PIN Lock, data encryption</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="openUpdateModal()">
+          <div class="pmi-icon blue">ℹ️</div>
+          <div class="pmi-text">
+            <div class="pmi-title">About App</div>
+            <div class="pmi-sub">Version 3.17.0, check updates, support</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+      </div>
+
+      <!-- Backup & Export Section (Screen 7 from Screenshots) -->
+      <div class="section-container" style="margin-top: 24px;">
+        <div class="section-header">
+          <div>
+            <h2 class="section-title">Backup & Export</h2>
+            <p class="view-sub-title" style="margin-top: 2px;">Keep your data safe and portable</p>
+          </div>
+        </div>
+
+        <!-- Data Backup Card -->
+        <div class="backup-card">
+          <div class="backup-meta">
+            <div class="backup-title">Data Backup</div>
+            <div class="backup-sub" id="lastBackupText">Last backup: Today • Auto-saved</div>
+          </div>
+          <div class="backup-actions">
+            <button type="button" class="btn-backup-now" onclick="exportDataJSON()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Backup Now
+            </button>
+            <label class="btn-restore">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="17 8 12 3 7 8"></polyline>
+                <line x1="12" y1="3" x2="12" y2="15"></line>
+              </svg>
+              Restore
+              <input type="file" id="restoreFileInput" accept=".json" onchange="importDataJSON(event)" style="display:none;">
+            </label>
+          </div>
+        </div>
+
+        <!-- Export Data Cards -->
+        <div class="export-options-list">
+          <div class="export-card card-green" onclick="exportDataCSV()">
+            <div class="export-icon">📊</div>
+            <div class="export-info">
+              <div class="export-title">Export as CSV</div>
+              <div class="export-desc">Books, notes, progress</div>
+            </div>
+          </div>
+
+          <div class="export-card card-red" onclick="exportDataPDF()">
+            <div class="export-icon">📑</div>
+            <div class="export-info">
+              <div class="export-title">Export as PDF</div>
+              <div class="export-desc">Reading report, summary sheets</div>
+            </div>
+          </div>
+
+          <div class="export-card card-blue" onclick="exportDataJSON()">
+            <div class="export-icon">💾</div>
+            <div class="export-info">
+              <div class="export-title">Export as JSON</div>
+              <div class="export-desc">Full backup file, offline archive</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy & Security Cards -->
+        <div class="privacy-cards-group">
+          <div class="privacy-card" onclick="openPinSetupModal()">
+            <div class="priv-icon">🔒</div>
+            <div class="priv-info">
+              <div class="priv-title">Set PIN Lock</div>
+              <div class="priv-desc">4-digit PIN for app access</div>
+            </div>
+          </div>
+
+          <div class="privacy-card">
+            <div class="priv-icon">🛡️</div>
+            <div class="priv-info">
+              <div class="priv-title">Data Encryption</div>
+              <div class="priv-desc">100% Encrypted & Local Offline Storage</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= VIEW 6: BOOK READING DETAIL VIEW ================= -->
+    <section id="viewBookDetail" class="app-view">
+      <div class="detail-top-nav">
+        <button type="button" class="btn-back-nav" onclick="closeBookDetailView()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+        <span class="detail-nav-title">Currently Reading</span>
+        <button type="button" class="btn-detail-edit" onclick="openEditCurrentBookModal()">Edit</button>
+      </div>
+
+      <div class="detail-hero-section">
+        <div class="detail-cover-wrap">
+          <img id="detailBookCover" src="" alt="Cover" onerror="this.src='cover_placeholder.jpg'">
+        </div>
+        <div class="detail-info-block">
+          <h2 class="detail-book-title" id="detailBookTitle">Book Title</h2>
+          <div class="detail-book-author" id="detailBookAuthor">Author Name</div>
+          <div class="detail-genre-tags" id="detailCategoryTags">
+            <span class="detail-tag">Self Help</span>
+          </div>
+          <div class="detail-rating-row">
+            <span class="star-icon">★</span>
+            <span id="detailRatingVal">4.8</span>
+            <span class="reviews-count" id="detailReviewsCount">(1.2k reviews)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reading Progress Bar -->
+      <div class="detail-progress-card">
+        <div class="dpc-header">
+          <span class="dpc-percent" id="detailProgressPercent">42% completed</span>
+          <span class="dpc-pages" id="detailPagesRatio">84 / 200 pages</span>
+        </div>
+        <div class="dpc-track">
+          <div class="dpc-fill" id="detailProgressFill" style="width: 42%;"></div>
+        </div>
+      </div>
+
+      <!-- Action Buttons Row -->
+      <div class="detail-actions-row">
+        <button type="button" class="btn-gold-pill flex-1" id="detailContinueBtn" onclick="toggleReadingTimer()">
+          <span id="detailTimerIcon">⏱️</span>
+          <span id="detailTimerBtnText">Continue Reading</span>
+        </button>
+        <button type="button" class="btn-circle-add" onclick="openQuickLogModal()" title="Log Pages">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
         </button>
       </div>
-    </div>
-  </div>
 
-  <!-- Book Completion Card Modal (Feature 4) -->
-  <div class="modal-overlay" id="completionCardModalOverlay">
-    <div class="modal-content" style="max-width: 560px;">
-      <div class="modal-header">
-        <h3 class="modal-title">🎉 Book Finished! Completion Card</h3>
-        <button class="modal-close" onclick="closeCompletionCardModal()">&times;</button>
+      <!-- Tabs Navigation -->
+      <div class="detail-tabs-bar">
+        <button type="button" class="detail-tab-btn active" id="tabBtnOverview" onclick="switchDetailTab('overview')">Overview</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnNotes" onclick="switchDetailTab('notes')">Notes</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnChapters" onclick="switchDetailTab('chapters')">Chapters</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnReviews" onclick="switchDetailTab('reviews')">Reviews</button>
       </div>
-      <div class="modal-body" style="padding: 1.25rem; align-items: center;">
-        <!-- Certificate / Shareable Card -->
-        <div id="certificateCaptureArea" class="certificate-card">
-          <div class="cert-watermark">MIND & FOCUS</div>
-          <div class="cert-header">
-            <div class="cert-badge">🏆 BOOK FINISHED</div>
-            <div class="cert-date" id="certDate">06 Sep 2026</div>
-          </div>
-          
-          <div class="cert-title" id="certBookTitle">Thinking, Fast and Slow</div>
-          <div class="cert-author" id="certBookAuthor">by Daniel Kahneman</div>
-          
-          <div class="cert-stats-grid">
-            <div class="cert-stat">
-              <span class="cert-stat-label">TIME TAKEN</span>
-              <span class="cert-stat-val" id="certDaysRead">14 Days</span>
-            </div>
-            <div class="cert-stat">
-              <span class="cert-stat-label">RATING</span>
-              <span class="cert-stat-val" id="certRating">★★★★★</span>
-            </div>
-            <div class="cert-stat">
-              <span class="cert-stat-label">CATEGORY</span>
-              <span class="cert-stat-val" id="certCategory">Psychology</span>
-            </div>
-            <div class="cert-stat">
-              <span class="cert-stat-label">VALUE</span>
-              <span class="cert-stat-val" id="certPrice" style="color:#10b981;">₹0</span>
-            </div>
-          </div>
 
-          <div class="cert-takeaway" id="certTakeawayBox">
-            <div class="cert-takeaway-label">💡 KEY TAKEAWAY:</div>
-            <div class="cert-takeaway-text" id="certTakeawayText">
-              "Never make important decisions when you are tired or overwhelmed. System 2 needs deliberate focus."
-            </div>
-          </div>
+      <!-- Tab Content: Overview -->
+      <div class="detail-tab-content active" id="tabContentOverview">
+        <div class="detail-card-box">
+          <h4 class="box-title">About this book</h4>
+          <p class="box-text" id="detailAboutText">A transformative journey into personal mastery, focus, and clarity.</p>
+        </div>
 
-          <div class="cert-footer">
-            <span>📚 150 Books Reading Journey</span>
-            <span>🧠 Mind & Focus Books Tracker</span>
+        <div class="detail-card-box">
+          <h4 class="box-title">Reading Details</h4>
+          <div class="reading-meta-list">
+            <div class="rm-item">
+              <span class="rm-icon">📅</span>
+              <span class="rm-label">Started</span>
+              <span class="rm-val" id="detailDateStarted">Apr 12, 2025</span>
+            </div>
+            <div class="rm-item">
+              <span class="rm-icon">🎯</span>
+              <span class="rm-label">Target Finish</span>
+              <span class="rm-val" id="detailDateTarget">Apr 30, 2025</span>
+            </div>
+            <div class="rm-item">
+              <span class="rm-icon">📖</span>
+              <span class="rm-label">Daily Goal</span>
+              <span class="rm-val" id="detailDailyGoal">20 pages</span>
+            </div>
           </div>
         </div>
       </div>
-      <div class="modal-footer" style="justify-content: space-between; flex-wrap:wrap; gap:0.5rem;">
-        <button class="btn" onclick="closeCompletionCardModal()">Close</button>
-        <div style="display:flex; gap:0.5rem;">
-          <button class="btn btn-primary" onclick="downloadCompletionCardImage()" style="background:#10b981; border-color:#10b981; color:#fff; font-weight:700;">
-            📸 Save as Image (PNG)
-          </button>
+
+      <!-- Tab Content: Notes -->
+      <div class="detail-tab-content" id="tabContentNotes">
+        <div class="detail-card-box">
+          <h4 class="box-title">Personal Key Takeaways & Quotes</h4>
+          <textarea id="detailNotesInput" placeholder="Add your reflections, key thoughts, or favourite quotes..." oninput="saveCurrentBookNotes(this.value)"></textarea>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Lend / Borrow Tracker Modal -->
-  <div class="modal-overlay" id="lendModalOverlay">
-    <div class="modal-content" style="max-width:500px;">
+      <!-- Tab Content: Chapters -->
+      <div class="detail-tab-content" id="tabContentChapters">
+        <div class="detail-card-box" id="detailChaptersList">
+          <!-- Generated from pages -->
+        </div>
+      </div>
+
+      <!-- Tab Content: Reviews -->
+      <div class="detail-tab-content" id="tabContentReviews">
+        <div class="detail-card-box">
+          <h4 class="box-title">My Rating & Review</h4>
+          <div class="rating-stars-picker" id="detailRatingPicker">
+            <span class="star-pick" onclick="setBookRating(1)">★</span>
+            <span class="star-pick" onclick="setBookRating(2)">★</span>
+            <span class="star-pick" onclick="setBookRating(3)">★</span>
+            <span class="star-pick" onclick="setBookRating(4)">★</span>
+            <span class="star-pick" onclick="setBookRating(5)">★</span>
+          </div>
+          <p class="box-text" id="detailReviewText">Share your verdict on this masterpiece.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= BOTTOM NAVIGATION DOCK ================= -->
+  <nav class="bottom-nav-dock" id="bottomNavDock">
+    <button type="button" class="nav-tab active" id="navTabHome" onclick="switchTab('home')">
+      <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M3 9.5L12 2l9 7.5V20a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9.5z"></path>
+        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+      </svg>
+      <span class="dock-label">Home</span>
+    </button>
+
+    <button type="button" class="nav-tab" id="navTabLibrary" onclick="switchTab('library')">
+      <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+      </svg>
+      <span class="dock-label">Library</span>
+    </button>
+
+    <button type="button" class="nav-tab" id="navTabExplore" onclick="switchTab('explore')">
+      <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <circle cx="12" cy="12" r="10"></circle>
+        <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+      </svg>
+      <span class="dock-label">Explore</span>
+    </button>
+
+    <button type="button" class="nav-tab" id="navTabProgress" onclick="switchTab('progress')">
+      <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <line x1="18" y1="20" x2="18" y2="10"></line>
+        <line x1="12" y1="20" x2="12" y2="4"></line>
+        <line x1="6" y1="20" x2="6" y2="14"></line>
+      </svg>
+      <span class="dock-label">Progress</span>
+    </button>
+
+    <button type="button" class="nav-tab" id="navTabProfile" onclick="switchTab('profile')">
+      <svg class="dock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+        <circle cx="12" cy="7" r="4"></circle>
+      </svg>
+      <span class="dock-label">Profile</span>
+    </button>
+  </nav>
+
+  <!-- ================= EDIT / ADD BOOK MODAL (SAFE-SAVE) ================= -->
+  <div class="modal-overlay" id="editBookModalOverlay">
+    <div class="modal-card">
       <div class="modal-header">
-        <h3 class="modal-title">👥 Book Lend Tracker</h3>
-        <button class="modal-close" onclick="closeLendModal()">&times;</button>
+        <h3 class="modal-title" id="editBookModalTitle">Edit Book</h3>
+        <button type="button" class="modal-close-btn" onclick="closeEditModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <div style="background:var(--bg-primary); border:1px solid var(--border-color); border-radius:8px; padding:0.75rem 1rem;">
-          <div id="lendModalBookTitle" style="font-weight:700; color:var(--text-primary); font-size:1.05rem;"></div>
-          <div id="lendModalBookAuthor" style="font-size:0.85rem; color:var(--text-secondary);"></div>
-        </div>
-
         <div class="form-group">
-          <label class="form-label">Borrower Name (Kisko di hai?) *</label>
-          <input type="text" id="lendBorrowerName" class="form-control" placeholder="e.g. Rahul Sharma (Friend / Colleague)">
+          <label>Book Title *</label>
+          <input type="text" id="modalBookTitle" placeholder="e.g. Atomic Habits">
         </div>
-
+        <div class="form-group">
+          <label>Author *</label>
+          <input type="text" id="modalBookAuthor" placeholder="e.g. James Clear">
+        </div>
         <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Lent Date (Kab di?)</label>
-            <input type="date" id="lendDate" class="form-control">
+          <div class="form-group flex-1">
+            <label>Category</label>
+            <input type="text" id="modalBookCategory" placeholder="e.g. Productivity">
           </div>
-          <div class="form-group">
-            <label class="form-label">Expected Return Date</label>
-            <input type="date" id="lendExpectedDate" class="form-control">
+          <div class="form-group flex-1">
+            <label>Status</label>
+            <select id="modalBookStatus">
+              <option value="READING">Reading</option>
+              <option value="DONE">Completed</option>
+              <option value="UNREAD">Wishlist</option>
+            </select>
           </div>
         </div>
-
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Current Page</label>
+            <input type="number" id="modalBookCurrentPage" value="0" min="0">
+          </div>
+          <div class="form-group flex-1">
+            <label>Total Pages</label>
+            <input type="number" id="modalBookTotalPages" value="200" min="1">
+          </div>
+        </div>
         <div class="form-group">
-          <label class="form-label">Contact / Mobile / Notes (Optional)</label>
-          <input type="text" id="lendContact" class="form-control" placeholder="e.g. +91 9876543210 or College friend">
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
-        <button type="button" class="btn btn-danger" id="returnBookBtn" onclick="markCurrentBookReturned()" style="display:none;">
-          ✅ Mark as Returned
-        </button>
-        <div style="display:flex; gap:0.5rem; margin-left:auto;">
-          <button type="button" class="btn" onclick="closeLendModal()">Cancel</button>
-          <button type="button" class="btn btn-primary" onclick="saveLendModal()">Save Lent Info</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Barcode / ISBN Scanner Modal -->
-  <div class="modal-overlay" id="barcodeScannerOverlay">
-    <div class="modal-content" style="max-width:540px;">
-      <div class="modal-header">
-        <h3 class="modal-title">📷 Barcode / ISBN Scanner</h3>
-        <button class="modal-close" onclick="closeBarcodeScanner()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">
-          Point your camera at the ISBN barcode on the back of any physical book:
-        </p>
-
-        <!-- Video Scanner Container -->
-        <div class="scanner-viewport-wrap" id="scannerViewportWrap">
-          <video id="scannerVideo" autoplay playsinline muted></video>
-          <div class="scanner-reticle">
-            <div class="scanner-laser"></div>
+          <label>Cover Image URL / Real HD Cover Link</label>
+          <input type="text" id="modalBookCoverUrl" placeholder="https://covers.openlibrary.org/b/id/...-L.jpg" oninput="updateModalCoverPreview(this.value)">
+          <div class="modal-cover-preview" id="modalCoverPreview">
+            <img id="modalCoverPreviewImg" src="" alt="Cover Preview" onerror="this.src='cover_placeholder.jpg'">
           </div>
-          <div id="scannerStatusText" class="scanner-status">Initializing Camera...</div>
         </div>
-
-        <div style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
-          <button type="button" class="btn btn-sm" id="toggleCameraBtn" onclick="switchScannerCamera()">🔄 Switch Camera</button>
-          <label class="btn btn-sm" style="cursor:pointer; margin:0;">
-            📸 Snap / Upload Barcode Photo
-            <input type="file" accept="image/*" style="display:none;" onchange="handleBarcodePhotoUpload(this)">
-          </label>
+        <div class="form-group">
+          <label>Rating (1 to 5 Stars)</label>
+          <select id="modalBookRating">
+            <option value="5">★★★★★ (5 Stars)</option>
+            <option value="4">★★★★☆ (4 Stars)</option>
+            <option value="3">★★★☆☆ (3 Stars)</option>
+            <option value="2">★★☆☆☆ (2 Stars)</option>
+            <option value="1">★☆☆☆☆ (1 Star)</option>
+          </select>
         </div>
-
-        <div style="display:flex; align-items:center; gap:0.75rem; margin:0.5rem 0;">
-          <div style="flex:1; height:1px; background:var(--border-color);"></div>
-          <span style="font-size:0.75rem; color:var(--text-muted); font-weight:700;">OR ENTER ISBN MANUALLY</span>
-          <div style="flex:1; height:1px; background:var(--border-color);"></div>
-        </div>
-
-        <div style="display:flex; gap:0.5rem;">
-          <input type="text" id="manualIsbnInput" class="form-control" placeholder="Enter 10 or 13-digit ISBN (e.g. 9780143452669)">
-          <button type="button" class="btn btn-primary" onclick="lookupManualIsbn()" style="white-space:nowrap;">
-            🔍 Fetch Book
-          </button>
-        </div>
-        <div id="isbnLookupStatus" style="font-size:0.82rem; color:var(--text-secondary); min-height:18px;"></div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn" onclick="closeBarcodeScanner()">Close</button>
+        <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="saveBookModal()">Save Changes</button>
       </div>
     </div>
   </div>
 
-  <!-- Full-screen Privacy Lock Screen -->
-  <div id="privacyLockOverlay" class="privacy-lock-screen" style="display:none;">
-    <div class="lock-card" id="lockCard">
-      <div class="lock-icon-wrap">🔒</div>
-      <h2 class="lock-title">Mind Focus Books</h2>
-      <p class="lock-subtitle">Enter your 4-digit PIN to unlock library</p>
+  <!-- ================= QUICK LOG PAGES MODAL ================= -->
+  <div class="modal-overlay" id="quickLogModalOverlay">
+    <div class="modal-card modal-sm">
+      <div class="modal-header">
+        <h3 class="modal-title">Log Reading Pages</h3>
+        <button type="button" class="modal-close-btn" onclick="closeQuickLogModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="quick-log-sub" id="quickLogBookName">The Silent Path</p>
+        <div class="form-group">
+          <label>Current Page Read</label>
+          <input type="number" id="quickLogPageInput" min="0" value="84">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeQuickLogModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="saveQuickLogPages()">Update Progress</button>
+      </div>
+    </div>
+  </div>
 
-      <!-- PIN Indicator Dots -->
+  <!-- ================= EDIT PROFILE MODAL ================= -->
+  <div class="modal-overlay" id="editProfileModalOverlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Profile</h3>
+        <button type="button" class="modal-close-btn" onclick="closeEditProfileModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="inputProfileName" value="Ankit Burdak">
+        </div>
+        <div class="form-group">
+          <label>Username / Handle</label>
+          <input type="text" id="inputProfileHandle" value="@ankitburdak">
+        </div>
+        <div class="form-group">
+          <label>Profile Avatar</label>
+          <div class="avatar-upload-row">
+            <img src="ankit_avatar.png" id="previewEditAvatar" class="avatar-preview-sm" alt="Preview">
+            <label class="btn-restore" style="cursor:pointer;">
+              Choose Photo
+              <input type="file" id="avatarFileInput" accept="image/*" onchange="handleAvatarFileSelect(event)" style="display:none;">
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeEditProfileModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="saveProfileChanges()">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PIN SETUP & LOCK SCREEN ================= -->
+  <div class="pin-lock-overlay" id="pinLockOverlay" style="display:none;">
+    <div class="pin-lock-box">
+      <div class="pin-lock-icon">🔒</div>
+      <h3 class="pin-lock-title" id="pinScreenTitle">Enter Security PIN</h3>
+      <p class="pin-lock-sub" id="pinScreenSub">Access your personal library</p>
       <div class="pin-dots-row">
         <div class="pin-dot" id="pinDot0"></div>
         <div class="pin-dot" id="pinDot1"></div>
         <div class="pin-dot" id="pinDot2"></div>
         <div class="pin-dot" id="pinDot3"></div>
       </div>
-
-      <div id="pinErrorMessage" class="pin-error-text"></div>
-
-      <!-- Touch Numpad -->
-      <div class="numpad-grid">
-        <button type="button" class="numpad-btn" onclick="enterPinDigit('1')">1</button>
-        <button type="button" class="numpad-btn" onclick="enterPinDigit('2')">2</button>
-        <button type="button" class="numpad-btn" onclick="enterPinDigit('3')">3</button>
-        <button type="button" class="numpad-btn" onclick="enterPinDigit('4')">4</button>
-        <button type="button" class="numpad-btn" onclick="enterPinDigit('5')">5</button>
-        <button type="button" class="numpad-btn" onclick="enterPinDigit('6')">6</button>
-        <button type="button" class="numpad-btn" onclick="enterPinDigit('7')">7</button>
-        <button type="button" class="numpad-btn" onclick="enterPinDigit('8')">8</button>
-        <button type="button" class="numpad-btn" onclick="enterPinDigit('9')">9</button>
-        <button type="button" class="numpad-btn numpad-action" onclick="clearEnteredPin()">Clear</button>
-        <button type="button" class="numpad-btn" onclick="enterPinDigit('0')">0</button>
-        <button type="button" class="numpad-btn numpad-action" onclick="deletePinDigit()">⌫</button>
+      <div class="pin-keypad">
+        <button type="button" class="pin-key" onclick="pressPinKey('1')">1</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('2')">2</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('3')">3</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('4')">4</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('5')">5</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('6')">6</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('7')">7</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('8')">8</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('9')">9</button>
+        <button type="button" class="pin-key pin-clear" onclick="clearPinInput()">C</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('0')">0</button>
+        <button type="button" class="pin-key pin-back" onclick="deletePinKey()">&larr;</button>
       </div>
-
-      <!-- Fix 5: Forgot PIN recovery option -->
-      <button type="button" class="forgot-pin-btn" onclick="forgotPinReset()" title="Reset PIN — aapka data safe rahega">
-        🔑 Forgot PIN? Reset it
-      </button>
     </div>
   </div>
 
-  <!-- PIN Settings / Setup Modal -->
-  <div class="modal-overlay" id="pinSetupModalOverlay">
-    <div class="modal-content" style="max-width:440px;">
+  <!-- ================= IN-APP UPDATE CHECKER MODAL ================= -->
+  <div class="modal-overlay" id="inAppUpdateModalOverlay">
+    <div class="modal-card">
       <div class="modal-header">
-        <h3 class="modal-title">🔒 Privacy Lock Settings</h3>
-        <button class="modal-close" onclick="closePinSetupModal()">&times;</button>
+        <h3 class="modal-title">Mind & Focus Updates</h3>
+        <button type="button" class="modal-close-btn" onclick="closeUpdateModal()">&times;</button>
       </div>
       <div class="modal-body">
-        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">
-          Protect your notes, book costs, and reading log with a 4-digit security PIN.
-        </p>
-
-        <div class="form-group">
-          <label class="form-label">Enter 4-Digit PIN</label>
-          <input type="password" id="newPinInput" class="form-control" maxlength="4" pattern="[0-9]*" inputmode="numeric" placeholder="e.g. 1234">
+        <div class="update-status-row">
+          <span class="update-badge" id="currentVerBadge">v3.17.0</span>
+          <span class="update-status-text" id="updateStatusText">You have the latest version</span>
         </div>
-
-        <div class="form-group">
-          <label class="form-label">Confirm 4-Digit PIN</label>
-          <input type="password" id="confirmPinInput" class="form-control" maxlength="4" pattern="[0-9]*" inputmode="numeric" placeholder="Re-enter PIN">
-        </div>
-
-        <div id="pinSetupStatus" style="font-size:0.85rem; color:#ef4444; min-height:16px;"></div>
-      </div>
-      <div class="modal-footer" style="justify-content:space-between;">
-        <button type="button" class="btn btn-danger" id="removePinBtn" onclick="removePrivacyPin()" style="display:none;">
-          Disable PIN
-        </button>
-        <div style="display:flex; gap:0.5rem; margin-left:auto;">
-          <button type="button" class="btn" onclick="closePinSetupModal()">Cancel</button>
-          <button type="button" class="btn btn-primary" onclick="savePrivacyPin()">Save PIN</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Page Text OCR Scanner Modal (Feature 1) -->
-  <div class="modal-overlay" id="ocrScannerOverlay">
-    <div class="modal-content" style="max-width:540px;">
-      <div class="modal-header">
-        <h3 class="modal-title">📸 Scan Book Page (Extract Quotes / OCR)</h3>
-        <button class="modal-close" onclick="closeOcrScanner()">&times;</button>
-      </div>
-      <div class="modal-body" style="gap:1rem;">
-        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">
-          Take a clear photo of any book page, quote, or paragraph to extract text automatically:
-        </p>
-
-        <div style="display:flex; gap:0.5rem; justify-content:center; flex-wrap:wrap;">
-          <label class="btn btn-primary btn-sm" style="cursor:pointer; margin:0;">
-            📷 Snap / Upload Page Photo
-            <input type="file" id="ocrImageFileInput" accept="image/*" style="display:none;" onchange="handleOcrPhotoUpload(this)">
-          </label>
-          <button type="button" class="btn btn-sm" id="ocrFilterBwBtn" onclick="toggleOcrContrast()" style="display:none;">
-            🌓 High Contrast (B&W)
-          </button>
-        </div>
-
-        <!-- Image Preview Container -->
-        <div id="ocrPreviewWrap" style="display:none; text-align:center; background:var(--bg-primary); border:1px solid var(--border-color); border-radius:8px; padding:0.5rem; max-height:260px; overflow:hidden;">
-          <img id="ocrPreviewImg" src="" alt="Page Snapshot" style="max-width:100%; max-height:240px; object-fit:contain; border-radius:4px;">
-          <canvas id="ocrCanvas" style="display:none;"></canvas>
-        </div>
-
-        <!-- Status & Progress -->
-        <div id="ocrStatusWrap" style="display:none; text-align:center;">
-          <div id="ocrStatusText" style="font-size:0.85rem; font-weight:600; color:#3b82f6; margin-bottom:0.4rem;">
-            Analyzing page text...
-          </div>
-          <div class="ocr-progress-bar-wrap">
-            <div class="ocr-progress-bar-fill" id="ocrProgressBar"></div>
-          </div>
-        </div>
-
-        <!-- Extracted Text Result Area -->
-        <div id="ocrResultWrap" style="display:none;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
-            <label class="form-label" style="margin:0; font-weight:700; color:var(--text-primary);">Extracted Quote / Text:</label>
-            <span style="font-size:0.75rem; color:var(--text-muted);">(You can edit before inserting)</span>
-          </div>
-          <textarea id="ocrResultText" class="form-control" style="min-height:120px; font-size:0.88rem;"></textarea>
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content:space-between; flex-wrap:wrap; gap:0.5rem;">
-        <button type="button" class="btn" onclick="closeOcrScanner()">Cancel</button>
-        <div style="display:flex; gap:0.5rem;">
-          <button type="button" class="btn btn-primary" id="ocrInsertBtn" onclick="applyOcrToNotes()" style="display:none; background:#10b981; border-color:#10b981;">
-            📝 Insert into Notes
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Auto-Backup & Safety Hub Modal (Feature 5) -->
-  <div class="modal-overlay" id="backupModalOverlay">
-    <div class="modal-content" style="max-width:520px;">
-      <div class="modal-header">
-        <h3 class="modal-title">💾 Auto-Backup & Safety Hub</h3>
-        <button class="modal-close" onclick="closeBackupModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="gap:1rem;">
-        <!-- Status Card -->
-        <div class="backup-status-card">
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div>
-              <div style="font-size:1.1rem; font-weight:700; color:var(--text-primary);" id="backupStatusBooksCount">
-                150 Books Protected
-              </div>
-              <div style="font-size:0.82rem; color:var(--text-secondary); margin-top:0.2rem;" id="backupStatusLastSaved">
-                Last Auto-Snapshot: Today
-              </div>
-            </div>
-            <div style="font-size:2rem;">🛡️</div>
-          </div>
-          <div style="margin-top:0.75rem; font-size:0.82rem; color:#10b981; display:flex; align-items:center; gap:0.4rem;">
-            <span>●</span> All purchase prices, notes, and progress are saved in your offline database.
-          </div>
-        </div>
-
-        <!-- Action 1: Download to Phone -->
-        <div class="backup-action-card">
-          <div style="display:flex; align-items:center; gap:0.75rem;">
-            <div style="font-size:1.5rem;">📥</div>
-            <div style="flex:1;">
-              <div style="font-weight:700; font-size:0.95rem; color:var(--text-primary);">Save Backup File to Phone</div>
-              <div style="font-size:0.8rem; color:var(--text-secondary);">Downloads timestamped JSON file to your phone's Downloads folder</div>
-            </div>
-            <button type="button" class="btn btn-primary btn-sm" onclick="downloadBackupFile()">
-              Download
-            </button>
-          </div>
-        </div>
-
-        <!-- Action 2: Share to Google Drive / WhatsApp -->
-        <div class="backup-action-card">
-          <div style="display:flex; align-items:center; gap:0.75rem;">
-            <div style="font-size:1.5rem;">☁️</div>
-            <div style="flex:1;">
-              <div style="font-weight:700; font-size:0.95rem; color:var(--text-primary);">Send to Google Drive / Cloud</div>
-              <div style="font-size:0.8rem; color:var(--text-secondary);">Share backup file directly to Google Drive, WhatsApp or Email</div>
-            </div>
-            <button type="button" class="btn btn-sm" onclick="shareBackupToCloud()" style="background:#4285f4; color:#fff; border-color:#4285f4; font-weight:600;">
-              Share / Save
-            </button>
-          </div>
-        </div>
-
-        <!-- Action 3: Quick Emergency Rollback -->
-        <div class="backup-action-card">
-          <div style="display:flex; align-items:center; gap:0.75rem;">
-            <div style="font-size:1.5rem;">🔄</div>
-            <div style="flex:1;">
-              <div style="font-weight:700; font-size:0.95rem; color:var(--text-primary);">Emergency Rollback</div>
-              <div style="font-size:0.8rem; color:var(--text-secondary);">Restore the last automatic local snapshot if you made any mistakes</div>
-            </div>
-            <button type="button" class="btn btn-sm btn-warning" onclick="quickRollbackSnapshot()">
-              Rollback
-            </button>
-          </div>
-        </div>
-
-        <!-- Action 4: Restore from File -->
-        <div class="backup-action-card">
-          <div style="display:flex; align-items:center; gap:0.75rem;">
-            <div style="font-size:1.5rem;">📤</div>
-            <div style="flex:1;">
-              <div style="font-weight:700; font-size:0.95rem; color:var(--text-primary);">Restore from Backup File</div>
-              <div style="font-size:0.8rem; color:var(--text-secondary);">Select a previously saved .json backup file from phone</div>
-            </div>
-            <label class="btn btn-sm" style="cursor:pointer; margin:0;">
-              Select File
-              <input type="file" accept=".json" style="display:none;" onchange="handleBackupFileRestore(this)">
-            </label>
-          </div>
+        <div class="changelog-box">
+          <h4>What's New in v3.17.0:</h4>
+          <ul class="changelog-list" id="changelogFeatures">
+            <li>✨ 100% Brand-New Ultra-Clean Mobile Design (Home, Library, Explore, Progress, Profile)</li>
+            <li>🗑️ Deleted all legacy obsolete code for maximum speed and zero phone crashes</li>
+            <li>📖 Beautiful Reading Detail Screen with tabs, daily goals & timer</li>
+            <li>📊 Native Interactive Monthly Progress Bar Chart & Genre Donut Chart</li>
+            <li>🛡️ Safe-Save Book Editor with live HD cover preview</li>
+            <li>💾 One-Tap Backup & Restore (JSON, CSV, PDF)</li>
+          </ul>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn" onclick="closeBackupModal()">Close</button>
+        <button type="button" class="btn-cancel" onclick="closeUpdateModal()">Close</button>
+        <a id="downloadApkBtn" href="https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.0/MindFocusBooks-Native.apk" class="btn-save-gold" download>Download APK</a>
       </div>
     </div>
   </div>
 
-  <!-- Bottom Navigation Bar (Frosted White Luxury Dock matching feature_bookshelf mockup) -->
-  <nav class="bottom-nav-dock" id="bottomNavDock">
-    <button type="button" class="dock-item active" id="dockHomeBtn" onclick="switchBottomTab('home')">
-      <svg class="dock-svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-      <span class="dock-label">Home</span>
-    </button>
-    <button type="button" class="dock-item" id="dockHome2Btn" onclick="switchBottomTab('home2')">
-      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="3" y="3" width="7" height="9" rx="1.5"></rect>
-        <rect x="14" y="3" width="7" height="5" rx="1.5"></rect>
-        <rect x="14" y="12" width="7" height="9" rx="1.5"></rect>
-        <rect x="3" y="16" width="7" height="5" rx="1.5"></rect>
-      </svg>
-      <span class="dock-label">Home 2</span>
-    </button>
-    <button type="button" class="dock-item" id="dockLibraryBtn" onclick="switchBottomTab('library')">
-      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
-      <span class="dock-label">Library</span>
-    </button>
-    <button type="button" class="dock-item" id="dockExploreBtn" onclick="openSpotlightModal()">
-      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-      <span class="dock-label">Explore</span>
-    </button>
-    <button type="button" class="dock-item" id="dockProgressBtn" onclick="switchBottomTab('progress')">
-      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-      <span class="dock-label">Progress</span>
-    </button>
-    <button type="button" class="dock-item" id="dockProfileBtn" onclick="switchBottomTab('profile')">
-      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-      <span class="dock-label">Profile</span>
-    </button>
-  </nav>
-
-  <!-- App Settings & Update Modal -->
-  <div class="modal-overlay" id="appSettingsModalOverlay">
-    <div class="modal-content" style="max-width:480px;">
-      <div class="modal-header">
-        <h3 class="modal-title">⚙️ App Settings & Hub</h3>
-        <button class="modal-close" onclick="closeSettingsModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="display:block !important; padding: 1rem 1.15rem 2.5rem !important; max-height: 75vh; overflow-y: auto; -webkit-overflow-scrolling: touch;">
-        <!-- App Header & Version Banner -->
-        <div style="background:linear-gradient(135deg, rgba(99, 102, 241, 0.18), rgba(168, 85, 247, 0.12)); border:1px solid var(--border-color); border-radius:18px; padding:1rem; display:flex; justify-content:space-between; align-items:center; margin-bottom: 1.25rem;">
-          <div style="display:flex; align-items:center; gap:0.75rem;">
-            <div style="width:48px; height:48px; border-radius:14px; background:linear-gradient(135deg, var(--accent-primary), #3b82f6); display:flex; align-items:center; justify-content:center; font-size:1.5rem; box-shadow: 0 4px 14px var(--accent-glow); flex-shrink: 0;">
-              📖
-            </div>
-            <div>
-              <div style="font-weight:800; font-size:1.05rem; color:var(--text-primary);">Mind Focus Tracker</div>
-              <div style="font-size:0.75rem; color:var(--accent-primary); font-weight:700; cursor:pointer;" id="appCurrentVersionText" onclick="handleVersionSecretTap()" title="Tap 5 times to unlock Developer Console">v3.8.0 Real App Design &amp; Feature Studio</div>
-            </div>
-          </div>
-          <button type="button" class="btn btn-primary btn-sm" onclick="checkForAppUpdates(true)" id="settingsCheckUpdateBtn" style="border-radius:12px; padding:0.45rem 0.85rem; font-weight:800;">
-            🔄 Update
-          </button>
-        </div>
-
-        <!-- Group 1: 🎨 Appearance & Visual Studio -->
-        <div class="settings-group">
-          <div class="settings-group-header">Appearance &amp; Theme Studio</div>
-          <div style="padding:0.75rem 0.9rem 0.4rem;">
-            <div class="theme-picker-grid" style="margin-top:0;">
-              <button type="button" class="theme-choice-btn" id="themeChoiceDark" onclick="setAppTheme('dark')">
-                <span class="theme-icon">🌙</span>
-                <span class="theme-label">Midnight</span>
-                <span class="theme-sub">Dark</span>
-              </button>
-              <button type="button" class="theme-choice-btn" id="themeChoiceSepia" onclick="setAppTheme('sepia')">
-                <span class="theme-icon">📜</span>
-                <span class="theme-label">Kindle</span>
-                <span class="theme-sub">Sepia</span>
-              </button>
-              <button type="button" class="theme-choice-btn" id="themeChoiceLight" onclick="setAppTheme('light')">
-                <span class="theme-icon">☀️</span>
-                <span class="theme-label">Daylight</span>
-                <span class="theme-sub">Clean</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Dynamic Accent Palettes -->
-          <div style="padding: 0.5rem 0.9rem 0.3rem;">
-            <div style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:0.4rem;">Neon Accent Glow:</div>
-            <div class="accent-palette-picker" style="padding:0;">
-              <button type="button" class="accent-color-circle active" id="accentViolet" onclick="setAppAccent('violet')" style="background:#8b5cf6;" title="Electric Violet">🟣</button>
-              <button type="button" class="accent-color-circle" id="accentEmerald" onclick="setAppAccent('emerald')" style="background:#10b981;" title="Cyber Emerald">🟢</button>
-              <button type="button" class="accent-color-circle" id="accentGold" onclick="setAppAccent('gold')" style="background:#f59e0b;" title="Royal Gold">🟡</button>
-              <button type="button" class="accent-color-circle" id="accentCoral" onclick="setAppAccent('coral')" style="background:#f43f5e;" title="Sunset Coral">🔴</button>
-              <button type="button" class="accent-color-circle" id="accentCyan" onclick="setAppAccent('cyan')" style="background:#06b6d4;" title="Neon Cyan">🔵</button>
-            </div>
-          </div>
-
-          <!-- Reader Typography Studio -->
-          <div style="padding: 0.5rem 0.9rem 0.85rem;">
-            <div style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); margin-bottom:0.4rem;">Typography Font Studio:</div>
-            <div class="font-picker-grid" style="padding:0;">
-              <button type="button" class="font-choice-btn active" id="fontSansBtn" onclick="setAppFont('sans')">Modern Sans</button>
-              <button type="button" class="font-choice-btn" id="fontSerifBtn" onclick="setAppFont('serif')">Kindle Serif</button>
-              <button type="button" class="font-choice-btn" id="fontMonoBtn" onclick="setAppFont('mono')">Tech Mono</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- Group 2: 🎯 Reading Habit & Streak Shield -->
-        <div class="settings-group">
-          <div class="settings-group-header">Reading Habit &amp; Streak Vault</div>
-          <button type="button" class="settings-action-row" onclick="promptDailyTarget()">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; box-shadow:0 6px 18px rgba(245,158,11,0.4);">🎯</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Daily Reading Target</div>
-                <div class="settings-row-sub" id="settingsDailyTargetSub">Target: 25 pages/day</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" id="settingsDailyTargetVal">25 pgs ›</span>
-          </button>
-          <button type="button" class="settings-action-row" onclick="toggleStreakFreeze()">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #06b6d4, #0284c7); color:#fff; box-shadow:0 6px 18px rgba(6,182,212,0.4);">🛡️</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Duolingo Streak Freeze Shield</div>
-                <div class="settings-row-sub" id="settingsStreakFreezeSub">Protects streak if you miss a day</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" style="color:#06b6d4;" id="settingsStreakFreezeVal">2 Shields Ready ›</span>
-          </button>
-        </div>
-
-        <!-- Group 3: 📳 Haptic Tactile Engine & Sound -->
-        <div class="settings-group">
-          <div class="settings-group-header">Haptics &amp; Deep Focus</div>
-          <button type="button" class="settings-action-row" onclick="cycleHapticMode()">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #8b5cf6, #6366f1); color:#fff; box-shadow:0 6px 18px rgba(139,92,246,0.4);">📳</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Haptic Tactile Feedback</div>
-                <div class="settings-row-sub">Physical click sensation on buttons</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" id="settingsHapticModeVal">Crisp Click ›</span>
-          </button>
-        </div>
-
-        <!-- Group 4: 💾 Data Vault & Storage breakdown -->
-        <div class="settings-group">
-          <div class="settings-group-header">Data Vault &amp; Storage</div>
-          <div class="settings-action-row" style="cursor:default;">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; box-shadow:0 6px 18px rgba(16,185,129,0.4);">📊</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Storage Inspector</div>
-                <div class="settings-row-sub" id="settingsStorageSub">150 Books • 100% Offline Database</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" style="color:#10b981;">~2.8 MB</span>
-          </div>
-          <button type="button" class="settings-action-row" onclick="downloadInstantJsonBackup()">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #3b82f6, #2563eb); color:#fff; box-shadow:0 6px 18px rgba(59,130,246,0.4);">💾</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">1-Tap Instant Backup</div>
-                <div class="settings-row-sub">Save complete JSON snapshot to phone</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron">Download ›</span>
-          </button>
-          <button type="button" class="settings-action-row" onclick="exportToCsv()">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #f59e0b, #d97706); color:#fff; box-shadow:0 6px 18px rgba(245,158,11,0.4);">📑</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Export to Excel (CSV)</div>
-                <div class="settings-row-sub">Spreadsheet reading log with ratings</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" style="color:var(--text-muted);">›</span>
-          </button>
-          <button type="button" class="settings-action-row" onclick="exportToPdf()">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #f43f5e, #e11d48); color:#fff; box-shadow:0 6px 18px rgba(244,63,94,0.4);">📄</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Download PDF Report</div>
-                <div class="settings-row-sub">Printable visual library summary</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" style="color:var(--text-muted);">›</span>
-          </button>
-          <button type="button" class="settings-action-row" onclick="document.getElementById('importFileInput').click()">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #a855f7, #7c3aed); color:#fff; box-shadow:0 6px 18px rgba(168,85,247,0.4);">📥</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Import Backup File (JSON)</div>
-                <div class="settings-row-sub">Restore library &amp; reading progress</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" style="color:var(--text-muted);">›</span>
-          </button>
-        </div>
-
-        <!-- Group 5: 🔒 Security & Reset -->
-        <div class="settings-group">
-          <div class="settings-group-header">Privacy &amp; System</div>
-          <button type="button" class="settings-action-row" onclick="openPinSetupModal()">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #64748b, #475569); color:#fff; box-shadow:0 6px 18px rgba(100,116,139,0.4);">🔒</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Privacy PIN Lock</div>
-                <div class="settings-row-sub">Secure notes &amp; library with 4-digit PIN</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" style="color:var(--text-muted);">›</span>
-          </button>
-          <button type="button" class="settings-action-row" id="resetDataBtn" style="border-bottom:none;">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #dc2626, #991b1b); color:#fff; box-shadow:0 6px 18px rgba(220,38,38,0.4);">⚠️</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title" style="color:#ef4444;">Reset Library to Default</div>
-                <div class="settings-row-sub">Restore clean 150 books state</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" style="color:#ef4444;">›</span>
-          </button>
-        </div>
-
-        <!-- Group 6: 🛠️ Phone Developer & Crash Diagnostics -->
-        <div class="settings-group">
-          <div class="settings-group-header">Developer &amp; Diagnostics</div>
-          <div class="settings-action-row" style="cursor:pointer;" onclick="toggleMobileDevToolsPillSetting()">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #10b981, #059669); color:#fff; box-shadow:0 6px 18px rgba(16,185,129,0.4);">🛠️</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Mobile DevTools Console</div>
-                <div class="settings-row-sub">Floating on-screen F12 debugger &amp; error radar</div>
-              </div>
-            </div>
-            <div style="display:flex; align-items:center;">
-              <input type="checkbox" id="toggleDevToolsCheckbox" style="transform:scale(1.3); cursor:pointer;" onclick="event.stopPropagation(); toggleMobileDevToolsPillSetting();">
-            </div>
-          </div>
-          <button type="button" class="settings-action-row" onclick="openMobileDevToolsModal()">
-            <div class="settings-row-left">
-              <div class="settings-icon-badge" style="background:linear-gradient(135deg, #6366f1, #4f46e5); color:#fff; box-shadow:0 6px 18px rgba(99,102,241,0.4);">🩺</div>
-              <div class="settings-row-info">
-                <div class="settings-row-title">Open In-App Debug Console</div>
-                <div class="settings-row-sub">Live error logs, network monitor &amp; system health</div>
-              </div>
-            </div>
-            <span class="settings-row-chevron" style="color:#6366f1; font-weight:bold;">Inspect ›</span>
-          </button>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn" onclick="closeSettingsModal()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Social Shareable Quote Poster Modal -->
-  <div class="quote-poster-overlay" id="quotePosterOverlay">
-    <div style="display:flex; flex-direction:column; align-items:center; gap:1rem; max-width:92vw;">
-      <div class="quote-poster-container" id="quotePosterCardNode">
-        <div class="quote-poster-watermark">✦ MIND FOCUS BOOKS ✦</div>
-        <img class="quote-poster-cover" id="quotePosterCoverImg" src="" alt="Cover" onerror="this.style.display='none'">
-        <div class="quote-poster-quote" id="quotePosterQuoteText">"Reading is to the mind what exercise is to the body."</div>
-        <div class="quote-poster-meta">
-          <div class="quote-poster-title" id="quotePosterBookTitle">Atomic Habits</div>
-          <div class="quote-poster-author" id="quotePosterBookAuthor">by James Clear</div>
-          <div style="margin-top:0.4rem; font-size:0.75rem; color:#f59e0b; font-weight:700;" id="quotePosterRating">★★★★★ • Top Shelf</div>
-        </div>
-      </div>
-      <div style="display:flex; gap:0.65rem; width:100%;">
-        <button type="button" class="btn" onclick="closeQuotePosterModal()" style="flex:1;">Close</button>
-        <button type="button" class="btn btn-primary" onclick="downloadQuotePosterImage()" style="flex:2; background:linear-gradient(135deg, #10b981, #059669); font-weight:800;">
-          📥 Save Image (Share)
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Vision-OS Frosted Glassmorphism Update Center Modal -->
-  <div class="modal-overlay" id="updateCheckerModalOverlay" onclick="handleUpdateOverlayClick(event)">
-    <div class="modal-content update-glass-card" onclick="event.stopPropagation()">
-      <div style="display:flex; justify-content:flex-end; margin-bottom:-10px;">
-        <button class="modal-close" style="color:#94a3b8; font-size:1.6rem; cursor:pointer;" onclick="closeUpdateCheckerModal()">&times;</button>
-      </div>
-
-      <!-- Glowing Rocket Glass Icon Box -->
-      <div class="update-glass-rocket-icon">
-        🚀
-      </div>
-
-      <div class="update-glass-title" id="updateModalTitle">New Version Update Ready:</div>
-      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.16.0</div>
-      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.16.0 • Edit Modal Cover Safe-Save &amp; Real HD Book Covers</div>
-
-      <!-- Feature Checklist matching user photo preview -->
-      <div class="update-glass-checklist">
-        <div class="update-glass-item">
-          <span class="update-glass-check">✓</span>
-          <span>Edit Modal Cover Safe-Save: Editing books never deletes or clears your cover</span>
-        </div>
-        <div class="update-glass-item">
-          <span class="update-glass-check">✓</span>
-          <span>Auto-Populated Cover Input: URL and image preview are fully visible in edit screen</span>
-        </div>
-        <div class="update-glass-item">
-          <span class="update-glass-check">✓</span>
-          <span>100% Real High-Definition (-L.jpg) Official Covers across all 313 World Masterpieces</span>
-        </div>
-        <div class="update-glass-item">
-          <span class="update-glass-check">✓</span>
-          <span>100% Full Uncropped Covers: Book covers are never cut off or cropped</span>
-        </div>
-        <div class="update-glass-item">
-          <span class="update-glass-check">✓</span>
-          <span>Crystal-Clear Book Titles &amp; Authors: High-contrast legible typography below cover</span>
-        </div>
-      </div>
-
-      <!-- Animated Progress Bar (when downloading) -->
-      <div class="update-progress-container" id="updateModalProgress" style="display:none; margin-bottom:1rem;">
-        <div class="update-progress-info" style="color:#cbd5e1; font-size:0.8rem; margin-bottom:4px; display:flex; justify-content:space-between;">
-          <span id="updateProgressText">Downloading Signed APK...</span>
-          <span id="updateProgressPct">0%</span>
-        </div>
-        <div class="update-progress-track" style="height:6px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden;">
-          <div class="update-progress-fill" id="updateProgressFill" style="height:100%; width:0%; background:linear-gradient(90deg, #3b82f6, #10b981); transition:width 0.2s ease;"></div>
-        </div>
-      </div>
-
-      <!-- Download Button -->
-      <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerInAppUpdate()">
-        ⚡ Download &amp; Install v3.16.0 Now
-      </button>
-    </div>
-  </div>
-
-  <!-- Offline Ambience Sound Player Modal -->
-  <div class="modal-overlay" id="ambienceModalOverlay">
-    <div class="modal-content" style="max-width:480px;">
-      <div class="modal-header">
-        <h3 class="modal-title">🎧 Offline Focus Ambience Sounds</h3>
-        <button class="modal-close" onclick="closeAmbienceModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="gap:1rem;">
-        <p style="font-size:0.85rem; color:var(--text-secondary); margin:0;">
-          Play soothing background ambient sounds to block distractions and read with deep focus. 100% offline synthesis.
-        </p>
-
-        <!-- 4D Spatial Soundscape Mixer & Presets -->
-        <div class="spatial-mixer-console">
-          <!-- Real-Time Waveform / EQ Visualizer -->
-          <div class="spatial-eq-card">
-            <div class="spatial-eq-header">
-              <span class="spatial-eq-tag">🎧 4D SPATIAL SOUND ENGINE</span>
-              <span class="spatial-eq-status" id="spatialEqStatus">OFFLINE SYNTHESIS</span>
-            </div>
-            <canvas id="spatialEqCanvas" class="spatial-eq-canvas" width="440" height="64"></canvas>
-          </div>
-
-          <!-- Master Controls -->
-          <div class="mixer-master-bar">
-            <div class="master-vol-info">
-              <span class="master-label">Master Volume</span>
-              <span class="master-val" id="masterVolumeLabel">65%</span>
-            </div>
-            <input type="range" class="mixer-fader master-fader" id="masterVolumeSlider" min="0" max="100" value="65" oninput="setMasterAmbienceVolume(this.value)">
-          </div>
-
-          <!-- 4-Track DJ Multi-Channel Mixer Faders -->
-          <div class="mixer-channels-grid">
-            <!-- Channel 1: Rain -->
-            <div class="mixer-channel-card" id="channelCardRain">
-              <div class="channel-header">
-                <span class="channel-icon">🌧️</span>
-                <span class="channel-name">Rainfall</span>
-                <span class="channel-val" id="chanValRain">50%</span>
-              </div>
-              <div class="channel-fader-wrap">
-                <input type="range" class="mixer-fader" id="channelRainSlider" min="0" max="100" value="50" oninput="setChannelVolume('rain', this.value)">
-              </div>
-              <button type="button" class="channel-mute-btn" id="muteBtnRain" onclick="toggleChannelMute('rain')">Mute</button>
-            </div>
-
-            <!-- Channel 2: Fireplace -->
-            <div class="mixer-channel-card" id="channelCardFire">
-              <div class="channel-header">
-                <span class="channel-icon">🔥</span>
-                <span class="channel-name">Fireplace</span>
-                <span class="channel-val" id="chanValFire">30%</span>
-              </div>
-              <div class="channel-fader-wrap">
-                <input type="range" class="mixer-fader" id="channelFireSlider" min="0" max="100" value="30" oninput="setChannelVolume('fire', this.value)">
-              </div>
-              <button type="button" class="channel-mute-btn" id="muteBtnFire" onclick="toggleChannelMute('fire')">Mute</button>
-            </div>
-
-            <!-- Channel 3: Ocean Waves -->
-            <div class="mixer-channel-card" id="channelCardWaves">
-              <div class="channel-header">
-                <span class="channel-icon">🌊</span>
-                <span class="channel-name">Waves</span>
-                <span class="channel-val" id="chanValWaves">20%</span>
-              </div>
-              <div class="channel-fader-wrap">
-                <input type="range" class="mixer-fader" id="channelWavesSlider" min="0" max="100" value="20" oninput="setChannelVolume('waves', this.value)">
-              </div>
-              <button type="button" class="channel-mute-btn" id="muteBtnWaves" onclick="toggleChannelMute('waves')">Mute</button>
-            </div>
-
-            <!-- Channel 4: Pine Forest -->
-            <div class="mixer-channel-card" id="channelCardForest">
-              <div class="channel-header">
-                <span class="channel-icon">🌲</span>
-                <span class="channel-name">Forest</span>
-                <span class="channel-val" id="chanValForest">0%</span>
-              </div>
-              <div class="channel-fader-wrap">
-                <input type="range" class="mixer-fader" id="channelForestSlider" min="0" max="100" value="0" oninput="setChannelVolume('forest', this.value)">
-              </div>
-              <button type="button" class="channel-mute-btn" id="muteBtnForest" onclick="toggleChannelMute('forest')">Mute</button>
-            </div>
-          </div>
-
-          <!-- Quick Presets -->
-          <div class="mixer-presets-row">
-            <span class="preset-label">Quick 4D Scenes:</span>
-            <button type="button" class="preset-chip active" onclick="applyMixerPreset('rain_storm')">⛈️ Thunder Storm</button>
-            <button type="button" class="preset-chip" onclick="applyMixerPreset('cozy_cabin')">🏡 Cozy Fire Cabin</button>
-            <button type="button" class="preset-chip" onclick="applyMixerPreset('coastal_zen')">🌅 Coastal Zen</button>
-            <button type="button" class="preset-chip" onclick="applyMixerPreset('deep_forest')">🍃 Deep Woods</button>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content:space-between;">
-        <button type="button" class="btn" onclick="closeAmbienceModal()">Close</button>
-        <button type="button" class="btn btn-primary" id="ambienceTogglePlayBtn" onclick="toggleAmbiencePlayback()" style="background:#10b981; border-color:#10b981; font-weight:700;">
-          ▶️ Play 4D Ambience
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Daily Reading Streak & Badges Modal -->
-  <div class="modal-overlay" id="streakModalOverlay">
-    <div class="modal-content" style="max-width:520px;">
-      <div class="modal-header">
-        <h3 class="modal-title">🔥 4D Reading Rings &amp; Streak Hub</h3>
-        <button class="modal-close" onclick="closeStreakModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="gap:1.25rem;">
-        <!-- Apple Watch Style 3-Ring Activity Section -->
-        <div class="activity-rings-card">
-          <div class="rings-canvas-wrapper">
-            <canvas id="activityRingsCanvas" width="180" height="180"></canvas>
-            <div class="rings-center-stat">
-              <span class="rings-flame-icon">🔥</span>
-              <span class="rings-center-val" id="ringsStreakCountText">1d</span>
-            </div>
-          </div>
-          <div class="rings-legend-list">
-            <div class="ring-legend-item ring-pages">
-              <span class="legend-dot dot-coral"></span>
-              <div class="legend-info">
-                <span class="legend-title">Daily Pages</span>
-                <span class="legend-sub" id="ringPagesStat">15 / 25 pages</span>
-              </div>
-              <span class="legend-pct" id="ringPagesPct">60%</span>
-            </div>
-            <div class="ring-legend-item ring-minutes">
-              <span class="legend-dot dot-emerald"></span>
-              <div class="legend-info">
-                <span class="legend-title">Focus Time</span>
-                <span class="legend-sub" id="ringMinutesStat">25 / 30 mins</span>
-              </div>
-              <span class="legend-pct" id="ringMinutesPct">83%</span>
-            </div>
-            <div class="ring-legend-item ring-habit">
-              <span class="legend-dot dot-cyan"></span>
-              <div class="legend-info">
-                <span class="legend-title">Habit Consistency</span>
-                <span class="legend-sub" id="ringHabitStat">5 / 7 days</span>
-              </div>
-              <span class="legend-pct" id="ringHabitPct">71%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Hero Flame Card -->
-        <div class="streak-hero-card">
-          <div class="streak-flame-large" id="streakHeroFlame">🔥</div>
-          <div class="streak-count-title" id="streakModalCountTitle">1 Day Reading Streak!</div>
-          <div class="streak-subtitle" id="streakModalSubtitle">Awesome start! Read everyday to build an unbreakable reading habit.</div>
-          
-          <div class="streak-days-track" id="streakDaysTrack">
-            <!-- Rendered dynamically by JS -->
-          </div>
-        </div>
-
-        <!-- Trophy Cabinet / Milestone Badges -->
-        <div>
-          <div style="display:flex; justify-content:space-between; align-items:center;">
-            <div style="font-weight:800; font-size:0.95rem; color:var(--text-primary);">🏆 Achievement Trophies</div>
-            <div style="font-size:0.75rem; color:var(--text-muted);" id="trophiesUnlockedCount">0 / 6 Unlocked</div>
-          </div>
-          <div class="badges-cabinet-grid" id="badgesCabinetGrid">
-            <!-- Rendered dynamically by JS -->
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn" onclick="closeStreakModal()">Close</button>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- Spotlight Command Island (Instant Teleport Search - Feature 5) -->
-  <div class="modal-overlay spotlight-overlay" id="spotlightIslandModal" onclick="handleSpotlightBackdrop(event)">
-    <div class="spotlight-capsule">
-      <div class="spotlight-search-header">
-        <span class="spotlight-search-icon">⚡</span>
-        <input type="text" id="spotlightInput" class="spotlight-input" placeholder="Teleport to any book, author, note, or quick command..." autocomplete="off" oninput="handleSpotlightSearch(this.value)">
-        <span class="spotlight-kbd" onclick="closeSpotlightModal()">ESC</span>
-      </div>
-      <div class="spotlight-quick-filters">
-        <button type="button" class="spotlight-pill active" onclick="filterSpotlightCategory('ALL', this)">All</button>
-        <button type="button" class="spotlight-pill" onclick="filterSpotlightCategory('READING', this)">📖 Reading</button>
-        <button type="button" class="spotlight-pill" onclick="filterSpotlightCategory('DONE', this)">✅ Finished</button>
-        <button type="button" class="spotlight-pill" onclick="filterSpotlightCategory('ACTION', this)">⚡ Actions</button>
-      </div>
-      <div class="spotlight-results-container" id="spotlightResultsContainer">
-        <!-- Dynamically injected results -->
-      </div>
-      <div class="spotlight-footer">
-        <span>Tip: Press <kbd>Ctrl</kbd>+<kbd>K</kbd> anywhere or tap ⚡ to launch Spotlight</span>
-        <span id="spotlightCountBadge">150 books indexed</span>
-      </div>
-    </div>
-  </div>
-
-
-  <!-- Reading DNA Constellation Modal (Interactive Visual Constellation - Feature 10) -->
-  <div class="modal-overlay" id="readingDnaModalOverlay" onclick="handleDnaBackdrop(event)">
-    <div class="modal-content reading-dna-modal-box">
-      <div class="modal-header">
-        <h3 class="modal-title" style="display:flex; align-items:center; gap:0.55rem;">
-          <span style="font-size:1.4rem;">🌌</span>
-          <span>Your Reading DNA Galaxy</span>
-        </h3>
-        <button class="modal-close" onclick="closeReadingDnaModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="padding:1rem 1.25rem;">
-        <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:0.75rem;">
-          Every finished book forms an interconnected shining star in your cosmic knowledge constellation. Hover or tap any star to inspect its milestone!
-        </div>
-        <div class="reading-dna-canvas-wrap">
-          <canvas id="readingDnaCanvas" width="600" height="340"></canvas>
-          <div class="reading-dna-star-tooltip" id="readingDnaTooltip"></div>
-        </div>
-        <div class="reading-dna-legend" id="readingDnaLegend"></div>
-      </div>
-      <div class="modal-footer" style="justify-content:space-between;">
-        <span style="font-size:0.8rem; color:var(--text-muted);" id="dnaFinishedStats">0 / 150 Stars Ignited</span>
-        <button type="button" class="btn" onclick="closeReadingDnaModal()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- In-App Dimensional Holographic Cloud Broadcast Portal -->
-  <div class="modal-overlay holo-portal-overlay" id="inAppNoticeModalOverlay" style="z-index: 999999;">
-    <canvas id="holoNoticeParticleCanvas" class="holo-particle-canvas"></canvas>
-    <div class="holo-laser-beam"></div>
-    <div class="holo-plasma-border-wrap">
-      <div class="holo-plasma-glow-bg"></div>
-        <!-- Card 1: Quantum Holographic Beacon (Original) -->
-        <div class="holo-notice-card" id="holoNoticeCard">
-          <div class="holo-card-sheen"></div>
-          <div class="holo-telemetry-badge">
-            <span class="holo-live-dot"></span>
-            <span class="holo-telemetry-text">CARD 1 • QUANTUM BEACON TRANSMISSION</span>
-          </div>
-
-          <div class="holo-reactor-orb-container">
-            <div class="shockwave-ring ring-1"></div>
-            <div class="shockwave-ring ring-2"></div>
-            <div class="shockwave-ring ring-3"></div>
-            <div class="holo-reactor-orb">
-              <span id="inAppNoticeIcon">📢</span>
-            </div>
-          </div>
-
-          <h3 class="holo-notice-title" id="inAppNoticeTitle">Notice</h3>
-
-          <div class="holo-message-capsule">
-            <div class="holo-corner-accents">
-              <span class="corner tl">⌜</span>
-              <span class="corner tr">⌝</span>
-              <span class="corner bl">⌞</span>
-              <span class="corner br">⌟</span>
-            </div>
-            <div class="holo-message-watermark">MINDFOCUS • CARD 1 TRANSMISSION</div>
-            <div class="holo-message-text" id="inAppNoticeMessage">
-              soja bhai
-            </div>
-          </div>
-
-          <div class="holo-notice-footer">
-            <div class="holo-footer-meta">
-              <span class="holo-signal-icon">⚡</span>
-              <span>CARD 1 • ENCRYPTED END-TO-END</span>
-            </div>
-            <button type="button" class="holo-dismiss-btn" id="inAppNoticeDismissBtn" onclick="dismissInAppNotice(event)">
-              <span class="btn-sheen"></span>
-              <span class="btn-text" id="inAppNoticeBtnText">OK, Samajh Gaya</span>
-              <span class="btn-arrow">✦</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==========================================================================
-       FEATURE: MULTI-LANGUAGE REAL BOOK READER (HINDI / HINGLISH / ENGLISH)
-       ========================================================================== -->
-
-  <!-- 1. Language Selection Modal -->
-  <div class="modal-overlay" id="bookLanguageSelectModal" onclick="handleLangSelectOverlayClick(event)">
-    <div class="modal-content lang-select-dialog" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <div style="display:flex; align-items:center; gap:0.6rem;">
-          <span style="font-size:1.5rem;">📖</span>
-          <div>
-            <h3 class="modal-title" id="langSelectBookTitle">किताब पढ़ें / Read Book</h3>
-            <div style="font-size:0.75rem; color:var(--text-secondary);" id="langSelectBookAuthor">Select Reading Language</div>
-          </div>
-        </div>
-        <button class="modal-close" onclick="closeLanguageSelectModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="padding:1.25rem; gap:1rem;">
-        <!-- Book Preview Card -->
-        <div class="lang-select-book-preview">
-          <div class="lang-select-cover-wrap">
-            <img id="langSelectCoverImg" src="hyperfocus_cover.jpg" alt="Cover" class="lang-select-cover">
-          </div>
-          <div class="lang-select-info">
-            <span class="lang-select-badge" id="langSelectCategoryBadge">Focus &amp; Productivity</span>
-            <h4 id="langSelectTitleEn" style="margin:0.25rem 0 0.15rem; font-size:1rem; font-weight:800; color:var(--text-primary);">Hyperfocus: How to Work Less to Achieve More</h4>
-            <div class="lang-select-author-txt" id="langSelectAuthorTxt" style="font-size:0.8rem; color:var(--text-secondary);">by Chris Bailey • अनुवाद: अजय तिवारी</div>
-            <div class="lang-select-isbn-row" id="langSelectIsbnRow" style="margin-top:0.4rem; font-size:0.75rem; color:var(--text-muted); display:flex; gap:0.6rem; flex-wrap:wrap;">
-              <span>ISBN: <strong style="color:var(--text-primary);">978-93-5543-300-8</strong></span>
-              <span>• Price: <strong style="color:#10b981;">₹350</strong></span>
-            </div>
-          </div>
-        </div>
-
-        <div style="font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-top:0.1rem; display:flex; justify-content:space-between; align-items:center;">
-          <span>🌐 भाषा चुनें (Choose Language):</span>
-          <span style="font-size:0.72rem; color:var(--text-muted);">1-Tap to Open Real Book</span>
-        </div>
-
-        <div class="lang-options-grid">
-          <!-- Option 1: Hindi -->
-          <button type="button" class="lang-option-card active-lang-card" onclick="selectBookLanguageAndOpen('hindi')">
-            <div class="lang-card-left">
-              <span class="lang-flag">🇮🇳</span>
-              <div class="lang-card-text">
-                <div class="lang-card-title">हिंदी (Hindi) <span class="lang-recommended-pill">मूल पुस्तक</span></div>
-                <div class="lang-card-sub">हायपरफ़ोकस: कम प्रयास में अधिक सफलता कैसे प्राप्त करें (अजय तिवारी)</div>
-              </div>
-            </div>
-            <div class="lang-card-action">
-              <span class="lang-pages-count" id="langHindiCountBadge">2 पृष्ठ</span>
-              <span class="lang-open-arrow">पढ़ें ›</span>
-            </div>
-          </button>
-
-          <!-- Option 2: Hinglish -->
-          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('hinglish')">
-            <div class="lang-card-left">
-              <span class="lang-flag">🔤</span>
-              <div class="lang-card-text">
-                <div class="lang-card-title">Hinglish (हिंग्लिश) <span class="lang-hinglish-pill">Roman Hindi</span></div>
-                <div class="lang-card-sub">Simple Roman Hindi me padhein — aasaan aur fast reading experience</div>
-              </div>
-            </div>
-            <div class="lang-card-action">
-              <span class="lang-pages-count" id="langHinglishCountBadge">2 Pages</span>
-              <span class="lang-open-arrow">Read ›</span>
-            </div>
-          </button>
-
-          <!-- Option 3: English -->
-          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('english')">
-            <div class="lang-card-left">
-              <span class="lang-flag">🇬🇧</span>
-              <div class="lang-card-text">
-                <div class="lang-card-title">English <span class="lang-eng-pill">Original</span></div>
-                <div class="lang-card-sub">Hyperfocus: How to Work Less to Achieve More (Original edition)</div>
-              </div>
-            </div>
-            <div class="lang-card-action">
-              <span class="lang-pages-count" id="langEnglishCountBadge">2 Pages</span>
-              <span class="lang-open-arrow">Read ›</span>
-            </div>
-          </button>
-        </div>
-
-        <!-- FEATURE: INSTANT SCAN & CONVERT TO ALL LANGUAGES -->
-        <div class="lang-all-ocr-card" style="background:linear-gradient(135deg, rgba(99,102,241,0.09), rgba(16,185,129,0.09)); border:1.5px dashed rgba(99,102,241,0.45); border-radius:14px; padding:12px 14px; text-align:center; position:relative; overflow:hidden;">
-          <input type="file" id="langModalPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleLangModalAutoOcrAll(this)">
-          <div id="langModalOcrPrompt" onclick="document.getElementById('langModalPhotoInput').click()" style="cursor:pointer;">
-            <div style="font-size:1.9rem; line-height:1; margin-bottom:4px;">📸 ⚡</div>
-            <div style="font-weight:800; font-size:0.92rem; color:var(--text-primary);">
-              Book Page ki Photo Dalein (Auto-Add to All Languages)
-            </div>
-            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
-              ⚡ <strong>1-Click: Photo dalte hi हिंदी + Hinglish + English teeno bhashaon mein naya page ban jayega!</strong>
-            </div>
-            <div style="margin-top:8px;">
-              <span class="btn btn-sm btn-primary" style="font-size:0.74rem; font-weight:700; padding:4px 14px; border-radius:20px; pointer-events:none;">
-                📷 Scan &amp; Convert to All 3 Languages
-              </span>
-            </div>
-          </div>
-
-          <!-- Loading / Scanning State -->
-          <div id="langModalOcrScanning" style="display:none; padding:8px 0; text-align:center;">
-            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
-            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="langModalOcrStatus">
-              Photo scan karke teeno bhashaon mein convert ho raha hai...
-            </div>
-            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
-              <div id="langModalOcrProgressBar" style="width:25%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
-            </div>
-          </div>
-
-          <!-- Success Badge -->
-          <div id="langModalOcrSuccess" style="display:none; align-items:center; gap:8px; justify-content:center; padding:4px 0; font-weight:700; color:#10b981; font-size:0.82rem;">
-            <span>✅</span> <span id="langModalOcrSuccessTxt">Teeno bhashaon mein naya page safaltapoorvak add ho gaya!</span>
-          </div>
-        </div>
-
-        <!-- Add Custom Pages Button -->
-        <div class="lang-custom-add-banner">
-          <div>
-            <div style="font-weight:700; font-size:0.82rem; color:var(--text-primary);">📝 Single Page Type/Add Karna Hai?</div>
-            <div style="font-size:0.75rem; color:var(--text-secondary);">Keval ek bhasha mein custom page likhein ya jodein</div>
-          </div>
-          <button type="button" class="btn btn-sm" onclick="openAddCustomPageModal()" style="background:var(--accent-primary); color:#fff; border:none; font-weight:700; border-radius:8px;">
-            ➕ Add Page
-          </button>
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content:flex-end;">
-        <button type="button" class="btn" onclick="closeLanguageSelectModal()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 2. Full-Screen 3D Multi-Language Book Reader Modal -->
-  <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)">
-    <div class="real-book-reader-container" onclick="event.stopPropagation()">
-      <!-- Top Reader Navigation Bar -->
-      <div class="reader-top-bar">
-        <div class="reader-top-left">
-          <button type="button" class="reader-btn-icon" onclick="closeRealBookReader()" title="Close Book">✕</button>
-          <div class="reader-book-identity">
-            <span class="reader-badge" id="readerBookBadge">📖 REAL BOOK</span>
-            <h2 class="reader-title" id="readerBookTitleDisplay">हायपरफ़ोकस</h2>
-          </div>
-        </div>
-
-        <!-- Center Language Switcher Pills -->
-        <div class="reader-lang-pills">
-          <button type="button" class="reader-lang-pill active" id="readerLangPillHindi" onclick="switchReaderLanguage('hindi')">हिंदी</button>
-          <button type="button" class="reader-lang-pill" id="readerLangPillHinglish" onclick="switchReaderLanguage('hinglish')">Hinglish</button>
-          <button type="button" class="reader-lang-pill" id="readerLangPillEnglish" onclick="switchReaderLanguage('english')">English</button>
-        </div>
-
-        <!-- Right Controls -->
-        <div class="reader-top-right">
-          <!-- View Mode Toggle: Dual Spread vs Single Page -->
-          <button type="button" class="reader-btn-sm" id="readerSpreadToggleBtn" onclick="toggleReaderSpreadMode()" title="Toggle View Mode" style="font-weight:700;">📖 Spread</button>
-          <!-- View Cover Button -->
-          <button type="button" class="reader-btn-sm" onclick="openBookCoverModal()" title="View Book Cover" style="font-weight:700;">📕 Cover</button>
-          <!-- Font Size Adjuster -->
-          <div class="reader-font-controls">
-            <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(-1)" title="Decrease font size">A-</button>
-            <span id="readerFontSizeDisplay" style="font-size:0.75rem; color:var(--text-muted); min-width:28px; text-align:center;">100%</span>
-            <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(1)" title="Increase font size">A+</button>
-          </div>
-          <!-- Theme Mode: Sepia / Dark / Light -->
-          <button type="button" class="reader-btn-sm" id="readerThemeToggleBtn" onclick="cycleReaderTheme()" title="Reader Paper Tone">📜 Sepia</button>
-          <!-- Add Page Button -->
-          <button type="button" class="reader-btn-sm" onclick="openAddCustomPageModal()" title="Add new page">➕ Add Page</button>
-        </div>
-      </div>
-
-      <!-- 3D Open Book Stage -->
-      <div class="real-book-stage-wrap" id="realBookStageWrap">
-        <div class="real-book-hardcover" id="realBookHardcover">
-          <div class="real-book-spine-groove"></div>
-          <div class="real-book-spread" id="realBookSpread">
-            <!-- Bookmark Ribbon -->
-            <div class="reader-ribbon-bookmark"></div>
-
-            <!-- Left Page (Spread mode on desktop / Tablet) -->
-            <div class="reader-page-sheet page-sheet-left" id="readerPageLeft">
-              <div class="page-inner-sheet" id="pageInnerLeft">
-                <!-- Content rendered dynamically -->
-              </div>
-              <div class="reader-page-footer-wrap">
-                <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
-                <div class="reader-page-actions" id="pageActionsLeft">
-                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('left')" title="Edit Page">✏️ Edit</button>
-                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('left')" title="Delete Page">🗑️</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- Center Spine Shadow & Valley -->
-            <div class="reader-spine-divider">
-              <div class="reader-spine-crease"></div>
-            </div>
-
-            <!-- Right Page (Spread mode) / Single page on mobile -->
-            <div class="reader-page-sheet page-sheet-right" id="readerPageRight">
-              <div class="page-inner-sheet" id="pageInnerRight">
-                <!-- Content rendered dynamically -->
-              </div>
-              <!-- 3D Paper Curl Corner Visual -->
-              <div class="reader-paper-curl-corner" title="3D Page Curl"></div>
-              <div class="reader-page-footer-wrap">
-                <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
-                <div class="reader-page-actions" id="pageActionsRight">
-                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('right')" title="Edit Page">✏️ Edit</button>
-                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('right')" title="Delete Page">🗑️</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom Page Navigation Toolbar -->
-      <div class="reader-bottom-bar">
-        <button type="button" class="reader-nav-btn" id="readerPrevPageBtn" onclick="turnRealBookPage(-1)">
-          ‹ Previous Page
-        </button>
-
-        <div class="reader-page-slider-group">
-          <input type="range" class="reader-page-range" id="readerPageSlider" min="1" max="2" value="1" oninput="onReaderSliderChange(this.value)">
-          <span class="reader-page-indicator" id="readerPageIndicator">Page 1 / 2</span>
-        </div>
-
-        <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="turnRealBookPage(1)">
-          Next Page ›
-        </button>
-      </div>
-
-      <!-- Luxury Floating Dock (Matching Photo: Font Size, Page Indicator, Soundscape) -->
-      <div class="reader-luxury-dock" id="readerLuxuryDock">
-        <div class="reader-dock-group">
-          <div class="reader-font-slider-wrap">
-            <span style="font-weight:800; color:#d97706; font-size:1.05rem;">Aa</span>
-            <input type="range" id="readerFontSlider" min="14" max="24" value="18" oninput="setReaderFontSizePx(this.value)" style="width:65px; accent-color:#f59e0b; cursor:pointer;">
-            <span class="reader-font-val-pill" id="readerFontPxDisplay">18px</span>
-          </div>
-          <span class="reader-dock-label">Font Size</span>
-        </div>
-
-        <div class="reader-dock-group">
-          <div class="reader-page-indicator-pill" id="readerDockPagePill">1 / 4</div>
-          <span class="reader-dock-label">Page Indicator</span>
-        </div>
-
-        <div class="reader-dock-group">
-          <button type="button" id="readerSoundscapeBtn" class="reader-soundscape-toggle" onclick="toggleReaderSoundscape()">
-            🔈 Soundscape: OFF
-          </button>
-          <span class="reader-dock-label">Soundscape</span>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 3. Add Custom Book Page Modal -->
-  <div class="modal-overlay" id="addCustomPageModal" onclick="handleAddPageOverlayClick(event)">
-    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span style="font-size:1.4rem;">➕</span>
-          <h3 class="modal-title">नया बुक पेज जोड़ें (Add Book Page)</h3>
-        </div>
-        <button class="modal-close" onclick="closeAddCustomPageModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="gap:0.9rem;">
-        
-        <!-- AUTO-OCR PHOTO UPLOAD & SCAN DROPZONE -->
-        <div class="page-ocr-dropzone" id="pageOcrDropzone" onclick="document.getElementById('customPagePhotoInput').click()">
-          <input type="file" id="customPagePhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleCustomPagePhotoUpload(this)">
-          
-          <div id="ocrLaserScanLine" class="ocr-scan-laser" style="display:none;"></div>
-
-          <!-- Default Prompt State -->
-          <div id="ocrDropzonePrompt">
-            <div style="font-size:2.2rem; line-height:1; margin-bottom:0.4rem;">📸</div>
-            <div style="font-weight:800; font-size:0.95rem; color:var(--text-primary);">
-              Book Page ki Photo Yahan Dalein ya Camera se Kheenche
-            </div>
-            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:3px;">
-              ⚡ <strong>Photo dalte hi automatic text mein convert ho jayega!</strong>
-            </div>
-            <div style="margin-top:8px; display:flex; justify-content:center; gap:6px; flex-wrap:wrap;">
-              <span style="background:rgba(99,102,241,0.12); color:#6366f1; border:1px solid rgba(99,102,241,0.25); font-size:0.72rem; padding:3px 8px; border-radius:12px; font-weight:600;">
-                📷 Gallery / Camera
-              </span>
-              <span style="background:rgba(16,185,129,0.12); color:#10b981; border:1px solid rgba(16,185,129,0.25); font-size:0.72rem; padding:3px 8px; border-radius:12px; font-weight:600;">
-                📋 Drag &amp; Drop / Ctrl+V Paste
-              </span>
-            </div>
-          </div>
-
-          <!-- Loading / Scanning State -->
-          <div id="ocrScanningState" style="display:none; text-align:center; padding:10px 4px;">
-            <div class="ocr-scan-spinner">⚡</div>
-            <div style="font-weight:800; font-size:0.9rem; color:#6366f1; margin-top:4px;" id="ocrScanProgressText">
-              Photo scan ho rahi hai aur text convert ho raha hai...
-            </div>
-            <div style="max-width:280px; margin:8px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:6px; overflow:hidden;">
-              <div id="ocrScanProgressBar" style="width:20%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
-            </div>
-            <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:5px;" id="ocrScanStatusSub">
-              AI text recognition chal raha hai...
-            </div>
-          </div>
-
-          <!-- Success Preview State -->
-          <div id="ocrUploadedPreview" style="display:none; align-items:center; gap:10px; text-align:left; padding:4px 6px;">
-            <img id="ocrThumbnailImg" src="" alt="Thumbnail" style="width:46px; height:56px; object-fit:cover; border-radius:6px; border:1px solid var(--border-color); box-shadow:0 2px 6px rgba(0,0,0,0.15);">
-            <div style="flex:1;">
-              <div style="font-weight:700; font-size:0.84rem; color:#10b981; display:flex; align-items:center; gap:4px;">
-                <span>✅</span> <span>Text successfully convert ho gaya!</span>
-              </div>
-              <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:2px;" id="ocrExtractSummaryText">
-                Text neeche box mein daal diya gaya hai. Aap ise edit ya save kar sakte hain.
-              </div>
-            </div>
-            <button type="button" class="btn btn-sm" onclick="event.stopPropagation(); document.getElementById('customPagePhotoInput').click();" style="font-size:0.72rem; padding:4px 8px;">
-              🔄 Change Photo
-            </button>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Book Select Karein:</label>
-            <select id="customPageBookSelect" class="form-control">
-              <!-- Populated with books -->
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Language (भाषा):</label>
-            <select id="customPageLangSelect" class="form-control">
-              <option value="hindi">हिंदी (Hindi)</option>
-              <option value="hinglish">Hinglish (हिंग्लिश)</option>
-              <option value="english">English</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Page Number:</label>
-            <input type="number" id="customPageNoInput" class="form-control" min="1" value="3">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Page Heading / Chapter (Optional):</label>
-            <input type="text" id="customPageHeadingInput" class="form-control" placeholder="e.g. अध्याय 1: ऑटोपायलट मोड">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
-            <label class="form-label" style="margin:0;">Page Content (Text ya Paragraphs):</label>
-            <span style="font-size:0.72rem; color:var(--text-muted);">Photo se auto-filled • You can edit</span>
-          </div>
-          <textarea id="customPageContentInput" class="form-control" style="min-height:160px; font-size:0.9rem; line-height:1.5;" placeholder="Photo daalte hi text yahan automatically aa jayega, ya aap type bhi kar sakte hain..."></textarea>
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content:space-between;">
-        <button type="button" class="btn" onclick="closeAddCustomPageModal()">Cancel</button>
-        <button type="button" class="btn btn-primary" onclick="saveCustomBookPage()">💾 Save Page</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- 4. Edit Book Page Modal (with Photo Re-Scan & OCR) -->
-  <div class="modal-overlay" id="editBookPageModal" onclick="handleEditPageOverlayClick(event)">
-    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span style="font-size:1.4rem;">✏️</span>
-          <h3 class="modal-title" id="editPageModalTitle">पेज एडिट करें (Edit Page)</h3>
-        </div>
-        <button class="modal-close" onclick="closeEditBookPageModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="gap:0.9rem;">
-        
-        <!-- AUTO-OCR PHOTO RE-SCAN DROPZONE -->
-        <div class="page-ocr-dropzone" id="editPageOcrDropzone" onclick="document.getElementById('editPagePhotoInput').click()">
-          <input type="file" id="editPagePhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleEditPagePhotoUpload(this)">
-          
-          <div id="editOcrLaserScanLine" class="ocr-scan-laser" style="display:none;"></div>
-
-          <div id="editOcrDropzonePrompt">
-            <div style="font-size:1.8rem; line-height:1; margin-bottom:4px;">📸 🔄</div>
-            <div style="font-weight:800; font-size:0.9rem; color:var(--text-primary);">
-              Nayi Photo se Text Badlein (Re-Scan Photo)
-            </div>
-            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
-              ⚡ <strong>Photo dalte hi naya text automatically text box mein replace ho jayega!</strong>
-            </div>
-          </div>
-
-          <div id="editOcrScanningState" style="display:none; text-align:center; padding:8px 4px;">
-            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
-            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="editOcrScanProgressText">
-              Photo scan ho rahi hai...
-            </div>
-            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
-              <div id="editOcrScanProgressBar" style="width:20%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="form-group">
-            <label class="form-label">Page Number:</label>
-            <input type="number" id="editPageNoInput" class="form-control" min="1" readonly style="background:rgba(0,0,0,0.06); opacity:0.85;">
-          </div>
-          <div class="form-group">
-            <label class="form-label">Language:</label>
-            <input type="text" id="editPageLangInput" class="form-control" readonly style="background:rgba(0,0,0,0.06); opacity:0.85;">
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Page Heading / Title:</label>
-          <input type="text" id="editPageHeadingInput" class="form-control" placeholder="Page heading...">
-        </div>
-
-        <div class="form-group">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
-            <label class="form-label" style="margin:0;">Page Content (Text ya HTML):</label>
-            <span style="font-size:0.72rem; color:var(--text-muted);">Editable</span>
-          </div>
-          <textarea id="editPageContentInput" class="form-control" style="min-height:180px; font-size:0.9rem; line-height:1.5;"></textarea>
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content:space-between;">
-        <button type="button" class="btn btn-danger" onclick="confirmDeleteCurrentEditPage()" style="background:#ef4444; color:#fff; border:none; font-weight:700;">
-          🗑️ Delete Page
-        </button>
-        <div style="display:flex; gap:0.5rem;">
-          <button type="button" class="btn" onclick="closeEditBookPageModal()">Cancel</button>
-          <button type="button" class="btn btn-primary" onclick="saveEditedBookPage()">💾 Save Changes</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 5. Book Cover Viewer Modal -->
-  <div class="modal-overlay" id="bookCoverViewerModal" onclick="handleCoverViewerOverlayClick(event)">
-    <div class="modal-content" style="max-width:460px; text-align:center; padding:1.25rem;" onclick="event.stopPropagation()">
-      <div class="modal-header" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border-color);">
-        <div style="display:flex; align-items:center; gap:0.5rem;">
-          <span style="font-size:1.4rem;">📕</span>
-          <h3 class="modal-title" id="coverModalTitle">पुस्तक कवर / Book Cover</h3>
-        </div>
-        <button class="modal-close" onclick="closeBookCoverModal()">&times;</button>
-      </div>
-      <div class="modal-body" style="padding:0.8rem 0; gap:0.75rem;">
-        <div style="display:flex; justify-content:center; gap:0.5rem; margin-bottom:0.5rem;">
-          <button type="button" class="btn btn-sm btn-primary" id="coverTabFrontBtn" onclick="switchCoverView('front')">Front Cover</button>
-          <button type="button" class="btn btn-sm" id="coverTabBackBtn" onclick="switchCoverView('back')">Back Cover</button>
-        </div>
-        <div style="max-height:65vh; overflow:hidden; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.03); border-radius:12px; padding:10px;">
-          <img id="coverViewerImg" src="hyperfocus_cover.jpg" alt="Book Cover" style="max-width:100%; max-height:55vh; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.25); object-fit:contain;">
-        </div>
-        <div id="coverViewerCaption" style="font-size:0.82rem; font-weight:600; color:var(--text-secondary); margin-top:0.25rem;">
-          हायपरफ़ोकस (Hyperfocus) • Front Cover
-        </div>
-      </div>
-      <div class="modal-footer" style="justify-content:center; padding-top:0.5rem; border-top:1px solid var(--border-color);">
-        <button type="button" class="btn" onclick="closeBookCoverModal()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ==========================================================================
-       FEATURE: 3D REAL PAGES DICTIONARY BOOK (A-Z ENGLISH-HINDI FOCUS LEXICON)
-       ========================================================================== -->
-  <div id="dictionaryBookModalOverlay" class="dictionary-modal-overlay" onclick="handleDictOverlayClick(event)">
-    <div class="dict-book-outer-wrapper" onclick="event.stopPropagation()">
-      <!-- Top Bar -->
-      <div class="dict-book-top-bar">
-        <div class="dict-book-header-left">
-          <span class="dict-book-badge">📖 REAL 3D BOOK</span>
-          <h2 class="dict-book-header-title">A-Z English-Hindi Focus Vocabulary Lexicon</h2>
-        </div>
-        <div class="dict-book-header-right">
-          <div class="dict-search-box">
-            <span class="dict-search-icon">🔍</span>
-            <input type="text" id="dictSearchInput" placeholder="Search English or Hindi word..." oninput="onDictSearchInput(this.value)">
-            <button type="button" class="dict-search-clear" id="dictSearchClearBtn" onclick="clearDictSearch()" style="display:none;">✕</button>
-          </div>
-          <button type="button" class="dict-close-btn" onclick="closeDictionaryBookReader()" title="Close Book (Esc)">✕</button>
-        </div>
-      </div>
-
-      <!-- A-Z Alphabet Strip -->
-      <div class="dict-alphabet-strip" id="dictAlphabetStrip">
-        <!-- Rendered via JS -->
-      </div>
-
-      <!-- 3D Realistic Open Book Stage -->
-      <div class="dict-3d-book-stage">
-        <div class="dict-book-hardcover" id="dictHardcover">
-          <!-- Ribbon Bookmark -->
-          <div class="dict-ribbon-bookmark"></div>
-
-          <!-- Book Spread -->
-          <div class="dict-book-spread" id="dictBookSpread">
-            <!-- Left Page -->
-            <div class="dict-page dict-page-left" id="dictPageLeft"></div>
-
-            <!-- Realistic Center Spine Shadow -->
-            <div class="dict-center-spine"></div>
-
-            <!-- Right Page -->
-            <div class="dict-page dict-page-right" id="dictPageRight"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Bottom Controls Bar -->
-      <div class="dict-book-controls-bar">
-        <button type="button" class="dict-nav-btn" id="dictPrevBtn" onclick="turnDictPage(-1)">
-          ‹ Turn Prev Page
-        </button>
-        <div class="dict-page-indicator-wrap">
-          <input type="range" class="dict-page-slider" id="dictPageSlider" min="1" max="1" value="1" oninput="onDictSliderChange(this.value)">
-          <span class="dict-page-indicator-text" id="dictPageIndicator">Pages 1-2 of 38</span>
-        </div>
-        <button type="button" class="dict-nav-btn primary" id="dictNextBtn" onclick="turnDictPage(1)">
-          Turn Next Page ›
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Floating Mobile DevTools Button -->
-  <button type="button" id="mobileDevToolsPill" class="mobile-devtools-pill" onclick="openMobileDevToolsModal()" style="display:none;" title="Mobile DevTools">
-    <span>🛠️ Dev</span>
-    <span class="pill-error-badge" id="pillErrorBadge" style="display:none;">0</span>
-  </button>
-
-  <!-- Mobile DevTools & Crash Diagnostics Modal -->
-  <div class="mobile-devtools-overlay" id="mobileDevToolsModalOverlay" onclick="handleDevToolsOverlayClick(event)">
-    <div class="mobile-devtools-dialog" onclick="event.stopPropagation()">
-      <!-- Header -->
-      <div class="devtools-header">
-        <div class="devtools-title">
-          <span>🛠️</span>
-          <span>Mobile DevTools &amp; Crash Radar</span>
-        </div>
-        <button type="button" class="btn-close-modal" onclick="closeMobileDevToolsModal()" style="font-size:1.4rem; color:var(--text-muted); background:none; border:none; cursor:pointer;">&times;</button>
-      </div>
-
-      <!-- Tabs Bar -->
-      <div class="devtools-tabs-bar">
-        <button type="button" class="devtools-tab-btn active" id="btnDevTabConsole" onclick="switchDevToolsTab('devTabConsole')">
-          <span>📟 Console</span>
-          <span class="pill-error-badge" id="devConsoleErrorCountBadge" style="display:none;">0</span>
-        </button>
-        <button type="button" class="devtools-tab-btn" id="btnDevTabNetwork" onclick="switchDevToolsTab('devTabNetwork')">
-          <span>🌐 Network</span>
-        </button>
-        <button type="button" class="devtools-tab-btn" id="btnDevTabStorage" onclick="switchDevToolsTab('devTabStorage')">
-          <span>💾 Storage</span>
-        </button>
-        <button type="button" class="devtools-tab-btn" id="btnDevTabDevice" onclick="switchDevToolsTab('devTabDevice')">
-          <span>📱 Device</span>
-        </button>
-        <button type="button" class="devtools-tab-btn" id="btnDevTabUsb" onclick="switchDevToolsTab('devTabUsb')">
-          <span>🔌 USB Inspect</span>
-        </button>
-      </div>
-
-      <!-- Body -->
-      <div class="devtools-body">
-        <!-- Tab 1: Console -->
-        <div class="devtools-tab-content active" id="devTabConsole">
-          <div class="devtools-actions-row">
-            <div style="display:flex; gap:6px; flex-wrap:wrap;">
-              <button type="button" class="btn-devtools-sm" onclick="clearDevToolsConsole()">🗑️ Clear</button>
-              <button type="button" class="btn-devtools-sm" onclick="copyDevToolsLogs()">📋 Copy Logs</button>
-              <button type="button" class="btn-devtools-sm" onclick="triggerTestCrashTelemetry()">🧪 Test Crash</button>
-            </div>
-            <span style="font-size:0.72rem; color:var(--text-muted);" id="devLogsCountText">0 entries</span>
-          </div>
-          <div class="devtools-console-stream" id="devtoolsConsoleStream">
-            <div class="devtools-log-entry info">
-              <div class="devtools-log-meta">[System] Mobile DevTools Engine initialized</div>
-              <div>Ready to capture runtime errors, unhandled rejections, and network calls.</div>
-            </div>
-          </div>
-          <!-- REPL Command Line -->
-          <div class="devtools-repl-bar">
-            <input type="text" id="devReplInput" class="devtools-repl-input" placeholder="Run JavaScript on phone... (e.g. alert('Hello!'))" onkeydown="handleDevReplKeydown(event)">
-            <button type="button" class="btn-devtools-sm primary" onclick="runDevReplCode()">Run ›</button>
-          </div>
-        </div>
-
-        <!-- Tab 2: Network -->
-        <div class="devtools-tab-content" id="devTabNetwork">
-          <div class="devtools-actions-row">
-            <span style="font-size:0.8rem; color:#38bdf8; font-weight:700;">Recent Network &amp; Cloud Relay Calls</span>
-            <button type="button" class="btn-devtools-sm" onclick="clearDevToolsNetwork()">🗑️ Clear</button>
-          </div>
-          <div class="devtools-console-stream" id="devtoolsNetworkStream">
-            <div style="color:var(--text-muted); text-align:center; padding:20px;">No network calls captured yet.</div>
-          </div>
-        </div>
-
-        <!-- Tab 3: Storage -->
-        <div class="devtools-tab-content" id="devTabStorage">
-          <div class="devtools-actions-row">
-            <span style="font-size:0.8rem; color:#f59e0b; font-weight:700;">localStorage Keys &amp; Values</span>
-            <button type="button" class="btn-devtools-sm" onclick="refreshDevToolsStorage()">🔄 Refresh</button>
-          </div>
-          <div class="devtools-console-stream" id="devtoolsStorageStream">
-            <div style="color:var(--text-muted); text-align:center; padding:20px;">Loading storage...</div>
-          </div>
-        </div>
-
-        <!-- Tab 4: Device Health -->
-        <div class="devtools-tab-content" id="devTabDevice">
-          <div style="font-size:0.82rem; color:#34d399; font-weight:700; margin-bottom:8px;">📱 Real-Time Phone Hardware &amp; WebView Specs</div>
-          <table class="devtools-info-table" id="devtoolsDeviceTable">
-            <!-- Populated via JavaScript -->
-          </table>
-        </div>
-
-        <!-- Tab 5: USB Remote Inspect -->
-        <div class="devtools-tab-content" id="devTabUsb">
-          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:12px; padding:14px; line-height:1.5;">
-            <div style="font-weight:800; color:#38bdf8; margin-bottom:6px; font-size:0.9rem;">🔌 Connect to PC Chrome (Remote F12)</div>
-            <p style="font-size:0.78rem; color:var(--text-secondary); margin-bottom:10px;">
-              Phone ko USB cable se PC se jodh kar poora Google Chrome DevTools kholne ke steps:
-            </p>
-            <ol style="font-size:0.78rem; color:var(--text-primary); padding-left:18px; display:flex; flex-direction:column; gap:6px;">
-              <li>Phone Settings me <b>Developer Options</b> ON karein aur <b>USB Debugging</b> allow karein.</li>
-              <li>Phone ko USB data cable se Computer se connect karein.</li>
-              <li>Computer ke Chrome browser me ye link open karein:<br>
-                <code style="background:rgba(56,189,248,0.15); color:#38bdf8; padding:3px 8px; border-radius:6px; display:inline-block; margin-top:4px;">chrome://inspect/#devices</code>
-              </li>
-              <li>Waha aapko <b>Mind Focus Books</b> app dikhega, samne <b>Inspect</b> dabate hi computer screen par live phone inspect khul jayega!</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Hidden File Input for Import -->
-  <input type="file" id="importFileInput" accept=".json" style="display:none;">
-
-  <!-- Standalone Offline Scripts with CDN Fallbacks -->
-  <script src="html2canvas.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'"></script>
-  <script src="jspdf.umd.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'"></script>
-  <script src="jspdf.plugin.autotable.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js'"></script>
-  <script src="tesseract.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js'"></script>
-  <script src="dictionary-data.js?v=3.8.0"></script>
-  <script src="book-pages-data.js?v=3.8.0"></script>
-  <script src="books-data.js?v=3.8.0"></script>
-  <script src="app.js?v=3.8.0"></script>
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" role="status" aria-live="polite"></div>
+
+  <!-- SCRIPTS -->
+  <script src="jspdf.umd.min.js"></script>
+  <script src="jspdf.plugin.autotable.min.js"></script>
+  <script src="books-data.js"></script>
+  <script src="remote-config.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

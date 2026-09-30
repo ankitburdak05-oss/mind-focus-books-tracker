@@ -51,6 +51,8 @@ jobs:
         cp book-pages-data.js android/app/src/main/assets/ || true
         cp hyperfocus_cover.jpg android/app/src/main/assets/ || true
         cp hyperfocus_back.jpg android/app/src/main/assets/ || true
+        cp ankit_avatar.png android/app/src/main/assets/ || true
+        cp cozy_banner_bg.jpg android/app/src/main/assets/ || true
         cp Mind-Focus-Books-App-Offline.html android/app/src/main/assets/ || true
 
     - name: Ensure Permanent Keystore Exists

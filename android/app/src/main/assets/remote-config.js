@@ -1,27 +1,41 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-09-30T13:45:00.000Z",
+  "updatedAt": "2026-09-30T16:10:00.000Z",
   "activeRelease": {
-    "version": "v3.16.0",
-    "name": "Mind Focus Books v3.16.0 — Edit Modal Cover Safe-Save & Real HD Book Covers",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.16.0/MindFocusBooks-Native.apk",
+    "version": "v3.17.0",
+    "name": "Mind Focus Books v3.17.0 - Ultra-Clean Mobile Redesign & Legacy Purge",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.0/MindFocusBooks-Native.apk",
     "features": [
-      "🛡️ Edit Modal Cover Safe-Save: Editing book details never erases the cover; auto-populates and preserves cover_url",
-      "🖼️ Real HD Book Covers: High-definition (-L.jpg) authentic covers across all 313 World Masterpieces",
-      "📝 Live Cover Input & Preview: Book edit dialog displays current cover URL and live image preview",
-      "✨ Crystal-Clear Titles: High-contrast legible typography below cover with author & category",
-      "🎨 Organic Magnific.ai 'Upr-Neeche' Masonry Stagger Flow with Natural Aspect Ratios (Home 2)",
-      "🔄 1-Tap Home Switcher: Wood Shelves (Home 1) ⟷ AI Editorial Grid (Home 2)",
-      "📱 Native Navigation Dock: Direct Home 2 tab without floating clutter",
-      "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
-      "🏷️ Official v3.16.0 Release"
+      "✨ Brand-New Ultra-Clean Mobile Design across all 5 Navigation Tabs (Home, Library, Explore, Progress, Profile)",
+      "🗑️ 100% Legacy Code Cleanup: Removed all obsolete bloat for ultra-fast, smooth, crash-free mobile performance",
+      "📖 Dedicated Reading Detail Screen with tabs, daily goals, page logger & focus timer",
+      "📊 Interactive Native Analytics: Monthly Reading Progress Bar Chart & Reading by Genre Donut Chart",
+      "🛡️ Safe-Save Book Editor with live HD cover preview (preserves 313 real covers)",
+      "💾 One-Tap Backup & Export System (JSON, CSV, PDF)",
+      "🏷️ Official v3.17.0 Release"
     ],
-    "stagedAt": "2026-09-30T13:45:00.000Z",
+    "stagedAt": "2026-09-30T16:10:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.17.0",
+    "name": "Mind Focus Books v3.17.0 - Ultra-Clean Mobile Redesign & Legacy Purge",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.0/MindFocusBooks-Native.apk",
+    "features": [
+      "✨ Brand-New Ultra-Clean Mobile Design across all 5 Navigation Tabs (Home, Library, Explore, Progress, Profile)",
+      "🗑️ 100% Legacy Code Cleanup: Removed all obsolete bloat for ultra-fast, smooth, crash-free mobile performance",
+      "📖 Dedicated Reading Detail Screen with tabs, daily goals, page logger & focus timer",
+      "📊 Interactive Native Analytics: Monthly Reading Progress Bar Chart & Reading by Genre Donut Chart",
+      "🛡️ Safe-Save Book Editor with live HD cover preview (preserves 313 real covers)",
+      "💾 One-Tap Backup & Export System (JSON, CSV, PDF)",
+      "🏷️ Official v3.17.0 Release"
+    ],
+    "stagedAt": "2026-09-30T16:10:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.16.0",
-    "name": "Mind Focus Books v3.16.0 — Edit Modal Cover Safe-Save & Real HD Book Covers",
+    "name": "Mind Focus Books v3.16.0 - Edit Modal Cover Safe-Save & Real HD Book Covers",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.16.0/MindFocusBooks-Native.apk",
     "features": [
       "🛡️ Edit Modal Cover Safe-Save: Editing book details never erases the cover; auto-populates and preserves cover_url",
@@ -35,23 +49,6 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
       "🏷️ Official v3.16.0 Release"
     ],
     "stagedAt": "2026-09-30T13:45:00.000Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
-    "version": "v3.15.0",
-    "name": "Mind Focus Books v3.15.0 — Real HD Covers & Uncropped Natural Editorial Grid",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.15.0/MindFocusBooks-Native.apk",
-    "features": [
-      "🖼️ 100% Full Uncropped Covers: Book covers are never cropped or cut off",
-      "✨ Crystal-Clear Titles: High-contrast legible typography below cover with author & category",
-      "HD Real High-Definition (-L.jpg) Book Covers across all 313 World Masterpieces",
-      "🎨 Organic Magnific.ai 'Upr-Neeche' Masonry Stagger Flow with Natural Aspect Ratios",
-      "🔄 1-Tap Home Switcher: Wood Shelves (Home 1) ⟷ AI Editorial Grid (Home 2)",
-      "📱 Native Navigation Dock: Direct Home 2 tab without floating clutter",
-      "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
-      "🏷️ Official v3.15.0 Release"
-    ],
-    "stagedAt": "2026-09-29T18:45:00.000Z",
     "isDeployed": true
   },
   "features": {
