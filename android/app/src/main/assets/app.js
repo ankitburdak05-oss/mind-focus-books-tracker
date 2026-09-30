@@ -1,4 +1,4 @@
-const APP_VERSION = '3.12.0';
+const APP_VERSION = '3.13.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -3513,35 +3513,227 @@ function renderHomeView() {
 }
 window.renderHomeView = renderHomeView;
 
+let currentHome2Category = 'ALL';
+
+function renderHome2View(filterCategory = null) {
+  if (filterCategory !== null) {
+    currentHome2Category = filterCategory;
+  }
+  
+  const container = document.getElementById('editorialMasonryGrid');
+  const catBar = document.getElementById('editorialCategoryBar');
+  const pillLabel = document.getElementById('home2ActiveCategoryPill');
+  if (!container) return;
+
+  const allBooks = state.books || [];
+  
+  // 1. Render Category Filter Bar
+  if (catBar) {
+    const preferredCats = [
+      'ALL',
+      'Dark Psychology & Strategy',
+      'Mysticism & Esotericism',
+      'Psychological Thriller & Mystery',
+      'Science Fiction & Futurism',
+      'World History & Civilizations',
+      'Technology, AI & The Future',
+      'Geopolitics & Global Affairs',
+      'Art, Creativity & Design',
+      'True Crime & Forensic Mind',
+      'Nature, Cosmos & Universe',
+      'Mythology & Ancient Epics',
+      'Wealth & Finance',
+      'Philosophy & Stoicism',
+      'Productivity & Time',
+      'Communication & Influence',
+      'Biographies & Great Lives',
+      'Spirituality & Wisdom',
+      'Leadership & Business',
+      'Health & Longevity',
+      'World Classics & Literature',
+      'Focus & Concentration',
+      'Mindset & Logic',
+      'Brain Science',
+      'Habits & Discipline',
+      'Memory & Learning'
+    ];
+
+    const categoryIcons = {
+      'ALL': '✨',
+      'Dark Psychology & Strategy': '🎭',
+      'Mysticism & Esotericism': '🔮',
+      'Psychological Thriller & Mystery': '🕵️',
+      'Science Fiction & Futurism': '🌌',
+      'World History & Civilizations': '📜',
+      'Technology, AI & The Future': '🤖',
+      'Geopolitics & Global Affairs': '🌍',
+      'Art, Creativity & Design': '🎨',
+      'True Crime & Forensic Mind': '🩸',
+      'Nature, Cosmos & Universe': '🪐',
+      'Mythology & Ancient Epics': '⚡',
+      'Wealth & Finance': '💰',
+      'Philosophy & Stoicism': '🏛️',
+      'Productivity & Time': '⏳',
+      'Communication & Influence': '🗣️',
+      'Biographies & Great Lives': '👑',
+      'Spirituality & Wisdom': '🕉️',
+      'Leadership & Business': '🚀',
+      'Health & Longevity': '🌱',
+      'World Classics & Literature': '📜',
+      'Focus & Concentration': '🎯',
+      'Mindset & Logic': '🧠',
+      'Brain Science': '🔬',
+      'Habits & Discipline': '⚡',
+      'Memory & Learning': '📚'
+    };
+
+    let barHtml = '';
+    preferredCats.forEach(cat => {
+      const isAll = cat === 'ALL';
+      const count = isAll ? allBooks.length : allBooks.filter(b => (b.category || '').toLowerCase() === cat.toLowerCase()).length;
+      if (!isAll && count === 0) return;
+      const icon = categoryIcons[cat] || '📚';
+      const isActive = isAll ? (currentHome2Category === 'ALL') : (currentHome2Category.toLowerCase() === cat.toLowerCase());
+      const safeCat = cat.replace(/'/g, "\\'");
+      
+      barHtml += `<button type="button" class="editorial-cat-chip ${isActive ? 'active' : ''}" onclick="renderHome2View('${safeCat}')">
+        <span>${icon}</span>
+        <span>${escapeHtml(isAll ? 'All Books' : cat)}</span>
+        <span class="chip-count">${count}</span>
+      </button>`;
+    });
+    catBar.innerHTML = barHtml;
+  }
+
+  // 2. Filter Books
+  let filtered = allBooks.map((b, idx) => ({ ...b, origIdx: idx }));
+  if (currentHome2Category !== 'ALL') {
+    filtered = filtered.filter(b => (b.category || '').toLowerCase() === currentHome2Category.toLowerCase());
+  }
+
+  if (pillLabel) {
+    pillLabel.innerText = currentHome2Category === 'ALL' 
+      ? `Showing All Books (${filtered.length})` 
+      : `${currentHome2Category} (${filtered.length})`;
+  }
+
+  // 3. Render Masonry Cards
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="column-span:all; text-align:center; padding:4rem 1rem; color:#94a3b8;">
+      <div style="font-size:3rem; margin-bottom:0.5rem;">🔍</div>
+      <div style="font-size:1.1rem; font-weight:800; color:#fff;">No books found in this category</div>
+      <button type="button" class="btn" onclick="renderHome2View('ALL')" style="margin-top:1rem;">Show All Books</button>
+    </div>`;
+    return;
+  }
+
+  const heightClasses = ['poster-tall', 'poster-med', 'poster-tall', 'poster-compact', 'poster-med', 'poster-tall'];
+
+  let gridHtml = '';
+  filtered.forEach((book, i) => {
+    const heightClass = heightClasses[i % heightClasses.length];
+    const coverUrl = getBookCover(book);
+    const { colors, emoji } = getOfflineCoverGradient(book);
+    const isDone = (book.status === 'DONE' || book.status === 'COMPLETED');
+    const isReading = (book.status === 'READING');
+
+    let statusPill = '';
+    if (isReading) {
+      statusPill = `<span class="editorial-top-pill pill-reading">📖 Reading</span>`;
+    } else if (isDone) {
+      statusPill = `<span class="editorial-top-pill pill-done">🏆 Finished</span>`;
+    } else {
+      statusPill = `<span class="editorial-top-pill">${emoji} ${(book.category || 'Focus').split('&')[0].trim()}</span>`;
+    }
+
+    const bookNoTag = (book.no || '').replace(/\D/g, '');
+
+    // Background visual
+    let bgHtml = '';
+    if (coverUrl) {
+      bgHtml = `<img src="${escapeHtml(coverUrl)}" class="editorial-poster-bg" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+        <div class="editorial-poster-fallback-art" style="display:none; background:linear-gradient(145deg, ${colors[0]}, ${colors[1]}, ${colors[2]});">${emoji}</div>`;
+    } else {
+      bgHtml = `<div class="editorial-poster-fallback-art" style="background:linear-gradient(145deg, ${colors[0]}, ${colors[1]}, ${colors[2]});">${emoji}</div>`;
+    }
+
+    gridHtml += `
+      <div class="editorial-poster-card ${heightClass}" onclick="openRealBookReader(${book.origIdx})">
+        ${bgHtml}
+        <div class="editorial-poster-overlay"></div>
+        <div class="editorial-poster-top">
+          ${statusPill}
+          <span class="editorial-top-pill" style="opacity:0.85;">#${bookNoTag || (book.origIdx + 1)}</span>
+        </div>
+        <div class="editorial-poster-body">
+          <div class="editorial-poster-title">${escapeHtml(book.title)}</div>
+          <div class="editorial-poster-author">✍️ ${escapeHtml(book.author || 'Author')}</div>
+          <div class="editorial-poster-meta">
+            <span class="meta-cat">${escapeHtml(book.category || 'World Masterpiece')}</span>
+            <span class="meta-rating">★ ${escapeHtml(book.rating || '5')}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = gridHtml;
+}
+window.renderHome2View = renderHome2View;
+
 function switchBottomTab(tab) {
   if (typeof triggerHaptic === 'function') triggerHaptic('light');
 
   const dockHome = document.getElementById('dockHomeBtn');
+  const dockHome2 = document.getElementById('dockHome2Btn');
   const dockLibrary = document.getElementById('dockLibraryBtn');
   const dockExplore = document.getElementById('dockExploreBtn');
   const dockProgress = document.getElementById('dockProgressBtn');
   const dockProfile = document.getElementById('dockProfileBtn');
 
   if (dockHome) dockHome.classList.toggle('active', tab === 'home');
+  if (dockHome2) dockHome2.classList.toggle('active', tab === 'home2');
   if (dockLibrary) dockLibrary.classList.toggle('active', tab === 'library');
   if (dockExplore) dockExplore.classList.toggle('active', tab === 'explore');
   if (dockProgress) dockProgress.classList.toggle('active', tab === 'progress');
   if (dockProfile) dockProfile.classList.toggle('active', tab === 'profile');
 
   const homeView = document.getElementById('homeViewContainer');
+  const home2View = document.getElementById('home2ViewContainer');
   const libraryView = document.getElementById('libraryViewContainer');
   const discoverView = document.getElementById('discoverViewContainer');
   const profileView = document.getElementById('profileViewContainer');
 
+  // Synchronize top switcher capsule buttons
+  const sBtn1 = document.getElementById('switcherBtnHome1');
+  const sBtn2 = document.getElementById('switcherBtnHome2');
+  const sBtn1Alt = document.getElementById('switcherBtnHome1Alt');
+  const sBtn2Alt = document.getElementById('switcherBtnHome2Alt');
+
+  if (sBtn1) sBtn1.classList.toggle('active', tab === 'home');
+  if (sBtn2) sBtn2.classList.toggle('active', tab === 'home2');
+  if (sBtn1Alt) sBtn1Alt.classList.toggle('active', tab === 'home');
+  if (sBtn2Alt) sBtn2Alt.classList.toggle('active', tab === 'home2');
+
   if (tab === 'home') {
     if (homeView) homeView.style.display = 'block';
+    if (home2View) home2View.style.display = 'none';
     if (libraryView) libraryView.style.display = 'none';
     if (discoverView) discoverView.style.display = 'none';
     if (profileView) profileView.style.display = 'none';
     renderHomeView();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+  } else if (tab === 'home2') {
+    if (homeView) homeView.style.display = 'none';
+    if (home2View) home2View.style.display = 'block';
+    if (libraryView) libraryView.style.display = 'none';
+    if (discoverView) discoverView.style.display = 'none';
+    if (profileView) profileView.style.display = 'none';
+    renderHome2View();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   } else if (tab === 'library') {
     if (homeView) homeView.style.display = 'none';
+    if (home2View) home2View.style.display = 'none';
     if (libraryView) libraryView.style.display = 'block';
     if (discoverView) discoverView.style.display = 'none';
     if (profileView) profileView.style.display = 'none';
@@ -3551,6 +3743,7 @@ function switchBottomTab(tab) {
     openSpotlightModal();
   } else if (tab === 'progress') {
     if (homeView) homeView.style.display = 'none';
+    if (home2View) home2View.style.display = 'none';
     if (libraryView) libraryView.style.display = 'none';
     if (discoverView) discoverView.style.display = 'none';
     if (profileView) profileView.style.display = 'block';
@@ -3587,7 +3780,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.12.0';
+const CURRENT_APP_VERSION = 'v3.13.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -3862,7 +4055,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.12.0/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.13.0/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');

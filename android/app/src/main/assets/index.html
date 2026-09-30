@@ -182,6 +182,18 @@
 
     <!-- TAB VIEW 1: HOME (Exact 3D Luxury Mahogany Bookshelf matching design_wooden_shelf_1789786873826.jpg) -->
     <div id="homeViewContainer" class="app-tab-view">
+      <!-- Home 1 vs Home 2 Switcher Capsule -->
+      <div class="home-switcher-wrap">
+        <div class="home-switcher-capsule">
+          <button type="button" class="home-switcher-btn active" id="switcherBtnHome1" onclick="switchBottomTab('home')">
+            <span>🪵</span> <span>Wood Shelves (Home 1)</span>
+          </button>
+          <button type="button" class="home-switcher-btn" id="switcherBtnHome2" onclick="switchBottomTab('home2')">
+            <span>✨</span> <span>AI Editorial (Home 2)</span>
+          </button>
+        </div>
+      </div>
+
       <div class="mahogany-bookshelf-container" id="mahoganyBookshelfContainer">
         <!-- Rendered dynamically by renderHomeBookshelf() in app.js -->
       </div>
@@ -189,6 +201,48 @@
       <div style="display:none;" id="homeMyLibraryGrid"></div>
       <div style="display:none;" id="homeContinueReadingGrid"></div>
       <div style="display:none;" id="homeRecentlyAddedGrid"></div>
+    </div>
+
+    <!-- TAB VIEW 1B: HOME 2 (Cinematic AI Editorial Masonry Grid inspired by Magnific.ai / Midjourney) -->
+    <div id="home2ViewContainer" class="app-tab-view" style="display:none;">
+      <div class="home2-editorial-wrap">
+        <!-- Home 1 vs Home 2 Switcher Capsule -->
+        <div class="home-switcher-wrap">
+          <div class="home-switcher-capsule">
+            <button type="button" class="home-switcher-btn" id="switcherBtnHome1Alt" onclick="switchBottomTab('home')">
+              <span>🪵</span> <span>Wood Shelves (Home 1)</span>
+            </button>
+            <button type="button" class="home-switcher-btn active" id="switcherBtnHome2Alt" onclick="switchBottomTab('home2')">
+              <span>✨</span> <span>AI Editorial (Home 2)</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Editorial Hero Header -->
+        <div class="editorial-hero-banner">
+          <div>
+            <div class="editorial-hero-title">
+              <span>✨</span> Mind Focus Editorial
+            </div>
+            <div class="editorial-hero-sub">
+              Cinematic AI Showcase • 313 Masterpieces Across 26 World Categories
+            </div>
+          </div>
+          <div id="home2ActiveCategoryPill" style="font-size:0.75rem; font-weight:800; color:#38bdf8; background:rgba(56,189,248,0.15); border:1px solid rgba(56,189,248,0.3); border-radius:999px; padding:4px 12px;">
+            Showing All Books (313)
+          </div>
+        </div>
+
+        <!-- Category Horizontal Filter Bar -->
+        <div class="editorial-category-bar" id="editorialCategoryBar">
+          <!-- Dynamically populated in app.js -->
+        </div>
+
+        <!-- Multi-Column Masonry Grid -->
+        <div class="editorial-masonry-grid" id="editorialMasonryGrid">
+          <!-- Dynamically populated in app.js -->
+        </div>
+      </div>
     </div>
 
     <!-- TAB VIEW 2: LIBRARY (Full Catalog with Search & Shelves) -->
@@ -453,7 +507,7 @@
             <div style="font-size:1.15rem; font-weight:800; color:#ffffff;">Reader Profile</div>
             <div style="font-size:0.78rem; color:#94a3b8; margin-top:2px;">Mind Focus Books • Offline Native Edition</div>
             <div style="display:inline-block; font-size:0.7rem; font-weight:800; background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.4); border-radius:6px; padding:2px 8px; margin-top:5px;">
-              v3.12.0 Active
+              v3.13.0 Active
             </div>
           </div>
         </div>
@@ -1099,6 +1153,15 @@
       <svg class="dock-svg" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       <span class="dock-label">Home</span>
     </button>
+    <button type="button" class="dock-item" id="dockHome2Btn" onclick="switchBottomTab('home2')">
+      <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="9" rx="1.5"></rect>
+        <rect x="14" y="3" width="7" height="5" rx="1.5"></rect>
+        <rect x="14" y="12" width="7" height="9" rx="1.5"></rect>
+        <rect x="3" y="16" width="7" height="5" rx="1.5"></rect>
+      </svg>
+      <span class="dock-label">Home 2</span>
+    </button>
     <button type="button" class="dock-item" id="dockLibraryBtn" onclick="switchBottomTab('library')">
       <svg class="dock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
       <span class="dock-label">Library</span>
@@ -1375,26 +1438,26 @@
       </div>
 
       <div class="update-glass-title" id="updateModalTitle">New Version Update Ready:</div>
-      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.12.0</div>
-      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.12.0 • 300+ World Masterpieces &amp; 26 Categories</div>
+      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.13.0</div>
+      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.13.0 • Home 2 AI Editorial Grid &amp; 313 Books</div>
 
       <!-- Feature Checklist matching user photo preview -->
       <div class="update-glass-checklist">
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>300+ World Masterpieces across 26 Global Categories</span>
+          <span>Home 2: Magnific.ai &amp; Midjourney-Inspired Editorial Masonry Grid</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>Home 1 vs Home 2 Instant Switcher Pill + Bottom Navigation</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>313 World Masterpieces across 26 Global Categories</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
           <span>Dark Secrets, The Luminaries, Initiation &amp; Hermetic Wisdom</span>
-        </div>
-        <div class="update-glass-item">
-          <span class="update-glass-check">✓</span>
-          <span>Sci-Fi, World History, AI &amp; Future, Geopolitics, Art &amp; True Crime</span>
-        </div>
-        <div class="update-glass-item">
-          <span class="update-glass-check">✓</span>
-          <span>Auto-Merge Library: All new books added without touching progress</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
@@ -1415,7 +1478,7 @@
 
       <!-- Download Button -->
       <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerInAppUpdate()">
-        ⚡ Download &amp; Install v3.12.0 Now
+        ⚡ Download &amp; Install v3.13.0 Now
       </button>
     </div>
   </div>

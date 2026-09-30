@@ -1,23 +1,39 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-09-29T18:45:00.000Z",
+  "updatedAt": "2026-09-30T01:50:00.000Z",
   "activeRelease": {
-    "version": "v3.12.0",
-    "name": "Mind Focus Books v3.12.0 — 300+ World Masterpieces & 26 Categories",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.12.0/MindFocusBooks-Native.apk",
+    "version": "v3.13.0",
+    "name": "Mind Focus Books v3.13.0 — Home 2 AI Editorial Grid & 313 Books",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.13.0/MindFocusBooks-Native.apk",
     "features": [
-      "📚 300+ World Masterpieces: Full comprehensive global library covering all major fields",
-      "🔮 Dark Secrets, The Luminaries, Initiation & Hermetic Wisdom added",
-      "🌐 26 Distinct Categories: Sci-Fi, World History, AI & Future, Mysticism, Geopolitics, Art & True Crime",
-      "🔄 Non-Destructive Auto-Merge: Seamlessly merges new books without touching user progress",
+      "✨ Home 2: Magnific.ai & Midjourney-inspired cinematic editorial masonry poster grid",
+      "🔄 1-Tap Home Switcher: Wood Shelves (Home 1) ⟷ AI Editorial Grid (Home 2)",
+      "📱 Native Navigation Dock: Direct Home 2 tab without clutter",
+      "📚 313 World Masterpieces across 26 Global Categories",
+      "🔮 Dark Secrets, The Luminaries, Initiation & Hermetic Wisdom included",
       "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
-      "🖥️ Edge-to-Edge Full-Screen Luxury Mahogany Wooden Shelves",
-      "🏷️ Official v3.12.0 Release"
+      "🏷️ Official v3.13.0 Release"
     ],
-    "stagedAt": "2026-09-29T18:45:00.000Z",
+    "stagedAt": "2026-09-30T01:50:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.13.0",
+    "name": "Mind Focus Books v3.13.0 — Home 2 AI Editorial Grid & 313 Books",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.13.0/MindFocusBooks-Native.apk",
+    "features": [
+      "✨ Home 2: Magnific.ai & Midjourney-inspired cinematic editorial masonry poster grid",
+      "🔄 1-Tap Home Switcher: Wood Shelves (Home 1) ⟷ AI Editorial Grid (Home 2)",
+      "📱 Native Navigation Dock: Direct Home 2 tab without clutter",
+      "📚 313 World Masterpieces across 26 Global Categories",
+      "🔮 Dark Secrets, The Luminaries, Initiation & Hermetic Wisdom included",
+      "🏆 Strict Completed & Reading Shelves preserved (100% Genuine, Zero Fake Badges)",
+      "🏷️ Official v3.13.0 Release"
+    ],
+    "stagedAt": "2026-09-30T01:50:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.12.0",
     "name": "Mind Focus Books v3.12.0 — 300+ World Masterpieces & 26 Categories",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.12.0/MindFocusBooks-Native.apk",
@@ -31,21 +47,6 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
       "🏷️ Official v3.12.0 Release"
     ],
     "stagedAt": "2026-09-29T18:45:00.000Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
-    "version": "v3.11.0",
-    "name": "Mind Focus Books v3.11.0 — 250+ World Masterpieces & 16 Categories",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.11.0/MindFocusBooks-Native.apk",
-    "features": [
-      "📚 250+ World Masterpieces: 100 new world-famous books added across 16 categories",
-      "🧠 16 Distinct Categories: Dark Psychology, Philosophy, Stoicism, Wealth, Biographies, Classics, Strategy, etc.",
-      "🔄 Auto-Merge Library: New books automatically merge into your shelf without touching your reading progress",
-      "🏆 Strict Completed & Reading Shelves: No fake books, genuine library tracking only",
-      "🖥️ 100% Full-Screen Edge-to-Edge Wooden Library View",
-      "🏷️ Official v3.11.0 Release"
-    ],
-    "stagedAt": "2026-09-29T18:15:00.000Z",
     "isDeployed": true
   },
   "features": {
