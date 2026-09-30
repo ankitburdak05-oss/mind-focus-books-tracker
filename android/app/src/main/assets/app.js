@@ -976,6 +976,17 @@ function openRealBookReader(bookIdx, lang) {
   }
   readerState.currentPage = 1;
   
+  try {
+    const savedTheme = localStorage.getItem('mf_reader_theme');
+    if (savedTheme && ['sepia', 'dark', 'light'].includes(savedTheme)) {
+      readerState.theme = savedTheme;
+    }
+    const savedSpread = localStorage.getItem('mf_reader_spread_mode');
+    if (savedSpread && ['spread', 'single'].includes(savedSpread)) {
+      readerState.spreadMode = savedSpread;
+    }
+  } catch (e) {}
+  
   const modal = document.getElementById('realBookReaderModal');
   if (!modal) return;
   
@@ -1017,25 +1028,45 @@ function updateReaderLangPills() {
   if (pEnglish) pEnglish.classList.toggle('active', readerState.lang === 'english');
 }
 
-function toggleReaderSpreadMode() {
-  readerState.spreadMode = readerState.spreadMode === 'spread' ? 'single' : 'spread';
-  const btn = document.getElementById('readerSpreadToggleBtn');
-  if (btn) btn.innerText = readerState.spreadMode === 'spread' ? '📖 Spread' : '📄 Single';
+function setReaderTheme(theme) {
+  if (!['sepia', 'dark', 'light'].includes(theme)) theme = 'sepia';
+  readerState.theme = theme;
+  
+  const modal = document.getElementById('realBookReaderModal');
+  if (modal) modal.setAttribute('data-reader-theme', theme);
+  
+  document.getElementById('readerToneSepia')?.classList.toggle('active', theme === 'sepia');
+  document.getElementById('readerToneDark')?.classList.toggle('active', theme === 'dark');
+  document.getElementById('readerToneLight')?.classList.toggle('active', theme === 'light');
+  
+  try {
+    localStorage.setItem('mf_reader_theme', theme);
+  } catch (e) {}
+}
+
+function setReaderSpreadMode(mode) {
+  readerState.spreadMode = mode === 'spread' ? 'spread' : 'single';
+  
+  document.getElementById('readerBtnSpread')?.classList.toggle('active', readerState.spreadMode === 'spread');
+  document.getElementById('readerBtnSingle')?.classList.toggle('active', readerState.spreadMode === 'single');
+  
+  try {
+    localStorage.setItem('mf_reader_spread_mode', readerState.spreadMode);
+  } catch (e) {}
+  
   renderRealBookPages();
+}
+
+function toggleReaderSpreadMode() {
+  const nextMode = readerState.spreadMode === 'spread' ? 'single' : 'spread';
+  setReaderSpreadMode(nextMode);
 }
 
 function cycleReaderTheme() {
   const themes = ['sepia', 'dark', 'light'];
   const curIdx = themes.indexOf(readerState.theme);
-  readerState.theme = themes[(curIdx + 1) % themes.length];
-  
-  const modal = document.getElementById('realBookReaderModal');
-  if (modal) modal.setAttribute('data-reader-theme', readerState.theme);
-  
-  const btn = document.getElementById('readerThemeToggleBtn');
-  if (btn) {
-    btn.innerText = readerState.theme === 'sepia' ? '📜 Sepia' : (readerState.theme === 'dark' ? '🌙 Dark' : '☀️ Light');
-  }
+  const nextTheme = themes[(curIdx + 1) % themes.length];
+  setReaderTheme(nextTheme);
 }
 
 function adjustReaderFontSize(delta) {
@@ -1048,8 +1079,9 @@ function adjustReaderFontSize(delta) {
 }
 
 function prevReaderPage() {
+  const step = readerState.spreadMode === 'spread' ? 2 : 1;
   if (readerState.currentPage > 1) {
-    readerState.currentPage--;
+    readerState.currentPage = Math.max(1, readerState.currentPage - step);
     renderRealBookPages();
   }
 }
@@ -1057,11 +1089,38 @@ function prevReaderPage() {
 function nextReaderPage() {
   const book = state.books[readerState.activeBookIdx] || state.books[0];
   const pages = getBookPagesArray(book, readerState.lang);
-  if (readerState.currentPage < pages.length) {
-    readerState.currentPage++;
+  const totalPages = pages.length > 0 ? pages.length : 1;
+  const step = readerState.spreadMode === 'spread' ? 2 : 1;
+  
+  if (readerState.currentPage < totalPages) {
+    readerState.currentPage = Math.min(totalPages, readerState.currentPage + step);
     renderRealBookPages();
   }
 }
+
+function toggleAppFullscreen() {
+  if (!document.fullscreenElement) {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(err => {
+        console.warn("Fullscreen request error:", err);
+      });
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+}
+
+document.addEventListener('fullscreenchange', () => {
+  const isFs = !!document.fullscreenElement;
+  const btn = document.getElementById('headerFullscreenBtn');
+  if (btn) btn.title = isFs ? "Exit Fullscreen" : "Toggle Fullscreen (F11)";
+});
 
 function onReaderSliderInput(val) {
   readerState.currentPage = parseInt(val, 10) || 1;
@@ -1176,45 +1235,87 @@ function renderRealBookPages() {
     slider.value = readerState.currentPage;
   }
   
+  const isDual = (readerState.spreadMode === 'spread') && totalPages > 1;
+  
   const indicator = document.getElementById('readerPageIndicator');
   if (indicator) {
-    indicator.innerText = `Page ${readerState.currentPage} / ${totalPages}`;
+    if (isDual) {
+      const p2 = Math.min(totalPages, readerState.currentPage + 1);
+      indicator.innerText = `Pages ${readerState.currentPage}-${p2} / ${totalPages}`;
+    } else {
+      indicator.innerText = `Page ${readerState.currentPage} / ${totalPages}`;
+    }
   }
   
   const prevBtn = document.getElementById('readerPrevPageBtn');
   if (prevBtn) prevBtn.disabled = readerState.currentPage <= 1;
   
   const nextBtn = document.getElementById('readerNextPageBtn');
-  if (nextBtn) nextBtn.disabled = readerState.currentPage >= totalPages;
+  if (nextBtn) {
+    if (isDual) {
+      nextBtn.disabled = readerState.currentPage >= totalPages - 1;
+    } else {
+      nextBtn.disabled = readerState.currentPage >= totalPages;
+    }
+  }
   
-  // Render Left Page & Right Page
-  const isMobile = window.innerWidth <= 768;
-  const isDual = !isMobile && (readerState.spreadMode === 'spread') && totalPages > 1;
+  // Highlight active reader buttons
+  document.getElementById('readerBtnSpread')?.classList.toggle('active', readerState.spreadMode === 'spread');
+  document.getElementById('readerBtnSingle')?.classList.toggle('active', readerState.spreadMode === 'single');
+  document.getElementById('readerToneSepia')?.classList.toggle('active', readerState.theme === 'sepia');
+  document.getElementById('readerToneDark')?.classList.toggle('active', readerState.theme === 'dark');
+  document.getElementById('readerToneLight')?.classList.toggle('active', readerState.theme === 'light');
   
   const spreadEl = document.getElementById('realBookSpread');
   if (spreadEl) {
     spreadEl.classList.toggle('single-page-mode', !isDual);
+    spreadEl.classList.toggle('dual-spread-mode', isDual);
   }
   
   const leftPageSheet = document.getElementById('readerPageLeft');
+  const spineDivider = document.querySelector('.reader-spine-divider');
+  const ribbonBookmark = document.querySelector('.reader-ribbon-bookmark');
+  
   if (leftPageSheet) leftPageSheet.style.display = isDual ? 'flex' : 'none';
-  
-  const innerRight = document.getElementById('pageInnerRight');
-  const footerRight = document.getElementById('pageFooterRight');
-  
-  const curPageData = pages[readerState.currentPage - 1];
-  if (innerRight && curPageData) {
-    innerRight.innerHTML = curPageData.content;
-    if (footerRight) footerRight.innerText = `Page ${curPageData.pageNo || readerState.currentPage}`;
-  }
+  if (spineDivider) spineDivider.style.display = isDual ? 'block' : 'none';
+  if (ribbonBookmark) ribbonBookmark.style.display = isDual ? 'block' : 'none';
   
   if (isDual) {
-    const leftPageData = readerState.currentPage > 1 ? pages[readerState.currentPage - 2] : null;
+    // Left Page (Current Page)
+    const leftPageData = pages[readerState.currentPage - 1];
     const innerLeft = document.getElementById('pageInnerLeft');
     const footerLeft = document.getElementById('pageFooterLeft');
-    if (innerLeft) {
-      innerLeft.innerHTML = leftPageData ? leftPageData.content : '<div style="display:flex; height:100%; align-items:center; justify-content:center; opacity:0.3;">Blank Page</div>';
-      if (footerLeft) footerLeft.innerText = leftPageData ? `Page ${leftPageData.pageNo}` : '';
+    if (innerLeft && leftPageData) {
+      innerLeft.innerHTML = leftPageData.content;
+      if (footerLeft) footerLeft.innerText = `Page ${leftPageData.pageNo || readerState.currentPage}`;
+    }
+    
+    // Right Page (Next Page)
+    const rightPageData = pages[readerState.currentPage];
+    const innerRight = document.getElementById('pageInnerRight');
+    const footerRight = document.getElementById('pageFooterRight');
+    if (innerRight) {
+      if (rightPageData) {
+        innerRight.innerHTML = rightPageData.content;
+        if (footerRight) footerRight.innerText = `Page ${rightPageData.pageNo || (readerState.currentPage + 1)}`;
+      } else {
+        innerRight.innerHTML = `
+          <div style="display:flex; flex-direction:column; height:100%; align-items:center; justify-content:center; opacity:0.35; text-align:center;">
+            <div style="font-size:2rem; margin-bottom:8px;">✦</div>
+            <div style="font-size:0.95rem; font-weight:700;">End of Volume</div>
+            <div style="font-size:0.8rem; margin-top:4px;">Mind & Focus Master Library</div>
+          </div>`;
+        if (footerRight) footerRight.innerText = `End`;
+      }
+    }
+  } else {
+    // Single Page Mode: Right sheet displays current single page
+    const curPageData = pages[readerState.currentPage - 1];
+    const innerRight = document.getElementById('pageInnerRight');
+    const footerRight = document.getElementById('pageFooterRight');
+    if (innerRight && curPageData) {
+      innerRight.innerHTML = curPageData.content;
+      if (footerRight) footerRight.innerText = `Page ${curPageData.pageNo || readerState.currentPage} of ${totalPages}`;
     }
   }
 }

@@ -18,27 +18,34 @@
 
   <!-- ================= APP HEADER ================= -->
   <header class="app-header" id="appHeader">
-    <div class="header-left">
-      <div class="app-logo-badge">
-        <svg viewBox="0 0 24 24" fill="currentColor">
-          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
-          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
-        </svg>
+    <div class="app-header-inner">
+      <div class="header-left">
+        <div class="app-logo-badge">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+          </svg>
+        </div>
+        <div class="header-titles">
+          <h1 class="app-title">Mind & Focus</h1>
+          <span class="app-subtitle">Books Tracker</span>
+        </div>
       </div>
-      <div class="header-titles">
-        <h1 class="app-title">Mind & Focus</h1>
-        <span class="app-subtitle">Books Tracker</span>
-      </div>
-    </div>
-    <div class="header-right">
-      <button type="button" class="header-icon-btn" id="headerSearchBtn" title="Search Books" onclick="focusSearch()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
-          <circle cx="11" cy="11" r="8"></circle>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-        </svg>
-      </button>
-      <div class="header-avatar-wrap" id="headerProfileAvatar" onclick="switchTab('profile')" title="View Profile">
-        <img src="ankit_avatar.png" alt="Ankit Burdak" id="headerAvatarImg" onerror="this.src='icon-192.png'">
+      <div class="header-right">
+        <button type="button" class="header-icon-btn" id="headerFullscreenBtn" title="Toggle Fullscreen (F11)" onclick="toggleAppFullscreen()">
+          <svg id="fullscreenIconSvg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+        </button>
+        <button type="button" class="header-icon-btn" id="headerSearchBtn" title="Search Books" onclick="focusSearch()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </button>
+        <div class="header-avatar-wrap" id="headerProfileAvatar" onclick="switchTab('profile')" title="View Profile">
+          <img src="ankit_avatar.png" alt="Ankit Burdak" id="headerAvatarImg" onerror="this.src='icon-192.png'">
+        </div>
       </div>
     </div>
   </header>
@@ -764,15 +771,30 @@
           <button type="button" class="reader-lang-pill" id="readerLangPillEnglish" onclick="switchReaderLanguage('english')">English</button>
         </div>
 
-        <!-- Right Controls -->
+        <!-- Right Controls: Explicit View Modes & Paper Tone Switchers -->
         <div class="reader-top-right">
-          <button type="button" class="reader-btn-sm" id="readerSpreadToggleBtn" onclick="toggleReaderSpreadMode()" title="Toggle Spread / Single Page">📖 Spread</button>
+          <!-- View Modes: 📖 Dual Spread vs 📄 Single Page -->
+          <div class="reader-btn-pill-group" title="Reading Mode: Dual Spread vs Single Page">
+            <button type="button" class="reader-pill-btn active" id="readerBtnSpread" onclick="setReaderSpreadMode('spread')" title="📖 Dual Spread Mode (असली खुली किताब)">📖 Spread</button>
+            <button type="button" class="reader-pill-btn" id="readerBtnSingle" onclick="setReaderSpreadMode('single')" title="📄 Single Page Mode (एक पन्ना)">📄 Single</button>
+          </div>
+
+          <!-- Paper Tones: 📜 Sepia, 🌙 Dark, ☀️ Light -->
+          <div class="reader-btn-pill-group" title="Paper Tone Switcher">
+            <button type="button" class="reader-pill-btn active" id="readerToneSepia" onclick="setReaderTheme('sepia')" title="📜 Sepia (आँखों के लिए आरामदायक)">📜 Sepia</button>
+            <button type="button" class="reader-pill-btn" id="readerToneDark" onclick="setReaderTheme('dark')" title="🌙 Dark (रात में पढ़ने के लिए)">🌙 Dark</button>
+            <button type="button" class="reader-pill-btn" id="readerToneLight" onclick="setReaderTheme('light')" title="☀️ Light (सफेद पन्ना)">☀️ Light</button>
+          </div>
+
+          <!-- Font Size Controls -->
           <div class="reader-font-controls">
             <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(-1)" title="Smaller font">A-</button>
             <span id="readerFontSizeDisplay" style="font-size:0.75rem; color:var(--text-muted); min-width:28px; text-align:center;">100%</span>
             <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(1)" title="Larger font">A+</button>
           </div>
-          <button type="button" class="reader-btn-sm" id="readerThemeToggleBtn" onclick="cycleReaderTheme()" title="Reader Paper Tone">📜 Sepia</button>
+
+          <!-- Reader Fullscreen Toggle -->
+          <button type="button" class="reader-btn-icon" onclick="toggleAppFullscreen()" title="Toggle Fullscreen Reading (⛶)">⛶</button>
         </div>
       </div>
 

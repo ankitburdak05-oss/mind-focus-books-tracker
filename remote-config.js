@@ -2,31 +2,46 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-09-30T16:45:00.000Z",
   "activeRelease": {
-    "version": "v3.17.1",
-    "name": "Mind Focus Books v3.17.1 - Real Book Page Reader & Full 16-Field Editor",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.1/MindFocusBooks-Native.apk",
+    "version": "v3.18.0",
+    "name": "Mind Focus Books v3.18.0 - 5 Reader Modes & Fullscreen Widescreen Layout",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.0/MindFocusBooks-Native.apk",
     "features": [
-      "📖 Real 3D Book Page Reader: Full multi-language (Hindi, Hinglish, English) page flip reader restored",
-      "✏️ Complete 16-Field Edit Modal: Book No, Language, Dates, Count Days, Price, Rating, Status, Availability, Takeaways",
-      "⭐ 100% Honest Ratings: Unrated books default to 0.0 (no fake ratings)",
-      "📅 Real Dates & Pricing: Books show 'Not Started Yet' until read, prices optional without fake values",
-      "⚡ Instant Book Detail Opening: 1-click book details from Home, Library, and Explore",
-      "🏷️ Official v3.17.1 Release"
+      "📜 Sepia Paper Mode: Authentic vintage yellowish book paper (#fbf5e6) with warm brown ink for zero eye strain",
+      "🌙 Dark Night Mode: Deep anti-glare dark paper (#121824) with soft silver typography for dark room reading",
+      "☀️ Light Paper Mode: Crisp printed book white paper (#ffffff) with sharp slate typography",
+      "📖 Dual Spread Mode: Open physical 2-page book spread with 3D spine crease, shadow fold & silk red ribbon bookmark",
+      "📄 Single Page Mode: Mobile-optimized focused single page reader for quick and distraction-free reading",
+      "🖥️ Browser Fullscreen & Widescreen Desktop: Fully responsive 1440px desktop grid layout with one-click Fullscreen toggle",
+      "🏷️ Official v3.18.0 Release"
     ],
-    "stagedAt": "2026-09-30T16:45:00.000Z",
+    "stagedAt": "2026-09-30T17:40:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
+    "version": "v3.18.0",
+    "name": "Mind Focus Books v3.18.0 - 5 Reader Modes & Fullscreen Widescreen Layout",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.0/MindFocusBooks-Native.apk",
+    "features": [
+      "📜 Sepia Paper Mode: Authentic vintage yellowish book paper (#fbf5e6) with warm brown ink for zero eye strain",
+      "🌙 Dark Night Mode: Deep anti-glare dark paper (#121824) with soft silver typography for dark room reading",
+      "☀️ Light Paper Mode: Crisp printed book white paper (#ffffff) with sharp slate typography",
+      "📖 Dual Spread Mode: Open physical 2-page book spread with 3D spine crease, shadow fold & silk red ribbon bookmark",
+      "📄 Single Page Mode: Mobile-optimized focused single page reader for quick and distraction-free reading",
+      "🖥️ Browser Fullscreen & Widescreen Desktop: Fully responsive 1440px desktop grid layout with one-click Fullscreen toggle",
+      "🏷️ Official v3.18.0 Release"
+    ],
+    "stagedAt": "2026-09-30T17:40:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
     "version": "v3.17.1",
     "name": "Mind Focus Books v3.17.1 - Real Book Page Reader & Full 16-Field Editor",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.1/MindFocusBooks-Native.apk",
     "features": [
-      "📖 Real 3D Book Page Reader: Full multi-language (Hindi, Hinglish, English) page flip reader restored",
-      "✏️ Complete 16-Field Edit Modal: Book No, Language, Dates, Count Days, Price, Rating, Status, Availability, Takeaways",
-      "⭐ 100% Honest Ratings: Unrated books default to 0.0 (no fake ratings)",
-      "📅 Real Dates & Pricing: Books show 'Not Started Yet' until read, prices optional without fake values",
-      "⚡ Instant Book Detail Opening: 1-click book details from Home, Library, and Explore",
-      "🏷️ Official v3.17.1 Release"
+      "📖 Real 3D Book Page Reader: Multi-language (Hindi, Hinglish, English) page flip reader",
+      "✏️ Complete 16-Field Edit Modal: All book parameters safely editable",
+      "⭐ 100% Honest Ratings: Unrated books default to 0.0",
+      "📅 Real Dates & Pricing: Blank until user records them"
     ],
     "stagedAt": "2026-09-30T16:45:00.000Z",
     "isDeployed": true
