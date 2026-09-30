@@ -1,4 +1,4 @@
-const APP_VERSION = '3.13.0';
+const APP_VERSION = '3.14.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -3617,9 +3617,9 @@ function renderHome2View(filterCategory = null) {
       : `${currentHome2Category} (${filtered.length})`;
   }
 
-  // 3. Render Masonry Cards
+  // 3. Render Masonry Cards with Authentic Magnific.ai / Pinterest Multi-Column Stagger
   if (filtered.length === 0) {
-    container.innerHTML = `<div style="column-span:all; text-align:center; padding:4rem 1rem; color:#94a3b8;">
+    container.innerHTML = `<div style="text-align:center; padding:4rem 1rem; color:#94a3b8; width:100%;">
       <div style="font-size:3rem; margin-bottom:0.5rem;">🔍</div>
       <div style="font-size:1.1rem; font-weight:800; color:#fff;">No books found in this category</div>
       <button type="button" class="btn" onclick="renderHome2View('ALL')" style="margin-top:1rem;">Show All Books</button>
@@ -3627,11 +3627,37 @@ function renderHome2View(filterCategory = null) {
     return;
   }
 
-  const heightClasses = ['poster-tall', 'poster-med', 'poster-tall', 'poster-compact', 'poster-med', 'poster-tall'];
+  // Calculate number of columns based on viewport width
+  const winWidth = window.innerWidth || document.documentElement.clientWidth || 360;
+  let numCols = 2;
+  if (winWidth >= 1200) {
+    numCols = 4;
+  } else if (winWidth >= 768) {
+    numCols = 3;
+  } else {
+    numCols = 2;
+  }
 
-  let gridHtml = '';
+  // Column-specific height rhythms so adjacent columns NEVER line up horizontally ("upr-neeche")!
+  // Col 0: starts compact (170px/215px), then tall (330px/420px), then square (220px/280px), then supertall (410px/520px)...
+  // Col 1: starts supertall (410px/520px), then compact (170px/215px), then tall (330px/420px), then med (265px/340px)...
+  // Col 2: starts med (265px/340px), then supertall (410px/520px), then compact (170px/215px), then square (220px/280px)...
+  // Col 3: starts tall (330px/420px), then square (220px/280px), then supertall (410px/520px), then compact (170px/215px)...
+  const colRhythms = [
+    ['poster-compact', 'poster-tall', 'poster-square', 'poster-supertall', 'poster-med', 'poster-compact', 'poster-tall'],
+    ['poster-supertall', 'poster-compact', 'poster-tall', 'poster-med', 'poster-supertall', 'poster-square', 'poster-compact'],
+    ['poster-med', 'poster-supertall', 'poster-compact', 'poster-tall', 'poster-square', 'poster-supertall', 'poster-med'],
+    ['poster-tall', 'poster-square', 'poster-supertall', 'poster-compact', 'poster-med', 'poster-tall', 'poster-supertall']
+  ];
+
+  const colCards = Array.from({ length: numCols }, () => []);
+
   filtered.forEach((book, i) => {
-    const heightClass = heightClasses[i % heightClasses.length];
+    const colIndex = i % numCols;
+    const itemInColIndex = Math.floor(i / numCols);
+    const rhythm = colRhythms[colIndex % colRhythms.length];
+    const heightClass = rhythm[itemInColIndex % rhythm.length];
+
     const coverUrl = getBookCover(book);
     const { colors, emoji } = getOfflineCoverGradient(book);
     const isDone = (book.status === 'DONE' || book.status === 'COMPLETED');
@@ -3657,7 +3683,7 @@ function renderHome2View(filterCategory = null) {
       bgHtml = `<div class="editorial-poster-fallback-art" style="background:linear-gradient(145deg, ${colors[0]}, ${colors[1]}, ${colors[2]});">${emoji}</div>`;
     }
 
-    gridHtml += `
+    const cardHtml = `
       <div class="editorial-poster-card ${heightClass}" onclick="openRealBookReader(${book.origIdx})">
         ${bgHtml}
         <div class="editorial-poster-overlay"></div>
@@ -3675,11 +3701,32 @@ function renderHome2View(filterCategory = null) {
         </div>
       </div>
     `;
+
+    colCards[colIndex].push(cardHtml);
   });
 
-  container.innerHTML = gridHtml;
+  let colsHtml = '';
+  for (let c = 0; c < numCols; c++) {
+    colsHtml += `<div class="editorial-masonry-col">${colCards[c].join('')}</div>`;
+  }
+
+  container.innerHTML = colsHtml;
 }
 window.renderHome2View = renderHome2View;
+
+if (!window._home2ResizeBound) {
+  window._home2ResizeBound = true;
+  let home2ResizeTimer = null;
+  window.addEventListener('resize', () => {
+    const home2View = document.getElementById('home2ViewContainer');
+    if (home2View && home2View.style.display !== 'none') {
+      clearTimeout(home2ResizeTimer);
+      home2ResizeTimer = setTimeout(() => {
+        renderHome2View();
+      }, 250);
+    }
+  });
+}
 
 function switchBottomTab(tab) {
   if (typeof triggerHaptic === 'function') triggerHaptic('light');
@@ -3780,7 +3827,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.13.0';
+const CURRENT_APP_VERSION = 'v3.14.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -4055,7 +4102,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.13.0/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.14.0/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');

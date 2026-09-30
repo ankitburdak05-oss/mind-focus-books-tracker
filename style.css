@@ -10474,50 +10474,37 @@ body.modal-open {
   color: rgba(255, 255, 255, 0.85);
 }
 
-/* Multi-Column Responsive Masonry Grid */
+/* Multi-Column Responsive Masonry Grid (Authentic Magnific.ai / Pinterest Stagger) */
 .editorial-masonry-grid {
-  column-count: 2;
-  column-gap: 14px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
   width: 100%;
   box-sizing: border-box;
 }
 
-@media (min-width: 640px) {
-  .editorial-masonry-grid {
-    column-count: 2;
-    column-gap: 16px;
-  }
+.editorial-masonry-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
 }
 
-@media (min-width: 860px) {
+@media (max-width: 600px) {
   .editorial-masonry-grid {
-    column-count: 3;
-    column-gap: 18px;
+    gap: 12px;
   }
-}
-
-@media (min-width: 1240px) {
-  .editorial-masonry-grid {
-    column-count: 4;
-    column-gap: 20px;
-  }
-}
-
-@media (min-width: 1600px) {
-  .editorial-masonry-grid {
-    column-count: 5;
-    column-gap: 22px;
+  .editorial-masonry-col {
+    gap: 12px;
   }
 }
 
 /* Individual Poster Card */
 .editorial-poster-card {
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
-  margin-bottom: 16px;
+  width: 100%;
   position: relative;
-  border-radius: 20px;
+  border-radius: 22px;
   overflow: hidden;
   cursor: pointer;
   background: #0f141f;
@@ -10527,6 +10514,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  box-sizing: border-box;
 }
 
 .editorial-poster-card:hover {
@@ -10535,28 +10523,42 @@ body.modal-open {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Staggered Heights for Natural Rhythm */
+/* High-Contrast Staggered Heights for Genuine "Upr-Neeche" Rhythm */
+.editorial-poster-card.poster-supertall {
+  height: 520px;
+}
+
 .editorial-poster-card.poster-tall {
-  min-height: 380px;
+  height: 420px;
 }
 
 .editorial-poster-card.poster-med {
-  min-height: 290px;
+  height: 340px;
+}
+
+.editorial-poster-card.poster-square {
+  height: 280px;
 }
 
 .editorial-poster-card.poster-compact {
-  min-height: 230px;
+  height: 215px;
 }
 
 @media (max-width: 600px) {
+  .editorial-poster-card.poster-supertall {
+    height: 410px;
+  }
   .editorial-poster-card.poster-tall {
-    min-height: 300px;
+    height: 330px;
   }
   .editorial-poster-card.poster-med {
-    min-height: 240px;
+    height: 265px;
+  }
+  .editorial-poster-card.poster-square {
+    height: 220px;
   }
   .editorial-poster-card.poster-compact {
-    min-height: 190px;
+    height: 170px;
   }
 }
 
@@ -10649,20 +10651,32 @@ body.modal-open {
 
 .editorial-poster-title {
   font-family: 'Impact', 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 900;
-  line-height: 1.05;
+  line-height: 1.1;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: #ffffff;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 0, 0, 0.85);
   word-break: break-word;
   margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.editorial-poster-card.poster-compact .editorial-poster-title {
+  font-size: 1.05rem;
+  -webkit-line-clamp: 2;
 }
 
 @media (max-width: 600px) {
   .editorial-poster-title {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
+  }
+  .editorial-poster-card.poster-compact .editorial-poster-title {
+    font-size: 0.92rem;
   }
 }
 

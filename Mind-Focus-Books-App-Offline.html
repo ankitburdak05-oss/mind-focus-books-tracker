@@ -10495,50 +10495,37 @@ body.modal-open {
   color: rgba(255, 255, 255, 0.85);
 }
 
-/* Multi-Column Responsive Masonry Grid */
+/* Multi-Column Responsive Masonry Grid (Authentic Magnific.ai / Pinterest Stagger) */
 .editorial-masonry-grid {
-  column-count: 2;
-  column-gap: 14px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
   width: 100%;
   box-sizing: border-box;
 }
 
-@media (min-width: 640px) {
-  .editorial-masonry-grid {
-    column-count: 2;
-    column-gap: 16px;
-  }
+.editorial-masonry-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
 }
 
-@media (min-width: 860px) {
+@media (max-width: 600px) {
   .editorial-masonry-grid {
-    column-count: 3;
-    column-gap: 18px;
+    gap: 12px;
   }
-}
-
-@media (min-width: 1240px) {
-  .editorial-masonry-grid {
-    column-count: 4;
-    column-gap: 20px;
-  }
-}
-
-@media (min-width: 1600px) {
-  .editorial-masonry-grid {
-    column-count: 5;
-    column-gap: 22px;
+  .editorial-masonry-col {
+    gap: 12px;
   }
 }
 
 /* Individual Poster Card */
 .editorial-poster-card {
-  break-inside: avoid;
-  -webkit-column-break-inside: avoid;
-  page-break-inside: avoid;
-  margin-bottom: 16px;
+  width: 100%;
   position: relative;
-  border-radius: 20px;
+  border-radius: 22px;
   overflow: hidden;
   cursor: pointer;
   background: #0f141f;
@@ -10548,6 +10535,7 @@ body.modal-open {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
+  box-sizing: border-box;
 }
 
 .editorial-poster-card:hover {
@@ -10556,28 +10544,42 @@ body.modal-open {
   border-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Staggered Heights for Natural Rhythm */
+/* High-Contrast Staggered Heights for Genuine "Upr-Neeche" Rhythm */
+.editorial-poster-card.poster-supertall {
+  height: 520px;
+}
+
 .editorial-poster-card.poster-tall {
-  min-height: 380px;
+  height: 420px;
 }
 
 .editorial-poster-card.poster-med {
-  min-height: 290px;
+  height: 340px;
+}
+
+.editorial-poster-card.poster-square {
+  height: 280px;
 }
 
 .editorial-poster-card.poster-compact {
-  min-height: 230px;
+  height: 215px;
 }
 
 @media (max-width: 600px) {
+  .editorial-poster-card.poster-supertall {
+    height: 410px;
+  }
   .editorial-poster-card.poster-tall {
-    min-height: 300px;
+    height: 330px;
   }
   .editorial-poster-card.poster-med {
-    min-height: 240px;
+    height: 265px;
+  }
+  .editorial-poster-card.poster-square {
+    height: 220px;
   }
   .editorial-poster-card.poster-compact {
-    min-height: 190px;
+    height: 170px;
   }
 }
 
@@ -10670,20 +10672,32 @@ body.modal-open {
 
 .editorial-poster-title {
   font-family: 'Impact', 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.3rem;
   font-weight: 900;
-  line-height: 1.05;
+  line-height: 1.1;
   letter-spacing: 0.03em;
   text-transform: uppercase;
   color: #ffffff;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 0, 0, 0.85);
   word-break: break-word;
   margin-bottom: 5px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.editorial-poster-card.poster-compact .editorial-poster-title {
+  font-size: 1.05rem;
+  -webkit-line-clamp: 2;
 }
 
 @media (max-width: 600px) {
   .editorial-poster-title {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
+  }
+  .editorial-poster-card.poster-compact .editorial-poster-title {
+    font-size: 0.92rem;
   }
 }
 
@@ -11215,7 +11229,7 @@ body.modal-open {
             <div style="font-size:1.15rem; font-weight:800; color:#ffffff;">Reader Profile</div>
             <div style="font-size:0.78rem; color:#94a3b8; margin-top:2px;">Mind Focus Books • Offline Native Edition</div>
             <div style="display:inline-block; font-size:0.7rem; font-weight:800; background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.4); border-radius:6px; padding:2px 8px; margin-top:5px;">
-              v3.13.0 Active
+              v3.14.0 Active
             </div>
           </div>
         </div>
@@ -12146,14 +12160,18 @@ body.modal-open {
       </div>
 
       <div class="update-glass-title" id="updateModalTitle">New Version Update Ready:</div>
-      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.13.0</div>
-      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.13.0 • Home 2 AI Editorial Grid &amp; 313 Books</div>
+      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.14.0</div>
+      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.14.0 • Staggered Magnific.ai Editorial Grid &amp; 313 Books</div>
 
       <!-- Feature Checklist matching user photo preview -->
       <div class="update-glass-checklist">
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>Home 2: Magnific.ai &amp; Midjourney-Inspired Editorial Masonry Grid</span>
+          <span>Home 2: Authentic Staggered "Upr-Neeche" Masonry Grid (Magnific.ai Style)</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>Dynamic Multi-Column Layout with High-Contrast Aspect Ratios &amp; Heights</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
@@ -12162,10 +12180,6 @@ body.modal-open {
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
           <span>313 World Masterpieces across 26 Global Categories</span>
-        </div>
-        <div class="update-glass-item">
-          <span class="update-glass-check">✓</span>
-          <span>Dark Secrets, The Luminaries, Initiation &amp; Hermetic Wisdom</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
@@ -12186,7 +12200,7 @@ body.modal-open {
 
       <!-- Download Button -->
       <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerInAppUpdate()">
-        ⚡ Download &amp; Install v3.13.0 Now
+        ⚡ Download &amp; Install v3.14.0 Now
       </button>
     </div>
   </div>
@@ -18786,7 +18800,7 @@ if (typeof module !== 'undefined' && module.exports) {
 
 </script>
   <script>
-const APP_VERSION = '3.13.0';
+const APP_VERSION = '3.14.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const THEME_KEY = 'mind_focus_theme_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
@@ -22405,9 +22419,9 @@ function renderHome2View(filterCategory = null) {
       : `${currentHome2Category} (${filtered.length})`;
   }
 
-  // 3. Render Masonry Cards
+  // 3. Render Masonry Cards with Authentic Magnific.ai / Pinterest Multi-Column Stagger
   if (filtered.length === 0) {
-    container.innerHTML = `<div style="column-span:all; text-align:center; padding:4rem 1rem; color:#94a3b8;">
+    container.innerHTML = `<div style="text-align:center; padding:4rem 1rem; color:#94a3b8; width:100%;">
       <div style="font-size:3rem; margin-bottom:0.5rem;">🔍</div>
       <div style="font-size:1.1rem; font-weight:800; color:#fff;">No books found in this category</div>
       <button type="button" class="btn" onclick="renderHome2View('ALL')" style="margin-top:1rem;">Show All Books</button>
@@ -22415,11 +22429,37 @@ function renderHome2View(filterCategory = null) {
     return;
   }
 
-  const heightClasses = ['poster-tall', 'poster-med', 'poster-tall', 'poster-compact', 'poster-med', 'poster-tall'];
+  // Calculate number of columns based on viewport width
+  const winWidth = window.innerWidth || document.documentElement.clientWidth || 360;
+  let numCols = 2;
+  if (winWidth >= 1200) {
+    numCols = 4;
+  } else if (winWidth >= 768) {
+    numCols = 3;
+  } else {
+    numCols = 2;
+  }
 
-  let gridHtml = '';
+  // Column-specific height rhythms so adjacent columns NEVER line up horizontally ("upr-neeche")!
+  // Col 0: starts compact (170px/215px), then tall (330px/420px), then square (220px/280px), then supertall (410px/520px)...
+  // Col 1: starts supertall (410px/520px), then compact (170px/215px), then tall (330px/420px), then med (265px/340px)...
+  // Col 2: starts med (265px/340px), then supertall (410px/520px), then compact (170px/215px), then square (220px/280px)...
+  // Col 3: starts tall (330px/420px), then square (220px/280px), then supertall (410px/520px), then compact (170px/215px)...
+  const colRhythms = [
+    ['poster-compact', 'poster-tall', 'poster-square', 'poster-supertall', 'poster-med', 'poster-compact', 'poster-tall'],
+    ['poster-supertall', 'poster-compact', 'poster-tall', 'poster-med', 'poster-supertall', 'poster-square', 'poster-compact'],
+    ['poster-med', 'poster-supertall', 'poster-compact', 'poster-tall', 'poster-square', 'poster-supertall', 'poster-med'],
+    ['poster-tall', 'poster-square', 'poster-supertall', 'poster-compact', 'poster-med', 'poster-tall', 'poster-supertall']
+  ];
+
+  const colCards = Array.from({ length: numCols }, () => []);
+
   filtered.forEach((book, i) => {
-    const heightClass = heightClasses[i % heightClasses.length];
+    const colIndex = i % numCols;
+    const itemInColIndex = Math.floor(i / numCols);
+    const rhythm = colRhythms[colIndex % colRhythms.length];
+    const heightClass = rhythm[itemInColIndex % rhythm.length];
+
     const coverUrl = getBookCover(book);
     const { colors, emoji } = getOfflineCoverGradient(book);
     const isDone = (book.status === 'DONE' || book.status === 'COMPLETED');
@@ -22445,7 +22485,7 @@ function renderHome2View(filterCategory = null) {
       bgHtml = `<div class="editorial-poster-fallback-art" style="background:linear-gradient(145deg, ${colors[0]}, ${colors[1]}, ${colors[2]});">${emoji}</div>`;
     }
 
-    gridHtml += `
+    const cardHtml = `
       <div class="editorial-poster-card ${heightClass}" onclick="openRealBookReader(${book.origIdx})">
         ${bgHtml}
         <div class="editorial-poster-overlay"></div>
@@ -22463,11 +22503,32 @@ function renderHome2View(filterCategory = null) {
         </div>
       </div>
     `;
+
+    colCards[colIndex].push(cardHtml);
   });
 
-  container.innerHTML = gridHtml;
+  let colsHtml = '';
+  for (let c = 0; c < numCols; c++) {
+    colsHtml += `<div class="editorial-masonry-col">${colCards[c].join('')}</div>`;
+  }
+
+  container.innerHTML = colsHtml;
 }
 window.renderHome2View = renderHome2View;
+
+if (!window._home2ResizeBound) {
+  window._home2ResizeBound = true;
+  let home2ResizeTimer = null;
+  window.addEventListener('resize', () => {
+    const home2View = document.getElementById('home2ViewContainer');
+    if (home2View && home2View.style.display !== 'none') {
+      clearTimeout(home2ResizeTimer);
+      home2ResizeTimer = setTimeout(() => {
+        renderHome2View();
+      }, 250);
+    }
+  });
+}
 
 function switchBottomTab(tab) {
   if (typeof triggerHaptic === 'function') triggerHaptic('light');
@@ -22568,7 +22629,7 @@ function restoreDockActiveTab() {
 // ==========================================
 // FEATURE 3: SETTINGS & IN-APP UPDATE CHECKER
 // ==========================================
-const CURRENT_APP_VERSION = 'v3.13.0';
+const CURRENT_APP_VERSION = 'v3.14.0';
 let latestApkDownloadUrl = '';
 
 function openSettingsModal() {
@@ -22843,7 +22904,7 @@ async function checkForAppUpdates(showFeedback = true) {
 
 function triggerInAppUpdate(apkUrl) {
   if (typeof triggerHaptic === 'function') triggerHaptic('medium');
-  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.13.0/MindFocusBooks-Native.apk';
+  const targetApkUrl = apkUrl || latestApkDownloadUrl || 'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.14.0/MindFocusBooks-Native.apk';
   const desc = document.getElementById('updateModalDesc');
   const progress = document.getElementById('updateModalProgress');
   const fill = document.getElementById('updateProgressFill');
