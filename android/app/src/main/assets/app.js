@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.19.0)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.20.0)
 // ==========================================================================
 
-const APP_VERSION = '3.19.0';
-const CURRENT_APP_VERSION = 'v3.19.0';
+const APP_VERSION = '3.20.0';
+const CURRENT_APP_VERSION = 'v3.20.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -656,6 +656,38 @@ function renderProgressView() {
   renderReadingGoal();
   renderProgressCharts();
   renderReadingBudget();
+  renderStreakTracker();
+}
+
+function renderStreakTracker() {
+  const streak = state.stats.readingStreak || 0;
+  const streakDaysCount = document.getElementById('streakDaysCount');
+  if (streakDaysCount) {
+    streakDaysCount.innerText = `${streak} ${streak === 1 ? 'day' : 'days'}`;
+  }
+
+  const track = document.querySelector('.streak-days-track');
+  if (!track) return;
+
+  const now = new Date();
+  const currentDayIndex = (now.getDay() + 6) % 7; // Mon=0 .. Sun=6
+  const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+  track.innerHTML = dayNames.map((name, idx) => {
+    let isActive = false;
+    if (streak > 0) {
+      const daysAgo = currentDayIndex - idx;
+      if (daysAgo >= 0 && daysAgo < streak) {
+        isActive = true;
+      }
+    }
+    return `
+      <div class="streak-day-badge ${isActive ? 'active' : ''}">
+        <span class="streak-day-name">${name}</span>
+        <span class="streak-day-icon">${isActive ? '🔥' : '⚪'}</span>
+      </div>
+    `;
+  }).join('');
 }
 
 function renderReadingGoal() {
@@ -683,7 +715,7 @@ function openSetGoalPrompt() {
 function renderReadingBudget() {
   const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
   
-  // All books with a valid price > 0
+  // All books with a valid price > 0 (ONLY user-entered prices)
   const pricedBooks = state.books.filter(b => b.price && Number(b.price) > 0);
   const totalSpent = pricedBooks.reduce((acc, b) => acc + Number(b.price), 0);
   
@@ -716,7 +748,7 @@ function renderReadingBudget() {
   const elSub = document.getElementById('rbBudgetSubtitle');
   if (elSub) {
     if (pricedBooks.length === 0) {
-      elSub.innerText = '0 books priced yet (Tap Auto-fill or edit book)';
+      elSub.innerText = '0 books priced yet (Tap any book to edit and add price)';
     } else {
       elSub.innerText = `${pricedBooks.length} of ${state.books.length} books have prices recorded`;
     }
@@ -765,37 +797,6 @@ function openSetBudgetPrompt() {
   }
 }
 
-function promptPopulateRealisticPrices() {
-  const unpriced = state.books.filter(b => !b.price || Number(b.price) <= 0);
-  if (unpriced.length === 0) {
-    showToast('All books already have prices recorded! 📚');
-    return;
-  }
-  
-  const ok = confirm(`Auto-assign standard Indian market MRPs (₹199 - ₹499) to ${unpriced.length} unpriced books in your library?\n\nYou can always change any individual price anytime.`);
-  if (!ok) return;
-  
-  unpriced.forEach((book, idx) => {
-    const pages = Number(book.pages || book.total_pages || 250);
-    let estimatedPrice = 299;
-    if (pages < 180) {
-      estimatedPrice = [199, 225, 250][idx % 3];
-    } else if (pages < 300) {
-      estimatedPrice = [299, 325, 350][idx % 3];
-    } else if (pages < 450) {
-      estimatedPrice = [399, 450, 499][idx % 3];
-    } else {
-      estimatedPrice = [499, 550, 599][idx % 3];
-    }
-    book.price = estimatedPrice;
-  });
-  
-  saveBooks();
-  renderReadingBudget();
-  renderLibrary();
-  showToast(`Updated market prices for ${unpriced.length} books! 💰`);
-}
-
 function renderProgressCharts() {
   const completedCount = state.books.filter(b => b.status === 'DONE').length;
   
@@ -836,6 +837,10 @@ function renderMonthlyBarChart() {
   ];
   const maxVal = Math.max(5, completedCount, readingCount);
   
+  const goal = parseInt(localStorage.getItem('mf_reading_goal_2026') || '25', 10);
+  const ratioEl = document.getElementById('monthlyProgressRatio');
+  if (ratioEl) ratioEl.innerText = `${completedCount}/${goal} books`;
+
   wrap.innerHTML = `
     <div style="display: flex; align-items: flex-end; justify-content: space-between; height: 130px; padding: 10px 10px 0;">
       ${months.map(m => {
@@ -903,16 +908,16 @@ function renderProfileView() {
   const total = state.books.length;
   const completed = state.books.filter(b => b.status === 'DONE').length;
   const reading = state.books.filter(b => b.status === 'READING').length;
-  const streak = state.stats.readingStreak != null && state.stats.readingStreak > 0 ? state.stats.readingStreak : 7;
+  const streak = state.stats.readingStreak || 0;
   
   const elB = document.getElementById('profileStatBooks');
-  if (elB) elB.innerText = completed > 0 ? completed : 12;
+  if (elB) elB.innerText = completed;
   
   const elS = document.getElementById('profileStatStreak');
   if (elS) elS.innerText = streak;
 
   const elR = document.getElementById('profileStatReading');
-  if (elR) elR.innerText = reading > 0 ? reading : 3;
+  if (elR) elR.innerText = reading;
   
   const pinStatusText = document.getElementById('pinStatusSubText');
   if (pinStatusText) {
@@ -2473,8 +2478,17 @@ function openUpdateCheckerModal() {
   }
 
   const listEl = document.querySelector('.update-glass-checklist');
-  if (listEl && rel?.features && Array.isArray(rel.features) && rel.features.length > 0) {
-    listEl.innerHTML = rel.features.map(f => `
+  if (listEl) {
+    const featuresToShow = (isNew && rel?.features && Array.isArray(rel.features) && rel.features.length > 0)
+      ? rel.features
+      : [
+          '⚡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices',
+          '💰 Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)',
+          '🔥 Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days',
+          '⭐ Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them',
+          '📱 Direct In-App APK Reinstall & 1-Click Update Installer'
+        ];
+    listEl.innerHTML = featuresToShow.map(f => `
       <div class="update-glass-item">
         <span class="update-glass-check">✓</span>
         <span>${escapeHtml(f)}</span>
@@ -2485,12 +2499,17 @@ function openUpdateCheckerModal() {
   const progressWrap = document.getElementById('updateModalProgress');
   if (progressWrap) progressWrap.style.display = 'none';
 
+  overlay.style.zIndex = '1000000';
   overlay.style.display = 'flex';
+  overlay.classList.add('active');
 }
 
 function closeUpdateCheckerModal() {
   const overlay = document.getElementById('updateCheckerModalOverlay');
-  if (overlay) overlay.style.display = 'none';
+  if (overlay) {
+    overlay.style.display = 'none';
+    overlay.classList.remove('active');
+  }
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
   const targetVer = cfg?.activeRelease?.version;
   if (targetVer) {
@@ -2668,27 +2687,18 @@ function setProgressPillFilter(period) {
   const allBooks = state.books || [];
   const completedCount = allBooks.filter(b => b.status === 'DONE').length;
   const readingCount = allBooks.filter(b => b.status === 'READING').length;
-  const wishlistCount = allBooks.filter(b => b.status === 'PENDING').length;
+  const wishlistCount = allBooks.filter(b => b.status === 'PENDING' || b.status === 'UNREAD' || b.status === 'WISHLIST').length;
+  const total = allBooks.length;
 
-  if (period === 'month') {
-    if (centerNum) centerNum.innerText = Math.max(12, completedCount);
-    if (totalBooks) totalBooks.innerText = allBooks.length > 0 ? allBooks.length : 12;
-    if (reading) reading.innerText = Math.max(3, readingCount);
-    if (toRead) toRead.innerText = Math.max(7, wishlistCount);
-    if (donutCircle) donutCircle.style.strokeDashoffset = '110';
-  } else if (period === 'year') {
-    if (centerNum) centerNum.innerText = Math.max(25, completedCount * 2);
-    if (totalBooks) totalBooks.innerText = allBooks.length > 0 ? allBooks.length : 25;
-    if (reading) reading.innerText = Math.max(3, readingCount);
-    if (toRead) toRead.innerText = Math.max(7, wishlistCount);
-    if (donutCircle) donutCircle.style.strokeDashoffset = '75';
-  } else {
-    if (centerNum) centerNum.innerText = Math.max(48, completedCount * 3);
-    if (totalBooks) totalBooks.innerText = allBooks.length > 0 ? allBooks.length : 48;
-    if (reading) reading.innerText = Math.max(3, readingCount);
-    if (toRead) toRead.innerText = Math.max(7, wishlistCount);
-    if (donutCircle) donutCircle.style.strokeDashoffset = '40';
-  }
+  if (centerNum) centerNum.innerText = completedCount;
+  if (totalBooks) totalBooks.innerText = total;
+  if (reading) reading.innerText = readingCount;
+  if (toRead) toRead.innerText = wishlistCount;
+
+  const circumference = 251.32;
+  const pct = total > 0 ? (completedCount / total) : 0;
+  const offset = circumference - (pct * circumference);
+  if (donutCircle) donutCircle.style.strokeDashoffset = String(Math.round(offset));
 }
 
 // ================= SCREEN 8: FOCUS TIMER CONTROLLER =================

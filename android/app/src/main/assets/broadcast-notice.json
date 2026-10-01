@@ -1,14 +1,14 @@
 {
-  "id": "notice-v3.19.0",
-  "version": "v3.19.0",
+  "id": "notice-v3.20.0",
+  "version": "v3.20.0",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v3.19.0 Ready!",
-  "message": "Major v3.19.0 update: Screens 4 to 20 Master Suite! Focus Timer, Notes & Highlights, Achievements, Quotes, Journal & Goals ready!",
+  "title": "Mind Focus Books v3.20.0 Ready!",
+  "message": "Update v3.20.0: 100% Real Data & Honest Metrics Engine! Dynamic weekly streak, honest prices & direct APK reinstall ready!",
   "btnText": "⚡ Update Now",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.19.0/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-01T09:15:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.20.0/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-01T10:45:00.000Z"
 }

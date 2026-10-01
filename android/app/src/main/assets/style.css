@@ -4859,6 +4859,19 @@ input:checked + .slider-round:before {
   transform: translateX(20px);
 }
 
-
-
-
+/* ================= VISION-OS UPDATE MODAL OVERLAY (HIGH Z-INDEX) ================= */
+#updateCheckerModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000000 !important;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+#updateCheckerModalOverlay.active {
+  display: flex !important;
+}

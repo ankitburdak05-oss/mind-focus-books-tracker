@@ -4873,9 +4873,22 @@ input:checked + .slider-round:before {
   transform: translateX(20px);
 }
 
-
-
-
+/* ================= VISION-OS UPDATE MODAL OVERLAY (HIGH Z-INDEX) ================= */
+#updateCheckerModalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000000 !important;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+#updateCheckerModalOverlay.active {
+  display: flex !important;
+}
 
 </style>
   <script>
@@ -5551,7 +5564,7 @@ if (typeof window !== 'undefined') {
             </defs>
           </svg>
           <div class="donut-inner-content">
-            <span class="donut-big-number" id="progDonutCenterNum">12</span>
+            <span class="donut-big-number" id="progDonutCenterNum">0</span>
             <span class="donut-sub-label">Books Read</span>
           </div>
         </div>
@@ -5562,21 +5575,21 @@ if (typeof window !== 'undefined') {
               <span class="donut-stat-dot" style="background: #3b82f6;"></span>
               Total Books
             </span>
-            <span class="donut-stat-val" id="progDonutTotalBooks">12</span>
+            <span class="donut-stat-val" id="progDonutTotalBooks">0</span>
           </div>
           <div class="donut-stat-row">
             <span class="donut-stat-key">
               <span class="donut-stat-dot" style="background: #f59e0b;"></span>
               Currently Reading
             </span>
-            <span class="donut-stat-val" id="progDonutReading">3</span>
+            <span class="donut-stat-val" id="progDonutReading">0</span>
           </div>
           <div class="donut-stat-row">
             <span class="donut-stat-key">
               <span class="donut-stat-dot" style="background: #a855f7;"></span>
               To Read
             </span>
-            <span class="donut-stat-val" id="progDonutToRead">7</span>
+            <span class="donut-stat-val" id="progDonutToRead">0</span>
           </div>
         </div>
       </div>
@@ -5586,19 +5599,19 @@ if (typeof window !== 'undefined') {
         <div class="streak-card-header">
           <div class="streak-title-badge">
             <span>🔥</span>
-            <span id="streakDaysCount">7 days</span>
+            <span id="streakDaysCount">0 days</span>
           </div>
           <span class="streak-see-all-link" onclick="navigateToSubView('achievements')">See All &rsaquo;</span>
         </div>
         <div class="streak-sub-text">Keep it going! Every single page builds your dream.</div>
         <div class="streak-days-track">
-          <div class="streak-day-badge active"><span class="streak-day-name">M</span><span class="streak-day-icon">🔥</span></div>
-          <div class="streak-day-badge active"><span class="streak-day-name">T</span><span class="streak-day-icon">🔥</span></div>
-          <div class="streak-day-badge active"><span class="streak-day-name">W</span><span class="streak-day-icon">🔥</span></div>
-          <div class="streak-day-badge active"><span class="streak-day-name">T</span><span class="streak-day-icon">🔥</span></div>
-          <div class="streak-day-badge active"><span class="streak-day-name">F</span><span class="streak-day-icon">🔥</span></div>
-          <div class="streak-day-badge active"><span class="streak-day-name">S</span><span class="streak-day-icon">🔥</span></div>
-          <div class="streak-day-badge active"><span class="streak-day-name">S</span><span class="streak-day-icon">🔥</span></div>
+          <div class="streak-day-badge"><span class="streak-day-name">M</span><span class="streak-day-icon">⚪</span></div>
+          <div class="streak-day-badge"><span class="streak-day-name">T</span><span class="streak-day-icon">⚪</span></div>
+          <div class="streak-day-badge"><span class="streak-day-name">W</span><span class="streak-day-icon">⚪</span></div>
+          <div class="streak-day-badge"><span class="streak-day-name">T</span><span class="streak-day-icon">⚪</span></div>
+          <div class="streak-day-badge"><span class="streak-day-name">F</span><span class="streak-day-icon">⚪</span></div>
+          <div class="streak-day-badge"><span class="streak-day-name">S</span><span class="streak-day-icon">⚪</span></div>
+          <div class="streak-day-badge"><span class="streak-day-name">S</span><span class="streak-day-icon">⚪</span></div>
         </div>
       </div>
 
@@ -5606,21 +5619,21 @@ if (typeof window !== 'undefined') {
       <div class="monthly-chart-card-v4">
         <div class="monthly-chart-header">
           <span class="monthly-chart-title">Monthly Progress</span>
-          <span class="monthly-chart-count" id="monthlyProgressRatio">12/20 books</span>
+          <span class="monthly-chart-count" id="monthlyProgressRatio">0 books</span>
         </div>
         <div class="monthly-bars-container">
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 45%;"></div></div><span class="monthly-bar-month">Jan</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 60%;"></div></div><span class="monthly-bar-month">Feb</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 80%;"></div></div><span class="monthly-bar-month">Mar</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 70%;"></div></div><span class="monthly-bar-month">Apr</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 90%;"></div></div><span class="monthly-bar-month">May</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 65%;"></div></div><span class="monthly-bar-month">Jun</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 75%;"></div></div><span class="monthly-bar-month">Jul</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 85%;"></div></div><span class="monthly-bar-month">Aug</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 50%;"></div></div><span class="monthly-bar-month">Sep</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 95%;"></div></div><span class="monthly-bar-month">Oct</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 40%;"></div></div><span class="monthly-bar-month">Nov</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 85%;"></div></div><span class="monthly-bar-month">Dec</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Jan</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Feb</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Mar</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Apr</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">May</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Jun</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Jul</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Aug</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Sep</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Oct</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Nov</span></div>
+          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Dec</span></div>
         </div>
       </div>
 
@@ -5667,8 +5680,7 @@ if (typeof window !== 'undefined') {
         </div>
 
         <div class="rb-helper-strip">
-          <span class="rb-helper-text">💡 You can enter or update price for any book in Edit Book modal.</span>
-          <button type="button" class="rb-auto-fill-btn" onclick="promptPopulateRealisticPrices()">⚡ Auto-fill Market MRPs</button>
+          <span class="rb-helper-text">💡 Real prices are recorded only when you add or edit a book.</span>
         </div>
       </div>
     </section>
@@ -5831,7 +5843,7 @@ if (typeof window !== 'undefined') {
           <div class="pmi-icon blue">ℹ️</div>
           <div class="pmi-text">
             <div class="pmi-title">About App &amp; Updates</div>
-            <div class="pmi-sub" id="aboutAppSubText">Version 3.19.0 &bull; 1-Click Reinstall</div>
+            <div class="pmi-sub" id="aboutAppSubText">Version 3.20.0 &bull; 1-Click Reinstall</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
@@ -6496,7 +6508,7 @@ if (typeof window !== 'undefined') {
           <img src="cover_placeholder.jpg" class="rec-cover-img" alt="Cover">
           <div class="rec-details-col">
             <div class="rec-book-title">Thinking, Fast and Slow</div>
-            <div class="rec-book-author">Daniel Kahneman &bull; ⭐ 4.8</div>
+            <div class="rec-book-author">Daniel Kahneman</div>
             <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 8px;">The two systems that drive the way we think</p>
             <button type="button" class="rec-action-btn" onclick="showToast('Thinking Fast and Slow added! 🧠')">Add to Library</button>
           </div>
@@ -6506,7 +6518,7 @@ if (typeof window !== 'undefined') {
           <img src="cover_placeholder.jpg" class="rec-cover-img" alt="Cover">
           <div class="rec-details-col">
             <div class="rec-book-title">Meditations</div>
-            <div class="rec-book-author">Marcus Aurelius &bull; ⭐ 4.9</div>
+            <div class="rec-book-author">Marcus Aurelius</div>
             <p style="font-size: 0.74rem; color: var(--text-muted); margin-bottom: 8px;">Timeless ancient stoic philosophy for clarity</p>
             <button type="button" class="rec-action-btn" onclick="showToast('Meditations added to Library! 🏛️')">Add to Library</button>
           </div>
@@ -7063,29 +7075,29 @@ if (typeof window !== 'undefined') {
       </div>
 
       <div class="update-glass-title" id="updateModalTitle">New Version Update Ready:</div>
-      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.19.0 Ready</div>
-      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.19.0 • Screens 4 to 20 Master Suite Upgrade</div>
+      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.20.0 Ready</div>
+      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.20.0 • 100% Real Data &amp; Honest Metrics Engine</div>
 
       <div class="update-glass-checklist">
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>📊 Screen 4: Reading Progress Donut, Weekly Streak Days (M-S) &amp; 12-Month Bar Chart</span>
+          <span>⚡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>👤 Screen 5: Profile Identity with Glowing Aura, 3 Stat Pills &amp; Charles Eliot Quote</span>
+          <span>💰 Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>⏱️ Screen 8: Scenic Focus Timer with Pomodoro, Deep Work &amp; Circular Dial</span>
+          <span>🔥 Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>📝 Screen 9: Notes &amp; Highlights Manager with Filters and Floating Action Add (+)</span>
+          <span>⭐ Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>🎯 Screens 11-20: Reading Goals, Badges, Daily Quotes, Offline Manager &amp; Journal</span>
+          <span>📱 Direct In-App APK Reinstall &amp; 1-Click Update Installer</span>
         </div>
       </div>
 
@@ -7101,7 +7113,7 @@ if (typeof window !== 'undefined') {
       </div>
 
       <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerInAppUpdate()">
-        ⚡ Download &amp; Install v3.19.0 Now
+        ⚡ Download &amp; Install v3.20.0 Now
       </button>
     </div>
   </div>
@@ -7154,7 +7166,7 @@ const DEFAULT_BOOKS = [
     "title": "A-Z English-Hindi Focus Vocabulary Lexicon",
     "author": "Oxford Focus Lexicon",
     "language": "ENG / HIN",
-    "status": "READING",
+    "status": "AVAILABLE",
     "start_date": "",
     "end_date": "",
     "count_days": 0,
@@ -12494,11 +12506,11 @@ const DEFAULT_BOOKS = [
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.19.0)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.20.0)
 // ==========================================================================
 
-const APP_VERSION = '3.19.0';
-const CURRENT_APP_VERSION = 'v3.19.0';
+const APP_VERSION = '3.20.0';
+const CURRENT_APP_VERSION = 'v3.20.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -13151,6 +13163,38 @@ function renderProgressView() {
   renderReadingGoal();
   renderProgressCharts();
   renderReadingBudget();
+  renderStreakTracker();
+}
+
+function renderStreakTracker() {
+  const streak = state.stats.readingStreak || 0;
+  const streakDaysCount = document.getElementById('streakDaysCount');
+  if (streakDaysCount) {
+    streakDaysCount.innerText = `${streak} ${streak === 1 ? 'day' : 'days'}`;
+  }
+
+  const track = document.querySelector('.streak-days-track');
+  if (!track) return;
+
+  const now = new Date();
+  const currentDayIndex = (now.getDay() + 6) % 7; // Mon=0 .. Sun=6
+  const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+
+  track.innerHTML = dayNames.map((name, idx) => {
+    let isActive = false;
+    if (streak > 0) {
+      const daysAgo = currentDayIndex - idx;
+      if (daysAgo >= 0 && daysAgo < streak) {
+        isActive = true;
+      }
+    }
+    return `
+      <div class="streak-day-badge ${isActive ? 'active' : ''}">
+        <span class="streak-day-name">${name}</span>
+        <span class="streak-day-icon">${isActive ? '🔥' : '⚪'}</span>
+      </div>
+    `;
+  }).join('');
 }
 
 function renderReadingGoal() {
@@ -13178,7 +13222,7 @@ function openSetGoalPrompt() {
 function renderReadingBudget() {
   const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
   
-  // All books with a valid price > 0
+  // All books with a valid price > 0 (ONLY user-entered prices)
   const pricedBooks = state.books.filter(b => b.price && Number(b.price) > 0);
   const totalSpent = pricedBooks.reduce((acc, b) => acc + Number(b.price), 0);
   
@@ -13211,7 +13255,7 @@ function renderReadingBudget() {
   const elSub = document.getElementById('rbBudgetSubtitle');
   if (elSub) {
     if (pricedBooks.length === 0) {
-      elSub.innerText = '0 books priced yet (Tap Auto-fill or edit book)';
+      elSub.innerText = '0 books priced yet (Tap any book to edit and add price)';
     } else {
       elSub.innerText = `${pricedBooks.length} of ${state.books.length} books have prices recorded`;
     }
@@ -13260,37 +13304,6 @@ function openSetBudgetPrompt() {
   }
 }
 
-function promptPopulateRealisticPrices() {
-  const unpriced = state.books.filter(b => !b.price || Number(b.price) <= 0);
-  if (unpriced.length === 0) {
-    showToast('All books already have prices recorded! 📚');
-    return;
-  }
-  
-  const ok = confirm(`Auto-assign standard Indian market MRPs (₹199 - ₹499) to ${unpriced.length} unpriced books in your library?\n\nYou can always change any individual price anytime.`);
-  if (!ok) return;
-  
-  unpriced.forEach((book, idx) => {
-    const pages = Number(book.pages || book.total_pages || 250);
-    let estimatedPrice = 299;
-    if (pages < 180) {
-      estimatedPrice = [199, 225, 250][idx % 3];
-    } else if (pages < 300) {
-      estimatedPrice = [299, 325, 350][idx % 3];
-    } else if (pages < 450) {
-      estimatedPrice = [399, 450, 499][idx % 3];
-    } else {
-      estimatedPrice = [499, 550, 599][idx % 3];
-    }
-    book.price = estimatedPrice;
-  });
-  
-  saveBooks();
-  renderReadingBudget();
-  renderLibrary();
-  showToast(`Updated market prices for ${unpriced.length} books! 💰`);
-}
-
 function renderProgressCharts() {
   const completedCount = state.books.filter(b => b.status === 'DONE').length;
   
@@ -13331,6 +13344,10 @@ function renderMonthlyBarChart() {
   ];
   const maxVal = Math.max(5, completedCount, readingCount);
   
+  const goal = parseInt(localStorage.getItem('mf_reading_goal_2026') || '25', 10);
+  const ratioEl = document.getElementById('monthlyProgressRatio');
+  if (ratioEl) ratioEl.innerText = `${completedCount}/${goal} books`;
+
   wrap.innerHTML = `
     <div style="display: flex; align-items: flex-end; justify-content: space-between; height: 130px; padding: 10px 10px 0;">
       ${months.map(m => {
@@ -13398,16 +13415,16 @@ function renderProfileView() {
   const total = state.books.length;
   const completed = state.books.filter(b => b.status === 'DONE').length;
   const reading = state.books.filter(b => b.status === 'READING').length;
-  const streak = state.stats.readingStreak != null && state.stats.readingStreak > 0 ? state.stats.readingStreak : 7;
+  const streak = state.stats.readingStreak || 0;
   
   const elB = document.getElementById('profileStatBooks');
-  if (elB) elB.innerText = completed > 0 ? completed : 12;
+  if (elB) elB.innerText = completed;
   
   const elS = document.getElementById('profileStatStreak');
   if (elS) elS.innerText = streak;
 
   const elR = document.getElementById('profileStatReading');
-  if (elR) elR.innerText = reading > 0 ? reading : 3;
+  if (elR) elR.innerText = reading;
   
   const pinStatusText = document.getElementById('pinStatusSubText');
   if (pinStatusText) {
@@ -14968,8 +14985,17 @@ function openUpdateCheckerModal() {
   }
 
   const listEl = document.querySelector('.update-glass-checklist');
-  if (listEl && rel?.features && Array.isArray(rel.features) && rel.features.length > 0) {
-    listEl.innerHTML = rel.features.map(f => `
+  if (listEl) {
+    const featuresToShow = (isNew && rel?.features && Array.isArray(rel.features) && rel.features.length > 0)
+      ? rel.features
+      : [
+          '⚡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices',
+          '💰 Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)',
+          '🔥 Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days',
+          '⭐ Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them',
+          '📱 Direct In-App APK Reinstall & 1-Click Update Installer'
+        ];
+    listEl.innerHTML = featuresToShow.map(f => `
       <div class="update-glass-item">
         <span class="update-glass-check">✓</span>
         <span>${escapeHtml(f)}</span>
@@ -14980,12 +15006,17 @@ function openUpdateCheckerModal() {
   const progressWrap = document.getElementById('updateModalProgress');
   if (progressWrap) progressWrap.style.display = 'none';
 
+  overlay.style.zIndex = '1000000';
   overlay.style.display = 'flex';
+  overlay.classList.add('active');
 }
 
 function closeUpdateCheckerModal() {
   const overlay = document.getElementById('updateCheckerModalOverlay');
-  if (overlay) overlay.style.display = 'none';
+  if (overlay) {
+    overlay.style.display = 'none';
+    overlay.classList.remove('active');
+  }
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
   const targetVer = cfg?.activeRelease?.version;
   if (targetVer) {
@@ -15163,27 +15194,18 @@ function setProgressPillFilter(period) {
   const allBooks = state.books || [];
   const completedCount = allBooks.filter(b => b.status === 'DONE').length;
   const readingCount = allBooks.filter(b => b.status === 'READING').length;
-  const wishlistCount = allBooks.filter(b => b.status === 'PENDING').length;
+  const wishlistCount = allBooks.filter(b => b.status === 'PENDING' || b.status === 'UNREAD' || b.status === 'WISHLIST').length;
+  const total = allBooks.length;
 
-  if (period === 'month') {
-    if (centerNum) centerNum.innerText = Math.max(12, completedCount);
-    if (totalBooks) totalBooks.innerText = allBooks.length > 0 ? allBooks.length : 12;
-    if (reading) reading.innerText = Math.max(3, readingCount);
-    if (toRead) toRead.innerText = Math.max(7, wishlistCount);
-    if (donutCircle) donutCircle.style.strokeDashoffset = '110';
-  } else if (period === 'year') {
-    if (centerNum) centerNum.innerText = Math.max(25, completedCount * 2);
-    if (totalBooks) totalBooks.innerText = allBooks.length > 0 ? allBooks.length : 25;
-    if (reading) reading.innerText = Math.max(3, readingCount);
-    if (toRead) toRead.innerText = Math.max(7, wishlistCount);
-    if (donutCircle) donutCircle.style.strokeDashoffset = '75';
-  } else {
-    if (centerNum) centerNum.innerText = Math.max(48, completedCount * 3);
-    if (totalBooks) totalBooks.innerText = allBooks.length > 0 ? allBooks.length : 48;
-    if (reading) reading.innerText = Math.max(3, readingCount);
-    if (toRead) toRead.innerText = Math.max(7, wishlistCount);
-    if (donutCircle) donutCircle.style.strokeDashoffset = '40';
-  }
+  if (centerNum) centerNum.innerText = completedCount;
+  if (totalBooks) totalBooks.innerText = total;
+  if (reading) reading.innerText = readingCount;
+  if (toRead) toRead.innerText = wishlistCount;
+
+  const circumference = 251.32;
+  const pct = total > 0 ? (completedCount / total) : 0;
+  const offset = circumference - (pct * circumference);
+  if (donutCircle) donutCircle.style.strokeDashoffset = String(Math.round(offset));
 }
 
 // ================= SCREEN 8: FOCUS TIMER CONTROLLER =================

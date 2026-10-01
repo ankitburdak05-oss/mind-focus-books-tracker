@@ -4,7 +4,7 @@ const DEFAULT_BOOKS = [
     "title": "A-Z English-Hindi Focus Vocabulary Lexicon",
     "author": "Oxford Focus Lexicon",
     "language": "ENG / HIN",
-    "status": "READING",
+    "status": "AVAILABLE",
     "start_date": "",
     "end_date": "",
     "count_days": 0,

@@ -2,27 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-01T05:00:00.000Z",
   "activeRelease": {
-    "version": "v3.19.0",
-    "name": "Mind Focus Books v3.19.0 - Screens 4 to 20 Master Suite Upgrade",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.19.0/MindFocusBooks-Native.apk",
+    "version": "v3.20.0",
+    "name": "Mind Focus Books v3.20.0 - 100% Real Data & Honest Metrics Engine",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.20.0/MindFocusBooks-Native.apk",
     "features": [
-      "📊 Screen 4: Reading Progress Donut, Weekly Streak Days (M-S) & 12-Month Bar Chart",
-      "👤 Screen 5: Profile Identity with Glowing Aura, 3 Stat Pills & Charles Eliot Quote",
-      "⏱️ Screen 8: Scenic Focus Timer with Pomodoro, Deep Work & Circular Dial",
-      "📝 Screen 9: Notes & Highlights Manager with Filters and Floating Action Add (+)",
-      "🎨 Screen 10: Reading Themes & Typography Sliders (Font Size, Spacing, Brightness)",
-      "🎯 Screen 11: Reading Goals with Donut Progress & Daily Habit Streaks",
-      "🏆 Screen 12: Achievements & Badges Showcase with Dynamic Progress Unlocks",
-      "💡 Screen 13: Scenic Daily Motivation Quotes with Save & Share Collection",
-      "✈️ Screen 14: Offline Mode & Asset Caching Manager",
-      "☁️ Screen 15: Cross-Device Cloud Sync with Multi-Device Indicators",
-      "📈 Screen 16: Deep Reading Analytics & Velocity Patterns",
-      "✨ Screen 17: Curated Book Recommendations",
-      "🛠️ Screen 18: App Customization with Accent Color Palettes & Wallpapers",
-      "📖 Screen 19: Reading Reflection Journal with Daily Logged Entries",
-      "🛡️ Screen 20: Privacy & Security with Biometric & PIN Protection"
+      "⚡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices",
+      "💰 Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)",
+      "🔥 Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days",
+      "⭐ Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them",
+      "📱 Direct In-App APK Reinstall & 1-Click Update Installer"
     ],
-    "stagedAt": "2026-10-01T09:15:00.000Z",
+    "stagedAt": "2026-10-01T10:45:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
