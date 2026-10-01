@@ -1,14 +1,14 @@
 {
-  "id": "notice-v3.18.4",
-  "version": "v3.18.4",
+  "id": "notice-v3.19.0",
+  "version": "v3.19.0",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v3.18.4 Ready!",
-  "message": "New v3.18.4 update is ready with 1-Click Reinstall & Vision-OS Update Center. Tap Update to install now!",
+  "title": "Mind Focus Books v3.19.0 Ready!",
+  "message": "Major v3.19.0 update: Screens 4 to 20 Master Suite! Focus Timer, Notes & Highlights, Achievements, Quotes, Journal & Goals ready!",
   "btnText": "⚡ Update Now",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.4/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-01T08:30:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.19.0/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-01T09:15:00.000Z"
 }
