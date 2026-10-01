@@ -77,18 +77,9 @@ function initApp() {
   // Initial Renders
   renderApp();
   
-  // Check for in-app updates in background immediately and periodically
-  setTimeout(checkForBackgroundUpdates, 500);
-  setTimeout(checkRemoteBroadcastNotice, 1000);
-  setInterval(checkForBackgroundUpdates, 15000);
-  
-  // Re-check when user switches back to app
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState === 'visible') {
-      checkForBackgroundUpdates();
-      checkRemoteBroadcastNotice();
-    }
-  });
+  // Check for in-app updates in background once on startup
+  setTimeout(checkForBackgroundUpdates, 1200);
+  setTimeout(checkRemoteBroadcastNotice, 1800);
 }
 
 // Ensure at least one book is currently reading
@@ -2312,13 +2303,18 @@ async function checkForBackgroundUpdates() {
       if (homeSub) homeSub.innerText = activeRel.name || `${activeRel.version} is ready to download and install`;
     }
     
-    // POP UP VISION-OS FROSTED GLASS UPDATE MODAL WITHIN 1 SECOND!
-    setTimeout(() => {
-      openUpdateCheckerModal();
-    }, 600);
+    // Auto-popup ONLY ONCE per session if not dismissed
+    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + activeRel.version);
+    if (!dismissed) {
+      setTimeout(() => {
+        openUpdateCheckerModal();
+      }, 800);
+    }
   } else {
-    // Current version is up to date -> card is completely hidden
+    // Current version is up to date -> cards completely hidden and quiet
     if (homeCard) homeCard.style.display = 'none';
+    const noticeOverlay = document.getElementById('inAppNoticeModalOverlay');
+    if (noticeOverlay) noticeOverlay.style.display = 'none';
   }
 }
 
@@ -2414,6 +2410,12 @@ function showInAppNoticePopup(data) {
 function dismissInAppNotice() {
   const overlay = document.getElementById('inAppNoticeModalOverlay');
   if (overlay) overlay.style.display = 'none';
+  if (currentBroadcastNoticeData && currentBroadcastNoticeData.id) {
+    try {
+      sessionStorage.setItem('mf_notice_dismissed_' + currentBroadcastNoticeData.id, '1');
+      localStorage.setItem('mf_notice_dismissed_' + currentBroadcastNoticeData.id, '1');
+    } catch (e) {}
+  }
 }
 
 function handleHoloOverlayClick(e) {
@@ -2466,6 +2468,13 @@ function openUpdateCheckerModal() {
 function closeUpdateCheckerModal() {
   const overlay = document.getElementById('updateCheckerModalOverlay');
   if (overlay) overlay.style.display = 'none';
+  const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
+  const targetVer = cfg?.activeRelease?.version;
+  if (targetVer) {
+    try {
+      sessionStorage.setItem('mf_update_dismissed_' + targetVer, '1');
+    } catch (e) {}
+  }
 }
 
 function handleUpdateOverlayClick(e) {
@@ -2530,13 +2539,20 @@ async function checkRemoteBroadcastNotice() {
     if (res.ok) {
       const data = await res.json();
       if (data && data.active) {
+        // If notice is an update for CURRENT_APP_VERSION, app already has this update! NEVER POP UP!
+        const noticeVer = data.version || (data.id && data.id.replace('notice-', ''));
+        if (noticeVer && noticeVer === CURRENT_APP_VERSION) {
+          return;
+        }
+        // If already dismissed, DO NOT POP UP!
+        if (sessionStorage.getItem('mf_notice_dismissed_' + data.id) || localStorage.getItem('mf_notice_dismissed_' + data.id)) {
+          return;
+        }
         showInAppNoticePopup(data);
       }
     }
   } catch (e) {
-    if (typeof window.__REMOTE_BROADCAST_NOTICE__ !== 'undefined' && window.__REMOTE_BROADCAST_NOTICE__.active) {
-      showInAppNoticePopup(window.__REMOTE_BROADCAST_NOTICE__);
-    }
+    // Offline fallback: never disrupt user repeatedly
   }
 }
 

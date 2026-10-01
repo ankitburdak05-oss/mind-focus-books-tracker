@@ -1,8 +1,9 @@
 {
   "id": "notice-v3.18.3",
+  "version": "v3.18.3",
   "type": "card1",
   "card": "card1",
-  "active": true,
+  "active": false,
   "icon": "🚀",
   "title": "Mind Focus Books v3.18.3 Ready!",
   "message": "New v3.18.3 update is ready with Full App Kindle Sepia Theme, Classic Wood Theme, Compact KPI Bar & Reading Budget. Tap Update to install now!",
