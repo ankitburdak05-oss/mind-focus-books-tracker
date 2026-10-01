@@ -3348,16 +3348,16 @@ if (typeof window !== 'undefined') {
         </div>
       </div>
 
-      <!-- In-App Version Update Alert Card (ALWAYS VISIBLE & TAPABLE ON HOME) -->
-      <div class="home-update-banner" id="homeUpdateCard" onclick="openUpdateModal()">
+      <!-- In-App Version Update Alert Card (shows ONLY when a new update is detected) -->
+      <div class="home-update-banner" id="homeUpdateCard" style="display:none;" onclick="openUpdateModal()">
         <div class="hub-left">
           <div class="hub-icon-wrap">🚀</div>
           <div class="hub-info">
-            <div class="hub-title" id="homeUpdateTitle">New v3.18.1 Update Available!</div>
-            <div class="hub-sub" id="homeUpdateSub">📜 Sepia Paper Mode, 5 Reader Modes & Offline Tracking Ready</div>
+            <div class="hub-title" id="homeUpdateTitle">New Version Update Available!</div>
+            <div class="hub-sub" id="homeUpdateSub">Mind Focus Books update is ready to install</div>
           </div>
         </div>
-        <button type="button" class="hub-action-btn" onclick="event.stopPropagation(); downloadAppUpdate();">⚡ Update APK</button>
+        <button type="button" class="hub-action-btn" onclick="event.stopPropagation(); downloadAppUpdate();">⚡ Update</button>
       </div>
 
       <!-- Currently Reading Hero Card -->
@@ -11954,7 +11954,7 @@ function openUpdateModal() {
   const notice = document.getElementById('updateDownloadNotice');
   if (notice) notice.style.display = 'none';
   
-  const cfg = (typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') ? window.__DEFAULT_REMOTE_CONFIG__ : null;
+  const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
   if (cfg && cfg.activeRelease) {
     const rel = cfg.activeRelease;
     const isNew = rel.version && (rel.version !== CURRENT_APP_VERSION);
@@ -11989,10 +11989,10 @@ function handleUpdateOverlayClick(event) {
 }
 
 function downloadAppUpdate() {
-  const cfg = (typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') ? window.__DEFAULT_REMOTE_CONFIG__ : null;
+  const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
   const apkUrl = (cfg && cfg.activeRelease && cfg.activeRelease.apkDownloadUrl) 
     ? cfg.activeRelease.apkDownloadUrl 
-    : "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.0/MindFocusBooks-Native.apk";
+    : "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk";
   
   showToast("Downloading update package... ⏳");
   
@@ -12026,40 +12026,57 @@ function downloadAppUpdate() {
   }
 }
 
-function checkForBackgroundUpdates() {
+async function checkForBackgroundUpdates() {
   const homeCard = document.getElementById('homeUpdateCard');
   const homeTitle = document.getElementById('homeUpdateTitle');
   const homeSub = document.getElementById('homeUpdateSub');
   
-  if (homeCard) {
-    homeCard.style.display = 'flex';
+  // Default: Keep hidden unless an update is confirmed
+  if (homeCard) homeCard.style.display = 'none';
+
+  let activeRel = null;
+
+  // 1. Live Remote Check via GitHub Raw Config
+  try {
+    const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?t=' + Date.now();
+    const res = await fetch(rawUrl, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.activeRelease && data.activeRelease.version) {
+        window.__LIVE_REMOTE_CONFIG__ = data;
+        activeRel = data.activeRelease;
+      }
+    }
+  } catch (err) {
+    console.warn('Live remote config fetch failed, checking fallback:', err);
   }
-  
-  const cfg = (typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') ? window.__DEFAULT_REMOTE_CONFIG__ : null;
-  if (!cfg || !cfg.activeRelease || !cfg.activeRelease.version) return;
-  
-  const activeRel = cfg.activeRelease;
+
+  // 2. Fallback to bundled config if offline
+  if (!activeRel && typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') {
+    activeRel = window.__DEFAULT_REMOTE_CONFIG__?.activeRelease || null;
+  }
+
+  if (!activeRel || !activeRel.version) return;
+
   const isNew = activeRel.version !== CURRENT_APP_VERSION;
-  
+
   if (homeCard) {
-    homeCard.style.display = 'flex';
     if (isNew) {
+      // ONLY SHOW WHEN A NEW UPDATE IS ACTUALLY AVAILABLE
+      homeCard.style.display = 'flex';
       if (homeTitle) homeTitle.innerText = `🔥 Update ${activeRel.version} Available!`;
       if (homeSub) homeSub.innerText = activeRel.name || `${activeRel.version} is ready to download and install`;
+      
+      const dismissed = sessionStorage.getItem('mf_update_dismissed_' + activeRel.version);
+      if (!dismissed) {
+        setTimeout(() => {
+          openUpdateModal();
+          sessionStorage.setItem('mf_update_dismissed_' + activeRel.version, '1');
+        }, 1200);
+      }
     } else {
-      if (homeTitle) homeTitle.innerText = `🚀 Mind Focus Books ${CURRENT_APP_VERSION} Active`;
-      if (homeSub) homeSub.innerText = `📜 Sepia Paper Mode & All Features Ready • Tap to Update or Re-download APK`;
-    }
-  }
-  
-  // Also show update modal on startup if new version exists and not dismissed this session
-  if (isNew) {
-    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + activeRel.version);
-    if (!dismissed) {
-      setTimeout(() => {
-        openUpdateModal();
-        sessionStorage.setItem('mf_update_dismissed_' + activeRel.version, '1');
-      }, 1200);
+      // Current version is up to date -> card is completely hidden
+      homeCard.style.display = 'none';
     }
   }
 }

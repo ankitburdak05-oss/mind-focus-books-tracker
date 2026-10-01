@@ -67,16 +67,16 @@
         </div>
       </div>
 
-      <!-- In-App Version Update Alert Card (ALWAYS VISIBLE & TAPABLE ON HOME) -->
-      <div class="home-update-banner" id="homeUpdateCard" onclick="openUpdateModal()">
+      <!-- In-App Version Update Alert Card (shows ONLY when a new update is detected) -->
+      <div class="home-update-banner" id="homeUpdateCard" style="display:none;" onclick="openUpdateModal()">
         <div class="hub-left">
           <div class="hub-icon-wrap">🚀</div>
           <div class="hub-info">
-            <div class="hub-title" id="homeUpdateTitle">New v3.18.1 Update Available!</div>
-            <div class="hub-sub" id="homeUpdateSub">📜 Sepia Paper Mode, 5 Reader Modes & Offline Tracking Ready</div>
+            <div class="hub-title" id="homeUpdateTitle">New Version Update Available!</div>
+            <div class="hub-sub" id="homeUpdateSub">Mind Focus Books update is ready to install</div>
           </div>
         </div>
-        <button type="button" class="hub-action-btn" onclick="event.stopPropagation(); downloadAppUpdate();">⚡ Update APK</button>
+        <button type="button" class="hub-action-btn" onclick="event.stopPropagation(); downloadAppUpdate();">⚡ Update</button>
       </div>
 
       <!-- Currently Reading Hero Card -->
