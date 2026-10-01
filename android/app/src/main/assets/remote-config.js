@@ -1,36 +1,36 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-10-01T04:00:00.000Z",
+  "updatedAt": "2026-10-01T05:00:00.000Z",
   "activeRelease": {
-    "version": "v3.18.2",
-    "name": "Mind Focus Books v3.18.2 - Reading Budget & Expense Tracking",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.2/MindFocusBooks-Native.apk",
+    "version": "v3.18.3",
+    "name": "Mind Focus Books v3.18.3 - Full App Kindle Sepia, Classic Wood & Compact KPI Bar",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.3/MindFocusBooks-Native.apk",
     "features": [
-      "💰 Reading Budget & Investment Tracker: Track total money spent on books in Progress view",
-      "📊 Comprehensive Cost Breakdown: Read books cost, currently reading, wishlist value & average price",
-      "🎯 Custom Reading Budget Target: Set your annual budget goal with real-time progress bar",
-      "⚡ Auto-fill Market MRPs: One-tap option to assign realistic Indian paperback prices (₹199 - ₹499)",
-      "📜 Sepia Paper Mode: Guaranteed warm classic cream paper (#fbf5e6) with soft dark brown ink",
-      "🌙 Dark & Light Paper Modes: High contrast night mode & fresh crisp white paper",
-      "🏷️ Official v3.18.2 Release"
+      "📜 Full App Kindle Sepia Paper Mode: Vintage eye-comfort cream paper (#fbf5e6) and rich brown text across ALL screens",
+      "🌲 Classic Wood Theme: Authentic mahogany & walnut wooden bookshelf texture and gradients",
+      "📊 Compact KPI Bar: Real-time Finished, Reading, Wishlist & Streak directly on Home screen",
+      "🚀 Card 1 Quantum Beacon: Instant cloud update alerts & seamless APK installation",
+      "📱 Vision-OS Frosted Glass Update Center: Live progress track and native package installer integration",
+      "💰 Reading Budget & Expenses: Comprehensive price tracker with budget target in Progress view",
+      "🏷️ Official v3.18.3 Release"
     ],
-    "stagedAt": "2026-10-01T04:00:00.000Z",
+    "stagedAt": "2026-10-01T05:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.18.2",
-    "name": "Mind Focus Books v3.18.2 - Reading Budget & Expense Tracking",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.2/MindFocusBooks-Native.apk",
+    "version": "v3.18.3",
+    "name": "Mind Focus Books v3.18.3 - Full App Kindle Sepia, Classic Wood & Compact KPI Bar",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.3/MindFocusBooks-Native.apk",
     "features": [
-      "💰 Reading Budget & Investment Tracker: Track total money spent on books in Progress view",
-      "📊 Comprehensive Cost Breakdown: Read books cost, currently reading, wishlist value & average price",
-      "🎯 Custom Reading Budget Target: Set your annual budget goal with real-time progress bar",
-      "⚡ Auto-fill Market MRPs: One-tap option to assign realistic Indian paperback prices (₹199 - ₹499)",
-      "📜 Sepia Paper Mode: Guaranteed warm classic cream paper (#fbf5e6) with soft dark brown ink",
-      "🌙 Dark & Light Paper Modes: High contrast night mode & fresh crisp white paper",
-      "🏷️ Official v3.18.2 Release"
+      "📜 Full App Kindle Sepia Paper Mode: Vintage eye-comfort cream paper (#fbf5e6) and rich brown text across ALL screens",
+      "🌲 Classic Wood Theme: Authentic mahogany & walnut wooden bookshelf texture and gradients",
+      "📊 Compact KPI Bar: Real-time Finished, Reading, Wishlist & Streak directly on Home screen",
+      "🚀 Card 1 Quantum Beacon: Instant cloud update alerts & seamless APK installation",
+      "📱 Vision-OS Frosted Glass Update Center: Live progress track and native package installer integration",
+      "💰 Reading Budget & Expenses: Comprehensive price tracker with budget target in Progress view",
+      "🏷️ Official v3.18.3 Release"
     ],
-    "stagedAt": "2026-10-01T04:00:00.000Z",
+    "stagedAt": "2026-10-01T05:00:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {

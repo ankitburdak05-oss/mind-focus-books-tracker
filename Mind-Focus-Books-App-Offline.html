@@ -54,6 +54,7 @@
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
+/* ================= 4 CORE APP THEMES ================= */
 [data-theme="light"] {
   --bg-primary: #f8fafc;
   --bg-secondary: #f1f5f9;
@@ -62,9 +63,144 @@
   --bg-elevated: #ffffff;
   --border-subtle: #e2e8f0;
   --border-card: #cbd5e1;
+  --border-gold: rgba(217, 119, 6, 0.4);
   --text-primary: #0f172a;
   --text-secondary: #475569;
   --text-muted: #94a3b8;
+  --accent-gold: #d97706;
+}
+
+/* 📜 Kindle Sepia Paper Mode (Entire App in Vintage Eye-Comfort Cream Paper) */
+[data-theme="sepia"] {
+  --bg-primary: #fbf5e6;
+  --bg-secondary: #f4ebd4;
+  --bg-card: #fffdf7;
+  --bg-card-hover: #f3e9cf;
+  --bg-elevated: #efe5ca;
+  --border-subtle: #e6dac0;
+  --border-card: #ddcfb0;
+  --border-gold: rgba(180, 83, 9, 0.4);
+  --text-primary: #2b1f14;
+  --text-secondary: #5c4733;
+  --text-muted: #826c54;
+  --accent-gold: #b45309;
+  --accent-gold-light: #d97706;
+  --accent-gold-dark: #78350f;
+  --accent-gold-glow: rgba(180, 83, 9, 0.2);
+}
+
+[data-theme="sepia"] body,
+[data-theme="sepia"] .app-view,
+[data-theme="sepia"] .app-header {
+  background-color: #fbf5e6 !important;
+  color: #2b1f14 !important;
+}
+
+[data-theme="sepia"] .featured-hero-card,
+[data-theme="sepia"] .currently-reading-hero,
+[data-theme="sepia"] .compact-kpi-bar,
+[data-theme="sepia"] .stat-card,
+[data-theme="sepia"] .prog-metric-card,
+[data-theme="sepia"] .reading-goal-card,
+[data-theme="sepia"] .reading-budget-card,
+[data-theme="sepia"] .chart-card,
+[data-theme="sepia"] .profile-hero-card,
+[data-theme="sepia"] .profile-stat-strip,
+[data-theme="sepia"] .profile-menu-group,
+[data-theme="sepia"] .profile-menu-item,
+[data-theme="sepia"] .modal-content,
+[data-theme="sepia"] .book-card-vertical,
+[data-theme="sepia"] .book-detail-hero-card,
+[data-theme="sepia"] .detail-card-panel,
+[data-theme="sepia"] .bottom-nav-dock,
+[data-theme="sepia"] .search-bar-wrap,
+[data-theme="sepia"] .time-filter-dropdown select,
+[data-theme="sepia"] .sort-select-wrap select,
+[data-theme="sepia"] .filter-category-wrap select,
+[data-theme="sepia"] .filter-chip {
+  background: #fffdf7 !important;
+  border-color: #ddcfb0 !important;
+  color: #2b1f14 !important;
+}
+
+[data-theme="sepia"] .dock-item {
+  color: #826c54 !important;
+}
+
+[data-theme="sepia"] .dock-item.active {
+  color: #b45309 !important;
+}
+
+[data-theme="sepia"] .filter-chip.active {
+  background: #b45309 !important;
+  color: #ffffff !important;
+  border-color: #b45309 !important;
+}
+
+/* 🌲 Classic Wood Theme (Rich Mahogany & Walnut Shelves Texture) */
+[data-theme="wood"] {
+  --bg-primary: #1c0e07;
+  --bg-secondary: #27140b;
+  --bg-card: #341b0e;
+  --bg-card-hover: #442413;
+  --bg-elevated: #3d1f10;
+  --border-subtle: #4d2815;
+  --border-card: #5a301a;
+  --border-gold: rgba(245, 158, 11, 0.45);
+  --text-primary: #fdf5ea;
+  --text-secondary: #d4b595;
+  --text-muted: #9e7f62;
+  --accent-gold: #f59e0b;
+  --accent-gold-light: #fbbf24;
+  --accent-gold-dark: #b45309;
+}
+
+[data-theme="wood"] body,
+[data-theme="wood"] .app-view,
+[data-theme="wood"] .app-header {
+  background: linear-gradient(180deg, #1c0e07 0%, #27140b 100%) !important;
+  color: #fdf5ea !important;
+}
+
+[data-theme="wood"] .featured-hero-card,
+[data-theme="wood"] .currently-reading-hero,
+[data-theme="wood"] .compact-kpi-bar,
+[data-theme="wood"] .stat-card,
+[data-theme="wood"] .prog-metric-card,
+[data-theme="wood"] .reading-goal-card,
+[data-theme="wood"] .reading-budget-card,
+[data-theme="wood"] .chart-card,
+[data-theme="wood"] .profile-hero-card,
+[data-theme="wood"] .profile-stat-strip,
+[data-theme="wood"] .profile-menu-group,
+[data-theme="wood"] .profile-menu-item,
+[data-theme="wood"] .modal-content,
+[data-theme="wood"] .book-card-vertical,
+[data-theme="wood"] .book-detail-hero-card,
+[data-theme="wood"] .detail-card-panel,
+[data-theme="wood"] .bottom-nav-dock,
+[data-theme="wood"] .search-bar-wrap,
+[data-theme="wood"] .time-filter-dropdown select,
+[data-theme="wood"] .sort-select-wrap select,
+[data-theme="wood"] .filter-category-wrap select,
+[data-theme="wood"] .filter-chip {
+  background: linear-gradient(145deg, #2c160b 0%, #3a1d0f 100%) !important;
+  border-color: #5a301a !important;
+  color: #fdf5ea !important;
+}
+
+[data-theme="wood"] .dock-item {
+  color: #9e7f62 !important;
+}
+
+[data-theme="wood"] .dock-item.active {
+  color: #f59e0b !important;
+}
+
+[data-theme="wood"] .filter-chip.active {
+  background: #f59e0b !important;
+  color: #1a0e05 !important;
+  border-color: #f59e0b !important;
 }
 
 * {
@@ -3194,6 +3330,381 @@ body {
   font-weight: 800 !important;
 }
 
+/* ================= COMPACT KPI BAR ================= */
+.compact-kpi-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-md);
+  padding: 10px 8px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.compact-kpi-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  padding: 4px 2px;
+  border-radius: 8px;
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.compact-kpi-item:hover {
+  transform: translateY(-2px);
+  background: var(--bg-card-hover, rgba(255, 255, 255, 0.04));
+}
+
+.compact-kpi-icon {
+  font-size: 1.35rem;
+  margin-bottom: 2px;
+}
+
+.compact-kpi-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.compact-kpi-val {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.compact-kpi-lbl {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-top: 1px;
+}
+
+/* ================= THEME PICKER GRID (PROFILE) ================= */
+.theme-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 8px;
+}
+
+@media (min-width: 500px) {
+  .theme-picker-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.theme-choice-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 8px;
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-subtle);
+  background: var(--bg-card);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.theme-choice-btn.active {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 14px var(--accent-gold-glow);
+  transform: scale(1.02);
+}
+
+.theme-choice-icon {
+  font-size: 1.5rem;
+  margin-bottom: 4px;
+}
+
+.theme-choice-title {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.theme-choice-sub {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin-top: 2px;
+}
+
+/* ================= CARD 1: QUANTUM HOLOGRAPHIC BEACON ================= */
+.holo-portal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 18, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999999;
+  padding: 16px;
+}
+
+.holo-notice-card {
+  position: relative;
+  background: linear-gradient(155deg, rgba(15, 20, 36, 0.98) 0%, rgba(6, 9, 20, 0.99) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 26px;
+  padding: 1.75rem 1.5rem;
+  max-width: 430px;
+  width: min(94vw, 430px);
+  text-align: center;
+  overflow: hidden;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8), 0 0 40px rgba(59, 130, 246, 0.3);
+  animation: holoPortalIn 0.5s cubic-bezier(0.16, 1.12, 0.32, 1) forwards;
+}
+
+@keyframes holoPortalIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-40px) scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.holo-telemetry-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(59, 130, 246, 0.15);
+  border: 1px solid rgba(59, 130, 246, 0.35);
+  border-radius: 9999px;
+  padding: 4px 12px;
+  margin-bottom: 1rem;
+}
+
+.holo-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+  animation: pulseLive 1.5s infinite;
+}
+
+@keyframes pulseLive {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.holo-telemetry-text {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.08em;
+}
+
+.holo-reactor-orb-container {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 1rem auto;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.holo-reactor-orb {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #3b82f6 0%, #1e1b4b 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 0 25px rgba(59, 130, 246, 0.6);
+}
+
+.holo-notice-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.65rem;
+}
+
+.holo-message-capsule {
+  position: relative;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin-bottom: 1.25rem;
+}
+
+.holo-corner-accents .corner {
+  position: absolute;
+  color: #38bdf8;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.corner.tl { top: 3px; left: 4px; }
+.corner.tr { top: 3px; right: 4px; }
+.corner.bl { bottom: 3px; left: 4px; }
+.corner.br { bottom: 3px; right: 4px; }
+
+.holo-message-watermark {
+  font-size: 0.62rem;
+  color: #64748b;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-bottom: 4px;
+}
+
+.holo-message-text {
+  font-size: 0.85rem;
+  color: #cbd5e1;
+  line-height: 1.45;
+}
+
+.holo-notice-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.holo-footer-meta {
+  font-size: 0.68rem;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.holo-dismiss-btn {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.holo-dismiss-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(37, 99, 235, 0.6);
+}
+
+/* ================= VISION-OS FROSTED GLASS UPDATE MODAL ================= */
+.update-glass-card {
+  background: rgba(15, 23, 42, 0.88) !important;
+  backdrop-filter: blur(28px) !important;
+  -webkit-backdrop-filter: blur(28px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 28px !important;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.75), 0 0 35px rgba(59, 130, 246, 0.3) !important;
+  color: #ffffff !important;
+  padding: 1.85rem 1.6rem !important;
+  max-width: 440px !important;
+  text-align: center;
+}
+
+.update-glass-rocket-icon {
+  width: 68px;
+  height: 68px;
+  margin: 0 auto 1.1rem auto;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.update-glass-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-bottom: 0.25rem;
+}
+
+.update-glass-version-tag {
+  display: inline-block;
+  background: linear-gradient(135deg, #3b82f6, #6366f1);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 0.82rem;
+  padding: 3px 12px;
+  border-radius: 9999px;
+  margin-bottom: 0.75rem;
+}
+
+.update-glass-sub {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  margin-bottom: 1.25rem;
+  line-height: 1.4;
+}
+
+.update-glass-checklist {
+  text-align: left;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1rem 1.1rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.update-glass-item {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.82rem;
+  color: #e2e8f0;
+  font-weight: 500;
+}
+
+.update-glass-check {
+  color: #34d399;
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.update-glass-btn-cta {
+  width: 100%;
+  padding: 13px 20px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+  font-size: 0.98rem;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.update-glass-btn-cta:hover {
+  transform: translateY(-2px);
+}
+
 
 
 
@@ -3556,6 +4067,38 @@ if (typeof window !== 'undefined') {
         </div>
         <div class="cr-cover-wrap" onclick="openCurrentReadingDetail()" style="cursor:pointer;">
           <img id="homeCrCoverImg" src="https://covers.openlibrary.org/b/id/10239359-L.jpg" alt="Book Cover" onerror="this.src='cover_placeholder.jpg'">
+        </div>
+      </div>
+
+      <!-- Compact KPI Bar (4 Key Metrics) -->
+      <div class="compact-kpi-bar">
+        <div class="compact-kpi-item" onclick="switchTab('library'); filterByStatus('DONE');" title="Finished Books">
+          <span class="compact-kpi-icon">📚</span>
+          <div class="compact-kpi-info">
+            <span class="compact-kpi-val" id="kpiDoneCount">0</span>
+            <span class="compact-kpi-lbl">Finished</span>
+          </div>
+        </div>
+        <div class="compact-kpi-item" onclick="switchTab('library'); filterByStatus('READING');" title="In Progress">
+          <span class="compact-kpi-icon">📖</span>
+          <div class="compact-kpi-info">
+            <span class="compact-kpi-val" id="kpiReadingCount">1</span>
+            <span class="compact-kpi-lbl">Reading</span>
+          </div>
+        </div>
+        <div class="compact-kpi-item" onclick="switchTab('library'); filterByStatus('WISHLIST');" title="Wishlist">
+          <span class="compact-kpi-icon">⏳</span>
+          <div class="compact-kpi-info">
+            <span class="compact-kpi-val" id="kpiPendingCount">312</span>
+            <span class="compact-kpi-lbl">Wishlist</span>
+          </div>
+        </div>
+        <div class="compact-kpi-item" onclick="switchTab('progress');" title="Streak & Reading Time">
+          <span class="compact-kpi-icon">⏱️</span>
+          <div class="compact-kpi-info">
+            <span class="compact-kpi-val" id="kpiStreakVal">7 Days</span>
+            <span class="compact-kpi-lbl">Streak</span>
+          </div>
         </div>
       </div>
 
@@ -3983,13 +4526,37 @@ if (typeof window !== 'undefined') {
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
 
-        <div class="profile-menu-item" onclick="toggleAppTheme()">
+        <div class="profile-menu-item" onclick="toggleThemePickerDrawer()">
           <div class="pmi-icon purple">🎨</div>
           <div class="pmi-text">
-            <div class="pmi-title">Appearance</div>
+            <div class="pmi-title">App Theme & Appearance</div>
             <div class="pmi-sub" id="appearanceSubText">Theme: Dark Modern Luxury</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <!-- 4-Theme Selection Grid -->
+        <div class="theme-picker-grid" id="profileThemePickerGrid" style="margin: 0 0 14px 0; padding: 0 4px;">
+          <div class="theme-choice-btn" id="themeBtnWood" onclick="setAppTheme('wood')">
+            <span class="theme-choice-icon">🌲</span>
+            <span class="theme-choice-title">Classic Wood</span>
+            <span class="theme-choice-sub">Mahogany Bookshelf</span>
+          </div>
+          <div class="theme-choice-btn active" id="themeBtnDark" onclick="setAppTheme('dark')">
+            <span class="theme-choice-icon">🌙</span>
+            <span class="theme-choice-title">Dark Luxury</span>
+            <span class="theme-choice-sub">Deep Black & Gold</span>
+          </div>
+          <div class="theme-choice-btn" id="themeBtnSepia" onclick="setAppTheme('sepia')">
+            <span class="theme-choice-icon">📜</span>
+            <span class="theme-choice-title">Kindle Sepia</span>
+            <span class="theme-choice-sub">Full App Vintage Paper</span>
+          </div>
+          <div class="theme-choice-btn" id="themeBtnLight" onclick="setAppTheme('light')">
+            <span class="theme-choice-icon">☀️</span>
+            <span class="theme-choice-title">Crisp Light</span>
+            <span class="theme-choice-sub">Clean White Paper</span>
+          </div>
         </div>
 
         <div class="profile-menu-item" onclick="cycleReaderThemeFromProfile()">
@@ -4661,38 +5228,99 @@ if (typeof window !== 'undefined') {
     </div>
   </div>
 
-  <!-- ================= IN-APP UPDATE CHECKER MODAL ================= -->
-  <div class="modal-overlay" id="inAppUpdateModalOverlay" onclick="handleUpdateOverlayClick(event)">
-    <div class="modal-card update-modal-card" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <h3 class="modal-title">🚀 Mind & Focus Updates</h3>
-        <button type="button" class="modal-close-btn" onclick="closeUpdateModal()">&times;</button>
+  <!-- ================= CARD 1: QUANTUM HOLOGRAPHIC BEACON MODAL ================= -->
+  <div class="holo-portal-overlay" id="inAppNoticeModalOverlay" style="display:none;" onclick="handleHoloOverlayClick(event)">
+    <div class="holo-notice-card" id="holoNoticeCard" onclick="event.stopPropagation()">
+      <div class="holo-telemetry-badge">
+        <span class="holo-live-dot"></span>
+        <span class="holo-telemetry-text">CARD 1 • QUANTUM BEACON TRANSMISSION</span>
       </div>
-      <div class="modal-body">
-        <div class="update-status-row">
-          <span class="update-badge" id="currentVerBadge">v3.18.1</span>
-          <span class="update-status-text" id="updateStatusText">Latest Release (v3.18.1) Ready to Install</span>
-        </div>
-        <div class="changelog-box">
-          <h4 id="changelogHeader">What's New in v3.18.1:</h4>
-          <ul class="changelog-list" id="changelogFeatures">
-            <li>📜 <strong>Sepia Paper Mode</strong>: Authentic vintage yellowish paper (#fbf5e6) with warm brown ink for zero eye strain</li>
-            <li>🌙 <strong>Dark Night Mode</strong>: Deep anti-glare dark paper (#121824) with soft silver text for night reading</li>
-            <li>☀️ <strong>Light Paper Mode</strong>: Crisp printed book white paper (#ffffff) with sharp slate typography</li>
-            <li>📖 <strong>Dual Spread Mode</strong>: Open physical 2-page book spread with 3D spine crease, shadow fold & silk red ribbon bookmark</li>
-            <li>📄 <strong>Single Page Mode</strong>: Focused single page reader for quick and distraction-free mobile reading</li>
-            <li>🖥️ <strong>Browser Fullscreen & Widescreen Desktop</strong>: 1440px desktop grid layout with one-click Fullscreen toggle (F11)</li>
-            <li>⚡ <strong>Native APK Downloader & Installer</strong>: Direct 1-tap download and installation in About App</li>
-          </ul>
-        </div>
-        <div class="update-download-notice" id="updateDownloadNotice" style="display:none; font-size:0.82rem; color:var(--accent-gold-light); margin-top:12px; text-align:center; padding:8px; background:rgba(245,158,11,0.1); border-radius:8px;">
-          ⏳ Starting APK download package... The Android Package Installer will open once complete!
+
+      <div class="holo-reactor-orb-container">
+        <div class="holo-reactor-orb">
+          <span id="inAppNoticeIcon">🚀</span>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-cancel" onclick="closeUpdateModal()">Close</button>
-        <button type="button" id="downloadApkBtn" class="btn-save-gold" onclick="downloadAppUpdate()">⚡ Download & Install APK</button>
+
+      <h3 class="holo-notice-title" id="inAppNoticeTitle">Mind Focus Books v3.18.2 Ready!</h3>
+
+      <div class="holo-message-capsule">
+        <div class="holo-corner-accents">
+          <span class="corner tl">⌜</span>
+          <span class="corner tr">⌝</span>
+          <span class="corner bl">⌞</span>
+          <span class="corner br">⌟</span>
+        </div>
+        <div class="holo-message-watermark">MINDFOCUS • CARD 1 TRANSMISSION</div>
+        <div class="holo-message-text" id="inAppNoticeMessage">
+          New v3.18.2 update is available with Reading Budget & Expense Tracking, Full Kindle Sepia Theme, and performance improvements.
+        </div>
       </div>
+
+      <div class="holo-notice-footer">
+        <div class="holo-footer-meta">
+          <span>⚡ CARD 1 • ENCRYPTED END-TO-END</span>
+        </div>
+        <button type="button" class="holo-dismiss-btn" id="inAppNoticeDismissBtn" onclick="onHoloNoticeActionClick()">
+          <span id="inAppNoticeBtnText">⚡ Update Now</span>
+          <span>✦</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= VISION-OS FROSTED GLASS UPDATE MODAL ================= -->
+  <div class="modal-overlay" id="updateCheckerModalOverlay" style="display:none;" onclick="handleUpdateOverlayClick(event)">
+    <div class="modal-content update-glass-card" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:-10px;">
+        <button class="modal-close" style="background:none; border:none; color:#94a3b8; font-size:1.8rem; cursor:pointer;" onclick="closeUpdateCheckerModal()">&times;</button>
+      </div>
+
+      <div class="update-glass-rocket-icon">
+        🚀
+      </div>
+
+      <div class="update-glass-title" id="updateModalTitle">New Version Update Ready:</div>
+      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.18.2</div>
+      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.18.2 • Reading Budget & Expense Tracking + Full Kindle Sepia Theme</div>
+
+      <div class="update-glass-checklist">
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>💰 Reading Budget & Expenses: Track total money spent on books in Progress view</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>📜 Kindle Sepia Paper Mode: 100% full app eye-comfort vintage cream theme</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>🌲 Classic Wooden Bookshelf: Authentic rich mahogany & walnut textures</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>📊 Compact KPI Bar: Finished, Reading, Wishlist & Streak always live</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>⚡ Card 1 Quantum Beacon: Instant cloud update alerts & seamless APK installation</span>
+        </div>
+      </div>
+
+      <!-- Animated Progress Bar (when downloading) -->
+      <div class="update-progress-container" id="updateModalProgress" style="display:none; margin-bottom:1rem;">
+        <div class="update-progress-info" style="color:#cbd5e1; font-size:0.8rem; margin-bottom:4px; display:flex; justify-content:space-between;">
+          <span id="updateProgressText">Downloading Signed APK...</span>
+          <span id="updateProgressPct">0%</span>
+        </div>
+        <div class="update-progress-track" style="height:6px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden;">
+          <div class="update-progress-fill" id="updateProgressFill" style="height:100%; width:0%; background:linear-gradient(90deg, #3b82f6, #10b981); transition:width 0.2s ease;"></div>
+        </div>
+      </div>
+
+      <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerInAppUpdate()">
+        ⚡ Download &amp; Install v3.18.2 Now
+      </button>
     </div>
   </div>
 
@@ -10045,14 +10673,15 @@ const DEFAULT_BOOKS = [
 ];
 
 </script>
+  <script src="broadcast-notice.js"></script>
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.2)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.3)
 // ==========================================================================
 
-const APP_VERSION = '3.18.2';
-const CURRENT_APP_VERSION = 'v3.18.2';
+const APP_VERSION = '3.18.3';
+const CURRENT_APP_VERSION = 'v3.18.3';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -10128,6 +10757,7 @@ function initApp() {
   
   // Check for in-app updates in background
   setTimeout(checkForBackgroundUpdates, 1500);
+  setTimeout(checkRemoteBroadcastNotice, 2000);
 }
 
 // Ensure at least one book is currently reading
@@ -10387,14 +11017,27 @@ function renderHomeCurrentlyReading() {
 function renderHomeStats() {
   const total = state.books.length;
   const finished = state.books.filter(b => b.status === 'DONE').length;
+  const reading = state.books.filter(b => b.status === 'READING').length;
+  const pending = Math.max(0, total - finished - reading);
+  const streak = state.stats.readingStreak != null ? state.stats.readingStreak : 0;
   
+  // 1. Compact KPI Bar
+  const kpiDone = document.getElementById('kpiDoneCount');
+  if (kpiDone) kpiDone.innerText = finished;
+  const kpiRead = document.getElementById('kpiReadingCount');
+  if (kpiRead) kpiRead.innerText = reading;
+  const kpiPend = document.getElementById('kpiPendingCount');
+  if (kpiPend) kpiPend.innerText = pending;
+  const kpiStrk = document.getElementById('kpiStreakVal');
+  if (kpiStrk) kpiStrk.innerText = `${streak} Days`;
+
+  // 2. Standard 2x2 Stats Grid
   const statTotal = document.getElementById('statTotalBooks');
   if (statTotal) statTotal.innerText = total;
   
   const statFin = document.getElementById('statFinishedBooks');
   if (statFin) statFin.innerText = finished;
   
-  const streak = state.stats.readingStreak != null ? state.stats.readingStreak : 0;
   const statStreak = document.getElementById('statReadingStreak');
   if (statStreak) statStreak.innerText = `${streak} days`;
   
@@ -12429,22 +13072,189 @@ async function checkForBackgroundUpdates() {
   }
 }
 
-// ================= THEME TOGGLE =================
+// ================= 4 APP THEMES ENGINE =================
+function setAppTheme(theme) {
+  if (!['dark', 'sepia', 'wood', 'light'].includes(theme)) theme = 'dark';
+  state.theme = theme;
+  applyTheme(theme);
+  try {
+    localStorage.setItem('mf_theme', theme);
+  } catch (e) {}
+
+  // If user chooses sepia for app, also sync reader theme
+  if (theme === 'sepia') {
+    setReaderTheme('sepia');
+  }
+
+  const themeNames = {
+    'wood': '🌲 Classic Wood Theme',
+    'dark': '🌙 Dark Luxury Mode',
+    'sepia': '📜 Kindle Sepia Paper Mode',
+    'light': '☀️ Crisp Light Mode'
+  };
+  showToast(`Switched to ${themeNames[theme] || theme}! ✨`);
+}
+
 function toggleAppTheme() {
-  state.theme = state.theme === 'dark' ? 'light' : 'dark';
-  applyTheme(state.theme);
-  localStorage.setItem('mf_theme', state.theme);
-  showToast(`Switched to ${state.theme === 'dark' ? 'Dark Luxury' : 'Clean Light'} theme! 🎨`);
+  const themes = ['dark', 'sepia', 'wood', 'light'];
+  const curIdx = themes.indexOf(state.theme || 'dark');
+  const next = themes[(curIdx + 1) % themes.length];
+  setAppTheme(next);
+}
+
+function toggleThemePickerDrawer() {
+  const grid = document.getElementById('profileThemePickerGrid');
+  if (grid) {
+    grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
+  }
 }
 
 function applyTheme(theme) {
+  if (!['dark', 'sepia', 'wood', 'light'].includes(theme)) theme = 'dark';
   document.documentElement.setAttribute('data-theme', theme);
+  
   const text = document.getElementById('appearanceSubText');
-  if (text) text.innerText = theme === 'dark' ? 'Theme: Dark Modern Luxury' : 'Theme: Clean Light Mode';
+  const themeLabels = {
+    'wood': 'Theme: 🌲 Classic Wood Theme',
+    'dark': 'Theme: 🌙 Dark Modern Luxury',
+    'sepia': 'Theme: 📜 Kindle Sepia Paper Mode',
+    'light': 'Theme: ☀️ Crisp Light Mode'
+  };
+  if (text) text.innerText = themeLabels[theme] || `Theme: ${theme}`;
+
+  // Update active state in theme buttons
+  const btns = {
+    'wood': document.getElementById('themeBtnWood'),
+    'dark': document.getElementById('themeBtnDark'),
+    'sepia': document.getElementById('themeBtnSepia'),
+    'light': document.getElementById('themeBtnLight')
+  };
+  Object.keys(btns).forEach(key => {
+    if (btns[key]) btns[key].classList.toggle('active', key === theme);
+  });
 }
 
 function showNotificationSettings() {
   showToast('Daily reading streak reminders enabled at 8:00 PM 🔔');
+}
+
+// ================= CARD 1 (QUANTUM HOLOGRAPHIC BEACON) & VISION-OS UPDATE CENTER =================
+let currentBroadcastNoticeData = null;
+
+function showInAppNoticePopup(data) {
+  if (!data || !data.active) return;
+  currentBroadcastNoticeData = data;
+
+  const overlay = document.getElementById('inAppNoticeModalOverlay');
+  if (!overlay) return;
+
+  const iconEl = document.getElementById('inAppNoticeIcon');
+  const titleEl = document.getElementById('inAppNoticeTitle');
+  const msgEl = document.getElementById('inAppNoticeMessage');
+  const btnTextEl = document.getElementById('inAppNoticeBtnText');
+
+  if (iconEl) iconEl.innerText = data.icon || '🚀';
+  if (titleEl) titleEl.innerText = data.title || 'Mind Focus Books Update Ready!';
+  if (msgEl) msgEl.innerText = data.message || 'A new update is ready to install.';
+  if (btnTextEl) btnTextEl.innerText = data.btnText || '⚡ Update Now';
+
+  overlay.style.display = 'flex';
+}
+
+function dismissInAppNotice() {
+  const overlay = document.getElementById('inAppNoticeModalOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function handleHoloOverlayClick(e) {
+  if (e.target.id === 'inAppNoticeModalOverlay') {
+    dismissInAppNotice();
+  }
+}
+
+function onHoloNoticeActionClick() {
+  dismissInAppNotice();
+  openUpdateCheckerModal();
+}
+
+function openUpdateCheckerModal() {
+  const overlay = document.getElementById('updateCheckerModalOverlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function closeUpdateCheckerModal() {
+  const overlay = document.getElementById('updateCheckerModalOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function handleUpdateOverlayClick(e) {
+  if (e.target.id === 'updateCheckerModalOverlay') {
+    closeUpdateCheckerModal();
+  }
+}
+
+function triggerInAppUpdate() {
+  const downloadUrl = (currentBroadcastNoticeData && currentBroadcastNoticeData.apkUrl) ||
+    'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.2/MindFocusBooks-Native.apk';
+
+  const progressWrap = document.getElementById('updateModalProgress');
+  const progressFill = document.getElementById('updateProgressFill');
+  const progressPct = document.getElementById('updateProgressPct');
+  const progressText = document.getElementById('updateProgressText');
+  const actionBtn = document.getElementById('updateModalActionBtn');
+
+  if (progressWrap) progressWrap.style.display = 'block';
+  if (actionBtn) {
+    actionBtn.disabled = true;
+    actionBtn.innerText = '⏳ Downloading Signed APK...';
+  }
+
+  let pct = 0;
+  const interval = setInterval(() => {
+    pct += 15;
+    if (pct > 90) pct = 90;
+    if (progressFill) progressFill.style.width = pct + '%';
+    if (progressPct) progressPct.innerText = pct + '%';
+  }, 200);
+
+  // If running in Native Standalone Android APK with bridge:
+  if (typeof Android !== 'undefined' && typeof Android.downloadAndInstallApk === 'function') {
+    Android.downloadAndInstallApk(downloadUrl);
+    setTimeout(() => {
+      clearInterval(interval);
+      if (progressFill) progressFill.style.width = '100%';
+      if (progressPct) progressPct.innerText = '100%';
+      if (progressText) progressText.innerText = 'Package Ready! Opening Installer...';
+      if (actionBtn) actionBtn.innerText = '⚡ Package Installer Launched';
+    }, 1500);
+  } else {
+    // Browser fallback
+    setTimeout(() => {
+      clearInterval(interval);
+      if (progressFill) progressFill.style.width = '100%';
+      if (progressPct) progressPct.innerText = '100%';
+      window.location.href = downloadUrl;
+      if (actionBtn) actionBtn.innerText = '⚡ Download Started';
+    }, 1200);
+  }
+}
+
+// Background checker for live broadcast notice
+async function checkRemoteBroadcastNotice() {
+  try {
+    const cb = Date.now();
+    const res = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?t=' + cb, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.active) {
+        showInAppNoticePopup(data);
+      }
+    }
+  } catch (e) {
+    if (typeof window.__REMOTE_BROADCAST_NOTICE__ !== 'undefined' && window.__REMOTE_BROADCAST_NOTICE__.active) {
+      showInAppNoticePopup(window.__REMOTE_BROADCAST_NOTICE__);
+    }
+  }
 }
 
 // ================= UTILITIES & HELPERS =================

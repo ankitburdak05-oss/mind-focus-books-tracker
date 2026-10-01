@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.2)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.3)
 // ==========================================================================
 
-const APP_VERSION = '3.18.2';
-const CURRENT_APP_VERSION = 'v3.18.2';
+const APP_VERSION = '3.18.3';
+const CURRENT_APP_VERSION = 'v3.18.3';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -79,6 +79,7 @@ function initApp() {
   
   // Check for in-app updates in background
   setTimeout(checkForBackgroundUpdates, 1500);
+  setTimeout(checkRemoteBroadcastNotice, 2000);
 }
 
 // Ensure at least one book is currently reading
@@ -338,14 +339,27 @@ function renderHomeCurrentlyReading() {
 function renderHomeStats() {
   const total = state.books.length;
   const finished = state.books.filter(b => b.status === 'DONE').length;
+  const reading = state.books.filter(b => b.status === 'READING').length;
+  const pending = Math.max(0, total - finished - reading);
+  const streak = state.stats.readingStreak != null ? state.stats.readingStreak : 0;
   
+  // 1. Compact KPI Bar
+  const kpiDone = document.getElementById('kpiDoneCount');
+  if (kpiDone) kpiDone.innerText = finished;
+  const kpiRead = document.getElementById('kpiReadingCount');
+  if (kpiRead) kpiRead.innerText = reading;
+  const kpiPend = document.getElementById('kpiPendingCount');
+  if (kpiPend) kpiPend.innerText = pending;
+  const kpiStrk = document.getElementById('kpiStreakVal');
+  if (kpiStrk) kpiStrk.innerText = `${streak} Days`;
+
+  // 2. Standard 2x2 Stats Grid
   const statTotal = document.getElementById('statTotalBooks');
   if (statTotal) statTotal.innerText = total;
   
   const statFin = document.getElementById('statFinishedBooks');
   if (statFin) statFin.innerText = finished;
   
-  const streak = state.stats.readingStreak != null ? state.stats.readingStreak : 0;
   const statStreak = document.getElementById('statReadingStreak');
   if (statStreak) statStreak.innerText = `${streak} days`;
   
@@ -2380,22 +2394,189 @@ async function checkForBackgroundUpdates() {
   }
 }
 
-// ================= THEME TOGGLE =================
+// ================= 4 APP THEMES ENGINE =================
+function setAppTheme(theme) {
+  if (!['dark', 'sepia', 'wood', 'light'].includes(theme)) theme = 'dark';
+  state.theme = theme;
+  applyTheme(theme);
+  try {
+    localStorage.setItem('mf_theme', theme);
+  } catch (e) {}
+
+  // If user chooses sepia for app, also sync reader theme
+  if (theme === 'sepia') {
+    setReaderTheme('sepia');
+  }
+
+  const themeNames = {
+    'wood': '🌲 Classic Wood Theme',
+    'dark': '🌙 Dark Luxury Mode',
+    'sepia': '📜 Kindle Sepia Paper Mode',
+    'light': '☀️ Crisp Light Mode'
+  };
+  showToast(`Switched to ${themeNames[theme] || theme}! ✨`);
+}
+
 function toggleAppTheme() {
-  state.theme = state.theme === 'dark' ? 'light' : 'dark';
-  applyTheme(state.theme);
-  localStorage.setItem('mf_theme', state.theme);
-  showToast(`Switched to ${state.theme === 'dark' ? 'Dark Luxury' : 'Clean Light'} theme! 🎨`);
+  const themes = ['dark', 'sepia', 'wood', 'light'];
+  const curIdx = themes.indexOf(state.theme || 'dark');
+  const next = themes[(curIdx + 1) % themes.length];
+  setAppTheme(next);
+}
+
+function toggleThemePickerDrawer() {
+  const grid = document.getElementById('profileThemePickerGrid');
+  if (grid) {
+    grid.style.display = grid.style.display === 'none' ? 'grid' : 'none';
+  }
 }
 
 function applyTheme(theme) {
+  if (!['dark', 'sepia', 'wood', 'light'].includes(theme)) theme = 'dark';
   document.documentElement.setAttribute('data-theme', theme);
+  
   const text = document.getElementById('appearanceSubText');
-  if (text) text.innerText = theme === 'dark' ? 'Theme: Dark Modern Luxury' : 'Theme: Clean Light Mode';
+  const themeLabels = {
+    'wood': 'Theme: 🌲 Classic Wood Theme',
+    'dark': 'Theme: 🌙 Dark Modern Luxury',
+    'sepia': 'Theme: 📜 Kindle Sepia Paper Mode',
+    'light': 'Theme: ☀️ Crisp Light Mode'
+  };
+  if (text) text.innerText = themeLabels[theme] || `Theme: ${theme}`;
+
+  // Update active state in theme buttons
+  const btns = {
+    'wood': document.getElementById('themeBtnWood'),
+    'dark': document.getElementById('themeBtnDark'),
+    'sepia': document.getElementById('themeBtnSepia'),
+    'light': document.getElementById('themeBtnLight')
+  };
+  Object.keys(btns).forEach(key => {
+    if (btns[key]) btns[key].classList.toggle('active', key === theme);
+  });
 }
 
 function showNotificationSettings() {
   showToast('Daily reading streak reminders enabled at 8:00 PM 🔔');
+}
+
+// ================= CARD 1 (QUANTUM HOLOGRAPHIC BEACON) & VISION-OS UPDATE CENTER =================
+let currentBroadcastNoticeData = null;
+
+function showInAppNoticePopup(data) {
+  if (!data || !data.active) return;
+  currentBroadcastNoticeData = data;
+
+  const overlay = document.getElementById('inAppNoticeModalOverlay');
+  if (!overlay) return;
+
+  const iconEl = document.getElementById('inAppNoticeIcon');
+  const titleEl = document.getElementById('inAppNoticeTitle');
+  const msgEl = document.getElementById('inAppNoticeMessage');
+  const btnTextEl = document.getElementById('inAppNoticeBtnText');
+
+  if (iconEl) iconEl.innerText = data.icon || '🚀';
+  if (titleEl) titleEl.innerText = data.title || 'Mind Focus Books Update Ready!';
+  if (msgEl) msgEl.innerText = data.message || 'A new update is ready to install.';
+  if (btnTextEl) btnTextEl.innerText = data.btnText || '⚡ Update Now';
+
+  overlay.style.display = 'flex';
+}
+
+function dismissInAppNotice() {
+  const overlay = document.getElementById('inAppNoticeModalOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function handleHoloOverlayClick(e) {
+  if (e.target.id === 'inAppNoticeModalOverlay') {
+    dismissInAppNotice();
+  }
+}
+
+function onHoloNoticeActionClick() {
+  dismissInAppNotice();
+  openUpdateCheckerModal();
+}
+
+function openUpdateCheckerModal() {
+  const overlay = document.getElementById('updateCheckerModalOverlay');
+  if (overlay) overlay.style.display = 'flex';
+}
+
+function closeUpdateCheckerModal() {
+  const overlay = document.getElementById('updateCheckerModalOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
+function handleUpdateOverlayClick(e) {
+  if (e.target.id === 'updateCheckerModalOverlay') {
+    closeUpdateCheckerModal();
+  }
+}
+
+function triggerInAppUpdate() {
+  const downloadUrl = (currentBroadcastNoticeData && currentBroadcastNoticeData.apkUrl) ||
+    'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.2/MindFocusBooks-Native.apk';
+
+  const progressWrap = document.getElementById('updateModalProgress');
+  const progressFill = document.getElementById('updateProgressFill');
+  const progressPct = document.getElementById('updateProgressPct');
+  const progressText = document.getElementById('updateProgressText');
+  const actionBtn = document.getElementById('updateModalActionBtn');
+
+  if (progressWrap) progressWrap.style.display = 'block';
+  if (actionBtn) {
+    actionBtn.disabled = true;
+    actionBtn.innerText = '⏳ Downloading Signed APK...';
+  }
+
+  let pct = 0;
+  const interval = setInterval(() => {
+    pct += 15;
+    if (pct > 90) pct = 90;
+    if (progressFill) progressFill.style.width = pct + '%';
+    if (progressPct) progressPct.innerText = pct + '%';
+  }, 200);
+
+  // If running in Native Standalone Android APK with bridge:
+  if (typeof Android !== 'undefined' && typeof Android.downloadAndInstallApk === 'function') {
+    Android.downloadAndInstallApk(downloadUrl);
+    setTimeout(() => {
+      clearInterval(interval);
+      if (progressFill) progressFill.style.width = '100%';
+      if (progressPct) progressPct.innerText = '100%';
+      if (progressText) progressText.innerText = 'Package Ready! Opening Installer...';
+      if (actionBtn) actionBtn.innerText = '⚡ Package Installer Launched';
+    }, 1500);
+  } else {
+    // Browser fallback
+    setTimeout(() => {
+      clearInterval(interval);
+      if (progressFill) progressFill.style.width = '100%';
+      if (progressPct) progressPct.innerText = '100%';
+      window.location.href = downloadUrl;
+      if (actionBtn) actionBtn.innerText = '⚡ Download Started';
+    }, 1200);
+  }
+}
+
+// Background checker for live broadcast notice
+async function checkRemoteBroadcastNotice() {
+  try {
+    const cb = Date.now();
+    const res = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?t=' + cb, { cache: 'no-store' });
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.active) {
+        showInAppNoticePopup(data);
+      }
+    }
+  } catch (e) {
+    if (typeof window.__REMOTE_BROADCAST_NOTICE__ !== 'undefined' && window.__REMOTE_BROADCAST_NOTICE__.active) {
+      showInAppNoticePopup(window.__REMOTE_BROADCAST_NOTICE__);
+    }
+  }
 }
 
 // ================= UTILITIES & HELPERS =================
