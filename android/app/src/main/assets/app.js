@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.3)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.4)
 // ==========================================================================
 
-const APP_VERSION = '3.18.3';
-const CURRENT_APP_VERSION = 'v3.18.3';
+const APP_VERSION = '3.18.4';
+const CURRENT_APP_VERSION = 'v3.18.4';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -77,9 +77,9 @@ function initApp() {
   // Initial Renders
   renderApp();
   
-  // Check for in-app updates in background once on startup
-  setTimeout(checkForBackgroundUpdates, 1200);
-  setTimeout(checkRemoteBroadcastNotice, 1800);
+  // Check for in-app updates in background immediately on startup
+  setTimeout(checkForBackgroundUpdates, 300);
+  setTimeout(checkRemoteBroadcastNotice, 600);
 }
 
 // Ensure at least one book is currently reading
@@ -2308,12 +2308,15 @@ async function checkForBackgroundUpdates() {
       if (homeSub) homeSub.innerText = activeRel.name || `${activeRel.version} is ready to download and install`;
     }
     
-    // Auto-popup ONLY ONCE per session if not dismissed
+    // Auto-popup Vision-OS modal if not dismissed and Card 1 is not active
     const dismissed = sessionStorage.getItem('mf_update_dismissed_' + activeRel.version);
     if (!dismissed) {
       setTimeout(() => {
-        openUpdateCheckerModal();
-      }, 800);
+        const noticeOverlay = document.getElementById('inAppNoticeModalOverlay');
+        if (!noticeOverlay || noticeOverlay.style.display !== 'flex') {
+          openUpdateCheckerModal();
+        }
+      }, 500);
     }
   } else {
     // Current version is up to date -> cards completely hidden and quiet
@@ -2441,12 +2444,31 @@ function openUpdateCheckerModal() {
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
   const rel = cfg?.activeRelease || null;
   const targetVer = rel?.version || CURRENT_APP_VERSION;
+  const isNew = targetVer !== CURRENT_APP_VERSION;
 
+  const titleEl = document.getElementById('updateModalTitle');
   const badge = document.getElementById('updateTargetVersionBadge');
-  if (badge) badge.innerText = `${targetVer} Ready`;
-
   const desc = document.getElementById('updateModalDesc');
-  if (desc && rel?.name) desc.innerText = rel.name;
+  const btn = document.getElementById('updateModalActionBtn');
+
+  if (isNew) {
+    if (titleEl) titleEl.innerText = 'New Version Update Ready:';
+    if (badge) badge.innerText = `${targetVer} Ready`;
+    if (desc) desc.innerText = rel?.name || `Mind Focus Books ${targetVer} is ready to install!`;
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = `⚡ Download & Install ${targetVer} Now`;
+    }
+  } else {
+    // Current version is up to date — allow 1-click Reinstall anytime
+    if (titleEl) titleEl.innerText = 'Mind Focus Books is Up to Date';
+    if (badge) badge.innerText = `${CURRENT_APP_VERSION} (Installed)`;
+    if (desc) desc.innerText = 'You have the latest version installed • Tap below to re-download or reinstall official APK anytime';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = `⚡ Re-download & Install APK (${CURRENT_APP_VERSION})`;
+    }
+  }
 
   const listEl = document.querySelector('.update-glass-checklist');
   if (listEl && rel?.features && Array.isArray(rel.features) && rel.features.length > 0) {
@@ -2456,12 +2478,6 @@ function openUpdateCheckerModal() {
         <span>${escapeHtml(f)}</span>
       </div>
     `).join('');
-  }
-
-  const btn = document.getElementById('updateModalActionBtn');
-  if (btn) {
-    btn.disabled = false;
-    btn.innerText = `⚡ Download & Install ${targetVer} Now`;
   }
 
   const progressWrap = document.getElementById('updateModalProgress');

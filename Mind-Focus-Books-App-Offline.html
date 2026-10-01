@@ -4631,7 +4631,7 @@ if (typeof window !== 'undefined') {
           <div class="pmi-icon blue">ℹ️</div>
           <div class="pmi-text">
             <div class="pmi-title">About App</div>
-            <div class="pmi-sub" id="aboutAppSubText">Version 3.18.3, check updates, download APK</div>
+            <div class="pmi-sub" id="aboutAppSubText">Version 3.18.4, check updates, download APK</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
@@ -5294,7 +5294,7 @@ if (typeof window !== 'undefined') {
         </div>
         <div class="holo-message-watermark">MINDFOCUS • CARD 1 TRANSMISSION</div>
         <div class="holo-message-text" id="inAppNoticeMessage">
-          New v3.18.3 update is available with Full App Kindle Sepia Theme, Classic Wood Theme, and Compact KPI Bar.
+          New v3.18.4 update is ready with 1-Click Reinstall &amp; Vision-OS Update Center. Tap Update to install now!
         </div>
       </div>
 
@@ -5322,29 +5322,29 @@ if (typeof window !== 'undefined') {
       </div>
 
       <div class="update-glass-title" id="updateModalTitle">New Version Update Ready:</div>
-      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.18.3 Ready</div>
-      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.18.3 • Full App Kindle Sepia Theme + Classic Wood + Compact KPI Bar</div>
+      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v3.18.4 Ready</div>
+      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v3.18.4 • 1-Click Reinstall &amp; Vision-OS Update Engine</div>
 
       <div class="update-glass-checklist">
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>⚡ 1-Click Reinstall &amp; Direct Package Installer: Re-download or update directly inside app</span>
+        </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
           <span>📜 Kindle Sepia Paper Mode: 100% full app eye-comfort vintage cream theme</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>🌲 Classic Wooden Bookshelf: Authentic rich mahogany & walnut textures</span>
+          <span>🌲 Classic Wooden Bookshelf: Authentic rich mahogany &amp; walnut textures</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>📊 Compact KPI Bar: Finished, Reading, Wishlist & Streak always live</span>
+          <span>📊 Compact KPI Bar: Finished, Reading, Wishlist &amp; Streak always live</span>
         </div>
         <div class="update-glass-item">
           <span class="update-glass-check">✓</span>
-          <span>💰 Reading Budget & Expenses: Track total money spent on books in Progress view</span>
-        </div>
-        <div class="update-glass-item">
-          <span class="update-glass-check">✓</span>
-          <span>⚡ Card 1 Quantum Beacon: Instant cloud update alerts & seamless APK installation</span>
+          <span>💰 Reading Budget &amp; Expenses: Track total money spent on books in Progress view</span>
         </div>
       </div>
 
@@ -5360,7 +5360,7 @@ if (typeof window !== 'undefined') {
       </div>
 
       <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerInAppUpdate()">
-        ⚡ Download &amp; Install v3.18.3 Now
+        ⚡ Download &amp; Install v3.18.4 Now
       </button>
     </div>
   </div>
@@ -10718,11 +10718,11 @@ const DEFAULT_BOOKS = [
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.3)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.4)
 // ==========================================================================
 
-const APP_VERSION = '3.18.3';
-const CURRENT_APP_VERSION = 'v3.18.3';
+const APP_VERSION = '3.18.4';
+const CURRENT_APP_VERSION = 'v3.18.4';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -10796,9 +10796,9 @@ function initApp() {
   // Initial Renders
   renderApp();
   
-  // Check for in-app updates in background once on startup
-  setTimeout(checkForBackgroundUpdates, 1200);
-  setTimeout(checkRemoteBroadcastNotice, 1800);
+  // Check for in-app updates in background immediately on startup
+  setTimeout(checkForBackgroundUpdates, 300);
+  setTimeout(checkRemoteBroadcastNotice, 600);
 }
 
 // Ensure at least one book is currently reading
@@ -13027,12 +13027,15 @@ async function checkForBackgroundUpdates() {
       if (homeSub) homeSub.innerText = activeRel.name || `${activeRel.version} is ready to download and install`;
     }
     
-    // Auto-popup ONLY ONCE per session if not dismissed
+    // Auto-popup Vision-OS modal if not dismissed and Card 1 is not active
     const dismissed = sessionStorage.getItem('mf_update_dismissed_' + activeRel.version);
     if (!dismissed) {
       setTimeout(() => {
-        openUpdateCheckerModal();
-      }, 800);
+        const noticeOverlay = document.getElementById('inAppNoticeModalOverlay');
+        if (!noticeOverlay || noticeOverlay.style.display !== 'flex') {
+          openUpdateCheckerModal();
+        }
+      }, 500);
     }
   } else {
     // Current version is up to date -> cards completely hidden and quiet
@@ -13160,12 +13163,31 @@ function openUpdateCheckerModal() {
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
   const rel = cfg?.activeRelease || null;
   const targetVer = rel?.version || CURRENT_APP_VERSION;
+  const isNew = targetVer !== CURRENT_APP_VERSION;
 
+  const titleEl = document.getElementById('updateModalTitle');
   const badge = document.getElementById('updateTargetVersionBadge');
-  if (badge) badge.innerText = `${targetVer} Ready`;
-
   const desc = document.getElementById('updateModalDesc');
-  if (desc && rel?.name) desc.innerText = rel.name;
+  const btn = document.getElementById('updateModalActionBtn');
+
+  if (isNew) {
+    if (titleEl) titleEl.innerText = 'New Version Update Ready:';
+    if (badge) badge.innerText = `${targetVer} Ready`;
+    if (desc) desc.innerText = rel?.name || `Mind Focus Books ${targetVer} is ready to install!`;
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = `⚡ Download & Install ${targetVer} Now`;
+    }
+  } else {
+    // Current version is up to date — allow 1-click Reinstall anytime
+    if (titleEl) titleEl.innerText = 'Mind Focus Books is Up to Date';
+    if (badge) badge.innerText = `${CURRENT_APP_VERSION} (Installed)`;
+    if (desc) desc.innerText = 'You have the latest version installed • Tap below to re-download or reinstall official APK anytime';
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = `⚡ Re-download & Install APK (${CURRENT_APP_VERSION})`;
+    }
+  }
 
   const listEl = document.querySelector('.update-glass-checklist');
   if (listEl && rel?.features && Array.isArray(rel.features) && rel.features.length > 0) {
@@ -13175,12 +13197,6 @@ function openUpdateCheckerModal() {
         <span>${escapeHtml(f)}</span>
       </div>
     `).join('');
-  }
-
-  const btn = document.getElementById('updateModalActionBtn');
-  if (btn) {
-    btn.disabled = false;
-    btn.innerText = `⚡ Download & Install ${targetVer} Now`;
   }
 
   const progressWrap = document.getElementById('updateModalProgress');
