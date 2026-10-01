@@ -1,12 +1,13 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v3.7.1",
+  "id": "notice-v3.18.2",
   "type": "card1",
   "card": "card1",
-  "active": false,
-  "icon": "✨",
-  "title": "Mind Focus Books v3.7.1",
-  "message": "Welcome to Mind Focus Books Tracker v3.7.1 — Streamlined Clean Edition!",
-  "btnText": "OK",
-  "action": "dismiss",
-  "timestamp": "2026-09-14T03:55:00.000Z"
+  "active": true,
+  "icon": "🚀",
+  "title": "Mind Focus Books v3.18.2 Update Ready!",
+  "message": "New v3.18.2 update is available with Reading Budget & Expense Tracking, Sepia Reader Modes, and performance improvements.",
+  "btnText": "⚡ Update Now",
+  "action": "update",
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.2/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-01T04:15:00.000Z"
 };
