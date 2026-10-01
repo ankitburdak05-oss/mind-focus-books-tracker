@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private ValueCallback<Uri[]> uploadMessage;
     private final static int FILE_CHOOSER_RESULT_CODE = 1001;
     private File pendingInstallApkFile = null;
+    private WebAppInterface webAppInterface;
 
     @Override
     @SuppressLint("SetJavaScriptEnabled")
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         settings.setDisplayZoomControls(false);
 
         // Add native JavaScript bridge for Downloads and Cloud Sharing
-        WebAppInterface webAppInterface = new WebAppInterface();
+        webAppInterface = new WebAppInterface();
         webView.addJavascriptInterface(webAppInterface, "Android");
 
         // Handle file and APK downloads from WebView
@@ -336,47 +337,48 @@ public class MainActivity extends AppCompatActivity {
             }).start();
         }
 
-        private void launchPackageInstaller(File apkFile, String fallbackUrl) {
-            try {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    if (!getPackageManager().canRequestPackageInstalls()) {
-                        pendingInstallApkFile = apkFile;
-                        Toast.makeText(MainActivity.this, "⚠️ Kripya 'Allow from this source' enable karein taki update install ho sake", Toast.LENGTH_LONG).show();
-                        Intent permissionIntent = new Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
-                        permissionIntent.setData(Uri.parse("package:" + getPackageName()));
-                        permissionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(permissionIntent);
-                        return;
-                    }
-                }
+    }
 
-                Uri apkUri = androidx.core.content.FileProvider.getUriForFile(
-                        MainActivity.this,
-                        getPackageName() + ".fileprovider",
-                        apkFile
-                );
-                Intent installIntent = new Intent(Intent.ACTION_VIEW);
-                installIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
-                installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                installIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(installIntent, PackageManager.MATCH_DEFAULT_ONLY);
-                for (ResolveInfo ri : resInfoList) {
-                    grantUriPermission(ri.activityInfo.packageName, apkUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+    public void launchPackageInstaller(File apkFile, String fallbackUrl) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                if (!getPackageManager().canRequestPackageInstalls()) {
+                    pendingInstallApkFile = apkFile;
+                    Toast.makeText(MainActivity.this, "⚠️ Kripya 'Allow from this source' enable karein taki update install ho sake", Toast.LENGTH_LONG).show();
+                    Intent permissionIntent = new Intent(android.provider.Settings.ACTION_MANAGE_UNKNOWN_APP_SOURCES);
+                    permissionIntent.setData(Uri.parse("package:" + getPackageName()));
+                    permissionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(permissionIntent);
+                    return;
                 }
+            }
 
-                startActivity(installIntent);
-                Toast.makeText(MainActivity.this, "⚡ Launching Package Installer...", Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Toast.makeText(MainActivity.this, "Installation error: " + e.getMessage() + ". Opening in browser...", Toast.LENGTH_LONG).show();
-                if (fallbackUrl != null && !fallbackUrl.isEmpty()) {
-                    try {
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fallbackUrl));
-                        browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                        startActivity(browserIntent);
-                    } catch (Exception ignored) {}
-                }
+            Uri apkUri = androidx.core.content.FileProvider.getUriForFile(
+                    MainActivity.this,
+                    getPackageName() + ".fileprovider",
+                    apkFile
+            );
+            Intent installIntent = new Intent(Intent.ACTION_VIEW);
+            installIntent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+            installIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            installIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            installIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+            List<ResolveInfo> resInfoList = getPackageManager().queryIntentActivities(installIntent, PackageManager.MATCH_DEFAULT_ONLY);
+            for (ResolveInfo ri : resInfoList) {
+                grantUriPermission(ri.activityInfo.packageName, apkUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            }
+
+            startActivity(installIntent);
+            Toast.makeText(MainActivity.this, "⚡ Launching Package Installer...", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            Toast.makeText(MainActivity.this, "Installation error: " + e.getMessage() + ". Opening in browser...", Toast.LENGTH_LONG).show();
+            if (fallbackUrl != null && !fallbackUrl.isEmpty()) {
+                try {
+                    Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(fallbackUrl));
+                    browserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(browserIntent);
+                } catch (Exception ignored) {}
             }
         }
     }
@@ -391,12 +393,6 @@ public class MainActivity extends AppCompatActivity {
                 pendingInstallApkFile = null;
                 launchPackageInstaller(apk, null);
             }
-        }
-    }
-
-    private void launchPackageInstaller(File apkFile, String fallbackUrl) {
-        if (webAppInterface != null) {
-            webAppInterface.launchPackageInstaller(apkFile, fallbackUrl);
         }
     }
 
