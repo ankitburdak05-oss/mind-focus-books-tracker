@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity {
 
                     File updatesDir = new File(getCacheDir(), "updates");
                     if (!updatesDir.exists()) updatesDir.mkdirs();
-                    File apkFile = new File(updatesDir, "MindFocusBooks-v3.7.1-Update.apk");
+                    File apkFile = new File(updatesDir, "MindFocusBooks-Update.apk");
                     if (apkFile.exists()) apkFile.delete();
 
                     try (java.io.InputStream in = connection.getInputStream();

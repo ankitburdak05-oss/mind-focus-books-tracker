@@ -75,11 +75,43 @@
   --accent-gold-glow: rgba(180, 83, 9, 0.2);
 }
 
+[data-theme="sepia"],
+html[data-theme="sepia"],
 [data-theme="sepia"] body,
+[data-theme="sepia"] .app-layout,
+[data-theme="sepia"] .app-container,
 [data-theme="sepia"] .app-view,
-[data-theme="sepia"] .app-header {
+[data-theme="sepia"] .app-header,
+[data-theme="sepia"] .sub-view {
   background-color: #fbf5e6 !important;
   color: #2b1f14 !important;
+}
+
+[data-theme="sepia"] h1,
+[data-theme="sepia"] h2,
+[data-theme="sepia"] h3,
+[data-theme="sepia"] h4,
+[data-theme="sepia"] .view-title,
+[data-theme="sepia"] .section-title,
+[data-theme="sepia"] .book-title,
+[data-theme="sepia"] .card-title,
+[data-theme="sepia"] .stat-val,
+[data-theme="sepia"] .compact-kpi-val,
+[data-theme="sepia"] .profile-name,
+[data-theme="sepia"] .header-title {
+  color: #2b1f14 !important;
+}
+
+[data-theme="sepia"] p,
+[data-theme="sepia"] .view-sub-title,
+[data-theme="sepia"] .book-author,
+[data-theme="sepia"] .card-desc,
+[data-theme="sepia"] .stat-label,
+[data-theme="sepia"] .compact-kpi-lbl,
+[data-theme="sepia"] .profile-email,
+[data-theme="sepia"] .section-sub,
+[data-theme="sepia"] .backup-sub {
+  color: #5c4733 !important;
 }
 
 [data-theme="sepia"] .featured-hero-card,
@@ -95,15 +127,24 @@
 [data-theme="sepia"] .profile-menu-group,
 [data-theme="sepia"] .profile-menu-item,
 [data-theme="sepia"] .modal-content,
+[data-theme="sepia"] .modal-card,
+[data-theme="sepia"] .backup-card,
+[data-theme="sepia"] .export-card,
+[data-theme="sepia"] .privacy-card,
 [data-theme="sepia"] .book-card-vertical,
+[data-theme="sepia"] .book-card-horizontal,
 [data-theme="sepia"] .book-detail-hero-card,
 [data-theme="sepia"] .detail-card-panel,
 [data-theme="sepia"] .bottom-nav-dock,
 [data-theme="sepia"] .search-bar-wrap,
+[data-theme="sepia"] .search-input,
 [data-theme="sepia"] .time-filter-dropdown select,
 [data-theme="sepia"] .sort-select-wrap select,
 [data-theme="sepia"] .filter-category-wrap select,
-[data-theme="sepia"] .filter-chip {
+[data-theme="sepia"] .filter-chip,
+[data-theme="sepia"] input,
+[data-theme="sepia"] select,
+[data-theme="sepia"] textarea {
   background: #fffdf7 !important;
   border-color: #ddcfb0 !important;
   color: #2b1f14 !important;

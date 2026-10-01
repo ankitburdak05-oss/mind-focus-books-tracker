@@ -77,9 +77,18 @@ function initApp() {
   // Initial Renders
   renderApp();
   
-  // Check for in-app updates in background
-  setTimeout(checkForBackgroundUpdates, 1500);
-  setTimeout(checkRemoteBroadcastNotice, 2000);
+  // Check for in-app updates in background immediately and periodically
+  setTimeout(checkForBackgroundUpdates, 500);
+  setTimeout(checkRemoteBroadcastNotice, 1000);
+  setInterval(checkForBackgroundUpdates, 15000);
+  
+  // Re-check when user switches back to app
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') {
+      checkForBackgroundUpdates();
+      checkRemoteBroadcastNotice();
+    }
+  });
 }
 
 // Ensure at least one book is currently reading
@@ -2254,89 +2263,15 @@ function exportDataPDF() {
 
 // ================= IN-APP UPDATE CHECKER & DOWNLOADER =================
 function openUpdateModal() {
-  const modal = document.getElementById('inAppUpdateModalOverlay');
-  if (!modal) return;
-  
-  const curBadge = document.getElementById('currentVerBadge');
-  if (curBadge) curBadge.innerText = CURRENT_APP_VERSION;
-  
-  const statusText = document.getElementById('updateStatusText');
-  const changelogHeader = document.getElementById('changelogHeader');
-  const changelogList = document.getElementById('changelogFeatures');
-  const downloadBtn = document.getElementById('downloadApkBtn');
-  const notice = document.getElementById('updateDownloadNotice');
-  if (notice) notice.style.display = 'none';
-  
-  const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-  if (cfg && cfg.activeRelease) {
-    const rel = cfg.activeRelease;
-    const isNew = rel.version && (rel.version !== CURRENT_APP_VERSION);
-    
-    if (statusText) {
-      statusText.innerText = isNew 
-        ? `🔥 New Update ${rel.version} Available!` 
-        : `✅ You have the latest version (${CURRENT_APP_VERSION})`;
-    }
-    if (changelogHeader) {
-      changelogHeader.innerText = `What's New in ${rel.version || CURRENT_APP_VERSION}:`;
-    }
-    if (changelogList && rel.features && Array.isArray(rel.features)) {
-      changelogList.innerHTML = rel.features.map(f => `<li>${escapeHtml(f)}</li>`).join('');
-    }
-    if (downloadBtn) {
-      downloadBtn.innerText = isNew ? `⚡ Download & Install ${rel.version} Now` : `📥 Re-download APK (${CURRENT_APP_VERSION})`;
-    }
-  }
-  
-  modal.classList.add('active');
+  openUpdateCheckerModal();
 }
 
 function closeUpdateModal() {
-  document.getElementById('inAppUpdateModalOverlay')?.classList.remove('active');
-}
-
-function handleUpdateOverlayClick(event) {
-  if (event.target.id === 'inAppUpdateModalOverlay') {
-    closeUpdateModal();
-  }
+  closeUpdateCheckerModal();
 }
 
 function downloadAppUpdate() {
-  const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-  const apkUrl = (cfg && cfg.activeRelease && cfg.activeRelease.apkDownloadUrl) 
-    ? cfg.activeRelease.apkDownloadUrl 
-    : "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk";
-  
-  showToast("Downloading update package... ⏳");
-  
-  const notice = document.getElementById('updateDownloadNotice');
-  if (notice) {
-    notice.style.display = 'block';
-    notice.innerText = "⏳ Downloading APK package... Launching installer!";
-  }
-  
-  // 1. Android Native App Bridge
-  if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
-    try {
-      window.Android.downloadAndInstallApk(apkUrl);
-      return;
-    } catch (e) {
-      console.warn("Android bridge call failed:", e);
-    }
-  }
-  
-  // 2. Direct browser fallback
-  try {
-    const a = document.createElement('a');
-    a.href = apkUrl;
-    a.setAttribute('download', 'MindFocusBooks-Native.apk');
-    a.target = '_blank';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  } catch (e) {
-    window.location.href = apkUrl;
-  }
+  triggerInAppUpdate();
 }
 
 async function checkForBackgroundUpdates() {
@@ -2344,9 +2279,6 @@ async function checkForBackgroundUpdates() {
   const homeTitle = document.getElementById('homeUpdateTitle');
   const homeSub = document.getElementById('homeUpdateSub');
   
-  // Default: Keep hidden unless an update is confirmed
-  if (homeCard) homeCard.style.display = 'none';
-
   let activeRel = null;
 
   // 1. Live Remote Check via GitHub Raw Config
@@ -2373,24 +2305,20 @@ async function checkForBackgroundUpdates() {
 
   const isNew = activeRel.version !== CURRENT_APP_VERSION;
 
-  if (homeCard) {
-    if (isNew) {
-      // ONLY SHOW WHEN A NEW UPDATE IS ACTUALLY AVAILABLE
+  if (isNew) {
+    if (homeCard) {
       homeCard.style.display = 'flex';
       if (homeTitle) homeTitle.innerText = `🔥 Update ${activeRel.version} Available!`;
       if (homeSub) homeSub.innerText = activeRel.name || `${activeRel.version} is ready to download and install`;
-      
-      const dismissed = sessionStorage.getItem('mf_update_dismissed_' + activeRel.version);
-      if (!dismissed) {
-        setTimeout(() => {
-          openUpdateModal();
-          sessionStorage.setItem('mf_update_dismissed_' + activeRel.version, '1');
-        }, 1200);
-      }
-    } else {
-      // Current version is up to date -> card is completely hidden
-      homeCard.style.display = 'none';
     }
+    
+    // POP UP VISION-OS FROSTED GLASS UPDATE MODAL WITHIN 1 SECOND!
+    setTimeout(() => {
+      openUpdateCheckerModal();
+    }, 600);
+  } else {
+    // Current version is up to date -> card is completely hidden
+    if (homeCard) homeCard.style.display = 'none';
   }
 }
 
@@ -2501,7 +2429,38 @@ function onHoloNoticeActionClick() {
 
 function openUpdateCheckerModal() {
   const overlay = document.getElementById('updateCheckerModalOverlay');
-  if (overlay) overlay.style.display = 'flex';
+  if (!overlay) return;
+
+  const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
+  const rel = cfg?.activeRelease || null;
+  const targetVer = rel?.version || CURRENT_APP_VERSION;
+
+  const badge = document.getElementById('updateTargetVersionBadge');
+  if (badge) badge.innerText = `${targetVer} Ready`;
+
+  const desc = document.getElementById('updateModalDesc');
+  if (desc && rel?.name) desc.innerText = rel.name;
+
+  const listEl = document.querySelector('.update-glass-checklist');
+  if (listEl && rel?.features && Array.isArray(rel.features) && rel.features.length > 0) {
+    listEl.innerHTML = rel.features.map(f => `
+      <div class="update-glass-item">
+        <span class="update-glass-check">✓</span>
+        <span>${escapeHtml(f)}</span>
+      </div>
+    `).join('');
+  }
+
+  const btn = document.getElementById('updateModalActionBtn');
+  if (btn) {
+    btn.disabled = false;
+    btn.innerText = `⚡ Download & Install ${targetVer} Now`;
+  }
+
+  const progressWrap = document.getElementById('updateModalProgress');
+  if (progressWrap) progressWrap.style.display = 'none';
+
+  overlay.style.display = 'flex';
 }
 
 function closeUpdateCheckerModal() {
@@ -2516,8 +2475,10 @@ function handleUpdateOverlayClick(e) {
 }
 
 function triggerInAppUpdate() {
-  const downloadUrl = (currentBroadcastNoticeData && currentBroadcastNoticeData.apkUrl) ||
-    'https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.2/MindFocusBooks-Native.apk';
+  const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
+  const targetVer = cfg?.activeRelease?.version || CURRENT_APP_VERSION;
+  const downloadUrl = (cfg?.activeRelease?.apkDownloadUrl) ||
+    `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Native.apk`;
 
   const progressWrap = document.getElementById('updateModalProgress');
   const progressFill = document.getElementById('updateProgressFill');
@@ -2540,8 +2501,8 @@ function triggerInAppUpdate() {
   }, 200);
 
   // If running in Native Standalone Android APK with bridge:
-  if (typeof Android !== 'undefined' && typeof Android.downloadAndInstallApk === 'function') {
-    Android.downloadAndInstallApk(downloadUrl);
+  if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
+    window.Android.downloadAndInstallApk(downloadUrl);
     setTimeout(() => {
       clearInterval(interval);
       if (progressFill) progressFill.style.width = '100%';
