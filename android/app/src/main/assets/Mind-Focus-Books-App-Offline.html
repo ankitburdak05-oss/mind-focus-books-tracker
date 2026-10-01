@@ -4631,7 +4631,7 @@ if (typeof window !== 'undefined') {
           <div class="pmi-icon blue">ℹ️</div>
           <div class="pmi-text">
             <div class="pmi-title">About App</div>
-            <div class="pmi-sub" id="aboutAppSubText">Version 3.18.2, check updates, download APK</div>
+            <div class="pmi-sub" id="aboutAppSubText">Version 3.18.3, check updates, download APK</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
@@ -5283,7 +5283,7 @@ if (typeof window !== 'undefined') {
         </div>
       </div>
 
-      <h3 class="holo-notice-title" id="inAppNoticeTitle">Mind Focus Books v3.18.2 Ready!</h3>
+      <h3 class="holo-notice-title" id="inAppNoticeTitle">Mind Focus Books v3.18.3 Ready!</h3>
 
       <div class="holo-message-capsule">
         <div class="holo-corner-accents">
@@ -5294,7 +5294,7 @@ if (typeof window !== 'undefined') {
         </div>
         <div class="holo-message-watermark">MINDFOCUS • CARD 1 TRANSMISSION</div>
         <div class="holo-message-text" id="inAppNoticeMessage">
-          New v3.18.2 update is available with Reading Budget & Expense Tracking, Full Kindle Sepia Theme, and performance improvements.
+          New v3.18.3 update is available with Full App Kindle Sepia Theme, Classic Wood Theme, and Compact KPI Bar.
         </div>
       </div>
 
@@ -11634,6 +11634,11 @@ function renderProfileView() {
   const pinStatusText = document.getElementById('pinStatusSubText');
   if (pinStatusText) {
     pinStatusText.innerText = state.pin ? 'PIN Lock Active • Protected' : 'PIN Lock disabled • Set PIN';
+  }
+
+  const aboutSub = document.getElementById('aboutAppSubText');
+  if (aboutSub) {
+    aboutSub.innerText = `Version ${APP_VERSION} (Latest) • Tap to check updates`;
   }
   
   updateLastBackupDisplay();

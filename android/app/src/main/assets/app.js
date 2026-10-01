@@ -916,6 +916,11 @@ function renderProfileView() {
   if (pinStatusText) {
     pinStatusText.innerText = state.pin ? 'PIN Lock Active • Protected' : 'PIN Lock disabled • Set PIN';
   }
+
+  const aboutSub = document.getElementById('aboutAppSubText');
+  if (aboutSub) {
+    aboutSub.innerText = `Version ${APP_VERSION} (Latest) • Tap to check updates`;
+  }
   
   updateLastBackupDisplay();
   updateProfileReaderToneDisplay();
