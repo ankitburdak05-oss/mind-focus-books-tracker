@@ -1,36 +1,36 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-10-01T00:45:00.000Z",
+  "updatedAt": "2026-10-01T04:00:00.000Z",
   "activeRelease": {
-    "version": "v3.18.1",
-    "name": "Mind Focus Books v3.18.1 - Guaranteed Sepia Paper Mode & Permanent Update Hub",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.1/MindFocusBooks-Native.apk",
+    "version": "v3.18.2",
+    "name": "Mind Focus Books v3.18.2 - Reading Budget & Expense Tracking",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.2/MindFocusBooks-Native.apk",
     "features": [
-      "📜 Sepia Paper Mode: Guaranteed warm vintage cream paper (#fbf5e6) with rich dark brown ink, 100% active with 1-tap",
-      "🌙 Dark Night Mode: Deep anti-glare dark paper (#121824) with soft silver typography for dark room reading",
-      "☀️ Light Paper Mode: Crisp printed book white paper (#ffffff) with sharp slate typography",
-      "📖 Dual Spread Mode: Open physical 2-page book spread with 3D spine crease, shadow fold & silk red ribbon bookmark",
-      "📄 Single Page Mode: Mobile-optimized focused single page reader for quick and distraction-free reading",
-      "🚀 Permanent Home Update Hub: Update & download card is always visible and ready on Home screen",
-      "🏷️ Official v3.18.1 Release"
+      "💰 Reading Budget & Investment Tracker: Track total money spent on books in Progress view",
+      "📊 Comprehensive Cost Breakdown: Read books cost, currently reading, wishlist value & average price",
+      "🎯 Custom Reading Budget Target: Set your annual budget goal with real-time progress bar",
+      "⚡ Auto-fill Market MRPs: One-tap option to assign realistic Indian paperback prices (₹199 - ₹499)",
+      "📜 Sepia Paper Mode: Guaranteed warm classic cream paper (#fbf5e6) with soft dark brown ink",
+      "🌙 Dark & Light Paper Modes: High contrast night mode & fresh crisp white paper",
+      "🏷️ Official v3.18.2 Release"
     ],
-    "stagedAt": "2026-10-01T00:45:00.000Z",
+    "stagedAt": "2026-10-01T04:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.18.1",
-    "name": "Mind Focus Books v3.18.1 - Guaranteed Sepia Paper Mode & Permanent Update Hub",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.1/MindFocusBooks-Native.apk",
+    "version": "v3.18.2",
+    "name": "Mind Focus Books v3.18.2 - Reading Budget & Expense Tracking",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.18.2/MindFocusBooks-Native.apk",
     "features": [
-      "📜 Sepia Paper Mode: Guaranteed warm vintage cream paper (#fbf5e6) with rich dark brown ink, 100% active with 1-tap",
-      "🌙 Dark Night Mode: Deep anti-glare dark paper (#121824) with soft silver typography for dark room reading",
-      "☀️ Light Paper Mode: Crisp printed book white paper (#ffffff) with sharp slate typography",
-      "📖 Dual Spread Mode: Open physical 2-page book spread with 3D spine crease, shadow fold & silk red ribbon bookmark",
-      "📄 Single Page Mode: Mobile-optimized focused single page reader for quick and distraction-free reading",
-      "🚀 Permanent Home Update Hub: Update & download card is always visible and ready on Home screen",
-      "🏷️ Official v3.18.1 Release"
+      "💰 Reading Budget & Investment Tracker: Track total money spent on books in Progress view",
+      "📊 Comprehensive Cost Breakdown: Read books cost, currently reading, wishlist value & average price",
+      "🎯 Custom Reading Budget Target: Set your annual budget goal with real-time progress bar",
+      "⚡ Auto-fill Market MRPs: One-tap option to assign realistic Indian paperback prices (₹199 - ₹499)",
+      "📜 Sepia Paper Mode: Guaranteed warm classic cream paper (#fbf5e6) with soft dark brown ink",
+      "🌙 Dark & Light Paper Modes: High contrast night mode & fresh crisp white paper",
+      "🏷️ Official v3.18.2 Release"
     ],
-    "stagedAt": "2026-10-01T00:45:00.000Z",
+    "stagedAt": "2026-10-01T04:00:00.000Z",
     "isDeployed": true
   },
   "previousRelease": {

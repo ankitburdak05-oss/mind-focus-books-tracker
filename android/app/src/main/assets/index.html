@@ -384,7 +384,7 @@
         </div>
       </div>
 
-      <!-- 3 Key Metric Badges -->
+      <!-- 4 Key Metric Badges -->
       <div class="progress-stats-row">
         <div class="prog-metric-card blue">
           <div class="prog-metric-icon">📖</div>
@@ -400,6 +400,62 @@
           <div class="prog-metric-icon">📄</div>
           <div class="prog-metric-val" id="progPagesMonth">0</div>
           <div class="prog-metric-lbl">Pages Read</div>
+        </div>
+        <div class="prog-metric-card purple">
+          <div class="prog-metric-icon">💰</div>
+          <div class="prog-metric-val" id="progTotalPrice">₹0</div>
+          <div class="prog-metric-lbl">Total Spent</div>
+        </div>
+      </div>
+
+      <!-- Reading Budget & Investment Card -->
+      <div class="reading-budget-card">
+        <div class="rb-header">
+          <div class="rb-info">
+            <span class="rb-badge">💰 READING BUDGET & EXPENSES</span>
+            <h3 class="rb-title" id="rbTotalSpentDisplay">₹0 Total Spent</h3>
+            <span class="rb-sub" id="rbBudgetSubtitle">0 books with price recorded</span>
+          </div>
+          <div class="rb-actions">
+            <button type="button" class="rb-set-budget-btn" onclick="openSetBudgetPrompt()">Edit Budget Target</button>
+          </div>
+        </div>
+
+        <!-- Budget Target Progress Bar -->
+        <div class="rb-target-box" id="rbTargetBox">
+          <div class="rb-target-labels">
+            <span id="rbBudgetLabel">Annual Budget Target: ₹5,000</span>
+            <span id="rbBudgetPct">0% used</span>
+          </div>
+          <div class="rg-progress-track">
+            <div class="rb-progress-bar" id="rbProgressBar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Breakdown Grid -->
+        <div class="rb-breakdown-grid">
+          <div class="rb-stat-item">
+            <span class="rb-stat-label">✅ Read Books</span>
+            <span class="rb-stat-val" id="rbSpentCompleted">₹0</span>
+          </div>
+          <div class="rb-stat-item">
+            <span class="rb-stat-label">📖 Reading</span>
+            <span class="rb-stat-val" id="rbSpentReading">₹0</span>
+          </div>
+          <div class="rb-stat-item">
+            <span class="rb-stat-label">⏳ Wishlist Value</span>
+            <span class="rb-stat-val" id="rbSpentWishlist">₹0</span>
+          </div>
+          <div class="rb-stat-item">
+            <span class="rb-stat-label">📊 Avg / Book</span>
+            <span class="rb-stat-val" id="rbAvgPrice">₹0</span>
+          </div>
+        </div>
+
+        <!-- Quick Action / Helper Strip -->
+        <div class="rb-helper-strip">
+          <span class="rb-helper-text">💡 You can enter or update price for any book in Edit Book modal.</span>
+          <button type="button" class="rb-auto-fill-btn" onclick="promptPopulateRealisticPrices()">⚡ Auto-fill Market MRPs</button>
         </div>
       </div>
 
@@ -512,7 +568,7 @@
           <div class="pmi-icon blue">ℹ️</div>
           <div class="pmi-text">
             <div class="pmi-title">About App</div>
-            <div class="pmi-sub" id="aboutAppSubText">Version 3.18.0, check updates, download APK</div>
+            <div class="pmi-sub" id="aboutAppSubText">Version 3.18.2, check updates, download APK</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>

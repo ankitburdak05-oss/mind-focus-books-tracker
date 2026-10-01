@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.1)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.2)
 // ==========================================================================
 
-const APP_VERSION = '3.18.1';
-const CURRENT_APP_VERSION = 'v3.18.1';
+const APP_VERSION = '3.18.2';
+const CURRENT_APP_VERSION = 'v3.18.2';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -640,6 +640,7 @@ function renderExploreBooksGrid() {
 function renderProgressView() {
   renderReadingGoal();
   renderProgressCharts();
+  renderReadingBudget();
 }
 
 function renderReadingGoal() {
@@ -664,6 +665,122 @@ function openSetGoalPrompt() {
   }
 }
 
+function renderReadingBudget() {
+  const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
+  
+  // All books with a valid price > 0
+  const pricedBooks = state.books.filter(b => b.price && Number(b.price) > 0);
+  const totalSpent = pricedBooks.reduce((acc, b) => acc + Number(b.price), 0);
+  
+  // Completed books price
+  const doneBooks = state.books.filter(b => b.status === 'DONE' && b.price && Number(b.price) > 0);
+  const doneSpent = doneBooks.reduce((acc, b) => acc + Number(b.price), 0);
+  
+  // Currently reading books price
+  const readingBooks = state.books.filter(b => b.status === 'READING' && b.price && Number(b.price) > 0);
+  const readingSpent = readingBooks.reduce((acc, b) => acc + Number(b.price), 0);
+  
+  // Wishlist / Pending books price
+  const wishlistBooks = state.books.filter(b => b.status !== 'DONE' && b.status !== 'READING' && b.price && Number(b.price) > 0);
+  const wishlistSpent = wishlistBooks.reduce((acc, b) => acc + Number(b.price), 0);
+  
+  // Avg price per priced book
+  const avgPrice = pricedBooks.length ? Math.round(totalSpent / pricedBooks.length) : 0;
+  
+  // Format with Indian Rupee symbol & commas
+  const formatINR = (num) => '₹' + Math.round(Number(num) || 0).toLocaleString('en-IN');
+  
+  // Update metric card in stats row
+  const elProgPrice = document.getElementById('progTotalPrice');
+  if (elProgPrice) elProgPrice.innerText = formatINR(totalSpent);
+  
+  // Update budget card elements
+  const elTotalDisplay = document.getElementById('rbTotalSpentDisplay');
+  if (elTotalDisplay) elTotalDisplay.innerText = `${formatINR(totalSpent)} Total Spent`;
+  
+  const elSub = document.getElementById('rbBudgetSubtitle');
+  if (elSub) {
+    if (pricedBooks.length === 0) {
+      elSub.innerText = '0 books priced yet (Tap Auto-fill or edit book)';
+    } else {
+      elSub.innerText = `${pricedBooks.length} of ${state.books.length} books have prices recorded`;
+    }
+  }
+  
+  const elDone = document.getElementById('rbSpentCompleted');
+  if (elDone) elDone.innerText = formatINR(doneSpent);
+  
+  const elReading = document.getElementById('rbSpentReading');
+  if (elReading) elReading.innerText = formatINR(readingSpent);
+  
+  const elWishlist = document.getElementById('rbSpentWishlist');
+  if (elWishlist) elWishlist.innerText = formatINR(wishlistSpent);
+  
+  const elAvg = document.getElementById('rbAvgPrice');
+  if (elAvg) elAvg.innerText = formatINR(avgPrice);
+  
+  // Budget progress bar against annualBudget
+  const budgetLabel = document.getElementById('rbBudgetLabel');
+  if (budgetLabel) budgetLabel.innerText = `Annual Budget Target: ${formatINR(annualBudget)}`;
+  
+  const pct = annualBudget > 0 ? Math.min(100, Math.round((totalSpent / annualBudget) * 100)) : 0;
+  const elPct = document.getElementById('rbBudgetPct');
+  if (elPct) elPct.innerText = `${pct}% used`;
+  
+  const bar = document.getElementById('rbProgressBar');
+  if (bar) {
+    bar.style.width = `${pct}%`;
+    if (pct >= 100) {
+      bar.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
+    } else if (pct >= 80) {
+      bar.style.background = 'linear-gradient(90deg, #f59e0b, #d97706)';
+    } else {
+      bar.style.background = 'linear-gradient(90deg, #10b981, #059669)';
+    }
+  }
+}
+
+function openSetBudgetPrompt() {
+  const currentBudget = localStorage.getItem('mf_reading_budget_2026') || '5000';
+  const val = prompt('Set your 2026 Reading Budget (in ₹ Rupees):', currentBudget);
+  if (val && !isNaN(val) && parseFloat(val) > 0) {
+    localStorage.setItem('mf_reading_budget_2026', parseFloat(val));
+    renderReadingBudget();
+    showToast(`2026 Reading Budget set to ₹${Number(val).toLocaleString('en-IN')}! 💰`);
+  }
+}
+
+function promptPopulateRealisticPrices() {
+  const unpriced = state.books.filter(b => !b.price || Number(b.price) <= 0);
+  if (unpriced.length === 0) {
+    showToast('All books already have prices recorded! 📚');
+    return;
+  }
+  
+  const ok = confirm(`Auto-assign standard Indian market MRPs (₹199 - ₹499) to ${unpriced.length} unpriced books in your library?\n\nYou can always change any individual price anytime.`);
+  if (!ok) return;
+  
+  unpriced.forEach((book, idx) => {
+    const pages = Number(book.pages || book.total_pages || 250);
+    let estimatedPrice = 299;
+    if (pages < 180) {
+      estimatedPrice = [199, 225, 250][idx % 3];
+    } else if (pages < 300) {
+      estimatedPrice = [299, 325, 350][idx % 3];
+    } else if (pages < 450) {
+      estimatedPrice = [399, 450, 499][idx % 3];
+    } else {
+      estimatedPrice = [499, 550, 599][idx % 3];
+    }
+    book.price = estimatedPrice;
+  });
+  
+  saveBooks();
+  renderReadingBudget();
+  renderLibrary();
+  showToast(`Updated market prices for ${unpriced.length} books! 💰`);
+}
+
 function renderProgressCharts() {
   const completedCount = state.books.filter(b => b.status === 'DONE').length;
   
@@ -682,6 +799,7 @@ function renderProgressCharts() {
   const elPages = document.getElementById('progPagesMonth');
   if (elPages) elPages.innerText = totalPagesRead;
   
+  renderReadingBudget();
   renderMonthlyBarChart();
   renderGenreDonutChart();
 }

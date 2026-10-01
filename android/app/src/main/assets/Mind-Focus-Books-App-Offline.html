@@ -926,9 +926,16 @@ body {
 /* ================= VIEW 4: PROGRESS STYLES ================= */
 .progress-stats-row {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   margin-bottom: 16px;
+}
+
+@media (min-width: 520px) {
+  .progress-stats-row {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
 }
 
 .prog-metric-card {
@@ -937,6 +944,19 @@ body {
   border-radius: var(--radius-md);
   padding: 12px 8px;
   text-align: center;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.prog-metric-card:hover {
+  transform: translateY(-2px);
+}
+
+.prog-metric-card.purple {
+  border-color: rgba(168, 85, 247, 0.25);
+}
+
+.prog-metric-card.purple .prog-metric-val {
+  color: #c084fc;
 }
 
 .prog-metric-icon {
@@ -954,6 +974,160 @@ body {
   font-size: 11px;
   color: var(--text-secondary);
   margin-top: 2px;
+}
+
+/* ================= READING BUDGET & EXPENSES CARD ================= */
+.reading-budget-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.rb-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.rb-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.rb-badge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #10b981;
+  margin-bottom: 4px;
+}
+
+.rb-title {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.rb-sub {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-top: 3px;
+}
+
+.rb-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.rb-set-budget-btn {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: #10b981;
+  padding: 6px 12px;
+  border-radius: var(--radius-pill);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rb-set-budget-btn:hover {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.rb-target-box {
+  margin-bottom: 14px;
+  background: var(--bg-card-secondary, rgba(255, 255, 255, 0.03));
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color);
+}
+
+.rb-target-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.rb-progress-bar {
+  height: 100%;
+  border-radius: var(--radius-pill);
+  transition: width 0.4s ease, background 0.3s ease;
+}
+
+.rb-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+@media (min-width: 520px) {
+  .rb-breakdown-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.rb-stat-item {
+  background: var(--bg-card-secondary, rgba(255, 255, 255, 0.03));
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.rb-stat-label {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.rb-stat-val {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+
+.rb-helper-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.rb-auto-fill-btn {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: var(--accent-gold, #f59e0b);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  font-size: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.rb-auto-fill-btn:hover {
+  background: var(--accent-gold, #f59e0b);
+  color: #1a1a1a;
 }
 
 .chart-card {
@@ -3665,7 +3839,7 @@ if (typeof window !== 'undefined') {
         </div>
       </div>
 
-      <!-- 3 Key Metric Badges -->
+      <!-- 4 Key Metric Badges -->
       <div class="progress-stats-row">
         <div class="prog-metric-card blue">
           <div class="prog-metric-icon">📖</div>
@@ -3681,6 +3855,62 @@ if (typeof window !== 'undefined') {
           <div class="prog-metric-icon">📄</div>
           <div class="prog-metric-val" id="progPagesMonth">0</div>
           <div class="prog-metric-lbl">Pages Read</div>
+        </div>
+        <div class="prog-metric-card purple">
+          <div class="prog-metric-icon">💰</div>
+          <div class="prog-metric-val" id="progTotalPrice">₹0</div>
+          <div class="prog-metric-lbl">Total Spent</div>
+        </div>
+      </div>
+
+      <!-- Reading Budget & Investment Card -->
+      <div class="reading-budget-card">
+        <div class="rb-header">
+          <div class="rb-info">
+            <span class="rb-badge">💰 READING BUDGET & EXPENSES</span>
+            <h3 class="rb-title" id="rbTotalSpentDisplay">₹0 Total Spent</h3>
+            <span class="rb-sub" id="rbBudgetSubtitle">0 books with price recorded</span>
+          </div>
+          <div class="rb-actions">
+            <button type="button" class="rb-set-budget-btn" onclick="openSetBudgetPrompt()">Edit Budget Target</button>
+          </div>
+        </div>
+
+        <!-- Budget Target Progress Bar -->
+        <div class="rb-target-box" id="rbTargetBox">
+          <div class="rb-target-labels">
+            <span id="rbBudgetLabel">Annual Budget Target: ₹5,000</span>
+            <span id="rbBudgetPct">0% used</span>
+          </div>
+          <div class="rg-progress-track">
+            <div class="rb-progress-bar" id="rbProgressBar" style="width: 0%;"></div>
+          </div>
+        </div>
+
+        <!-- Breakdown Grid -->
+        <div class="rb-breakdown-grid">
+          <div class="rb-stat-item">
+            <span class="rb-stat-label">✅ Read Books</span>
+            <span class="rb-stat-val" id="rbSpentCompleted">₹0</span>
+          </div>
+          <div class="rb-stat-item">
+            <span class="rb-stat-label">📖 Reading</span>
+            <span class="rb-stat-val" id="rbSpentReading">₹0</span>
+          </div>
+          <div class="rb-stat-item">
+            <span class="rb-stat-label">⏳ Wishlist Value</span>
+            <span class="rb-stat-val" id="rbSpentWishlist">₹0</span>
+          </div>
+          <div class="rb-stat-item">
+            <span class="rb-stat-label">📊 Avg / Book</span>
+            <span class="rb-stat-val" id="rbAvgPrice">₹0</span>
+          </div>
+        </div>
+
+        <!-- Quick Action / Helper Strip -->
+        <div class="rb-helper-strip">
+          <span class="rb-helper-text">💡 You can enter or update price for any book in Edit Book modal.</span>
+          <button type="button" class="rb-auto-fill-btn" onclick="promptPopulateRealisticPrices()">⚡ Auto-fill Market MRPs</button>
         </div>
       </div>
 
@@ -3793,7 +4023,7 @@ if (typeof window !== 'undefined') {
           <div class="pmi-icon blue">ℹ️</div>
           <div class="pmi-text">
             <div class="pmi-title">About App</div>
-            <div class="pmi-sub" id="aboutAppSubText">Version 3.18.0, check updates, download APK</div>
+            <div class="pmi-sub" id="aboutAppSubText">Version 3.18.2, check updates, download APK</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
@@ -9818,11 +10048,11 @@ const DEFAULT_BOOKS = [
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.1)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.18.2)
 // ==========================================================================
 
-const APP_VERSION = '3.18.1';
-const CURRENT_APP_VERSION = 'v3.18.1';
+const APP_VERSION = '3.18.2';
+const CURRENT_APP_VERSION = 'v3.18.2';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -10459,6 +10689,7 @@ function renderExploreBooksGrid() {
 function renderProgressView() {
   renderReadingGoal();
   renderProgressCharts();
+  renderReadingBudget();
 }
 
 function renderReadingGoal() {
@@ -10483,6 +10714,122 @@ function openSetGoalPrompt() {
   }
 }
 
+function renderReadingBudget() {
+  const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
+  
+  // All books with a valid price > 0
+  const pricedBooks = state.books.filter(b => b.price && Number(b.price) > 0);
+  const totalSpent = pricedBooks.reduce((acc, b) => acc + Number(b.price), 0);
+  
+  // Completed books price
+  const doneBooks = state.books.filter(b => b.status === 'DONE' && b.price && Number(b.price) > 0);
+  const doneSpent = doneBooks.reduce((acc, b) => acc + Number(b.price), 0);
+  
+  // Currently reading books price
+  const readingBooks = state.books.filter(b => b.status === 'READING' && b.price && Number(b.price) > 0);
+  const readingSpent = readingBooks.reduce((acc, b) => acc + Number(b.price), 0);
+  
+  // Wishlist / Pending books price
+  const wishlistBooks = state.books.filter(b => b.status !== 'DONE' && b.status !== 'READING' && b.price && Number(b.price) > 0);
+  const wishlistSpent = wishlistBooks.reduce((acc, b) => acc + Number(b.price), 0);
+  
+  // Avg price per priced book
+  const avgPrice = pricedBooks.length ? Math.round(totalSpent / pricedBooks.length) : 0;
+  
+  // Format with Indian Rupee symbol & commas
+  const formatINR = (num) => '₹' + Math.round(Number(num) || 0).toLocaleString('en-IN');
+  
+  // Update metric card in stats row
+  const elProgPrice = document.getElementById('progTotalPrice');
+  if (elProgPrice) elProgPrice.innerText = formatINR(totalSpent);
+  
+  // Update budget card elements
+  const elTotalDisplay = document.getElementById('rbTotalSpentDisplay');
+  if (elTotalDisplay) elTotalDisplay.innerText = `${formatINR(totalSpent)} Total Spent`;
+  
+  const elSub = document.getElementById('rbBudgetSubtitle');
+  if (elSub) {
+    if (pricedBooks.length === 0) {
+      elSub.innerText = '0 books priced yet (Tap Auto-fill or edit book)';
+    } else {
+      elSub.innerText = `${pricedBooks.length} of ${state.books.length} books have prices recorded`;
+    }
+  }
+  
+  const elDone = document.getElementById('rbSpentCompleted');
+  if (elDone) elDone.innerText = formatINR(doneSpent);
+  
+  const elReading = document.getElementById('rbSpentReading');
+  if (elReading) elReading.innerText = formatINR(readingSpent);
+  
+  const elWishlist = document.getElementById('rbSpentWishlist');
+  if (elWishlist) elWishlist.innerText = formatINR(wishlistSpent);
+  
+  const elAvg = document.getElementById('rbAvgPrice');
+  if (elAvg) elAvg.innerText = formatINR(avgPrice);
+  
+  // Budget progress bar against annualBudget
+  const budgetLabel = document.getElementById('rbBudgetLabel');
+  if (budgetLabel) budgetLabel.innerText = `Annual Budget Target: ${formatINR(annualBudget)}`;
+  
+  const pct = annualBudget > 0 ? Math.min(100, Math.round((totalSpent / annualBudget) * 100)) : 0;
+  const elPct = document.getElementById('rbBudgetPct');
+  if (elPct) elPct.innerText = `${pct}% used`;
+  
+  const bar = document.getElementById('rbProgressBar');
+  if (bar) {
+    bar.style.width = `${pct}%`;
+    if (pct >= 100) {
+      bar.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
+    } else if (pct >= 80) {
+      bar.style.background = 'linear-gradient(90deg, #f59e0b, #d97706)';
+    } else {
+      bar.style.background = 'linear-gradient(90deg, #10b981, #059669)';
+    }
+  }
+}
+
+function openSetBudgetPrompt() {
+  const currentBudget = localStorage.getItem('mf_reading_budget_2026') || '5000';
+  const val = prompt('Set your 2026 Reading Budget (in ₹ Rupees):', currentBudget);
+  if (val && !isNaN(val) && parseFloat(val) > 0) {
+    localStorage.setItem('mf_reading_budget_2026', parseFloat(val));
+    renderReadingBudget();
+    showToast(`2026 Reading Budget set to ₹${Number(val).toLocaleString('en-IN')}! 💰`);
+  }
+}
+
+function promptPopulateRealisticPrices() {
+  const unpriced = state.books.filter(b => !b.price || Number(b.price) <= 0);
+  if (unpriced.length === 0) {
+    showToast('All books already have prices recorded! 📚');
+    return;
+  }
+  
+  const ok = confirm(`Auto-assign standard Indian market MRPs (₹199 - ₹499) to ${unpriced.length} unpriced books in your library?\n\nYou can always change any individual price anytime.`);
+  if (!ok) return;
+  
+  unpriced.forEach((book, idx) => {
+    const pages = Number(book.pages || book.total_pages || 250);
+    let estimatedPrice = 299;
+    if (pages < 180) {
+      estimatedPrice = [199, 225, 250][idx % 3];
+    } else if (pages < 300) {
+      estimatedPrice = [299, 325, 350][idx % 3];
+    } else if (pages < 450) {
+      estimatedPrice = [399, 450, 499][idx % 3];
+    } else {
+      estimatedPrice = [499, 550, 599][idx % 3];
+    }
+    book.price = estimatedPrice;
+  });
+  
+  saveBooks();
+  renderReadingBudget();
+  renderLibrary();
+  showToast(`Updated market prices for ${unpriced.length} books! 💰`);
+}
+
 function renderProgressCharts() {
   const completedCount = state.books.filter(b => b.status === 'DONE').length;
   
@@ -10501,6 +10848,7 @@ function renderProgressCharts() {
   const elPages = document.getElementById('progPagesMonth');
   if (elPages) elPages.innerText = totalPagesRead;
   
+  renderReadingBudget();
   renderMonthlyBarChart();
   renderGenreDonutChart();
 }
