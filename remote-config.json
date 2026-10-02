@@ -1,18 +1,19 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-10-01T05:00:00.000Z",
+  "updatedAt": "2026-10-02T07:35:00.000Z",
   "activeRelease": {
-    "version": "v3.20.0",
-    "name": "Mind Focus Books v3.20.0 - 100% Real Data & Honest Metrics Engine",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.20.0/MindFocusBooks-Native.apk",
+    "version": "v3.20.1",
+    "name": "Mind Focus Books v3.20.1 - Auto Update Modal & Real Data Engine",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.20.1/MindFocusBooks-Native.apk",
     "features": [
+      "📱 Automated Vision-OS Frosted Glass Update Modal: Pops up automatically 1-sec after app load on Phone & Laptop",
       "⚡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices",
       "💰 Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)",
       "🔥 Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days",
       "⭐ Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them",
-      "📱 Direct In-App APK Reinstall & 1-Click Update Installer"
+      "🚀 1-Tap Direct In-App APK Reinstall & Auto Package Installer"
     ],
-    "stagedAt": "2026-10-01T10:45:00.000Z",
+    "stagedAt": "2026-10-02T07:35:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
