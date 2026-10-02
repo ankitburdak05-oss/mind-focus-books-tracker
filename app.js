@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.29.0)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.30.0)
 // ==========================================================================
 
-const APP_VERSION = '3.29.0';
-const CURRENT_APP_VERSION = 'v3.29.0';
+const APP_VERSION = '3.30.0';
+const CURRENT_APP_VERSION = 'v3.30.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -4281,8 +4281,26 @@ function importIsbnScannedBook() {
     showToast(`Added "${isbnScannedData.title}" to your library! 📚`);
   }
   closeIsbnBarcodeScannerModal();
+function openSubViewMasterModal(title, contentHtml) {
+  const overlay = document.getElementById('subViewMasterModalOverlay');
+  const titleEl = document.getElementById('subViewMasterModalTitle');
+  const bodyEl = document.getElementById('subViewMasterModalBody');
+
+  if (titleEl) titleEl.innerHTML = title;
+  if (bodyEl) bodyEl.innerHTML = contentHtml;
+  if (overlay) {
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
 }
 
+function closeSubViewMasterModal() {
+  const overlay = document.getElementById('subViewMasterModalOverlay');
+  if (overlay) {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
 
 // ==========================================================================
 // 20 ADVANCED FEATURES — EXACT INFOGRAPHIC PHOTO DESIGN RENDERERS

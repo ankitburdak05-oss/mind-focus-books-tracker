@@ -1,14 +1,14 @@
 {
-  "id": "notice-v3.29.0",
-  "version": "v3.29.0",
+  "id": "notice-v3.30.0",
+  "version": "v3.30.0",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "⚡",
-  "title": "Mind Focus Books v3.29.0 Update Ready!",
-  "message": "v3.29.0 is live! Direct 1-Tap Command Center for all 20 Photo Features added to Home & Profile views with restored navigation router.",
-  "btnText": "⚡ Update Now (v3.29.0)",
+  "icon": "✨",
+  "title": "Mind Focus Books v3.30.0 Update Ready!",
+  "message": "v3.30.0 is live! Fixed missing modal containers & handlers. All 20 Infographic Features are now 100% working and open on 1-tap!",
+  "btnText": "⚡ Update Now (v3.30.0)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.29.0/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-02T17:25:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.30.0/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-02T18:45:00.000Z"
 }
