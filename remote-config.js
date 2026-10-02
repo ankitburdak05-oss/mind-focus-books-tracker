@@ -1,19 +1,17 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-10-02T16:50:00.000Z",
+  "updatedAt": "2026-10-02T17:25:00.000Z",
   "activeRelease": {
-    "version": "v3.28.0",
-    "name": "Mind Focus Books v3.28.0 - 20 Infographic Advanced Features Exact UI & Interactive Modals Suite",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.28.0/MindFocusBooks-Native.apk",
+    "version": "v3.29.0",
+    "name": "Mind Focus Books v3.29.0 - 20 Photo Features Direct Command Hub & Router Restoration",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.29.0/MindFocusBooks-Native.apk",
     "features": [
-      "📚 20 Infographic Advanced Features 100% Exact UI & Interactive Modals",
-      "📷 Book Scanner & ISBN Capture with Camera Viewfinder",
-      "📸 Physical Page OCR & Smart Auto-Tagging",
-      "⚡ Duplicate Book Detector & Reading Streak Freeze",
-      "📊 Reading Speed Analyzer & Reflection Scorecard",
-      "🔒 Private Local Encryption & Activity Audit Log"
+      "⚡ 20 Advanced Features Direct Command Center Grid on Home & Profile Views",
+      "🔗 Direct 1-Tap Click Handlers for all 20 Photo Features",
+      "🧭 Unified Router Restoration: Fixed navigation override issue",
+      "📚 100% Preserved Dataset & Core Functionality"
     ],
-    "stagedAt": "2026-10-02T16:50:00.000Z",
+    "stagedAt": "2026-10-02T17:25:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.28.0)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.29.0)
 // ==========================================================================
 
-const APP_VERSION = '3.28.0';
-const CURRENT_APP_VERSION = 'v3.28.0';
+const APP_VERSION = '3.29.0';
+const CURRENT_APP_VERSION = 'v3.29.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -2678,28 +2678,79 @@ function showToast(message, duration = 2800) {
 
 // Universal Sub-Screen Navigation Router
 function navigateToSubView(viewName) {
+  if (!viewName) return;
   state.previousSubView = state.activeTab || 'profile';
-  
-  // Hide all views
-  const views = document.querySelectorAll('.app-view');
-  views.forEach(v => v.classList.remove('active'));
+
+  // Map 20 Infographic Photo Feature routes directly to their modal renderers
+  const modalRoutes = {
+    'bookScanner': openBookScannerModal,
+    'ocrScanner': openOcrScannerModal,
+    'smartTagging': openSmartTaggingModal,
+    'duplicateDetector': openDuplicateDetectorModal,
+    'bookTimeline': openBookTimelineModal,
+    'readingSpeed': openReadingSpeedModal,
+    'pagePlanner': openPagePlannerModal,
+    'streakFreeze': openStreakFreezeModal,
+    'bookmarkCollections': openBookmarkCollectionsModal,
+    'quoteNoteLink': openQuoteNoteLinkModal,
+    'chapterChecklist': openChapterChecklistModal,
+    'wishlistPriceWatch': openWishlistPriceWatchModal,
+    'readingQueue': openManageQueueModal,
+    'manageQueue': openManageQueueModal,
+    'reflectionScorecard': openReflectionScorecardModal,
+    'learningConnections': openLearningConnectionsModal,
+    'customMetadata': openCustomMetadataModal,
+    'trashCenter': openTrashCenterModal,
+    'backupHistory': openBackupHistoryModal,
+    'activityAuditLog': renderActivityAuditLogModal,
+    'securityPrivacy': openSecurityPrivacyModal,
+    'privacySecurity': openSecurityPrivacyModal
+  };
+
+  if (modalRoutes[viewName]) {
+    modalRoutes[viewName]();
+    return;
+  }
+
+  // Handle special feature handlers
+  if (viewName === 'appFeaturesGuide') {
+    renderAppFeaturesDirectoryView();
+    const modal = document.getElementById('appFeaturesGuideModalOverlay');
+    if (modal) modal.style.display = 'flex';
+    return;
+  }
+  if (viewName === 'zenMode') {
+    toggleRainAudio();
+    showToast('🧘 Zen Mode activated! Playing Ambient Rain Sounds...');
+    return;
+  }
+  if (viewName === 'smartResume') {
+    openRealBookReaderForCurrent();
+    return;
+  }
+  if (viewName === 'archiveBackup') {
+    exportDataJSON();
+    return;
+  }
 
   // Target view ID format: view[Capitalized]
   const targetId = 'view' + viewName.charAt(0).toUpperCase() + viewName.slice(1);
   const targetView = document.getElementById(targetId);
   if (targetView) {
+    const views = document.querySelectorAll('.app-view');
+    views.forEach(v => v.classList.remove('active'));
     targetView.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
 
-  // Lifecycle initializers for sub-screens
-  if (viewName === 'notesHighlights') renderNotesList();
-  if (viewName === 'quotesInspiration') renderQuotesView();
-  if (viewName === 'readingJournal') renderJournalView();
-  if (viewName === 'readingStats') updateReadingStatistics();
-  if (viewName === 'focusTimer') updateFocusTimerDisplay();
-  if (viewName === 'appFeaturesGuide') renderAppFeaturesDirectoryView();
-  if (viewName === 'activityAuditLog') renderActivityAuditLog();
+    if (viewName === 'notesHighlights') renderNotesList();
+    if (viewName === 'quotesInspiration') renderQuotesView();
+    if (viewName === 'readingJournal') renderJournalView();
+    if (viewName === 'readingStats') updateReadingStatistics();
+    if (viewName === 'focusTimer') updateFocusTimerDisplay();
+  } else {
+    const title = viewName.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+    showToast(`✨ ${title} view active!`);
+  }
 }
 
 function navigateBack() {
@@ -4030,65 +4081,7 @@ function filterAuditLog(tag) {
   showToast(`Filtered logs by tag: ${tag}`);
 }
 
-// 2. Sub-View Router for 34 Subviews
-function navigateToSubView(viewName) {
-  if (!viewName) return;
-
-  const subviewTitles = {
-    'aiBookCoach': '🤖 AI Book Coach & Assistant',
-    'smartRevision': '🔄 Smart Revision & Notes Review',
-    'memoryFlashcards': '🎴 Active Recall Memory Flashcards',
-    'knowledgeMap': '🕸️ Knowledge Mind Map',
-    'bookComparison': '⚖️ Side-by-Side Book Comparison',
-    'readingHeatmap': '📊 Daily Reading Consistency Heatmap',
-    'moodTracker': '🌙 Focus Mood & Energy Tracker',
-    'voiceNotes': '🎙️ Voice Notes & Memos',
-    'personalSearch': '🔍 Universal Library Search',
-    'dailyRecall': '🧠 Daily Memory Recall Quiz',
-    'spacedRepetition': '🗓️ Spaced Repetition Schedule',
-    'readingStats': '📊 Deep Reading Statistics',
-    'smartResume': '📖 Smart Reading Resume',
-    'zenMode': '🧘 Zen Mode & Rain Audio Generator',
-    'weeklyReview': '📋 Weekly Review & Reflection Journal',
-    'adaptiveGoal': '🎯 Adaptive Goal Adjuster',
-    'completionForecast': '⏳ Book Completion Forecast',
-    'knowledgeVault': '🏛️ Mental Models Knowledge Vault',
-    'readingChallenge': '🏆 Monthly Reading Challenge',
-    'archiveBackup': '🛡️ Backup & JSON Archive',
-    'appFeaturesGuide': '📖 App Features Directory & Sitemap',
-    'achievements': '🏅 Reading Badges & Achievements',
-    'activityAuditLog': '📜 Activity & System Audit Log'
-  };
-
-  const title = subviewTitles[viewName] || `✨ Feature: ${viewName}`;
-
-  if (viewName === 'appFeaturesGuide') {
-    renderAppFeaturesDirectoryView();
-    const modal = document.getElementById('appFeaturesGuideModalOverlay');
-    if (modal) {
-      modal.style.display = 'flex';
-      return;
-    }
-  }
-
-  if (viewName === 'zenMode') {
-    toggleRainAudio();
-    showToast('🧘 Zen Mode activated! Playing Ambient Rain Sounds...');
-    return;
-  }
-
-  if (viewName === 'smartResume') {
-    openRealBookReaderForCurrent();
-    return;
-  }
-
-  if (viewName === 'archiveBackup') {
-    exportDataJSON();
-    return;
-  }
-
-  showToast(`${title} opened!`);
-}
+// Subview router handled by universal master router
 
 function toggleRainAudio() {
   if (!window.__RAIN_AUDIO__) {
