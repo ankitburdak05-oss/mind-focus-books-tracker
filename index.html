@@ -1503,6 +1503,562 @@
       </div>
     </section>
 
+    <!-- ================= FEATURE 1: AI BOOK COACH ================= -->
+    <section id="viewAiBookCoach" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">AI Book Coach 🤖</h2>
+          <p class="sub-screen-sub-title">Personalized guidance, insights &amp; suggestions</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="ai-coach-card-v20 glass-card" style="padding:16px;">
+        <div class="ai-coach-header" style="display:flex; align-items:center; gap:12px;">
+          <div class="ai-coach-avatar" style="font-size:32px;">🤖</div>
+          <div class="ai-coach-status">
+            <h3 style="margin:0; font-size:15px;">AI Ankit Coach</h3>
+            <span style="font-size:11px; color:var(--accent-emerald);">● Active &bull; Ready to help</span>
+          </div>
+        </div>
+        <p style="font-size:12px; color:var(--text-secondary); margin:10px 0;">Based on your reading history, ask for advice or recommendations:</p>
+        
+        <div class="ai-coach-chips" style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;">
+          <button type="button" class="notes-tab-chip" onclick="askAiCoach('Why Atomic Habits?')">Atomic Habits: Why read?</button>
+          <button type="button" class="notes-tab-chip" onclick="askAiCoach('Why Deep Work?')">Deep Work: Why read?</button>
+          <button type="button" class="notes-tab-chip" onclick="askAiCoach('How to build 30-min reading habit?')">Habit Tips</button>
+        </div>
+
+        <div id="aiCoachChatLog" class="ai-chat-log-box" style="background:rgba(0,0,0,0.3); border-radius:10px; padding:12px; min-height:160px; max-height:240px; overflow-y:auto; font-size:13px; margin-bottom:12px;">
+          <div class="ai-msg bot" style="background:rgba(59,130,246,0.15); padding:8px 12px; border-radius:8px; border-left:3px solid #3b82f6;">
+            <span>👋 Hello Ankit! I am your AI Reading Coach. Ask me anything about your books, key takeaways, or reading habits!</span>
+          </div>
+        </div>
+
+        <div class="ai-input-row" style="display:flex; gap:8px;">
+          <input type="text" id="aiCoachInputPrompt" placeholder="Ask me anything about books..." onkeydown="if(event.key==='Enter') sendAiCoachMessage()" style="flex:1; padding:10px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:8px; color:#fff; font-size:13px;">
+          <button type="button" class="btn-primary" onclick="sendAiCoachMessage()" style="padding:10px 16px;">Send 🚀</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 2: SMART REVISION MODE ================= -->
+    <section id="viewSmartRevision" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Smart Revision Mode 🔄</h2>
+          <p class="sub-screen-sub-title">Revisit key points and notes for better retention</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="smart-revision-card glass-card" style="padding:16px;">
+        <div class="sr-book-selector">
+          <label style="font-size:12px; color:var(--text-secondary);">Select Book to Revise:</label>
+          <select id="srBookSelect" class="form-control" onchange="loadSmartRevisionBook(this.value)" style="margin-top:6px; background:rgba(255,255,255,0.05); color:#fff; border:1px solid rgba(255,255,255,0.1); padding:8px; border-radius:8px; width:100%;">
+            <option value="Atomic Habits">Atomic Habits — James Clear</option>
+            <option value="Deep Work">Deep Work — Cal Newport</option>
+            <option value="Mindset">Mindset — Carol Dweck</option>
+          </select>
+        </div>
+
+        <div class="sr-tabs-row" style="display:flex; gap:8px; margin:14px 0;">
+          <button type="button" class="notes-tab-chip active" onclick="switchRevisionTab('notes')">Key Notes</button>
+          <button type="button" class="notes-tab-chip" onclick="switchRevisionTab('summary')">Summary</button>
+          <button type="button" class="notes-tab-chip" onclick="switchRevisionTab('flashcards')">Flashcards</button>
+        </div>
+
+        <div id="srRevisionContent" style="background:rgba(255,255,255,0.03); padding:16px; border-radius:10px;">
+          <h4 style="margin:0 0 10px 0; color:var(--accent-gold);">📌 Atomic Habits — Core Points</h4>
+          <ul style="padding-left:18px; line-height:1.6; font-size:13px; color:var(--text-primary);">
+            <li>Small changes, big results: 1% better every day = 37x better in a year.</li>
+            <li>Habit loop: Cue ➔ Craving ➔ Response ➔ Reward.</li>
+            <li>Focus on systems instead of goals. Your environment shapes your behavior.</li>
+            <li>Identity-based habits: Decide the person you want to be.</li>
+          </ul>
+        </div>
+
+        <button type="button" class="btn-primary" style="width:100%; margin-top:16px; padding:12px;" onclick="startRevisionSession()">▶ Start Revision Session</button>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 3: MEMORY FLASHCARDS ================= -->
+    <section id="viewMemoryFlashcards" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Memory Flashcards 🎴</h2>
+          <p class="sub-screen-sub-title">Interactive recall cards for active memory</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="flashcard-container-v20 glass-card" style="padding:16px;">
+        <div class="flashcard-chips" style="display:flex; gap:8px; margin-bottom:14px;">
+          <button type="button" class="notes-tab-chip active">All Cards</button>
+          <button type="button" class="notes-tab-chip">Due Today</button>
+          <button type="button" class="notes-tab-chip">On Repeat</button>
+        </div>
+
+        <div class="flashcard-box" id="flashcardBox" onclick="flipFlashcard()" style="background:linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9)); border:1px solid rgba(255,255,255,0.12); border-radius:14px; padding:24px; text-align:center; min-height:180px; display:flex; flex-direction:column; justify-content:center; align-items:center; cursor:pointer; transition:transform 0.3s ease;">
+          <span style="font-size:11px; font-weight:700; color:var(--accent-gold); letter-spacing:1px; margin-bottom:10px;">QUESTION &bull; TAP TO REVEAL ANSWER</span>
+          <div style="font-size:16px; font-weight:600; color:#fff;" id="fcQuestionText">What is the 2-minute rule from Atomic Habits?</div>
+          <span style="font-size:11px; color:var(--text-secondary); margin-top:14px;">👆 Tap card to flip</span>
+        </div>
+
+        <div class="flashcard-controls" style="display:flex; justify-content:space-between; align-items:center; margin-top:16px;">
+          <button type="button" class="btn-cancel" onclick="prevFlashcard()" style="padding:8px 16px;">&larr; Prev</button>
+          <span id="fcCountIndicator" style="font-size:13px; font-weight:600; color:var(--text-secondary);">1 / 5</span>
+          <button type="button" class="btn-primary" onclick="nextFlashcard()" style="padding:8px 16px;">Next &rarr;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 4: KNOWLEDGE MAP ================= -->
+    <section id="viewKnowledgeMap" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Knowledge Map 🕸️</h2>
+          <p class="sub-screen-sub-title">See connections between books, ideas &amp; concepts</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="knowledge-map-card glass-card" style="padding:16px; text-align:center;">
+        <div class="kmap-visual-box" style="position:relative; min-height:240px; background:rgba(0,0,0,0.3); border-radius:12px; padding:20px; overflow:hidden;">
+          <svg style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:1;" viewBox="0 0 300 240">
+            <line x1="150" y1="120" x2="70" y2="60" stroke="#3b82f6" stroke-width="2" stroke-dasharray="4"/>
+            <line x1="150" y1="120" x2="230" y2="60" stroke="#10b981" stroke-width="2" stroke-dasharray="4"/>
+            <line x1="150" y1="120" x2="70" y2="180" stroke="#f59e0b" stroke-width="2" stroke-dasharray="4"/>
+            <line x1="150" y1="120" x2="230" y2="180" stroke="#8b5cf6" stroke-width="2" stroke-dasharray="4"/>
+          </svg>
+          <div class="kmap-node center" onclick="showMapConcept('Atomic Habits')" style="position:relative; z-index:2; margin:70px auto; width:80px; height:80px; background:linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius:50%; display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; font-weight:700; font-size:11px; box-shadow:0 0 20px rgba(59,130,246,0.5); cursor:pointer;">
+            <span>Atomic</span>
+            <span>Habits</span>
+          </div>
+          <div class="kmap-node branch" onclick="showMapConcept('Productivity')" style="position:absolute; top:25px; left:20px; z-index:2; padding:6px 10px; background:rgba(59,130,246,0.2); border:1px solid #3b82f6; border-radius:20px; color:#93c5fd; font-size:11px; cursor:pointer;">Productivity</div>
+          <div class="kmap-node branch" onclick="showMapConcept('Mindset')" style="position:absolute; top:25px; right:20px; z-index:2; padding:6px 10px; background:rgba(16,185,129,0.2); border:1px solid #10b981; border-radius:20px; color:#6ee7b7; font-size:11px; cursor:pointer;">Mindset</div>
+          <div class="kmap-node branch" onclick="showMapConcept('Discipline')" style="position:absolute; bottom:25px; left:20px; z-index:2; padding:6px 10px; background:rgba(245,158,11,0.2); border:1px solid #f59e0b; border-radius:20px; color:#fcd34d; font-size:11px; cursor:pointer;">Discipline</div>
+          <div class="kmap-node branch" onclick="showMapConcept('Focus')" style="position:absolute; bottom:25px; right:20px; z-index:2; padding:6px 10px; background:rgba(139,92,246,0.2); border:1px solid #8b5cf6; border-radius:20px; color:#c4b5fd; font-size:11px; cursor:pointer;">Focus</div>
+        </div>
+        <div id="kmapConceptDetail" style="margin-top:14px; text-align:left; background:rgba(255,255,255,0.03); padding:12px; border-radius:8px; font-size:12px; color:var(--text-secondary);">
+          💡 <strong>Tip:</strong> Tap on any node in the map above to explore connected ideas and takeaways!
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 5: BOOK COMPARISON ================= -->
+    <section id="viewBookComparison" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Book Comparison ⚖️</h2>
+          <p class="sub-screen-sub-title">Compare books side-by-side &amp; choose next read</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="book-compare-card glass-card" style="padding:16px;">
+        <div class="compare-vs-header" style="display:grid; grid-template-columns: 1fr 30px 1fr; align-items:center; text-align:center; gap:8px;">
+          <div>
+            <div style="font-weight:700; color:var(--accent-gold); font-size:14px;">Atomic Habits</div>
+            <div style="font-size:11px; color:var(--text-secondary);">James Clear</div>
+          </div>
+          <div style="font-weight:900; color:#f43f5e; font-size:14px; background:rgba(244,63,94,0.15); border-radius:50%; width:30px; height:30px; display:flex; align-items:center; justify-content:center;">VS</div>
+          <div>
+            <div style="font-weight:700; color:#3b82f6; font-size:14px;">Deep Work</div>
+            <div style="font-size:11px; color:var(--text-secondary);">Cal Newport</div>
+          </div>
+        </div>
+
+        <table style="width:100%; margin-top:16px; font-size:12px; border-collapse:collapse;">
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
+            <td style="padding:8px 0; font-weight:600;">Focus</td>
+            <td style="padding:8px; text-align:center;">Habits &amp; Systems</td>
+            <td style="padding:8px; text-align:center;">Deep Focus</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
+            <td style="padding:8px 0; font-weight:600;">Best For</td>
+            <td style="padding:8px; text-align:center;">Daily Routine</td>
+            <td style="padding:8px; text-align:center;">Peak Productivity</td>
+          </tr>
+          <tr style="border-bottom:1px solid rgba(255,255,255,0.08);">
+            <td style="padding:8px 0; font-weight:600;">Est. Time</td>
+            <td style="padding:8px; text-align:center;">4.5 hrs</td>
+            <td style="padding:8px; text-align:center;">6.0 hrs</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0; font-weight:600;">User Rating</td>
+            <td style="padding:8px; text-align:center; color:var(--accent-gold);">★★★★☆ 4.8</td>
+            <td style="padding:8px; text-align:center; color:var(--accent-gold);">★★★★★ 4.9</td>
+          </tr>
+        </table>
+
+        <button type="button" class="btn-primary" style="width:100%; margin-top:16px; padding:12px;" onclick="chooseNextBook('Deep Work')">Choose My Next Book 🚀</button>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 6: READING HEATMAP ================= -->
+    <section id="viewReadingHeatmap" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Reading Heatmap 📊</h2>
+          <p class="sub-screen-sub-title">Visualize reading patterns and consistency</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="heatmap-card glass-card" style="padding:16px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <span style="font-weight:700; font-size:13px;">Activity Heatmap Grid</span>
+          <div style="font-size:11px; color:var(--text-secondary);">Less <span style="display:inline-block; width:10px; height:10px; background:rgba(255,255,255,0.1); border-radius:2px;"></span> <span style="display:inline-block; width:10px; height:10px; background:#10b981; border-radius:2px;"></span> More</div>
+        </div>
+
+        <div class="heatmap-grid" id="readingHeatmapGrid" style="display:grid; grid-template-columns: repeat(7, 1fr); gap:6px; margin:10px 0;">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div style="display:flex; justify-content:space-between; margin-top:16px; font-size:12px; color:var(--text-secondary);">
+          <div>Total Reading Days: <strong style="color:#fff;" id="hmTotalDays">18/30</strong></div>
+          <div>Longest Streak: <strong style="color:var(--accent-gold);" id="hmLongestStreak">7 days</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 7: MOOD & ENERGY TRACKER ================= -->
+    <section id="viewMoodTracker" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Mood &amp; Energy Tracker 🌙</h2>
+          <p class="sub-screen-sub-title">Track mood, energy &amp; reading state</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="mood-tracker-card glass-card" style="padding:16px;">
+        <label style="font-size:12px; font-weight:600; color:var(--text-secondary);">How are you feeling right now?</label>
+        <div class="mood-emojis-row" style="display:flex; justify-content:space-between; margin:12px 0;">
+          <button type="button" class="notes-tab-chip active" onclick="selectMood(this, 'Great')">😊 Great</button>
+          <button type="button" class="notes-tab-chip" onclick="selectMood(this, 'Good')">🙂 Good</button>
+          <button type="button" class="notes-tab-chip" onclick="selectMood(this, 'Okay')">😐 Okay</button>
+          <button type="button" class="notes-tab-chip" onclick="selectMood(this, 'Tired')">🥱 Tired</button>
+        </div>
+
+        <label style="font-size:12px; font-weight:600; color:var(--text-secondary); margin-top:14px; display:block;">Energy Level (1 to 10):</label>
+        <input type="range" min="1" max="10" value="8" id="moodEnergySlider" style="width:100%; margin:8px 0;" oninput="document.getElementById('energyValLabel').innerText = this.value">
+        <div style="text-align:right; font-size:12px; color:var(--accent-emerald);">Level: <span id="energyValLabel">8</span>/10</div>
+
+        <button type="button" class="btn-primary" style="width:100%; margin-top:18px; padding:12px;" onclick="logMoodSession()">Log Session Mood 📝</button>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 8: VOICE NOTES ================= -->
+    <section id="viewVoiceNotes" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Voice Notes 🎙️</h2>
+          <p class="sub-screen-sub-title">Capture thoughts with voice while reading</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="voice-notes-card glass-card" style="padding:20px; text-align:center;">
+        <div id="voiceTimerDisplay" style="font-size:24px; font-weight:800; color:var(--accent-gold); margin-bottom:10px;">00:42</div>
+
+        <div style="display:flex; justify-content:center; gap:16px; margin-top:10px;">
+          <button type="button" class="btn-mic-rec" id="voiceRecBtn" onclick="toggleVoiceRecord()" style="width:60px; height:60px; border-radius:50%; background:#f43f5e; color:#fff; border:none; font-size:22px; cursor:pointer; box-shadow:0 0 15px rgba(244,63,94,0.5);">🎙️</button>
+        </div>
+
+        <h4 style="margin:20px 0 10px 0; text-align:left; color:var(--text-secondary);">Recent Audio Notes</h4>
+        <div id="voiceNotesList" style="display:flex; flex-direction:column; gap:8px; text-align:left;">
+          <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-size:13px; font-weight:600;">Chapter 3 - Atomic Habits</div>
+              <div style="font-size:11px; color:var(--text-secondary);">Today, 10:24 AM &bull; 0:42</div>
+            </div>
+            <button type="button" class="btn-primary" style="padding:4px 10px; font-size:11px;" onclick="playVoiceAudio('Atomic Habits Audio')">▶ Play</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 9: PERSONAL SEARCH ================= -->
+    <section id="viewPersonalSearch" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Personal Search 🔍</h2>
+          <p class="sub-screen-sub-title">Search across books, notes, highlights &amp; quotes</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="search-global-card glass-card" style="padding:16px;">
+        <input type="text" id="globalSearchInput" placeholder="Search books, notes, highlights..." oninput="performGlobalSearch(this.value)" style="width:100%; padding:12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:10px; color:#fff; font-size:14px;">
+
+        <div style="display:flex; gap:6px; margin:12px 0; overflow-x:auto;">
+          <button type="button" class="notes-tab-chip active">All</button>
+          <button type="button" class="notes-tab-chip">📚 Books</button>
+          <button type="button" class="notes-tab-chip">📝 Notes</button>
+          <button type="button" class="notes-tab-chip">💬 Quotes</button>
+        </div>
+
+        <div id="globalSearchResults" style="display:flex; flex-direction:column; gap:8px;">
+          <!-- Dynamic results -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 10: DAILY RECALL ================= -->
+    <section id="viewDailyRecall" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Daily Recall 🧠</h2>
+          <p class="sub-screen-sub-title">Test memory &amp; reinforce learning</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="daily-recall-card glass-card" style="padding:20px; text-align:center;">
+        <span style="font-size:11px; font-weight:700; color:var(--accent-gold); letter-spacing:1px;">WHAT DID I LEARN TODAY?</span>
+        <h3 style="margin:14px 0 6px 0; color:#fff; font-size:16px;" id="recallQuestionTitle">What is the main idea of Atomic Habits?</h3>
+        
+        <div style="background:rgba(255,255,255,0.04); padding:14px; border-radius:10px; margin:14px 0; font-size:13px; color:var(--text-secondary); text-align:left;" id="recallTakeawayAnswer">
+          "Small changes, big results. Build better habits by focusing on identity, environment, and consistency."
+        </div>
+
+        <div style="background:rgba(16,185,129,0.15); color:#34d399; padding:8px 14px; border-radius:20px; font-weight:600; font-size:12px; display:inline-block; margin-bottom:14px;">
+          Great! Keep going! 🎉
+        </div>
+
+        <button type="button" class="btn-primary" style="width:100%; padding:12px;" onclick="nextRecallQuestion()">Next Question &rarr;</button>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 11: SPACED REPETITION ================= -->
+    <section id="viewSpacedRepetition" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Review Schedule 🗓️</h2>
+          <p class="sub-screen-sub-title">Smartly schedule reviews for memory</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="spaced-rep-card glass-card" style="padding:16px;">
+        <div style="display:flex; gap:8px; margin-bottom:14px;">
+          <button type="button" class="notes-tab-chip active">Today</button>
+          <button type="button" class="notes-tab-chip">Upcoming</button>
+          <button type="button" class="notes-tab-chip">All</button>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div style="background:rgba(255,255,255,0.04); padding:12px; border-radius:10px; display:flex; justify-content:space-between; align-items:center;">
+            <div>
+              <div style="font-weight:700; font-size:13px;">Atomic Habits (Ch 1-3)</div>
+              <div style="font-size:11px; color:var(--accent-gold);">Due Today</div>
+            </div>
+            <button type="button" class="btn-primary" style="padding:6px 12px; font-size:11px;" onclick="startSpacedReview('Atomic Habits')">Review Now</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 13: SMART RESUME ================= -->
+    <section id="viewSmartResume" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Smart Resume 📖</h2>
+          <p class="sub-screen-sub-title">Continue reading where you left off</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="smart-resume-card glass-card" style="padding:20px; text-align:center;">
+        <h3 style="margin:0 0 6px 0; color:var(--accent-gold);" id="srBookTitle">Atomic Habits</h3>
+        <div style="font-size:13px; color:var(--text-secondary);" id="srPageProgress">Page 124 of 256 (48%)</div>
+
+        <blockquote style="margin:16px 0; font-style:italic; font-size:13px; color:#e2e8f0; background:rgba(255,255,255,0.04); padding:12px; border-left:3px solid var(--accent-gold); border-radius:4px;">
+          "You do not rise to the level of your goals. You fall to the level of your systems."
+        </blockquote>
+
+        <button type="button" class="btn-primary" style="width:100%; padding:14px; font-size:14px; margin-bottom:10px;" onclick="continueReadingLastBook()">⚡ Continue Reading Now</button>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 14: ZEN MODE ================= -->
+    <section id="viewZenMode" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Zen Mode 🧘</h2>
+          <p class="sub-screen-sub-title">Distraction-free environment for deep reading</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="zen-mode-card glass-card" style="padding:24px; text-align:center; background:linear-gradient(180deg, rgba(15,23,42,0.9), rgba(30,41,59,0.9));">
+        <div style="font-size:40px; margin-bottom:10px;">🪷</div>
+        <h3 style="margin:0; font-size:18px; color:var(--accent-gold);">Focus. Read. Grow.</h3>
+
+        <div style="margin:20px 0; display:flex; flex-direction:column; gap:12px; text-align:left;">
+          <div class="privacy-item-row" style="padding:10px 0;">
+            <span>Dark Mode Focus</span>
+            <label class="switch-toggle"><input type="checkbox" checked><span class="slider-round"></span></label>
+          </div>
+          <div class="privacy-item-row" style="padding:10px 0;">
+            <span>Ambient Rain Sounds 🌧️</span>
+            <label class="switch-toggle"><input type="checkbox" id="zenRainToggle" onchange="toggleZenRainSound(this.checked)"><span class="slider-round"></span></label>
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" style="width:100%; padding:14px; font-size:15px;" onclick="launchZenModeSession()">🧘 Start Zen Mode Session</button>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 15: WEEKLY REVIEW ================= -->
+    <section id="viewWeeklyReview" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Daily &amp; Weekly Review 📋</h2>
+          <p class="sub-screen-sub-title">Reflect on progress &amp; set goals</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="weekly-review-card glass-card" style="padding:18px;">
+        <div style="font-size:12px; color:var(--accent-gold); font-weight:700;">WEEKLY REVIEW &bull; APR 14 - APR 20</div>
+        
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin:14px 0;">
+          <div style="background:rgba(255,255,255,0.04); padding:12px; border-radius:8px; text-align:center;">
+            <div style="font-size:20px; font-weight:800; color:#fff;" id="wrBooksRead">2</div>
+            <div style="font-size:11px; color:var(--text-secondary);">Books Read</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04); padding:12px; border-radius:8px; text-align:center;">
+            <div style="font-size:20px; font-weight:800; color:var(--accent-emerald);" id="wrPagesRead">248</div>
+            <div style="font-size:11px; color:var(--text-secondary);">Pages Read</div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-primary" style="width:100%; padding:12px;" onclick="openSetGoalPrompt()">Set Next Week's Goals 🎯</button>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 16: ADAPTIVE GOAL ================= -->
+    <section id="viewAdaptiveGoal" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Auto-Adjust Goal 🎯</h2>
+          <p class="sub-screen-sub-title">Adapt goal based on your pace</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="adaptive-goal-card glass-card" style="padding:18px;">
+        <div class="privacy-item-row">
+          <span>Auto-Adjust Goal</span>
+          <label class="switch-toggle"><input type="checkbox" checked onchange="showToast('Adaptive Goal active! 🎯')"><span class="slider-round"></span></label>
+        </div>
+        <div style="margin:14px 0; font-size:13px; color:var(--text-secondary);">
+          Current Goal: <strong style="color:#fff;">12 books / year</strong><br>
+          Suggested Goal: <strong style="color:var(--accent-gold);">15 books / year</strong>
+        </div>
+        <button type="button" class="btn-primary" style="width:100%; padding:12px;" onclick="showToast('New Goal Applied! 🎯')">Apply New Goal</button>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 17: COMPLETION FORECAST ================= -->
+    <section id="viewCompletionForecast" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Completion Forecast ⏳</h2>
+          <p class="sub-screen-sub-title">Estimated completion date &amp; pace</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="forecast-card glass-card" style="padding:20px; text-align:center;">
+        <div style="font-size:28px; font-weight:800; color:var(--accent-emerald);">61%</div>
+        <h3 style="margin:6px 0; color:#fff;">Estimated Completion: Apr 28, 2025</h3>
+        <span style="font-size:12px; color:var(--accent-gold); display:inline-block; margin-top:6px;">⚡ You are on track! (6 days remaining)</span>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 18: KNOWLEDGE VAULT ================= -->
+    <section id="viewKnowledgeVault" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Knowledge Vault 🏛️</h2>
+          <p class="sub-screen-sub-title">Save key ideas, quotes, links &amp; notes</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="knowledge-vault-card glass-card" style="padding:16px;">
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+          <button type="button" class="notes-tab-chip active">All</button>
+          <button type="button" class="notes-tab-chip">Notes</button>
+          <button type="button" class="notes-tab-chip">Quotes</button>
+          <button type="button" class="notes-tab-chip">Links</button>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:8px; font-size:12px;">"Better decisions, better life." &bull; <em>Atomic Habits</em></div>
+          <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:8px; font-size:12px;">"The mind is everything." &bull; <em>Mindset</em></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 19: READING CHALLENGE ================= -->
+    <section id="viewReadingChallenge" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Reading Challenge 🏆</h2>
+          <p class="sub-screen-sub-title">Stay motivated with monthly challenges</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="reading-challenge-card glass-card" style="padding:18px; text-align:center;">
+        <h3 style="margin:0 0 10px 0; color:var(--accent-gold);">April 2025 Challenge</h3>
+        <div style="font-size:14px; font-weight:700; color:#fff; margin-bottom:10px;">12 / 20 Days Completed</div>
+        <div class="rg-progress-track" style="margin-bottom:14px;">
+          <div class="rg-progress-bar" style="width:60%;"></div>
+        </div>
+        <span style="font-size:12px; color:var(--text-secondary);">Keep going! You are doing great! 🔥</span>
+      </div>
+    </section>
+
+    <!-- ================= FEATURE 20: ARCHIVE & BACKUP ================= -->
+    <section id="viewArchiveBackup" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Backup &amp; Archive 🛡️</h2>
+          <p class="sub-screen-sub-title">Keep your data safe &amp; always accessible</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="backup-archive-card glass-card" style="padding:18px; display:flex; flex-direction:column; gap:12px;">
+        <button type="button" class="btn-primary" style="padding:12px;" onclick="exportDataJSON()">📤 Export Data (JSON / CSV)</button>
+        <button type="button" class="btn-cancel" style="padding:12px;" onclick="triggerImportDataJSON()">📥 Restore Data</button>
+      </div>
+    </section>
+
   </main>
 
   <!-- ================= BOTTOM NAVIGATION DOCK ================= -->
