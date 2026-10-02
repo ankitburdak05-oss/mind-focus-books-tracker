@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Warrior Video Test</title>
+<style>
+body { margin:0; padding:20px; background:#1a1a2e; color:#fff; font-family:system-ui; text-align:center; }
+h1 { color:#fbbf24; }
+video { max-width: 100%; height: auto; border: 3px solid #fbbf24; border-radius: 12px; box-shadow: 0 0 40px rgba(255,180,0,0.4); margin: 20px 0; }
+.test-wrap { background:#000; padding:30px; border-radius:14px; max-width:800px; margin: 20px auto; }
+.info { background:rgba(255,255,255,0.05); padding:14px; border-radius:12px; margin:14px 0; text-align:left; }
+button { padding:12px 24px; background:linear-gradient(135deg,#f59e0b,#fbbf24); color:#000; border:none; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; margin: 8px; }
+</style>
+</head>
+<body>
+<h1>⚔️ Warrior Video Direct Test</h1>
+
+<div class="info">
+  <strong>Test 1: Direct video (MP4)</strong>
+</div>
+<div class="test-wrap">
+  <video id="v1" autoplay muted loop playsinline controls>
+    <source src="assets/warrior/warrior_sword.mp4" type="video/mp4">
+  </video>
+</div>
+<button onclick="document.getElementById('v1').play()">▶ Play MP4</button>
+<button onclick="document.getElementById('v1').pause()">⏸ Pause</button>
+<button onclick="document.getElementById('v1').currentTime=0">↺ Restart</button>
+
+<div class="info">
+  <strong>Test 2: WebM fallback</strong>
+</div>
+<div class="test-wrap">
+  <video id="v2" autoplay muted loop playsinline>
+    <source src="assets/warrior/warrior_sword.webm" type="video/webm">
+  </video>
+</div>
+
+<div class="info">
+  <strong>Test 3: Animated GIF (always works)</strong>
+</div>
+<div class="test-wrap">
+  <img src="assets/warrior/warrior_sword.gif" style="max-width:100%; border-radius:12px;"/>
+</div>
+
+<script>
+console.log('Video test page loaded');
+const v1 = document.getElementById('v1');
+v1.addEventListener('loadeddata', () => console.log('MP4 loaded, duration:', v1.duration, 's'));
+v1.addEventListener('error', e => console.error('MP4 error:', e));
+v1.addEventListener('play', () => console.log('MP4 playing'));
+</script>
+</body>
+</html>
