@@ -15824,6 +15824,9 @@ async function checkForBackgroundUpdates() {
   const homeTitle = document.getElementById('homeUpdateTitle');
   const homeSub = document.getElementById('homeUpdateSub');
   
+  const installedVer = localStorage.getItem('mf_installed_version') || 'v3.18.0';
+  const hasInstalledCurrent = installedVer === CURRENT_APP_VERSION;
+
   let activeRel = null;
 
   // 1. Live Remote Check via GitHub Raw Config
@@ -15846,32 +15849,29 @@ async function checkForBackgroundUpdates() {
     activeRel = window.__DEFAULT_REMOTE_CONFIG__?.activeRelease || null;
   }
 
-  if (!activeRel || !activeRel.version) return;
+  const remoteVer = activeRel?.version || CURRENT_APP_VERSION;
+  const isNewAvailable = remoteVer !== installedVer || !hasInstalledCurrent;
 
-  const isNew = activeRel.version !== CURRENT_APP_VERSION;
-
-  if (isNew) {
+  if (isNewAvailable) {
     if (homeCard) {
       homeCard.style.display = 'flex';
-      if (homeTitle) homeTitle.innerText = `🔥 Update ${activeRel.version} Available!`;
-      if (homeSub) homeSub.innerText = activeRel.name || `${activeRel.version} is ready to download and install`;
+      if (homeTitle) homeTitle.innerText = `🔥 Update ${remoteVer} Ready!`;
+      if (homeSub) homeSub.innerText = activeRel?.name || `${remoteVer} is ready to download & install now`;
     }
     
-    // Auto-popup Vision-OS modal if not dismissed and Card 1 is not active
-    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + activeRel.version);
+    // Auto-popup Vision-OS modal if not installed yet
+    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + remoteVer);
     if (!dismissed) {
       setTimeout(() => {
         const noticeOverlay = document.getElementById('inAppNoticeModalOverlay');
         if (!noticeOverlay || noticeOverlay.style.display !== 'flex') {
           openUpdateCheckerModal();
         }
-      }, 500);
+      }, 600);
     }
   } else {
-    // Current version is up to date -> cards completely hidden and quiet
+    // Up to date
     if (homeCard) homeCard.style.display = 'none';
-    const noticeOverlay = document.getElementById('inAppNoticeModalOverlay');
-    if (noticeOverlay) noticeOverlay.style.display = 'none';
   }
 }
 
@@ -15993,14 +15993,15 @@ function openUpdateCheckerModal() {
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
   const rel = cfg?.activeRelease || null;
   const targetVer = rel?.version || CURRENT_APP_VERSION;
-  const isNew = targetVer !== CURRENT_APP_VERSION;
+  const installedVer = localStorage.getItem('mf_installed_version');
+  const isInstalled = installedVer === targetVer;
 
   const titleEl = document.getElementById('updateModalTitle');
   const badge = document.getElementById('updateTargetVersionBadge');
   const desc = document.getElementById('updateModalDesc');
   const btn = document.getElementById('updateModalActionBtn');
 
-  if (isNew) {
+  if (!isInstalled) {
     if (titleEl) titleEl.innerText = 'New Version Update Ready:';
     if (badge) badge.innerText = `${targetVer} Ready`;
     if (desc) desc.innerText = rel?.name || `Mind Focus Books ${targetVer} is ready to install!`;
@@ -16009,19 +16010,19 @@ function openUpdateCheckerModal() {
       btn.innerText = `⚡ Download & Install ${targetVer} Now`;
     }
   } else {
-    // Current version is up to date — allow 1-click Reinstall anytime
+    // Installed — Reinstall anytime
     if (titleEl) titleEl.innerText = 'Mind Focus Books is Up to Date';
-    if (badge) badge.innerText = `${CURRENT_APP_VERSION} (Installed)`;
+    if (badge) badge.innerText = `${targetVer} (Installed)`;
     if (desc) desc.innerText = 'You have the latest version installed • Tap below to re-download or reinstall official APK anytime';
     if (btn) {
       btn.disabled = false;
-      btn.innerText = `⚡ Re-download & Install APK (${CURRENT_APP_VERSION})`;
+      btn.innerText = `⚡ Re-download & Install APK (${targetVer})`;
     }
   }
 
   const listEl = document.querySelector('.update-glass-checklist');
   if (listEl) {
-    const featuresToShow = (isNew && rel?.features && Array.isArray(rel.features) && rel.features.length > 0)
+    const featuresToShow = (rel?.features && Array.isArray(rel.features) && rel.features.length > 0)
       ? rel.features
       : [
           '⚡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices',
@@ -16053,12 +16054,10 @@ function closeUpdateCheckerModal() {
     overlay.classList.remove('active');
   }
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-  const targetVer = cfg?.activeRelease?.version;
-  if (targetVer) {
-    try {
-      sessionStorage.setItem('mf_update_dismissed_' + targetVer, '1');
-    } catch (e) {}
-  }
+  const targetVer = cfg?.activeRelease?.version || CURRENT_APP_VERSION;
+  try {
+    sessionStorage.setItem('mf_update_dismissed_' + targetVer, '1');
+  } catch (e) {}
 }
 
 function handleUpdateOverlayClick(e) {
@@ -16072,6 +16071,11 @@ function triggerInAppUpdate() {
   const targetVer = cfg?.activeRelease?.version || CURRENT_APP_VERSION;
   const downloadUrl = (cfg?.activeRelease?.apkDownloadUrl) ||
     `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Native.apk`;
+
+  // Mark version as installed in local storage
+  try {
+    localStorage.setItem('mf_installed_version', targetVer);
+  } catch (e) {}
 
   const progressWrap = document.getElementById('updateModalProgress');
   const progressFill = document.getElementById('updateProgressFill');
@@ -16101,7 +16105,10 @@ function triggerInAppUpdate() {
       if (progressFill) progressFill.style.width = '100%';
       if (progressPct) progressPct.innerText = '100%';
       if (progressText) progressText.innerText = 'Package Ready! Opening Installer...';
-      if (actionBtn) actionBtn.innerText = '⚡ Package Installer Launched';
+      if (actionBtn) {
+        actionBtn.disabled = false;
+        actionBtn.innerText = `✓ Installed — Re-download APK (${targetVer})`;
+      }
     }, 1500);
   } else {
     // Browser fallback
@@ -16110,7 +16117,10 @@ function triggerInAppUpdate() {
       if (progressFill) progressFill.style.width = '100%';
       if (progressPct) progressPct.innerText = '100%';
       window.location.href = downloadUrl;
-      if (actionBtn) actionBtn.innerText = '⚡ Download Started';
+      if (actionBtn) {
+        actionBtn.disabled = false;
+        actionBtn.innerText = `✓ Download Started — Re-download (${targetVer})`;
+      }
     }, 1200);
   }
 }
