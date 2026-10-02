@@ -2712,26 +2712,26 @@ let activeGuideCategory = 'ALL';
 let currentGuideSearchQuery = '';
 
 const appFeaturesGuideData = [
-  { id: 1, title: 'Classic Wooden Bookshelf & 4 Themes', category: 'Reading', icon: '🪵', screenNum: 'Screen 1', description: 'Mahogany & Walnut real wooden shelf texture, dark luxury mode, Kindle sepia & clean white themes.', actionText: 'Switch Themes', route: 'profile' },
-  { id: 2, title: 'Compact KPI Bar & Honest Metrics', category: 'Analytics', icon: '📊', screenNum: 'Screen 2', description: 'Real-time counters for finished books, reading progress, pending wishlist, streak & reading time.', actionText: 'View Dashboard', route: 'home' },
-  { id: 3, title: 'Quantum Holographic Beacon & Card 1', category: 'Security', icon: '🚀', screenNum: 'Screen 3', description: 'Cyan/blue neon holographic banner with shockwave reactor orb and live broadcast announcements.', actionText: 'Check Updates', route: 'modal_update' },
-  { id: 4, title: 'AI Book Coach & Assistant', category: 'Reading', icon: '🤖', screenNum: 'Screen 4', description: 'Intelligent AI reading companion providing chapter summaries, insights, and page recommendations.', actionText: 'Open Coach', route: 'sub_aiBookCoach' },
-  { id: 5, title: 'OCR Book Cover & Text Scanner', category: 'Reading', icon: '📷', screenNum: 'Screen 5', description: 'Camera OCR scanner to capture physical book pages or covers with instant text recognition.', actionText: 'Open Scanner', route: 'sub_ocrScanner' },
-  { id: 6, title: '3D Interactive Flip Book Reader', category: 'Reading', icon: '📖', screenNum: 'Screen 6', description: 'Realistic 3D paper page flipping, multi-language support (Hindi, Hinglish, English) & custom themes.', actionText: 'Open 3D Reader', route: 'modal_reader' },
-  { id: 7, title: 'Audio Book Speed & Ambient Player', category: 'Reading', icon: '🎧', screenNum: 'Screen 7', description: 'Built-in Text-To-Speech audio reader with 0.5x–2.5x speed controls, rain, coffee shop & fireplace sounds.', actionText: 'Open Audio Player', route: 'sub_audioBookPlayer' },
-  { id: 8, title: 'Mind Map & Concept Node Generator', category: 'Analytics', icon: '🧠', screenNum: 'Screen 8', description: 'Interactive visual mind map generator connecting key book themes, concepts, and memory nodes.', actionText: 'Open Mind Map', route: 'sub_mindMapGenerator' },
-  { id: 9, title: 'Gamified Reading Streak & Heatmap', category: 'Analytics', icon: '🔥', screenNum: 'Screen 9', description: 'GitHub-style 365-day reading activity contribution grid, streak badges & streak freeze shield.', actionText: 'View Streak Grid', route: 'progress' },
-  { id: 10, title: 'Book Cost & Expenditure Analytics', category: 'Analytics', icon: '💰', screenNum: 'Screen 10', description: 'Track total budget spent on physical books, savings breakdown, and honest price calculations.', actionText: 'View Budget', route: 'progress_budget' },
-  { id: 11, title: 'Community Quote & Highlight Sharing', category: 'Library', icon: '💬', screenNum: 'Screen 11', description: 'Save quotes and highlights from any book, export as social media image cards & share reflections.', actionText: 'View Quotes', route: 'sub_quotesInspiration' },
-  { id: 12, title: 'Smart Library Search & Tag Filtering', category: 'Library', icon: '🔍', screenNum: 'Screen 12', description: 'Instant search across titles, authors, categories, shelves, tags & custom reading status.', actionText: 'Open Library', route: 'library' },
-  { id: 13, title: 'Reading Goals & Annual Challenge', category: 'Analytics', icon: '🎯', screenNum: 'Screen 13', description: 'Set daily page targets, monthly book goals, and yearly challenge milestones with visual donut rings.', actionText: 'Open Goals', route: 'sub_readingGoals' },
-  { id: 14, title: 'Personal Reading Journal & Daily Log', category: 'Library', icon: '📓', screenNum: 'Screen 14', description: 'Private reading diary to write daily reflections, rate chapters, log reading mood and notes.', actionText: 'Open Journal', route: 'sub_readingJournal' },
-  { id: 15, title: 'Offline Data Backup & Encrypted Export', category: 'Security', icon: '🛡️', screenNum: 'Screen 15', description: '100% offline privacy, 1-click JSON backup download, local restore & encrypted security lock.', actionText: 'Open Security', route: 'sub_securityBackup' },
-  { id: 16, title: 'Custom Bookshelf & Category Organizer', category: 'Library', icon: '📚', screenNum: 'Screen 16', description: 'Organize your personal library into virtual shelves, custom genres, and status categories.', actionText: 'Manage Shelves', route: 'modal_queue' },
-  { id: 17, title: 'Dark / Light / Vision-OS Glass UI Themes', category: 'Security', icon: '✨', screenNum: 'Screen 17', description: 'Ultra-modern glassmorphic interface with Vision-OS blur effects, accent glows & light/dark modes.', actionText: 'Change Theme', route: 'toggle_theme' },
-  { id: 18, title: 'Security Lock (PIN & Biometrics)', category: 'Security', icon: '🔒', screenNum: 'Screen 18', description: 'Protect your reading notes, library, and journal entries with 4-digit PIN lock & biometric protection.', actionText: 'Manage PIN', route: 'prompt_pin' },
-  { id: 19, title: 'App Features Directory & Sitemap', category: 'Security', icon: '🗺️', screenNum: 'Screen 19', description: 'Full interactive directory index listing all 20 screens and features with instant search and category filters.', actionText: 'Currently Active', route: 'self' },
-  { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: '📋', screenNum: 'Screen 20', description: 'Complete audit log history tracking every book addition, progress update, reading session & system event.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' }
+  { id: 1, title: 'Classic Wooden Bookshelf & 4 Themes', category: 'Reading', icon: '🪵', screenNum: 'Screen 1', location: 'Top Bar / Profile -> Themes Menu', purpose: 'App ka visual appearance (Mahogany, Walnut, Dark Gold, Sepia) badalne ke liye.', benefit: 'Eye comfort aur aesthetic satisfaction ke liye.', actionText: 'Switch Themes', route: 'profile' },
+  { id: 2, title: 'Compact KPI Bar & Real Metrics', category: 'Analytics', icon: '📊', screenNum: 'Screen 2', location: 'Home & Profile Header Top Bar', purpose: 'Finished books, reading progress, wishlist, time & streak track karne ke liye.', benefit: '1-second me apni daily reading stats dekhne ke liye.', actionText: 'View Dashboard', route: 'home' },
+  { id: 3, title: 'Quantum Holographic Beacon', category: 'Security', icon: '🚀', screenNum: 'Screen 3', location: 'Progress Screen Top Banner', purpose: 'Shockwave reactor orb & live broadcast updates ke liye.', benefit: 'Milestone reach hone par visual motivation ke liye.', actionText: 'Check Updates', route: 'modal_update' },
+  { id: 4, title: 'AI Book Coach & Assistant', category: 'Reading', icon: '🤖', screenNum: 'Screen 4', location: 'Profile -> Options -> AI Book Coach', purpose: 'Chapter summaries, कठिन सवाल aur quiz answers ke liye.', benefit: 'Mushkil kitabon ko bina kisi ki help ke 3x fast samajhne ke liye.', actionText: 'Open Coach', route: 'sub_aiBookCoach' },
+  { id: 5, title: 'OCR Book Cover & Text Scanner', category: 'Reading', icon: '📷', screenNum: 'Screen 5', location: 'Add Book Form / Reader Camera Icon', purpose: 'Physical book page/cover photo se text auto-extract karne ke liye.', benefit: 'Manual typing bachane aur instant entry ke liye.', actionText: 'Open Scanner', route: 'sub_ocrScanner' },
+  { id: 6, title: '3D Interactive Flip Book Reader', category: 'Reading', icon: '📖', screenNum: 'Screen 6', location: 'Book Detail -> Start Reading Button', purpose: 'Physical paper page-flip animation se kitabein padhne ke liye.', benefit: 'Realistic digital reading experience aur page progress auto-save ke liye.', actionText: 'Open 3D Reader', route: 'modal_reader' },
+  { id: 7, title: 'Audio Book Speed & Ambient Player', category: 'Reading', icon: '🎧', screenNum: 'Screen 7', location: 'Reader Toolbar -> Audio Icon', purpose: 'TTS voice audio aur background sounds (Rain, Fireplace) sunne ke liye.', benefit: 'Reading concentration aur focus badhane ke liye.', actionText: 'Open Audio Player', route: 'sub_audioBookPlayer' },
+  { id: 8, title: 'Mind Map & Concept Node Generator', category: 'Analytics', icon: '🧠', screenNum: 'Screen 8', location: 'Profile -> Options -> Knowledge Map', purpose: 'Kitabon ke main ideas ka mind map node diagram dekhne ke liye.', benefit: 'Deep learning aur concepts ko visual connect karne ke liye.', actionText: 'Open Mind Map', route: 'sub_mindMapGenerator' },
+  { id: 9, title: 'Gamified Reading Streak & Heatmap', category: 'Analytics', icon: '🔥', screenNum: 'Screen 9', location: 'Home / Progress -> Streak Card', purpose: '365-day reading activity contribution grid dekhne ke liye.', benefit: 'Daily reading habit ko continuous game ki tarah maintain karne ke liye.', actionText: 'View Streak Grid', route: 'progress' },
+  { id: 10, title: 'Book Cost & Expenditure Analytics', category: 'Analytics', icon: '💰', screenNum: 'Screen 10', location: 'Progress -> Expense & Budget Section', purpose: 'Physical books par kharch huye real budget ko calculate karne ke liye.', benefit: 'Personal book buying budget control me rakhne ke liye.', actionText: 'View Budget', route: 'progress_budget' },
+  { id: 11, title: 'Community Quote & Highlight Sharing', category: 'Library', icon: '💬', screenNum: 'Screen 11', location: 'Book Details -> Quotes & Notes Tab', purpose: 'Favorite lines aur highlights ko image cards me share/save karne ke liye.', benefit: 'Important thoughts ko hamesha ke liye save rakhne ke liye.', actionText: 'View Quotes', route: 'sub_quotesInspiration' },
+  { id: 12, title: 'Smart Library Search & Tag Filtering', category: 'Library', icon: '🔍', screenNum: 'Screen 12', location: 'Library Screen Top Search Bar', purpose: 'Title, Author, Category ya Custom Tags se search karne ke liye.', benefit: 'Badi library me se 1-second me book dhoondhne ke liye.', actionText: 'Open Library', route: 'library' },
+  { id: 13, title: 'Reading Goals & Annual Challenge', category: 'Analytics', icon: '🎯', screenNum: 'Screen 13', location: 'Profile -> Options -> Reading Goals', purpose: 'Daily page target aur yearly book goal ring track karne ke liye.', benefit: 'Reading milestone bina kisi fail ke complete karne ke liye.', actionText: 'Open Goals', route: 'sub_readingGoals' },
+  { id: 14, title: 'Personal Reading Journal & Daily Log', category: 'Library', icon: '📓', screenNum: 'Screen 14', location: 'Profile -> Options -> Reading Journal', purpose: 'Daily personal thoughts, chapter rating aur diary likhne ke liye.', benefit: 'Personal reflection aur self-growth journal maintain karne ke liye.', actionText: 'Open Journal', route: 'sub_readingJournal' },
+  { id: 15, title: 'Offline Data Backup & Encrypted Export', category: 'Security', icon: '🛡️', screenNum: 'Screen 15', location: 'Profile -> Settings -> Data & Backup', purpose: '1-click JSON/CSV backup download aur data restore ke liye.', benefit: 'Phone badalne ya reinstall karne par bhi reading data loss hone se bachane ke liye.', actionText: 'Open Security', route: 'sub_securityBackup' },
+  { id: 16, title: 'Custom Bookshelf & Category Organizer', category: 'Library', icon: '📚', screenNum: 'Screen 16', location: 'Library -> Shelves Tab', purpose: 'Virtual bookshelves (Favorites, Philosophy, Fiction) banane ke liye.', benefit: 'Kitabon ko neat and clean categories me organize rakhne ke liye.', actionText: 'Manage Shelves', route: 'modal_queue' },
+  { id: 17, title: 'Dark / Light / Vision-OS Glass UI Themes', category: 'Security', icon: '✨', screenNum: 'Screen 17', location: 'Profile -> Customization View', purpose: 'Vision-OS glassmorphism blur effects aur colors customize karne ke liye.', benefit: 'App ko sleek aur ultra-modern premium feel dene ke liye.', actionText: 'Change Theme', route: 'toggle_theme' },
+  { id: 18, title: 'Security Lock (PIN & Biometrics)', category: 'Security', icon: '🔒', screenNum: 'Screen 18', location: 'Profile -> Privacy & Security', purpose: 'App aur notes ko 4-digit PIN lock se secure karne ke liye.', benefit: 'Personal notes ko private aur safe rakhne ke liye.', actionText: 'Manage PIN', route: 'prompt_pin' },
+  { id: 19, title: 'App Features Directory & Sitemap', category: 'Security', icon: '🗺️', screenNum: 'Screen 19', location: 'Profile -> App Features Directory Button', purpose: 'Sabi 20+ features ki detailed list aur direct 1-tap launcher cards ke liye.', benefit: 'Kisi bhi feature ko bina dhoondhe 1-tap me launch karne ke liye.', actionText: 'Currently Active', route: 'self' },
+  { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: '📋', screenNum: 'Screen 20', location: 'Profile -> Options -> Activity Audit Log', purpose: 'App me kiye gaye har action ki history audit log me dekhne ke liye.', benefit: 'System security aur app actions transparent rakhne ke liye.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' }
 ];
 
 function renderAppFeaturesDirectoryView() {
@@ -2756,18 +2756,26 @@ function renderAppFeaturesDirectoryView() {
   }
 
   container.innerHTML = filtered.map(item => `
-    <div class="feature-guide-card" style="background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; align-items: flex-start; gap: 12px; transition: all 0.2s ease;">
-      <div style="font-size: 1.8rem; background: rgba(245, 158, 11, 0.12); border-radius: 12px; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(245, 158, 11, 0.2);">${item.icon}</div>
-      <div style="flex: 1;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-          <span style="font-weight: 800; font-size: 0.95rem; color: #ffffff;">${item.title}</span>
-          <span style="font-size: 0.68rem; font-weight: 700; color: var(--accent-gold); background: rgba(245, 158, 11, 0.15); padding: 2px 8px; border-radius: 999px;">${item.screenNum}</span>
+    <div class="feature-guide-card" style="background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; transition: all 0.2s ease;">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <div style="font-size: 1.6rem; background: rgba(245, 158, 11, 0.12); border-radius: 12px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(245, 158, 11, 0.2);">${item.icon}</div>
+        <div style="flex: 1;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 800; font-size: 0.95rem; color: #ffffff;">${item.title}</span>
+            <span style="font-size: 0.68rem; font-weight: 700; color: var(--accent-gold); background: rgba(245, 158, 11, 0.15); padding: 2px 8px; border-radius: 999px;">${item.screenNum}</span>
+          </div>
+          <span style="font-size: 0.7rem; color: #94a3b8;">Category: ${item.category}</span>
         </div>
-        <p style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 10px;">${item.description}</p>
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <span style="font-size: 0.7rem; color: #94a3b8; background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 6px;">Category: ${item.category}</span>
-          <button type="button" class="btn-save-gold" style="padding: 5px 12px; font-size: 0.75rem; border-radius: 8px; cursor: pointer;" onclick="launchGuideFeatureRoute('${item.route}')">${item.actionText} &rarr;</button>
-        </div>
+      </div>
+
+      <div style="background: rgba(0, 0, 0, 0.25); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem;">
+        <div style="color: #60a5fa; font-weight: 600;">📍 <strong>Kahan hai:</strong> ${item.location}</div>
+        <div style="color: #cbd5e1;">👤 <strong>Kiske liye:</strong> ${item.purpose}</div>
+        <div style="color: #34d399;">🎯 <strong>Kyu use karein:</strong> ${item.benefit}</div>
+      </div>
+
+      <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
+        <button type="button" class="btn-save-gold" style="padding: 6px 14px; font-size: 0.75rem; border-radius: 8px; cursor: pointer;" onclick="launchGuideFeatureRoute('${item.route}')">${item.actionText} &rarr;</button>
       </div>
     </div>
   `).join('');
