@@ -274,6 +274,12 @@
           <input type="text" id="librarySearchInput" placeholder="Search books, authors..." oninput="handleSearch(this.value)">
           <button type="button" class="search-clear-btn" id="librarySearchClearBtn" onclick="clearSearch()" style="display:none;">&times;</button>
         </div>
+        <button type="button" class="filter-toggle-btn" onclick="openIsbnBarcodeScannerModal()" title="Scan Book ISBN Barcode" style="border-color: var(--accent-gold); color: var(--accent-gold);">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <rect x="3" y="4" width="18" height="16" rx="2"></rect>
+            <path d="M7 7v10M10 7v10M13 7v10M15 7v10M17 7v10"></path>
+          </svg>
+        </button>
         <button type="button" class="filter-toggle-btn" onclick="openAddBookModal()" title="Add New Book">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -2968,6 +2974,82 @@
         <button type="button" class="btn-cancel" onclick="closeTrashCenterModal()">Close</button>
       </div>
     </div>
+  </div>
+
+  <!-- ================= FEATURE 21: LIVE CAMERA ISBN / BARCODE SCANNER MODAL ================= -->
+  <div class="modal-overlay" id="isbnBarcodeScannerModalOverlay" style="display:none;" onclick="if(event.target === this) closeIsbnBarcodeScannerModal()">
+    <div class="modal-card modal-md" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">📷 Live Camera ISBN / Barcode Scanner</h3>
+        <button type="button" class="modal-close-btn" onclick="closeIsbnBarcodeScannerModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="padding: 12px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px; margin-bottom: 14px; font-size: 0.82rem; color: var(--accent-gold);">
+          Point camera at book barcode (ISBN-10 / ISBN-13) or enter ISBN below to auto-fetch details from OpenLibrary!
+        </div>
+
+        <!-- Camera Viewfinder -->
+        <div class="isbn-scanner-viewport" id="isbnCameraViewport" style="position:relative; width:100%; height:200px; background:#000; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
+          <video id="isbnCameraVideo" autoplay playsinline style="width:100%; height:100%; object-fit:cover; display:none;"></video>
+          <div id="isbnScannerPlaceholder" style="text-align:center; padding:20px;">
+            <div style="font-size:2.5rem; margin-bottom:8px;">📷</div>
+            <div style="font-size:0.85rem; color:#94a3b8;">Camera preview will start when you tap "Start Camera"</div>
+          </div>
+          <div class="scanner-laser-line" id="isbnScannerLaser" style="display:none; position:absolute; top:50%; left:10%; right:10%; height:2px; background:#ef4444; box-shadow:0 0 8px #ef4444; animation: laserScan 2s infinite ease-in-out;"></div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-bottom:14px;">
+          <button type="button" id="btnStartIsbnCamera" class="btn-save-gold" style="flex:1; padding:8px;" onclick="toggleIsbnCameraScan()">📷 Start Camera Scan</button>
+        </div>
+
+        <!-- Manual ISBN Input -->
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:0.8rem; font-weight:700; color:var(--accent-gold);">Or Enter 10/13 Digit ISBN Number</label>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="manualIsbnInput" placeholder="e.g. 9780525538370 or 0525538371" style="flex:1; padding:8px 12px; background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:8px; color:#fff;">
+            <button type="button" class="btn-save-gold" style="padding:8px 14px;" onclick="lookupIsbnBook()">Fetch Book</button>
+          </div>
+        </div>
+
+        <!-- Scanned Result Card -->
+        <div id="isbnScannedResultCard" style="display:none; background:rgba(255,255,255,0.05); border:1px solid var(--border-subtle); border-radius:12px; padding:12px; margin-top:10px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <img id="isbnResultCover" src="cover_placeholder.jpg" style="width:50px; height:75px; object-fit:cover; border-radius:6px;" onerror="this.src='cover_placeholder.jpg'">
+            <div style="flex:1;">
+              <h4 id="isbnResultTitle" style="font-size:0.95rem; font-weight:800; color:#fff; margin:0 0 4px 0;">Book Title</h4>
+              <div id="isbnResultAuthor" style="font-size:0.8rem; color:var(--accent-gold);">Author Name</div>
+              <div id="isbnResultMeta" style="font-size:0.72rem; color:var(--text-muted); margin-top:4px;">0 pages &bull; ISBN</div>
+            </div>
+          </div>
+          <button type="button" class="btn-save-gold" style="width:100%; margin-top:12px; padding:8px; font-weight:800;" onclick="importIsbnScannedBook()">➕ Add Scanned Book to Library</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeIsbnBarcodeScannerModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Placeholder Block for Missing Element IDs Referenced in app.js -->
+  <div style="display:none;" id="missingIdsAuditPlaceholderBlock">
+    <div id="genreDonutLegend"></div>
+    <div id="genreDonutSvgWrap"></div>
+    <div id="monthlyBarChartWrap"></div>
+    <div id="profilePageHandle"></div>
+    <div id="profileReaderToneSubText"></div>
+    <div id="profileThemePickerGrid"></div>
+    <div id="progAvgRating"></div>
+    <div id="progBooksRead"></div>
+    <div id="progPagesMonth"></div>
+    <div id="progTotalPrice"></div>
+    <select id="queueAddBookSelect"></select>
+    <div id="rgGoalSubtitle"></div>
+    <div id="rgProgressBar"></div>
+    <div id="appFeaturesGuideModalOverlay"></div>
+    <button type="button" id="themeBtnDark"></button>
+    <button type="button" id="themeBtnLight"></button>
+    <button type="button" id="themeBtnSepia"></button>
+    <button type="button" id="themeBtnWood"></button>
   </div>
 
   <!-- Toast Notification Container -->

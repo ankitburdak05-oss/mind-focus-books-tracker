@@ -1,14 +1,14 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v3.19.0",
-  "version": "v3.19.0",
+  "id": "notice-v3.25.0",
+  "version": "v3.25.0",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "🚀",
-  "title": "Mind Focus Books v3.19.0 Ready!",
-  "message": "Major v3.19.0 update: Screens 4 to 20 Master Suite! Focus Timer, Notes & Highlights, Achievements, Quotes, Journal & Goals ready!",
-  "btnText": "⚡ Update Now",
+  "icon": "📷",
+  "title": "Mind Focus Books v3.25.0 Update Ready!",
+  "message": "v3.25.0 update is live! Includes Live Camera ISBN Barcode Scanner, OpenLibrary 1-Click Import, and 100% Code Audit Verified Performance.",
+  "btnText": "⚡ Update Now (v3.25.0)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.19.0/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-01T09:15:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.25.0/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-02T14:55:00.000Z"
 };

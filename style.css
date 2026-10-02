@@ -4923,4 +4923,14 @@ input:checked + .slider-round:before {
   font-size: 10px;
   color: var(--text-secondary);
 }
+
+@keyframes laserScan {
+  0% { top: 15%; opacity: 0.8; }
+  50% { top: 85%; opacity: 1; }
+  100% { top: 15%; opacity: 0.8; }
 }
+
+.scanner-laser-line {
+  z-index: 10;
+}
+
