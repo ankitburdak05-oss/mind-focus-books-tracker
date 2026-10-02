@@ -4875,3 +4875,52 @@ input:checked + .slider-round:before {
 #updateCheckerModalOverlay.active {
   display: flex !important;
 }
+
+/* ================= 20 ADVANCED FEATURES GRID HUB ================= */
+.features-20-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+
+@media (min-width: 600px) {
+  .features-20-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.f20-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.f20-card:hover, .f20-card:active {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4);
+  transform: translateY(-2px);
+}
+
+.f20-icon {
+  font-size: 22px;
+  margin-bottom: 2px;
+}
+
+.f20-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.f20-sub {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+}
