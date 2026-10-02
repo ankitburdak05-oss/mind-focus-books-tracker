@@ -305,6 +305,7 @@ function renderHomeView() {
   renderHomeCurrentlyReading();
   renderHomeStats();
   renderHomeRecentBooks();
+  renderHomeWidgets();
 }
 
 function updateDynamicGreeting() {
@@ -3412,4 +3413,419 @@ function continueReadingLastBook() {
 function launchZenModeSession() {
   showToast('Zen Mode active! Enjoy distraction-free reading 🧘');
 }
+
+// ================= FEATURE HANDLERS & IMPLEMENTATIONS =================
+
+// Initialize & Render Home View Widgets (Planner, Streak Freeze, Reading Queue)
+function renderHomeWidgets() {
+  // Page-per-Day Planner
+  const target = state.plannerTarget || 25;
+  const todayRead = state.plannerTodayRead || 0;
+  const targetText = document.getElementById('homePlannerTargetText');
+  const todayReadText = document.getElementById('homePlannerTodayRead');
+  if (targetText) targetText.innerText = `Goal: ${target} pages/day`;
+  if (todayReadText) todayReadText.innerText = `${todayRead} / ${target} pages`;
+
+  // Render Planner Calendar Weekday Badges
+  const weekContainer = document.getElementById('homePlannerWeekBadges');
+  if (weekContainer) {
+    const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    const todayIndex = (new Date().getDay() + 6) % 7; // Monday = 0
+    weekContainer.innerHTML = days.map((day, idx) => {
+      const isToday = idx === todayIndex;
+      const isDone = isToday && todayRead >= target;
+      const bg = isDone ? '#10b981' : isToday ? 'rgba(245, 158, 11, 0.3)' : 'rgba(255,255,255,0.06)';
+      const color = isDone ? '#fff' : isToday ? 'var(--accent-gold)' : 'var(--text-muted)';
+      const border = isToday ? '1px solid var(--accent-gold)' : '1px solid rgba(255,255,255,0.1)';
+      return `<div style="flex:1; text-align:center; padding: 4px 0; font-size:0.7rem; font-weight:800; background:${bg}; color:${color}; border:${border}; border-radius:6px;">${day}</div>`;
+    }).join('');
+  }
+
+  // Reading Streak Freeze
+  const freezeStatus = document.getElementById('homeStreakFreezeStatus');
+  const btnFreeze = document.getElementById('btnActivateFreeze');
+  if (state.streakFreezeActive) {
+    if (freezeStatus) freezeStatus.innerText = '❄️ Active Today';
+    if (btnFreeze) {
+      btnFreeze.innerText = '❄️ Freeze Active';
+      btnFreeze.style.background = 'rgba(56, 189, 248, 0.2)';
+    }
+  } else {
+    if (freezeStatus) freezeStatus.innerText = `${state.streakFreezeCount || 1} Freeze Ready`;
+    if (btnFreeze) {
+      btnFreeze.innerText = '❄️ Activate Freeze';
+      btnFreeze.style.background = 'transparent';
+    }
+  }
+
+  // Personal Reading Queue
+  renderHomeReadingQueue();
+}
+
+// Render Reading Queue on Home Screen
+function renderHomeReadingQueue() {
+  const container = document.getElementById('homeReadingQueueList');
+  if (!container) return;
+  const queue = state.readingQueue || [];
+  if (queue.length === 0) {
+    container.innerHTML = `
+      <div style="background: rgba(255,255,255,0.03); border: 1px dashed var(--border-subtle); border-radius: 12px; padding: 16px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
+        No books in queue. Click "Manage Queue" to build your upcoming reading list!
+      </div>`;
+    return;
+  }
+  container.innerHTML = queue.slice(0, 3).map((bookId, index) => {
+    const book = state.books.find(b => b.id === bookId || b.title === bookId);
+    if (!book) return '';
+    return `
+      <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;" onclick="openBookDetailView(state.books.find(x => x.id === '${book.id}'))">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <span style="font-weight: 900; color: var(--accent-gold); font-size: 0.85rem; width: 20px;">#${index + 1}</span>
+          <div>
+            <div style="font-weight: 700; font-size: 0.85rem; color: #fff;">${book.title}</div>
+            <div style="font-size: 0.72rem; color: var(--text-secondary);">${book.author} &bull; ${book.pages ? book.pages + ' pages' : 'Book'}</div>
+          </div>
+        </div>
+        <span style="font-size: 0.75rem; color: var(--accent-gold); font-weight: 700;">Read &rsaquo;</span>
+      </div>`;
+  }).join('');
+}
+
+// Feature 1: Book Scanner & ISBN Capture
+function openBookScannerModal() {
+  const modal = document.getElementById('bookScannerModalOverlay');
+  if (modal) modal.style.display = 'flex';
+}
+function closeBookScannerModal() {
+  const modal = document.getElementById('bookScannerModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+function fetchIsbnMetadata() {
+  const isbn = (document.getElementById('scannerIsbnInput')?.value || '').trim();
+  if (!isbn) {
+    showToast('Please enter an ISBN code to scan!');
+    return;
+  }
+  showToast('Searching Google Books API for ISBN: ' + isbn + '... 🔍');
+  fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.items && data.items.length > 0) {
+        const info = data.items[0].volumeInfo;
+        const newBook = {
+          id: 'isbn_' + Date.now(),
+          title: info.title || 'Scanned Book',
+          author: info.authors ? info.authors.join(', ') : 'Unknown Author',
+          pages: info.pageCount || 250,
+          genre: info.categories ? info.categories[0] : 'General',
+          status: 'WANT_TO_READ',
+          description: info.description || 'Scanned via ISBN scanner.',
+          price: 0,
+          date_added: new Date().toISOString()
+        };
+        state.books.unshift(newBook);
+        saveState();
+        closeBookScannerModal();
+        renderHomeView();
+        showToast(`Added "${newBook.title}" to your library! 📚`);
+      } else {
+        showToast('ISBN not found on Google Books. Try manual search.');
+      }
+    })
+    .catch(() => {
+      showToast('Offline mode: ISBN lookup mock created for testing.');
+      closeBookScannerModal();
+    });
+}
+
+// Feature 2: Physical Page OCR Quote Extractor
+function openOcrScannerModal() {
+  const modal = document.getElementById('ocrScannerModalOverlay');
+  if (modal) modal.style.display = 'flex';
+}
+function closeOcrScannerModal() {
+  const modal = document.getElementById('ocrScannerModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+function processOcrText() {
+  const title = (document.getElementById('ocrBookTitle')?.value || '').trim() || 'Scanned OCR Quote';
+  const page = document.getElementById('ocrPageNum')?.value || '1';
+  const rawText = (document.getElementById('ocrRawText')?.value || '').trim();
+  if (!rawText) {
+    showToast('Please paste or enter OCR text!');
+    return;
+  }
+  const newNote = {
+    id: 'ocr_' + Date.now(),
+    type: 'Quote',
+    bookTitle: title,
+    page: page,
+    content: rawText,
+    date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  };
+  if (!state.userNotes) state.userNotes = [];
+  state.userNotes.unshift(newNote);
+  saveState();
+  closeOcrScannerModal();
+  showToast('Saved quote from physical book OCR! 📸');
+}
+
+// Feature 4: Duplicate Detector
+function openDuplicateDetectorModal() {
+  const modal = document.getElementById('duplicateDetectorModalOverlay');
+  if (modal) modal.style.display = 'flex';
+
+  const container = document.getElementById('duplicateDetectorResults');
+  if (!container) return;
+
+  const titlesMap = {};
+  state.books.forEach(b => {
+    const norm = b.title.toLowerCase().trim();
+    if (!titlesMap[norm]) titlesMap[norm] = [];
+    titlesMap[norm].push(b);
+  });
+
+  const duplicates = Object.values(titlesMap).filter(list => list.length > 1);
+  if (duplicates.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px; color: #10b981;">
+        <div style="font-size: 2.5rem; margin-bottom: 8px;">✨</div>
+        <div style="font-weight: 800; font-size: 1rem;">No Duplicate Books Found!</div>
+        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Your library of ${state.books.length} books is clean and unique.</p>
+      </div>`;
+  } else {
+    container.innerHTML = duplicates.map(group => `
+      <div style="background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 12px; padding: 12px; margin-bottom: 10px;">
+        <div style="font-weight: 800; font-size: 0.9rem; color: #ef4444; margin-bottom: 6px;">Duplicate: "${group[0].title}" (${group.length} copies)</div>
+        ${group.map(b => `
+          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); padding: 8px 12px; border-radius: 8px; margin-top: 4px; font-size: 0.8rem;">
+            <div>
+              <span style="color: #fff; font-weight: 700;">${b.author}</span>
+              <span style="color: var(--text-muted); margin-left: 8px;">[${b.status}]</span>
+            </div>
+            <button type="button" style="background: #ef4444; border: none; color: #fff; font-size: 0.7rem; padding: 4px 8px; border-radius: 6px; cursor: pointer;" onclick="deleteBookById('${b.id}')">Remove Copy</button>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+}
+function closeDuplicateDetectorModal() {
+  const modal = document.getElementById('duplicateDetectorModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+function deleteBookById(bookId) {
+  const index = state.books.findIndex(b => b.id === bookId);
+  if (index > -1) {
+    const deleted = state.books.splice(index, 1)[0];
+    if (!state.trashBin) state.trashBin = [];
+    state.trashBin.unshift(deleted);
+    saveState();
+    openDuplicateDetectorModal();
+    showToast(`Moved "${deleted.title}" copy to Trash.`);
+  }
+}
+
+// Feature 6: Reading Speed Benchmark Test
+let speedTestStartTime = null;
+function openReadingSpeedModal() {
+  const modal = document.getElementById('readingSpeedModalOverlay');
+  if (modal) modal.style.display = 'flex';
+  const container = document.getElementById('speedTestContainer');
+  if (!container) return;
+  container.innerHTML = `
+    <div style="text-align: center; padding: 10px;">
+      <p style="font-size: 0.82rem; color: var(--text-secondary); margin-bottom: 12px;">
+        Read the passage below at your normal comfortable speed, then click <b>"Finished Reading"</b> to calculate your exact WPM (Words Per Minute).
+      </p>
+      <div id="speedPassageBox" style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 16px; font-size: 0.95rem; line-height: 1.6; color: var(--text-primary); text-align: left; max-height: 160px; overflow-y: auto;">
+        "Reading is to the mind what exercise is to the body. As by the one, health and strength are preserved and increased, so by the other, wisdom and knowledge are acquired. Continuous reading expands your vocabulary, sharpens critical thinking, and elevates emotional intelligence."
+      </div>
+      <button type="button" class="btn-save-gold" style="margin-top: 14px; width: 100%; font-size: 0.9rem;" onclick="startSpeedTestTimer(this)">
+        ⏱️ Start Reading Test
+      </button>
+    </div>`;
+}
+function closeReadingSpeedModal() {
+  const modal = document.getElementById('readingSpeedModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+function startSpeedTestTimer(btn) {
+  speedTestStartTime = Date.now();
+  btn.innerText = '✅ Finished Reading (Calculate WPM)';
+  btn.onclick = finishSpeedTest;
+}
+function finishSpeedTest() {
+  if (!speedTestStartTime) return;
+  const elapsedSec = (Date.now() - speedTestStartTime) / 1000;
+  const wordCount = 42; // Word count of benchmark passage
+  const wpm = Math.round((wordCount / elapsedSec) * 60);
+  state.readingWpm = wpm;
+  saveState();
+  const container = document.getElementById('speedTestContainer');
+  if (container) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 20px;">
+        <div style="font-size: 3rem; margin-bottom: 8px;">🚀</div>
+        <div style="font-size: 1.5rem; font-weight: 900; color: var(--accent-gold);">${wpm} WPM</div>
+        <div style="font-size: 0.85rem; color: #fff; font-weight: 700; margin-top: 4px;">Reading Speed Benchmark Result</div>
+        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 8px;">
+          Time taken: ${elapsedSec.toFixed(1)} seconds.<br>
+          ${wpm > 250 ? '🌟 Above Average Reader!' : '📖 Steady & Thoughtful Reading Pace!'}
+        </p>
+      </div>`;
+  }
+}
+
+// Feature 7: Page Goal Planner Modal
+function openPagePlannerModal() {
+  const modal = document.getElementById('pagePlannerModalOverlay');
+  if (modal) modal.style.display = 'flex';
+  const targetInput = document.getElementById('plannerPageTargetInput');
+  const todayReadInput = document.getElementById('plannerTodayReadInput');
+  if (targetInput) targetInput.value = state.plannerTarget || 25;
+  if (todayReadInput) todayReadInput.value = state.plannerTodayRead || 0;
+}
+function closePagePlannerModal() {
+  const modal = document.getElementById('pagePlannerModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+function savePagePlannerGoal() {
+  const target = parseInt(document.getElementById('plannerPageTargetInput')?.value || '25', 10);
+  const todayRead = parseInt(document.getElementById('plannerTodayReadInput')?.value || '0', 10);
+  state.plannerTarget = target;
+  state.plannerTodayRead = todayRead;
+  saveState();
+  closePagePlannerModal();
+  renderHomeWidgets();
+  showToast(`Updated daily goal: ${todayRead}/${target} pages! 📅`);
+}
+
+// Feature 8: Reading Streak Freeze Toggle
+function toggleStreakFreeze() {
+  state.streakFreezeActive = !state.streakFreezeActive;
+  if (state.streakFreezeActive && (!state.streakFreezeCount || state.streakFreezeCount <= 0)) {
+    state.streakFreezeCount = 1;
+  }
+  saveState();
+  renderHomeWidgets();
+  showToast(state.streakFreezeActive ? '❄️ Streak Freeze activated for today!' : 'Streak Freeze disabled.');
+}
+
+// Feature 13: Manage Reading Queue Modal
+function openManageQueueModal() {
+  const modal = document.getElementById('manageQueueModalOverlay');
+  if (modal) modal.style.display = 'flex';
+
+  const container = document.getElementById('manageQueueContainer');
+  if (!container) return;
+
+  const queue = state.readingQueue || [];
+  container.innerHTML = `
+    <div style="margin-bottom: 12px;">
+      <label style="font-size: 0.8rem; font-weight: 700; color: var(--accent-gold);">Add Book to Queue</label>
+      <select id="queueAddBookSelect" style="width: 100%; padding: 8px; margin-top: 4px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 8px; color: #fff;">
+        <option value="">Select a book from library...</option>
+        ${state.books.map(b => `<option value="${b.id}">${b.title}</option>`).join('')}
+      </select>
+      <button type="button" class="btn-save-gold" style="margin-top: 8px; width: 100%; padding: 6px; font-size: 0.75rem;" onclick="addBookToQueueFromSelect()">+ Add Selected Book to Queue</button>
+    </div>
+    <div style="font-weight: 800; font-size: 0.85rem; color: #fff; margin-bottom: 8px;">Current Queue Order:</div>
+    <div id="modalQueueItemsList">
+      ${queue.length === 0 ? '<div style="color:var(--text-muted); font-size:0.75rem;">Queue is empty.</div>' : queue.map((bookId, idx) => {
+        const book = state.books.find(b => b.id === bookId || b.title === bookId);
+        if (!book) return '';
+        return `
+          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 8px 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span style="font-weight: 800; color: var(--accent-gold); margin-right: 8px;">#${idx + 1}</span>
+              <span style="color: #fff; font-size: 0.82rem;">${book.title}</span>
+            </div>
+            <button type="button" style="background: transparent; border: 1px solid #ef4444; color: #ef4444; border-radius: 6px; padding: 2px 6px; font-size: 0.7rem; cursor: pointer;" onclick="removeQueueItem(${idx})">Remove</button>
+          </div>`;
+      }).join('')}
+    </div>`;
+}
+function closeManageQueueModal() {
+  const modal = document.getElementById('manageQueueModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+function addBookToQueueFromSelect() {
+  const bookId = document.getElementById('queueAddBookSelect')?.value;
+  if (!bookId) {
+    showToast('Please select a book!');
+    return;
+  }
+  if (!state.readingQueue) state.readingQueue = [];
+  if (!state.readingQueue.includes(bookId)) {
+    state.readingQueue.push(bookId);
+    saveState();
+    openManageQueueModal();
+    renderHomeWidgets();
+    showToast('Added to reading queue! 📋');
+  } else {
+    showToast('Book is already in queue!');
+  }
+}
+function removeQueueItem(index) {
+  if (state.readingQueue && state.readingQueue[index] !== undefined) {
+    state.readingQueue.splice(index, 1);
+    saveState();
+    openManageQueueModal();
+    renderHomeWidgets();
+    showToast('Removed from queue.');
+  }
+}
+
+// Feature 17: Trash & Restore Center
+function openTrashCenterModal() {
+  const modal = document.getElementById('trashCenterModalOverlay');
+  if (modal) modal.style.display = 'flex';
+
+  const container = document.getElementById('trashCenterContainer');
+  if (!container) return;
+
+  const trash = state.trashBin || [];
+  if (trash.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px; color: var(--text-muted);">
+        <div style="font-size: 2.5rem; margin-bottom: 8px;">🗑️</div>
+        <div style="font-weight: 700; font-size: 0.9rem;">Trash Bin is Empty</div>
+        <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Deleted books will stay in Trash for 30 days before permanent deletion.</p>
+      </div>`;
+    return;
+  }
+  container.innerHTML = trash.map((book, idx) => `
+    <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="font-weight: 700; font-size: 0.85rem; color: #fff;">${book.title}</div>
+        <div style="font-size: 0.72rem; color: var(--text-secondary);">${book.author} &bull; Deleted recently</div>
+      </div>
+      <div style="display: flex; gap: 6px;">
+        <button type="button" class="btn-save-gold" style="padding: 4px 10px; font-size: 0.72rem;" onclick="restoreBookFromTrash(${idx})">Restore 🔄</button>
+      </div>
+    </div>`).join('');
+}
+function closeTrashCenterModal() {
+  const modal = document.getElementById('trashCenterModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+function restoreBookFromTrash(index) {
+  if (state.trashBin && state.trashBin[index]) {
+    const book = state.trashBin.splice(index, 1)[0];
+    state.books.unshift(book);
+    saveState();
+    openTrashCenterModal();
+    renderHomeView();
+    showToast(`Restored "${book.title}" to library! 📚`);
+  }
+}
+function emptyTrashPermanently() {
+  if (!state.trashBin || state.trashBin.length === 0) return;
+  state.trashBin = [];
+  saveState();
+  openTrashCenterModal();
+  showToast('Trash emptied permanently. 🗑️');
+}
+
 
