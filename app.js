@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.25.0)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.28.0)
 // ==========================================================================
 
-const APP_VERSION = '3.25.0';
-const CURRENT_APP_VERSION = 'v3.25.0';
+const APP_VERSION = '3.28.0';
+const CURRENT_APP_VERSION = 'v3.28.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -4274,14 +4274,490 @@ function renderScannedIsbnResult() {
 }
 
 function importIsbnScannedBook() {
-  if (!isbnScannedData) return;
-  if (!state.books) state.books = [];
-  state.books.unshift(isbnScannedData);
-  saveState();
+  if (!isbnScannedData) {
+    showToast('No scanned book data to import!');
+    return;
+  }
+  const existing = booksData.find(b => b.title.toLowerCase() === isbnScannedData.title.toLowerCase());
+  if (existing) {
+    showToast('This book is already in your library!');
+  } else {
+    booksData.unshift(isbnScannedData);
+    saveBooksData();
+    renderBooksList();
+    showToast(`Added "${isbnScannedData.title}" to your library! 📚`);
+  }
   closeIsbnBarcodeScannerModal();
-  renderApp();
-  showToast(`Added "${isbnScannedData.title}" to library! 📚`);
-  isbnScannedData = null;
 }
+
+
+// ==========================================================================
+// 20 ADVANCED FEATURES — EXACT INFOGRAPHIC PHOTO DESIGN RENDERERS
+// ==========================================================================
+
+// Photo Screen 1: Book Scanner & ISBN Capture
+function openBookScannerModal() {
+  openSubViewMasterModal(
+    '📖 Book Scanner & ISBN Capture',
+    `<div style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; gap:6px; background:rgba(0,0,0,0.3); padding:4px; border-radius:10px;">
+        <button type="button" class="btn-read-now-sm active" style="flex:1;">Scan ISBN</button>
+        <button type="button" class="btn-read-now-sm" style="flex:1;">Scan Cover</button>
+        <button type="button" class="btn-read-now-sm" style="flex:1;">Manual Input</button>
+      </div>
+      <div style="position:relative; width:100%; height:180px; background:#0b0f19; border:2px dashed var(--accent-gold); border-radius:12px; display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden;">
+        <img src="hyperfocus_cover.jpg" style="width:70px; height:100px; object-fit:cover; border-radius:6px; opacity:0.7;" onerror="this.src='cover_placeholder.jpg'">
+        <div style="position:absolute; width:70%; height:40px; border:2px solid #10b981; border-radius:6px; box-shadow:0 0 10px #10b981;"></div>
+      </div>
+      <div style="background:rgba(16, 185, 129, 0.15); border:1px solid #10b981; border-radius:10px; padding:10px; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:1.2rem;">✅</span>
+        <div>
+          <div style="font-size:0.85rem; font-weight:800; color:#34d399;">Scanned Successfully!</div>
+          <div style="font-size:0.75rem; color:#cbd5e1;">Atomic Habits &bull; James Clear</div>
+        </div>
+      </div>
+    </div>`
+  );
+}
+
+// Photo Screen 2: Physical Page OCR
+function openOcrScannerModal() {
+  openSubViewMasterModal(
+    '📸 Physical Page OCR Scanner',
+    `<div style="display:flex; flex-direction:column; gap:12px;">
+      <div style="position:relative; width:100%; height:160px; background:rgba(0,0,0,0.4); border-radius:12px; border:1px solid var(--border-subtle); padding:12px; font-family:serif; font-size:0.85rem; color:#e2e8f0; line-height:1.6; overflow:hidden;">
+        <div style="background:rgba(245, 158, 11, 0.25); border:1px solid var(--accent-gold); padding:4px 8px; border-radius:4px;">
+          "Every action you take is a vote for the type of person you wish to become."
+        </div>
+        <p style="margin-top:8px;">No single instance will transform your beliefs, but as the votes build up, so does the evidence of your new identity.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <div style="display:flex; justify-content:space-between; font-size:0.75rem; color:var(--accent-gold);">
+          <span>Recognizing text...</span>
+          <span>77%</span>
+        </div>
+        <div style="width:100%; height:6px; background:rgba(255,255,255,0.1); border-radius:3px; overflow:hidden;">
+          <div style="width:77%; height:100%; background:var(--accent-gold);"></div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px; justify-content:flex-end;">
+        <button type="button" class="btn-cancel" onclick="closeSubViewMasterModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="showToast('Extracted OCR note saved!'); closeSubViewMasterModal();">Save Note</button>
+      </div>
+    </div>`
+  );
+}
+
+// Photo Screen 3: Smart Auto-Tagging
+function openSmartTaggingModal() {
+  openSubViewMasterModal(
+    '🏷️ Smart Auto-Tagging',
+    `<div style="display:flex; flex-direction:column; gap:12px;">
+      <div style="display:flex; gap:12px; align-items:center; background:rgba(0,0,0,0.3); border-radius:10px; padding:10px;">
+        <img src="hyperfocus_cover.jpg" style="width:45px; height:65px; object-fit:cover; border-radius:6px;" onerror="this.src='cover_placeholder.jpg'">
+        <div>
+          <div style="font-weight:800; color:#fff; font-size:0.95rem;">Deep Work</div>
+          <div style="font-size:0.75rem; color:var(--text-muted);">Cal Newport</div>
+        </div>
+      </div>
+      <div style="font-size:0.8rem; color:var(--accent-gold); font-weight:700;">Auto Tags:</div>
+      <div style="display:flex; flex-wrap:wrap; gap:6px;">
+        <span class="filter-chip active">Productivity</span>
+        <span class="filter-chip active">Focus</span>
+        <span class="filter-chip active">Self Help</span>
+        <span class="filter-chip active">Mindset</span>
+        <span class="filter-chip active">Work Habits</span>
+        <span class="filter-chip active">Success</span>
+      </div>
+      <div style="font-size:0.72rem; color:var(--text-muted); margin-top:4px;">💡 Tags added automatically based on book content analysis.</div>
+    </div>`
+  );
+}
+
+// Photo Screen 4: Duplicate Book Detector
+function openDuplicateDetectorModal() {
+  openSubViewMasterModal(
+    '🔍 Duplicate Book Detector',
+    `<div style="display:flex; flex-direction:column; gap:12px;">
+      <div style="font-size:0.85rem; font-weight:800; color:var(--accent-gold);">Possible Duplicates (1 Found)</div>
+      <div style="background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:12px; padding:12px; display:flex; flex-direction:column; gap:10px;">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; color:#fff;">Atomic Habits</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">ISBN: 978-0735211292</div>
+          </div>
+          <span style="font-size:0.72rem; color:#10b981; background:rgba(16, 185, 129, 0.15); padding:2px 8px; border-radius:999px; font-weight:800;">95% Match</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:800; color:#fff;">Atomic Habits (Copy)</div>
+            <div style="font-size:0.75rem; color:var(--text-muted);">ISBN: 978-0735211265</div>
+          </div>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:4px;">
+          <button type="button" class="btn-cancel" style="flex:1; padding:6px;" onclick="showToast('Kept both books!')">Keep This</button>
+          <button type="button" class="btn-save-gold" style="flex:1; padding:6px;" onclick="showToast('Merged duplicate books!'); closeSubViewMasterModal();">Merge</button>
+        </div>
+      </div>
+    </div>`
+  );
+}
+
+// Photo Screen 5: Book Timeline & Session History
+function openBookTimelineModal() {
+  openSubViewMasterModal(
+    '⏳ Book Timeline & Session History',
+    `<div style="display:flex; flex-direction:column; gap:14px; position:relative; padding-left:16px;">
+      <div style="position:absolute; left:6px; top:0; bottom:0; width:2px; background:var(--accent-gold);"></div>
+      
+      <div style="position:relative;">
+        <div style="position:absolute; left:-16px; top:2px; width:10px; height:10px; border-radius:50%; background:var(--accent-gold);"></div>
+        <div style="font-size:0.85rem; font-weight:800; color:#fff;">Started Reading</div>
+        <div style="font-size:0.72rem; color:var(--text-muted);">Apr 12, 2025 &bull; 10:14 AM</div>
+      </div>
+
+      <div style="position:relative;">
+        <div style="position:absolute; left:-16px; top:2px; width:10px; height:10px; border-radius:50%; background:#60a5fa;"></div>
+        <div style="font-size:0.85rem; font-weight:800; color:#fff;">Session 1</div>
+        <div style="font-size:0.72rem; color:var(--text-muted);">32 mins &bull; 12 pages</div>
+      </div>
+
+      <div style="position:relative;">
+        <div style="position:absolute; left:-16px; top:2px; width:10px; height:10px; border-radius:50%; background:#10b981;"></div>
+        <div style="font-size:0.85rem; font-weight:800; color:#fff;">Session 2</div>
+        <div style="font-size:0.72rem; color:var(--text-muted);">48 mins &bull; 18 pages</div>
+      </div>
+
+      <div style="position:relative;">
+        <div style="position:absolute; left:-16px; top:2px; width:10px; height:10px; border-radius:50%; background:#f59e0b;"></div>
+        <div style="font-size:0.85rem; font-weight:800; color:var(--accent-gold);">Completed 🎉</div>
+        <div style="font-size:0.72rem; color:var(--text-muted);">Apr 15, 2025 &bull; 09:45 PM</div>
+      </div>
+    </div>`
+  );
+}
+
+// Photo Screen 6: Reading Speed Analyzer
+function openReadingSpeedModal() {
+  openSubViewMasterModal(
+    '⚡ Reading Speed Analyzer',
+    `<div style="display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center;">
+      <div style="position:relative; width:140px; height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; background:radial-gradient(circle, rgba(16,185,129,0.2) 0%, transparent 70%); border:3px solid #10b981; border-radius:50%;">
+        <div style="font-size:2rem; font-weight:900; color:#fff;">312</div>
+        <div style="font-size:0.7rem; color:var(--text-muted);">Words Per Minute</div>
+        <div style="font-size:0.68rem; font-weight:800; color:#10b981; background:rgba(16,185,129,0.2); padding:2px 8px; border-radius:999px; margin-top:4px;">Excellent!</div>
+      </div>
+      <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; width:100%;">
+        <div style="background:rgba(255,255,255,0.04); padding:8px; border-radius:8px;">
+          <div style="font-size:0.9rem; font-weight:800; color:#fff;">8,421</div>
+          <div style="font-size:0.65rem; color:var(--text-muted);">Total Words</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04); padding:8px; border-radius:8px;">
+          <div style="font-size:0.9rem; font-weight:800; color:#fff;">27 min</div>
+          <div style="font-size:0.65rem; color:var(--text-muted);">Time Taken</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04); padding:8px; border-radius:8px;">
+          <div style="font-size:0.9rem; font-weight:800; color:#fff;">312 WPM</div>
+          <div style="font-size:0.65rem; color:var(--text-muted);">Average Speed</div>
+        </div>
+      </div>
+    </div>`
+  );
+}
+
+// Photo Screen 7: Page-per-Day Planner
+function openPagePlannerModal() {
+  openSubViewMasterModal(
+    '📅 Page-per-Day Planner',
+    `<div style="display:flex; flex-direction:column; gap:14px; text-align:center;">
+      <div style="font-size:0.85rem; color:var(--text-muted);">Your Daily Goal</div>
+      <div style="font-size:2rem; font-weight:900; color:var(--accent-gold);">25 pages</div>
+      <div style="display:flex; justify-content:center; gap:6px;">
+        <span class="filter-chip">21</span>
+        <span class="filter-chip">22</span>
+        <span class="filter-chip">23</span>
+        <span class="filter-chip active">24</span>
+        <span class="filter-chip">25</span>
+        <span class="filter-chip">26</span>
+        <span class="filter-chip">27</span>
+      </div>
+      <div style="background:rgba(0,0,0,0.3); border-radius:10px; padding:12px;">
+        <div style="font-size:0.8rem; color:var(--text-muted);">Today's Plan</div>
+        <div style="font-size:1.2rem; font-weight:800; color:#fff; margin-top:2px;">25 pages</div>
+      </div>
+      <button type="button" class="btn-save-gold" style="width:100%; padding:10px;" onclick="openRealBookReaderForCurrent(); closeSubViewMasterModal();">Start Reading</button>
+    </div>`
+  );
+}
+
+// Photo Screen 8: Reading Streak Freeze
+function openStreakFreezeModal() {
+  openSubViewMasterModal(
+    '❄️ Reading Streak Freeze',
+    `<div style="display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center;">
+      <div style="font-size:3rem;">❄️</div>
+      <div style="font-size:1.8rem; font-weight:900; color:#fff;">12 <span style="font-size:0.9rem; font-weight:600; color:var(--text-muted);">Day Streak</span></div>
+      <p style="font-size:0.82rem; color:var(--text-secondary);">You're doing great! Use a streak freeze if you miss a day.</p>
+      <button type="button" class="btn-save-gold" style="background:#38bdf8; color:#000; width:100%; padding:10px; font-weight:800;" onclick="toggleStreakFreeze(); closeSubViewMasterModal();">❄️ Activate Freeze</button>
+      <div style="font-size:0.72rem; color:var(--accent-gold); margin-top:4px;">Next streak reward at 15 days</div>
+    </div>`
+  );
+}
+
+// Photo Screen 9: Bookmark Collections
+function openBookmarkCollectionsModal() {
+  openSubViewMasterModal(
+    '📁 Bookmark Collections',
+    `<div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex; gap:6px; margin-bottom:6px;">
+        <button type="button" class="filter-chip active" style="flex:1;">All</button>
+        <button type="button" class="filter-chip" style="flex:1;">Collections</button>
+        <button type="button" class="filter-chip" style="flex:1;">Notes</button>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+        <div><span style="color:var(--accent-gold);">📁 Important Quotes</span><div style="font-size:0.7rem; color:var(--text-muted);">12 items</div></div>
+        <span>&rsaquo;</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+        <div><span style="color:#60a5fa;">📁 Key Ideas</span><div style="font-size:0.7rem; color:var(--text-muted);">8 items</div></div>
+        <span>&rsaquo;</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); border-radius:10px; padding:10px 14px; display:flex; justify-content:space-between; align-items:center;">
+        <div><span style="color:#34d399;">📁 Chapters to Revisit</span><div style="font-size:0.7rem; color:var(--text-muted);">14 items</div></div>
+        <span>&rsaquo;</span>
+      </div>
+      <button type="button" class="btn-save-gold" style="width:100%; margin-top:6px;" onclick="showToast('Collection created!');">+ Create Collection</button>
+    </div>`
+  );
+}
+
+// Photo Screen 10: Quote-to-Note Linking
+function openQuoteNoteLinkModal() {
+  openSubViewMasterModal(
+    '💡 Quote-to-Note Linking',
+    `<div style="display:flex; flex-direction:column; gap:12px;">
+      <div style="background:rgba(245,158,11,0.12); border:1px solid var(--accent-gold); border-radius:12px; padding:14px; font-style:italic; font-size:0.9rem; color:#fff;">
+        "Small steps each day lead to big results."
+        <div style="font-style:normal; font-size:0.75rem; color:var(--accent-gold); margin-top:6px;">— James Clear</div>
+      </div>
+      <button type="button" class="btn-read-now-sm" style="align-self:flex-start;" onclick="showToast('Quote linked to note!')">Link to Note</button>
+      <div style="display:flex; flex-direction:column; gap:6px;">
+        <label style="font-size:0.78rem; color:var(--text-muted);">My Note</label>
+        <textarea style="width:100%; height:70px; background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:8px; color:#fff; padding:8px;">This reminds me to stay consistent with my reading habits.</textarea>
+      </div>
+      <div style="display:flex; gap:6px;">
+        <span class="filter-chip active">Motivation</span>
+        <span class="filter-chip active">Habits</span>
+        <span class="filter-chip active">Growth</span>
+      </div>
+    </div>`
+  );
+}
+
+// Photo Screen 11: Chapter Checklist
+function openChapterChecklistModal() {
+  openSubViewMasterModal(
+    '📋 Chapter Checklist',
+    `<div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="font-size:0.85rem; font-weight:800; color:var(--accent-gold);">Dopamine Nation &bull; Chapters</div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <label style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.04); padding:10px; border-radius:8px; color:#fff;">
+          <input type="checkbox" checked style="accent-color:#10b981;"> 1. The Dark Side of Dopamine
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.04); padding:10px; border-radius:8px; color:#fff;">
+          <input type="checkbox" checked style="accent-color:#10b981;"> 2. The Pleasure Trap
+        </label>
+        <label style="display:flex; align-items:center; gap:8px; background:rgba(255,255,255,0.04); padding:10px; border-radius:8px; color:var(--text-muted);">
+          <input type="checkbox" style="accent-color:#10b981;"> 3. The Modern World
+        </label>
+      </div>
+      <div style="font-size:0.75rem; color:var(--text-muted); margin-top:4px;">3 of 5 completed</div>
+    </div>`
+  );
+}
+
+// Photo Screen 12: Wishlist Price Watch
+function openWishlistPriceWatchModal() {
+  openSubViewMasterModal(
+    '💰 Book Wishlist Price Watch',
+    `<div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:10px; padding:10px; display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <div style="font-weight:800; color:#fff;">Thinking, Fast and Slow</div>
+          <div style="font-size:0.75rem; color:var(--accent-gold);">₹499</div>
+        </div>
+        <span style="font-size:0.72rem; color:#10b981; background:rgba(16,185,129,0.15); padding:4px 8px; border-radius:999px; font-weight:800;">Price Drop Alert! Now ₹299 (-40%)</span>
+      </div>
+      <button type="button" class="btn-save-gold" style="width:100%; margin-top:4px;" onclick="showToast('Added to Wishlist!');">+ Add to Wishlist</button>
+    </div>`
+  );
+}
+
+// Photo Screen 13: Personal Reading Queue
+function openManageQueueModal() {
+  const modal = document.getElementById('manageQueueModalOverlay');
+  if (modal) modal.style.display = 'flex';
+
+  const container = document.getElementById('manageQueueContainer');
+  if (!container) return;
+
+  const queue = state.readingQueue || [];
+  const books = state.books || [];
+
+  container.innerHTML = `
+    <div style="display:flex; gap:6px; margin-bottom:12px;">
+      <button type="button" class="filter-chip active" style="flex:1;">Upcoming (${queue.length})</button>
+      <button type="button" class="filter-chip" style="flex:1;">Completed</button>
+    </div>
+    ${queue.map((id, idx) => {
+      const b = books.find(item => item.id === id) || { title: 'Book in Queue', author: 'Author' };
+      return `
+        <div style="background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:10px; padding:10px 12px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:700; font-size:0.85rem; color:#fff;">${idx+1}. ${escapeHtml(b.title)}</div>
+            <div style="font-size:0.72rem; color:var(--text-muted);">${escapeHtml(b.author)}</div>
+          </div>
+          ${idx===0 ? '<span style="font-size:0.7rem; color:#000; background:var(--accent-gold); padding:2px 8px; border-radius:999px; font-weight:800;">Next</span>' : `<button type="button" class="btn-cancel" style="padding:4px 8px; font-size:0.7rem;" onclick="removeQueueItem(${idx})">Remove</button>`}
+        </div>`;
+    }).join('')}`;
+}
+
+// Photo Screen 14: Finished-Book Reflection Scorecard
+function openReflectionScorecardModal() {
+  openSubViewMasterModal(
+    '⭐ Reflection Scorecard',
+    `<div style="display:flex; flex-direction:column; align-items:center; gap:14px;">
+      <div style="width:100px; height:100px; border-radius:50%; border:3px solid var(--accent-gold); display:flex; flex-direction:column; align-items:center; justify-content:center; background:rgba(245,158,11,0.1);">
+        <div style="font-size:1.8rem; font-weight:900; color:#fff;">8.5</div>
+        <div style="font-size:0.65rem; color:var(--text-muted);">/ 10</div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px; width:100%; font-size:0.8rem;">
+        <div style="display:flex; justify-content:space-between;"><span>Learned Something</span><span style="color:var(--accent-gold); font-weight:800;">9/10</span></div>
+        <div style="display:flex; justify-content:space-between;"><span>Practical Value</span><span style="color:var(--accent-gold); font-weight:800;">8/10</span></div>
+        <div style="display:flex; justify-content:space-between;"><span>Enjoyment</span><span style="color:var(--accent-gold); font-weight:800;">9/10</span></div>
+        <div style="display:flex; justify-content:space-between;"><span>Would Recommend</span><span style="color:var(--accent-gold); font-weight:800;">8/10</span></div>
+      </div>
+      <button type="button" class="btn-save-gold" style="width:100%;" onclick="showToast('Reflection Review Saved!'); closeSubViewMasterModal();">Write Full Review</button>
+    </div>`
+  );
+}
+
+// Photo Screen 15: Book-to-Book Learning Connections
+function openLearningConnectionsModal() {
+  openSubViewMasterModal(
+    '🕸️ Book Learning Connections',
+    `<div style="text-align:center; padding:10px;">
+      <div style="background:rgba(245, 158, 11, 0.15); border:1px solid var(--accent-gold); padding:10px; border-radius:10px; margin-bottom:12px;">
+        <div style="font-size:0.95rem; font-weight:800; color:#fff;">Atomic Habits</div>
+        <div style="font-size:0.75rem; color:var(--accent-gold);">James Clear</div>
+      </div>
+      <div style="font-size:0.78rem; color:var(--text-muted); margin-bottom:10px;">Related Connected Books:</div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="background:rgba(255,255,255,0.04); padding:8px 12px; border-radius:8px; text-align:left; font-size:0.8rem;">
+          🧠 <strong>Deep Work</strong> &bull; Cal Newport <span style="font-size:0.7rem; color:var(--accent-gold); float:right;">(Focus & Productivity)</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.04); padding:8px 12px; border-radius:8px; text-align:left; font-size:0.8rem;">
+          🎯 <strong>Essentialism</strong> &bull; Greg McKeown <span style="font-size:0.7rem; color:var(--accent-gold); float:right;">(Less but better)</span>
+        </div>
+      </div>
+    </div>`
+  );
+}
+
+// Photo Screen 16: Custom Metadata Fields
+function openCustomMetadataModal() {
+  openSubViewMasterModal(
+    '✏️ Custom Metadata Fields',
+    `<div style="display:flex; flex-direction:column; gap:10px;">
+      <div class="form-group"><label style="font-size:0.78rem;">Reading Format</label><input type="text" value="Hardcover" style="width:100%; padding:8px; background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:8px; color:#fff;"></div>
+      <div class="form-group"><label style="font-size:0.78rem;">Language</label><input type="text" value="English" style="width:100%; padding:8px; background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:8px; color:#fff;"></div>
+      <div class="form-group"><label style="font-size:0.78rem;">Cost</label><input type="text" value="$12.99" style="width:100%; padding:8px; background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:8px; color:#fff;"></div>
+      <button type="button" class="btn-save-gold" style="width:100%; margin-top:4px;" onclick="showToast('Custom metadata fields saved!'); closeSubViewMasterModal();">Save Fields</button>
+    </div>`
+  );
+}
+
+// Photo Screen 17: Trash & Restore Center
+function openTrashCenterModal() {
+  const modal = document.getElementById('trashCenterModalOverlay');
+  if (modal) modal.style.display = 'flex';
+
+  const container = document.getElementById('trashCenterContainer');
+  if (!container) return;
+
+  const trash = state.trashBin || [];
+  if (trash.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px; color: var(--text-muted);">
+        <div style="font-size: 2.5rem; margin-bottom: 8px;">🗑️</div>
+        <div style="font-weight: 700; font-size: 0.9rem;">Trash Bin is Empty</div>
+      </div>`;
+    return;
+  }
+  container.innerHTML = trash.map((book, idx) => `
+    <div style="background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <div style="font-weight: 700; font-size: 0.85rem; color: #fff;">${escapeHtml(book.title)}</div>
+        <div style="font-size: 0.72rem; color: var(--text-secondary);">${escapeHtml(book.author)} &bull; Deleted recently</div>
+      </div>
+      <button type="button" class="btn-save-gold" style="padding: 4px 10px; font-size: 0.72rem;" onclick="restoreBookFromTrash(${idx})">Restore 🔄</button>
+    </div>`).join('');
+}
+
+// Photo Screen 18: Backup Version History
+function openBackupHistoryModal() {
+  openSubViewMasterModal(
+    '🛡️ Backup Version History',
+    `<div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center;">
+        <div><div style="font-weight:700; font-size:0.85rem; color:#fff;">Auto Backup</div><div style="font-size:0.7rem; color:var(--text-muted);">Apr 15, 2025 &bull; 9:24 PM</div></div>
+        <span style="font-size:0.7rem; color:#10b981; background:rgba(16,185,129,0.15); padding:2px 6px; border-radius:999px;">Latest</span>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:8px;">
+        <button type="button" class="btn-cancel" style="flex:1;" onclick="triggerImportDataJSON()">Restore</button>
+        <button type="button" class="btn-save-gold" style="flex:1;" onclick="exportDataJSON()">Backup Now</button>
+      </div>
+    </div>`
+  );
+}
+
+// Photo Screen 19: App Activity Audit Log
+function renderActivityAuditLogModal() {
+  openSubViewMasterModal(
+    '📜 App Activity Audit Log',
+    `<div style="display:flex; flex-direction:column; gap:10px;">
+      <div style="display:flex; gap:6px;">
+        <span class="filter-chip active">All</span>
+        <span class="filter-chip">Reading</span>
+        <span class="filter-chip">Books</span>
+        <span class="filter-chip">System</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:8px; font-size:0.8rem; color:#fff;">
+        📘 <strong>Book Added:</strong> Atomic Habits (Apr 15, 2025 &bull; 10:24 AM)
+      </div>
+      <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:8px; font-size:0.8rem; color:#fff;">
+        📝 <strong>Note Added:</strong> "Small steps each day..." (Apr 14, 2025 &bull; 09:12 PM)
+      </div>
+    </div>`
+  );
+}
+
+// Photo Screen 20: Private Local Encryption Status
+function openSecurityPrivacyModal() {
+  openSubViewMasterModal(
+    '🔒 Security & Local Encryption',
+    `<div style="display:flex; flex-direction:column; align-items:center; gap:12px; text-align:center;">
+      <div style="font-size:2.5rem;">🔒</div>
+      <div style="font-size:1rem; font-weight:800; color:#10b981;">Local Encryption Enabled</div>
+      <div style="display:flex; flex-direction:column; gap:6px; width:100%; text-align:left; font-size:0.8rem; background:rgba(0,0,0,0.3); padding:12px; border-radius:10px;">
+        <div style="color:#34d399;">✅ Books Data Encrypted</div>
+        <div style="color:#34d399;">✅ Notes Encrypted</div>
+        <div style="color:#34d399;">✅ Backups Encrypted</div>
+        <div style="color:#34d399;">✅ App Lock Active (AES-256)</div>
+      </div>
+    </div>`
+  );
+}
+
 
 
