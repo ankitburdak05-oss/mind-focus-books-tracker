@@ -2678,16 +2678,18 @@ function showToast(message, duration = 2800) {
 
 // Universal Sub-Screen Navigation Router
 function navigateToSubView(viewName) {
+  if (!viewName) return;
   state.previousSubView = state.activeTab || 'profile';
-  
-  // Hide all views
-  const views = document.querySelectorAll('.app-view');
-  views.forEach(v => v.classList.remove('active'));
 
   // Target view ID format: view[Capitalized]
   const targetId = 'view' + viewName.charAt(0).toUpperCase() + viewName.slice(1);
   const targetView = document.getElementById(targetId);
+
   if (targetView) {
+    // Hide all views
+    const views = document.querySelectorAll('.app-view');
+    views.forEach(v => v.classList.remove('active'));
+
     targetView.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
@@ -2698,8 +2700,21 @@ function navigateToSubView(viewName) {
   if (viewName === 'readingJournal') renderJournalView();
   if (viewName === 'readingStats') updateReadingStatistics();
   if (viewName === 'focusTimer') updateFocusTimerDisplay();
-  if (viewName === 'appFeaturesGuide') renderAppFeaturesDirectoryView();
+  if (viewName === 'appFeaturesGuide') {
+    renderAppFeaturesDirectoryView();
+    const modal = document.getElementById('appFeaturesGuideModalOverlay');
+    if (modal) modal.style.display = 'flex';
+  }
   if (viewName === 'activityAuditLog') renderActivityAuditLog();
+  if (viewName === 'zenMode') {
+    toggleRainAudio();
+  }
+  if (viewName === 'smartResume') {
+    openRealBookReaderForCurrent();
+  }
+  if (viewName === 'archiveBackup') {
+    exportDataJSON();
+  }
 }
 
 function navigateBack() {
@@ -4030,65 +4045,7 @@ function filterAuditLog(tag) {
   showToast(`Filtered logs by tag: ${tag}`);
 }
 
-// 2. Sub-View Router for 34 Subviews
-function navigateToSubView(viewName) {
-  if (!viewName) return;
 
-  const subviewTitles = {
-    'aiBookCoach': '🤖 AI Book Coach & Assistant',
-    'smartRevision': '🔄 Smart Revision & Notes Review',
-    'memoryFlashcards': '🎴 Active Recall Memory Flashcards',
-    'knowledgeMap': '🕸️ Knowledge Mind Map',
-    'bookComparison': '⚖️ Side-by-Side Book Comparison',
-    'readingHeatmap': '📊 Daily Reading Consistency Heatmap',
-    'moodTracker': '🌙 Focus Mood & Energy Tracker',
-    'voiceNotes': '🎙️ Voice Notes & Memos',
-    'personalSearch': '🔍 Universal Library Search',
-    'dailyRecall': '🧠 Daily Memory Recall Quiz',
-    'spacedRepetition': '🗓️ Spaced Repetition Schedule',
-    'readingStats': '📊 Deep Reading Statistics',
-    'smartResume': '📖 Smart Reading Resume',
-    'zenMode': '🧘 Zen Mode & Rain Audio Generator',
-    'weeklyReview': '📋 Weekly Review & Reflection Journal',
-    'adaptiveGoal': '🎯 Adaptive Goal Adjuster',
-    'completionForecast': '⏳ Book Completion Forecast',
-    'knowledgeVault': '🏛️ Mental Models Knowledge Vault',
-    'readingChallenge': '🏆 Monthly Reading Challenge',
-    'archiveBackup': '🛡️ Backup & JSON Archive',
-    'appFeaturesGuide': '📖 App Features Directory & Sitemap',
-    'achievements': '🏅 Reading Badges & Achievements',
-    'activityAuditLog': '📜 Activity & System Audit Log'
-  };
-
-  const title = subviewTitles[viewName] || `✨ Feature: ${viewName}`;
-
-  if (viewName === 'appFeaturesGuide') {
-    renderAppFeaturesDirectoryView();
-    const modal = document.getElementById('appFeaturesGuideModalOverlay');
-    if (modal) {
-      modal.style.display = 'flex';
-      return;
-    }
-  }
-
-  if (viewName === 'zenMode') {
-    toggleRainAudio();
-    showToast('🧘 Zen Mode activated! Playing Ambient Rain Sounds...');
-    return;
-  }
-
-  if (viewName === 'smartResume') {
-    openRealBookReaderForCurrent();
-    return;
-  }
-
-  if (viewName === 'archiveBackup') {
-    exportDataJSON();
-    return;
-  }
-
-  showToast(`${title} opened!`);
-}
 
 function toggleRainAudio() {
   if (!window.__RAIN_AUDIO__) {
