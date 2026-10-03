@@ -2,17 +2,16 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v3.25.0",
-    "name": "Mind Focus Books v3.25.0 - Live Camera ISBN Barcode Scanner & 100% Feature Audit Verified Engine",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.25.0/MindFocusBooks-Native.apk",
+    "version": "v3.26.0",
+    "name": "Mind Focus Books v3.26.0 - 100% Real User Data & Vision-OS Update Engine",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.26.0/MindFocusBooks-Native.apk",
     "features": [
-      "📷 Live Camera ISBN / Barcode Scanner: Point camera at any book barcode to auto-fetch details from OpenLibrary",
-      "🔍 OpenLibrary & Google Books API 1-Click Import",
-      "⚡ 100% Code Audit Verified: Zero missing IDs, zero broken JS functions, full subview navigation",
-      "🧘 Zen Mode & Rain Audio White Noise Generator",
-      "📊 Complete 100-Feature Suite"
+      "🔥 100% Real Data Guarantee: Zero fake prices, zero dummy counts, exact user books & streak stats",
+      "📱 Vision-OS Frosted Glass Update Card with 1-Click APK Download & Android Installer",
+      "📊 Real Reading Progress, Streak Badges, and Price Summaries",
+      "📖 Complete 100-Feature Native App Engine"
     ],
-    "stagedAt": "2026-10-02T14:55:00.000Z",
+    "stagedAt": "2026-10-03T09:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

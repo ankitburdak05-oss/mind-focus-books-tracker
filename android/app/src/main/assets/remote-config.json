@@ -1,19 +1,17 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-10-02T08:52:00.000Z",
+  "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v3.21.0",
-    "name": "Mind Focus Books v3.21.0 - Instant Vision-OS Update & 20-Feature Detailed Sitemap",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.21.0/MindFocusBooks-Native.apk",
+    "version": "v3.26.0",
+    "name": "Mind Focus Books v3.26.0 - 100% Real User Data & Vision-OS Update Engine",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.26.0/MindFocusBooks-Native.apk",
     "features": [
-      "🗺️ App Features Directory & Detailed Sitemap: All 20 screens with Kahan Hai / Kiske Liye / Kyu Use Karein badges",
-      "📱 Automated Vision-OS Frosted Glass Update Modal: Pops up automatically 1-sec after app load on Phone",
-      "⚡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices",
-      "💰 Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)",
-      "🔥 Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days",
-      "⭐ Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them"
+      "🔥 100% Real Data Guarantee: Zero fake prices, zero dummy counts, exact user books & streak stats",
+      "📱 Vision-OS Frosted Glass Update Card with 1-Click APK Download & Android Installer",
+      "📊 Real Reading Progress, Streak Badges, and Price Summaries",
+      "📖 Complete 100-Feature Native App Engine"
     ],
-    "stagedAt": "2026-10-02T08:52:00.000Z",
+    "stagedAt": "2026-10-03T09:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

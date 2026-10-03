@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.25.0)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v3.26.0)
 // ==========================================================================
 
-const APP_VERSION = '3.25.0';
-const CURRENT_APP_VERSION = 'v3.25.0';
+const APP_VERSION = '3.26.0';
+const CURRENT_APP_VERSION = 'v3.26.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -2307,7 +2307,7 @@ async function checkForBackgroundUpdates() {
   const homeTitle = document.getElementById('homeUpdateTitle');
   const homeSub = document.getElementById('homeUpdateSub');
   
-  const installedVer = localStorage.getItem('mf_installed_version') || 'v3.18.0';
+  const installedVer = localStorage.getItem('mf_installed_version') || 'v3.25.0';
   const hasInstalledCurrent = installedVer === CURRENT_APP_VERSION;
 
   let activeRel = null;
@@ -2335,14 +2335,19 @@ async function checkForBackgroundUpdates() {
   const remoteVer = activeRel?.version || CURRENT_APP_VERSION;
   const isNewAvailable = remoteVer !== installedVer || !hasInstalledCurrent;
 
-  if (isNewAvailable) {
-    if (homeCard) {
-      homeCard.style.display = 'flex';
-      if (homeTitle) homeTitle.innerText = `🔥 Update ${remoteVer} Ready!`;
+  if (homeCard) {
+    homeCard.style.display = 'flex';
+    if (isNewAvailable) {
+      if (homeTitle) homeTitle.innerText = `🚀 Update ${remoteVer} Ready!`;
       if (homeSub) homeSub.innerText = activeRel?.name || `${remoteVer} is ready to download & install now`;
+    } else {
+      if (homeTitle) homeTitle.innerText = `✨ Mind Focus Books ${remoteVer}`;
+      if (homeSub) homeSub.innerText = `Latest version installed • Tap to check release details & APK reinstall`;
     }
-    
-    // Auto-popup Vision-OS modal if not installed yet
+  }
+
+  if (isNewAvailable) {
+    // Auto-popup Vision-OS modal on launch if update is ready
     const dismissed = sessionStorage.getItem('mf_update_dismissed_' + remoteVer);
     if (!dismissed) {
       setTimeout(() => {
@@ -2350,11 +2355,8 @@ async function checkForBackgroundUpdates() {
         if (!noticeOverlay || noticeOverlay.style.display !== 'flex') {
           openUpdateCheckerModal();
         }
-      }, 600);
+      }, 500);
     }
-  } else {
-    // Up to date
-    if (homeCard) homeCard.style.display = 'none';
   }
 }
 
