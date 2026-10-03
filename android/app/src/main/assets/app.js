@@ -886,14 +886,53 @@ function renderGenreDonutChart() {
   const legendWrap = document.getElementById('genreDonutLegend');
   if (!svgWrap || !legendWrap) return;
   
-  const categories = [
-    { label: 'Self Help', pct: 30, color: '#3b82f6' },
-    { label: 'Fiction', pct: 25, color: '#10b981' },
-    { label: 'Productivity', pct: 20, color: '#f59e0b' },
-    { label: 'Business', pct: 15, color: '#f97316' },
-    { label: 'Others', pct: 10, color: '#8b5cf6' }
-  ];
+  const totalBooks = state.books ? state.books.length : 0;
+  const palette = ['#3b82f6', '#10b981', '#f59e0b', '#f97316', '#8b5cf6', '#ec4899', '#06b6d4'];
   
+  if (totalBooks === 0) {
+    svgWrap.innerHTML = `
+      <svg viewBox="0 0 120 120" style="width: 100%; height: 100%;">
+        <circle cx="60" cy="60" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="12" />
+        <text x="60" y="56" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">0</text>
+        <text x="60" y="70" text-anchor="middle" font-size="9" fill="#94a3b8">Total Books</text>
+      </svg>
+    `;
+    legendWrap.innerHTML = `<div style="color:var(--text-muted); font-size:0.8rem; text-align:center; padding:8px;">No books added yet</div>`;
+    return;
+  }
+
+  const catCounts = {};
+  state.books.forEach(b => {
+    const cat = (b.category && b.category.trim()) ? b.category.trim() : 'General';
+    catCounts[cat] = (catCounts[cat] || 0) + 1;
+  });
+
+  const sortedCats = Object.keys(catCounts)
+    .map(name => ({ label: name, count: catCounts[name] }))
+    .sort((a, b) => b.count - a.count);
+
+  let categories = [];
+  if (sortedCats.length <= 5) {
+    categories = sortedCats.map((item, idx) => ({
+      label: item.label,
+      pct: Math.round((item.count / totalBooks) * 100),
+      color: palette[idx % palette.length]
+    }));
+  } else {
+    const top4 = sortedCats.slice(0, 4);
+    const othersCount = sortedCats.slice(4).reduce((sum, item) => sum + item.count, 0);
+    categories = top4.map((item, idx) => ({
+      label: item.label,
+      pct: Math.round((item.count / totalBooks) * 100),
+      color: palette[idx % palette.length]
+    }));
+    categories.push({
+      label: 'Others',
+      pct: Math.round((othersCount / totalBooks) * 100),
+      color: palette[4]
+    });
+  }
+
   let cumulativePct = 0;
   const circumference = 2 * Math.PI * 40; // ~251.3
   
@@ -911,7 +950,7 @@ function renderGenreDonutChart() {
   svgWrap.innerHTML = `
     <svg viewBox="0 0 120 120" style="width: 100%; height: 100%;">
       ${paths}
-      <text x="60" y="56" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">${state.books.length}</text>
+      <text x="60" y="56" text-anchor="middle" font-size="14" font-weight="800" fill="#ffffff">${totalBooks}</text>
       <text x="60" y="70" text-anchor="middle" font-size="9" fill="#94a3b8">Total Books</text>
     </svg>
   `;
@@ -920,7 +959,7 @@ function renderGenreDonutChart() {
     <div class="donut-legend-item">
       <div class="donut-legend-left">
         <span class="legend-dot" style="background: ${cat.color}"></span>
-        <span>${cat.label}</span>
+        <span>${escapeHtml(cat.label)}</span>
       </div>
       <span class="legend-pct">${cat.pct}%</span>
     </div>
@@ -2307,7 +2346,7 @@ async function checkForBackgroundUpdates() {
   const homeTitle = document.getElementById('homeUpdateTitle');
   const homeSub = document.getElementById('homeUpdateSub');
   
-  const installedVer = localStorage.getItem('mf_installed_version') || 'v3.25.0';
+  const installedVer = localStorage.getItem('mf_installed_version') || CURRENT_APP_VERSION;
   const hasInstalledCurrent = installedVer === CURRENT_APP_VERSION;
 
   let activeRel = null;
@@ -2601,7 +2640,17 @@ function triggerInAppUpdate() {
       clearInterval(interval);
       if (progressFill) progressFill.style.width = '100%';
       if (progressPct) progressPct.innerText = '100%';
-      window.location.href = downloadUrl;
+      try {
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.target = '_blank';
+        link.download = 'MindFocusBooks-Native.apk';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      } catch (e) {
+        window.open(downloadUrl, '_blank');
+      }
       if (actionBtn) {
         actionBtn.disabled = false;
         actionBtn.innerText = `✓ Download Started — Re-download (${targetVer})`;
