@@ -6404,7 +6404,7 @@ if (typeof window !== 'undefined') {
               <span class="rm-label">Start Date</span>
               <span class="rm-val" id="detailDateStarted">Not Started Yet</span>
             </div>
-            <div class="rm-item">
+            <div class="rm-item" onclick="promptSetTargetDate()" style="cursor:pointer;" title="Tap to set or edit target date">
               <span class="rm-icon">🎯</span>
               <span class="rm-label">End / Target Date</span>
               <span class="rm-val" id="detailDateTarget">In Progress</span>
@@ -14808,13 +14808,46 @@ function openBookDetailView(book) {
     if (elAvail) elAvail.innerText = book.availability || 'AVAILABLE';
     
     const elStart = document.getElementById('detailDateStarted');
-    if (elStart) elStart.innerText = book.start_date || 'Not Started Yet';
+    if (elStart) elStart.innerText = book.start_date ? formatDateDisplay(book.start_date) : 'Not Started Yet';
     
     const elTarget = document.getElementById('detailDateTarget');
-    if (elTarget) elTarget.innerText = book.end_date || 'In Progress';
+    if (elTarget) {
+      if (book.status === 'DONE') {
+        const frozenDate = book.end_date || book.completed_date || new Date().toISOString().split('T')[0];
+        if (!book.end_date) { book.end_date = frozenDate; book.completed_date = frozenDate; saveBooks(); }
+        elTarget.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">🔒 ${formatDateDisplay(frozenDate)} (Frozen)</span>`;
+      } else if (book.end_date) {
+        elTarget.innerHTML = `<span>${formatDateDisplay(book.end_date)}</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:4px;">✏️ Tap</span>`;
+      } else if (book.status === 'READING') {
+        elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:600;">📅 Set Target Date ✏️</span>`;
+      } else {
+        elTarget.innerText = 'Not Set';
+      }
+    }
     
     const elDays = document.getElementById('detailDaysSpent');
-    if (elDays) elDays.innerText = book.count_days ? `${book.count_days} days` : '-';
+    if (elDays) {
+      if (book.status === 'DONE') {
+        if (!book.count_days || book.count_days === 0) {
+          if (book.start_date && (book.end_date || book.completed_date)) {
+            const d1 = new Date(book.start_date);
+            const d2 = new Date(book.end_date || book.completed_date);
+            book.count_days = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+          } else {
+            book.count_days = 1;
+          }
+          saveBooks();
+        }
+        elDays.innerText = `✅ ${book.count_days} days (Finished)`;
+      } else if (book.status === 'READING' && book.start_date) {
+        const d1 = new Date(book.start_date);
+        const d2 = new Date();
+        const diff = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+        elDays.innerText = `${book.count_days || diff} days (Ongoing)`;
+      } else {
+        elDays.innerText = book.count_days ? `${book.count_days} days` : '-';
+      }
+    }
     
     const elPrice = document.getElementById('detailPriceVal');
     if (elPrice) elPrice.innerText = book.price ? `₹${book.price}` : 'Not Added';
@@ -14867,6 +14900,56 @@ function openBookDetailView(book) {
   }
 }
 
+function formatDateDisplay(dateStr) {
+  if (!dateStr) return '-';
+  try {
+    const parts = String(dateStr).split('-');
+    if (parts.length === 3) {
+      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const y = parts[0];
+      const m = parseInt(parts[1], 10) - 1;
+      const d = parseInt(parts[2], 10);
+      if (m >= 0 && m < 12 && d > 0 && d <= 31) {
+        return `${String(d).padStart(2, '0')} ${months[m]} ${y}`;
+      }
+    }
+    const dt = new Date(dateStr);
+    if (!isNaN(dt.getTime())) {
+      return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+    return dateStr;
+  } catch (e) {
+    return dateStr;
+  }
+}
+
+function promptSetTargetDate() {
+  if (!state.currentBook) return;
+  if (state.currentBook.status === 'DONE') {
+    const frozenDate = state.currentBook.end_date || state.currentBook.completed_date || 'Completed';
+    showToast(`🔒 Book already completed on ${formatDateDisplay(frozenDate)}! Date is permanently frozen.`);
+    return;
+  }
+  const curr = state.currentBook.end_date || '';
+  const def = curr || new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0];
+  const chosen = prompt('🎯 Enter Target Completion Date (YYYY-MM-DD):', def);
+  if (chosen && chosen.trim()) {
+    const cleanDate = chosen.trim();
+    state.currentBook.end_date = cleanDate;
+    if (state.currentBook.start_date) {
+      const d1 = new Date(state.currentBook.start_date);
+      const d2 = new Date(cleanDate);
+      if (!isNaN(d1.getTime()) && !isNaN(d2.getTime())) {
+        const diff = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+        state.currentBook.count_days = diff;
+      }
+    }
+    saveBooks();
+    openBookDetailView(state.currentBook);
+    showToast(`🎯 Target date set to ${formatDateDisplay(cleanDate)}!`);
+  }
+}
+
 function updateStatusChipsUI(status) {
   const normStatus = (status || 'PENDING').toUpperCase();
   const chipReading = document.getElementById('chipReading');
@@ -14881,12 +14964,29 @@ function updateStatusChipsUI(status) {
 function quickSetBookStatus(newStatus) {
   if (!state.currentBook) return;
   state.currentBook.status = newStatus;
+  const today = new Date().toISOString().split('T')[0];
+
   if (newStatus === 'DONE') {
     state.currentBook.current_page = state.currentBook.pages || state.currentBook.total_pages || 250;
-    state.currentBook.completed_date = new Date().toISOString().split('T')[0];
+    if (!state.currentBook.completed_date) {
+      state.currentBook.completed_date = today;
+    }
+    // Freeze completion date permanently into end_date
+    state.currentBook.end_date = state.currentBook.completed_date;
+    if (state.currentBook.start_date) {
+      const d1 = new Date(state.currentBook.start_date);
+      const d2 = new Date(state.currentBook.completed_date);
+      state.currentBook.count_days = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+    } else {
+      state.currentBook.start_date = today;
+      state.currentBook.count_days = 1;
+    }
   } else if (newStatus === 'READING') {
     if (!state.currentBook.current_page || state.currentBook.current_page === 0) {
       state.currentBook.current_page = 1;
+    }
+    if (!state.currentBook.start_date) {
+      state.currentBook.start_date = today;
     }
   } else if (newStatus === 'PENDING') {
     state.currentBook.current_page = 0;
@@ -14898,22 +14998,13 @@ function quickSetBookStatus(newStatus) {
   const elStat = document.getElementById('detailStatusVal');
   if (elStat) elStat.innerText = newStatus;
   
-  // Recompute progress in detail
-  const total = state.currentBook.pages || state.currentBook.total_pages || 200;
-  const current = state.currentBook.current_page || 0;
-  const pct = Math.min(100, Math.round((current / total) * 100));
-  const progPct = document.getElementById('detailProgressPercent');
-  if (progPct) progPct.innerText = `${pct}% completed`;
-  const progPages = document.getElementById('detailPagesRatio');
-  if (progPages) progPages.innerText = `${current} / ${total} pages`;
-  const progFill = document.getElementById('detailProgressFill');
-  if (progFill) progFill.style.width = `${pct}%`;
-
+  // Recompute detail view fields
+  openBookDetailView(state.currentBook);
   renderHomeView();
   renderLibraryFilters();
   
   const statusLabels = {
-    'DONE': '✅ Finished & Completed!',
+    'DONE': '✅ Finished & Completed! Completion date is frozen 🔒',
     'READING': '📖 Now Currently Reading!',
     'PENDING': '🔖 Added to Wishlist!'
   };
@@ -15020,11 +15111,27 @@ function saveQuickLogPages() {
   }
   
   const total = state.currentBook.pages || state.currentBook.total_pages || 200;
+  const today = new Date().toISOString().split('T')[0];
   if (newPage >= total) {
     state.currentBook.status = 'DONE';
-    showToast('🎉 Congratulations! You completed this book!');
+    if (!state.currentBook.completed_date) {
+      state.currentBook.completed_date = today;
+    }
+    state.currentBook.end_date = state.currentBook.completed_date; // Freeze date permanently
+    if (state.currentBook.start_date) {
+      const d1 = new Date(state.currentBook.start_date);
+      const d2 = new Date(state.currentBook.completed_date);
+      state.currentBook.count_days = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+    } else {
+      state.currentBook.start_date = today;
+      state.currentBook.count_days = 1;
+    }
+    showToast('🎉 Congratulations! You completed this book! Date is frozen 🔒');
   } else if (newPage > 0) {
     state.currentBook.status = 'READING';
+    if (!state.currentBook.start_date) {
+      state.currentBook.start_date = today;
+    }
     showToast(`Progress logged: Page ${newPage} ✨`);
   }
   
@@ -15715,17 +15822,39 @@ function saveBookModal() {
   const priceVal = document.getElementById('editBookPrice').value.trim();
   const price = priceVal ? parseFloat(priceVal) : 0;
   const rating = parseInt(document.getElementById('editBookRating').value, 10) || 0;
-  const startDate = document.getElementById('editStartDate').value;
-  const endDate = document.getElementById('editEndDate').value;
-  const countDays = parseInt(document.getElementById('editCountDays').value, 10) || 0;
+  let startDate = document.getElementById('editStartDate').value;
+  let endDate = document.getElementById('editEndDate').value;
+  let countDays = parseInt(document.getElementById('editCountDays').value, 10) || 0;
+  const today = new Date().toISOString().split('T')[0];
+
+  if (status === 'DONE') {
+    if (!endDate) {
+      endDate = today;
+    }
+    if (!startDate) {
+      startDate = endDate;
+    }
+    if (!countDays || countDays === 0) {
+      const d1 = new Date(startDate);
+      const d2 = new Date(endDate);
+      countDays = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+    }
+  } else if (status === 'READING') {
+    if (!startDate) {
+      startDate = today;
+    }
+  }
+
   const takeaway = document.getElementById('editBookTakeaway').value.trim();
   
   // Safe-Save Cover Protection
   const inputCover = document.getElementById('editBookCover').value.trim();
   let existingCover = '';
+  let existingCompleted = '';
   if (state.editingBookIndex >= 0) {
     const existing = state.books[state.editingBookIndex];
     existingCover = existing.cover_image || existing.cover_url || '';
+    existingCompleted = existing.completed_date || '';
   }
   const finalCover = inputCover || state.currentEditingCoverUrl || existingCover || '';
   
@@ -15738,7 +15867,7 @@ function saveBookModal() {
     category,
     status,
     availability,
-    current_page: currentPage,
+    current_page: (status === 'DONE' && currentPage < totalPages) ? totalPages : currentPage,
     pages: totalPages,
     total_pages: totalPages,
     price,
@@ -15746,6 +15875,7 @@ function saveBookModal() {
     rating,
     start_date: startDate,
     end_date: endDate,
+    completed_date: (status === 'DONE') ? endDate : existingCompleted,
     count_days: countDays,
     takeaway,
     notes: takeaway,
@@ -16069,13 +16199,12 @@ async function checkForBackgroundUpdates() {
   const isNewAvailable = remoteVer !== installedVer || !hasInstalledCurrent;
 
   if (homeCard) {
-    homeCard.style.display = 'flex';
     if (isNewAvailable) {
+      homeCard.style.display = 'flex';
       if (homeTitle) homeTitle.innerText = `🚀 Update ${remoteVer} Ready!`;
       if (homeSub) homeSub.innerText = activeRel?.name || `${remoteVer} is ready to download & install now`;
     } else {
-      if (homeTitle) homeTitle.innerText = `✨ Mind Focus Books ${remoteVer}`;
-      if (homeSub) homeSub.innerText = `Latest version installed • Tap to check release details & APK reinstall`;
+      homeCard.style.display = 'none';
     }
   }
 
@@ -16296,6 +16425,8 @@ function triggerInAppUpdate() {
   // Mark version as installed in local storage
   try {
     localStorage.setItem('mf_installed_version', targetVer);
+    const homeCard = document.getElementById('homeUpdateCard');
+    if (homeCard) homeCard.style.display = 'none';
   } catch (e) {}
 
   const progressWrap = document.getElementById('updateModalProgress');
