@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.2)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.3)
 // ==========================================================================
 
-const APP_VERSION = '28.0.2';
-const CURRENT_APP_VERSION = 'v28.0.2';
+const APP_VERSION = '28.0.3';
+const CURRENT_APP_VERSION = 'v28.0.3';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -2963,9 +2963,6 @@ function navigateToSubView(viewName) {
     if (modal) modal.style.display = 'flex';
   }
   if (viewName === 'activityAuditLog') renderActivityAuditLog();
-  if (viewName === 'zenMode') toggleRainAudio();
-  if (viewName === 'smartResume') openRealBookReaderForCurrent();
-  if (viewName === 'archiveBackup') exportDataJSON();
 }
 
 function navigateBack() {
@@ -3635,196 +3632,7 @@ function resetAllAppDataPrompt() {
   }
 }
 
-// ================= 20 ADVANCED FEATURES HANDLERS =================
-function askAiCoach(promptText) {
-  const input = document.getElementById('aiCoachInputPrompt');
-  if (input) input.value = promptText;
-  sendAiCoachMessage();
-}
 
-function sendAiCoachMessage() {
-  const input = document.getElementById('aiCoachInputPrompt');
-  const log = document.getElementById('aiCoachChatLog');
-  if (!input || !log) return;
-  const text = input.value.trim();
-  if (!text) return;
-  
-  const userMsg = document.createElement('div');
-  userMsg.className = 'ai-msg user';
-  userMsg.style.cssText = 'background:rgba(255,255,255,0.08); padding:8px 12px; border-radius:8px; align-self:flex-end; margin-top:8px; text-align:right; font-weight:600; color:#fff;';
-  userMsg.innerHTML = `<span>${text}</span>`;
-  log.appendChild(userMsg);
-  input.value = '';
-  log.scrollTop = log.scrollHeight;
-  
-  setTimeout(() => {
-    let reply = "Great question! Reading 20-30 minutes daily with focused attention creates compounding knowledge.";
-    const lower = text.toLowerCase();
-    if (lower.includes('atomic habits')) {
-      reply = "💡 Atomic Habits by James Clear focuses on building 1% improvements daily, designing your environment, and forming identity-based habits.";
-    } else if (lower.includes('deep work')) {
-      reply = "🧠 Deep Work by Cal Newport teaches intense concentration without distraction to achieve elite performance in less time.";
-    } else if (lower.includes('habit')) {
-      reply = "⚡ Habit Tip: Pair a new habit with an existing daily anchor (e.g. read 2 pages right after your morning tea).";
-    }
-    const botMsg = document.createElement('div');
-    botMsg.className = 'ai-msg bot';
-    botMsg.style.cssText = 'background:rgba(59,130,246,0.15); padding:8px 12px; border-radius:8px; border-left:3px solid #3b82f6; margin-top:8px;';
-    botMsg.innerHTML = `<span>${reply}</span>`;
-    log.appendChild(botMsg);
-    log.scrollTop = log.scrollHeight;
-  }, 600);
-}
-
-let currentFcIndex = 0;
-const flashcardsList = [
-  { q: "What is the 2-minute rule from Atomic Habits?", a: "When you start a new habit, it should take less than 2 minutes to do (e.g. read 1 page)." },
-  { q: "What is Deep Work?", a: "Professional activities performed in a state of distraction-free concentration that push your cognitive capabilities." },
-  { q: "What is a Fixed vs Growth Mindset?", a: "Fixed believes abilities are static; Growth believes intelligence & skill can be developed through effort." },
-  { q: "What is Spaced Repetition?", a: "A learning technique that incorporates increasing intervals of time between subsequent review of previously learned material." },
-  { q: "What is the 4 Laws of Behavior Change?", a: "Make it obvious, Make it attractive, Make it easy, Make it satisfying." }
-];
-
-function flipFlashcard() {
-  const box = document.getElementById('flashcardBox');
-  if (!box) return;
-  const isFlipped = box.getAttribute('data-flipped') === 'true';
-  const qText = document.getElementById('fcQuestionText');
-  const fc = flashcardsList[currentFcIndex];
-  
-  if (isFlipped) {
-    box.setAttribute('data-flipped', 'false');
-    box.style.background = 'linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9))';
-    if (qText) qText.innerHTML = fc.q;
-  } else {
-    box.setAttribute('data-flipped', 'true');
-    box.style.background = 'linear-gradient(135deg, rgba(16,185,129,0.2), rgba(6,78,59,0.6))';
-    if (qText) qText.innerHTML = `💡 <strong>Answer:</strong><br>${fc.a}`;
-  }
-}
-
-function nextFlashcard() {
-  currentFcIndex = (currentFcIndex + 1) % flashcardsList.length;
-  updateFlashcardDisplay();
-}
-
-function prevFlashcard() {
-  currentFcIndex = (currentFcIndex - 1 + flashcardsList.length) % flashcardsList.length;
-  updateFlashcardDisplay();
-}
-
-function updateFlashcardDisplay() {
-  const box = document.getElementById('flashcardBox');
-  if (box) {
-    box.setAttribute('data-flipped', 'false');
-    box.style.background = 'linear-gradient(135deg, rgba(30,41,59,0.8), rgba(15,23,42,0.9))';
-  }
-  const qText = document.getElementById('fcQuestionText');
-  if (qText) qText.innerHTML = flashcardsList[currentFcIndex].q;
-  const indicator = document.getElementById('fcCountIndicator');
-  if (indicator) indicator.innerText = `${currentFcIndex + 1} / ${flashcardsList.length}`;
-}
-
-let isVoiceRecording = false;
-function toggleVoiceRecord() {
-  const btn = document.getElementById('voiceRecBtn');
-  if (!btn) return;
-  if (!isVoiceRecording) {
-    isVoiceRecording = true;
-    btn.style.background = '#10b981';
-    btn.innerText = '⏹️';
-    showToast('Voice Recording started... 🎙️');
-  } else {
-    isVoiceRecording = false;
-    btn.style.background = '#f43f5e';
-    btn.innerText = '🎙️';
-    showToast('Voice Note saved! 💾');
-  }
-}
-
-function playVoiceAudio(title) {
-  showToast(`Playing audio note: ${title} ▶️`);
-}
-
-function selectMood(btn, mood) {
-  const btns = btn.parentElement.querySelectorAll('button');
-  btns.forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  btn.setAttribute('data-selected-mood', mood);
-}
-
-function logMoodSession() {
-  const slider = document.getElementById('moodEnergySlider');
-  const val = slider ? slider.value : 8;
-  showToast(`Logged Session Mood: Energy ${val}/10! 🌙`);
-}
-
-function performGlobalSearch(query) {
-  const container = document.getElementById('globalSearchResults');
-  if (!container) return;
-  const q = query.toLowerCase().trim();
-  if (!q) {
-    container.innerHTML = '<div style="font-size:12px; color:var(--text-secondary); text-align:center; padding:10px;">Type above to search notes, quotes & books</div>';
-    return;
-  }
-  const matches = state.books.filter(b => b.title.toLowerCase().includes(q) || b.author.toLowerCase().includes(q));
-  if (matches.length === 0) {
-    container.innerHTML = `<div style="font-size:12px; color:var(--text-secondary); text-align:center; padding:10px;">No matches found for "${query}"</div>`;
-  } else {
-    container.innerHTML = matches.map(b => `
-      <div style="background:rgba(255,255,255,0.04); padding:10px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; cursor:pointer;" onclick="openBookDetailView(state.books.find(x=>x.title==='${b.title.replace(/'/g, "\\'")}'))">
-        <div>
-          <div style="font-weight:700; font-size:13px; color:#fff;">${b.title}</div>
-          <div style="font-size:11px; color:var(--text-secondary);">${b.author} &bull; ${b.status}</div>
-        </div>
-        <span style="font-size:12px; color:var(--accent-gold);">&rsaquo;</span>
-      </div>
-    `).join('');
-  }
-}
-
-let recallIndex = 0;
-const recallQuestions = [
-  { q: "What is the main idea of Atomic Habits?", a: "Small changes, big results. Build better habits by focusing on identity, environment, and consistency." },
-  { q: "What is Deep Work?", a: "Concentrated, distraction-free work that maximizes output and skill acquisition." },
-  { q: "What is the key takeaway of Mindset?", a: "Embrace challenges and see failures as opportunities to grow and learn." }
-];
-
-function nextRecallQuestion() {
-  recallIndex = (recallIndex + 1) % recallQuestions.length;
-  const item = recallQuestions[recallIndex];
-  const qEl = document.getElementById('recallQuestionTitle');
-  const aEl = document.getElementById('recallTakeawayAnswer');
-  if (qEl) qEl.innerText = item.q;
-  if (aEl) aEl.innerText = item.a;
-  showToast('Next recall prompt loaded! 🧠');
-}
-
-function toggleZenRainSound(enable) {
-  showToast(enable ? 'Ambient Rain Sounds Activated 🌧️' : 'Ambient Rain Sounds Muted 🔇');
-}
-
-function startRevisionSession() {
-  showToast('Starting 15-minute Smart Revision session! 🔄');
-}
-
-function chooseNextBook(bookName) {
-  showToast(`Selected "${bookName}" as your next read! 🚀`);
-}
-
-function startSpacedReview(bookName) {
-  showToast(`Opening Spaced Repetition deck for ${bookName}! 🗓️`);
-}
-
-function continueReadingLastBook() {
-  if (state.books && state.books.length > 0) {
-    openBookDetailView(state.books[0]);
-  }
-}
-
-function launchZenModeSession() {
-  showToast('Zen Mode active! Enjoy distraction-free reading 🧘');
-}
 
 // ================= FEATURE HANDLERS & IMPLEMENTATIONS =================
 
@@ -4276,17 +4084,7 @@ function triggerImportDataJSON() {
   input.click();
 }
 
-function loadSmartRevisionBook() {
-  showToast('Smart Revision card loaded for today!');
-}
 
-function switchRevisionTab(tab) {
-  showToast(`Switched revision tab: ${tab}`);
-}
-
-function showMapConcept(concept) {
-  showToast(`Concept selected: ${concept}`);
-}
 
 function clearActivityLog() {
   showToast('Activity log cleared.');

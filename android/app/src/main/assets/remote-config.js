@@ -2,16 +2,16 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v28.0.2",
-    "name": "Mind Focus Books v28.0.2 - Live Date Sync & Home Days Spent Counter Fix",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.2/MindFocusBooks-Native.apk",
+    "version": "v28.0.3",
+    "name": "Mind Focus Books v28.0.3 - UI Cleanup & Clean Fast Profile",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.3/MindFocusBooks-Native.apk",
     "features": [
-      "🔄 Live System Date Sync: Instant sync with system calendar/clock (4 Oct -> 5 Oct changes immediately).",
-      "⏳ Bahar Hero Card Days Spent: Home Currently Reading card clearly shows elapsed days spent count (Day 1, Day 2, etc.).",
-      "🔥 Reading Streak KPI Sync: Streak bar & stats dynamically reflect active book reading days.",
-      "🔒 Permanent Completion Freeze: Completion date and days spent freeze forever once marked DONE."
+      "🧹 Clean Fast Profile: Completely removed cluttered 20-features grid and unused dummy sub-screens.",
+      "⚡ Lightning Speed: Lightweight codebase with removed redundant DOM elements and handlers.",
+      "🔄 Live System Date Sync: Instant sync with system calendar/clock.",
+      "⏳ Bahar Hero Card Days Spent: Home Currently Reading card shows live elapsed days spent count."
     ],
-    "stagedAt": "2026-10-05T07:15:00.000Z",
+    "stagedAt": "2026-10-05T07:45:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
