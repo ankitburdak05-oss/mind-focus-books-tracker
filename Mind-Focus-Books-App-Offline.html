@@ -13841,6 +13841,14 @@ function loadStats() {
   } catch (e) {}
 }
 
+function getTodayLocalDate(dateObj) {
+  const d = dateObj || new Date();
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 function saveStats() {
   try {
     localStorage.setItem(STATS_KEY, JSON.stringify(state.stats));
@@ -13851,9 +13859,9 @@ function recordReadingSession(minutes) {
   if (!minutes || minutes <= 0) return;
   state.stats.totalMinutesRead = (state.stats.totalMinutesRead || 0) + minutes;
   
-  const today = new Date().toISOString().split('T')[0];
+  const today = getTodayLocalDate();
   if (state.stats.lastReadDate !== today) {
-    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    const yesterday = getTodayLocalDate(new Date(Date.now() - 86400000));
     if (state.stats.lastReadDate === yesterday) {
       state.stats.readingStreak = (state.stats.readingStreak || 0) + 1;
     } else {
@@ -14807,7 +14815,7 @@ function openBookDetailView(book) {
     const elAvail = document.getElementById('detailAvailabilityVal');
     if (elAvail) elAvail.innerText = book.availability || 'AVAILABLE';
     
-    const today = new Date().toISOString().split('T')[0];
+    const today = getTodayLocalDate();
 
     const elStart = document.getElementById('detailDateStarted');
     if (elStart) {
@@ -14827,13 +14835,15 @@ function openBookDetailView(book) {
           book.completed_date = frozenDate;
           saveBooks();
         }
-        elTarget.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">🔒 ${formatDateDisplay(frozenDate)} (Completed • Frozen)</span>`;
+        elTarget.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">🔒 ${formatDateDisplay(frozenDate)} (Completed • Frozen)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Edit</span>`;
       } else if (book.status === 'READING') {
-        // Dynamic live date: Aaj 4 Oct to 4 Oct, Kal 5 Oct to 5 Oct!
-        book.end_date = today;
-        elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:600;">📅 ${formatDateDisplay(today)} (Live • Ongoing)</span>`;
+        if (book.end_date && book.end_date.trim()) {
+          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">🎯 ${formatDateDisplay(book.end_date)}</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Change</span>`;
+        } else {
+          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:600;">📅 ${formatDateDisplay(today)} (Live • Ongoing)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Set Target</span>`;
+        }
       } else {
-        elTarget.innerText = book.end_date ? formatDateDisplay(book.end_date) : 'Not Started';
+        elTarget.innerText = book.end_date ? formatDateDisplay(book.end_date) : 'Not Set';
       }
     }
     
@@ -14916,7 +14926,7 @@ function openBookDetailView(book) {
 function formatDateDisplay(dateStr) {
   if (!dateStr) return '-';
   try {
-    const parts = String(dateStr).split('-');
+    const parts = String(dateStr).trim().split('-');
     if (parts.length === 3) {
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const y = parts[0];
@@ -14938,13 +14948,31 @@ function formatDateDisplay(dateStr) {
 
 function promptSetTargetDate() {
   if (!state.currentBook) return;
-  const today = new Date().toISOString().split('T')[0];
-  if (state.currentBook.status === 'DONE') {
-    const frozenDate = state.currentBook.completed_date || state.currentBook.end_date || today;
-    showToast(`🔒 Book completed on ${formatDateDisplay(frozenDate)}! Date is permanently frozen.`);
-    return;
+  const today = getTodayLocalDate();
+  const currentVal = state.currentBook.end_date || state.currentBook.completed_date || today;
+  const newDate = prompt(
+    state.currentBook.status === 'DONE' 
+      ? '🔒 Enter Completion Date (YYYY-MM-DD):' 
+      : '🎯 Enter Target Date (YYYY-MM-DD):', 
+    currentVal
+  );
+  if (newDate && newDate.trim()) {
+    const cleanDate = newDate.trim();
+    state.currentBook.end_date = cleanDate;
+    if (state.currentBook.status === 'DONE') {
+      state.currentBook.completed_date = cleanDate;
+    }
+    if (state.currentBook.start_date) {
+      const d1 = new Date(state.currentBook.start_date);
+      const d2 = new Date(cleanDate);
+      if (!isNaN(d1.getTime()) && !isNaN(d2.getTime())) {
+        state.currentBook.count_days = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+      }
+    }
+    saveBooks();
+    openBookDetailView(state.currentBook);
+    showToast(`🎯 Date updated to ${formatDateDisplay(cleanDate)}! ✨`);
   }
-  showToast(`📅 Live Ongoing Date: ${formatDateDisplay(today)}. Jab aap book complete karenge tab ye date freeze ho jayegi! 🔒`);
 }
 
 function updateStatusChipsUI(status) {
@@ -14961,12 +14989,12 @@ function updateStatusChipsUI(status) {
 function quickSetBookStatus(newStatus) {
   if (!state.currentBook) return;
   state.currentBook.status = newStatus;
-  const today = new Date().toISOString().split('T')[0];
+  const today = getTodayLocalDate();
 
   if (newStatus === 'DONE') {
     state.currentBook.current_page = state.currentBook.pages || state.currentBook.total_pages || 250;
     if (!state.currentBook.completed_date) {
-      state.currentBook.completed_date = today;
+      state.currentBook.completed_date = state.currentBook.end_date || today;
     }
     // Freeze completion date permanently into end_date
     state.currentBook.end_date = state.currentBook.completed_date;
@@ -15108,11 +15136,11 @@ function saveQuickLogPages() {
   }
   
   const total = state.currentBook.pages || state.currentBook.total_pages || 200;
-  const today = new Date().toISOString().split('T')[0];
+  const today = getTodayLocalDate();
   if (newPage >= total) {
     state.currentBook.status = 'DONE';
     if (!state.currentBook.completed_date) {
-      state.currentBook.completed_date = today;
+      state.currentBook.completed_date = state.currentBook.end_date || today;
     }
     state.currentBook.end_date = state.currentBook.completed_date; // Freeze date permanently
     if (state.currentBook.start_date) {
@@ -15822,7 +15850,7 @@ function saveBookModal() {
   let startDate = document.getElementById('editStartDate').value;
   let endDate = document.getElementById('editEndDate').value;
   let countDays = parseInt(document.getElementById('editCountDays').value, 10) || 0;
-  const today = new Date().toISOString().split('T')[0];
+  const today = getTodayLocalDate();
 
   if (status === 'DONE') {
     if (!endDate) {
@@ -15840,6 +15868,13 @@ function saveBookModal() {
     if (!startDate) {
       startDate = today;
     }
+    if (endDate && startDate) {
+      const d1 = new Date(startDate);
+      const d2 = new Date(endDate);
+      if (!isNaN(d1.getTime()) && !isNaN(d2.getTime())) {
+        countDays = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+      }
+    }
   }
 
   const takeaway = document.getElementById('editBookTakeaway').value.trim();
@@ -15847,11 +15882,9 @@ function saveBookModal() {
   // Safe-Save Cover Protection
   const inputCover = document.getElementById('editBookCover').value.trim();
   let existingCover = '';
-  let existingCompleted = '';
   if (state.editingBookIndex >= 0) {
     const existing = state.books[state.editingBookIndex];
     existingCover = existing.cover_image || existing.cover_url || '';
-    existingCompleted = existing.completed_date || '';
   }
   const finalCover = inputCover || state.currentEditingCoverUrl || existingCover || '';
   
@@ -15872,7 +15905,7 @@ function saveBookModal() {
     rating,
     start_date: startDate,
     end_date: endDate,
-    completed_date: (status === 'DONE') ? endDate : existingCompleted,
+    completed_date: (status === 'DONE') ? (endDate || today) : '',
     count_days: countDays,
     takeaway,
     notes: takeaway,
@@ -16033,7 +16066,7 @@ function exportDataJSON() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `MindFocusBooks_Backup_${new Date().toISOString().split('T')[0]}.json`;
+    a.download = `MindFocusBooks_Backup_${getTodayLocalDate()}.json`;
     a.click();
     URL.revokeObjectURL(url);
     const nowStr = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
@@ -16099,7 +16132,7 @@ function exportDataCSV() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `MindFocusBooks_${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `MindFocusBooks_${getTodayLocalDate()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
     showToast('CSV exported successfully! 📊');
@@ -16141,7 +16174,7 @@ function exportDataPDF() {
       });
     }
     
-    doc.save(`MindFocusBooks_Report_${new Date().toISOString().split('T')[0]}.pdf`);
+    doc.save(`MindFocusBooks_Report_${getTodayLocalDate()}.pdf`);
     showToast('PDF Report generated! 📑');
   } catch (e) {
     console.error(e);
@@ -18081,7 +18114,7 @@ async function lookupIsbnBook(givenIsbn) {
         notes: `Scanned via ISBN Barcode (${cleanIsbn}).`,
         takeaway: `Principles and strategies from ${title}.`,
         price: 0,
-        dateAdded: new Date().toISOString().split('T')[0]
+        dateAdded: getTodayLocalDate()
       };
 
       renderScannedIsbnResult();
