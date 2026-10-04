@@ -1,14 +1,14 @@
 {
-  "id": "notice-v3.25.0",
-  "version": "v3.25.0",
+  "id": "notice-v27.0.0",
+  "version": "v27.0.0",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "📷",
-  "title": "Mind Focus Books v3.25.0 Update Ready!",
-  "message": "v3.25.0 update is live! Includes Live Camera ISBN Barcode Scanner, OpenLibrary 1-Click Import, and 100% Code Audit Verified Performance.",
-  "btnText": "⚡ Update Now (v3.25.0)",
+  "icon": "🚀",
+  "title": "Mind Focus Books v27.0.0 Update Ready!",
+  "message": "v27.0.0 update is live! Features 6-20 Master Suite: 3D Book Reader, Circular Focus Dial, Real-Data Achievements, Reading Goals, and Cloud Sync.",
+  "btnText": "⚡ Update Now (v27.0.0)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.25.0/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-02T14:55:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v27.0.0/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-04T09:00:00.000Z"
 }

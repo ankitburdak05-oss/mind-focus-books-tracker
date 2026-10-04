@@ -2,17 +2,26 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v3.25.0",
-    "name": "Mind Focus Books v3.25.0 - Live Camera ISBN Barcode Scanner & 100% Feature Audit Verified Engine",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.25.0/MindFocusBooks-Native.apk",
+    "version": "v27.0.0",
+    "name": "Mind Focus Books v27.0.0 - Features 6-20 Master Suite Upgrade & Live Reading Engine",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v27.0.0/MindFocusBooks-Native.apk",
     "features": [
-      "📷 Live Camera ISBN / Barcode Scanner: Point camera at any book barcode to auto-fetch details from OpenLibrary",
-      "🔍 OpenLibrary & Google Books API 1-Click Import",
-      "⚡ 100% Code Audit Verified: Zero missing IDs, zero broken JS functions, full subview navigation",
-      "🧘 Zen Mode & Rain Audio White Noise Generator",
-      "📊 Complete 100-Feature Suite"
+      "📖 Screen 6: Detailed Book View with Real Takeaways, Rating & Chapters",
+      "📚 Screen 7: Immersive Real 3D Book Page Reader with Auto Progress & Position Save",
+      "⏱️ Screen 8: Circular Focus Dial Timer (25:00) with Live Book Session Tracking",
+      "📝 Screen 9: Unified Notes, Highlights, Quotes & Key Learnings Manager",
+      "🎨 Screen 10 & 18: Reading Themes & Live App Customization (6 Colors & Wallpapers)",
+      "🎯 Screen 11: Reading Goals with Live SVG Donut & Habit Streak Sync",
+      "🏆 Screen 12: Real User Data-Driven Automatic Achievements Unlock Engine",
+      "💡 Screen 13: Scenic Daily Motivation Quotes with Book Attachment",
+      "✈️ Screen 14: Verified 100% Offline Mode & Local Storage Cache",
+      "☁️ Screen 15: Cross-Device Cloud Sync Architecture with Multi-Device Indicators",
+      "📊 Screen 16: Deep Reading Analytics Dashboard & Time Filters",
+      "✨ Screen 17: Local AI-Powered Personalized Book Recommendations",
+      "📔 Screen 19: Personal Reflection Reading Journal with Date & Book Tags",
+      "🛡️ Screen 20: Privacy & Security with 4-Digit PIN & Biometric Protection"
     ],
-    "stagedAt": "2026-10-02T14:55:00.000Z",
+    "stagedAt": "2026-10-04T09:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
