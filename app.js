@@ -2569,6 +2569,9 @@ function openUpdateCheckerModal() {
   overlay.style.zIndex = '1000000';
   overlay.style.display = 'flex';
   overlay.classList.add('active');
+  overlay.scrollTop = 0;
+  const card = overlay.querySelector('.update-glass-card');
+  if (card) card.scrollTop = 0;
 }
 
 function closeUpdateCheckerModal() {
