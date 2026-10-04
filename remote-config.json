@@ -2,26 +2,16 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v27.0.0",
-    "name": "Mind Focus Books v27.0.0 - Features 6-20 Master Suite Upgrade & Live Reading Engine",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v27.0.0/MindFocusBooks-Native.apk",
+    "version": "v28.0.0",
+    "name": "Mind Focus Books v28.0.0 - Live Reading Date Tracking & Frozen Completion Engine",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.0/MindFocusBooks-Native.apk",
     "features": [
-      "📖 Screen 6: Detailed Book View with Real Takeaways, Rating & Chapters",
-      "📚 Screen 7: Immersive Real 3D Book Page Reader with Auto Progress & Position Save",
-      "⏱️ Screen 8: Circular Focus Dial Timer (25:00) with Live Book Session Tracking",
-      "📝 Screen 9: Unified Notes, Highlights, Quotes & Key Learnings Manager",
-      "🎨 Screen 10 & 18: Reading Themes & Live App Customization (6 Colors & Wallpapers)",
-      "🎯 Screen 11: Reading Goals with Live SVG Donut & Habit Streak Sync",
-      "🏆 Screen 12: Real User Data-Driven Automatic Achievements Unlock Engine",
-      "💡 Screen 13: Scenic Daily Motivation Quotes with Book Attachment",
-      "✈️ Screen 14: Verified 100% Offline Mode & Local Storage Cache",
-      "☁️ Screen 15: Cross-Device Cloud Sync Architecture with Multi-Device Indicators",
-      "📊 Screen 16: Deep Reading Analytics Dashboard & Time Filters",
-      "✨ Screen 17: Local AI-Powered Personalized Book Recommendations",
-      "📔 Screen 19: Personal Reflection Reading Journal with Date & Book Tags",
-      "🛡️ Screen 20: Privacy & Security with 4-Digit PIN & Biometric Protection"
+      "📅 Live Ongoing Date Tracking: Reading books automatically update to today's date every single day (aaj 4 Oct to 4 Oct, kal 5 Oct to 5 Oct) - date never gets stuck!",
+      "🔒 Permanent Completion Date Freeze: Once you mark a book as complete, the completion date & total reading days freeze permanently and never change.",
+      "✨ Home Screen Banner Cleaned: Update card automatically hides when app is already updated to latest version.",
+      "⚡ Native Battery & Performance Optimization: No background polling when app is minimized or hidden."
     ],
-    "stagedAt": "2026-10-04T09:00:00.000Z",
+    "stagedAt": "2026-10-04T09:20:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

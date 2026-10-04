@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v27.0.0)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.0)
 // ==========================================================================
 
-const APP_VERSION = '27.0.0';
-const CURRENT_APP_VERSION = 'v27.0.0';
+const APP_VERSION = '28.0.0';
+const CURRENT_APP_VERSION = 'v28.0.0';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -1113,21 +1113,33 @@ function openBookDetailView(book) {
     const elAvail = document.getElementById('detailAvailabilityVal');
     if (elAvail) elAvail.innerText = book.availability || 'AVAILABLE';
     
+    const today = new Date().toISOString().split('T')[0];
+
     const elStart = document.getElementById('detailDateStarted');
-    if (elStart) elStart.innerText = book.start_date ? formatDateDisplay(book.start_date) : 'Not Started Yet';
+    if (elStart) {
+      if (book.status === 'READING' && !book.start_date) {
+        book.start_date = today;
+        saveBooks();
+      }
+      elStart.innerText = book.start_date ? formatDateDisplay(book.start_date) : 'Not Started Yet';
+    }
     
     const elTarget = document.getElementById('detailDateTarget');
     if (elTarget) {
       if (book.status === 'DONE') {
-        const frozenDate = book.end_date || book.completed_date || new Date().toISOString().split('T')[0];
-        if (!book.end_date) { book.end_date = frozenDate; book.completed_date = frozenDate; saveBooks(); }
-        elTarget.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">🔒 ${formatDateDisplay(frozenDate)} (Frozen)</span>`;
-      } else if (book.end_date) {
-        elTarget.innerHTML = `<span>${formatDateDisplay(book.end_date)}</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:4px;">✏️ Tap</span>`;
+        const frozenDate = book.completed_date || book.end_date || today;
+        if (!book.end_date || !book.completed_date) {
+          book.end_date = frozenDate;
+          book.completed_date = frozenDate;
+          saveBooks();
+        }
+        elTarget.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">🔒 ${formatDateDisplay(frozenDate)} (Completed • Frozen)</span>`;
       } else if (book.status === 'READING') {
-        elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:600;">📅 Set Target Date ✏️</span>`;
+        // Dynamic live date: Aaj 4 Oct to 4 Oct, Kal 5 Oct to 5 Oct!
+        book.end_date = today;
+        elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:600;">📅 ${formatDateDisplay(today)} (Live • Ongoing)</span>`;
       } else {
-        elTarget.innerText = 'Not Set';
+        elTarget.innerText = book.end_date ? formatDateDisplay(book.end_date) : 'Not Started';
       }
     }
     
@@ -1144,12 +1156,13 @@ function openBookDetailView(book) {
           }
           saveBooks();
         }
-        elDays.innerText = `✅ ${book.count_days} days (Finished)`;
-      } else if (book.status === 'READING' && book.start_date) {
-        const d1 = new Date(book.start_date);
-        const d2 = new Date();
+        elDays.innerText = `✅ ${book.count_days} days (Finished • Frozen)`;
+      } else if (book.status === 'READING') {
+        const startDateStr = book.start_date || today;
+        const d1 = new Date(startDateStr);
+        const d2 = new Date(today);
         const diff = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
-        elDays.innerText = `${book.count_days || diff} days (Ongoing)`;
+        elDays.innerText = `⏳ ${diff} days (Reading now)`;
       } else {
         elDays.innerText = book.count_days ? `${book.count_days} days` : '-';
       }
@@ -1231,29 +1244,13 @@ function formatDateDisplay(dateStr) {
 
 function promptSetTargetDate() {
   if (!state.currentBook) return;
+  const today = new Date().toISOString().split('T')[0];
   if (state.currentBook.status === 'DONE') {
-    const frozenDate = state.currentBook.end_date || state.currentBook.completed_date || 'Completed';
-    showToast(`🔒 Book already completed on ${formatDateDisplay(frozenDate)}! Date is permanently frozen.`);
+    const frozenDate = state.currentBook.completed_date || state.currentBook.end_date || today;
+    showToast(`🔒 Book completed on ${formatDateDisplay(frozenDate)}! Date is permanently frozen.`);
     return;
   }
-  const curr = state.currentBook.end_date || '';
-  const def = curr || new Date(Date.now() + 14 * 86400000).toISOString().split('T')[0];
-  const chosen = prompt('🎯 Enter Target Completion Date (YYYY-MM-DD):', def);
-  if (chosen && chosen.trim()) {
-    const cleanDate = chosen.trim();
-    state.currentBook.end_date = cleanDate;
-    if (state.currentBook.start_date) {
-      const d1 = new Date(state.currentBook.start_date);
-      const d2 = new Date(cleanDate);
-      if (!isNaN(d1.getTime()) && !isNaN(d2.getTime())) {
-        const diff = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
-        state.currentBook.count_days = diff;
-      }
-    }
-    saveBooks();
-    openBookDetailView(state.currentBook);
-    showToast(`🎯 Target date set to ${formatDateDisplay(cleanDate)}!`);
-  }
+  showToast(`📅 Live Ongoing Date: ${formatDateDisplay(today)}. Jab aap book complete karenge tab ye date freeze ho jayegi! 🔒`);
 }
 
 function updateStatusChipsUI(status) {

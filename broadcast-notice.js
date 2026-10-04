@@ -1,14 +1,14 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v27.0.0",
-  "version": "v27.0.0",
+  "id": "notice-v28.0.0",
+  "version": "v28.0.0",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v27.0.0 Update Ready!",
-  "message": "v27.0.0 update is live! Features 6-20 Master Suite: 3D Book Reader, Circular Focus Dial, Real-Data Achievements, Reading Goals, and Cloud Sync.",
-  "btnText": "⚡ Update Now (v27.0.0)",
+  "title": "Mind Focus Books v28.0.0 Update Ready!",
+  "message": "v28.0.0 update is live! Features Live Ongoing Date Tracking (aaj 4 Oct to 4 Oct, kal 5 Oct), Permanent Completion Date Freeze & Battery Heat Fix.",
+  "btnText": "⚡ Update Now (v28.0.0)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v27.0.0/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-04T09:00:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.0/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-04T09:20:00.000Z"
 };

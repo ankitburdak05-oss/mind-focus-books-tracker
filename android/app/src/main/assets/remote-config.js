@@ -1,18 +1,17 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-10-01T05:00:00.000Z",
+  "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v3.20.0",
-    "name": "Mind Focus Books v3.20.0 - 100% Real Data & Honest Metrics Engine",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.20.0/MindFocusBooks-Native.apk",
+    "version": "v28.0.0",
+    "name": "Mind Focus Books v28.0.0 - Live Reading Date Tracking & Frozen Completion Engine",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.0/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices",
-      "💰 Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)",
-      "🔥 Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days",
-      "⭐ Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them",
-      "📱 Direct In-App APK Reinstall & 1-Click Update Installer"
+      "📅 Live Ongoing Date Tracking: Reading books automatically update to today's date every single day (aaj 4 Oct to 4 Oct, kal 5 Oct to 5 Oct) - date never gets stuck!",
+      "🔒 Permanent Completion Date Freeze: Once you mark a book as complete, the completion date & total reading days freeze permanently and never change.",
+      "✨ Home Screen Banner Cleaned: Update card automatically hides when app is already updated to latest version.",
+      "⚡ Native Battery & Performance Optimization: No background polling when app is minimized or hidden."
     ],
-    "stagedAt": "2026-10-01T10:45:00.000Z",
+    "stagedAt": "2026-10-04T09:20:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
