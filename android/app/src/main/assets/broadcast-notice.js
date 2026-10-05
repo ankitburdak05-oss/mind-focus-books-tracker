@@ -1,14 +1,14 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v28.0.0",
-  "version": "v28.0.0",
+  "id": "notice-v28.0.1",
+  "version": "v28.0.1",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v28.0.0 Update Ready!",
-  "message": "v28.0.0 update is live! Features Live Ongoing Date Tracking (aaj 4 Oct to 4 Oct, kal 5 Oct), Permanent Completion Date Freeze & Battery Heat Fix.",
-  "btnText": "⚡ Update Now (v28.0.0)",
+  "title": "Mind Focus Books v28.0.1 Update Ready!",
+  "message": "v28.0.1 is live! Fixed Target Date saving, Local Device Calendar Engine & Permanent Completion Date Freeze.",
+  "btnText": "⚡ Update Now (v28.0.1)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.0/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-04T09:20:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.1/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-04T12:30:00.000Z"
 };
