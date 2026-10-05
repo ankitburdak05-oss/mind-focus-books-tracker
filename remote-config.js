@@ -2,16 +2,16 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v28.0.1",
-    "name": "Mind Focus Books v28.0.1 - Target Date Engine & Local Device Clock Fix",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.1/MindFocusBooks-Native.apk",
+    "version": "v28.0.2",
+    "name": "Mind Focus Books v28.0.2 - Live Date Sync & Home Days Spent Counter Fix",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.2/MindFocusBooks-Native.apk",
     "features": [
-      "🎯 User Target Date Preserved: Changing target date in edit modal or detail view now saves and displays exactly as set without being overridden.",
-      "📅 Local Device Clock Engine: Fixed timezone UTC shift so target date always tracks your exact device calendar date.",
-      "🔒 Permanent Completion Freeze: When a book is completed, the completion date & total reading days freeze permanently.",
-      "✨ Clean Home Screen: Update card automatically hides when app is already updated to latest version."
+      "🔄 Live System Date Sync: Instant sync with system calendar/clock (4 Oct -> 5 Oct changes immediately).",
+      "⏳ Bahar Hero Card Days Spent: Home Currently Reading card clearly shows elapsed days spent count (Day 1, Day 2, etc.).",
+      "🔥 Reading Streak KPI Sync: Streak bar & stats dynamically reflect active book reading days.",
+      "🔒 Permanent Completion Freeze: Completion date and days spent freeze forever once marked DONE."
     ],
-    "stagedAt": "2026-10-04T12:30:00.000Z",
+    "stagedAt": "2026-10-05T07:15:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

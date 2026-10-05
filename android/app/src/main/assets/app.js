@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.1)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.2)
 // ==========================================================================
 
-const APP_VERSION = '28.0.1';
-const CURRENT_APP_VERSION = 'v28.0.1';
+const APP_VERSION = '28.0.2';
+const CURRENT_APP_VERSION = 'v28.0.2';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -154,6 +154,39 @@ function getTodayLocalDate(dateObj) {
   const day = String(d.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+
+function calculateDaysElapsed(startDateStr, endDateStr) {
+  if (!startDateStr) return 1;
+  try {
+    const endStr = endDateStr || getTodayLocalDate();
+    const p1 = String(startDateStr).split('-').map(Number);
+    const p2 = String(endStr).split('-').map(Number);
+    if (p1.length < 3 || p2.length < 3) return 1;
+    const d1 = new Date(p1[0], p1[1] - 1, p1[2]);
+    const d2 = new Date(p2[0], p2[1] - 1, p2[2]);
+    const diffMs = d2.getTime() - d1.getTime();
+    const diffDays = Math.round(diffMs / 86400000);
+    return Math.max(1, diffDays + 1); // 4 Oct = Day 1, 5 Oct = Day 2, 6 Oct = Day 3
+  } catch (e) {
+    return 1;
+  }
+}
+
+// Auto-detect system clock / laptop date change every 1 second and live refresh UI!
+let __lastKnownSystemDate__ = getTodayLocalDate();
+setInterval(() => {
+  const cur = getTodayLocalDate();
+  if (cur !== __lastKnownSystemDate__) {
+    __lastKnownSystemDate__ = cur;
+    if (state.activeTab === 'home') {
+      renderHomeView();
+    }
+    const detailView = document.getElementById('viewBookDetail');
+    if (detailView && detailView.classList.contains('active') && state.currentBook) {
+      openBookDetailView(state.currentBook);
+    }
+  }
+}, 1000);
 
 function saveStats() {
   try {
@@ -343,6 +376,7 @@ function renderHomeCurrentlyReading() {
   const book = state.currentBook;
   if (!book) return;
   
+  const today = getTodayLocalDate();
   const total = book.pages || book.total_pages || 200;
   const current = book.current_page || 0;
   const pct = Math.min(100, Math.round((current / total) * 100));
@@ -350,8 +384,22 @@ function renderHomeCurrentlyReading() {
   const titleEl = document.getElementById('homeCrTitle');
   if (titleEl) titleEl.innerText = book.title;
   
+  // Calculate active reading days spent for currently reading book
+  const startD = book.start_date || today;
+  const daysSpent = (book.status === 'DONE') ? (book.count_days || 1) : calculateDaysElapsed(startD, today);
+  
   const subtitleEl = document.getElementById('homeCrSubtitle');
-  if (subtitleEl) subtitleEl.innerText = `${pct}% completed (${current}/${total} pages)`;
+  if (subtitleEl) {
+    subtitleEl.innerHTML = `
+      <span>${pct}% completed (${current}/${total} pages)</span>
+      <span style="display:inline-block; margin-left:6px; padding:2px 8px; border-radius:10px; background:rgba(245,158,11,0.18); color:var(--accent-gold); font-weight:700; font-size:11px;">
+        ⏳ ${daysSpent} Day${daysSpent > 1 ? 's' : ''} Spent
+      </span>
+      <span style="display:inline-block; margin-left:4px; padding:2px 8px; border-radius:10px; background:rgba(16,185,129,0.18); color:var(--accent-emerald); font-weight:700; font-size:11px;">
+        📅 ${formatDateDisplay(today)}
+      </span>
+    `;
+  }
   
   const percentTextEl = document.getElementById('homeCrPercentText');
   if (percentTextEl) percentTextEl.innerText = `${pct}%`;
@@ -373,7 +421,14 @@ function renderHomeStats() {
   const finished = state.books.filter(b => b.status === 'DONE').length;
   const reading = state.books.filter(b => b.status === 'READING').length;
   const pending = Math.max(0, total - finished - reading);
-  const streak = state.stats.readingStreak != null ? state.stats.readingStreak : 0;
+  
+  const today = getTodayLocalDate();
+  const activeReadingBook = state.books.find(b => b.status === 'READING') || state.currentBook;
+  let activeDays = 1;
+  if (activeReadingBook && activeReadingBook.status === 'READING') {
+    activeDays = calculateDaysElapsed(activeReadingBook.start_date || today, today);
+  }
+  const displayStreak = Math.max(state.stats.readingStreak || 0, activeDays);
   
   // 1. Compact KPI Bar
   const kpiDone = document.getElementById('kpiDoneCount');
@@ -383,7 +438,7 @@ function renderHomeStats() {
   const kpiPend = document.getElementById('kpiPendingCount');
   if (kpiPend) kpiPend.innerText = pending;
   const kpiStrk = document.getElementById('kpiStreakVal');
-  if (kpiStrk) kpiStrk.innerText = `${streak} Days`;
+  if (kpiStrk) kpiStrk.innerText = `${displayStreak} Days`;
 
   // 2. Standard 2x2 Stats Grid
   const statTotal = document.getElementById('statTotalBooks');
@@ -393,7 +448,7 @@ function renderHomeStats() {
   if (statFin) statFin.innerText = finished;
   
   const statStreak = document.getElementById('statReadingStreak');
-  if (statStreak) statStreak.innerText = `${streak} days`;
+  if (statStreak) statStreak.innerText = `${displayStreak} days`;
   
   const statTime = document.getElementById('statReadingTime');
   if (statTime) {
@@ -1143,10 +1198,11 @@ function openBookDetailView(book) {
         }
         elTarget.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">🔒 ${formatDateDisplay(frozenDate)} (Completed • Frozen)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Edit</span>`;
       } else if (book.status === 'READING') {
-        if (book.end_date && book.end_date.trim()) {
-          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">🎯 ${formatDateDisplay(book.end_date)}</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Change</span>`;
+        // While reading: Live ongoing date ALWAYS tracks today's system clock!
+        if (book.target_date && book.target_date !== today) {
+          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">🎯 Target: ${formatDateDisplay(book.target_date)}</span> <span style="font-size:11px; color:var(--text-secondary); margin-left:4px;">(Live: ${formatDateDisplay(today)})</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️</span>`;
         } else {
-          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:600;">📅 ${formatDateDisplay(today)} (Live • Ongoing)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Set Target</span>`;
+          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">📅 ${formatDateDisplay(today)} (Live • Ongoing)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Set Target</span>`;
         }
       } else {
         elTarget.innerText = book.end_date ? formatDateDisplay(book.end_date) : 'Not Set';
@@ -1156,23 +1212,17 @@ function openBookDetailView(book) {
     const elDays = document.getElementById('detailDaysSpent');
     if (elDays) {
       if (book.status === 'DONE') {
-        if (!book.count_days || book.count_days === 0) {
-          if (book.start_date && (book.end_date || book.completed_date)) {
-            const d1 = new Date(book.start_date);
-            const d2 = new Date(book.end_date || book.completed_date);
-            book.count_days = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
-          } else {
-            book.count_days = 1;
-          }
+        const frozenDate = book.completed_date || book.end_date || today;
+        const frozenDays = book.count_days || calculateDaysElapsed(book.start_date || frozenDate, frozenDate);
+        if (!book.count_days) {
+          book.count_days = frozenDays;
           saveBooks();
         }
-        elDays.innerText = `✅ ${book.count_days} days (Finished • Frozen)`;
+        elDays.innerText = `✅ ${frozenDays} Day${frozenDays > 1 ? 's' : ''} (Finished • Frozen)`;
       } else if (book.status === 'READING') {
         const startDateStr = book.start_date || today;
-        const d1 = new Date(startDateStr);
-        const d2 = new Date(today);
-        const diff = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
-        elDays.innerText = `⏳ ${diff} days (Reading now)`;
+        const daysSpent = calculateDaysElapsed(startDateStr, today);
+        elDays.innerText = `⏳ ${daysSpent} Day${daysSpent > 1 ? 's' : ''} (Reading now)`;
       } else {
         elDays.innerText = book.count_days ? `${book.count_days} days` : '-';
       }
@@ -1269,11 +1319,7 @@ function promptSetTargetDate() {
       state.currentBook.completed_date = cleanDate;
     }
     if (state.currentBook.start_date) {
-      const d1 = new Date(state.currentBook.start_date);
-      const d2 = new Date(cleanDate);
-      if (!isNaN(d1.getTime()) && !isNaN(d2.getTime())) {
-        state.currentBook.count_days = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
-      }
+      state.currentBook.count_days = calculateDaysElapsed(state.currentBook.start_date, cleanDate);
     }
     saveBooks();
     openBookDetailView(state.currentBook);
@@ -1304,14 +1350,8 @@ function quickSetBookStatus(newStatus) {
     }
     // Freeze completion date permanently into end_date
     state.currentBook.end_date = state.currentBook.completed_date;
-    if (state.currentBook.start_date) {
-      const d1 = new Date(state.currentBook.start_date);
-      const d2 = new Date(state.currentBook.completed_date);
-      state.currentBook.count_days = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
-    } else {
-      state.currentBook.start_date = today;
-      state.currentBook.count_days = 1;
-    }
+    const startD = state.currentBook.start_date || today;
+    state.currentBook.count_days = calculateDaysElapsed(startD, state.currentBook.completed_date);
   } else if (newStatus === 'READING') {
     if (!state.currentBook.current_page || state.currentBook.current_page === 0) {
       state.currentBook.current_page = 1;
@@ -1319,6 +1359,7 @@ function quickSetBookStatus(newStatus) {
     if (!state.currentBook.start_date) {
       state.currentBook.start_date = today;
     }
+    state.currentBook.count_days = calculateDaysElapsed(state.currentBook.start_date, today);
   } else if (newStatus === 'PENDING') {
     state.currentBook.current_page = 0;
   }
@@ -2123,10 +2164,7 @@ function calculateCountDays() {
   const end = document.getElementById('editEndDate').value;
   const countInput = document.getElementById('editCountDays');
   if (start && end) {
-    const d1 = new Date(start);
-    const d2 = new Date(end);
-    const diffTime = d2 - d1;
-    const diffDays = Math.max(0, Math.ceil(diffTime / (1000 * 60 * 60 * 24)));
+    const diffDays = calculateDaysElapsed(start, end);
     if (countInput) countInput.value = diffDays;
   }
 }
@@ -2166,20 +2204,16 @@ function saveBookModal() {
       startDate = endDate;
     }
     if (!countDays || countDays === 0) {
-      const d1 = new Date(startDate);
-      const d2 = new Date(endDate);
-      countDays = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
+      countDays = calculateDaysElapsed(startDate, endDate);
     }
   } else if (status === 'READING') {
     if (!startDate) {
       startDate = today;
     }
     if (endDate && startDate) {
-      const d1 = new Date(startDate);
-      const d2 = new Date(endDate);
-      if (!isNaN(d1.getTime()) && !isNaN(d2.getTime())) {
-        countDays = Math.max(1, Math.round((d2 - d1) / (1000 * 60 * 60 * 24)));
-      }
+      countDays = calculateDaysElapsed(startDate, endDate);
+    } else if (startDate) {
+      countDays = calculateDaysElapsed(startDate, today);
     }
   }
 
