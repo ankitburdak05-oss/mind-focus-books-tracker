@@ -2,16 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v28.0.4",
-    "name": "Mind Focus Books v28.0.4 - Accurate Calendar Day Count Engine",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.4/MindFocusBooks-Native.apk",
+    "version": "v28.0.5",
+    "name": "Mind Focus Books v28.0.5 - 315 Books & New Real Covers Update",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.5/MindFocusBooks-Native.apk",
     "features": [
+      "📚 Added 2 New Books with Real Photo Covers: The Art of Persuasion & Talking with Psychopaths and Savages.",
+      "🏷️ Accurate Category Placements: Communication & Influence + True Crime & Forensic Mind.",
       "🎯 Calendar Day Difference Math: Start date (4 Oct) = 0 Days Spent, Next day (5 Oct) = 1 Day Spent.",
       "⏳ Bahar & Andar Perfect Sync: Home hero card, detail view, and streak counter all perfectly match the 0/1 day counting.",
-      "🔄 Instant Live System Date Sync: Detects system date change instantly without reload.",
-      "🔒 Permanent Completion Freeze: Freezes completion date and days permanently upon marking DONE."
+      "🔄 Instant Live System Date Sync: Detects system date change instantly without reload."
     ],
-    "stagedAt": "2026-10-05T08:00:00.000Z",
+    "stagedAt": "2026-10-06T18:15:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
