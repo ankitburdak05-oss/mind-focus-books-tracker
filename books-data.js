@@ -5336,5 +5336,41 @@ const DEFAULT_BOOKS = [
     "total_pages": 400,
     "current_page": 0,
     "cover_url": "https://covers.openlibrary.org/b/id/8739376-L.jpg"
+  },
+  {
+    "no": "book 313",
+    "title": "The Art of Persuasion",
+    "author": "Bob Burg",
+    "language": "HINDI / ENG",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": 0,
+    "category": "Communication & Influence",
+    "takeaway": "लोगों को अपनी बात मनवाने की कला, बिना दबाव या भय के सहयोग हासिल करना और सकारात्मक संवाद से रिश्ते मजबूत बनाना।",
+    "availability": "AVAILABLE",
+    "price": 0,
+    "total_pages": 240,
+    "current_page": 0,
+    "cover_url": "cover_art_of_persuasion.jpg"
+  },
+  {
+    "no": "book 314",
+    "title": "Talking with Psychopaths and Savages",
+    "author": "Christopher Berry-Dee",
+    "language": "HINDI / ENG",
+    "status": "PENDING",
+    "start_date": "",
+    "end_date": "",
+    "count_days": 0,
+    "rating": 0,
+    "category": "True Crime & Forensic Mind",
+    "takeaway": "दुनिया के सबसे खौफनाक और ठंडे दिमाग वाले हत्यारों व मनोरोगियों के दिमाग में उतरने की एक वास्तविक व गहरी केस-स्टडी यात्रा।",
+    "availability": "AVAILABLE",
+    "price": 0,
+    "total_pages": 320,
+    "current_page": 0,
+    "cover_url": "cover_talking_with_psychopaths.jpg"
   }
 ];
