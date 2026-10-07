@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.7)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.8)
 // ==========================================================================
 
-const APP_VERSION = '28.0.7';
-const CURRENT_APP_VERSION = 'v28.0.7';
+const APP_VERSION = '28.0.8';
+const CURRENT_APP_VERSION = 'v28.0.8';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -945,6 +945,122 @@ function renderTotalSpentView() {
   container.innerHTML = html;
 }
 
+// Global active status filter for Book Status screen
+let currentBookStatusTab = 'DONE'; // 'DONE', 'READING', 'PENDING'
+
+function switchBookStatusTab(tabStatus) {
+  currentBookStatusTab = tabStatus;
+  
+  // Highlight active tab button
+  document.getElementById('bstatTabDone')?.classList.toggle('active', tabStatus === 'DONE');
+  document.getElementById('bstatTabReading')?.classList.toggle('active', tabStatus === 'READING');
+  document.getElementById('bstatTabPending')?.classList.toggle('active', tabStatus === 'PENDING');
+
+  renderBookStatusView();
+}
+
+function renderBookStatusView() {
+  const container = document.getElementById('bookStatusListContainer');
+  const countDoneEl = document.getElementById('bstatCountDone');
+  const countReadingEl = document.getElementById('bstatCountReading');
+  const countPendingEl = document.getElementById('bstatCountPending');
+  const subtitleEl = document.getElementById('bookStatusSubScreenSubtitle');
+
+  const books = state.books || [];
+
+  // Calculate live counts for all 3 categories
+  const doneBooks = books.filter(b => b && b.status === 'DONE');
+  const readingBooks = books.filter(b => b && b.status === 'READING');
+  const pendingBooks = books.filter(b => b && b.status !== 'DONE' && b.status !== 'READING');
+
+  if (countDoneEl) countDoneEl.innerText = doneBooks.length;
+  if (countReadingEl) countReadingEl.innerText = readingBooks.length;
+  if (countPendingEl) countPendingEl.innerText = pendingBooks.length;
+
+  // Update profile menu item subtitle
+  const profileStatusSub = document.getElementById('profileBookStatusSubText');
+  if (profileStatusSub) {
+    profileStatusSub.innerText = `✅ ${doneBooks.length} Done • 📖 ${readingBooks.length} Reading • ⏳ ${pendingBooks.length} Pending`;
+  }
+
+  if (!container) return;
+
+  let activeList = [];
+  let statusBadgeLabel = '';
+  let statusBadgeClass = '';
+
+  if (currentBookStatusTab === 'DONE') {
+    activeList = doneBooks;
+    statusBadgeLabel = 'Completed';
+    statusBadgeClass = 'done';
+    if (subtitleEl) subtitleEl.innerText = `${doneBooks.length} Completed Book${doneBooks.length === 1 ? '' : 's'}`;
+  } else if (currentBookStatusTab === 'READING') {
+    activeList = readingBooks;
+    statusBadgeLabel = 'Reading';
+    statusBadgeClass = 'reading';
+    if (subtitleEl) subtitleEl.innerText = `${readingBooks.length} Currently Reading Book${readingBooks.length === 1 ? '' : 's'}`;
+  } else {
+    activeList = pendingBooks;
+    statusBadgeLabel = 'Pending';
+    statusBadgeClass = 'pending';
+    if (subtitleEl) subtitleEl.innerText = `${pendingBooks.length} Pending Book${pendingBooks.length === 1 ? '' : 's'}`;
+  }
+
+  if (activeList.length === 0) {
+    const emptyTitles = {
+      'DONE': 'Koi Completed Book Nahi Hai',
+      'READING': 'Koi Reading Book Nahi Hai',
+      'PENDING': 'Koi Pending Book Nahi Hai'
+    };
+    const emptyDescs = {
+      'DONE': 'Jab aap kisi book ko complete karke status "DONE" karenge, to vo yahan dikhegi.',
+      'READING': 'Jab aap kisi book ko start karke status "READING" karenge, to vo yahan dikhegi.',
+      'PENDING': 'Sabhi naye ya to-be-read books yahan dikhte hain.'
+    };
+    container.innerHTML = `
+      <div class="total-spent-empty-state">
+        <div class="total-spent-empty-icon">${currentBookStatusTab === 'DONE' ? '🏆' : currentBookStatusTab === 'READING' ? '📖' : '⏳'}</div>
+        <div class="total-spent-empty-title">${emptyTitles[currentBookStatusTab] || 'No Books'}</div>
+        <div class="total-spent-empty-desc">${emptyDescs[currentBookStatusTab] || ''}</div>
+      </div>
+    `;
+    return;
+  }
+
+  // Render list of books
+  let html = '';
+  activeList.forEach(b => {
+    const originalIndex = books.indexOf(b);
+    const coverSrc = b.cover_url || b.cover_image || 'icon-192.png';
+    const bookTitle = escapeHtml(b.title || 'Untitled Book');
+    const bookAuthor = escapeHtml(b.author || 'Unknown Author');
+    const bookCategory = escapeHtml(b.category || 'General');
+    const daysSpent = b.count_days !== undefined && b.count_days !== null && b.count_days !== '' ? Number(b.count_days) : 0;
+    const daysText = daysSpent === 1 ? '1 day' : `${daysSpent} days`;
+
+    html += `
+      <div class="book-status-item-card" onclick="openBookDetailViewByIndex(${originalIndex})">
+        <div class="bstat-cover-wrap">
+          <img class="bstat-cover-img" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='icon-192.png'">
+        </div>
+        <div class="bstat-info-wrap">
+          <div class="bstat-book-title">${bookTitle}</div>
+          <div class="bstat-book-author">${bookAuthor}</div>
+          <div class="bstat-meta-row">
+            <span class="bstat-category-tag">${bookCategory}</span>
+            ${currentBookStatusTab !== 'PENDING' ? `<span class="bstat-days-tag">⏱️ ${daysText}</span>` : ''}
+          </div>
+        </div>
+        <div class="bstat-right-col">
+          <span class="bstat-badge ${statusBadgeClass}">${statusBadgeLabel}</span>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
 function openSetBudgetPrompt() {
   const currentBudget = localStorage.getItem('mf_reading_budget_2026') || '5000';
   const val = prompt('Set your 2026 Reading Budget (in ₹ Rupees):', currentBudget);
@@ -1129,6 +1245,7 @@ function renderProfileView() {
   updateLastBackupDisplay();
   updateProfileReaderToneDisplay();
   renderReadingBudget();
+  renderBookStatusView();
 }
 
 function updateLastBackupDisplay() {
@@ -3040,6 +3157,7 @@ function navigateToSubView(viewName) {
   }
   if (viewName === 'activityAuditLog') renderActivityAuditLog();
   if (viewName === 'totalSpent') renderTotalSpentView();
+  if (viewName === 'bookStatus') renderBookStatusView();
 }
 
 function navigateBack() {

@@ -1,14 +1,14 @@
 {
-  "id": "notice-v28.0.7",
-  "version": "v28.0.7",
+  "id": "notice-v28.0.8",
+  "version": "v28.0.8",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v28.0.7 Update Ready!",
-  "message": "v28.0.7 is live! New 'Total Spent' screen in Profile with non-clickable priced books overview.",
-  "btnText": "⚡ Update Now (v28.0.7)",
+  "title": "Mind Focus Books v28.0.8 Update Ready!",
+  "message": "v28.0.8 is live! New 'Book Status' hub in Profile with 3 live tabs: Completed, Reading & Pending.",
+  "btnText": "⚡ Update Now (v28.0.8)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.7/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-07T17:20:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.8/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-07T17:40:00.000Z"
 }

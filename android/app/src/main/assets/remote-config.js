@@ -2,16 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v28.0.7",
-    "name": "Mind Focus Books v28.0.7 - Total Spent Expense Tracker",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.7/MindFocusBooks-Native.apk",
+    "version": "v28.0.8",
+    "name": "Mind Focus Books v28.0.8 - Book Status Master Filter",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.8/MindFocusBooks-Native.apk",
     "features": [
-      "💰 Profile 'Total Spent' Feature: Dedicated option showing only books with prices added.",
-      "📖 Clean Overview List: Left cover image, center book title & author, right price badge.",
-      "🔒 Non-Clickable Display: Clean viewing mode with clicks disabled on list items.",
-      "📚 321 Books Catalog with Real HD Photo Covers."
+      "📑 Profile 'Book Status' Hub: 3 instant segment tabs [Completed | Reading | Pending].",
+      "✅ Completed Books Tab: Live list of all read books with completion badges & time spent.",
+      "📖 Reading Books Tab: Currently reading books with live day streaks.",
+      "⏳ Pending Books Tab: To-be-read wishlist books cleanly organized.",
+      "💰 Total Spent Expense Overview: Only books with recorded prices."
     ],
-    "stagedAt": "2026-10-07T17:20:00.000Z",
+    "stagedAt": "2026-10-07T17:40:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
