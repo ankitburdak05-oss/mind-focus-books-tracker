@@ -2,17 +2,16 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v28.0.8",
-    "name": "Mind Focus Books v28.0.8 - Book Status Master Filter",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.8/MindFocusBooks-Native.apk",
+    "version": "v28.0.9",
+    "name": "Mind Focus Books v28.0.9 - Book Availability Inventory Filter",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.9/MindFocusBooks-Native.apk",
     "features": [
-      "📑 Profile 'Book Status' Hub: 3 instant segment tabs [Completed | Reading | Pending].",
-      "✅ Completed Books Tab: Live list of all read books with completion badges & time spent.",
-      "📖 Reading Books Tab: Currently reading books with live day streaks.",
-      "⏳ Pending Books Tab: To-be-read wishlist books cleanly organized.",
-      "💰 Total Spent Expense Overview: Only books with recorded prices."
+      "📦 Profile 'Book Availability' Option: Instantly see Available and Unavailable books in your library.",
+      "🟢 Available Books Tab: Live list of all available books with direct detail view access.",
+      "🔴 Unavailable Books Tab: Filter out books that are missing or yet to be obtained.",
+      "📑 Book Status Master Hub: Completed, Reading & Pending live categorization."
     ],
-    "stagedAt": "2026-10-07T17:40:00.000Z",
+    "stagedAt": "2026-10-07T17:55:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

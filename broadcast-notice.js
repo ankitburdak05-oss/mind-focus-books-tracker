@@ -1,14 +1,14 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v28.0.8",
-  "version": "v28.0.8",
+  "id": "notice-v28.0.9",
+  "version": "v28.0.9",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v28.0.8 Update Ready!",
-  "message": "v28.0.8 is live! New 'Book Status' hub in Profile with 3 live tabs: Completed, Reading & Pending.",
-  "btnText": "⚡ Update Now (v28.0.8)",
+  "title": "Mind Focus Books v28.0.9 Update Ready!",
+  "message": "v28.0.9 is live! New 'Book Availability' screen in Profile with Available & Unavailable tabs.",
+  "btnText": "⚡ Update Now (v28.0.9)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.8/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-07T17:40:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.9/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-07T17:55:00.000Z"
 };

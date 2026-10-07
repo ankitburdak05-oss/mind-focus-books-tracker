@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.8)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.9)
 // ==========================================================================
 
-const APP_VERSION = '28.0.8';
-const CURRENT_APP_VERSION = 'v28.0.8';
+const APP_VERSION = '28.0.9';
+const CURRENT_APP_VERSION = 'v28.0.9';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -1061,6 +1061,101 @@ function renderBookStatusView() {
   container.innerHTML = html;
 }
 
+// Global active status filter for Book Availability screen
+let currentBookAvailTab = 'AVAILABLE'; // 'AVAILABLE', 'UNAVAILABLE'
+
+function switchBookAvailTab(availStatus) {
+  currentBookAvailTab = availStatus;
+
+  // Highlight active tab button
+  document.getElementById('bavailTabAvailable')?.classList.toggle('active', availStatus === 'AVAILABLE');
+  document.getElementById('bavailTabUnavailable')?.classList.toggle('active', availStatus === 'UNAVAILABLE');
+
+  renderBookAvailabilityView();
+}
+
+function renderBookAvailabilityView() {
+  const container = document.getElementById('bookAvailListContainer');
+  const countAvailEl = document.getElementById('bavailCountAvailable');
+  const countUnavailEl = document.getElementById('bavailCountUnavailable');
+  const subtitleEl = document.getElementById('bookAvailSubScreenSubtitle');
+
+  const books = state.books || [];
+
+  // Categorize books by availability
+  // In app data, availability is usually "AVAILABLE" or "UNAVAILABLE"
+  const availBooks = books.filter(b => {
+    const a = (b.availability || '').toUpperCase();
+    return a === 'AVAILABLE' || a === 'OWNED' || a === 'YES' || a === '';
+  });
+  const unavailBooks = books.filter(b => {
+    const a = (b.availability || '').toUpperCase();
+    return a === 'UNAVAILABLE' || a === 'NOT_OWNED' || a === 'NO';
+  });
+
+  if (countAvailEl) countAvailEl.innerText = availBooks.length;
+  if (countUnavailEl) countUnavailEl.innerText = unavailBooks.length;
+
+  // Update profile menu item subtitle
+  const profileAvailSub = document.getElementById('profileBookAvailabilitySubText');
+  if (profileAvailSub) {
+    profileAvailSub.innerText = `🟢 ${availBooks.length} Available • 🔴 ${unavailBooks.length} Unavailable`;
+  }
+
+  if (!container) return;
+
+  const isAvailableTab = currentBookAvailTab === 'AVAILABLE';
+  const activeList = isAvailableTab ? availBooks : unavailBooks;
+
+  if (subtitleEl) {
+    subtitleEl.innerText = `${activeList.length} ${isAvailableTab ? 'Available' : 'Unavailable'} Book${activeList.length === 1 ? '' : 's'}`;
+  }
+
+  if (activeList.length === 0) {
+    container.innerHTML = `
+      <div class="total-spent-empty-state">
+        <div class="total-spent-empty-icon">${isAvailableTab ? '📦' : '✨'}</div>
+        <div class="total-spent-empty-title">${isAvailableTab ? 'Koi Available Book Nahi Hai' : 'Koi Unavailable Book Nahi Hai'}</div>
+        <div class="total-spent-empty-desc">${isAvailableTab ? 'Sabhi available books yahan dikhengi.' : 'Sabhi unavailable books yahan dikhengi.'}</div>
+      </div>
+    `;
+    return;
+  }
+
+  // Render list of books
+  let html = '';
+  activeList.forEach(b => {
+    const originalIndex = books.indexOf(b);
+    const coverSrc = b.cover_url || b.cover_image || 'icon-192.png';
+    const bookTitle = escapeHtml(b.title || 'Untitled Book');
+    const bookAuthor = escapeHtml(b.author || 'Unknown Author');
+    const bookCategory = escapeHtml(b.category || 'General');
+    const badgeLabel = isAvailableTab ? 'Available' : 'Unavailable';
+    const badgeClass = isAvailableTab ? 'available' : 'unavailable';
+
+    html += `
+      <div class="book-status-item-card" onclick="openBookDetailViewByIndex(${originalIndex})">
+        <div class="bstat-cover-wrap">
+          <img class="bstat-cover-img" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='icon-192.png'">
+        </div>
+        <div class="bstat-info-wrap">
+          <div class="bstat-book-title">${bookTitle}</div>
+          <div class="bstat-book-author">${bookAuthor}</div>
+          <div class="bstat-meta-row">
+            <span class="bstat-category-tag">${bookCategory}</span>
+            <span class="bstat-days-tag">${b.status || 'PENDING'}</span>
+          </div>
+        </div>
+        <div class="bstat-right-col">
+          <span class="bstat-badge ${badgeClass}">${badgeLabel}</span>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
 function openSetBudgetPrompt() {
   const currentBudget = localStorage.getItem('mf_reading_budget_2026') || '5000';
   const val = prompt('Set your 2026 Reading Budget (in ₹ Rupees):', currentBudget);
@@ -1246,6 +1341,7 @@ function renderProfileView() {
   updateProfileReaderToneDisplay();
   renderReadingBudget();
   renderBookStatusView();
+  renderBookAvailabilityView();
 }
 
 function updateLastBackupDisplay() {
@@ -3158,6 +3254,7 @@ function navigateToSubView(viewName) {
   if (viewName === 'activityAuditLog') renderActivityAuditLog();
   if (viewName === 'totalSpent') renderTotalSpentView();
   if (viewName === 'bookStatus') renderBookStatusView();
+  if (viewName === 'bookAvailability') renderBookAvailabilityView();
 }
 
 function navigateBack() {

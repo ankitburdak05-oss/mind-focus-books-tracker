@@ -665,6 +665,16 @@
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
 
+        <!-- 📦 BOOK AVAILABILITY OPTION (Available, Unavailable) -->
+        <div class="profile-menu-item" onclick="navigateToSubView('bookAvailability')">
+          <div class="pmi-icon purple" style="font-size: 1.35rem;">📦</div>
+          <div class="pmi-text">
+            <div class="pmi-title" style="font-weight: 700;">Book Availability</div>
+            <div class="pmi-sub" id="profileBookAvailabilitySubText">Available &bull; Unavailable</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
         <div class="profile-menu-item" onclick="openTrashCenterModal()">
           <div class="pmi-icon orange">🗑️</div>
           <div class="pmi-text">
@@ -1740,6 +1750,37 @@
 
       <!-- Filtered Books List Container -->
       <div class="book-status-list-container" id="bookStatusListContainer">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </section>
+
+    <!-- ================= SUB-SCREEN: BOOK AVAILABILITY (AVAILABLE, UNAVAILABLE) ================= -->
+    <section id="viewBookAvailability" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Book Availability</h2>
+          <p class="sub-screen-sub-title" id="bookAvailSubScreenSubtitle">Filter by Physical Availability</p>
+        </div>
+        <div style="width: 36px;"></div>
+      </div>
+
+      <!-- 2 Availability Segment Tabs -->
+      <div class="book-status-tabs-bar">
+        <button type="button" class="book-status-tab-btn active" id="bavailTabAvailable" onclick="switchBookAvailTab('AVAILABLE')">
+          <span class="bstat-tab-icon">🟢</span>
+          <span class="bstat-tab-label">Available</span>
+          <span class="bstat-tab-count" id="bavailCountAvailable">0</span>
+        </button>
+        <button type="button" class="book-status-tab-btn" id="bavailTabUnavailable" onclick="switchBookAvailTab('UNAVAILABLE')">
+          <span class="bstat-tab-icon">🔴</span>
+          <span class="bstat-tab-label">Unavailable</span>
+          <span class="bstat-tab-count" id="bavailCountUnavailable">0</span>
+        </button>
+      </div>
+
+      <!-- Filtered Availability Books List Container -->
+      <div class="book-status-list-container" id="bookAvailListContainer">
         <!-- Rendered dynamically by JS -->
       </div>
     </section>
