@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.6)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.7)
 // ==========================================================================
 
-const APP_VERSION = '28.0.6';
-const CURRENT_APP_VERSION = 'v28.0.6';
+const APP_VERSION = '28.0.7';
+const CURRENT_APP_VERSION = 'v28.0.7';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
