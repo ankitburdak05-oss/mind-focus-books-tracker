@@ -2,17 +2,17 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v28.0.10",
-    "name": "Mind Focus Books v28.0.10 - Navigation Fix & Screen Return",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.10/MindFocusBooks-Native.apk",
+    "version": "v28.0.11",
+    "name": "Mind Focus Books v28.0.11 - Android Hardware & In-App Back Navigation Fix",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.11/MindFocusBooks-Native.apk",
     "features": [
-      "🔄 Accurate Screen Return: Clicking back from book details returns directly to the originating screen (Book Status, Availability, Total Spent).",
+      "🔄 Android Hardware & On-Screen Back Button Fix: Returning from book details goes directly back to Book Status, Book Availability or Total Spent.",
       "📦 Profile 'Book Availability' Option: Instantly see Available and Unavailable books in your library.",
       "🟢 Available Books Tab: Live list of all available books with direct detail view access.",
       "🔴 Unavailable Books Tab: Filter out books that are missing or yet to be obtained.",
       "📑 Book Status Master Hub: Completed, Reading & Pending live categorization."
     ],
-    "stagedAt": "2026-10-07T18:25:00.000Z",
+    "stagedAt": "2026-10-08T00:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

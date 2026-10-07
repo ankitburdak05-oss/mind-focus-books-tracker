@@ -13657,11 +13657,11 @@ const DEFAULT_BOOKS = [
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.10)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.11)
 // ==========================================================================
 
-const APP_VERSION = '28.0.10';
-const CURRENT_APP_VERSION = 'v28.0.10';
+const APP_VERSION = '28.0.11';
+const CURRENT_APP_VERSION = 'v28.0.11';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -15368,6 +15368,35 @@ function closeBookDetailView() {
   }
   switchTab(state.previousTab || 'home');
 }
+
+// Global Android hardware/system back button handler
+window.handleAppBackButton = function() {
+  // 1. If edit book modal is open, close modal
+  const editModal = document.getElementById('editBookModalOverlay');
+  if (editModal && editModal.classList.contains('active')) {
+    closeEditModal();
+    return true;
+  }
+
+  // 2. If Book Detail view is active, close detail and return to originating screen
+  const detailView = document.getElementById('viewBookDetail');
+  if (detailView && detailView.classList.contains('active')) {
+    closeBookDetailView();
+    return true;
+  }
+
+  // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, etc.), go back to Profile
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog'];
+  for (const svId of subViews) {
+    const sv = document.getElementById(svId);
+    if (sv && sv.classList.contains('active')) {
+      navigateBack();
+      return true;
+    }
+  }
+
+  return false;
+};
 
 function switchTabNavOnly(tabId) {
   state.activeTab = tabId;

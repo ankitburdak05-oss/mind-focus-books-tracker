@@ -377,8 +377,23 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (webView != null && webView.canGoBack()) {
-            webView.goBack();
+        if (webView != null) {
+            // First check if app's JavaScript router has an active detail or modal view to close
+            webView.evaluateJavascript(
+                "(function() { if (typeof window.handleAppBackButton === 'function') { return window.handleAppBackButton(); } return false; })()",
+                result -> {
+                    if ("true".equals(result)) {
+                        // JavaScript handled closing the view/detail screen!
+                        return;
+                    }
+                    // Fallback to webview history or system back
+                    if (webView.canGoBack()) {
+                        webView.goBack();
+                    } else {
+                        super.onBackPressed();
+                    }
+                }
+            );
         } else {
             super.onBackPressed();
         }
