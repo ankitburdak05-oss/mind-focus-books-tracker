@@ -872,6 +872,77 @@ function renderReadingBudget() {
       bar.style.background = 'linear-gradient(90deg, #10b981, #059669)';
     }
   }
+
+  // Update profile menu item subtitle
+  const profileSub = document.getElementById('profileTotalSpentSubText');
+  if (profileSub) {
+    profileSub.innerText = `${formatINR(totalSpent)} Total Spent • ${pricedBooks.length} Books`;
+  }
+
+  // If currently viewing the Total Spent screen, re-render it
+  const viewTotalSpent = document.getElementById('viewTotalSpent');
+  if (viewTotalSpent && viewTotalSpent.classList.contains('active')) {
+    renderTotalSpentView();
+  }
+}
+
+// Render Total Spent Sub-Screen (Strictly Non-Clickable Books List with Price)
+function renderTotalSpentView() {
+  const container = document.getElementById('totalSpentBooksList');
+  const countEl = document.getElementById('totalSpentSubScreenCount');
+  const sumEl = document.getElementById('totalSpentMainSum');
+  const avgEl = document.getElementById('totalSpentAvgHint');
+  
+  if (!container) return;
+
+  // Filter only books where price exists and is > 0
+  const pricedBooks = (state.books || []).filter(b => b && b.price && Number(b.price) > 0);
+  const totalSpent = pricedBooks.reduce((acc, b) => acc + Number(b.price), 0);
+  const avgPrice = pricedBooks.length ? Math.round(totalSpent / pricedBooks.length) : 0;
+  const formatINR = (num) => '₹' + Math.round(Number(num) || 0).toLocaleString('en-IN');
+
+  if (countEl) countEl.innerText = `${pricedBooks.length} Book${pricedBooks.length === 1 ? '' : 's'} with Price`;
+  if (sumEl) sumEl.innerText = formatINR(totalSpent);
+  if (avgEl) avgEl.innerText = pricedBooks.length ? `Average: ${formatINR(avgPrice)} / book` : 'No priced books recorded yet';
+
+  if (pricedBooks.length === 0) {
+    container.innerHTML = `
+      <div class="total-spent-empty-state">
+        <div class="total-spent-empty-icon">🏷️</div>
+        <div class="total-spent-empty-title">Koi Kitab Price ke Sath Nahi Hai</div>
+        <div class="total-spent-empty-desc">Jab aap kisi kitab ko Edit karke uski price add karenge, to vo yahan automatically show hone lagegi.</div>
+      </div>
+    `;
+    return;
+  }
+
+  // Build non-clickable rows (Left: Cover, Center: Title + Author + Category, Right: Price)
+  let html = '';
+  pricedBooks.forEach(b => {
+    const coverSrc = b.cover_url || b.cover_image || 'icon-192.png';
+    const bookTitle = escapeHtml(b.title || 'Untitled Book');
+    const bookAuthor = escapeHtml(b.author || 'Unknown Author');
+    const bookCategory = escapeHtml(b.category || 'General');
+    const priceFormatted = formatINR(b.price);
+
+    html += `
+      <div class="total-spent-book-row" role="listitem">
+        <div class="total-spent-book-cover-wrap">
+          <img class="total-spent-book-cover-img" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='icon-192.png'">
+        </div>
+        <div class="total-spent-book-center-info">
+          <div class="total-spent-book-title">${bookTitle}</div>
+          <div class="total-spent-book-author">${bookAuthor}</div>
+          <span class="total-spent-book-category-tag">${bookCategory}</span>
+        </div>
+        <div class="total-spent-book-price-col">
+          <span class="total-spent-book-price-badge">${priceFormatted}</span>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
 }
 
 function openSetBudgetPrompt() {
@@ -1057,6 +1128,7 @@ function renderProfileView() {
   
   updateLastBackupDisplay();
   updateProfileReaderToneDisplay();
+  renderReadingBudget();
 }
 
 function updateLastBackupDisplay() {
@@ -2967,6 +3039,7 @@ function navigateToSubView(viewName) {
     if (modal) modal.style.display = 'flex';
   }
   if (viewName === 'activityAuditLog') renderActivityAuditLog();
+  if (viewName === 'totalSpent') renderTotalSpentView();
 }
 
 function navigateBack() {
