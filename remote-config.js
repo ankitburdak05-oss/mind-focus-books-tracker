@@ -2,17 +2,16 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v28.0.5",
-    "name": "Mind Focus Books v28.0.5 - 315 Books & New Real Covers Update",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.5/MindFocusBooks-Native.apk",
+    "version": "v28.0.6",
+    "name": "Mind Focus Books v28.0.6 - 321 Books & Hindi Literature Classics",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.6/MindFocusBooks-Native.apk",
     "features": [
-      "📚 Added 2 New Books with Real Photo Covers: The Art of Persuasion & Talking with Psychopaths and Savages.",
-      "🏷️ Accurate Category Placements: Communication & Influence + True Crime & Forensic Mind.",
-      "🎯 Calendar Day Difference Math: Start date (4 Oct) = 0 Days Spent, Next day (5 Oct) = 1 Day Spent.",
-      "⏳ Bahar & Andar Perfect Sync: Home hero card, detail view, and streak counter all perfectly match the 0/1 day counting.",
-      "🔄 Instant Live System Date Sync: Detects system date change instantly without reload."
+      "📚 Added 6 Famous Hindi Novels with Real Covers: Musafir Cafe, October Junction, Deewar Mein Ek Khidki Rahti Thi, Yaar Papa, Ret Ki Machhli, Gunahon Ka Devta.",
+      "📖 Expanded Library: Now 321 Books active in catalog.",
+      "🎨 High Definition Official Real Covers for all newly added books.",
+      "🎯 Calendar Day Difference Math: Start date (4 Oct) = 0 Days Spent, Next day (5 Oct) = 1 Day Spent."
     ],
-    "stagedAt": "2026-10-06T18:15:00.000Z",
+    "stagedAt": "2026-10-07T16:45:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

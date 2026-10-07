@@ -1,14 +1,14 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v28.0.5",
-  "version": "v28.0.5",
+  "id": "notice-v28.0.6",
+  "version": "v28.0.6",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v28.0.5 Update Ready!",
-  "message": "v28.0.5 is live! Added 2 new books with real photo covers (315 Books total) & precise calendar day counting.",
-  "btnText": "⚡ Update Now (v28.0.5)",
+  "title": "Mind Focus Books v28.0.6 Update Ready!",
+  "message": "v28.0.6 is live! Added 6 Hindi literature classics with real covers (321 Books total).",
+  "btnText": "⚡ Update Now (v28.0.6)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.5/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-06T18:15:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.6/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-07T16:45:00.000Z"
 };
