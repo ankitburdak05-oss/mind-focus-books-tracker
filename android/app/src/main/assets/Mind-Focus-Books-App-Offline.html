@@ -13657,11 +13657,11 @@ const DEFAULT_BOOKS = [
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.9)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.10)
 // ==========================================================================
 
-const APP_VERSION = '28.0.9';
-const CURRENT_APP_VERSION = 'v28.0.9';
+const APP_VERSION = '28.0.10';
+const CURRENT_APP_VERSION = 'v28.0.10';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -15054,6 +15054,12 @@ function openBookDetailViewByIndex(idx) {
 
 function openBookDetailView(book) {
   try {
+    // Record exactly which view we came from so Back button returns to the exact same place!
+    const activeView = document.querySelector('.app-view.active');
+    if (activeView && activeView.id !== 'viewBookDetail') {
+      state.detailReturnViewId = activeView.id;
+    }
+
     state.currentBook = book;
     state.currentBookIndex = state.books.indexOf(book);
     
@@ -15327,7 +15333,48 @@ function quickSetBookStatus(newStatus) {
 }
 
 function closeBookDetailView() {
+  if (state.detailReturnViewId) {
+    const returnViewId = state.detailReturnViewId;
+    const returnView = document.getElementById(returnViewId);
+    if (returnView) {
+      // Hide all views
+      document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+      returnView.classList.add('active');
+
+      // If returning to a sub-screen of profile or other tabs, keep dock state synced
+      if (returnViewId === 'viewBookStatus') {
+        renderBookStatusView();
+        switchTabNavOnly('profile');
+      } else if (returnViewId === 'viewBookAvailability') {
+        renderBookAvailabilityView();
+        switchTabNavOnly('profile');
+      } else if (returnViewId === 'viewTotalSpent') {
+        renderTotalSpentView();
+        switchTabNavOnly('profile');
+      } else if (returnViewId === 'viewHome') {
+        switchTab('home');
+      } else if (returnViewId === 'viewLibrary') {
+        switchTab('library');
+      } else if (returnViewId === 'viewExplore') {
+        switchTab('explore');
+      } else if (returnViewId === 'viewProgress') {
+        switchTab('progress');
+      } else if (returnViewId === 'viewProfile') {
+        switchTab('profile');
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+  }
   switchTab(state.previousTab || 'home');
+}
+
+function switchTabNavOnly(tabId) {
+  state.activeTab = tabId;
+  const navTabs = document.querySelectorAll('.nav-tab');
+  navTabs.forEach(t => t.classList.remove('active'));
+  const activeNavBtn = document.getElementById('navTab' + tabId.charAt(0).toUpperCase() + tabId.slice(1));
+  if (activeNavBtn) activeNavBtn.classList.add('active');
 }
 
 function switchDetailTab(tabName) {
@@ -16217,6 +16264,12 @@ function saveBookModal() {
   saveBooks();
   closeEditModal();
   renderApp();
+
+  // If user was viewing book details, keep detail view open with updated info!
+  if (state.editingBookIndex >= 0 && state.currentBookIndex === state.editingBookIndex) {
+    document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+    document.getElementById('viewBookDetail')?.classList.add('active');
+  }
 }
 
 // ================= EDIT PROFILE MODAL =================

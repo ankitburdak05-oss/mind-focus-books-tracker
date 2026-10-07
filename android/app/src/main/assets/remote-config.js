@@ -2,16 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v28.0.9",
-    "name": "Mind Focus Books v28.0.9 - Book Availability Inventory Filter",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.9/MindFocusBooks-Native.apk",
+    "version": "v28.0.10",
+    "name": "Mind Focus Books v28.0.10 - Navigation Fix & Screen Return",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.10/MindFocusBooks-Native.apk",
     "features": [
+      "🔄 Accurate Screen Return: Clicking back from book details returns directly to the originating screen (Book Status, Availability, Total Spent).",
       "📦 Profile 'Book Availability' Option: Instantly see Available and Unavailable books in your library.",
       "🟢 Available Books Tab: Live list of all available books with direct detail view access.",
       "🔴 Unavailable Books Tab: Filter out books that are missing or yet to be obtained.",
       "📑 Book Status Master Hub: Completed, Reading & Pending live categorization."
     ],
-    "stagedAt": "2026-10-07T17:55:00.000Z",
+    "stagedAt": "2026-10-07T18:25:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
