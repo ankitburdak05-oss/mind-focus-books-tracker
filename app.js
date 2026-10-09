@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.11)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.12)
 // ==========================================================================
 
-const APP_VERSION = '28.0.11';
-const CURRENT_APP_VERSION = 'v28.0.11';
+const APP_VERSION = '28.0.12';
+const CURRENT_APP_VERSION = 'v28.0.12';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -346,7 +346,6 @@ function renderHomeView() {
   renderHomeCurrentlyReading();
   renderHomeStats();
   renderHomeRecentBooks();
-  renderHomeWidgets();
 }
 
 function updateDynamicGreeting() {
@@ -3364,7 +3363,7 @@ const appFeaturesGuideData = [
   { id: 13, title: 'Reading Goals & Annual Challenge', category: 'Analytics', icon: '🎯', screenNum: 'Screen 13', location: 'Profile -> Options -> Reading Goals', purpose: 'Daily page target aur yearly book goal ring track karne ke liye.', benefit: 'Reading milestone bina kisi fail ke complete karne ke liye.', actionText: 'Open Goals', route: 'sub_readingGoals' },
   { id: 14, title: 'Personal Reading Journal & Daily Log', category: 'Library', icon: '📓', screenNum: 'Screen 14', location: 'Profile -> Options -> Reading Journal', purpose: 'Daily personal thoughts, chapter rating aur diary likhne ke liye.', benefit: 'Personal reflection aur self-growth journal maintain karne ke liye.', actionText: 'Open Journal', route: 'sub_readingJournal' },
   { id: 15, title: 'Offline Data Backup & Encrypted Export', category: 'Security', icon: '🛡️', screenNum: 'Screen 15', location: 'Profile -> Settings -> Data & Backup', purpose: '1-click JSON/CSV backup download aur data restore ke liye.', benefit: 'Phone badalne ya reinstall karne par bhi reading data loss hone se bachane ke liye.', actionText: 'Open Security', route: 'sub_securityBackup' },
-  { id: 16, title: 'Custom Bookshelf & Category Organizer', category: 'Library', icon: '📚', screenNum: 'Screen 16', location: 'Library -> Shelves Tab', purpose: 'Virtual bookshelves (Favorites, Philosophy, Fiction) banane ke liye.', benefit: 'Kitabon ko neat and clean categories me organize rakhne ke liye.', actionText: 'Manage Shelves', route: 'modal_queue' },
+  { id: 16, title: 'Custom Bookshelf & Category Organizer', category: 'Library', icon: '📚', screenNum: 'Screen 16', location: 'Library -> Shelves Tab', purpose: 'Virtual bookshelves (Favorites, Philosophy, Fiction) banane ke liye.', benefit: 'Kitabon ko neat and clean categories me organize rakhne ke liye.', actionText: 'Manage Shelves', route: 'library' },
   { id: 17, title: 'Dark / Light / Vision-OS Glass UI Themes', category: 'Security', icon: '✨', screenNum: 'Screen 17', location: 'Profile -> Customization View', purpose: 'Vision-OS glassmorphism blur effects aur colors customize karne ke liye.', benefit: 'App ko sleek aur ultra-modern premium feel dene ke liye.', actionText: 'Change Theme', route: 'toggle_theme' },
   { id: 18, title: 'Security Lock (PIN & Biometrics)', category: 'Security', icon: '🔒', screenNum: 'Screen 18', location: 'Profile -> Privacy & Security', purpose: 'App aur notes ko 4-digit PIN lock se secure karne ke liye.', benefit: 'Personal notes ko private aur safe rakhne ke liye.', actionText: 'Manage PIN', route: 'prompt_pin' },
   { id: 19, title: 'App Features Directory & Sitemap', category: 'Security', icon: '🗺️', screenNum: 'Screen 19', location: 'Profile -> App Features Directory Button', purpose: 'Sabi 20+ features ki detailed list aur direct 1-tap launcher cards ke liye.', benefit: 'Kisi bhi feature ko bina dhoondhe 1-tap me launch karne ke liye.', actionText: 'Currently Active', route: 'self' },
@@ -3446,8 +3445,6 @@ function launchGuideFeatureRoute(route) {
     openUpdateCheckerModal();
   } else if (route === 'modal_reader') {
     openRealBookReaderForCurrent();
-  } else if (route === 'modal_queue') {
-    openManageQueueModal();
   } else if (route === 'toggle_theme') {
     toggleTheme();
   } else if (route === 'prompt_pin') {
@@ -4010,81 +4007,6 @@ function resetAllAppDataPrompt() {
 
 // ================= FEATURE HANDLERS & IMPLEMENTATIONS =================
 
-// Initialize & Render Home View Widgets (Planner, Streak Freeze, Reading Queue)
-function renderHomeWidgets() {
-  // Page-per-Day Planner
-  const target = state.plannerTarget || 25;
-  const todayRead = state.plannerTodayRead || 0;
-  const targetText = document.getElementById('homePlannerTargetText');
-  const todayReadText = document.getElementById('homePlannerTodayRead');
-  if (targetText) targetText.innerText = `Goal: ${target} pages/day`;
-  if (todayReadText) todayReadText.innerText = `${todayRead} / ${target} pages`;
-
-  // Render Planner Calendar Weekday Badges
-  const weekContainer = document.getElementById('homePlannerWeekBadges');
-  if (weekContainer) {
-    const days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    const todayIndex = (new Date().getDay() + 6) % 7; // Monday = 0
-    weekContainer.innerHTML = days.map((day, idx) => {
-      const isToday = idx === todayIndex;
-      const isDone = isToday && todayRead >= target;
-      const bg = isDone ? '#10b981' : isToday ? 'rgba(245, 158, 11, 0.3)' : 'rgba(255,255,255,0.06)';
-      const color = isDone ? '#fff' : isToday ? 'var(--accent-gold)' : 'var(--text-muted)';
-      const border = isToday ? '1px solid var(--accent-gold)' : '1px solid rgba(255,255,255,0.1)';
-      return `<div style="flex:1; text-align:center; padding: 4px 0; font-size:0.7rem; font-weight:800; background:${bg}; color:${color}; border:${border}; border-radius:6px;">${day}</div>`;
-    }).join('');
-  }
-
-  // Reading Streak Freeze
-  const freezeStatus = document.getElementById('homeStreakFreezeStatus');
-  const btnFreeze = document.getElementById('btnActivateFreeze');
-  if (state.streakFreezeActive) {
-    if (freezeStatus) freezeStatus.innerText = '❄️ Active Today';
-    if (btnFreeze) {
-      btnFreeze.innerText = '❄️ Freeze Active';
-      btnFreeze.style.background = 'rgba(56, 189, 248, 0.2)';
-    }
-  } else {
-    if (freezeStatus) freezeStatus.innerText = `${state.streakFreezeCount || 1} Freeze Ready`;
-    if (btnFreeze) {
-      btnFreeze.innerText = '❄️ Activate Freeze';
-      btnFreeze.style.background = 'transparent';
-    }
-  }
-
-  // Personal Reading Queue
-  renderHomeReadingQueue();
-}
-
-// Render Reading Queue on Home Screen
-function renderHomeReadingQueue() {
-  const container = document.getElementById('homeReadingQueueList');
-  if (!container) return;
-  const queue = state.readingQueue || [];
-  if (queue.length === 0) {
-    container.innerHTML = `
-      <div style="background: rgba(255,255,255,0.03); border: 1px dashed var(--border-subtle); border-radius: 12px; padding: 16px; text-align: center; color: var(--text-muted); font-size: 0.8rem;">
-        No books in queue. Click "Manage Queue" to build your upcoming reading list!
-      </div>`;
-    return;
-  }
-  container.innerHTML = queue.slice(0, 3).map((bookId, index) => {
-    const book = state.books.find(b => b.id === bookId || b.title === bookId);
-    if (!book) return '';
-    return `
-      <div style="background: rgba(255,255,255,0.04); border: 1px solid var(--border-subtle); border-radius: 10px; padding: 10px 14px; display: flex; align-items: center; justify-content: space-between;" onclick="openBookDetailView(state.books.find(x => x.id === '${book.id}'))">
-        <div style="display: flex; align-items: center; gap: 12px;">
-          <span style="font-weight: 900; color: var(--accent-gold); font-size: 0.85rem; width: 20px;">#${index + 1}</span>
-          <div>
-            <div style="font-weight: 700; font-size: 0.85rem; color: #fff;">${book.title}</div>
-            <div style="font-size: 0.72rem; color: var(--text-secondary);">${book.author} &bull; ${book.pages ? book.pages + ' pages' : 'Book'}</div>
-          </div>
-        </div>
-        <span style="font-size: 0.75rem; color: var(--accent-gold); font-weight: 700;">Read &rsaquo;</span>
-      </div>`;
-  }).join('');
-}
-
 // Feature 1: Book Scanner & ISBN Capture
 function openBookScannerModal() {
   const modal = document.getElementById('bookScannerModalOverlay');
@@ -4268,106 +4190,6 @@ function finishSpeedTest() {
           ${wpm > 250 ? '🌟 Above Average Reader!' : '📖 Steady & Thoughtful Reading Pace!'}
         </p>
       </div>`;
-  }
-}
-
-// Feature 7: Page Goal Planner Modal
-function openPagePlannerModal() {
-  const modal = document.getElementById('pagePlannerModalOverlay');
-  if (modal) modal.style.display = 'flex';
-  const targetInput = document.getElementById('plannerPageTargetInput');
-  const todayReadInput = document.getElementById('plannerTodayReadInput');
-  if (targetInput) targetInput.value = state.plannerTarget || 25;
-  if (todayReadInput) todayReadInput.value = state.plannerTodayRead || 0;
-}
-function closePagePlannerModal() {
-  const modal = document.getElementById('pagePlannerModalOverlay');
-  if (modal) modal.style.display = 'none';
-}
-function savePagePlannerGoal() {
-  const target = parseInt(document.getElementById('plannerPageTargetInput')?.value || '25', 10);
-  const todayRead = parseInt(document.getElementById('plannerTodayReadInput')?.value || '0', 10);
-  state.plannerTarget = target;
-  state.plannerTodayRead = todayRead;
-  saveState();
-  closePagePlannerModal();
-  renderHomeWidgets();
-  showToast(`Updated daily goal: ${todayRead}/${target} pages! 📅`);
-}
-
-// Feature 8: Reading Streak Freeze Toggle
-function toggleStreakFreeze() {
-  state.streakFreezeActive = !state.streakFreezeActive;
-  if (state.streakFreezeActive && (!state.streakFreezeCount || state.streakFreezeCount <= 0)) {
-    state.streakFreezeCount = 1;
-  }
-  saveState();
-  renderHomeWidgets();
-  showToast(state.streakFreezeActive ? '❄️ Streak Freeze activated for today!' : 'Streak Freeze disabled.');
-}
-
-// Feature 13: Manage Reading Queue Modal
-function openManageQueueModal() {
-  const modal = document.getElementById('manageQueueModalOverlay');
-  if (modal) modal.style.display = 'flex';
-
-  const container = document.getElementById('manageQueueContainer');
-  if (!container) return;
-
-  const queue = state.readingQueue || [];
-  container.innerHTML = `
-    <div style="margin-bottom: 12px;">
-      <label style="font-size: 0.8rem; font-weight: 700; color: var(--accent-gold);">Add Book to Queue</label>
-      <select id="queueAddBookSelect" style="width: 100%; padding: 8px; margin-top: 4px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 8px; color: #fff;">
-        <option value="">Select a book from library...</option>
-        ${state.books.map(b => `<option value="${b.id}">${b.title}</option>`).join('')}
-      </select>
-      <button type="button" class="btn-save-gold" style="margin-top: 8px; width: 100%; padding: 6px; font-size: 0.75rem;" onclick="addBookToQueueFromSelect()">+ Add Selected Book to Queue</button>
-    </div>
-    <div style="font-weight: 800; font-size: 0.85rem; color: #fff; margin-bottom: 8px;">Current Queue Order:</div>
-    <div id="modalQueueItemsList">
-      ${queue.length === 0 ? '<div style="color:var(--text-muted); font-size:0.75rem;">Queue is empty.</div>' : queue.map((bookId, idx) => {
-        const book = state.books.find(b => b.id === bookId || b.title === bookId);
-        if (!book) return '';
-        return `
-          <div style="background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: 8px; padding: 8px 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <span style="font-weight: 800; color: var(--accent-gold); margin-right: 8px;">#${idx + 1}</span>
-              <span style="color: #fff; font-size: 0.82rem;">${book.title}</span>
-            </div>
-            <button type="button" style="background: transparent; border: 1px solid #ef4444; color: #ef4444; border-radius: 6px; padding: 2px 6px; font-size: 0.7rem; cursor: pointer;" onclick="removeQueueItem(${idx})">Remove</button>
-          </div>`;
-      }).join('')}
-    </div>`;
-}
-function closeManageQueueModal() {
-  const modal = document.getElementById('manageQueueModalOverlay');
-  if (modal) modal.style.display = 'none';
-}
-function addBookToQueueFromSelect() {
-  const bookId = document.getElementById('queueAddBookSelect')?.value;
-  if (!bookId) {
-    showToast('Please select a book!');
-    return;
-  }
-  if (!state.readingQueue) state.readingQueue = [];
-  if (!state.readingQueue.includes(bookId)) {
-    state.readingQueue.push(bookId);
-    saveState();
-    openManageQueueModal();
-    renderHomeWidgets();
-    showToast('Added to reading queue! 📋');
-  } else {
-    showToast('Book is already in queue!');
-  }
-}
-function removeQueueItem(index) {
-  if (state.readingQueue && state.readingQueue[index] !== undefined) {
-    state.readingQueue.splice(index, 1);
-    saveState();
-    openManageQueueModal();
-    renderHomeWidgets();
-    showToast('Removed from queue.');
   }
 }
 

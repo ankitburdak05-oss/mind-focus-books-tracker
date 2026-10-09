@@ -189,58 +189,6 @@
         </div>
       </div>
 
-      <!-- Feature 7: Page-per-Day Planner & Feature 8: Reading Streak Freeze Widget -->
-      <div style="display: flex; gap: 12px; margin-top: 14px; flex-wrap: wrap;">
-        <!-- Page-per-Day Planner Widget -->
-        <div class="f20-widget-card flex-1" style="background: rgba(30, 41, 59, 0.7); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px;">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-            <span style="font-size: 0.85rem; font-weight: 800; color: var(--accent-gold); display: flex; align-items: center; gap: 6px;">
-              <span>📅</span> Page-per-Day Planner
-            </span>
-            <span style="font-size: 0.72rem; color: var(--text-muted);" id="homePlannerTargetText">Goal: 25 pages/day</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.2); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px;">
-            <div>
-              <div style="font-size: 1.1rem; font-weight: 900; color: #fff;" id="homePlannerTodayRead">0 / 25 pages</div>
-              <div style="font-size: 0.7rem; color: var(--text-secondary);">Today's Reading Target</div>
-            </div>
-            <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.75rem;" onclick="openPagePlannerModal()">Custom Goal</button>
-          </div>
-          <!-- Calendar Weekday Badges -->
-          <div style="display: flex; justify-content: space-between; gap: 4px;" id="homePlannerWeekBadges">
-            <!-- Populated dynamically -->
-          </div>
-        </div>
-
-        <!-- Reading Streak Freeze Protection Widget -->
-        <div class="f20-widget-card" style="width: 170px; background: rgba(14, 165, 233, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
-          <div>
-            <div style="font-size: 0.82rem; font-weight: 800; color: #38bdf8; display: flex; align-items: center; gap: 4px;">
-              <span>❄️</span> Streak Freeze
-            </div>
-            <div style="font-size: 0.7rem; color: var(--text-secondary); margin-top: 4px;" id="homeStreakFreezeStatus">
-              1 Freeze Ready
-            </div>
-          </div>
-          <button type="button" id="btnActivateFreeze" class="btn-secondary-action" style="margin-top: 8px; border-color: #38bdf8; color: #38bdf8; padding: 6px; font-size: 0.72rem; text-align: center;" onclick="toggleStreakFreeze()">
-            ❄️ Activate Freeze
-          </button>
-        </div>
-      </div>
-
-      <!-- Feature 13: Personal Reading Queue Section -->
-      <div class="section-container" style="margin-top: 20px;">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">Personal Reading Queue 📋</h2>
-            <p class="view-sub-title" style="margin-top: 2px;">Your custom ordered list of upcoming books</p>
-          </div>
-          <button type="button" class="section-link-btn" onclick="openManageQueueModal()">Manage Queue &rarr;</button>
-        </div>
-        <div id="homeReadingQueueList" style="display: flex; flex-direction: column; gap: 8px;">
-          <!-- Rendered by JS -->
-        </div>
-      </div>
 
       <!-- Featured Masterpieces Section -->
       <div class="section-container" style="margin-top: 20px;">
@@ -2374,46 +2322,6 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-cancel" onclick="closeReadingSpeedModal()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= FEATURE 7: PAGE PLANNER GOAL MODAL ================= -->
-  <div class="modal-overlay" id="pagePlannerModalOverlay" style="display:none;" onclick="if(event.target === this) closePagePlannerModal()">
-    <div class="modal-card modal-sm" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <h3 class="modal-title">📅 Page-per-Day Daily Goal</h3>
-        <button type="button" class="modal-close-btn" onclick="closePagePlannerModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Target Pages Per Day</label>
-          <input type="number" id="plannerPageTargetInput" value="25" min="1" max="1000" style="width: 100%; text-align: center; font-size: 1.2rem; font-weight: 800;">
-        </div>
-        <div class="form-group">
-          <label>Pages Read Today</label>
-          <input type="number" id="plannerTodayReadInput" value="0" min="0" max="1000" style="width: 100%; text-align: center; font-size: 1.2rem; font-weight: 800;">
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-cancel" onclick="closePagePlannerModal()">Cancel</button>
-        <button type="button" class="btn-save-gold" onclick="savePagePlannerGoal()">Save Goal</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ================= FEATURE 13: MANAGE READING QUEUE MODAL ================= -->
-  <div class="modal-overlay" id="manageQueueModalOverlay" style="display:none;" onclick="if(event.target === this) closeManageQueueModal()">
-    <div class="modal-card modal-md" onclick="event.stopPropagation()">
-      <div class="modal-header">
-        <h3 class="modal-title">📋 Manage Personal Reading Queue</h3>
-        <button type="button" class="modal-close-btn" onclick="closeManageQueueModal()">&times;</button>
-      </div>
-      <div class="modal-body" id="manageQueueContainer">
-        <!-- Rendered by JS -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-cancel" onclick="closeManageQueueModal()">Close</button>
       </div>
     </div>
   </div>
