@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.12)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.13)
 // ==========================================================================
 
-const APP_VERSION = '28.0.12';
-const CURRENT_APP_VERSION = 'v28.0.12';
+const APP_VERSION = '28.0.13';
+const CURRENT_APP_VERSION = 'v28.0.13';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -64,6 +64,7 @@ function initApp() {
   loadProfile();
   loadStats();
   loadBooks();
+  loadLendingRecords();
   applyTheme(state.theme);
   
   // Security PIN Check
@@ -1155,6 +1156,310 @@ function renderBookAvailabilityView() {
   container.innerHTML = html;
 }
 
+// ==========================================================================
+// 🤝 BOOK LENDING / BORROW TRACKER ENGINE
+// ==========================================================================
+let lendingRecords = [];
+let currentBookLendingTab = 'ACTIVE'; // 'ACTIVE', 'RETURNED'
+
+function loadLendingRecords() {
+  try {
+    const saved = localStorage.getItem('mf_lending_records');
+    if (saved) {
+      lendingRecords = JSON.parse(saved);
+    } else {
+      lendingRecords = [];
+    }
+  } catch (e) {
+    console.error('Error loading lending records:', e);
+    lendingRecords = [];
+  }
+}
+
+function saveLendingRecords() {
+  try {
+    localStorage.setItem('mf_lending_records', JSON.stringify(lendingRecords));
+  } catch (e) {
+    console.error('Error saving lending records:', e);
+  }
+}
+
+function switchBookLendingTab(tab) {
+  currentBookLendingTab = tab;
+  document.getElementById('blendTabActive')?.classList.toggle('active', tab === 'ACTIVE');
+  document.getElementById('blendTabReturned')?.classList.toggle('active', tab === 'RETURNED');
+  renderBookLendingView();
+}
+
+function renderBookLendingView() {
+  const container = document.getElementById('bookLendingListContainer');
+  const countActiveEl = document.getElementById('blendCountActive');
+  const countReturnedEl = document.getElementById('blendCountReturned');
+  const subtitleEl = document.getElementById('bookLendingSubScreenSubtitle');
+
+  const books = state.books || [];
+  const today = getTodayLocalDate();
+
+  // Auto-sync books that have status 'LENT' into lendingRecords
+  books.forEach(b => {
+    if (b && b.status === 'LENT') {
+      const exists = lendingRecords.find(r => r && (r.bookId === b.id || r.bookTitle === b.title) && !r.returned);
+      if (!exists) {
+        lendingRecords.unshift({
+          id: 'lend_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+          bookId: b.id,
+          bookTitle: b.title,
+          borrower: b.lent_to || 'Friend',
+          phone: b.lent_phone || '',
+          lendDate: b.lent_date || today,
+          returnDate: null,
+          returned: false,
+          notes: b.lent_notes || ''
+        });
+        saveLendingRecords();
+      }
+    }
+  });
+
+  const activeRecords = lendingRecords.filter(r => r && !r.returned);
+  const returnedRecords = lendingRecords.filter(r => r && r.returned);
+
+  if (countActiveEl) countActiveEl.innerText = activeRecords.length;
+  if (countReturnedEl) countReturnedEl.innerText = returnedRecords.length;
+
+  // Update profile menu item subtitle
+  const profileLendSub = document.getElementById('profileBookLendingSubText');
+  if (profileLendSub) {
+    profileLendSub.innerText = `${activeRecords.length} Lent Out • ${returnedRecords.length} Returned`;
+  }
+
+  if (!container) return;
+
+  const isActiveTab = currentBookLendingTab === 'ACTIVE';
+  const recordsToRender = isActiveTab ? activeRecords : returnedRecords;
+
+  if (subtitleEl) {
+    subtitleEl.innerText = isActiveTab 
+      ? `${activeRecords.length} Currently Lent Book${activeRecords.length === 1 ? '' : 's'}`
+      : `${returnedRecords.length} Returned Book${returnedRecords.length === 1 ? '' : 's'}`;
+  }
+
+  if (recordsToRender.length === 0) {
+    container.innerHTML = `
+      <div class="total-spent-empty-state">
+        <div class="total-spent-empty-icon">${isActiveTab ? '🤝' : '📚'}</div>
+        <div class="total-spent-empty-title">${isActiveTab ? 'Koi Book Lent Nahi Hai' : 'Koi Returned History Nahi Hai'}</div>
+        <div class="total-spent-empty-desc">${isActiveTab ? 'Jab aap kisi dost ko kitab denge to "+ Lend Book" par tap karein ya Book Details se lent mark karein.' : 'Wapas mili kitabein yahan history me save rahengi.'}</div>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  recordsToRender.forEach(r => {
+    const book = books.find(b => b.id === r.bookId || b.title === r.bookTitle) || {
+      title: r.bookTitle,
+      author: 'Unknown Author',
+      cover_url: 'icon-192.png'
+    };
+    const coverSrc = book.cover_url || book.cover_image || 'icon-192.png';
+    const bookTitle = escapeHtml(book.title || r.bookTitle || 'Untitled Book');
+    const bookAuthor = escapeHtml(book.author || 'Unknown Author');
+    const borrower = escapeHtml(r.borrower || 'Friend');
+    const daysLent = calculateDaysElapsed(r.lendDate || today, r.returnDate || today);
+    const daysText = daysLent === 1 ? '1 day' : `${daysLent} days`;
+
+    const originalIndex = books.indexOf(book);
+    const clickHandler = originalIndex >= 0 ? `onclick="openBookDetailViewByIndex(${originalIndex})"` : '';
+
+    html += `
+      <div class="book-status-item-card" ${clickHandler} style="flex-direction: column; align-items: stretch; gap: 8px;">
+        <div style="display: flex; gap: 12px; align-items: center;">
+          <div class="bstat-cover-wrap">
+            <img class="bstat-cover-img" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='icon-192.png'">
+          </div>
+          <div class="bstat-info-wrap" style="flex: 1;">
+            <div class="bstat-book-title">${bookTitle}</div>
+            <div class="bstat-book-author">${bookAuthor}</div>
+            <div class="bstat-meta-row">
+              <span class="bstat-category-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">👤 With ${borrower}</span>
+              <span class="bstat-days-tag">${isActiveTab ? `⏳ Since ${daysText}` : `✅ Kept ${daysText}`}</span>
+            </div>
+          </div>
+          <div class="bstat-right-col">
+            <span class="bstat-badge ${isActiveTab ? 'lent' : 'done'}">${isActiveTab ? 'LENT OUT' : 'RETURNED'}</span>
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-top: 2px;">
+          <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+            <span>📅 Given: ${formatDateDisplay(r.lendDate)}</span>
+            ${r.phone ? `<span>📞 <a href="tel:${escapeHtml(r.phone)}" style="color:var(--accent-gold); text-decoration:none;" onclick="event.stopPropagation()">${escapeHtml(r.phone)}</a></span>` : ''}
+            ${r.notes ? `<span>💬 ${escapeHtml(r.notes)}</span>` : ''}
+          </div>
+          ${isActiveTab ? `
+            <button type="button" class="btn-save-gold" style="padding: 4px 10px; font-size: 0.72rem; white-space: nowrap;" onclick="event.stopPropagation(); markBookReturned('${r.id}')">
+              Mark Returned ✅
+            </button>
+          ` : `
+            <span style="font-size: 0.72rem; color: #10b981; font-weight: 700;">Returned on ${formatDateDisplay(r.returnDate)}</span>
+          `}
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
+function openLendBookModal(preselectedBookId) {
+  const modal = document.getElementById('lendBookModalOverlay');
+  if (!modal) return;
+
+  const select = document.getElementById('lendBookSelect');
+  if (select) {
+    select.innerHTML = (state.books || []).map(b => `
+      <option value="${b.id}" ${b.id === preselectedBookId ? 'selected' : ''}>${escapeHtml(b.title)} (${escapeHtml(b.author || 'Author')})</option>
+    `).join('');
+    if (preselectedBookId) select.value = preselectedBookId;
+  }
+
+  const nameInput = document.getElementById('lendBorrowerName');
+  if (nameInput) nameInput.value = '';
+
+  const phoneInput = document.getElementById('lendBorrowerPhone');
+  if (phoneInput) phoneInput.value = '';
+
+  const dateInput = document.getElementById('lendDateInput');
+  if (dateInput) dateInput.value = getTodayLocalDate();
+
+  const notesInput = document.getElementById('lendNotesInput');
+  if (notesInput) notesInput.value = '';
+
+  modal.style.display = 'flex';
+}
+
+function closeLendBookModal() {
+  const modal = document.getElementById('lendBookModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+
+function confirmLendBook() {
+  const bookId = document.getElementById('lendBookSelect')?.value;
+  const borrower = document.getElementById('lendBorrowerName')?.value.trim();
+  const phone = document.getElementById('lendBorrowerPhone')?.value.trim() || '';
+  const lendDate = document.getElementById('lendDateInput')?.value || getTodayLocalDate();
+  const notes = document.getElementById('lendNotesInput')?.value.trim() || '';
+
+  if (!bookId) {
+    showToast('Please select a book from library!');
+    return;
+  }
+  if (!borrower) {
+    showToast('Please enter borrower name (Dost ka naam)!');
+    return;
+  }
+
+  const book = state.books.find(b => b.id === bookId);
+  if (!book) {
+    showToast('Selected book not found!');
+    return;
+  }
+
+  const record = {
+    id: 'lend_' + Date.now(),
+    bookId: book.id,
+    bookTitle: book.title,
+    borrower: borrower,
+    phone: phone,
+    lendDate: lendDate,
+    returnDate: null,
+    returned: false,
+    notes: notes
+  };
+
+  lendingRecords.unshift(record);
+  saveLendingRecords();
+
+  book.status = 'LENT';
+  book.lent_to = borrower;
+  book.lent_phone = phone;
+  book.lent_date = lendDate;
+  book.lent_notes = notes;
+  saveBooks();
+
+  closeLendBookModal();
+  renderBookLendingView();
+  renderBookStatusView();
+  renderProfileView();
+  if (state.currentBook && state.currentBook.id === book.id) {
+    openBookDetailView(book);
+  }
+  showToast(`🤝 "${book.title}" marked as lent to ${borrower}!`);
+}
+
+function markBookReturned(recordId) {
+  const record = lendingRecords.find(r => r && r.id === recordId);
+  if (!record) return;
+
+  record.returned = true;
+  record.returnDate = getTodayLocalDate();
+  saveLendingRecords();
+
+  const book = state.books.find(b => b.id === record.bookId || b.title === record.bookTitle);
+  if (book) {
+    book.status = 'PENDING';
+    delete book.lent_to;
+    delete book.lent_phone;
+    delete book.lent_date;
+    delete book.lent_notes;
+    saveBooks();
+  }
+
+  renderBookLendingView();
+  renderBookStatusView();
+  renderProfileView();
+  if (state.currentBook && (state.currentBook.id === record.bookId || state.currentBook.title === record.bookTitle)) {
+    openBookDetailView(state.currentBook);
+  }
+  showToast(`✅ "${record.bookTitle}" marked as returned! Welcome back!`);
+}
+
+function markCurrentBookReturned() {
+  if (!state.currentBook) return;
+  const rec = lendingRecords.find(r => (r.bookId === state.currentBook.id || r.bookTitle === state.currentBook.title) && !r.returned);
+  if (rec) {
+    markBookReturned(rec.id);
+  } else {
+    state.currentBook.status = 'PENDING';
+    delete state.currentBook.lent_to;
+    delete state.currentBook.lent_phone;
+    delete state.currentBook.lent_date;
+    delete state.currentBook.lent_notes;
+    saveBooks();
+    openBookDetailView(state.currentBook);
+    showToast(`✅ "${state.currentBook.title}" marked as returned!`);
+  }
+}
+
+function toggleBookLendingForCurrent() {
+  if (!state.currentBook) return;
+  if (state.currentBook.status === 'LENT') {
+    if (confirm(`Do you want to mark "${state.currentBook.title}" as returned?`)) {
+      markCurrentBookReturned();
+    }
+  } else {
+    openLendBookModal(state.currentBook.id);
+  }
+}
+
+function onEditBookStatusChange(status) {
+  const row = document.getElementById('editLentDetailsRow');
+  if (row) {
+    row.style.display = status === 'LENT' ? 'flex' : 'none';
+  }
+}
+
 function openSetBudgetPrompt() {
   const currentBudget = localStorage.getItem('mf_reading_budget_2026') || '5000';
   const val = prompt('Set your 2026 Reading Budget (in ₹ Rupees):', currentBudget);
@@ -1341,6 +1646,7 @@ function renderProfileView() {
   renderReadingBudget();
   renderBookStatusView();
   renderBookAvailabilityView();
+  renderBookLendingView();
 }
 
 function updateLastBackupDisplay() {
@@ -1546,6 +1852,27 @@ function openBookDetailView(book) {
     // Update 1-Tap Status Chips
     updateStatusChipsUI(book.status);
 
+    // Update Book Lending Banner
+    const isLent = book.status === 'LENT' || lendingRecords.some(r => (r.bookId === book.id || r.bookTitle === book.title) && !r.returned);
+    const lentBanner = document.getElementById('detailLentBanner');
+    if (lentBanner) {
+      if (isLent) {
+        const rec = lendingRecords.find(r => (r.bookId === book.id || r.bookTitle === book.title) && !r.returned);
+        const borrower = rec ? rec.borrower : (book.lent_to || 'Friend');
+        const lendDate = rec ? rec.lendDate : (book.lent_date || getTodayLocalDate());
+        const phone = rec ? rec.phone : (book.lent_phone || '');
+        const days = calculateDaysElapsed(lendDate, getTodayLocalDate());
+        const daysText = days === 1 ? '1 day' : `${days} days`;
+        const statusText = document.getElementById('detailLentStatusText');
+        const subText = document.getElementById('detailLentSubText');
+        if (statusText) statusText.innerText = `With ${borrower} since ${daysText}`;
+        if (subText) subText.innerText = `${phone ? 'Phone: ' + phone + ' • ' : ''}Given on ${formatDateDisplay(lendDate)}`;
+        lentBanner.style.display = 'block';
+      } else {
+        lentBanner.style.display = 'none';
+      }
+    }
+
     // Update Reader Mode Hint Name
     const modeNameEl = document.getElementById('detailReaderModeName');
     if (modeNameEl) {
@@ -1626,6 +1953,8 @@ function updateStatusChipsUI(status) {
   if (chipReading) chipReading.classList.toggle('active', normStatus === 'READING');
   if (chipCompleted) chipCompleted.classList.toggle('active', normStatus === 'DONE' || normStatus === 'COMPLETED');
   if (chipWishlist) chipWishlist.classList.toggle('active', normStatus === 'PENDING' || normStatus === 'WISHLIST' || normStatus === 'UNREAD');
+  const chipLent = document.getElementById('chipLent');
+  if (chipLent) chipLent.classList.toggle('active', normStatus === 'LENT');
 }
 
 function quickSetBookStatus(newStatus) {
@@ -1689,6 +2018,9 @@ function closeBookDetailView() {
       } else if (returnViewId === 'viewBookAvailability') {
         renderBookAvailabilityView();
         switchTabNavOnly('profile');
+      } else if (returnViewId === 'viewBookLending') {
+        renderBookLendingView();
+        switchTabNavOnly('profile');
       } else if (returnViewId === 'viewTotalSpent') {
         renderTotalSpentView();
         switchTabNavOnly('profile');
@@ -1727,7 +2059,7 @@ window.handleAppBackButton = function() {
   }
 
   // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, etc.), go back to Profile
-  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog'];
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog'];
   for (const svId of subViews) {
     const sv = document.getElementById(svId);
     if (sv && sv.classList.contains('active')) {
@@ -2403,6 +2735,14 @@ function openEditModal(index) {
   document.getElementById('editCountDays').value = book.count_days || 0;
   document.getElementById('editBookTakeaway').value = book.takeaway || book.notes || '';
   
+  const isLent = book.status === 'LENT';
+  const lentRow = document.getElementById('editLentDetailsRow');
+  if (lentRow) lentRow.style.display = isLent ? 'flex' : 'none';
+  const elLentTo = document.getElementById('editLentTo');
+  if (elLentTo) elLentTo.value = book.lent_to || '';
+  const elLentPhone = document.getElementById('editLentPhone');
+  if (elLentPhone) elLentPhone.value = book.lent_phone || '';
+
   updateCoverPreviewBox(existingCover);
   document.getElementById('editBookModalOverlay')?.classList.add('active');
 }
@@ -2616,6 +2956,45 @@ function saveBookModal() {
     cover_image: finalCover,
     cover_url: finalCover
   };
+
+  if (status === 'LENT') {
+    const lentTo = document.getElementById('editLentTo')?.value.trim() || 'Friend';
+    const lentPhone = document.getElementById('editLentPhone')?.value.trim() || '';
+    bookData.lent_to = lentTo;
+    bookData.lent_phone = lentPhone;
+    bookData.lent_date = bookData.lent_date || today;
+
+    // Check if lending record exists, or create one
+    const existingRec = lendingRecords.find(r => (r.bookId === bookData.id || r.bookTitle === bookData.title) && !r.returned);
+    if (existingRec) {
+      existingRec.borrower = lentTo;
+      existingRec.phone = lentPhone;
+    } else {
+      lendingRecords.unshift({
+        id: 'lend_' + Date.now(),
+        bookId: bookData.id || 'book_' + Date.now(),
+        bookTitle: bookData.title,
+        borrower: lentTo,
+        phone: lentPhone,
+        lendDate: today,
+        returnDate: null,
+        returned: false,
+        notes: ''
+      });
+    }
+    saveLendingRecords();
+  } else {
+    // If status was changed from LENT to something else, mark existing active record as returned
+    const activeRec = lendingRecords.find(r => (r.bookId === bookData.id || r.bookTitle === bookData.title) && !r.returned);
+    if (activeRec) {
+      activeRec.returned = true;
+      activeRec.returnDate = today;
+      saveLendingRecords();
+    }
+    delete bookData.lent_to;
+    delete bookData.lent_phone;
+    delete bookData.lent_date;
+  }
   
   if (state.editingBookIndex >= 0) {
     state.books[state.editingBookIndex] = Object.assign({}, state.books[state.editingBookIndex], bookData);
@@ -3336,6 +3715,7 @@ function navigateToSubView(viewName) {
   if (viewName === 'totalSpent') renderTotalSpentView();
   if (viewName === 'bookStatus') renderBookStatusView();
   if (viewName === 'bookAvailability') renderBookAvailabilityView();
+  if (viewName === 'bookLending') renderBookLendingView();
 }
 
 function navigateBack() {
@@ -3367,7 +3747,8 @@ const appFeaturesGuideData = [
   { id: 17, title: 'Dark / Light / Vision-OS Glass UI Themes', category: 'Security', icon: '✨', screenNum: 'Screen 17', location: 'Profile -> Customization View', purpose: 'Vision-OS glassmorphism blur effects aur colors customize karne ke liye.', benefit: 'App ko sleek aur ultra-modern premium feel dene ke liye.', actionText: 'Change Theme', route: 'toggle_theme' },
   { id: 18, title: 'Security Lock (PIN & Biometrics)', category: 'Security', icon: '🔒', screenNum: 'Screen 18', location: 'Profile -> Privacy & Security', purpose: 'App aur notes ko 4-digit PIN lock se secure karne ke liye.', benefit: 'Personal notes ko private aur safe rakhne ke liye.', actionText: 'Manage PIN', route: 'prompt_pin' },
   { id: 19, title: 'App Features Directory & Sitemap', category: 'Security', icon: '🗺️', screenNum: 'Screen 19', location: 'Profile -> App Features Directory Button', purpose: 'Sabi 20+ features ki detailed list aur direct 1-tap launcher cards ke liye.', benefit: 'Kisi bhi feature ko bina dhoondhe 1-tap me launch karne ke liye.', actionText: 'Currently Active', route: 'self' },
-  { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: '📋', screenNum: 'Screen 20', location: 'Profile -> Options -> Activity Audit Log', purpose: 'App me kiye gaye har action ki history audit log me dekhne ke liye.', benefit: 'System security aur app actions transparent rakhne ke liye.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' }
+  { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: '📋', screenNum: 'Screen 20', location: 'Profile -> Options -> Activity Audit Log', purpose: 'App me kiye gaye har action ki history audit log me dekhne ke liye.', benefit: 'System security aur app actions transparent rakhne ke liye.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' },
+  { id: 21, title: 'Book Lending & Borrow Tracker', category: 'Library', icon: '🤝', screenNum: 'Screen 21', location: 'Profile -> Options -> Book Lending Tracker', purpose: 'Dosto ya rishtedaaro ko di hui kitabein track karne ke liye.', benefit: 'Physical kitabein kabhi gum hone se bachane aur timely return paane ke liye.', actionText: 'Open Lending Hub', route: 'sub_bookLending' }
 ];
 
 function renderAppFeaturesDirectoryView() {

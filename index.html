@@ -623,6 +623,16 @@
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
 
+        <!-- 🤝 BOOK LENDING TRACKER OPTION -->
+        <div class="profile-menu-item" onclick="navigateToSubView('bookLending')">
+          <div class="pmi-icon green" style="font-size: 1.35rem; background: rgba(16, 185, 129, 0.15); color: #10b981;">🤝</div>
+          <div class="pmi-text">
+            <div class="pmi-title" style="font-weight: 700;">Book Lending Tracker</div>
+            <div class="pmi-sub" id="profileBookLendingSubText">0 Books Lent Out &bull; Track Borrowed Books</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
         <div class="profile-menu-item" onclick="openTrashCenterModal()">
           <div class="pmi-icon orange">🗑️</div>
           <div class="pmi-text">
@@ -898,6 +908,20 @@
           <button type="button" class="status-chip-btn" id="chipReading" onclick="quickSetBookStatus('READING')">📖 Reading</button>
           <button type="button" class="status-chip-btn" id="chipCompleted" onclick="quickSetBookStatus('DONE')">✅ Finished</button>
           <button type="button" class="status-chip-btn" id="chipWishlist" onclick="quickSetBookStatus('PENDING')">🔖 Want to Read</button>
+          <button type="button" class="status-chip-btn" id="chipLent" onclick="toggleBookLendingForCurrent()">🤝 Lent Out</button>
+        </div>
+      </div>
+
+      <!-- Book Lending Active Status Banner -->
+      <div id="detailLentBanner" style="display:none; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 12px; padding: 12px 14px; margin-top: 14px; margin-bottom: 6px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div>
+            <div style="font-weight: 800; font-size: 0.88rem; color: #10b981; display:flex; align-items:center; gap:6px;">
+              <span>🤝</span> <span id="detailLentStatusText">With Rahul since 15 days</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px;" id="detailLentSubText">Phone: 9876543210 &bull; Given on 24 Sep 2026</div>
+          </div>
+          <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.75rem; white-space: nowrap;" onclick="markCurrentBookReturned()">Mark Returned ✅</button>
         </div>
       </div>
 
@@ -1733,6 +1757,37 @@
       </div>
     </section>
 
+    <!-- ================= SUB-SCREEN: BOOK LENDING TRACKER ================= -->
+    <section id="viewBookLending" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Book Lending Tracker</h2>
+          <p class="sub-screen-sub-title" id="bookLendingSubScreenSubtitle">Dosto ko di hui kitabein track karein</p>
+        </div>
+        <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.75rem;" onclick="openLendBookModal()">+ Lend Book</button>
+      </div>
+
+      <!-- 2 Lending Segment Tabs -->
+      <div class="book-status-tabs-bar">
+        <button type="button" class="book-status-tab-btn active" id="blendTabActive" onclick="switchBookLendingTab('ACTIVE')">
+          <span class="bstat-tab-icon">🤝</span>
+          <span class="bstat-tab-label">Currently Lent</span>
+          <span class="bstat-tab-count" id="blendCountActive">0</span>
+        </button>
+        <button type="button" class="book-status-tab-btn" id="blendTabReturned" onclick="switchBookLendingTab('RETURNED')">
+          <span class="bstat-tab-icon">✅</span>
+          <span class="bstat-tab-label">Returned History</span>
+          <span class="bstat-tab-count" id="blendCountReturned">0</span>
+        </button>
+      </div>
+
+      <!-- Filtered Lending Books List Container -->
+      <div class="book-status-list-container" id="bookLendingListContainer">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </section>
+
 
 
   </main>
@@ -1874,6 +1929,46 @@
     </div>
   </div>
 
+  <!-- ================= LEND BOOK MODAL ================= -->
+  <div class="modal-overlay" id="lendBookModalOverlay" style="display:none;" onclick="if(event.target === this) closeLendBookModal()">
+    <div class="modal-card modal-md" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">🤝 Lend Book to Friend</h3>
+        <button type="button" class="modal-close-btn" onclick="closeLendBookModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Select Book from Library *</label>
+          <select id="lendBookSelect" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 8px; color: #fff;">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Borrower Name (Dost ka Naam) *</label>
+          <input type="text" id="lendBorrowerName" placeholder="e.g. Rahul Sharma" style="width: 100%;">
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Phone Number (Optional)</label>
+            <input type="tel" id="lendBorrowerPhone" placeholder="e.g. 9876543210">
+          </div>
+          <div class="form-group flex-1">
+            <label>Date Given *</label>
+            <input type="date" id="lendDateInput">
+          </div>
+        </div>
+        <div class="form-group" style="margin-top: 12px;">
+          <label>Notes / Expected Return (Optional)</label>
+          <input type="text" id="lendNotesInput" placeholder="e.g. 15 din baad exams ke baad dega" style="width: 100%;">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeLendBookModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="confirmLendBook()">Confirm &amp; Lend 🤝</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ================= COMPREHENSIVE EDIT / ADD BOOK MODAL (ALL 16 FIELDS) ================= -->
   <div class="modal-overlay" id="editBookModalOverlay">
     <div class="modal-card">
@@ -1946,7 +2041,7 @@
         <div class="form-row">
           <div class="form-group flex-1">
             <label>Status</label>
-            <select id="editBookStatus">
+            <select id="editBookStatus" onchange="onEditBookStatusChange(this.value)">
               <option value="PENDING">⏳ PENDING</option>
               <option value="READING">📖 READING</option>
               <option value="DONE">✅ DONE</option>
@@ -1959,6 +2054,18 @@
               <option value="AVAILABLE">Available</option>
               <option value="UNAVAILABLE">Unavailable</option>
             </select>
+          </div>
+        </div>
+
+        <!-- Lent Details (visible when status is LENT) -->
+        <div class="form-row" id="editLentDetailsRow" style="display:none;">
+          <div class="form-group flex-1">
+            <label>Borrower Name (Dost ka naam)</label>
+            <input type="text" id="editLentTo" placeholder="e.g. Rahul Sharma">
+          </div>
+          <div class="form-group flex-1">
+            <label>Borrower Phone</label>
+            <input type="tel" id="editLentPhone" placeholder="e.g. 9876543210">
           </div>
         </div>
 

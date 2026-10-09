@@ -2,15 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v28.0.12",
-    "name": "Mind Focus Books v28.0.12 - Clean Home UI & Performance Upgrade",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.12/MindFocusBooks-Native.apk",
+    "version": "v28.0.13",
+    "name": "Mind Focus Books v28.0.13 - Book Lending & Borrow Tracker",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.13/MindFocusBooks-Native.apk",
     "features": [
-      "✨ Clean Home Dashboard: Removed Page Planner, Streak Freeze & Reading Queue widgets.",
-      "⚡ Clean Native Performance: Removed unused widgets and modals for faster app experience.",
-      "📦 Clean Codebase: Completely purged widget codes from UI and script engine."
+      "🤝 Book Lending Tracker: Profile option & dedicated sub-screen to track books lent to friends.",
+      "⏳ Live Days Tracker: Instantly see who has your book and for how many days (e.g. 'With Rahul since 15 days').",
+      "✅ 1-Tap Mark Returned: Easily mark books returned and maintain a permanent returned history.",
+      "📞 Quick Contact & Details: Save friend's name, phone number, date given and expected return note.",
+      "📖 Book Detail & Edit Integration: Direct Lending banner, Lent status chip, and edit modal support."
     ],
-    "stagedAt": "2026-10-09T16:30:00.000Z",
+    "stagedAt": "2026-10-09T17:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
