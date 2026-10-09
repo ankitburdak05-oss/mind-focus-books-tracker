@@ -2,17 +2,17 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v28.0.13",
-    "name": "Mind Focus Books v28.0.13 - Book Lending & Borrow Tracker",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v28.0.13/MindFocusBooks-Native.apk",
+    "version": "v0.0.1",
+    "name": "Mind Focus Books v0.0.1 - Not Interested Books Vault",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.1/MindFocusBooks-Native.apk",
     "features": [
-      "🤝 Book Lending Tracker: Profile option & dedicated sub-screen to track books lent to friends.",
-      "⏳ Live Days Tracker: Instantly see who has your book and for how many days (e.g. 'With Rahul since 15 days').",
-      "✅ 1-Tap Mark Returned: Easily mark books returned and maintain a permanent returned history.",
-      "📞 Quick Contact & Details: Save friend's name, phone number, date given and expected return note.",
-      "📖 Book Detail & Edit Integration: Direct Lending banner, Lent status chip, and edit modal support."
+      "🚫 Not Interested Books Vault: Profile option to hide unwanted books from active Library & Explore.",
+      "🎯 Clean Focus Mode: Keeps Library and Explore uncluttered with only books you actually want to read.",
+      "🔄 1-Tap Instant Restore: Easily restore any book back to Library with a single tap at any time.",
+      "🏷️ Quick Reason Tags: Save why you shelved a book (Mood, Boring, Future, etc.) with hidden date tracking.",
+      "📖 Seamless Book Detail Integration: Not Interested status chip, action banner, and sub-screen."
     ],
-    "stagedAt": "2026-10-09T17:00:00.000Z",
+    "stagedAt": "2026-10-09T18:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

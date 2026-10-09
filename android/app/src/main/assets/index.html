@@ -633,6 +633,16 @@
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
 
+        <!-- 🚫 NOT INTERESTED BOOKS OPTION -->
+        <div class="profile-menu-item" onclick="navigateToSubView('notInterested')">
+          <div class="pmi-icon red" style="font-size: 1.35rem; background: rgba(239, 68, 68, 0.15); color: #ef4444;">🚫</div>
+          <div class="pmi-text">
+            <div class="pmi-title" style="font-weight: 700;">Not Interested Books</div>
+            <div class="pmi-sub" id="profileNotInterestedSubText">0 Hidden &bull; Restore anytime</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
         <div class="profile-menu-item" onclick="openTrashCenterModal()">
           <div class="pmi-icon orange">🗑️</div>
           <div class="pmi-text">
@@ -909,6 +919,7 @@
           <button type="button" class="status-chip-btn" id="chipCompleted" onclick="quickSetBookStatus('DONE')">✅ Finished</button>
           <button type="button" class="status-chip-btn" id="chipWishlist" onclick="quickSetBookStatus('PENDING')">🔖 Want to Read</button>
           <button type="button" class="status-chip-btn" id="chipLent" onclick="toggleBookLendingForCurrent()">🤝 Lent Out</button>
+          <button type="button" class="status-chip-btn" id="chipNotInterested" onclick="toggleNotInterestedForCurrent()">🚫 Not Interested</button>
         </div>
       </div>
 
@@ -922,6 +933,19 @@
             <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px;" id="detailLentSubText">Phone: 9876543210 &bull; Given on 24 Sep 2026</div>
           </div>
           <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.75rem; white-space: nowrap;" onclick="markCurrentBookReturned()">Mark Returned ✅</button>
+        </div>
+      </div>
+
+      <!-- Book Not Interested Active Status Banner -->
+      <div id="detailNotInterestedBanner" style="display:none; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 12px; padding: 12px 14px; margin-top: 14px; margin-bottom: 6px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div>
+            <div style="font-weight: 800; font-size: 0.88rem; color: #ef4444; display:flex; align-items:center; gap:6px;">
+              <span>🚫</span> <span id="detailNotInterestedStatusText">Marked as Not Interested</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px;" id="detailNotInterestedSubText">Hidden from Library &amp; Explore &bull; Restore anytime</div>
+          </div>
+          <button type="button" class="btn-restore-ni" onclick="restoreCurrentBookToLibrary()">Restore to Library 🔄</button>
         </div>
       </div>
 
@@ -1788,7 +1812,29 @@
       </div>
     </section>
 
+    <!-- ================= SUB-SCREEN: NOT INTERESTED BOOKS ================= -->
+    <section id="viewNotInterested" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Not Interested Books</h2>
+          <p class="sub-screen-sub-title" id="notInterestedSubScreenSubtitle">Hidden kitabein &bull; Padhne ka man ho to wapas laayein</p>
+        </div>
+      </div>
 
+      <!-- Quick Info Banner -->
+      <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 12px; padding: 10px 14px; margin: 12px 16px 16px; display: flex; align-items: center; gap: 10px;">
+        <span style="font-size: 1.3rem;">ℹ️</span>
+        <span style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4;">
+          Ye kitabein aapki active Library aur Explore se hide hain. Kisi bhi kitab ko dobara padhna ho to <strong style="color: #10b981;">"Restore"</strong> par tap karein!
+        </span>
+      </div>
+
+      <!-- Not Interested Books List Container -->
+      <div class="book-status-list-container" id="notInterestedListContainer" style="padding: 0 16px 30px;">
+        <!-- Rendered dynamically by JS -->
+      </div>
+    </section>
 
   </main>
 
@@ -1965,6 +2011,62 @@
       <div class="modal-footer">
         <button type="button" class="btn-cancel" onclick="closeLendBookModal()">Cancel</button>
         <button type="button" class="btn-save-gold" onclick="confirmLendBook()">Confirm &amp; Lend 🤝</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= NOT INTERESTED CONFIRMATION MODAL ================= -->
+  <div class="modal-overlay" id="notInterestedModalOverlay" style="display:none;" onclick="if(event.target === this) closeNotInterestedModal()">
+    <div class="modal-card modal-md" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: #ef4444; display:flex; align-items:center; gap:8px;">
+          <span>🚫</span> Mark as Not Interested
+        </h3>
+        <button type="button" class="modal-close-btn" onclick="closeNotInterestedModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+          <div style="font-weight: 700; color: #fff; font-size: 0.95rem; margin-bottom: 4px;" id="niTargetBookTitle">Book Title</div>
+          <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4;">
+            Ye kitab aapki <strong>Library</strong> aur <strong>Explore</strong> se hide ho jayegi taaki reading focus bana rahe.
+            Aap ise Profile &gt; <em>Not Interested Books</em> me kabhi bhi dekh aur wapas 1-tap me restore kar sakte hain.
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label style="font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; display:block;">Select Reason (Optional):</label>
+          <div class="ni-reasons-wrap" style="display:flex; flex-direction:column; gap:8px;">
+            <label class="ni-reason-pill active" onclick="selectNiReason(this, '😴 Abhi Mood Nahi Hai')">
+              <input type="radio" name="niReasonRadio" value="😴 Abhi Mood Nahi Hai" checked style="display:none;">
+              <span>😴 Abhi Mood Nahi Hai (Not in mood right now)</span>
+            </label>
+            <label class="ni-reason-pill" onclick="selectNiReason(this, '🥱 Boring / Overhyped Lagi')">
+              <input type="radio" name="niReasonRadio" value="🥱 Boring / Overhyped Lagi" style="display:none;">
+              <span>🥱 Boring / Overhyped Lagi (Did not enjoy)</span>
+            </label>
+            <label class="ni-reason-pill" onclick="selectNiReason(this, '⏳ Baad Me Padhunga (Future)')">
+              <input type="radio" name="niReasonRadio" value="⏳ Baad Me Padhunga (Future)" style="display:none;">
+              <span>⏳ Baad Me Padhunga (Future shelf)</span>
+            </label>
+            <label class="ni-reason-pill" onclick="selectNiReason(this, '🚫 Topic Pasand Nahi Aaya')">
+              <input type="radio" name="niReasonRadio" value="🚫 Topic Pasand Nahi Aaya" style="display:none;">
+              <span>🚫 Topic Pasand Nahi Aaya (Wrong fit)</span>
+            </label>
+            <label class="ni-reason-pill" onclick="selectNiReason(this, '📁 Just Shelve (No reason)')">
+              <input type="radio" name="niReasonRadio" value="📁 Just Shelve (No reason)" style="display:none;">
+              <span>📁 Just Shelve (No specific reason)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+          <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display:block;">Custom Note (Optional):</label>
+          <input type="text" id="niCustomNoteInput" placeholder="e.g. Chapter 2 ke baad bore lagi..." style="width: 100%; padding: 8px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 8px; color: #fff;">
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:space-between; gap:10px;">
+        <button type="button" class="btn-cancel" onclick="closeNotInterestedModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff; border:none;" onclick="confirmNotInterestedAction()">🚫 Move to Not Interested</button>
       </div>
     </div>
   </div>

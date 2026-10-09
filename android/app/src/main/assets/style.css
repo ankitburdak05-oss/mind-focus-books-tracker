@@ -5404,3 +5404,63 @@ input:checked + .slider-round:before {
   border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
+.bstat-badge.not-interested {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* Not Interested Reason Pills in Modal */
+.ni-reason-pill {
+  display: flex;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.ni-reason-pill:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ni-reason-pill.active {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  color: #ffffff;
+  font-weight: 600;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+}
+
+.btn-restore-ni {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border-radius: 10px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: linear-gradient(135deg, #10b981, #059669);
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+  transition: transform 0.15s ease, filter 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-restore-ni:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+.btn-restore-ni:active {
+  transform: scale(0.97);
+}
+

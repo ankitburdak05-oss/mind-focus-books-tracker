@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v28.0.13)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.1)
 // ==========================================================================
 
-const APP_VERSION = '28.0.13';
-const CURRENT_APP_VERSION = 'v28.0.13';
+const APP_VERSION = '0.0.1';
+const CURRENT_APP_VERSION = 'v0.0.1';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -86,10 +86,14 @@ function initApp() {
 // Ensure at least one book is currently reading
 function ensureCurrentlyReadingBook() {
   if (!state.books || state.books.length === 0) return;
-  const readingBookIndex = state.books.findIndex(b => b.status === 'READING');
-  if (readingBookIndex !== -1) {
-    state.currentBookIndex = readingBookIndex;
-    state.currentBook = state.books[readingBookIndex];
+  const activeBooks = state.books.filter(b => !b.notInterested);
+  const readingBook = activeBooks.find(b => b.status === 'READING');
+  if (readingBook) {
+    state.currentBookIndex = state.books.indexOf(readingBook);
+    state.currentBook = readingBook;
+  } else if (activeBooks.length > 0) {
+    state.currentBookIndex = state.books.indexOf(activeBooks[0]);
+    state.currentBook = activeBooks[0];
   } else {
     state.currentBookIndex = 0;
     state.currentBook = state.books[0];
@@ -464,7 +468,7 @@ function renderHomeRecentBooks() {
   if (!list) return;
   
   const currentTitle = state.currentBook ? state.currentBook.title : '';
-  const filtered = state.books.filter(b => b.title !== currentTitle);
+  const filtered = state.books.filter(b => b.title !== currentTitle && !b.notInterested);
   const recent = filtered.slice(0, 12);
   list.innerHTML = recent.map((book) => {
     const originalIndex = state.books.indexOf(book);
@@ -487,10 +491,11 @@ function renderLibraryView() {
 }
 
 function renderLibraryFilters() {
-  const total = state.books.length;
-  const reading = state.books.filter(b => b.status === 'READING').length;
-  const completed = state.books.filter(b => b.status === 'DONE').length;
-  const wishlist = state.books.filter(b => b.status === 'PENDING' || b.status === 'UNREAD' || b.status === 'WISHLIST').length;
+  const activeBooks = state.books.filter(b => !b.notInterested);
+  const total = activeBooks.length;
+  const reading = activeBooks.filter(b => b.status === 'READING').length;
+  const completed = activeBooks.filter(b => b.status === 'DONE').length;
+  const wishlist = activeBooks.filter(b => b.status === 'PENDING' || b.status === 'UNREAD' || b.status === 'WISHLIST').length;
   
   const cAll = document.getElementById('countAll');
   if (cAll) cAll.innerText = total;
@@ -502,12 +507,15 @@ function renderLibraryFilters() {
   if (cWish) cWish.innerText = wishlist;
   
   const catSelect = document.getElementById('libraryCategorySelect');
-  if (catSelect && catSelect.children.length <= 1) {
-    const categories = Array.from(new Set(state.books.map(b => b.category).filter(Boolean))).sort();
+  if (catSelect) {
+    const currentVal = catSelect.value || 'ALL';
+    catSelect.innerHTML = '<option value="ALL">All Categories</option>';
+    const categories = Array.from(new Set(activeBooks.map(b => b.category).filter(Boolean))).sort();
     categories.forEach(cat => {
       const opt = document.createElement('option');
       opt.value = cat;
       opt.innerText = cat;
+      if (cat === currentVal) opt.selected = true;
       catSelect.appendChild(opt);
     });
   }
@@ -564,7 +572,7 @@ function renderLibraryGrid() {
   const grid = document.getElementById('libraryBooksGrid');
   if (!grid) return;
   
-  let filtered = state.books.slice();
+  let filtered = state.books.filter(b => !b.notInterested);
   
   if (state.statusFilter === 'READING') {
     filtered = filtered.filter(b => b.status === 'READING');
@@ -646,7 +654,7 @@ function renderExploreView() {
 
 function renderPopularCategoryCounts() {
   const countCat = (catPattern) => {
-    return state.books.filter(b => b.category && b.category.toLowerCase().includes(catPattern.toLowerCase())).length;
+    return state.books.filter(b => !b.notInterested && b.category && b.category.toLowerCase().includes(catPattern.toLowerCase())).length;
   };
   
   const elMindset = document.getElementById('catCountMindset');
@@ -697,7 +705,7 @@ function renderExploreBooksGrid() {
   const grid = document.getElementById('exploreBooksGrid');
   if (!grid) return;
   
-  let list = state.books.slice();
+  let list = state.books.filter(b => !b.notInterested);
   
   if (state.exploreGenre !== 'ALL') {
     list = list.filter(b => (b.category || '').toLowerCase().includes(state.exploreGenre.toLowerCase()));
@@ -1460,6 +1468,210 @@ function onEditBookStatusChange(status) {
   }
 }
 
+// ================= NOT INTERESTED BOOKS MODULE =================
+let niSelectedReason = '😴 Abhi Mood Nahi Hai';
+let currentNiBookToMark = null;
+
+function openNotInterestedModal(book) {
+  const target = book || state.currentBook;
+  if (!target) return;
+  currentNiBookToMark = target;
+
+  const titleEl = document.getElementById('niTargetBookTitle');
+  if (titleEl) titleEl.innerText = target.title || 'Untitled Book';
+
+  // Reset reason pills
+  niSelectedReason = '😴 Abhi Mood Nahi Hai';
+  const pills = document.querySelectorAll('.ni-reason-pill');
+  pills.forEach((p, idx) => {
+    p.classList.toggle('active', idx === 0);
+  });
+
+  const noteInput = document.getElementById('niCustomNoteInput');
+  if (noteInput) noteInput.value = '';
+
+  const modal = document.getElementById('notInterestedModalOverlay');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeNotInterestedModal() {
+  const modal = document.getElementById('notInterestedModalOverlay');
+  if (modal) modal.style.display = 'none';
+  currentNiBookToMark = null;
+}
+
+function selectNiReason(el, reason) {
+  niSelectedReason = reason;
+  const pills = document.querySelectorAll('.ni-reason-pill');
+  pills.forEach(p => p.classList.remove('active'));
+  if (el) el.classList.add('active');
+}
+
+function confirmNotInterestedAction() {
+  const book = currentNiBookToMark || state.currentBook;
+  if (!book) return;
+
+  const noteInput = document.getElementById('niCustomNoteInput');
+  const customNote = noteInput ? noteInput.value.trim() : '';
+  const finalReason = customNote ? `${niSelectedReason} (${customNote})` : niSelectedReason;
+
+  book.notInterested = true;
+  book.notInterestedReason = finalReason;
+  book.notInterestedDate = getTodayLocalDate();
+
+  saveBooks();
+  closeNotInterestedModal();
+
+  if (typeof logActivity === 'function') {
+    logActivity('BOOK_NOT_INTERESTED', `Moved "${book.title}" to Not Interested Books`);
+  }
+
+  showToast(`🚫 "${book.title}" moved to Not Interested Books`);
+
+  // Refresh lists
+  renderLibraryFilters();
+  renderLibraryGrid();
+  renderExploreBooksGrid();
+  renderHomeRecentBooks();
+  renderNotInterestedView();
+  renderProfileView();
+
+  // If currently in detail view, update or return
+  const detailView = document.getElementById('viewBookDetail');
+  if (detailView && detailView.classList.contains('active')) {
+    openBookDetailView(book);
+  }
+}
+
+function toggleNotInterestedForCurrent() {
+  if (!state.currentBook) return;
+  if (state.currentBook.notInterested) {
+    if (confirm(`Do you want to restore "${state.currentBook.title}" back to Library & Explore?`)) {
+      restoreCurrentBookToLibrary();
+    }
+  } else {
+    openNotInterestedModal(state.currentBook);
+  }
+}
+
+function restoreCurrentBookToLibrary() {
+  if (!state.currentBook) return;
+  restoreBookToLibrary(state.currentBook);
+}
+
+function restoreBookToLibraryByIndex(idx) {
+  if (idx < 0 || idx >= state.books.length) return;
+  restoreBookToLibrary(state.books[idx]);
+}
+
+function restoreBookToLibrary(book) {
+  if (!book) return;
+  book.notInterested = false;
+  delete book.notInterestedReason;
+  delete book.notInterestedDate;
+
+  saveBooks();
+
+  if (typeof logActivity === 'function') {
+    logActivity('BOOK_RESTORED', `Restored "${book.title}" to Library & Explore`);
+  }
+
+  showToast(`✅ "${book.title}" restored to Library & Explore!`);
+
+  // Refresh views
+  renderLibraryFilters();
+  renderLibraryGrid();
+  renderExploreBooksGrid();
+  renderHomeRecentBooks();
+  renderNotInterestedView();
+  renderProfileView();
+
+  const detailView = document.getElementById('viewBookDetail');
+  if (detailView && detailView.classList.contains('active')) {
+    openBookDetailView(book);
+  }
+}
+
+function deleteBookFromNotInterested(idx) {
+  if (idx < 0 || idx >= state.books.length) return;
+  const book = state.books[idx];
+  if (confirm(`Are you sure you want to permanently delete "${book.title}"?`)) {
+    state.books.splice(idx, 1);
+    saveBooks();
+    showToast(`🗑️ "${book.title}" deleted.`);
+    renderNotInterestedView();
+    renderProfileView();
+  }
+}
+
+function renderNotInterestedView() {
+  const container = document.getElementById('notInterestedListContainer');
+  const subtitleEl = document.getElementById('notInterestedSubScreenSubtitle');
+
+  const books = state.books || [];
+  const hiddenBooks = books.filter(b => b && b.notInterested);
+
+  // Update profile menu item subtitle
+  const profileSub = document.getElementById('profileNotInterestedSubText');
+  if (profileSub) {
+    profileSub.innerText = `${hiddenBooks.length} Hidden Book${hiddenBooks.length === 1 ? '' : 's'} • Restore anytime`;
+  }
+
+  if (subtitleEl) {
+    subtitleEl.innerText = `${hiddenBooks.length} Hidden Book${hiddenBooks.length === 1 ? '' : 's'} • Padhne ka man ho to wapas laayein`;
+  }
+
+  if (!container) return;
+
+  if (hiddenBooks.length === 0) {
+    container.innerHTML = `
+      <div class="total-spent-empty-state">
+        <div class="total-spent-empty-icon">🚫</div>
+        <div class="total-spent-empty-title">Koi Book Not Interested Nahi Hai</div>
+        <div class="total-spent-empty-desc">Jab kisi kitab me abhi interest na ho, to Book Details me "🚫 Not Interested" par tap karein. Vo yahan safe rahegi aur Library se hide ho jayegi.</div>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  hiddenBooks.forEach(b => {
+    const originalIndex = books.indexOf(b);
+    const coverSrc = getBookCoverUrl(b);
+    const bookTitle = escapeHtml(b.title || 'Untitled Book');
+    const bookAuthor = escapeHtml(b.author || 'Unknown Author');
+    const bookCategory = escapeHtml(b.category || 'General');
+    const reason = escapeHtml(b.notInterestedReason || 'Not in mood right now');
+    const hiddenDate = b.notInterestedDate ? formatDateDisplay(b.notInterestedDate) : 'Recently';
+
+    html += `
+      <div class="book-status-item-card" style="border-left: 3px solid #ef4444;">
+        <div class="bstat-cover-wrap" onclick="openBookDetailViewByIndex(${originalIndex})">
+          <img class="bstat-cover-img" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='cover_placeholder.jpg'">
+        </div>
+        <div class="bstat-info-wrap" onclick="openBookDetailViewByIndex(${originalIndex})">
+          <div class="bstat-book-title">${bookTitle}</div>
+          <div class="bstat-book-author">${bookAuthor}</div>
+          <div class="bstat-meta-row" style="flex-wrap: wrap; gap: 6px; margin-top: 3px;">
+            <span class="bstat-category-tag">${bookCategory}</span>
+            <span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 6px; background: rgba(239, 68, 68, 0.14); color: #f87171; font-weight: 600;">
+              🏷️ ${reason}
+            </span>
+            <span style="font-size: 0.7rem; color: var(--text-muted);">Hidden ${hiddenDate}</span>
+          </div>
+        </div>
+        <div class="bstat-right-col" style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+          <button type="button" class="btn-restore-ni" onclick="event.stopPropagation(); restoreBookToLibraryByIndex(${originalIndex})">
+            🔄 Restore
+          </button>
+        </div>
+      </div>
+    `;
+  });
+
+  container.innerHTML = html;
+}
+
 function openSetBudgetPrompt() {
   const currentBudget = localStorage.getItem('mf_reading_budget_2026') || '5000';
   const val = prompt('Set your 2026 Reading Budget (in ₹ Rupees):', currentBudget);
@@ -1647,6 +1859,7 @@ function renderProfileView() {
   renderBookStatusView();
   renderBookAvailabilityView();
   renderBookLendingView();
+  renderNotInterestedView();
 }
 
 function updateLastBackupDisplay() {
@@ -1873,6 +2086,25 @@ function openBookDetailView(book) {
       }
     }
 
+    // Update Book Not Interested Banner
+    const isNotInterested = !!book.notInterested;
+    const niBanner = document.getElementById('detailNotInterestedBanner');
+    if (niBanner) {
+      if (isNotInterested) {
+        const niStatusText = document.getElementById('detailNotInterestedStatusText');
+        const niSubText = document.getElementById('detailNotInterestedSubText');
+        if (niStatusText) niStatusText.innerText = `Marked as Not Interested 🚫`;
+        if (niSubText) {
+          const reason = book.notInterestedReason || 'Not in mood right now';
+          const dateStr = book.notInterestedDate ? ` • Hidden on ${formatDateDisplay(book.notInterestedDate)}` : '';
+          niSubText.innerText = `Reason: ${reason}${dateStr}`;
+        }
+        niBanner.style.display = 'block';
+      } else {
+        niBanner.style.display = 'none';
+      }
+    }
+
     // Update Reader Mode Hint Name
     const modeNameEl = document.getElementById('detailReaderModeName');
     if (modeNameEl) {
@@ -1955,6 +2187,8 @@ function updateStatusChipsUI(status) {
   if (chipWishlist) chipWishlist.classList.toggle('active', normStatus === 'PENDING' || normStatus === 'WISHLIST' || normStatus === 'UNREAD');
   const chipLent = document.getElementById('chipLent');
   if (chipLent) chipLent.classList.toggle('active', normStatus === 'LENT');
+  const chipNotInterested = document.getElementById('chipNotInterested');
+  if (chipNotInterested) chipNotInterested.classList.toggle('active', !!(state.currentBook && state.currentBook.notInterested));
 }
 
 function quickSetBookStatus(newStatus) {
@@ -2021,6 +2255,9 @@ function closeBookDetailView() {
       } else if (returnViewId === 'viewBookLending') {
         renderBookLendingView();
         switchTabNavOnly('profile');
+      } else if (returnViewId === 'viewNotInterested') {
+        renderNotInterestedView();
+        switchTabNavOnly('profile');
       } else if (returnViewId === 'viewTotalSpent') {
         renderTotalSpentView();
         switchTabNavOnly('profile');
@@ -2044,7 +2281,21 @@ function closeBookDetailView() {
 
 // Global Android hardware/system back button handler
 window.handleAppBackButton = function() {
-  // 1. If edit book modal is open, close modal
+  // 1. If not interested modal is open, close modal
+  const niModal = document.getElementById('notInterestedModalOverlay');
+  if (niModal && niModal.style.display !== 'none') {
+    closeNotInterestedModal();
+    return true;
+  }
+
+  // 1b. If lend book modal is open, close modal
+  const lendModal = document.getElementById('lendBookModalOverlay');
+  if (lendModal && lendModal.style.display !== 'none') {
+    closeLendBookModal();
+    return true;
+  }
+
+  // 1c. If edit book modal is open, close modal
   const editModal = document.getElementById('editBookModalOverlay');
   if (editModal && editModal.classList.contains('active')) {
     closeEditModal();
@@ -2058,8 +2309,8 @@ window.handleAppBackButton = function() {
     return true;
   }
 
-  // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, etc.), go back to Profile
-  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog'];
+  // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, Not Interested, etc.), go back to Profile
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog'];
   for (const svId of subViews) {
     const sv = document.getElementById(svId);
     if (sv && sv.classList.contains('active')) {
@@ -3716,6 +3967,7 @@ function navigateToSubView(viewName) {
   if (viewName === 'bookStatus') renderBookStatusView();
   if (viewName === 'bookAvailability') renderBookAvailabilityView();
   if (viewName === 'bookLending') renderBookLendingView();
+  if (viewName === 'notInterested') renderNotInterestedView();
 }
 
 function navigateBack() {
@@ -3748,7 +4000,8 @@ const appFeaturesGuideData = [
   { id: 18, title: 'Security Lock (PIN & Biometrics)', category: 'Security', icon: '🔒', screenNum: 'Screen 18', location: 'Profile -> Privacy & Security', purpose: 'App aur notes ko 4-digit PIN lock se secure karne ke liye.', benefit: 'Personal notes ko private aur safe rakhne ke liye.', actionText: 'Manage PIN', route: 'prompt_pin' },
   { id: 19, title: 'App Features Directory & Sitemap', category: 'Security', icon: '🗺️', screenNum: 'Screen 19', location: 'Profile -> App Features Directory Button', purpose: 'Sabi 20+ features ki detailed list aur direct 1-tap launcher cards ke liye.', benefit: 'Kisi bhi feature ko bina dhoondhe 1-tap me launch karne ke liye.', actionText: 'Currently Active', route: 'self' },
   { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: '📋', screenNum: 'Screen 20', location: 'Profile -> Options -> Activity Audit Log', purpose: 'App me kiye gaye har action ki history audit log me dekhne ke liye.', benefit: 'System security aur app actions transparent rakhne ke liye.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' },
-  { id: 21, title: 'Book Lending & Borrow Tracker', category: 'Library', icon: '🤝', screenNum: 'Screen 21', location: 'Profile -> Options -> Book Lending Tracker', purpose: 'Dosto ya rishtedaaro ko di hui kitabein track karne ke liye.', benefit: 'Physical kitabein kabhi gum hone se bachane aur timely return paane ke liye.', actionText: 'Open Lending Hub', route: 'sub_bookLending' }
+  { id: 21, title: 'Book Lending & Borrow Tracker', category: 'Library', icon: '🤝', screenNum: 'Screen 21', location: 'Profile -> Options -> Book Lending Tracker', purpose: 'Dosto ya rishtedaaro ko di hui kitabein track karne ke liye.', benefit: 'Physical kitabein kabhi gum hone se bachane aur timely return paane ke liye.', actionText: 'Open Lending Hub', route: 'sub_bookLending' },
+  { id: 22, title: 'Not Interested Books Vault', category: 'Library', icon: '🚫', screenNum: 'Screen 22', location: 'Profile -> Options -> Not Interested Books', purpose: 'Jo kitabein abhi padhne ka man na ho unhe Library & Explore se hide karne ke liye.', benefit: 'Library ko clean aur uncluttered rakhne ke liye, aur jab man kare 1-tap me wapas lane ke liye.', actionText: 'Open Not Interested', route: 'sub_notInterested' }
 ];
 
 function renderAppFeaturesDirectoryView() {
