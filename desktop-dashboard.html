@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <script src="books-data.js"></script>
   <style>
     :root {
       --bg-base: #0a0d14;
@@ -940,42 +941,42 @@
     </div>
 
     <nav class="sidebar-nav">
-      <a class="nav-item" href="index.html" title="Open Mobile / Main View">
+      <button type="button" class="nav-item" data-tab="home" onclick="switchDeskTab('home')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
         <span>Home</span>
-      </a>
-      <a class="nav-item" href="index.html#viewLibrary">
+      </button>
+      <button type="button" class="nav-item" data-tab="library" onclick="switchDeskTab('library')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10M6 10h10"></path></svg>
         <span>My Library</span>
-      </a>
-      <a class="nav-item" href="index.html#viewExplore">
+      </button>
+      <button type="button" class="nav-item" data-tab="explore" onclick="switchDeskTab('explore')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
         <span>Explore</span>
-      </a>
-      <a class="nav-item" href="index.html#viewBookLending">
+      </button>
+      <button type="button" class="nav-item" data-tab="lending" onclick="switchDeskTab('lending')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m16 3 4 4-4 4M20 7H4M8 21l-4-4 4-4M4 17h16"></path></svg>
         <span>Lending Desk</span>
-      </a>
-      <a class="nav-item active" href="desktop-dashboard.html">
+      </button>
+      <button type="button" class="nav-item active" data-tab="reservation" onclick="switchDeskTab('reservation')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
         <span>Reservation Desk</span>
-      </a>
-      <a class="nav-item" href="index.html#viewNotesHighlights">
+      </button>
+      <button type="button" class="nav-item" data-tab="notes" onclick="switchDeskTab('notes')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
         <span>Notes</span>
-      </a>
-      <a class="nav-item" href="index.html#viewReadingStats">
+      </button>
+      <button type="button" class="nav-item" data-tab="stats" onclick="switchDeskTab('stats')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
         <span>Stats</span>
-      </a>
-      <a class="nav-item" href="index.html#viewProfile">
+      </button>
+      <button type="button" class="nav-item" data-tab="profile" onclick="switchDeskTab('profile')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         <span>Profile</span>
-      </a>
-      <a class="nav-item" href="index.html#viewAppSettings">
+      </button>
+      <button type="button" class="nav-item" data-tab="settings" onclick="switchDeskTab('settings')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
         <span>Settings</span>
-      </a>
+      </button>
     </nav>
 
     <!-- Sidebar Aesthetic Table Lamp Card -->
@@ -1001,7 +1002,7 @@
           <span class="noti-dot"></span>
         </button>
 
-        <div class="header-profile-pill" onclick="window.location.href='index.html#viewProfile'">
+        <div class="header-profile-pill" onclick="switchDeskTab('profile')">
           <div class="profile-avatar-circle">A</div>
           <span class="profile-name-text">Ankit ▾</span>
         </div>
@@ -1011,94 +1012,343 @@
     <!-- Content Workspace -->
     <main class="desk-content">
 
-      <!-- Hero Banner Card -->
-      <section class="hero-banner-card">
-        <div class="hero-banner-content">
-          <div class="hero-calendar-badge">
-            📅
+      <!-- ================= DESK TAB 1: RESERVATION DESK ================= -->
+      <div id="deskViewReservation" class="desk-view-section active">
+        <!-- Hero Banner Card -->
+        <section class="hero-banner-card">
+          <div class="hero-banner-content">
+            <div class="hero-calendar-badge">
+              📅
+            </div>
+            <div class="hero-text-block">
+              <h2>Book Reservation &amp; Waitlist Desk</h2>
+              <p>Track books you want to borrow or reserve from friends, with queue and availability.</p>
+            </div>
           </div>
-          <div class="hero-text-block">
-            <h2>Book Reservation &amp; Waitlist Desk</h2>
-            <p>Track books you want to borrow or reserve from friends, with queue and availability.</p>
+        </section>
+
+        <!-- Metric Pills + Reserve CTA Button -->
+        <section class="desk-action-grid">
+          <div class="metric-pill-card">
+            <div class="metric-icon-circle gold">
+              👥
+            </div>
+            <div class="metric-meta-block">
+              <span class="metric-lbl">Active Reservations</span>
+              <span class="metric-val" id="metricActiveCount">05</span>
+              <span class="metric-sub">Books you are waiting for</span>
+            </div>
           </div>
+
+          <div class="metric-pill-card">
+            <div class="metric-icon-circle blue">
+              🕒
+            </div>
+            <div class="metric-meta-block">
+              <span class="metric-lbl">Available Soon</span>
+              <span class="metric-val" id="metricAvailableCount">02</span>
+              <span class="metric-sub">Books expected this month</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn-reserve-cta" onclick="openReserveModal()">
+            <span style="font-size: 1.2rem; font-weight: 800;">+</span> Reserve a Book
+          </button>
+        </section>
+
+        <!-- Main Data Table: Active Reservations & Waitlist -->
+        <section>
+          <div class="desk-section-header">
+            <h3 class="desk-section-title">Active Reservations &amp; Waitlist</h3>
+
+            <!-- Filter Pills -->
+            <div class="desk-filter-group" id="deskFilterGroup">
+              <button type="button" class="filter-tab-btn active" data-filter="ALL" onclick="setDeskFilter('ALL')">All (5)</button>
+              <button type="button" class="filter-tab-btn" data-filter="WAITING" onclick="setDeskFilter('WAITING')">Waiting (3)</button>
+              <button type="button" class="filter-tab-btn" data-filter="AVAILABLE_SOON" onclick="setDeskFilter('AVAILABLE_SOON')">Available Soon (2)</button>
+              <button type="button" class="filter-tab-btn" data-filter="NOT_AVAILABLE" onclick="setDeskFilter('NOT_AVAILABLE')">Not Available (0)</button>
+            </div>
+          </div>
+
+          <!-- Table Container -->
+          <div class="desk-table-container">
+            <table class="desk-table">
+              <thead>
+                <tr>
+                  <th style="width: 32px;">#</th>
+                  <th>Book</th>
+                  <th>Current Holder</th>
+                  <th>Queue Position</th>
+                  <th>Expected Available</th>
+                  <th>Status</th>
+                  <th style="text-align: right; padding-right: 28px;">Action</th>
+                </tr>
+              </thead>
+              <tbody id="deskWaitlistTableBody">
+                <!-- Rendered via JavaScript -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Bottom Section: Recently Fulfilled Reservations -->
+        <section class="desk-bottom-row">
+          <div class="desk-section-header">
+            <h3 class="desk-section-title">Recently Fulfilled Reservations</h3>
+            <a href="#" style="font-size: 0.82rem; font-weight: 700; color: var(--accent-gold); text-decoration: none;">View All &rarr;</a>
+          </div>
+
+          <div class="bottom-cards-grid" id="deskFulfilledGrid">
+            <!-- Rendered via JavaScript -->
+          </div>
+        </section>
+      </div>
+
+      <!-- ================= DESK TAB 2: HOME VIEW ================= -->
+      <div id="deskViewHome" class="desk-view-section" style="display:none;">
+        <section class="hero-banner-card">
+          <div class="hero-banner-content">
+            <div class="hero-calendar-badge">🏠</div>
+            <div class="hero-text-block">
+              <h2>Welcome back, Ankit!</h2>
+              <p>Your reading sanctuary &bull; Track your daily progress, streaks and reading queue.</p>
+            </div>
+          </div>
+        </section>
+        <div class="desk-action-grid">
+          <div class="metric-pill-card">
+            <div class="metric-icon-circle gold">📚</div>
+            <div class="metric-meta-block">
+              <span class="metric-lbl">Total Library</span>
+              <span class="metric-val" id="deskTotalBooksVal">313</span>
+              <span class="metric-sub">Books in collection</span>
+            </div>
+          </div>
+          <div class="metric-pill-card">
+            <div class="metric-icon-circle blue">🔥</div>
+            <div class="metric-meta-block">
+              <span class="metric-lbl">Daily Streak</span>
+              <span class="metric-val">7 Days</span>
+              <span class="metric-sub">Active reading momentum</span>
+            </div>
+          </div>
+          <button type="button" class="btn-reserve-cta" onclick="switchDeskTab('library')">
+            Explore My Library &rarr;
+          </button>
         </div>
-      </section>
-
-      <!-- Metric Pills + Reserve CTA Button -->
-      <section class="desk-action-grid">
-        <div class="metric-pill-card">
-          <div class="metric-icon-circle gold">
-            👥
-          </div>
-          <div class="metric-meta-block">
-            <span class="metric-lbl">Active Reservations</span>
-            <span class="metric-val" id="metricActiveCount">05</span>
-            <span class="metric-sub">Books you are waiting for</span>
-          </div>
-        </div>
-
-        <div class="metric-pill-card">
-          <div class="metric-icon-circle blue">
-            🕒
-          </div>
-          <div class="metric-meta-block">
-            <span class="metric-lbl">Available Soon</span>
-            <span class="metric-val" id="metricAvailableCount">02</span>
-            <span class="metric-sub">Books expected this month</span>
-          </div>
-        </div>
-
-        <button type="button" class="btn-reserve-cta" onclick="openReserveModal()">
-          <span style="font-size: 1.2rem; font-weight: 800;">+</span> Reserve a Book
-        </button>
-      </section>
-
-      <!-- Main Data Table: Active Reservations & Waitlist -->
-      <section>
         <div class="desk-section-header">
-          <h3 class="desk-section-title">Active Reservations &amp; Waitlist</h3>
-
-          <!-- Filter Pills -->
-          <div class="desk-filter-group" id="deskFilterGroup">
-            <button type="button" class="filter-tab-btn active" data-filter="ALL" onclick="setDeskFilter('ALL')">All (5)</button>
-            <button type="button" class="filter-tab-btn" data-filter="WAITING" onclick="setDeskFilter('WAITING')">Waiting (3)</button>
-            <button type="button" class="filter-tab-btn" data-filter="AVAILABLE_SOON" onclick="setDeskFilter('AVAILABLE_SOON')">Available Soon (2)</button>
-            <button type="button" class="filter-tab-btn" data-filter="NOT_AVAILABLE" onclick="setDeskFilter('NOT_AVAILABLE')">Not Available (0)</button>
-          </div>
+          <h3 class="desk-section-title">Featured Books</h3>
         </div>
+        <div class="bottom-cards-grid" id="deskHomeFeaturedGrid"></div>
+      </div>
 
-        <!-- Table Container -->
+      <!-- ================= DESK TAB 3: MY LIBRARY ================= -->
+      <div id="deskViewLibrary" class="desk-view-section" style="display:none;">
+        <section class="hero-banner-card">
+          <div class="hero-banner-content">
+            <div class="hero-calendar-badge">📚</div>
+            <div class="hero-text-block">
+              <h2>My Personal Library</h2>
+              <p>Search, filter, and explore your entire 313 book collection with instant preview.</p>
+            </div>
+          </div>
+        </section>
+        <div class="desk-section-header">
+          <h3 class="desk-section-title">All Books (<span id="deskLibraryTotalBadge">313</span>)</h3>
+        </div>
         <div class="desk-table-container">
           <table class="desk-table">
             <thead>
               <tr>
                 <th style="width: 32px;">#</th>
+                <th>Book Title &amp; Author</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Language</th>
+                <th style="text-align: right; padding-right: 28px;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="deskLibraryTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ================= DESK TAB 4: EXPLORE ================= -->
+      <div id="deskViewExplore" class="desk-view-section" style="display:none;">
+        <section class="hero-banner-card">
+          <div class="hero-banner-content">
+            <div class="hero-calendar-badge">🧭</div>
+            <div class="hero-text-block">
+              <h2>Explore &amp; Discover</h2>
+              <p>Curated genres, timeless wisdom, philosophy, focus mastery, and life strategies.</p>
+            </div>
+          </div>
+        </section>
+        <div class="desk-section-header">
+          <h3 class="desk-section-title">Top Categories</h3>
+        </div>
+        <div class="bottom-cards-grid" id="deskExploreGrid"></div>
+      </div>
+
+      <!-- ================= DESK TAB 5: LENDING DESK ================= -->
+      <div id="deskViewLending" class="desk-view-section" style="display:none;">
+        <section class="hero-banner-card">
+          <div class="hero-banner-content">
+            <div class="hero-calendar-badge">🤝</div>
+            <div class="hero-text-block">
+              <h2>Book Lending Tracker</h2>
+              <p>Keep track of books you lent to friends and borrowed books with due dates.</p>
+            </div>
+          </div>
+        </section>
+        <div class="desk-section-header">
+          <h3 class="desk-section-title">Lent Out Books</h3>
+        </div>
+        <div class="desk-table-container">
+          <table class="desk-table">
+            <thead>
+              <tr>
+                <th>#</th>
                 <th>Book</th>
-                <th>Current Holder</th>
-                <th>Queue Position</th>
-                <th>Expected Available</th>
+                <th>Borrower / Friend</th>
+                <th>Date Lent</th>
                 <th>Status</th>
                 <th style="text-align: right; padding-right: 28px;">Action</th>
               </tr>
             </thead>
-            <tbody id="deskWaitlistTableBody">
-              <!-- Rendered via JavaScript -->
+            <tbody id="deskLendingTableBody">
+              <tr>
+                <td colspan="6" style="text-align: center; padding: 36px; color: var(--text-muted);">
+                  No active lent books right now. All books are safe on your shelf!
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>
-      </section>
+      </div>
 
-      <!-- Bottom Section: Recently Fulfilled Reservations -->
-      <section class="desk-bottom-row">
-        <div class="desk-section-header">
-          <h3 class="desk-section-title">Recently Fulfilled Reservations</h3>
-          <a href="#" style="font-size: 0.82rem; font-weight: 700; color: var(--accent-gold); text-decoration: none;">View All &rarr;</a>
-        </div>
+      <!-- ================= DESK TAB 6: NOTES & HIGHLIGHTS ================= -->
+      <div id="deskViewNotes" class="desk-view-section" style="display:none;">
+        <section class="hero-banner-card">
+          <div class="hero-banner-content">
+            <div class="hero-calendar-badge">📝</div>
+            <div class="hero-text-block">
+              <h2>Notes, Highlights &amp; Reflections</h2>
+              <p>Capture deep insights, memorable quotes, and personal key takeaways.</p>
+            </div>
+          </div>
+        </section>
+        <div class="bottom-cards-grid" id="deskNotesGrid"></div>
+      </div>
 
-        <div class="bottom-cards-grid" id="deskFulfilledGrid">
-          <!-- Rendered via JavaScript -->
+      <!-- ================= DESK TAB 7: READING STATS ================= -->
+      <div id="deskViewStats" class="desk-view-section" style="display:none;">
+        <section class="hero-banner-card">
+          <div class="hero-banner-content">
+            <div class="hero-calendar-badge">📊</div>
+            <div class="hero-text-block">
+              <h2>Reading Analytics &amp; Streaks</h2>
+              <p>Detailed breakdown of your reading hours, finished titles, and annual consistency.</p>
+            </div>
+          </div>
+        </section>
+        <div class="desk-action-grid">
+          <div class="metric-pill-card">
+            <div class="metric-icon-circle gold">⏱️</div>
+            <div class="metric-meta-block">
+              <span class="metric-lbl">Total Time</span>
+              <span class="metric-val">18h 45m</span>
+              <span class="metric-sub">Focus deep work reading</span>
+            </div>
+          </div>
+          <div class="metric-pill-card">
+            <div class="metric-icon-circle blue">📖</div>
+            <div class="metric-meta-block">
+              <span class="metric-lbl">Books Finished</span>
+              <span class="metric-val">12 Books</span>
+              <span class="metric-sub">This calendar year</span>
+            </div>
+          </div>
+          <div class="metric-pill-card">
+            <div class="metric-icon-circle" style="background: rgba(16,185,129,0.15); color:#10b981;">💰</div>
+            <div class="metric-meta-block">
+              <span class="metric-lbl">Total Budget</span>
+              <span class="metric-val">₹4,250</span>
+              <span class="metric-sub">Investment in knowledge</span>
+            </div>
+          </div>
         </div>
-      </section>
+      </div>
+
+      <!-- ================= DESK TAB 8: PROFILE ================= -->
+      <div id="deskViewProfile" class="desk-view-section" style="display:none;">
+        <section class="hero-banner-card">
+          <div class="hero-banner-content">
+            <div class="profile-avatar-circle" style="width:58px; height:58px; font-size:1.6rem;">A</div>
+            <div class="hero-text-block">
+              <h2>Ankit</h2>
+              <p>Book Lover &bull; Dreamer &bull; Lifelong Learner &bull; Mind &amp; Focus Collector</p>
+            </div>
+          </div>
+        </section>
+        <div class="desk-action-grid">
+          <div class="metric-pill-card">
+            <div class="metric-icon-circle gold">🏆</div>
+            <div class="metric-meta-block">
+              <span class="metric-lbl">Achievements</span>
+              <span class="metric-val">8 Badges</span>
+              <span class="metric-sub">Earned on reading journey</span>
+            </div>
+          </div>
+          <div class="metric-pill-card">
+            <div class="metric-icon-circle blue">🎯</div>
+            <div class="metric-meta-block">
+              <span class="metric-lbl">Annual Target</span>
+              <span class="metric-val">25 Books</span>
+              <span class="metric-sub">48% achieved so far</span>
+            </div>
+          </div>
+          <div class="metric-pill-card">
+            <div class="metric-icon-circle" style="background:rgba(236,72,153,0.15); color:#ec4899;">🎨</div>
+            <div class="metric-meta-block">
+              <span class="metric-lbl">Current Theme</span>
+              <span class="metric-val">Dark Luxury</span>
+              <span class="metric-sub">Desktop Workspace Mode</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= DESK TAB 9: SETTINGS ================= -->
+      <div id="deskViewSettings" class="desk-view-section" style="display:none;">
+        <section class="hero-banner-card">
+          <div class="hero-banner-content">
+            <div class="hero-calendar-badge">⚙️</div>
+            <div class="hero-text-block">
+              <h2>Workspace Preferences &amp; Settings</h2>
+              <p>Configure dashboard view, backup your library data, and manage appearance.</p>
+            </div>
+          </div>
+        </section>
+        <div class="bottom-cards-grid">
+          <div class="fulfilled-card" style="cursor:default;">
+            <div class="metric-icon-circle gold" style="width:40px; height:40px; font-size:1.1rem;">💾</div>
+            <div class="fulfilled-info">
+              <div class="fulfilled-title">Local Browser Storage</div>
+              <div class="fulfilled-author">All books and reservations are saved on this laptop</div>
+            </div>
+            <div class="fulfilled-pill">Active</div>
+          </div>
+          <div class="fulfilled-card" style="cursor:default;">
+            <div class="metric-icon-circle blue" style="width:40px; height:40px; font-size:1.1rem;">💻</div>
+            <div class="fulfilled-info">
+              <div class="fulfilled-title">Laptop High-Resolution Mode</div>
+              <div class="fulfilled-author">Optimized for wide screen display</div>
+            </div>
+            <div class="fulfilled-pill">Enabled</div>
+          </div>
+        </div>
+      </div>
 
     </main>
   </div>
@@ -1455,6 +1705,146 @@
 
     function saveReservations() {
       localStorage.setItem(RESERVATIONS_STORAGE_KEY, JSON.stringify(deskReservations));
+    }
+
+    // ================= DESKTOP TABS SWITCHER (KEEPS USER ON DESKTOP DASHBOARD) =================
+    function switchDeskTab(tabName) {
+      // 1. Update Sidebar Active State
+      document.querySelectorAll('.desk-sidebar .nav-item').forEach(btn => {
+        const t = btn.getAttribute('data-tab');
+        btn.classList.toggle('active', t === tabName);
+      });
+
+      // 2. Hide all view sections, show target section
+      document.querySelectorAll('.desk-view-section').forEach(sec => {
+        sec.style.display = 'none';
+        sec.classList.remove('active');
+      });
+
+      const tabMap = {
+        'reservation': 'deskViewReservation',
+        'home': 'deskViewHome',
+        'library': 'deskViewLibrary',
+        'explore': 'deskViewExplore',
+        'lending': 'deskViewLending',
+        'notes': 'deskViewNotes',
+        'stats': 'deskViewStats',
+        'profile': 'deskViewProfile',
+        'settings': 'deskViewSettings'
+      };
+
+      const targetId = tabMap[tabName] || 'deskViewReservation';
+      const targetSec = document.getElementById(targetId);
+      if (targetSec) {
+        targetSec.style.display = 'block';
+        targetSec.classList.add('active');
+      }
+
+      // Render tab-specific desktop data
+      if (tabName === 'library') renderDeskLibrary();
+      if (tabName === 'explore') renderDeskExplore();
+      if (tabName === 'home') renderDeskHome();
+      if (tabName === 'notes') renderDeskNotes();
+    }
+
+    function renderDeskLibrary() {
+      const tbody = document.getElementById('deskLibraryTableBody');
+      const badge = document.getElementById('deskLibraryTotalBadge');
+      if (!tbody) return;
+
+      const books = (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) ? DEFAULT_BOOKS : [];
+      if (badge) badge.innerText = books.length;
+
+      tbody.innerHTML = books.slice(0, 40).map((b, idx) => `
+        <tr>
+          <td class="table-index-col">${idx + 1}</td>
+          <td>
+            <div class="table-book-cell">
+              <img src="${b.cover_image || b.cover_url || 'cover_placeholder.jpg'}" class="table-book-cover" onerror="this.src='cover_placeholder.jpg'">
+              <div class="table-book-meta">
+                <span class="table-book-title">${escapeHtml(b.title)}</span>
+                <span class="table-book-author">${escapeHtml(b.author || 'Unknown')}</span>
+              </div>
+            </div>
+          </td>
+          <td>
+            <span class="queue-pill">${escapeHtml(b.category || 'General')}</span>
+          </td>
+          <td>
+            <span class="status-badge ${b.status === 'READING' ? 'waiting' : 'available'}">
+              ${b.status === 'READING' ? '📖 Reading' : '✓ Completed'}
+            </span>
+          </td>
+          <td style="color:var(--text-secondary); font-size:0.82rem;">${escapeHtml(b.language || 'HINDI')}</td>
+          <td style="text-align:right;">
+            <button type="button" class="btn-action-remind" onclick="alert('Viewing: ${escapeHtml(b.title)}')">Read Preview</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function renderDeskExplore() {
+      const container = document.getElementById('deskExploreGrid');
+      if (!container) return;
+      const cats = [
+        { name: 'Self-Help & Habits', count: '48 Books', icon: '⚡' },
+        { name: 'Wealth & Money Psychology', count: '36 Books', icon: '💰' },
+        { name: 'Focus & Productivity', count: '29 Books', icon: '🎯' },
+        { name: 'Philosophy & Wisdom', count: '42 Books', icon: '🏛️' },
+        { name: 'Hindi Classic Literature', count: '65 Books', icon: '📜' },
+        { name: 'Biographies & Titans', count: '34 Books', icon: '👑' }
+      ];
+      container.innerHTML = cats.map(c => `
+        <div class="fulfilled-card" onclick="switchDeskTab('library')">
+          <div class="metric-icon-circle gold" style="width:44px; height:44px; font-size:1.3rem;">${c.icon}</div>
+          <div class="fulfilled-info">
+            <div class="fulfilled-title">${c.name}</div>
+            <div class="fulfilled-author">${c.count}</div>
+          </div>
+          <div class="fulfilled-pill">Explore &rarr;</div>
+        </div>
+      `).join('');
+    }
+
+    function renderDeskHome() {
+      const container = document.getElementById('deskHomeFeaturedGrid');
+      if (!container) return;
+      const featured = [
+        { title: 'Hyperfocus', author: 'Chris Bailey', cover: 'hyperfocus_cover.jpg', tag: 'Currently Reading' },
+        { title: 'Atomic Habits', author: 'James Clear', cover: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=200&q=80', tag: 'Masterpiece' },
+        { title: 'The Psychology of Money', author: 'Morgan Housel', cover: 'https://images.unsplash.com/photo-1592496431122-2349e0fbc666?w=200&q=80', tag: 'Bestseller' }
+      ];
+      container.innerHTML = featured.map(f => `
+        <div class="fulfilled-card" onclick="switchDeskTab('library')">
+          <img src="${f.cover}" class="fulfilled-thumb" onerror="this.src='cover_placeholder.jpg'">
+          <div class="fulfilled-info">
+            <div class="fulfilled-title">${f.title}</div>
+            <div class="fulfilled-author">${f.author}</div>
+            <div class="fulfilled-date">${f.tag}</div>
+          </div>
+          <div class="fulfilled-pill">Open</div>
+        </div>
+      `).join('');
+    }
+
+    function renderDeskNotes() {
+      const container = document.getElementById('deskNotesGrid');
+      if (!container) return;
+      const notes = [
+        { title: 'Deep Work Takeaway', book: 'Deep Work by Cal Newport', date: 'Oct 08, 2026', text: 'High-Quality Work Produced = (Time Spent) x (Intensity of Focus)' },
+        { title: 'Habit Loop Insight', book: 'Atomic Habits by James Clear', date: 'Oct 02, 2026', text: 'You do not rise to the level of your goals. You fall to the level of your systems.' },
+        { title: 'Focus Productivity', book: 'Hyperfocus by Chris Bailey', date: 'Sep 24, 2026', text: 'Scatterfocus unlocks creative connections by letting the mind wander purposefully.' }
+      ];
+      container.innerHTML = notes.map(n => `
+        <div class="fulfilled-card" style="flex-direction:column; align-items:flex-start; gap:8px;">
+          <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
+            <div class="fulfilled-title">${n.title}</div>
+            <span style="font-size:0.72rem; color:var(--text-muted);">${n.date}</span>
+          </div>
+          <div style="font-size:0.78rem; color:var(--accent-gold); font-weight:600;">${n.book}</div>
+          <div style="font-size:0.84rem; color:var(--text-secondary); line-height:1.4;">"${n.text}"</div>
+        </div>
+      `).join('');
     }
 
     function escapeHtml(str) {
