@@ -230,9 +230,10 @@
         </div>
         <!-- 1-Tap Instagram-Style Layout Switcher -->
         <div class="layout-switcher-pill" id="libraryLayoutSwitcher" title="Change Layout Size">
-          <button type="button" class="layout-opt-btn" id="btnLayoutGrid2" onclick="setLibraryLayout('grid2')" title="Bada Cover Grid (2 Columns)">🔲 2</button>
-          <button type="button" class="layout-opt-btn active" id="btnLayoutGrid3" onclick="setLibraryLayout('grid3')" title="Standard Grid (3 Columns)">⏹️ 3</button>
-          <button type="button" class="layout-opt-btn" id="btnLayoutList" onclick="setLibraryLayout('compactList')" title="Compact List (1 Row)">📑 List</button>
+          <button type="button" class="layout-opt-btn" onclick="stepLibraryColumns(-1)" title="Bigger Cards (Fewer Columns)">➖</button>
+          <button type="button" class="layout-opt-btn active" id="btnLayoutColsLabel" onclick="toggleLibraryCardSizeStrip()" title="Set 1 to 10 Columns">3 Col</button>
+          <button type="button" class="layout-opt-btn" onclick="stepLibraryColumns(1)" title="Smaller Cards (More Columns up to 10)">➕</button>
+          <button type="button" class="layout-opt-btn" id="btnLayoutList" onclick="setLibraryLayout('compactList')" title="Compact List (1 Row)">📑</button>
         </div>
         <button type="button" class="filter-toggle-btn" onclick="openIsbnBarcodeScannerModal()" title="Scan Book ISBN Barcode" style="border-color: var(--accent-gold); color: var(--accent-gold);">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
@@ -246,6 +247,26 @@
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
         </button>
+      </div>
+
+      <!-- Card Size Controller Strip (1 to 10 Columns) -->
+      <div class="card-size-slider-strip" id="libraryCardSizeStrip">
+        <div class="card-size-slider-left">
+          <span style="font-size: 0.95rem;">📐</span>
+          <span style="font-size: 0.8rem; font-weight: 700; color: #fff; white-space: nowrap;" id="libColsDisplayLabel">3 Cards / Row</span>
+        </div>
+        <div class="card-size-pill-row" id="libColsPillRow">
+          <button type="button" class="card-size-num-btn" data-col="1" onclick="setLibraryColumns(1)">1</button>
+          <button type="button" class="card-size-num-btn" data-col="2" onclick="setLibraryColumns(2)">2</button>
+          <button type="button" class="card-size-num-btn active" data-col="3" onclick="setLibraryColumns(3)">3</button>
+          <button type="button" class="card-size-num-btn" data-col="4" onclick="setLibraryColumns(4)">4</button>
+          <button type="button" class="card-size-num-btn" data-col="5" onclick="setLibraryColumns(5)">5</button>
+          <button type="button" class="card-size-num-btn" data-col="6" onclick="setLibraryColumns(6)">6</button>
+          <button type="button" class="card-size-num-btn" data-col="7" onclick="setLibraryColumns(7)">7</button>
+          <button type="button" class="card-size-num-btn" data-col="8" onclick="setLibraryColumns(8)">8</button>
+          <button type="button" class="card-size-num-btn" data-col="9" onclick="setLibraryColumns(9)">9</button>
+          <button type="button" class="card-size-num-btn" data-col="10" onclick="setLibraryColumns(10)">10</button>
+        </div>
       </div>
 
       <!-- Status Filter Tabs -->
@@ -2130,44 +2151,42 @@
 
       <div style="padding: 14px 16px 60px;">
         <div style="display: flex; flex-direction: column; gap: 14px;">
-          <!-- Option 1: Bada Grid (2 Columns) -->
-          <div class="ig-card" id="layoutChoiceGrid2" style="cursor: pointer; padding: 16px; border: 1.5px solid var(--border-card); transition: all 0.2s;" onclick="setLibraryLayout('grid2')">
+          <!-- Card Size Studio Card (1 to 10 Scale) -->
+          <div class="ig-card" style="padding: 16px; border: 1.5px solid var(--accent-gold); background: rgba(245, 158, 11, 0.05);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
               <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.5rem;">🔲</span>
-                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Bada Grid (2 Columns)</span>
+                <span style="font-size: 1.5rem;">📐</span>
+                <span style="font-size: 1rem; font-weight: 800; color: #fff;">Cards Per Row (1 to 10 Size)</span>
               </div>
-              <span id="radioIndicatorGrid2" style="font-size: 1.2rem; color: var(--text-muted);">⚪</span>
+              <span id="settingsColsBadge" style="font-size: 0.85rem; font-weight: 800; color: #000; background: var(--accent-gold); padding: 4px 10px; border-radius: 8px;">3 Columns</span>
             </div>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 10px 0; line-height: 1.4;">
-              Badi-badi photuyein aur covers dikhein. Books ke title aur author saaf aur bade font me aate hain.
+            <p id="settingsColsDescription" style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 14px 0; line-height: 1.4;">
+              Aap apni marzi se 1 se lekar 10 tak kitne bhi cards/columns ek row me rakh sakte hain.
             </p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; opacity: 0.6;">
-              <div style="background: rgba(255,255,255,0.06); height: 75px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.2);"></div>
-              <div style="background: rgba(255,255,255,0.06); height: 75px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.2);"></div>
+
+            <!-- Slider + Stepper -->
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+              <button type="button" class="btn-sec-reorder" style="width: 34px; height: 34px; font-size: 1rem;" onclick="stepLibraryColumns(-1)">➖</button>
+              <input type="range" id="settingsColsRange" min="1" max="10" value="3" style="flex: 1; accent-color: var(--accent-gold); cursor: pointer;" oninput="setLibraryColumns(this.value)">
+              <button type="button" class="btn-sec-reorder" style="width: 34px; height: 34px; font-size: 1rem;" onclick="stepLibraryColumns(1)">➕</button>
+            </div>
+
+            <!-- 10 Number Buttons Row -->
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;" id="settingsColsButtonsGrid">
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="1" onclick="setLibraryColumns(1)">1 (Giant)</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="2" onclick="setLibraryColumns(2)">2 (Bada)</button>
+              <button type="button" class="card-size-num-btn active" style="width: 100%; height: 32px;" data-set-col="3" onclick="setLibraryColumns(3)">3 (Normal)</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="4" onclick="setLibraryColumns(4)">4 (Grid)</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="5" onclick="setLibraryColumns(5)">5 (Mini)</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="6" onclick="setLibraryColumns(6)">6 Tiles</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="7" onclick="setLibraryColumns(7)">7 Tiles</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="8" onclick="setLibraryColumns(8)">8 Tiles</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="9" onclick="setLibraryColumns(9)">9 Tiles</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="10" onclick="setLibraryColumns(10)">10 (Micro)</button>
             </div>
           </div>
 
-          <!-- Option 2: Standard Grid (3 Columns) -->
-          <div class="ig-card" id="layoutChoiceGrid3" style="cursor: pointer; padding: 16px; border: 1.5px solid var(--border-card); transition: all 0.2s;" onclick="setLibraryLayout('grid3')">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.5rem;">⏹️</span>
-                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Standard Grid (3 Columns)</span>
-              </div>
-              <span id="radioIndicatorGrid3" style="font-size: 1.2rem; color: var(--accent-gold);">🟢</span>
-            </div>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 10px 0; line-height: 1.4;">
-              Classic library layout. Ek row me 3 kitabein balanced size me dikhti hain (Default view).
-            </p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; opacity: 0.6;">
-              <div style="background: rgba(255,255,255,0.06); height: 60px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
-              <div style="background: rgba(255,255,255,0.06); height: 60px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
-              <div style="background: rgba(255,255,255,0.06); height: 60px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
-            </div>
-          </div>
-
-          <!-- Option 3: Compact Horizontal List -->
+          <!-- Option: Compact Horizontal List -->
           <div class="ig-card" id="layoutChoiceCompactList" style="cursor: pointer; padding: 16px; border: 1.5px solid var(--border-card); transition: all 0.2s;" onclick="setLibraryLayout('compactList')">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
               <div style="display: flex; align-items: center; gap: 10px;">

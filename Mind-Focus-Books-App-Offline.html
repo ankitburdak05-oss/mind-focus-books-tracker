@@ -5817,39 +5817,164 @@ input:checked + .slider-round:before {
 }
 
 /* ==========================================================================
-   FEATURE 4: LIBRARY SCREEN LAYOUT & SIZE (GRID-2, GRID-3, COMPACT-LIST)
+   FEATURE 4: DYNAMIC 1 TO 10 CARD SIZES & COLUMNS (v0.0.4)
    ========================================================================== */
 
-/* 2-Column Bada Grid (Big Covers) */
-.library-books-grid.layout-grid2 {
+/* Dynamic Grid Column Definitions (1 to 10) */
+.library-books-grid {
   display: grid;
+  grid-template-columns: repeat(var(--lib-cols, 3), 1fr);
+  gap: var(--lib-gap, 10px);
+}
+
+.library-books-grid.cols-1 {
+  grid-template-columns: 1fr !important;
+  gap: 16px !important;
+}
+.library-books-grid.cols-1 .grid-book-card {
+  border-radius: 18px;
+}
+.library-books-grid.cols-1 .grid-cover-wrap {
+  aspect-ratio: 1 / 1.35;
+}
+.library-books-grid.cols-1 .grid-book-title {
+  font-size: 16px;
+  font-weight: 800;
+}
+.library-books-grid.cols-1 .grid-book-author {
+  font-size: 13px;
+}
+
+.library-books-grid.cols-2,
+.library-books-grid.layout-grid2 {
   grid-template-columns: repeat(2, 1fr) !important;
   gap: 14px !important;
 }
-
+.library-books-grid.cols-2 .grid-book-card,
 .library-books-grid.layout-grid2 .grid-book-card {
   border-radius: 16px;
 }
-
+.library-books-grid.cols-2 .grid-cover-wrap,
 .library-books-grid.layout-grid2 .grid-cover-wrap {
   aspect-ratio: 1 / 1.42;
 }
-
+.library-books-grid.cols-2 .grid-book-title,
 .library-books-grid.layout-grid2 .grid-book-title {
   font-size: 13.5px;
   font-weight: 700;
-  margin-bottom: 3px;
 }
-
+.library-books-grid.cols-2 .grid-book-author,
 .library-books-grid.layout-grid2 .grid-book-author {
   font-size: 11.5px;
 }
 
-/* 3-Column Standard Grid (Default) */
+.library-books-grid.cols-3,
 .library-books-grid.layout-grid3 {
-  display: grid;
   grid-template-columns: repeat(3, 1fr) !important;
   gap: 10px !important;
+}
+
+.library-books-grid.cols-4 {
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 8px !important;
+}
+.library-books-grid.cols-4 .grid-book-meta {
+  padding: 4px 6px 6px;
+}
+.library-books-grid.cols-4 .grid-book-title {
+  font-size: 9.5px;
+}
+.library-books-grid.cols-4 .grid-book-author {
+  font-size: 8.5px;
+}
+
+.library-books-grid.cols-5 {
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: 6px !important;
+}
+.library-books-grid.cols-5 .grid-book-meta {
+  padding: 3px 4px 5px;
+}
+.library-books-grid.cols-5 .grid-book-title {
+  font-size: 8.5px;
+}
+.library-books-grid.cols-5 .grid-book-author {
+  font-size: 7.5px;
+}
+
+.library-books-grid.cols-6 {
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: 5px !important;
+}
+.library-books-grid.cols-6 .grid-book-meta {
+  padding: 2px 3px 4px;
+}
+.library-books-grid.cols-6 .grid-book-title {
+  font-size: 7.5px;
+}
+.library-books-grid.cols-6 .grid-book-author,
+.library-books-grid.cols-6 .grid-progress-wrap {
+  display: none;
+}
+
+.library-books-grid.cols-7 {
+  grid-template-columns: repeat(7, 1fr) !important;
+  gap: 4px !important;
+}
+.library-books-grid.cols-7 .grid-book-meta {
+  padding: 2px;
+}
+.library-books-grid.cols-7 .grid-book-title {
+  font-size: 7px;
+}
+.library-books-grid.cols-7 .grid-book-author,
+.library-books-grid.cols-7 .grid-progress-wrap {
+  display: none;
+}
+
+.library-books-grid.cols-8 {
+  grid-template-columns: repeat(8, 1fr) !important;
+  gap: 4px !important;
+}
+.library-books-grid.cols-8 .grid-book-meta {
+  padding: 2px;
+}
+.library-books-grid.cols-8 .grid-book-title {
+  font-size: 6.5px;
+}
+.library-books-grid.cols-8 .grid-book-author,
+.library-books-grid.cols-8 .grid-progress-wrap {
+  display: none;
+}
+
+.library-books-grid.cols-9 {
+  grid-template-columns: repeat(9, 1fr) !important;
+  gap: 3px !important;
+}
+.library-books-grid.cols-9 .grid-book-meta {
+  padding: 1px;
+}
+.library-books-grid.cols-9 .grid-book-title {
+  font-size: 6px;
+}
+.library-books-grid.cols-9 .grid-book-author,
+.library-books-grid.cols-9 .grid-progress-wrap {
+  display: none;
+}
+
+.library-books-grid.cols-10 {
+  grid-template-columns: repeat(10, 1fr) !important;
+  gap: 3px !important;
+}
+.library-books-grid.cols-10 .grid-book-meta {
+  padding: 1px;
+}
+.library-books-grid.cols-10 .grid-book-title {
+  font-size: 5.8px;
+}
+.library-books-grid.cols-10 .grid-book-author,
+.library-books-grid.cols-10 .grid-progress-wrap {
+  display: none;
 }
 
 /* 1-Row Compact Horizontal List */
@@ -5857,6 +5982,61 @@ input:checked + .slider-round:before {
   display: flex !important;
   flex-direction: column !important;
   gap: 8px !important;
+}
+
+/* Quick Card Size Slider Strip in Library */
+.card-size-slider-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+}
+
+.card-size-slider-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-size-pill-row {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 2px 0;
+}
+
+.card-size-pill-row::-webkit-scrollbar {
+  display: none;
+}
+
+.card-size-num-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 700;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.card-size-num-btn.active {
+  background: var(--accent-gold);
+  color: #000;
+  border-color: var(--accent-gold);
+  box-shadow: 0 2px 6px rgba(245, 158, 11, 0.4);
 }
 
 .compact-book-row {
@@ -6706,9 +6886,10 @@ if (typeof window !== 'undefined') {
         </div>
         <!-- 1-Tap Instagram-Style Layout Switcher -->
         <div class="layout-switcher-pill" id="libraryLayoutSwitcher" title="Change Layout Size">
-          <button type="button" class="layout-opt-btn" id="btnLayoutGrid2" onclick="setLibraryLayout('grid2')" title="Bada Cover Grid (2 Columns)">🔲 2</button>
-          <button type="button" class="layout-opt-btn active" id="btnLayoutGrid3" onclick="setLibraryLayout('grid3')" title="Standard Grid (3 Columns)">⏹️ 3</button>
-          <button type="button" class="layout-opt-btn" id="btnLayoutList" onclick="setLibraryLayout('compactList')" title="Compact List (1 Row)">📑 List</button>
+          <button type="button" class="layout-opt-btn" onclick="stepLibraryColumns(-1)" title="Bigger Cards (Fewer Columns)">➖</button>
+          <button type="button" class="layout-opt-btn active" id="btnLayoutColsLabel" onclick="toggleLibraryCardSizeStrip()" title="Set 1 to 10 Columns">3 Col</button>
+          <button type="button" class="layout-opt-btn" onclick="stepLibraryColumns(1)" title="Smaller Cards (More Columns up to 10)">➕</button>
+          <button type="button" class="layout-opt-btn" id="btnLayoutList" onclick="setLibraryLayout('compactList')" title="Compact List (1 Row)">📑</button>
         </div>
         <button type="button" class="filter-toggle-btn" onclick="openIsbnBarcodeScannerModal()" title="Scan Book ISBN Barcode" style="border-color: var(--accent-gold); color: var(--accent-gold);">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
@@ -6722,6 +6903,26 @@ if (typeof window !== 'undefined') {
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
         </button>
+      </div>
+
+      <!-- Card Size Controller Strip (1 to 10 Columns) -->
+      <div class="card-size-slider-strip" id="libraryCardSizeStrip">
+        <div class="card-size-slider-left">
+          <span style="font-size: 0.95rem;">📐</span>
+          <span style="font-size: 0.8rem; font-weight: 700; color: #fff; white-space: nowrap;" id="libColsDisplayLabel">3 Cards / Row</span>
+        </div>
+        <div class="card-size-pill-row" id="libColsPillRow">
+          <button type="button" class="card-size-num-btn" data-col="1" onclick="setLibraryColumns(1)">1</button>
+          <button type="button" class="card-size-num-btn" data-col="2" onclick="setLibraryColumns(2)">2</button>
+          <button type="button" class="card-size-num-btn active" data-col="3" onclick="setLibraryColumns(3)">3</button>
+          <button type="button" class="card-size-num-btn" data-col="4" onclick="setLibraryColumns(4)">4</button>
+          <button type="button" class="card-size-num-btn" data-col="5" onclick="setLibraryColumns(5)">5</button>
+          <button type="button" class="card-size-num-btn" data-col="6" onclick="setLibraryColumns(6)">6</button>
+          <button type="button" class="card-size-num-btn" data-col="7" onclick="setLibraryColumns(7)">7</button>
+          <button type="button" class="card-size-num-btn" data-col="8" onclick="setLibraryColumns(8)">8</button>
+          <button type="button" class="card-size-num-btn" data-col="9" onclick="setLibraryColumns(9)">9</button>
+          <button type="button" class="card-size-num-btn" data-col="10" onclick="setLibraryColumns(10)">10</button>
+        </div>
       </div>
 
       <!-- Status Filter Tabs -->
@@ -8606,44 +8807,42 @@ if (typeof window !== 'undefined') {
 
       <div style="padding: 14px 16px 60px;">
         <div style="display: flex; flex-direction: column; gap: 14px;">
-          <!-- Option 1: Bada Grid (2 Columns) -->
-          <div class="ig-card" id="layoutChoiceGrid2" style="cursor: pointer; padding: 16px; border: 1.5px solid var(--border-card); transition: all 0.2s;" onclick="setLibraryLayout('grid2')">
+          <!-- Card Size Studio Card (1 to 10 Scale) -->
+          <div class="ig-card" style="padding: 16px; border: 1.5px solid var(--accent-gold); background: rgba(245, 158, 11, 0.05);">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
               <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.5rem;">🔲</span>
-                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Bada Grid (2 Columns)</span>
+                <span style="font-size: 1.5rem;">📐</span>
+                <span style="font-size: 1rem; font-weight: 800; color: #fff;">Cards Per Row (1 to 10 Size)</span>
               </div>
-              <span id="radioIndicatorGrid2" style="font-size: 1.2rem; color: var(--text-muted);">⚪</span>
+              <span id="settingsColsBadge" style="font-size: 0.85rem; font-weight: 800; color: #000; background: var(--accent-gold); padding: 4px 10px; border-radius: 8px;">3 Columns</span>
             </div>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 10px 0; line-height: 1.4;">
-              Badi-badi photuyein aur covers dikhein. Books ke title aur author saaf aur bade font me aate hain.
+            <p id="settingsColsDescription" style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 14px 0; line-height: 1.4;">
+              Aap apni marzi se 1 se lekar 10 tak kitne bhi cards/columns ek row me rakh sakte hain.
             </p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; opacity: 0.6;">
-              <div style="background: rgba(255,255,255,0.06); height: 75px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.2);"></div>
-              <div style="background: rgba(255,255,255,0.06); height: 75px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.2);"></div>
+
+            <!-- Slider + Stepper -->
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+              <button type="button" class="btn-sec-reorder" style="width: 34px; height: 34px; font-size: 1rem;" onclick="stepLibraryColumns(-1)">➖</button>
+              <input type="range" id="settingsColsRange" min="1" max="10" value="3" style="flex: 1; accent-color: var(--accent-gold); cursor: pointer;" oninput="setLibraryColumns(this.value)">
+              <button type="button" class="btn-sec-reorder" style="width: 34px; height: 34px; font-size: 1rem;" onclick="stepLibraryColumns(1)">➕</button>
+            </div>
+
+            <!-- 10 Number Buttons Row -->
+            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;" id="settingsColsButtonsGrid">
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="1" onclick="setLibraryColumns(1)">1 (Giant)</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="2" onclick="setLibraryColumns(2)">2 (Bada)</button>
+              <button type="button" class="card-size-num-btn active" style="width: 100%; height: 32px;" data-set-col="3" onclick="setLibraryColumns(3)">3 (Normal)</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="4" onclick="setLibraryColumns(4)">4 (Grid)</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="5" onclick="setLibraryColumns(5)">5 (Mini)</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="6" onclick="setLibraryColumns(6)">6 Tiles</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="7" onclick="setLibraryColumns(7)">7 Tiles</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="8" onclick="setLibraryColumns(8)">8 Tiles</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="9" onclick="setLibraryColumns(9)">9 Tiles</button>
+              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="10" onclick="setLibraryColumns(10)">10 (Micro)</button>
             </div>
           </div>
 
-          <!-- Option 2: Standard Grid (3 Columns) -->
-          <div class="ig-card" id="layoutChoiceGrid3" style="cursor: pointer; padding: 16px; border: 1.5px solid var(--border-card); transition: all 0.2s;" onclick="setLibraryLayout('grid3')">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.5rem;">⏹️</span>
-                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Standard Grid (3 Columns)</span>
-              </div>
-              <span id="radioIndicatorGrid3" style="font-size: 1.2rem; color: var(--accent-gold);">🟢</span>
-            </div>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 10px 0; line-height: 1.4;">
-              Classic library layout. Ek row me 3 kitabein balanced size me dikhti hain (Default view).
-            </p>
-            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; opacity: 0.6;">
-              <div style="background: rgba(255,255,255,0.06); height: 60px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
-              <div style="background: rgba(255,255,255,0.06); height: 60px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
-              <div style="background: rgba(255,255,255,0.06); height: 60px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
-            </div>
-          </div>
-
-          <!-- Option 3: Compact Horizontal List -->
+          <!-- Option: Compact Horizontal List -->
           <div class="ig-card" id="layoutChoiceCompactList" style="cursor: pointer; padding: 16px; border: 1.5px solid var(--border-card); transition: all 0.2s;" onclick="setLibraryLayout('compactList')">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
               <div style="display: flex; align-items: center; gap: 10px;">
@@ -15069,11 +15268,11 @@ const DEFAULT_BOOKS = [
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.3)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.4)
 // ==========================================================================
 
-const APP_VERSION = '0.0.3';
-const CURRENT_APP_VERSION = 'v0.0.3';
+const APP_VERSION = '0.0.4';
+const CURRENT_APP_VERSION = 'v0.0.4';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -15082,6 +15281,7 @@ const HOME_SECS_KEY = 'mf_home_sections_config';
 const BOOK_ORDER_KEY = 'mf_custom_book_order';
 const LAYOUT_KEY = 'mf_library_layout_mode';
 const SHELVES_KEY = 'mf_custom_shelves';
+const COLS_KEY = 'mf_library_cols';
 
 // Global Application State
 let state = {
@@ -15117,9 +15317,10 @@ let state = {
     totalMinutesRead: 0,
     lastReadDate: ''
   },
-  // Adjustments & Instagram Settings State (v0.0.3)
+  // Adjustments & Instagram Settings State (v0.0.4)
   homeSections: [],
   customBookOrder: [],
+  libraryColumns: parseInt(localStorage.getItem('mf_library_cols'), 10) || 3,
   libraryLayout: localStorage.getItem(LAYOUT_KEY) || 'grid3',
   customShelves: [],
   activeShelfFilter: null,
@@ -15657,17 +15858,20 @@ function renderLibraryGrid() {
   const grid = document.getElementById('libraryBooksGrid');
   if (!grid) return;
   
-  // Apply current layout mode
-  const currentLayout = state.libraryLayout || 'grid3';
-  grid.className = 'library-books-grid layout-' + currentLayout;
+  // Apply current layout mode & columns (1 to 10)
+  const cols = state.libraryColumns || 3;
+  const isCompactList = state.libraryLayout === 'compactList';
   
-  // Update Layout Switcher buttons
-  const bGrid2 = document.getElementById('btnLayoutGrid2');
-  const bGrid3 = document.getElementById('btnLayoutGrid3');
-  const bList = document.getElementById('btnLayoutList');
-  if (bGrid2) bGrid2.classList.toggle('active', currentLayout === 'grid2');
-  if (bGrid3) bGrid3.classList.toggle('active', currentLayout === 'grid3');
-  if (bList) bList.classList.toggle('active', currentLayout === 'compactList');
+  if (isCompactList) {
+    grid.className = 'library-books-grid layout-compact-list';
+  } else {
+    grid.className = `library-books-grid cols-${cols}`;
+    grid.style.setProperty('--lib-cols', cols);
+  }
+  
+  if (typeof updateLibraryColumnsUI === 'function') {
+    updateLibraryColumnsUI();
+  }
 
   // Update shelf chip counter/label
   const shelfChip = document.getElementById('chipShelfFilter');
@@ -15759,7 +15963,7 @@ function renderLibraryGrid() {
     const pct = Math.min(100, Math.round((current / total) * 100));
     
     // Compact Horizontal List Mode (1 Row per Book)
-    if (currentLayout === 'compactList') {
+    if (isCompactList) {
       return `
         <div class="compact-book-row" onclick="openBookDetailViewByIndex(${originalIndex})">
           <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
@@ -15778,7 +15982,7 @@ function renderLibraryGrid() {
       `;
     }
 
-    // Grid Mode (2-Columns Bada Grid or 3-Columns Standard)
+    // Grid Mode (1 to 10 Columns)
     return `
       <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
         <div class="grid-cover-wrap">
@@ -15786,13 +15990,14 @@ function renderLibraryGrid() {
         </div>
         <div class="grid-book-meta">
           <div class="grid-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
-          <div class="grid-book-author">${escapeHtml(book.author || 'Unknown')}</div>
+          ${cols <= 5 ? `<div class="grid-book-author">${escapeHtml(book.author || 'Unknown')}</div>` : ''}
+          ${cols <= 5 ? `
           <div class="grid-progress-wrap">
             <div class="grid-progress-bar">
               <div class="grid-progress-fill" style="width: ${pct}%"></div>
             </div>
             <span class="grid-progress-text">${pct}%</span>
-          </div>
+          </div>` : ''}
         </div>
       </div>
     `;
@@ -20882,8 +21087,9 @@ function loadAdjustmentConfigs() {
       state.customBookOrder = (state.books || []).map(b => b.title);
     }
 
-    // 3. Library Layout Mode
-    state.libraryLayout = localStorage.getItem(LAYOUT_KEY) || 'grid3';
+    // 3. Library Layout & Columns (1 to 10)
+    state.libraryColumns = parseInt(localStorage.getItem(COLS_KEY), 10) || 3;
+    state.libraryLayout = localStorage.getItem(LAYOUT_KEY) || ('grid' + state.libraryColumns);
 
     // 4. Custom Shelves
     const savedShelves = localStorage.getItem(SHELVES_KEY);
@@ -20911,9 +21117,8 @@ function renderAppSettingsHub() {
   // Update badge for layout
   const layoutBadge = document.getElementById('igLayoutBadge');
   if (layoutBadge) {
-    if (state.libraryLayout === 'grid2') layoutBadge.innerText = '2 Columns';
-    else if (state.libraryLayout === 'compactList') layoutBadge.innerText = 'Compact List';
-    else layoutBadge.innerText = '3 Columns';
+    if (state.libraryLayout === 'compactList') layoutBadge.innerText = 'Compact List';
+    else layoutBadge.innerText = `${state.libraryColumns || 3} Columns`;
   }
 
   // Update badge for shelves
@@ -21177,43 +21382,119 @@ function resetCustomBookOrder() {
 }
 
 // --------------------------------------------------------------------------
-// FEATURE 4: LIBRARY LAYOUT & CARD SIZE (GRID-2, GRID-3, COMPACT-LIST)
+// FEATURE 4: DYNAMIC 1 TO 10 CARD SIZES & COLUMNS
 // --------------------------------------------------------------------------
-function setLibraryLayout(layoutName) {
-  if (!['grid2', 'grid3', 'compactList'].includes(layoutName)) return;
+function setLibraryColumns(colsVal) {
+  const cols = Math.max(1, Math.min(10, parseInt(colsVal, 10) || 3));
+  state.libraryColumns = cols;
+  state.libraryLayout = 'grid' + cols;
+  localStorage.setItem(COLS_KEY, cols);
+  localStorage.setItem(LAYOUT_KEY, 'grid' + cols);
 
-  state.libraryLayout = layoutName;
-  localStorage.setItem(LAYOUT_KEY, layoutName);
-
-  renderLibraryLayoutAdjustView();
+  updateLibraryColumnsUI();
   renderLibraryGrid();
 
-  const labels = {
-    grid2: 'Bada Grid (2 Columns)',
-    grid3: 'Standard Grid (3 Columns)',
-    compactList: 'Compact List (1 Row)'
-  };
-  showToast(`Layout changed to ${labels[layoutName]}`);
+  showToast(`Card Size: ${cols} Cards per Row`);
+}
+
+function stepLibraryColumns(delta) {
+  const cur = state.libraryColumns || 3;
+  setLibraryColumns(cur + delta);
+}
+
+function toggleLibraryCardSizeStrip() {
+  const strip = document.getElementById('libraryCardSizeStrip');
+  if (strip) {
+    const isHidden = window.getComputedStyle(strip).display === 'none';
+    strip.style.display = isHidden ? 'flex' : 'none';
+  }
+}
+
+function getCardSizeDescription(cols) {
+  if (cols === 1) return 'Level 1: 1 Card per Row (Giant Hero Card — Sabse Bada Cover)';
+  if (cols === 2) return 'Level 2: 2 Cards per Row (Bada Grid — High Detail)';
+  if (cols === 3) return 'Level 3: 3 Cards per Row (Standard Classic Grid)';
+  if (cols === 4) return 'Level 4: 4 Cards per Row (Medium Grid)';
+  if (cols === 5) return 'Level 5: 5 Cards per Row (Compact Grid)';
+  if (cols <= 9) return `Level ${cols}: ${cols} Cards per Row (Mini Gallery Tiles)`;
+  return 'Level 10: 10 Cards per Row (Micro Tiles — Ek Screen Par Dher Saari Kitabein!)';
+}
+
+function updateLibraryColumnsUI() {
+  const cols = state.libraryColumns || 3;
+  const isCompactList = state.libraryLayout === 'compactList';
+
+  // Library header button
+  const labelBtn = document.getElementById('btnLayoutColsLabel');
+  if (labelBtn) {
+    labelBtn.innerText = isCompactList ? 'List' : `${cols} Col`;
+    labelBtn.classList.toggle('active', !isCompactList);
+  }
+
+  const listBtn = document.getElementById('btnLayoutList');
+  if (listBtn) listBtn.classList.toggle('active', isCompactList);
+
+  // Strip label & pill highlights
+  const displayLabel = document.getElementById('libColsDisplayLabel');
+  if (displayLabel) displayLabel.innerText = isCompactList ? 'Compact List Mode' : `${cols} Cards / Row`;
+
+  const pillRow = document.getElementById('libColsPillRow');
+  if (pillRow) {
+    pillRow.querySelectorAll('.card-size-num-btn').forEach(btn => {
+      const btnCol = parseInt(btn.getAttribute('data-col'), 10);
+      btn.classList.toggle('active', !isCompactList && btnCol === cols);
+    });
+  }
+
+  // Settings Studio
+  const settingsBadge = document.getElementById('settingsColsBadge');
+  if (settingsBadge) settingsBadge.innerText = isCompactList ? 'List Mode' : `${cols} Columns`;
+
+  const settingsRange = document.getElementById('settingsColsRange');
+  if (settingsRange) settingsRange.value = cols;
+
+  const settingsDesc = document.getElementById('settingsColsDescription');
+  if (settingsDesc) settingsDesc.innerText = isCompactList ? 'Compact horizontal 1-row strips' : getCardSizeDescription(cols);
+
+  const settingsBtnsGrid = document.getElementById('settingsColsButtonsGrid');
+  if (settingsBtnsGrid) {
+    settingsBtnsGrid.querySelectorAll('.card-size-num-btn').forEach(btn => {
+      const btnCol = parseInt(btn.getAttribute('data-set-col'), 10);
+      btn.classList.toggle('active', !isCompactList && btnCol === cols);
+    });
+  }
+
+  const radioList = document.getElementById('radioIndicatorCompactList');
+  if (radioList) radioList.innerText = isCompactList ? '🟢' : '⚪';
+
+  const cardList = document.getElementById('layoutChoiceCompactList');
+  if (cardList) cardList.style.borderColor = isCompactList ? 'var(--accent-gold)' : 'var(--border-card)';
+}
+
+function setLibraryLayout(layoutName) {
+  if (layoutName === 'compactList') {
+    state.libraryLayout = 'compactList';
+    localStorage.setItem(LAYOUT_KEY, 'compactList');
+    updateLibraryColumnsUI();
+    renderLibraryGrid();
+    showToast('Layout changed to Compact List (1 Row)');
+    return;
+  }
+
+  if (layoutName === 'grid2') {
+    setLibraryColumns(2);
+    return;
+  }
+  if (layoutName === 'grid3') {
+    setLibraryColumns(3);
+    return;
+  }
+
+  setLibraryColumns(state.libraryColumns || 3);
 }
 
 function renderLibraryLayoutAdjustView() {
-  const current = state.libraryLayout || 'grid3';
-
-  const r2 = document.getElementById('radioIndicatorGrid2');
-  const r3 = document.getElementById('radioIndicatorGrid3');
-  const rList = document.getElementById('radioIndicatorCompactList');
-
-  const c2 = document.getElementById('layoutChoiceGrid2');
-  const c3 = document.getElementById('layoutChoiceGrid3');
-  const cList = document.getElementById('layoutChoiceCompactList');
-
-  if (r2) r2.innerText = current === 'grid2' ? '🟢' : '⚪';
-  if (r3) r3.innerText = current === 'grid3' ? '🟢' : '⚪';
-  if (rList) rList.innerText = current === 'compactList' ? '🟢' : '⚪';
-
-  if (c2) c2.style.borderColor = current === 'grid2' ? 'var(--accent-gold)' : 'var(--border-card)';
-  if (c3) c3.style.borderColor = current === 'grid3' ? 'var(--accent-gold)' : 'var(--border-card)';
-  if (cList) cList.style.borderColor = current === 'compactList' ? 'var(--accent-gold)' : 'var(--border-card)';
+  updateLibraryColumnsUI();
 }
 
 // --------------------------------------------------------------------------

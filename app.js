@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.3)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.4)
 // ==========================================================================
 
-const APP_VERSION = '0.0.3';
-const CURRENT_APP_VERSION = 'v0.0.3';
+const APP_VERSION = '0.0.4';
+const CURRENT_APP_VERSION = 'v0.0.4';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -12,6 +12,7 @@ const HOME_SECS_KEY = 'mf_home_sections_config';
 const BOOK_ORDER_KEY = 'mf_custom_book_order';
 const LAYOUT_KEY = 'mf_library_layout_mode';
 const SHELVES_KEY = 'mf_custom_shelves';
+const COLS_KEY = 'mf_library_cols';
 
 // Global Application State
 let state = {
@@ -47,9 +48,10 @@ let state = {
     totalMinutesRead: 0,
     lastReadDate: ''
   },
-  // Adjustments & Instagram Settings State (v0.0.3)
+  // Adjustments & Instagram Settings State (v0.0.4)
   homeSections: [],
   customBookOrder: [],
+  libraryColumns: parseInt(localStorage.getItem('mf_library_cols'), 10) || 3,
   libraryLayout: localStorage.getItem(LAYOUT_KEY) || 'grid3',
   customShelves: [],
   activeShelfFilter: null,
@@ -587,17 +589,20 @@ function renderLibraryGrid() {
   const grid = document.getElementById('libraryBooksGrid');
   if (!grid) return;
   
-  // Apply current layout mode
-  const currentLayout = state.libraryLayout || 'grid3';
-  grid.className = 'library-books-grid layout-' + currentLayout;
+  // Apply current layout mode & columns (1 to 10)
+  const cols = state.libraryColumns || 3;
+  const isCompactList = state.libraryLayout === 'compactList';
   
-  // Update Layout Switcher buttons
-  const bGrid2 = document.getElementById('btnLayoutGrid2');
-  const bGrid3 = document.getElementById('btnLayoutGrid3');
-  const bList = document.getElementById('btnLayoutList');
-  if (bGrid2) bGrid2.classList.toggle('active', currentLayout === 'grid2');
-  if (bGrid3) bGrid3.classList.toggle('active', currentLayout === 'grid3');
-  if (bList) bList.classList.toggle('active', currentLayout === 'compactList');
+  if (isCompactList) {
+    grid.className = 'library-books-grid layout-compact-list';
+  } else {
+    grid.className = `library-books-grid cols-${cols}`;
+    grid.style.setProperty('--lib-cols', cols);
+  }
+  
+  if (typeof updateLibraryColumnsUI === 'function') {
+    updateLibraryColumnsUI();
+  }
 
   // Update shelf chip counter/label
   const shelfChip = document.getElementById('chipShelfFilter');
@@ -689,7 +694,7 @@ function renderLibraryGrid() {
     const pct = Math.min(100, Math.round((current / total) * 100));
     
     // Compact Horizontal List Mode (1 Row per Book)
-    if (currentLayout === 'compactList') {
+    if (isCompactList) {
       return `
         <div class="compact-book-row" onclick="openBookDetailViewByIndex(${originalIndex})">
           <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
@@ -708,7 +713,7 @@ function renderLibraryGrid() {
       `;
     }
 
-    // Grid Mode (2-Columns Bada Grid or 3-Columns Standard)
+    // Grid Mode (1 to 10 Columns)
     return `
       <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
         <div class="grid-cover-wrap">
@@ -716,13 +721,14 @@ function renderLibraryGrid() {
         </div>
         <div class="grid-book-meta">
           <div class="grid-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
-          <div class="grid-book-author">${escapeHtml(book.author || 'Unknown')}</div>
+          ${cols <= 5 ? `<div class="grid-book-author">${escapeHtml(book.author || 'Unknown')}</div>` : ''}
+          ${cols <= 5 ? `
           <div class="grid-progress-wrap">
             <div class="grid-progress-bar">
               <div class="grid-progress-fill" style="width: ${pct}%"></div>
             </div>
             <span class="grid-progress-text">${pct}%</span>
-          </div>
+          </div>` : ''}
         </div>
       </div>
     `;
@@ -5812,8 +5818,9 @@ function loadAdjustmentConfigs() {
       state.customBookOrder = (state.books || []).map(b => b.title);
     }
 
-    // 3. Library Layout Mode
-    state.libraryLayout = localStorage.getItem(LAYOUT_KEY) || 'grid3';
+    // 3. Library Layout & Columns (1 to 10)
+    state.libraryColumns = parseInt(localStorage.getItem(COLS_KEY), 10) || 3;
+    state.libraryLayout = localStorage.getItem(LAYOUT_KEY) || ('grid' + state.libraryColumns);
 
     // 4. Custom Shelves
     const savedShelves = localStorage.getItem(SHELVES_KEY);
@@ -5841,9 +5848,8 @@ function renderAppSettingsHub() {
   // Update badge for layout
   const layoutBadge = document.getElementById('igLayoutBadge');
   if (layoutBadge) {
-    if (state.libraryLayout === 'grid2') layoutBadge.innerText = '2 Columns';
-    else if (state.libraryLayout === 'compactList') layoutBadge.innerText = 'Compact List';
-    else layoutBadge.innerText = '3 Columns';
+    if (state.libraryLayout === 'compactList') layoutBadge.innerText = 'Compact List';
+    else layoutBadge.innerText = `${state.libraryColumns || 3} Columns`;
   }
 
   // Update badge for shelves
@@ -6107,43 +6113,119 @@ function resetCustomBookOrder() {
 }
 
 // --------------------------------------------------------------------------
-// FEATURE 4: LIBRARY LAYOUT & CARD SIZE (GRID-2, GRID-3, COMPACT-LIST)
+// FEATURE 4: DYNAMIC 1 TO 10 CARD SIZES & COLUMNS
 // --------------------------------------------------------------------------
-function setLibraryLayout(layoutName) {
-  if (!['grid2', 'grid3', 'compactList'].includes(layoutName)) return;
+function setLibraryColumns(colsVal) {
+  const cols = Math.max(1, Math.min(10, parseInt(colsVal, 10) || 3));
+  state.libraryColumns = cols;
+  state.libraryLayout = 'grid' + cols;
+  localStorage.setItem(COLS_KEY, cols);
+  localStorage.setItem(LAYOUT_KEY, 'grid' + cols);
 
-  state.libraryLayout = layoutName;
-  localStorage.setItem(LAYOUT_KEY, layoutName);
-
-  renderLibraryLayoutAdjustView();
+  updateLibraryColumnsUI();
   renderLibraryGrid();
 
-  const labels = {
-    grid2: 'Bada Grid (2 Columns)',
-    grid3: 'Standard Grid (3 Columns)',
-    compactList: 'Compact List (1 Row)'
-  };
-  showToast(`Layout changed to ${labels[layoutName]}`);
+  showToast(`Card Size: ${cols} Cards per Row`);
+}
+
+function stepLibraryColumns(delta) {
+  const cur = state.libraryColumns || 3;
+  setLibraryColumns(cur + delta);
+}
+
+function toggleLibraryCardSizeStrip() {
+  const strip = document.getElementById('libraryCardSizeStrip');
+  if (strip) {
+    const isHidden = window.getComputedStyle(strip).display === 'none';
+    strip.style.display = isHidden ? 'flex' : 'none';
+  }
+}
+
+function getCardSizeDescription(cols) {
+  if (cols === 1) return 'Level 1: 1 Card per Row (Giant Hero Card — Sabse Bada Cover)';
+  if (cols === 2) return 'Level 2: 2 Cards per Row (Bada Grid — High Detail)';
+  if (cols === 3) return 'Level 3: 3 Cards per Row (Standard Classic Grid)';
+  if (cols === 4) return 'Level 4: 4 Cards per Row (Medium Grid)';
+  if (cols === 5) return 'Level 5: 5 Cards per Row (Compact Grid)';
+  if (cols <= 9) return `Level ${cols}: ${cols} Cards per Row (Mini Gallery Tiles)`;
+  return 'Level 10: 10 Cards per Row (Micro Tiles — Ek Screen Par Dher Saari Kitabein!)';
+}
+
+function updateLibraryColumnsUI() {
+  const cols = state.libraryColumns || 3;
+  const isCompactList = state.libraryLayout === 'compactList';
+
+  // Library header button
+  const labelBtn = document.getElementById('btnLayoutColsLabel');
+  if (labelBtn) {
+    labelBtn.innerText = isCompactList ? 'List' : `${cols} Col`;
+    labelBtn.classList.toggle('active', !isCompactList);
+  }
+
+  const listBtn = document.getElementById('btnLayoutList');
+  if (listBtn) listBtn.classList.toggle('active', isCompactList);
+
+  // Strip label & pill highlights
+  const displayLabel = document.getElementById('libColsDisplayLabel');
+  if (displayLabel) displayLabel.innerText = isCompactList ? 'Compact List Mode' : `${cols} Cards / Row`;
+
+  const pillRow = document.getElementById('libColsPillRow');
+  if (pillRow) {
+    pillRow.querySelectorAll('.card-size-num-btn').forEach(btn => {
+      const btnCol = parseInt(btn.getAttribute('data-col'), 10);
+      btn.classList.toggle('active', !isCompactList && btnCol === cols);
+    });
+  }
+
+  // Settings Studio
+  const settingsBadge = document.getElementById('settingsColsBadge');
+  if (settingsBadge) settingsBadge.innerText = isCompactList ? 'List Mode' : `${cols} Columns`;
+
+  const settingsRange = document.getElementById('settingsColsRange');
+  if (settingsRange) settingsRange.value = cols;
+
+  const settingsDesc = document.getElementById('settingsColsDescription');
+  if (settingsDesc) settingsDesc.innerText = isCompactList ? 'Compact horizontal 1-row strips' : getCardSizeDescription(cols);
+
+  const settingsBtnsGrid = document.getElementById('settingsColsButtonsGrid');
+  if (settingsBtnsGrid) {
+    settingsBtnsGrid.querySelectorAll('.card-size-num-btn').forEach(btn => {
+      const btnCol = parseInt(btn.getAttribute('data-set-col'), 10);
+      btn.classList.toggle('active', !isCompactList && btnCol === cols);
+    });
+  }
+
+  const radioList = document.getElementById('radioIndicatorCompactList');
+  if (radioList) radioList.innerText = isCompactList ? '🟢' : '⚪';
+
+  const cardList = document.getElementById('layoutChoiceCompactList');
+  if (cardList) cardList.style.borderColor = isCompactList ? 'var(--accent-gold)' : 'var(--border-card)';
+}
+
+function setLibraryLayout(layoutName) {
+  if (layoutName === 'compactList') {
+    state.libraryLayout = 'compactList';
+    localStorage.setItem(LAYOUT_KEY, 'compactList');
+    updateLibraryColumnsUI();
+    renderLibraryGrid();
+    showToast('Layout changed to Compact List (1 Row)');
+    return;
+  }
+
+  if (layoutName === 'grid2') {
+    setLibraryColumns(2);
+    return;
+  }
+  if (layoutName === 'grid3') {
+    setLibraryColumns(3);
+    return;
+  }
+
+  setLibraryColumns(state.libraryColumns || 3);
 }
 
 function renderLibraryLayoutAdjustView() {
-  const current = state.libraryLayout || 'grid3';
-
-  const r2 = document.getElementById('radioIndicatorGrid2');
-  const r3 = document.getElementById('radioIndicatorGrid3');
-  const rList = document.getElementById('radioIndicatorCompactList');
-
-  const c2 = document.getElementById('layoutChoiceGrid2');
-  const c3 = document.getElementById('layoutChoiceGrid3');
-  const cList = document.getElementById('layoutChoiceCompactList');
-
-  if (r2) r2.innerText = current === 'grid2' ? '🟢' : '⚪';
-  if (r3) r3.innerText = current === 'grid3' ? '🟢' : '⚪';
-  if (rList) rList.innerText = current === 'compactList' ? '🟢' : '⚪';
-
-  if (c2) c2.style.borderColor = current === 'grid2' ? 'var(--accent-gold)' : 'var(--border-card)';
-  if (c3) c3.style.borderColor = current === 'grid3' ? 'var(--accent-gold)' : 'var(--border-card)';
-  if (cList) cList.style.borderColor = current === 'compactList' ? 'var(--accent-gold)' : 'var(--border-card)';
+  updateLibraryColumnsUI();
 }
 
 // --------------------------------------------------------------------------
