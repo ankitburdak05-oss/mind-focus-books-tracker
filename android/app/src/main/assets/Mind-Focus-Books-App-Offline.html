@@ -6397,6 +6397,130 @@ input:checked + .slider-round:before {
   font-weight: 500;
 }
 
+/* ==========================================================================
+   MODERN GROUPED CARDS FOR PROFILE & SETTINGS
+   ========================================================================== */
+.profile-menu-group {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+}
+
+.profile-group-header {
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--text-muted);
+  margin: 18px 8px 8px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  user-select: none;
+  background: transparent;
+}
+
+.profile-menu-item:last-child {
+  border-bottom: none;
+}
+
+.profile-menu-item:active {
+  background: rgba(255, 255, 255, 0.06);
+  transform: scale(0.995);
+}
+
+.profile-menu-item .pmi-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+}
+
+.profile-menu-item .pmi-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-menu-item .pmi-title {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.profile-menu-item .pmi-sub {
+  font-size: 0.77rem;
+  color: var(--text-secondary);
+  line-height: 1.3;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.profile-menu-item .pmi-arrow {
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  font-weight: 600;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+/* Luxury Gradient Icon Accents */
+.pmi-icon.grad-purple {
+  background: linear-gradient(135deg, #8b5cf6, #ec4899) !important;
+  color: #fff !important;
+}
+
+.pmi-icon.grad-blue {
+  background: linear-gradient(135deg, #3b82f6, #06b6d4) !important;
+  color: #fff !important;
+}
+
+.pmi-icon.grad-gold {
+  background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+  color: #fff !important;
+}
+
+.pmi-icon.grad-emerald {
+  background: linear-gradient(135deg, #10b981, #059669) !important;
+  color: #fff !important;
+}
+
+.pmi-icon.grad-sunset {
+  background: linear-gradient(135deg, #f97316, #ef4444) !important;
+  color: #fff !important;
+}
+
+.pmi-icon.grad-rose {
+  background: linear-gradient(135deg, #ec4899, #f43f5e) !important;
+  color: #fff !important;
+}
+
+.pmi-icon.grad-dark {
+  background: linear-gradient(135deg, #475569, #334155) !important;
+  color: #fff !important;
+}
+
+
 
 </style>
   <script>
@@ -6884,13 +7008,6 @@ if (typeof window !== 'undefined') {
           <input type="text" id="librarySearchInput" placeholder="Search books, authors..." oninput="handleSearch(this.value)">
           <button type="button" class="search-clear-btn" id="librarySearchClearBtn" onclick="clearSearch()" style="display:none;">&times;</button>
         </div>
-        <!-- 1-Tap Instagram-Style Layout Switcher -->
-        <div class="layout-switcher-pill" id="libraryLayoutSwitcher" title="Change Layout Size">
-          <button type="button" class="layout-opt-btn" onclick="stepLibraryColumns(-1)" title="Bigger Cards (Fewer Columns)">➖</button>
-          <button type="button" class="layout-opt-btn active" id="btnLayoutColsLabel" onclick="toggleLibraryCardSizeStrip()" title="Set 1 to 10 Columns">3 Col</button>
-          <button type="button" class="layout-opt-btn" onclick="stepLibraryColumns(1)" title="Smaller Cards (More Columns up to 10)">➕</button>
-          <button type="button" class="layout-opt-btn" id="btnLayoutList" onclick="setLibraryLayout('compactList')" title="Compact List (1 Row)">📑</button>
-        </div>
         <button type="button" class="filter-toggle-btn" onclick="openIsbnBarcodeScannerModal()" title="Scan Book ISBN Barcode" style="border-color: var(--accent-gold); color: var(--accent-gold);">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
             <rect x="3" y="4" width="18" height="16" rx="2"></rect>
@@ -7272,182 +7389,33 @@ if (typeof window !== 'undefined') {
 
 
 
-      <!-- Screen 5: Comprehensive Sub-Screens Menu Group -->
+      <!-- Screen 5: Categorized Grouped Settings & Options -->
+
+      <!-- Group 1: Preferences & Customization -->
+      <div class="profile-group-header">⚙️ Customization &amp; Adjustments</div>
       <div class="profile-menu-group">
-        <!-- ⚙️ APP SETTINGS & ADJUSTMENTS SUITE (INSTAGRAM STYLE) -->
-        <div class="profile-menu-item" style="border: 1.5px solid #ec4899; background: linear-gradient(135deg, rgba(131, 58, 180, 0.16), rgba(253, 29, 29, 0.1), rgba(252, 176, 69, 0.06));" onclick="navigateToSubView('appSettings')">
-          <div class="pmi-icon" style="background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: #fff; font-size: 1.35rem; box-shadow: 0 4px 12px rgba(253, 29, 29, 0.3);">⚙️</div>
+        <!-- ⚙️ APP SETTINGS & ADJUSTMENTS SUITE -->
+        <div class="profile-menu-item" style="border-left: 3px solid #ec4899; background: linear-gradient(135deg, rgba(131, 58, 180, 0.12), rgba(253, 29, 29, 0.08));" onclick="navigateToSubView('appSettings')">
+          <div class="pmi-icon grad-purple">⚙️</div>
           <div class="pmi-text">
-            <div class="pmi-title" style="color: #fff; font-weight: 800; font-size: 1rem; display: flex; align-items: center; gap: 6px;">
-              Settings &amp; Adjustments
-              <span style="font-size: 0.68rem; font-weight: 700; background: linear-gradient(135deg, #833ab4, #fd1d1d); color:#fff; padding: 2px 6px; border-radius: 6px;">Instagram Style</span>
-            </div>
-            <div class="pmi-sub" style="color: rgba(255,255,255,0.85);">Home feed, Book sequence, Custom shelves &amp; Layout size</div>
-          </div>
-          <div class="pmi-arrow" style="color: #fcb045; font-size: 1.3rem;">&rsaquo;</div>
-        </div>
-
-        <!-- 📖 APP FEATURES GUIDE & SITEMAP DIRECTORY (FEATURE DIRECTORY) -->
-        <div class="profile-menu-item" style="border: 1.5px solid var(--accent-gold); background: rgba(245, 158, 11, 0.12);" onclick="navigateToSubView('appFeaturesGuide')">
-          <div class="pmi-icon gold" style="font-size: 1.4rem;">📖</div>
-          <div class="pmi-text">
-            <div class="pmi-title" style="color: var(--accent-gold); font-weight: 800; font-size: 0.98rem;">App Features Directory &amp; Sitemap</div>
-            <div class="pmi-sub" style="color: rgba(255,255,255,0.85);">Complete guide of all features, locations &amp; 1-tap launcher</div>
-          </div>
-          <div class="pmi-arrow" style="color: var(--accent-gold); font-weight: 800; font-size: 1.2rem;">&rsaquo;</div>
-        </div>
-
-        <!-- 💰 TOTAL SPENT OPTION (Priced Books List) -->
-        <div class="profile-menu-item" onclick="navigateToSubView('totalSpent')">
-          <div class="pmi-icon emerald" style="font-size: 1.35rem;">💰</div>
-          <div class="pmi-text">
-            <div class="pmi-title" style="font-weight: 700;">Total Spent</div>
-            <div class="pmi-sub" id="profileTotalSpentSubText">₹0 Total Spent &bull; Books with Price</div>
+            <div class="pmi-title" style="font-weight: 800;">Settings &amp; Adjustments</div>
+            <div class="pmi-sub">Home feed, Book sequence, Custom shelves &amp; Layout size</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
 
-        <!-- 📑 BOOK STATUS OPTION (Completed, Reading, Pending) -->
-        <div class="profile-menu-item" onclick="navigateToSubView('bookStatus')">
-          <div class="pmi-icon blue" style="font-size: 1.35rem;">📑</div>
+        <!-- 📖 APP FEATURES GUIDE & SITEMAP DIRECTORY -->
+        <div class="profile-menu-item" style="border-left: 3px solid var(--accent-gold);" onclick="navigateToSubView('appFeaturesGuide')">
+          <div class="pmi-icon grad-gold">📖</div>
           <div class="pmi-text">
-            <div class="pmi-title" style="font-weight: 700;">Book Status</div>
-            <div class="pmi-sub" id="profileBookStatusSubText">Completed &bull; Reading &bull; Pending</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <!-- 📦 BOOK AVAILABILITY OPTION (Available, Unavailable) -->
-        <div class="profile-menu-item" onclick="navigateToSubView('bookAvailability')">
-          <div class="pmi-icon purple" style="font-size: 1.35rem;">📦</div>
-          <div class="pmi-text">
-            <div class="pmi-title" style="font-weight: 700;">Book Availability</div>
-            <div class="pmi-sub" id="profileBookAvailabilitySubText">Available &bull; Unavailable</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <!-- 🤝 BOOK LENDING TRACKER OPTION -->
-        <div class="profile-menu-item" onclick="navigateToSubView('bookLending')">
-          <div class="pmi-icon green" style="font-size: 1.35rem; background: rgba(16, 185, 129, 0.15); color: #10b981;">🤝</div>
-          <div class="pmi-text">
-            <div class="pmi-title" style="font-weight: 700;">Book Lending Tracker</div>
-            <div class="pmi-sub" id="profileBookLendingSubText">0 Books Lent Out &bull; Track Borrowed Books</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <!-- 🚫 NOT INTERESTED BOOKS OPTION -->
-        <div class="profile-menu-item" onclick="navigateToSubView('notInterested')">
-          <div class="pmi-icon red" style="font-size: 1.35rem; background: rgba(239, 68, 68, 0.15); color: #ef4444;">🚫</div>
-          <div class="pmi-text">
-            <div class="pmi-title" style="font-weight: 700;">Not Interested Books</div>
-            <div class="pmi-sub" id="profileNotInterestedSubText">0 Hidden &bull; Restore anytime</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="openTrashCenterModal()">
-          <div class="pmi-icon orange">🗑️</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Trash &amp; Restore Center</div>
-            <div class="pmi-sub">Recover deleted books &amp; notes</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="navigateToSubView('activityAuditLog')">
-          <div class="pmi-icon blue">📜</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Activity Audit Log</div>
-            <div class="pmi-sub">Complete history of app actions &amp; events</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="navigateToSubView('privacySecurity')">
-          <div class="pmi-icon emerald">🛡️</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Private Local Encryption Status</div>
-            <div class="pmi-sub">AES-256 local encrypted device storage</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="navigateToSubView('achievements')">
-          <div class="pmi-icon gold">🏆</div>
-          <div class="pmi-text">
-            <div class="pmi-title">My Achievements</div>
-            <div class="pmi-sub">Earn badges &bull; Stay motivated</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="navigateToSubView('readingGoals')">
-          <div class="pmi-icon blue">🎯</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Reading Goals</div>
-            <div class="pmi-sub">Set daily &amp; annual targets</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="navigateToSubView('focusTimer')">
-          <div class="pmi-icon orange">⏱️</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Focus Timer</div>
-            <div class="pmi-sub">Pomodoro, Deep Work &amp; ambient sessions</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="navigateToSubView('notesHighlights')">
-          <div class="pmi-icon gold">📝</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Notes &amp; Highlights</div>
-            <div class="pmi-sub">Capture quotes, insights &amp; takeaways</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="navigateToSubView('readingJournal')">
-          <div class="pmi-icon emerald">📖</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Reading Journal</div>
-            <div class="pmi-sub">Write, reflect &amp; log daily thoughts</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="navigateToSubView('quotesInspiration')">
-          <div class="pmi-icon purple">💡</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Quotes &amp; Inspiration</div>
-            <div class="pmi-sub">Daily dose of wisdom &amp; motivation</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="navigateToSubView('readingStats')">
-          <div class="pmi-icon blue">📊</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Reading Statistics</div>
-            <div class="pmi-sub">Total time, pages, streak &amp; patterns</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
-        <div class="profile-menu-item" onclick="navigateToSubView('recommendations')">
-          <div class="pmi-icon orange">✨</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Book Recommendations</div>
-            <div class="pmi-sub">AI-powered suggestions for you</div>
+            <div class="pmi-title" style="font-weight: 800; color: var(--accent-gold);">App Features Directory &amp; Sitemap</div>
+            <div class="pmi-sub">Complete guide of all features, locations &amp; 1-tap launcher</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
 
         <div class="profile-menu-item" onclick="navigateToSubView('appearance')">
-          <div class="pmi-icon purple">🎨</div>
+          <div class="pmi-icon grad-rose">🎨</div>
           <div class="pmi-text">
             <div class="pmi-title">Reading Themes &amp; Appearance</div>
             <div class="pmi-sub" id="appearanceSubText">Theme: Dark Modern Luxury</div>
@@ -7456,16 +7424,177 @@ if (typeof window !== 'undefined') {
         </div>
 
         <div class="profile-menu-item" onclick="navigateToSubView('customization')">
-          <div class="pmi-icon gold">🛠️</div>
+          <div class="pmi-icon grad-gold">🛠️</div>
           <div class="pmi-text">
             <div class="pmi-title">Customization</div>
             <div class="pmi-sub">App icons, accent colors &amp; wallpapers</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
+      </div>
+
+      <!-- Group 2: Library & Book Management -->
+      <div class="profile-group-header">📚 Library &amp; Vaults</div>
+      <div class="profile-menu-group">
+        <!-- 💰 TOTAL SPENT OPTION (Priced Books List) -->
+        <div class="profile-menu-item" onclick="navigateToSubView('totalSpent')">
+          <div class="pmi-icon grad-emerald">💰</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Total Spent</div>
+            <div class="pmi-sub" id="profileTotalSpentSubText">₹0 Total Spent &bull; Books with Price</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <!-- 📑 BOOK STATUS OPTION (Completed, Reading, Pending) -->
+        <div class="profile-menu-item" onclick="navigateToSubView('bookStatus')">
+          <div class="pmi-icon grad-blue">📑</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Book Status</div>
+            <div class="pmi-sub" id="profileBookStatusSubText">Completed &bull; Reading &bull; Pending</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <!-- 📦 BOOK AVAILABILITY OPTION (Available, Unavailable) -->
+        <div class="profile-menu-item" onclick="navigateToSubView('bookAvailability')">
+          <div class="pmi-icon grad-purple">📦</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Book Availability</div>
+            <div class="pmi-sub" id="profileBookAvailabilitySubText">Available &bull; Unavailable</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <!-- 🤝 BOOK LENDING TRACKER OPTION -->
+        <div class="profile-menu-item" onclick="navigateToSubView('bookLending')">
+          <div class="pmi-icon grad-emerald">🤝</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Book Lending Tracker</div>
+            <div class="pmi-sub" id="profileBookLendingSubText">0 Books Lent Out &bull; Track Borrowed Books</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <!-- 🚫 NOT INTERESTED BOOKS OPTION -->
+        <div class="profile-menu-item" onclick="navigateToSubView('notInterested')">
+          <div class="pmi-icon grad-sunset">🚫</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Not Interested Books</div>
+            <div class="pmi-sub" id="profileNotInterestedSubText">0 Hidden &bull; Restore anytime</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="openTrashCenterModal()">
+          <div class="pmi-icon grad-sunset">🗑️</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Trash &amp; Restore Center</div>
+            <div class="pmi-sub">Recover deleted books &amp; notes</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+      </div>
+
+      <!-- Group 3: Reading Tools & Productivity -->
+      <div class="profile-group-header">⏱️ Reading &amp; Productivity Tools</div>
+      <div class="profile-menu-group">
+        <div class="profile-menu-item" onclick="navigateToSubView('achievements')">
+          <div class="pmi-icon grad-gold">🏆</div>
+          <div class="pmi-text">
+            <div class="pmi-title">My Achievements</div>
+            <div class="pmi-sub">Earn badges &bull; Stay motivated</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="navigateToSubView('readingGoals')">
+          <div class="pmi-icon grad-blue">🎯</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Reading Goals</div>
+            <div class="pmi-sub">Set daily &amp; annual targets</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="navigateToSubView('focusTimer')">
+          <div class="pmi-icon grad-sunset">⏱️</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Focus Timer</div>
+            <div class="pmi-sub">Pomodoro, Deep Work &amp; ambient sessions</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="navigateToSubView('notesHighlights')">
+          <div class="pmi-icon grad-gold">📝</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Notes &amp; Highlights</div>
+            <div class="pmi-sub">Capture quotes, insights &amp; takeaways</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="navigateToSubView('readingJournal')">
+          <div class="pmi-icon grad-emerald">📖</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Reading Journal</div>
+            <div class="pmi-sub">Write, reflect &amp; log daily thoughts</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="navigateToSubView('quotesInspiration')">
+          <div class="pmi-icon grad-purple">💡</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Quotes &amp; Inspiration</div>
+            <div class="pmi-sub">Daily dose of wisdom &amp; motivation</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="navigateToSubView('readingStats')">
+          <div class="pmi-icon grad-blue">📊</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Reading Statistics</div>
+            <div class="pmi-sub">Total time, pages, streak &amp; patterns</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="navigateToSubView('recommendations')">
+          <div class="pmi-icon grad-gold">✨</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Book Recommendations</div>
+            <div class="pmi-sub">AI-powered suggestions for you</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+      </div>
+
+      <!-- Group 4: Security, Sync & App Info -->
+      <div class="profile-group-header">🛡️ Security, Cloud &amp; System</div>
+      <div class="profile-menu-group">
+        <div class="profile-menu-item" onclick="navigateToSubView('privacySecurity')">
+          <div class="pmi-icon grad-emerald">🛡️</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Privacy &amp; Security</div>
+            <div class="pmi-sub" id="pinStatusSubText">PIN Lock, Biometric &amp; safety</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="navigateToSubView('activityAuditLog')">
+          <div class="pmi-icon grad-blue">📜</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Activity Audit Log</div>
+            <div class="pmi-sub">Complete history of app actions &amp; events</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
 
         <div class="profile-menu-item" onclick="navigateToSubView('offlineMode')">
-          <div class="pmi-icon blue">✈️</div>
+          <div class="pmi-icon grad-blue">✈️</div>
           <div class="pmi-text">
             <div class="pmi-title">Offline Mode</div>
             <div class="pmi-sub">Read anywhere, storage management</div>
@@ -7474,7 +7603,7 @@ if (typeof window !== 'undefined') {
         </div>
 
         <div class="profile-menu-item" onclick="navigateToSubView('syncDevices')">
-          <div class="pmi-icon teal">☁️</div>
+          <div class="pmi-icon grad-blue">☁️</div>
           <div class="pmi-text">
             <div class="pmi-title">Sync Across Devices</div>
             <div class="pmi-sub">Cloud sync &bull; Phone, Mac, Tablet</div>
@@ -7482,17 +7611,8 @@ if (typeof window !== 'undefined') {
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
 
-        <div class="profile-menu-item" onclick="navigateToSubView('privacySecurity')">
-          <div class="pmi-icon emerald">🛡️</div>
-          <div class="pmi-text">
-            <div class="pmi-title">Privacy &amp; Security</div>
-            <div class="pmi-sub" id="pinStatusSubText">PIN Lock, Biometric &amp; safety</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-
         <div class="profile-menu-item" onclick="openUpdateModal()">
-          <div class="pmi-icon blue">ℹ️</div>
+          <div class="pmi-icon grad-dark">ℹ️</div>
           <div class="pmi-text">
             <div class="pmi-title">About App &amp; Updates</div>
             <div class="pmi-sub" id="aboutAppSubText">Version 3.20.0 &bull; 1-Click Reinstall</div>

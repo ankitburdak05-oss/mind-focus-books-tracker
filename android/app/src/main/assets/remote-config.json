@@ -3,12 +3,12 @@
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
     "version": "v0.0.4",
-    "name": "Mind Focus Books v0.0.4 - 1-to-10 Library Card Size & Instagram Settings",
+    "name": "Mind Focus Books v0.0.4 - 1-to-10 Library Card Size & Modern Grouped Settings",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.4/MindFocusBooks-Native.apk",
     "features": [
       "🎛️ 1 se 10 Card Size Customizer: Library me 1 se 10 kitabein per row apni marzi se set karein.",
-      "🔢 Quick Stepper & Live Number Strip: [-], [+], aur [1] se [10] direct 1-tap card buttons.",
-      "⚙️ Instagram-Style Settings Hub: Grouped cards, gradient icons, and smooth iOS toggle switches.",
+      "🔢 Clean Search Header: Scanner aur Add Book buttons hamesha samne visible aur accessible.",
+      "⚙️ Grouped Settings Hub: Categorized luxury cards, gradient icons, aur smooth iOS toggle switches.",
       "🔢 Book Sequence Studio (Manual Reordering): Set custom order for books (#1, #2, #3, Pin to Top).",
       "🏠 Home Screen Sections Reorder & Toggle: Show/hide sections and reorder widgets with 🔼 / 🔽.",
       "📁 Custom Shelves & Folders: Create personal collections (e.g. Friends, Diwali) and manage books inside them."
