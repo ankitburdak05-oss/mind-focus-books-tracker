@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mind & Focus Books Tracker — Desktop Workspace</title>
+  <link rel="icon" type="image/png" href="icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #0a0d14;
+      --bg-sidebar: #07090f;
+      --bg-card: rgba(18, 24, 38, 0.72);
+      --bg-card-hover: rgba(26, 34, 52, 0.85);
+      --border-card: rgba(255, 255, 255, 0.07);
+      --border-subtle: rgba(255, 255, 255, 0.05);
+      --accent-gold: #f59e0b;
+      --accent-gold-dark: #d97706;
+      --accent-gold-glow: rgba(245, 158, 11, 0.28);
+      --accent-emerald: #10b981;
+      --accent-blue: #3b82f6;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --sidebar-width: 250px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-base);
+      color: var(--text-primary);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* ================= LEFT SIDEBAR ================= */
+    .desk-sidebar {
+      width: var(--sidebar-width);
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-card);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 100;
+    }
+
+    .sidebar-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 24px 22px 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .brand-icon {
+      font-size: 1.85rem;
+      filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.4));
+    }
+
+    .brand-text h1 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      color: #fff;
+      line-height: 1.15;
+    }
+
+    .brand-text span {
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+      font-weight: 500;
+      letter-spacing: 0.2px;
+    }
+
+    /* Sidebar Navigation Links */
+    .sidebar-nav {
+      flex: 1;
+      padding: 18px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      overflow-y: auto;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: all 0.18s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .nav-item svg {
+      width: 19px;
+      height: 19px;
+      stroke-width: 2;
+      opacity: 0.8;
+      transition: all 0.18s ease;
+    }
+
+    .nav-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-primary);
+    }
+
+    .nav-item:hover svg {
+      opacity: 1;
+    }
+
+    .nav-item.active {
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.1));
+      color: var(--accent-gold);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      box-shadow: 0 4px 14px var(--accent-gold-glow);
+    }
+
+    .nav-item.active svg {
+      color: var(--accent-gold);
+      opacity: 1;
+    }
+
+    /* Sidebar Aesthetic Lamp Footer */
+    .sidebar-footer-card {
+      margin: 14px;
+      border-radius: 16px;
+      background: linear-gradient(180deg, rgba(16, 21, 34, 0.6), rgba(9, 12, 20, 0.95)), 
+                  url('cozy_banner_bg.jpg') center/cover no-repeat;
+      border: 1px solid var(--border-card);
+      padding: 24px 16px 18px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .sidebar-footer-card::before {
+      content: '';
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, rgba(245, 158, 11, 0.35) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .sfc-icon {
+      font-size: 1.4rem;
+      margin-bottom: 8px;
+      opacity: 0.85;
+    }
+
+    .sfc-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: 0.84rem;
+      font-style: italic;
+      color: #e2e8f0;
+      line-height: 1.45;
+    }
+
+    .sfc-sub {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+      font-weight: 500;
+    }
+
+    /* ================= MAIN WRAPPER ================= */
+    .desk-main-wrap {
+      margin-left: var(--sidebar-width);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: radial-gradient(circle at 60% 0%, rgba(245, 158, 11, 0.05), transparent 40%),
+                  radial-gradient(circle at 20% 40%, rgba(59, 130, 246, 0.03), transparent 35%),
+                  var(--bg-base);
+    }
+
+    /* Top Search & Profile Bar */
+    .desk-header {
+      height: 72px;
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid var(--border-card);
+      background: rgba(10, 13, 20, 0.75);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+
+    .header-search-box {
+      flex: 1;
+      max-width: 580px;
+      height: 44px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      padding: 0 18px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+    }
+
+    .header-search-box:focus-within {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(245, 158, 11, 0.5);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+
+    .header-search-box svg {
+      width: 17px;
+      height: 17px;
+      color: var(--text-muted);
+    }
+
+    .header-search-box input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .header-search-box input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-card);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.15s ease;
+    }
+
+    .header-btn-icon:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-primary);
+    }
+
+    .header-btn-icon .noti-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--accent-gold);
+      border-radius: 50%;
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      box-shadow: 0 0 6px var(--accent-gold);
+    }
+
+    .header-profile-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 5px 12px 5px 6px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-card);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .header-profile-pill:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .profile-avatar-circle {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.88rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-name-text {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* ================= MAIN CONTENT PADDING ================= */
+    .desk-content {
+      padding: 30px 36px 60px;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ================= HERO SECTION BANNER ================= */
+    .hero-banner-card {
+      background: linear-gradient(90deg, rgba(14, 19, 32, 0.95) 45%, rgba(14, 19, 32, 0.6) 80%),
+                  url('cozy_banner_bg.jpg') right center/cover no-repeat;
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .hero-banner-content {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      max-width: 780px;
+    }
+
+    .hero-calendar-badge {
+      width: 58px;
+      height: 58px;
+      border-radius: 16px;
+      background: rgba(245, 158, 11, 0.12);
+      border: 1.5px solid rgba(245, 158, 11, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: var(--accent-gold);
+      flex-shrink: 0;
+      box-shadow: 0 4px 16px var(--accent-gold-glow);
+    }
+
+    .hero-text-block h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.3px;
+      line-height: 1.2;
+    }
+
+    .hero-text-block p {
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+      margin-top: 6px;
+      line-height: 1.45;
+    }
+
+    /* Metric Cards + Primary Action Row */
+    .desk-action-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 18px;
+      margin-bottom: 30px;
+      align-items: stretch;
+    }
+
+    .metric-pill-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+    }
+
+    .metric-pill-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .metric-icon-circle {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      flex-shrink: 0;
+    }
+
+    .metric-icon-circle.gold {
+      background: rgba(245, 158, 11, 0.14);
+      color: var(--accent-gold);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .metric-icon-circle.blue {
+      background: rgba(59, 130, 246, 0.14);
+      color: var(--accent-blue);
+      border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .metric-meta-block {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .metric-lbl {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: capitalize;
+    }
+
+    .metric-val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #fff;
+      line-height: 1.15;
+      margin-top: 2px;
+    }
+
+    .metric-sub {
+      font-size: 0.76rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .btn-reserve-cta {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #000;
+      font-weight: 800;
+      font-size: 0.96rem;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: 0 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+      user-select: none;
+    }
+
+    .btn-reserve-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 26px rgba(245, 158, 11, 0.45);
+      filter: brightness(1.05);
+    }
+
+    .btn-reserve-cta:active {
+      transform: scale(0.98);
+    }
+
+    /* ================= MAIN DATA SECTION ================= */
+    .desk-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .desk-section-title {
+      font-size: 1.15rem;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.2px;
+    }
+
+    /* Filter Pill Group */
+    .desk-filter-group {
+      display: flex;
+      gap: 6px;
+      background: rgba(255, 255, 255, 0.04);
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .filter-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .filter-tab-btn:hover {
+      color: var(--text-primary);
+    }
+
+    .filter-tab-btn.active {
+      background: var(--accent-gold);
+      color: #000;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+    }
+
+    /* ================= DATA TABLE CONTAINER ================= */
+    .desk-table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.28);
+      margin-bottom: 34px;
+    }
+
+    .desk-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    .desk-table th {
+      padding: 14px 18px;
+      font-size: 0.76rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-card);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .desk-table td {
+      padding: 16px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      vertical-align: middle;
+      font-size: 0.88rem;
+    }
+
+    .desk-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .desk-table tr {
+      transition: background 0.15s ease;
+    }
+
+    .desk-table tr:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .table-index-col {
+      color: var(--text-muted);
+      font-weight: 700;
+      font-size: 0.82rem;
+      width: 32px;
+    }
+
+    /* Book Cell */
+    .table-book-cell {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 240px;
+    }
+
+    .table-book-cover {
+      width: 42px;
+      height: 60px;
+      border-radius: 6px;
+      object-fit: cover;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+      background: #1e293b;
+      flex-shrink: 0;
+    }
+
+    .table-book-meta {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .table-book-title {
+      font-weight: 700;
+      color: #fff;
+      font-size: 0.92rem;
+      line-height: 1.3;
+    }
+
+    .table-book-author {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    /* Holder Cell */
+    .table-holder-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .holder-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-card);
+      color: #fff;
+      font-weight: 700;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .holder-info {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .holder-name {
+      font-weight: 600;
+      color: #fff;
+      font-size: 0.88rem;
+    }
+
+    .holder-role {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    /* Badges & Pills */
+    .queue-pill {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: var(--accent-gold);
+      background: rgba(245, 158, 11, 0.12);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      padding: 4px 10px;
+      border-radius: 999px;
+      display: inline-block;
+      white-space: nowrap;
+    }
+
+    .queue-pill.first {
+      color: #10b981;
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-badge.waiting {
+      background: rgba(245, 158, 11, 0.12);
+      color: var(--accent-gold);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+
+    .status-badge.available {
+      background: rgba(16, 185, 129, 0.12);
+      color: var(--accent-emerald);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .date-meta-text {
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Action Buttons in Table */
+    .table-actions-cell {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-action-remind {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-card);
+      color: #fff;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 9px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+    }
+
+    .btn-action-remind:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-action-confirm {
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      border: none;
+      color: #000;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 7px 16px;
+      border-radius: 9px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(245, 158, 11, 0.3);
+      transition: all 0.15s ease;
+    }
+
+    .btn-action-confirm:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    .btn-action-more {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      line-height: 1;
+    }
+
+    .btn-action-more:hover {
+      color: #fff;
+    }
+
+    /* ================= BOTTOM SECTION: RECENTLY FULFILLED ================= */
+    .desk-bottom-row {
+      margin-top: 10px;
+    }
+
+    .bottom-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .fulfilled-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      transition: all 0.18s ease;
+      cursor: pointer;
+    }
+
+    .fulfilled-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .fulfilled-thumb {
+      width: 44px;
+      height: 62px;
+      border-radius: 6px;
+      object-fit: cover;
+      flex-shrink: 0;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.35);
+      background: #1e293b;
+    }
+
+    .fulfilled-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .fulfilled-title {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.25;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .fulfilled-author {
+      font-size: 0.76rem;
+      color: var(--text-secondary);
+      margin-top: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .fulfilled-date {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .fulfilled-pill {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: var(--accent-emerald);
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 3px 9px;
+      border-radius: 999px;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Modal for New Reservation */
+    .desk-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.75);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .desk-modal-card {
+      background: #0f1422;
+      border: 1px solid var(--border-card);
+      border-radius: 20px;
+      padding: 28px;
+      width: 90%;
+      max-width: 520px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .desk-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .desk-modal-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-card);
+      border-radius: 10px;
+      padding: 10px 14px;
+      color: #fff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent-gold);
+      background: rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= LEFT SIDEBAR ================= -->
+  <aside class="desk-sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">📖</div>
+      <div class="brand-text">
+        <h1>Mind &amp; Focus</h1>
+        <span>Books Tracker</span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="index.html" title="Open Mobile / Main View">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+        <span>Home</span>
+      </a>
+      <a class="nav-item" href="index.html#viewLibrary">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1-2.5-2.5Z"></path><path d="M6 6h10M6 10h10"></path></svg>
+        <span>My Library</span>
+      </a>
+      <a class="nav-item" href="index.html#viewExplore">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
+        <span>Explore</span>
+      </a>
+      <a class="nav-item" href="index.html#viewBookLending">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="m16 3 4 4-4 4M20 7H4M8 21l-4-4 4-4M4 17h16"></path></svg>
+        <span>Lending Desk</span>
+      </a>
+      <a class="nav-item active" href="desktop-dashboard.html">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"></rect><line x1="16" x2="16" y1="2" y2="6"></line><line x1="8" x2="8" y1="2" y2="6"></line><line x1="3" x2="21" y1="10" y2="10"></line></svg>
+        <span>Reservation Desk</span>
+      </a>
+      <a class="nav-item" href="index.html#viewNotesHighlights">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+        <span>Notes</span>
+      </a>
+      <a class="nav-item" href="index.html#viewReadingStats">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+        <span>Stats</span>
+      </a>
+      <a class="nav-item" href="index.html#viewProfile">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Profile</span>
+      </a>
+      <a class="nav-item" href="index.html#viewAppSettings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <span>Settings</span>
+      </a>
+    </nav>
+
+    <!-- Sidebar Aesthetic Table Lamp Card -->
+    <div class="sidebar-footer-card">
+      <div class="sfc-icon">📖</div>
+      <div class="sfc-quote">"Good books find their way back."</div>
+      <div class="sfc-sub">Personal Library Sanctum</div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN DESKTOP CONTENT ================= -->
+  <div class="desk-main-wrap">
+    <!-- Header Bar -->
+    <header class="desk-header">
+      <div class="header-search-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+        <input type="text" id="deskSearchInput" placeholder="Search books, authors, or people..." oninput="handleDeskSearch(this.value)">
+      </div>
+
+      <div class="header-right">
+        <button type="button" class="header-btn-icon" title="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <span class="noti-dot"></span>
+        </button>
+
+        <div class="header-profile-pill" onclick="window.location.href='index.html#viewProfile'">
+          <div class="profile-avatar-circle">A</div>
+          <span class="profile-name-text">Ankit ▾</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Workspace -->
+    <main class="desk-content">
+
+      <!-- Hero Banner Card -->
+      <section class="hero-banner-card">
+        <div class="hero-banner-content">
+          <div class="hero-calendar-badge">
+            📅
+          </div>
+          <div class="hero-text-block">
+            <h2>Book Reservation &amp; Waitlist Desk</h2>
+            <p>Track books you want to borrow or reserve from friends, with queue and availability.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Metric Pills + Reserve CTA Button -->
+      <section class="desk-action-grid">
+        <div class="metric-pill-card">
+          <div class="metric-icon-circle gold">
+            👥
+          </div>
+          <div class="metric-meta-block">
+            <span class="metric-lbl">Active Reservations</span>
+            <span class="metric-val" id="metricActiveCount">05</span>
+            <span class="metric-sub">Books you are waiting for</span>
+          </div>
+        </div>
+
+        <div class="metric-pill-card">
+          <div class="metric-icon-circle blue">
+            🕒
+          </div>
+          <div class="metric-meta-block">
+            <span class="metric-lbl">Available Soon</span>
+            <span class="metric-val" id="metricAvailableCount">02</span>
+            <span class="metric-sub">Books expected this month</span>
+          </div>
+        </div>
+
+        <button type="button" class="btn-reserve-cta" onclick="openReserveModal()">
+          <span style="font-size: 1.2rem; font-weight: 800;">+</span> Reserve a Book
+        </button>
+      </section>
+
+      <!-- Main Data Table: Active Reservations & Waitlist -->
+      <section>
+        <div class="desk-section-header">
+          <h3 class="desk-section-title">Active Reservations &amp; Waitlist</h3>
+
+          <!-- Filter Pills -->
+          <div class="desk-filter-group" id="deskFilterGroup">
+            <button type="button" class="filter-tab-btn active" data-filter="ALL" onclick="setDeskFilter('ALL')">All (5)</button>
+            <button type="button" class="filter-tab-btn" data-filter="WAITING" onclick="setDeskFilter('WAITING')">Waiting (3)</button>
+            <button type="button" class="filter-tab-btn" data-filter="AVAILABLE_SOON" onclick="setDeskFilter('AVAILABLE_SOON')">Available Soon (2)</button>
+            <button type="button" class="filter-tab-btn" data-filter="NOT_AVAILABLE" onclick="setDeskFilter('NOT_AVAILABLE')">Not Available (0)</button>
+          </div>
+        </div>
+
+        <!-- Table Container -->
+        <div class="desk-table-container">
+          <table class="desk-table">
+            <thead>
+              <tr>
+                <th style="width: 32px;">#</th>
+                <th>Book</th>
+                <th>Current Holder</th>
+                <th>Queue Position</th>
+                <th>Expected Available</th>
+                <th>Status</th>
+                <th style="text-align: right; padding-right: 28px;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="deskWaitlistTableBody">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Bottom Section: Recently Fulfilled Reservations -->
+      <section class="desk-bottom-row">
+        <div class="desk-section-header">
+          <h3 class="desk-section-title">Recently Fulfilled Reservations</h3>
+          <a href="#" style="font-size: 0.82rem; font-weight: 700; color: var(--accent-gold); text-decoration: none;">View All &rarr;</a>
+        </div>
+
+        <div class="bottom-cards-grid" id="deskFulfilledGrid">
+          <!-- Rendered via JavaScript -->
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Modal: Reserve a Book -->
+  <div class="desk-modal-overlay" id="reserveModalOverlay" onclick="closeReserveModal()">
+    <div class="desk-modal-card" onclick="event.stopPropagation()">
+      <div class="desk-modal-header">
+        <h3 class="desk-modal-title">Reserve a New Book</h3>
+        <button style="background:none; border:none; color:#94a3b8; font-size:1.6rem; cursor:pointer;" onclick="closeReserveModal()">&times;</button>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Book Title</label>
+        <input type="text" id="reserveBookTitle" class="form-input" placeholder="e.g. Sapiens, Deep Work...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Author</label>
+        <input type="text" id="reserveBookAuthor" class="form-input" placeholder="e.g. Yuval Noah Harari">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Friend / Current Holder Name</label>
+        <input type="text" id="reserveHolderName" class="form-input" placeholder="e.g. Rahul Sharma">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Relation / Note</label>
+        <input type="text" id="reserveHolderRole" class="form-input" placeholder="Friend, Colleague, Library...">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Expected Date</label>
+        <input type="date" id="reserveExpectedDate" class="form-input">
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+        <button type="button" class="btn-action-remind" onclick="closeReserveModal()">Cancel</button>
+        <button type="button" class="btn-action-confirm" onclick="saveNewReservation()">Reserve Book</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ================= DESKTOP DASHBOARD ENGINE =================
+    const RESERVATIONS_STORAGE_KEY = 'mf_desk_reservations_v1';
+
+    // Default Seed Data matching the user's exact screenshot
+    const DEFAULT_RESERVATIONS = [
+      {
+        id: 'res-1',
+        title: 'The 7 Habits of Highly Effective People',
+        author: 'Stephen R. Covey',
+        cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80',
+        holderName: 'Rahul Sharma',
+        holderRole: 'Friend',
+        holderInit: 'R',
+        queue: '#1 of 2',
+        expectedDate: 'Oct 20, 2025',
+        status: 'WAITING',
+        statusLabel: 'Waiting'
+      },
+      {
+        id: 'res-2',
+        title: 'Atomic Habits',
+        author: 'James Clear',
+        cover: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=200&q=80',
+        holderName: 'Priya Verma',
+        holderRole: 'Colleague',
+        holderInit: 'P',
+        queue: '#2 of 3',
+        expectedDate: 'Nov 05, 2025',
+        status: 'WAITING',
+        statusLabel: 'Waiting'
+      },
+      {
+        id: 'res-3',
+        title: 'Deep Work',
+        author: 'Cal Newport',
+        cover: 'hyperfocus_cover.jpg',
+        holderName: 'Sumit Gurjar',
+        holderRole: 'Friend',
+        holderInit: 'S',
+        queue: '#3 of 4',
+        expectedDate: 'Nov 18, 2025',
+        status: 'WAITING',
+        statusLabel: 'Waiting'
+      },
+      {
+        id: 'res-4',
+        title: 'The Psychology of Money',
+        author: 'Morgan Housel',
+        cover: 'https://images.unsplash.com/photo-1592496431122-2349e0fbc666?w=200&q=80',
+        holderName: 'Aman Singh',
+        holderRole: 'Friend',
+        holderInit: 'A',
+        queue: '#1 of 1',
+        expectedDate: 'Oct 10, 2025',
+        status: 'AVAILABLE_SOON',
+        statusLabel: 'Available Soon'
+      },
+      {
+        id: 'res-5',
+        title: 'Dune',
+        author: 'Frank Herbert',
+        cover: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=200&q=80',
+        holderName: 'Neha Jain',
+        holderRole: 'Colleague',
+        holderInit: 'N',
+        queue: '#1 of 1',
+        expectedDate: 'Oct 12, 2025',
+        status: 'AVAILABLE_SOON',
+        statusLabel: 'Available Soon'
+      }
+    ];
+
+    const DEFAULT_FULFILLED = [
+      {
+        title: 'Ikigai',
+        author: 'Héctor García & Francesc Miralles',
+        cover: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=200&q=80',
+        date: 'Received on Oct 3, 2025'
+      },
+      {
+        title: 'Rich Dad Poor Dad',
+        author: 'Robert Kiyosaki',
+        cover: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=200&q=80',
+        date: 'Received on Sep 18, 2025'
+      },
+      {
+        title: 'The Alchemist',
+        author: 'Paulo Coelho',
+        cover: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=200&q=80',
+        date: 'Received on Aug 26, 2025'
+      }
+    ];
+
+    let deskReservations = [];
+    let currentFilter = 'ALL';
+    let searchQuery = '';
+
+    function loadReservations() {
+      try {
+        const saved = localStorage.getItem(RESERVATIONS_STORAGE_KEY);
+        if (saved) {
+          deskReservations = JSON.parse(saved);
+        } else {
+          deskReservations = [...DEFAULT_RESERVATIONS];
+          localStorage.setItem(RESERVATIONS_STORAGE_KEY, JSON.stringify(deskReservations));
+        }
+      } catch (e) {
+        deskReservations = [...DEFAULT_RESERVATIONS];
+      }
+      renderDesktopView();
+    }
+
+    function renderDesktopView() {
+      // 1. Metric Counts
+      const total = deskReservations.length;
+      const waitingCount = deskReservations.filter(r => r.status === 'WAITING').length;
+      const availableSoonCount = deskReservations.filter(r => r.status === 'AVAILABLE_SOON').length;
+
+      const metricActive = document.getElementById('metricActiveCount');
+      if (metricActive) metricActive.innerText = String(total).padStart(2, '0');
+
+      const metricAvail = document.getElementById('metricAvailableCount');
+      if (metricAvail) metricAvail.innerText = String(availableSoonCount).padStart(2, '0');
+
+      // 2. Filter tabs active state
+      document.querySelectorAll('#deskFilterGroup .filter-tab-btn').forEach(btn => {
+        const f = btn.getAttribute('data-filter');
+        btn.classList.toggle('active', f === currentFilter);
+        if (f === 'ALL') btn.innerText = `All (${total})`;
+        if (f === 'WAITING') btn.innerText = `Waiting (${waitingCount})`;
+        if (f === 'AVAILABLE_SOON') btn.innerText = `Available Soon (${availableSoonCount})`;
+      });
+
+      // 3. Filter Table Items
+      let list = deskReservations;
+      if (currentFilter !== 'ALL') {
+        list = list.filter(r => r.status === currentFilter);
+      }
+      if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        list = list.filter(r => 
+          r.title.toLowerCase().includes(q) ||
+          r.author.toLowerCase().includes(q) ||
+          r.holderName.toLowerCase().includes(q)
+        );
+      }
+
+      // Render Table Rows
+      const tbody = document.getElementById('deskWaitlistTableBody');
+      if (tbody) {
+        if (list.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                No reservations found in this view.
+              </td>
+            </tr>
+          `;
+        } else {
+          tbody.innerHTML = list.map((item, idx) => `
+            <tr>
+              <td class="table-index-col">${idx + 1}</td>
+              <td>
+                <div class="table-book-cell">
+                  <img src="${item.cover}" class="table-book-cover" onerror="this.src='cover_placeholder.jpg'">
+                  <div class="table-book-meta">
+                    <span class="table-book-title">${escapeHtml(item.title)}</span>
+                    <span class="table-book-author">${escapeHtml(item.author)}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="table-holder-cell">
+                  <div class="holder-avatar">${escapeHtml(item.holderInit || item.holderName[0] || 'U')}</div>
+                  <div class="holder-info">
+                    <span class="holder-name">${escapeHtml(item.holderName)}</span>
+                    <span class="holder-role">${escapeHtml(item.holderRole || 'Friend')}</span>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="queue-pill ${item.queue.startsWith('#1 of 1') ? 'first' : ''}">${escapeHtml(item.queue)}</span>
+              </td>
+              <td>
+                <div class="date-meta-text">
+                  <span>📅</span>
+                  <span>${escapeHtml(item.expectedDate)}</span>
+                </div>
+              </td>
+              <td>
+                <span class="status-badge ${item.status === 'AVAILABLE_SOON' ? 'available' : 'waiting'}">
+                  ${item.status === 'AVAILABLE_SOON' ? '● Available Soon' : '🕒 Waiting'}
+                </span>
+              </td>
+              <td style="text-align: right;">
+                <div class="table-actions-cell" style="justify-content: flex-end;">
+                  ${item.status === 'AVAILABLE_SOON' ? `
+                    <button type="button" class="btn-action-confirm" onclick="confirmReservation('${item.id}')">Confirm</button>
+                  ` : `
+                    <button type="button" class="btn-action-remind" onclick="remindHolder('${item.id}')">🔔 Remind</button>
+                  `}
+                  <button type="button" class="btn-action-more" onclick="deleteReservation('${item.id}')" title="Delete">✕</button>
+                </div>
+              </td>
+            </tr>
+          `).join('');
+        }
+      }
+
+      // Render Recently Fulfilled Cards
+      const fulfilledGrid = document.getElementById('deskFulfilledGrid');
+      if (fulfilledGrid) {
+        fulfilledGrid.innerHTML = DEFAULT_FULFILLED.map(item => `
+          <div class="fulfilled-card">
+            <img src="${item.cover}" class="fulfilled-thumb" onerror="this.src='cover_placeholder.jpg'">
+            <div class="fulfilled-info">
+              <div class="fulfilled-title">${escapeHtml(item.title)}</div>
+              <div class="fulfilled-author">${escapeHtml(item.author)}</div>
+              <div class="fulfilled-date">${escapeHtml(item.date)}</div>
+            </div>
+            <div class="fulfilled-pill">
+              <span>✓</span> Returned
+            </div>
+          </div>
+        `).join('');
+      }
+    }
+
+    function setDeskFilter(filter) {
+      currentFilter = filter;
+      renderDesktopView();
+    }
+
+    function handleDeskSearch(val) {
+      searchQuery = val.trim();
+      renderDesktopView();
+    }
+
+    function remindHolder(id) {
+      const item = deskReservations.find(r => r.id === id);
+      if (item) {
+        alert(`🔔 Reminder notification sent to ${item.holderName} for "${item.title}"!`);
+      }
+    }
+
+    function confirmReservation(id) {
+      const item = deskReservations.find(r => r.id === id);
+      if (item) {
+        alert(`🎉 Book Received! "${item.title}" is now added to your personal reading shelf.`);
+        deskReservations = deskReservations.filter(r => r.id !== id);
+        saveReservations();
+        renderDesktopView();
+      }
+    }
+
+    function deleteReservation(id) {
+      if (confirm('Delete this reservation item?')) {
+        deskReservations = deskReservations.filter(r => r.id !== id);
+        saveReservations();
+        renderDesktopView();
+      }
+    }
+
+    function openReserveModal() {
+      document.getElementById('reserveModalOverlay').style.display = 'flex';
+    }
+
+    function closeReserveModal() {
+      document.getElementById('reserveModalOverlay').style.display = 'none';
+    }
+
+    function saveNewReservation() {
+      const title = document.getElementById('reserveBookTitle').value.trim();
+      const author = document.getElementById('reserveBookAuthor').value.trim() || 'Unknown Author';
+      const holderName = document.getElementById('reserveHolderName').value.trim() || 'Friend';
+      const holderRole = document.getElementById('reserveHolderRole').value.trim() || 'Colleague';
+      const dateVal = document.getElementById('reserveExpectedDate').value;
+
+      if (!title) {
+        alert('Please enter a book title');
+        return;
+      }
+
+      let formattedDate = 'Expected Soon';
+      if (dateVal) {
+        const d = new Date(dateVal);
+        formattedDate = d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
+      }
+
+      const newItem = {
+        id: 'res-' + Date.now(),
+        title,
+        author,
+        cover: 'hyperfocus_cover.jpg',
+        holderName,
+        holderRole,
+        holderInit: holderName[0].toUpperCase(),
+        queue: '#1 of 1',
+        expectedDate: formattedDate,
+        status: 'WAITING',
+        statusLabel: 'Waiting'
+      };
+
+      deskReservations.unshift(newItem);
+      saveReservations();
+      closeReserveModal();
+      renderDesktopView();
+    }
+
+    function saveReservations() {
+      localStorage.setItem(RESERVATIONS_STORAGE_KEY, JSON.stringify(deskReservations));
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', loadReservations);
+  </script>
+</body>
+</html>
