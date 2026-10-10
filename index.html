@@ -37,6 +37,12 @@
             <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
           </svg>
         </button>
+        <button type="button" class="header-icon-btn" id="headerSettingsBtn" title="App Adjustments &amp; Settings" onclick="navigateToSubView('appSettings')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
+            <circle cx="12" cy="12" r="3"></circle>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+          </svg>
+        </button>
         <button type="button" class="header-icon-btn" id="headerSearchBtn" title="Search Books" onclick="focusSearch()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <circle cx="11" cy="11" r="8"></circle>
@@ -56,7 +62,7 @@
     <!-- ================= VIEW 1: HOME ================= -->
     <section id="viewHome" class="app-view active">
       <!-- Greeting Banner -->
-      <div class="home-greeting-banner">
+      <div class="home-greeting-banner" id="secHomeGreeting" data-home-sec="greeting">
         <div class="greeting-content">
           <div class="greeting-pre">Good Evening,</div>
           <div class="greeting-name">
@@ -80,7 +86,7 @@
       </div>
 
       <!-- Currently Reading Hero Card -->
-      <div class="currently-reading-hero" id="homeCurrentlyReadingCard">
+      <div class="currently-reading-hero" id="secHomeCurrentlyReading" data-home-sec="currentlyReading">
         <div class="cr-left">
           <div class="radial-progress-wrap">
             <svg class="radial-progress-svg" viewBox="0 0 80 80">
@@ -105,7 +111,7 @@
       </div>
 
       <!-- Compact KPI Bar (4 Key Metrics) -->
-      <div class="compact-kpi-bar">
+      <div class="compact-kpi-bar" id="secHomeKpiBar" data-home-sec="kpiBar">
         <div class="compact-kpi-item" onclick="switchTab('library'); filterByStatus('DONE');" title="Finished Books">
           <span class="compact-kpi-icon">📚</span>
           <div class="compact-kpi-info">
@@ -137,7 +143,7 @@
       </div>
 
       <!-- 4 Stats Cards (2x2 Grid) -->
-      <div class="home-stats-grid">
+      <div class="home-stats-grid" id="secHomeStatsGrid" data-home-sec="statsGrid">
         <div class="stat-card stat-teal" onclick="switchTab('library')">
           <div class="stat-icon-wrap teal">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -191,7 +197,7 @@
 
 
       <!-- Featured Masterpieces Section -->
-      <div class="section-container" style="margin-top: 20px;">
+      <div class="section-container" id="secHomeFeatured" data-home-sec="featured" style="margin-top: 20px;">
         <div class="section-header">
           <div>
             <h2 class="section-title">Featured Masterpieces</h2>
@@ -222,6 +228,12 @@
           <input type="text" id="librarySearchInput" placeholder="Search books, authors..." oninput="handleSearch(this.value)">
           <button type="button" class="search-clear-btn" id="librarySearchClearBtn" onclick="clearSearch()" style="display:none;">&times;</button>
         </div>
+        <!-- 1-Tap Instagram-Style Layout Switcher -->
+        <div class="layout-switcher-pill" id="libraryLayoutSwitcher" title="Change Layout Size">
+          <button type="button" class="layout-opt-btn" id="btnLayoutGrid2" onclick="setLibraryLayout('grid2')" title="Bada Cover Grid (2 Columns)">🔲 2</button>
+          <button type="button" class="layout-opt-btn active" id="btnLayoutGrid3" onclick="setLibraryLayout('grid3')" title="Standard Grid (3 Columns)">⏹️ 3</button>
+          <button type="button" class="layout-opt-btn" id="btnLayoutList" onclick="setLibraryLayout('compactList')" title="Compact List (1 Row)">📑 List</button>
+        </div>
         <button type="button" class="filter-toggle-btn" onclick="openIsbnBarcodeScannerModal()" title="Scan Book ISBN Barcode" style="border-color: var(--accent-gold); color: var(--accent-gold);">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
             <rect x="3" y="4" width="18" height="16" rx="2"></rect>
@@ -242,6 +254,7 @@
         <button type="button" class="filter-chip" id="chipStatusReading" onclick="filterByStatus('READING')">Reading (<span id="countReading">1</span>)</button>
         <button type="button" class="filter-chip" id="chipStatusCompleted" onclick="filterByStatus('DONE')">Completed (<span id="countCompleted">0</span>)</button>
         <button type="button" class="filter-chip" id="chipStatusWishlist" onclick="filterByStatus('WISHLIST')">Wishlist (<span id="countWishlist">312</span>)</button>
+        <button type="button" class="filter-chip" id="chipShelfFilter" onclick="openShelfSelectorDropdown()" style="border-color: var(--accent-gold); color: var(--accent-gold);">📁 Shelves (<span id="countShelves">0</span>)</button>
       </div>
 
       <!-- Secondary Controls: Sort & Category Filter -->
@@ -249,6 +262,7 @@
         <div class="sort-select-wrap">
           <span class="sort-prefix">Sort by:</span>
           <select id="librarySortSelect" onchange="handleSortChange(this.value)">
+            <option value="custom">⭐ My Custom Order (मेरी क्रम संख्या)</option>
             <option value="recent">Recently Added</option>
             <option value="title_asc">Title (A-Z)</option>
             <option value="progress_desc">Reading Progress</option>
@@ -583,6 +597,19 @@
 
       <!-- Screen 5: Comprehensive Sub-Screens Menu Group -->
       <div class="profile-menu-group">
+        <!-- ⚙️ APP SETTINGS & ADJUSTMENTS SUITE (INSTAGRAM STYLE) -->
+        <div class="profile-menu-item" style="border: 1.5px solid #ec4899; background: linear-gradient(135deg, rgba(131, 58, 180, 0.16), rgba(253, 29, 29, 0.1), rgba(252, 176, 69, 0.06));" onclick="navigateToSubView('appSettings')">
+          <div class="pmi-icon" style="background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: #fff; font-size: 1.35rem; box-shadow: 0 4px 12px rgba(253, 29, 29, 0.3);">⚙️</div>
+          <div class="pmi-text">
+            <div class="pmi-title" style="color: #fff; font-weight: 800; font-size: 1rem; display: flex; align-items: center; gap: 6px;">
+              Settings &amp; Adjustments
+              <span style="font-size: 0.68rem; font-weight: 700; background: linear-gradient(135deg, #833ab4, #fd1d1d); color:#fff; padding: 2px 6px; border-radius: 6px;">Instagram Style</span>
+            </div>
+            <div class="pmi-sub" style="color: rgba(255,255,255,0.85);">Home feed, Book sequence, Custom shelves &amp; Layout size</div>
+          </div>
+          <div class="pmi-arrow" style="color: #fcb045; font-size: 1.3rem;">&rsaquo;</div>
+        </div>
+
         <!-- 📖 APP FEATURES GUIDE & SITEMAP DIRECTORY (FEATURE DIRECTORY) -->
         <div class="profile-menu-item" style="border: 1.5px solid var(--accent-gold); background: rgba(245, 158, 11, 0.12);" onclick="navigateToSubView('appFeaturesGuide')">
           <div class="pmi-icon gold" style="font-size: 1.4rem;">📖</div>
@@ -1902,6 +1929,311 @@
       </div>
     </section>
 
+    <!-- ================= SUB-SCREEN: INSTAGRAM-STYLE APP SETTINGS & ADJUSTMENTS (v0.0.3) ================= -->
+    <section id="viewAppSettings" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Settings &amp; Adjustments</h2>
+          <p class="sub-screen-sub-title">Customize your app experience</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div class="ig-settings-wrap">
+        <!-- Search Settings Input -->
+        <div class="ig-search-box">
+          <span style="font-size: 1rem; opacity: 0.7;">🔍</span>
+          <input type="text" id="igSettingsSearchInput" placeholder="Search adjustments &amp; settings..." oninput="filterIgSettings(this.value)">
+        </div>
+
+        <!-- Group 1: Home Feed & Sections -->
+        <div class="ig-settings-group" data-ig-category="home">
+          <div class="ig-group-header">Home Feed &amp; Display</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="navigateToSubView('homeSectionsAdjust')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-purple">🏠</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Home Screen Sections</div>
+                  <div class="ig-sub">Show, hide, aur upar-neeche adjust karein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igHomeSecBadge">5 Active</span>
+                <span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 2: Book Position & Reordering -->
+        <div class="ig-settings-group" data-ig-category="order">
+          <div class="ig-group-header">Book Order &amp; Sequence</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="navigateToSubView('bookOrderStudio')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">🔢</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Kitabon ki Sequence (Manual Order)</div>
+                  <div class="ig-sub">1st, 2nd, 3rd number par apni marzi se set karein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val">Custom</span>
+                <span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 3: Library Display & Layout -->
+        <div class="ig-settings-group" data-ig-category="layout">
+          <div class="ig-group-header">Library View &amp; Layout</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="navigateToSubView('libraryLayoutAdjust')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-emerald">🖼️</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Library Card Size &amp; Layout</div>
+                  <div class="ig-sub">Bada Grid (2 kitabein) vs Compact List (1 row)</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igLayoutBadge">3 Columns</span>
+                <span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 4: Custom Shelves & Personal Folders -->
+        <div class="ig-settings-group" data-ig-category="shelves">
+          <div class="ig-group-header">Organization &amp; Shelves</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="navigateToSubView('customShelvesAdjust')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">📁</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Custom Shelves &amp; Folders</div>
+                  <div class="ig-sub">Apne folders banayein (Dosto ki Kitabein, Diwali)</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igShelvesBadge">2 Shelves</span>
+                <span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group 5: Content & Cleanliness Vault -->
+        <div class="ig-settings-group" data-ig-category="content">
+          <div class="ig-group-header">Content &amp; Vaults</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="navigateToSubView('notInterested')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box" style="background: rgba(239, 68, 68, 0.15); color: #ef4444;">🚫</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Not Interested Books Vault</div>
+                  <div class="ig-sub">Hide unwanted books or categories</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="navigateToSubView('appearance')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-purple">🎨</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Reading Themes &amp; Typography</div>
+                  <div class="ig-sub">Dark Modern, Sepia Paper, Font Sliders</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SUB-SCREEN: HOME SCREEN SECTIONS ADJUST (FEATURE 2) ================= -->
+    <section id="viewHomeSectionsAdjust" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateToSubView('appSettings')">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Home Screen Sections</h2>
+          <p class="sub-screen-sub-title">Show, hide &amp; reorder home feed</p>
+        </div>
+        <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.76rem;" onclick="resetHomeSectionsToDefault()">↺ Reset</button>
+      </div>
+
+      <div style="padding: 14px 16px 60px;">
+        <div style="background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.4rem;">💡</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
+            Switch se section on/off karein aur <strong>🔼 / 🔽</strong> button se decide karein ki kaunsa dabba upar rahega aur kaunsa neeche.
+          </span>
+        </div>
+
+        <div class="home-sections-list" id="homeSectionsAdjustContainer">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SUB-SCREEN: BOOK SEQUENCE STUDIO (FEATURE 1) ================= -->
+    <section id="viewBookOrderStudio" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateToSubView('appSettings')">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Book Sequence Studio</h2>
+          <p class="sub-screen-sub-title">Set 1st, 2nd, 3rd book order</p>
+        </div>
+        <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.76rem;" onclick="resetCustomBookOrder()">↺ Reset</button>
+      </div>
+
+      <div style="padding: 14px 16px 60px;">
+        <!-- Search Book -->
+        <div style="position: relative; margin-bottom: 14px;">
+          <input type="text" id="bookOrderSearchInput" placeholder="Search book to adjust sequence..." oninput="filterBookOrderStudio(this.value)" style="width: 100%; padding: 10px 14px 10px 38px; border-radius: 12px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #fff; font-size: 0.88rem;">
+          <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.95rem; opacity: 0.6;">🔍</span>
+        </div>
+
+        <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
+            ⭐ <strong>Pin to Top</strong> se kitab 1st number par aa jayegi. Number badge par tap karke seedha rank number bhi type kar sakte ho!
+          </div>
+          <span style="font-size: 1.2rem;">📌</span>
+        </div>
+
+        <!-- Rank List Container -->
+        <div class="book-rank-list" id="bookOrderRankList">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SUB-SCREEN: LIBRARY LAYOUT & SIZE (FEATURE 4) ================= -->
+    <section id="viewLibraryLayoutAdjust" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateToSubView('appSettings')">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Library Layout &amp; Size</h2>
+          <p class="sub-screen-sub-title">Card size &amp; visual style</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <div style="padding: 14px 16px 60px;">
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <!-- Option 1: Bada Grid (2 Columns) -->
+          <div class="ig-card" id="layoutChoiceGrid2" style="cursor: pointer; padding: 16px; border: 1.5px solid var(--border-card); transition: all 0.2s;" onclick="setLibraryLayout('grid2')">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5rem;">🔲</span>
+                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Bada Grid (2 Columns)</span>
+              </div>
+              <span id="radioIndicatorGrid2" style="font-size: 1.2rem; color: var(--text-muted);">⚪</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 10px 0; line-height: 1.4;">
+              Badi-badi photuyein aur covers dikhein. Books ke title aur author saaf aur bade font me aate hain.
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; opacity: 0.6;">
+              <div style="background: rgba(255,255,255,0.06); height: 75px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.2);"></div>
+              <div style="background: rgba(255,255,255,0.06); height: 75px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.2);"></div>
+            </div>
+          </div>
+
+          <!-- Option 2: Standard Grid (3 Columns) -->
+          <div class="ig-card" id="layoutChoiceGrid3" style="cursor: pointer; padding: 16px; border: 1.5px solid var(--border-card); transition: all 0.2s;" onclick="setLibraryLayout('grid3')">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5rem;">⏹️</span>
+                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Standard Grid (3 Columns)</span>
+              </div>
+              <span id="radioIndicatorGrid3" style="font-size: 1.2rem; color: var(--accent-gold);">🟢</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 10px 0; line-height: 1.4;">
+              Classic library layout. Ek row me 3 kitabein balanced size me dikhti hain (Default view).
+            </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; opacity: 0.6;">
+              <div style="background: rgba(255,255,255,0.06); height: 60px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
+              <div style="background: rgba(255,255,255,0.06); height: 60px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
+              <div style="background: rgba(255,255,255,0.06); height: 60px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
+            </div>
+          </div>
+
+          <!-- Option 3: Compact Horizontal List -->
+          <div class="ig-card" id="layoutChoiceCompactList" style="cursor: pointer; padding: 16px; border: 1.5px solid var(--border-card); transition: all 0.2s;" onclick="setLibraryLayout('compactList')">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <span style="font-size: 1.5rem;">📑</span>
+                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Chhota Compact List (1 Row Strip)</span>
+              </div>
+              <span id="radioIndicatorCompactList" style="font-size: 1.2rem; color: var(--text-muted);">⚪</span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 10px 0; line-height: 1.4;">
+              Ek screen par zyada kitabein bina scroll kiye adjust ho sakein. Har kitab ek compact horizontal row me dikhti hai.
+            </p>
+            <div style="display: flex; flex-direction: column; gap: 6px; opacity: 0.6;">
+              <div style="background: rgba(255,255,255,0.06); height: 32px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
+              <div style="background: rgba(255,255,255,0.06); height: 32px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn-save-gold" style="width: 100%; margin-top: 24px; padding: 12px; font-weight: 800;" onclick="switchTab('library')">
+          👀 View Library Now
+        </button>
+      </div>
+    </section>
+
+    <!-- ================= SUB-SCREEN: CUSTOM SHELVES & FOLDERS (FEATURE 5) ================= -->
+    <section id="viewCustomShelvesAdjust" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateToSubView('appSettings')">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Custom Shelves &amp; Folders</h2>
+          <p class="sub-screen-sub-title">Personal book collections</p>
+        </div>
+        <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.76rem;" onclick="openCreateShelfModal()">➕ New</button>
+      </div>
+
+      <div style="padding: 14px 16px 60px;">
+        <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
+            Apni marzi se naye folders banayein (jaise: <em>"Mere Dosto ki Kitabein"</em> ya <em>"Agli Diwali tak"</em>) aur kitabon ko adjust karein.
+          </div>
+          <span style="font-size: 1.4rem;">🗂️</span>
+        </div>
+
+        <!-- Shelves Grid -->
+        <div class="custom-shelves-grid" id="customShelvesListContainer">
+          <!-- Populated by JS -->
+        </div>
+
+        <!-- Active Shelf Detail Section (when a shelf is opened) -->
+        <div id="activeShelfDetailBox" style="display:none; margin-top: 24px; background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 18px; padding: 16px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <span id="activeShelfIconEmoji" style="font-size: 1.4rem;">📁</span>
+              <div>
+                <h3 id="activeShelfTitle" style="font-size: 1rem; font-weight: 800; color: #fff; margin:0;">Shelf Title</h3>
+                <span id="activeShelfBookCount" style="font-size: 0.75rem; color: var(--text-secondary);">0 Books</span>
+              </div>
+            </div>
+            <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.76rem;" onclick="openManageShelfBooksModal()">➕ Manage Books</button>
+          </div>
+          <div id="activeShelfBooksList" style="display: flex; flex-direction: column; gap: 8px; max-height: 340px; overflow-y: auto;">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+      </div>
+    </section>
 
   </main>
 
@@ -2669,6 +3001,75 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-cancel" onclick="closeIsbnBarcodeScannerModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CREATE CUSTOM SHELF / FOLDER ================= -->
+  <div class="modal-overlay" id="createShelfModal" style="display:none;" onclick="if(event.target===this)closeCreateShelfModal()">
+    <div class="modal-sheet" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Create Custom Shelf / Folder</h3>
+        <button type="button" class="modal-close-btn" onclick="closeCreateShelfModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: #fff;">Shelf / Folder Name</label>
+          <input type="text" id="newShelfNameInput" placeholder="e.g. Mere Dosto ki Kitabein, Agli Diwali tak..." style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 12px; color: #fff; font-size: 0.9rem;">
+        </div>
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: #fff;">Select Icon Emoji</label>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="shelfEmojiPicker">
+            <button type="button" class="color-dot-choice active" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('📁', this)">📁</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('🤝', this)">🤝</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('🪔', this)">🪔</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('⭐', this)">⭐</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('🎯', this)">🎯</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('💡', this)">💡</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('❤️', this)">❤️</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('🚀', this)">🚀</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeCreateShelfModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="saveNewCustomShelf()">Create Shelf</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: MANAGE SHELF BOOKS ================= -->
+  <div class="modal-overlay" id="manageShelfBooksModal" style="display:none;" onclick="if(event.target===this)closeManageShelfBooksModal()">
+    <div class="modal-sheet" style="max-width: 480px; max-height: 85vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="manageShelfModalTitle">Manage Books in Shelf</h3>
+        <button type="button" class="modal-close-btn" onclick="closeManageShelfBooksModal()">&times;</button>
+      </div>
+      <div style="padding: 10px 16px 0;">
+        <input type="text" id="shelfBookSearchInput" placeholder="Search books to add or remove..." oninput="filterShelfManageBooks(this.value)" style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 10px; color: #fff; font-size: 0.85rem;">
+      </div>
+      <div class="modal-body" id="manageShelfBooksList" style="flex: 1; overflow-y: auto; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px;">
+        <!-- Populated by JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-save-gold" style="width: 100%;" onclick="closeManageShelfBooksModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: SHELVES SELECTOR DROPDOWN (LIBRARY QUICK FILTER) ================= -->
+  <div class="modal-overlay" id="shelfSelectorDropdownModal" style="display:none;" onclick="if(event.target===this)closeShelfSelectorDropdown()">
+    <div class="modal-sheet" style="max-width: 380px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Select Shelf / Folder</h3>
+        <button type="button" class="modal-close-btn" onclick="closeShelfSelectorDropdown()">&times;</button>
+      </div>
+      <div class="modal-body" id="shelfSelectorDropdownList" style="display: flex; flex-direction: column; gap: 8px; max-height: 360px; overflow-y: auto;">
+        <!-- Populated by JS -->
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+        <button type="button" class="btn-cancel" onclick="closeShelfSelectorDropdown()">Close</button>
+        <button type="button" class="btn-gold-pill" onclick="closeShelfSelectorDropdown(); navigateToSubView('customShelvesAdjust');">+ Manage Shelves</button>
       </div>
     </div>
   </div>

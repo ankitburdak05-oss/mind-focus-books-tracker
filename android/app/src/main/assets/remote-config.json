@@ -2,17 +2,17 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.2",
-    "name": "Mind Focus Books v0.0.2 - Category Bulk Not Interested Manager",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.2/MindFocusBooks-Native.apk",
+    "version": "v0.0.3",
+    "name": "Mind Focus Books v0.0.3 - Instagram-Style Settings & 4 App Adjustments",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.3/MindFocusBooks-Native.apk",
     "features": [
-      "📁 Category-wise Not Interested Selector: Browse all book categories with icons & book counts.",
-      "☑️ 1-Tap Select All & Selective Checkboxes: Easily pick entire categories or select individual books.",
-      "🚫 Bulk Move to Not Interested: Move dozens of books out of Library & Explore in a single tap.",
-      "🔄 Instant Restore All: Bulk restore all hidden books back to Library with 1 tap.",
-      "🔍 Real-time Category Search: Instant search to quickly find and filter categories."
+      "⚙️ Instagram-Style Settings Hub: Grouped cards, gradient icons, and smooth iOS toggle switches.",
+      "🔢 Book Sequence Studio (Manual Reordering): Set custom order for books (#1, #2, #3, Pin to Top, Jump to Rank).",
+      "🏠 Home Screen Sections Reorder & Toggle: Show/hide sections and reorder widgets with 🔼 / 🔽.",
+      "🖼️ Library Layout & Size Switcher: 1-Tap switch between 2-Col Bada Grid, 3-Col Standard, and Compact List.",
+      "📁 Custom Shelves & Folders: Create personal collections (e.g. Friends, Diwali) and manage books inside them."
     ],
-    "stagedAt": "2026-10-10T16:00:00.000Z",
+    "stagedAt": "2026-10-10T16:45:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

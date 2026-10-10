@@ -1,13 +1,17 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.2)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.3)
 // ==========================================================================
 
-const APP_VERSION = '0.0.2';
-const CURRENT_APP_VERSION = 'v0.0.2';
+const APP_VERSION = '0.0.3';
+const CURRENT_APP_VERSION = 'v0.0.3';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
 const STATS_KEY = 'mind_focus_stats_v1';
+const HOME_SECS_KEY = 'mf_home_sections_config';
+const BOOK_ORDER_KEY = 'mf_custom_book_order';
+const LAYOUT_KEY = 'mf_library_layout_mode';
+const SHELVES_KEY = 'mf_custom_shelves';
 
 // Global Application State
 let state = {
@@ -19,7 +23,7 @@ let state = {
   exploreGenre: 'ALL',
   searchQuery: '',
   exploreSearchQuery: '',
-  sortBy: 'recent',
+  sortBy: 'custom', // Default to custom order
   currentBookIndex: -1,
   currentBook: null,
   editingBookIndex: -1,
@@ -42,7 +46,14 @@ let state = {
     readingStreak: 0,
     totalMinutesRead: 0,
     lastReadDate: ''
-  }
+  },
+  // Adjustments & Instagram Settings State (v0.0.3)
+  homeSections: [],
+  customBookOrder: [],
+  libraryLayout: localStorage.getItem(LAYOUT_KEY) || 'grid3',
+  customShelves: [],
+  activeShelfFilter: null,
+  activeShelfForDetail: null
 };
 
 // Book Reader State
@@ -65,6 +76,7 @@ function initApp() {
   loadStats();
   loadBooks();
   loadLendingRecords();
+  loadAdjustmentConfigs();
   applyTheme(state.theme);
   
   // Security PIN Check
@@ -75,6 +87,9 @@ function initApp() {
   // Set default Currently Reading book if none selected
   ensureCurrentlyReadingBook();
   
+  // Apply Home Sections Config
+  applyHomeSectionsConfig();
+
   // Initial Renders
   renderApp();
   
@@ -572,8 +587,43 @@ function renderLibraryGrid() {
   const grid = document.getElementById('libraryBooksGrid');
   if (!grid) return;
   
+  // Apply current layout mode
+  const currentLayout = state.libraryLayout || 'grid3';
+  grid.className = 'library-books-grid layout-' + currentLayout;
+  
+  // Update Layout Switcher buttons
+  const bGrid2 = document.getElementById('btnLayoutGrid2');
+  const bGrid3 = document.getElementById('btnLayoutGrid3');
+  const bList = document.getElementById('btnLayoutList');
+  if (bGrid2) bGrid2.classList.toggle('active', currentLayout === 'grid2');
+  if (bGrid3) bGrid3.classList.toggle('active', currentLayout === 'grid3');
+  if (bList) bList.classList.toggle('active', currentLayout === 'compactList');
+
+  // Update shelf chip counter/label
+  const shelfChip = document.getElementById('chipShelfFilter');
+  const countShelvesEl = document.getElementById('countShelves');
+  if (countShelvesEl) countShelvesEl.innerText = (state.customShelves || []).length;
+  if (shelfChip) {
+    if (state.activeShelfFilter) {
+      const activeShelfObj = (state.customShelves || []).find(s => s.id === state.activeShelfFilter);
+      shelfChip.innerHTML = `${activeShelfObj ? activeShelfObj.icon + ' ' + activeShelfObj.name : '📁 Shelf'} (Filtered)`;
+      shelfChip.classList.add('active');
+    } else {
+      shelfChip.innerHTML = `📁 Shelves (<span id="countShelves">${(state.customShelves || []).length}</span>)`;
+      shelfChip.classList.remove('active');
+    }
+  }
+
   let filtered = state.books.filter(b => !b.notInterested);
   
+  // Custom Shelf Filter
+  if (state.activeShelfFilter) {
+    const activeShelf = (state.customShelves || []).find(s => s.id === state.activeShelfFilter);
+    if (activeShelf && Array.isArray(activeShelf.bookTitles)) {
+      filtered = filtered.filter(b => activeShelf.bookTitles.includes(b.title));
+    }
+  }
+
   if (state.statusFilter === 'READING') {
     filtered = filtered.filter(b => b.status === 'READING');
   } else if (state.statusFilter === 'DONE') {
@@ -598,7 +648,18 @@ function renderLibraryGrid() {
     );
   }
   
-  if (state.sortBy === 'title_asc') {
+  // Custom Sequence & Standard Sorting
+  if (state.sortBy === 'custom') {
+    filtered.sort((a, b) => {
+      const order = state.customBookOrder || [];
+      const idxA = order.indexOf(a.title);
+      const idxB = order.indexOf(b.title);
+      const rankA = idxA === -1 ? 999999 : idxA;
+      const rankB = idxB === -1 ? 999999 : idxB;
+      if (rankA !== rankB) return rankA - rankB;
+      return (a.no || 0) - (b.no || 0);
+    });
+  } else if (state.sortBy === 'title_asc') {
     filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
   } else if (state.sortBy === 'progress_desc') {
     filtered.sort((a, b) => {
@@ -616,6 +677,7 @@ function renderLibraryGrid() {
     grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px 10px; color: var(--text-secondary);">
       <div style="font-size: 32px; margin-bottom: 8px;">📚</div>
       <p style="font-weight: 600;">No books match your criteria.</p>
+      ${state.activeShelfFilter ? '<button type="button" class="btn-gold-pill" style="margin-top:10px;" onclick="clearShelfFilter()">Clear Shelf Filter</button>' : ''}
     </div>`;
     return;
   }
@@ -626,6 +688,27 @@ function renderLibraryGrid() {
     const current = book.current_page || 0;
     const pct = Math.min(100, Math.round((current / total) * 100));
     
+    // Compact Horizontal List Mode (1 Row per Book)
+    if (currentLayout === 'compactList') {
+      return `
+        <div class="compact-book-row" onclick="openBookDetailViewByIndex(${originalIndex})">
+          <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
+          <div class="compact-book-info">
+            <div class="compact-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
+            <div class="compact-book-author">${escapeHtml(book.author || 'Unknown')}</div>
+            <div class="compact-book-meta-row">
+              <span class="compact-category-tag">${escapeHtml(book.category || 'General')}</span>
+              <div class="compact-progress-track">
+                <div class="compact-progress-bar" style="width: ${pct}%"></div>
+              </div>
+              <span class="compact-pct-text">${pct}%</span>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    // Grid Mode (2-Columns Bada Grid or 3-Columns Standard)
     return `
       <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
         <div class="grid-cover-wrap">
@@ -2639,6 +2722,40 @@ window.handleAppBackButton = function() {
     return true;
   }
 
+  // 1c. If custom shelf modal or dropdown is open, close it
+  const csModal = document.getElementById('createShelfModal');
+  if (csModal && csModal.style.display !== 'none') {
+    closeCreateShelfModal();
+    return true;
+  }
+  const msModal = document.getElementById('manageShelfBooksModal');
+  if (msModal && msModal.style.display !== 'none') {
+    closeManageShelfBooksModal();
+    return true;
+  }
+  const ssModal = document.getElementById('shelfSelectorDropdownModal');
+  if (ssModal && ssModal.style.display !== 'none') {
+    closeShelfSelectorDropdown();
+    return true;
+  }
+
+  // 1d. If in an adjustment sub-view, back goes to Settings Hub
+  const adjSubViews = ['viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
+  for (const asvId of adjSubViews) {
+    const asv = document.getElementById(asvId);
+    if (asv && asv.classList.contains('active')) {
+      navigateToSubView('appSettings');
+      return true;
+    }
+  }
+
+  // 1e. If in Instagram Settings Hub, back goes to Profile
+  const appSetView = document.getElementById('viewAppSettings');
+  if (appSetView && appSetView.classList.contains('active')) {
+    navigateBack();
+    return true;
+  }
+
   // 2. If Book Detail view is active, close detail and return to originating screen
   const detailView = document.getElementById('viewBookDetail');
   if (detailView && detailView.classList.contains('active')) {
@@ -2647,7 +2764,7 @@ window.handleAppBackButton = function() {
   }
 
   // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, Not Interested, etc.), go back to Profile
-  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog'];
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
   for (const svId of subViews) {
     const sv = document.getElementById(svId);
     if (sv && sv.classList.contains('active')) {
@@ -4306,6 +4423,11 @@ function navigateToSubView(viewName) {
   if (viewName === 'bookLending') renderBookLendingView();
   if (viewName === 'notInterested') renderNotInterestedView();
   if (viewName === 'niCategorySelect') openNiCategorySelectorView();
+  if (viewName === 'appSettings') renderAppSettingsHub();
+  if (viewName === 'homeSectionsAdjust') renderHomeSectionsAdjustView();
+  if (viewName === 'bookOrderStudio') renderBookOrderStudioView();
+  if (viewName === 'libraryLayoutAdjust') renderLibraryLayoutAdjustView();
+  if (viewName === 'customShelvesAdjust') renderCustomShelvesView();
 }
 
 function navigateBack() {
@@ -5650,5 +5772,662 @@ function renderPrivacySecurityView() {
   if (toggleLock) {
     toggleLock.checked = !!(state.pin && state.pin.length === 4);
   }
+}
+
+// ==========================================================================
+// INSTAGRAM-STYLE SETTINGS & 4 ADJUSTMENTS ENGINE (v0.0.3)
+// ==========================================================================
+
+const DEFAULT_HOME_SECTIONS = [
+  { id: 'greeting', name: 'Greeting & Quote Banner', icon: '🌅', desc: 'Good morning/evening banner & quote', visible: true },
+  { id: 'currentlyReading', name: 'Currently Reading Hero', icon: '📖', desc: 'Current active book & progress dial', visible: true },
+  { id: 'kpiBar', name: 'Compact KPI Metrics Bar', icon: '⚡', desc: 'Finished, Reading, Wishlist & Streak', visible: true },
+  { id: 'statsGrid', name: 'Reading Stats Cards (4x)', icon: '📊', desc: 'Total books, streak & reading time', visible: true },
+  { id: 'featured', name: 'Featured Masterpieces', icon: '✨', desc: 'Curated gems from your library', visible: true }
+];
+
+const DEFAULT_CUSTOM_SHELVES = [
+  { id: 'shelf-friends', name: 'Mere Dosto ki Kitabein', icon: '🤝', color: '#10b981', bookTitles: [] },
+  { id: 'shelf-diwali', name: 'Agli Diwali tak Padhni Hai', icon: '🪔', color: '#f59e0b', bookTitles: [] }
+];
+
+let selectedShelfEmoji = '📁';
+
+function loadAdjustmentConfigs() {
+  try {
+    // 1. Home Sections
+    const savedSecs = localStorage.getItem(HOME_SECS_KEY);
+    if (savedSecs) {
+      state.homeSections = JSON.parse(savedSecs);
+    } else {
+      state.homeSections = JSON.parse(JSON.stringify(DEFAULT_HOME_SECTIONS));
+    }
+
+    // 2. Custom Book Order
+    const savedOrder = localStorage.getItem(BOOK_ORDER_KEY);
+    if (savedOrder) {
+      state.customBookOrder = JSON.parse(savedOrder);
+    } else {
+      // Default book order from current loaded books
+      state.customBookOrder = (state.books || []).map(b => b.title);
+    }
+
+    // 3. Library Layout Mode
+    state.libraryLayout = localStorage.getItem(LAYOUT_KEY) || 'grid3';
+
+    // 4. Custom Shelves
+    const savedShelves = localStorage.getItem(SHELVES_KEY);
+    if (savedShelves) {
+      state.customShelves = JSON.parse(savedShelves);
+    } else {
+      state.customShelves = JSON.parse(JSON.stringify(DEFAULT_CUSTOM_SHELVES));
+    }
+  } catch (err) {
+    console.error('Error loading adjustments config:', err);
+    state.homeSections = JSON.parse(JSON.stringify(DEFAULT_HOME_SECTIONS));
+    state.customShelves = JSON.parse(JSON.stringify(DEFAULT_CUSTOM_SHELVES));
+  }
+}
+
+// --------------------------------------------------------------------------
+// INSTAGRAM SETTINGS HUB CONTROLS
+// --------------------------------------------------------------------------
+function renderAppSettingsHub() {
+  // Update badge for Home sections
+  const activeSecsCount = (state.homeSections || []).filter(s => s.visible).length;
+  const homeBadge = document.getElementById('igHomeSecBadge');
+  if (homeBadge) homeBadge.innerText = `${activeSecsCount} Active`;
+
+  // Update badge for layout
+  const layoutBadge = document.getElementById('igLayoutBadge');
+  if (layoutBadge) {
+    if (state.libraryLayout === 'grid2') layoutBadge.innerText = '2 Columns';
+    else if (state.libraryLayout === 'compactList') layoutBadge.innerText = 'Compact List';
+    else layoutBadge.innerText = '3 Columns';
+  }
+
+  // Update badge for shelves
+  const shelvesBadge = document.getElementById('igShelvesBadge');
+  if (shelvesBadge) shelvesBadge.innerText = `${(state.customShelves || []).length} Shelves`;
+}
+
+function filterIgSettings(query) {
+  const q = (query || '').toLowerCase().trim();
+  const groups = document.querySelectorAll('.ig-settings-group');
+  groups.forEach(group => {
+    const rows = group.querySelectorAll('.ig-row');
+    let hasMatch = false;
+    rows.forEach(row => {
+      const text = row.innerText.toLowerCase();
+      if (!q || text.includes(q)) {
+        row.style.display = 'flex';
+        hasMatch = true;
+      } else {
+        row.style.display = 'none';
+      }
+    });
+    group.style.display = hasMatch ? 'block' : 'none';
+  });
+}
+
+// --------------------------------------------------------------------------
+// FEATURE 2: HOME SCREEN SECTIONS ADJUST (SHOW/HIDE & REORDER)
+// --------------------------------------------------------------------------
+function applyHomeSectionsConfig() {
+  const homeView = document.getElementById('viewHome');
+  if (!homeView) return;
+
+  const sectionsMap = {
+    greeting: document.getElementById('secHomeGreeting'),
+    currentlyReading: document.getElementById('secHomeCurrentlyReading'),
+    kpiBar: document.getElementById('secHomeKpiBar'),
+    statsGrid: document.getElementById('secHomeStatsGrid'),
+    featured: document.getElementById('secHomeFeatured')
+  };
+
+  (state.homeSections || []).forEach(sec => {
+    const el = sectionsMap[sec.id];
+    if (el) {
+      el.style.display = sec.visible ? '' : 'none';
+      // Re-order by appending in specified order
+      homeView.appendChild(el);
+    }
+  });
+}
+
+function renderHomeSectionsAdjustView() {
+  const container = document.getElementById('homeSectionsAdjustContainer');
+  if (!container) return;
+
+  if (!state.homeSections || state.homeSections.length === 0) {
+    state.homeSections = JSON.parse(JSON.stringify(DEFAULT_HOME_SECTIONS));
+  }
+
+  container.innerHTML = state.homeSections.map((sec, index) => {
+    return `
+      <div class="home-sec-item">
+        <div class="home-sec-left">
+          <div class="home-sec-icon">${sec.icon}</div>
+          <div>
+            <div class="home-sec-title">${escapeHtml(sec.name)}</div>
+            <div class="home-sec-desc">${escapeHtml(sec.desc)}</div>
+          </div>
+        </div>
+        <div class="home-sec-controls">
+          <div class="home-sec-reorder-btns">
+            <button type="button" class="btn-sec-reorder" onclick="moveHomeSection('${sec.id}', -1)" title="Move Up" ${index === 0 ? 'disabled style="opacity:0.3;"' : ''}>▲</button>
+            <button type="button" class="btn-sec-reorder" onclick="moveHomeSection('${sec.id}', 1)" title="Move Down" ${index === state.homeSections.length - 1 ? 'disabled style="opacity:0.3;"' : ''}>▼</button>
+          </div>
+          <label class="ig-switch" title="Toggle Show/Hide">
+            <input type="checkbox" ${sec.visible ? 'checked' : ''} onchange="toggleHomeSectionVisibility('${sec.id}', this.checked)">
+            <span class="ig-slider"></span>
+          </label>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleHomeSectionVisibility(secId, isVisible) {
+  const target = (state.homeSections || []).find(s => s.id === secId);
+  if (target) {
+    target.visible = !!isVisible;
+    localStorage.setItem(HOME_SECS_KEY, JSON.stringify(state.homeSections));
+    applyHomeSectionsConfig();
+    showToast(`${target.name} ${isVisible ? 'shown' : 'hidden'} on Home`);
+  }
+}
+
+function moveHomeSection(secId, direction) {
+  const list = state.homeSections || [];
+  const idx = list.findIndex(s => s.id === secId);
+  if (idx < 0) return;
+
+  const targetIdx = idx + direction;
+  if (targetIdx < 0 || targetIdx >= list.length) return;
+
+  const temp = list[idx];
+  list[idx] = list[targetIdx];
+  list[targetIdx] = temp;
+
+  localStorage.setItem(HOME_SECS_KEY, JSON.stringify(list));
+  applyHomeSectionsConfig();
+  renderHomeSectionsAdjustView();
+  showToast('Home section reordered');
+}
+
+function resetHomeSectionsToDefault() {
+  state.homeSections = JSON.parse(JSON.stringify(DEFAULT_HOME_SECTIONS));
+  localStorage.setItem(HOME_SECS_KEY, JSON.stringify(state.homeSections));
+  applyHomeSectionsConfig();
+  renderHomeSectionsAdjustView();
+  showToast('Home sections reset to default');
+}
+
+// --------------------------------------------------------------------------
+// FEATURE 1: BOOK SEQUENCE & REORDERING STUDIO
+// --------------------------------------------------------------------------
+let currentBookOrderQuery = '';
+
+function renderBookOrderStudioView(filterQuery) {
+  const container = document.getElementById('bookOrderRankList');
+  if (!container) return;
+
+  // Active books only
+  let activeBooks = (state.books || []).filter(b => !b.notInterested);
+
+  // Initialize customBookOrder if empty
+  if (!state.customBookOrder || state.customBookOrder.length === 0) {
+    state.customBookOrder = activeBooks.map(b => b.title);
+  }
+
+  // Sort books by customBookOrder
+  activeBooks.sort((a, b) => {
+    const idxA = state.customBookOrder.indexOf(a.title);
+    const idxB = state.customBookOrder.indexOf(b.title);
+    const rankA = idxA === -1 ? 999999 : idxA;
+    const rankB = idxB === -1 ? 999999 : idxB;
+    return rankA - rankB;
+  });
+
+  const q = (filterQuery !== undefined ? filterQuery : currentBookOrderQuery).toLowerCase().trim();
+  let displayedBooks = activeBooks;
+  if (q) {
+    displayedBooks = activeBooks.filter(b => 
+      (b.title && b.title.toLowerCase().includes(q)) ||
+      (b.author && b.author.toLowerCase().includes(q))
+    );
+  }
+
+  if (displayedBooks.length === 0) {
+    container.innerHTML = `<div style="text-align:center; padding:30px; color:var(--text-secondary);">No matching books found.</div>`;
+    return;
+  }
+
+  container.innerHTML = displayedBooks.map(book => {
+    const rankIndex = state.customBookOrder.indexOf(book.title);
+    const displayRank = rankIndex >= 0 ? rankIndex + 1 : activeBooks.indexOf(book) + 1;
+    const isTop = displayRank === 1;
+
+    return `
+      <div class="book-rank-card ${isTop ? 'top-rank' : ''}">
+        <div class="rank-badge" onclick="promptSetBookRank('${escapeHtml(book.title)}')" title="Tap to enter custom rank">#${displayRank}</div>
+        <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.src='cover_placeholder.jpg'">
+        <div class="compact-book-info" style="flex:1;">
+          <div class="compact-book-title">${escapeHtml(book.title)}</div>
+          <div class="compact-book-author">${escapeHtml(book.author || 'Unknown')}</div>
+        </div>
+        <div class="rank-actions">
+          <button type="button" class="btn-pin-top" onclick="pinBookToTop('${escapeHtml(book.title)}')" title="Pin as #1">⭐ #1</button>
+          <button type="button" class="btn-rank-move" onclick="moveBookInCustomOrder('${escapeHtml(book.title)}', -1)" title="Move Up">▲</button>
+          <button type="button" class="btn-rank-move" onclick="moveBookInCustomOrder('${escapeHtml(book.title)}', 1)" title="Move Down">▼</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterBookOrderStudio(query) {
+  currentBookOrderQuery = query || '';
+  renderBookOrderStudioView(currentBookOrderQuery);
+}
+
+function ensureCustomOrderArray() {
+  if (!state.customBookOrder || state.customBookOrder.length === 0) {
+    state.customBookOrder = (state.books || []).map(b => b.title);
+  }
+}
+
+function moveBookInCustomOrder(bookTitle, direction) {
+  ensureCustomOrderArray();
+  const list = state.customBookOrder;
+  let idx = list.indexOf(bookTitle);
+
+  if (idx < 0) {
+    list.push(bookTitle);
+    idx = list.length - 1;
+  }
+
+  const targetIdx = idx + direction;
+  if (targetIdx < 0 || targetIdx >= list.length) return;
+
+  const temp = list[idx];
+  list[idx] = list[targetIdx];
+  list[targetIdx] = temp;
+
+  localStorage.setItem(BOOK_ORDER_KEY, JSON.stringify(list));
+  renderBookOrderStudioView();
+  renderLibraryGrid();
+  showToast(`Moved "${bookTitle.slice(0, 18)}..."`);
+}
+
+function pinBookToTop(bookTitle) {
+  ensureCustomOrderArray();
+  const list = state.customBookOrder;
+  const idx = list.indexOf(bookTitle);
+  if (idx >= 0) list.splice(idx, 1);
+  list.unshift(bookTitle);
+
+  localStorage.setItem(BOOK_ORDER_KEY, JSON.stringify(list));
+  renderBookOrderStudioView();
+  renderLibraryGrid();
+  showToast(`⭐ Pinned "${bookTitle.slice(0, 20)}" to #1!`);
+}
+
+function promptSetBookRank(bookTitle) {
+  ensureCustomOrderArray();
+  const currentRank = state.customBookOrder.indexOf(bookTitle) + 1;
+  const total = (state.books || []).length;
+  const input = prompt(`Enter desired rank for "${bookTitle}" (1 to ${total}):`, currentRank || 1);
+  if (!input) return;
+
+  const newRank = parseInt(input.trim(), 10);
+  if (isNaN(newRank) || newRank < 1 || newRank > total) {
+    showToast('Please enter a valid rank number');
+    return;
+  }
+
+  const list = state.customBookOrder;
+  const idx = list.indexOf(bookTitle);
+  if (idx >= 0) list.splice(idx, 1);
+  list.splice(newRank - 1, 0, bookTitle);
+
+  localStorage.setItem(BOOK_ORDER_KEY, JSON.stringify(list));
+  renderBookOrderStudioView();
+  renderLibraryGrid();
+  showToast(`Set "${bookTitle.slice(0, 18)}" as rank #${newRank}`);
+}
+
+function resetCustomBookOrder() {
+  state.customBookOrder = (state.books || []).map(b => b.title);
+  localStorage.setItem(BOOK_ORDER_KEY, JSON.stringify(state.customBookOrder));
+  renderBookOrderStudioView();
+  renderLibraryGrid();
+  showToast('Book sequence reset to default order');
+}
+
+// --------------------------------------------------------------------------
+// FEATURE 4: LIBRARY LAYOUT & CARD SIZE (GRID-2, GRID-3, COMPACT-LIST)
+// --------------------------------------------------------------------------
+function setLibraryLayout(layoutName) {
+  if (!['grid2', 'grid3', 'compactList'].includes(layoutName)) return;
+
+  state.libraryLayout = layoutName;
+  localStorage.setItem(LAYOUT_KEY, layoutName);
+
+  renderLibraryLayoutAdjustView();
+  renderLibraryGrid();
+
+  const labels = {
+    grid2: 'Bada Grid (2 Columns)',
+    grid3: 'Standard Grid (3 Columns)',
+    compactList: 'Compact List (1 Row)'
+  };
+  showToast(`Layout changed to ${labels[layoutName]}`);
+}
+
+function renderLibraryLayoutAdjustView() {
+  const current = state.libraryLayout || 'grid3';
+
+  const r2 = document.getElementById('radioIndicatorGrid2');
+  const r3 = document.getElementById('radioIndicatorGrid3');
+  const rList = document.getElementById('radioIndicatorCompactList');
+
+  const c2 = document.getElementById('layoutChoiceGrid2');
+  const c3 = document.getElementById('layoutChoiceGrid3');
+  const cList = document.getElementById('layoutChoiceCompactList');
+
+  if (r2) r2.innerText = current === 'grid2' ? '🟢' : '⚪';
+  if (r3) r3.innerText = current === 'grid3' ? '🟢' : '⚪';
+  if (rList) rList.innerText = current === 'compactList' ? '🟢' : '⚪';
+
+  if (c2) c2.style.borderColor = current === 'grid2' ? 'var(--accent-gold)' : 'var(--border-card)';
+  if (c3) c3.style.borderColor = current === 'grid3' ? 'var(--accent-gold)' : 'var(--border-card)';
+  if (cList) cList.style.borderColor = current === 'compactList' ? 'var(--accent-gold)' : 'var(--border-card)';
+}
+
+// --------------------------------------------------------------------------
+// FEATURE 5: CUSTOM SHELVES & PERSONAL FOLDERS
+// --------------------------------------------------------------------------
+function renderCustomShelvesView() {
+  const container = document.getElementById('customShelvesListContainer');
+  if (!container) return;
+
+  if (!state.customShelves || state.customShelves.length === 0) {
+    state.customShelves = JSON.parse(JSON.stringify(DEFAULT_CUSTOM_SHELVES));
+  }
+
+  container.innerHTML = state.customShelves.map(shelf => {
+    const count = (shelf.bookTitles || []).length;
+    return `
+      <div class="custom-shelf-card" onclick="openShelfDetail('${shelf.id}')">
+        <div class="shelf-card-top">
+          <div class="shelf-icon-badge">${shelf.icon || '📁'}</div>
+          <button type="button" class="shelf-delete-btn" onclick="event.stopPropagation(); deleteCustomShelf('${shelf.id}')" title="Delete Shelf">🗑️</button>
+        </div>
+        <div>
+          <div class="shelf-card-title">${escapeHtml(shelf.name)}</div>
+          <div class="shelf-card-count">${count} ${count === 1 ? 'Book' : 'Books'}</div>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  // If a shelf is currently open in detail, re-render it
+  if (state.activeShelfForDetail) {
+    openShelfDetail(state.activeShelfForDetail);
+  }
+}
+
+function openShelfDetail(shelfId) {
+  state.activeShelfForDetail = shelfId;
+  const shelf = (state.customShelves || []).find(s => s.id === shelfId);
+  const detailBox = document.getElementById('activeShelfDetailBox');
+  if (!shelf || !detailBox) return;
+
+  detailBox.style.display = 'block';
+  const iconEl = document.getElementById('activeShelfIconEmoji');
+  const titleEl = document.getElementById('activeShelfTitle');
+  const countEl = document.getElementById('activeShelfBookCount');
+  const listEl = document.getElementById('activeShelfBooksList');
+
+  if (iconEl) iconEl.innerText = shelf.icon || '📁';
+  if (titleEl) titleEl.innerText = shelf.name;
+  if (countEl) countEl.innerText = `${(shelf.bookTitles || []).length} Books`;
+
+  if (listEl) {
+    if (!shelf.bookTitles || shelf.bookTitles.length === 0) {
+      listEl.innerHTML = `<div style="text-align:center; padding:20px; color:var(--text-secondary); font-size:0.85rem;">Is shelf me abhi koi kitab nahi hai. '+ Manage Books' par tap karke kitabein add karein.</div>`;
+    } else {
+      listEl.innerHTML = shelf.bookTitles.map(title => {
+        const book = (state.books || []).find(b => b.title === title) || { title, author: 'Unknown' };
+        return `
+          <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid var(--border-subtle); border-radius:12px; padding:8px 12px;">
+            <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
+              <img src="${getBookCoverUrl(book)}" style="width:36px; height:50px; border-radius:6px; object-fit:cover;" onerror="this.src='cover_placeholder.jpg'">
+              <div style="min-width:0; flex:1;">
+                <div style="font-size:0.88rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(book.title)}</div>
+                <div style="font-size:0.75rem; color:var(--text-secondary);">${escapeHtml(book.author || 'Unknown')}</div>
+              </div>
+            </div>
+            <button type="button" class="btn-cancel" style="padding:4px 8px; font-size:0.72rem; color:#ef4444;" onclick="removeBookFromShelf('${shelf.id}', '${escapeHtml(book.title)}')">❌ Remove</button>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+}
+
+function openCreateShelfModal() {
+  const modal = document.getElementById('createShelfModal');
+  const input = document.getElementById('newShelfNameInput');
+  if (input) input.value = '';
+  selectedShelfEmoji = '📁';
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeCreateShelfModal() {
+  const modal = document.getElementById('createShelfModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function pickShelfEmoji(emoji, el) {
+  selectedShelfEmoji = emoji;
+  const picker = document.getElementById('shelfEmojiPicker');
+  if (picker) {
+    picker.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    if (el) el.classList.add('active');
+  }
+}
+
+function saveNewCustomShelf() {
+  const input = document.getElementById('newShelfNameInput');
+  const name = input ? input.value.trim() : '';
+  if (!name) {
+    showToast('Please enter a shelf name');
+    return;
+  }
+
+  const newShelf = {
+    id: 'shelf-' + Date.now(),
+    name,
+    icon: selectedShelfEmoji || '📁',
+    color: '#f59e0b',
+    bookTitles: []
+  };
+
+  state.customShelves.push(newShelf);
+  localStorage.setItem(SHELVES_KEY, JSON.stringify(state.customShelves));
+
+  closeCreateShelfModal();
+  renderCustomShelvesView();
+  openShelfDetail(newShelf.id);
+  renderLibraryGrid();
+  showToast(`New shelf "${name}" created!`);
+}
+
+function deleteCustomShelf(shelfId) {
+  const shelf = (state.customShelves || []).find(s => s.id === shelfId);
+  if (!shelf) return;
+
+  if (!confirm(`Are you sure you want to delete shelf "${shelf.name}"?`)) return;
+
+  state.customShelves = state.customShelves.filter(s => s.id !== shelfId);
+  if (state.activeShelfForDetail === shelfId) state.activeShelfForDetail = null;
+  if (state.activeShelfFilter === shelfId) state.activeShelfFilter = null;
+
+  localStorage.setItem(SHELVES_KEY, JSON.stringify(state.customShelves));
+  const detailBox = document.getElementById('activeShelfDetailBox');
+  if (detailBox) detailBox.style.display = 'none';
+
+  renderCustomShelvesView();
+  renderLibraryGrid();
+  showToast(`Shelf "${shelf.name}" deleted`);
+}
+
+function removeBookFromShelf(shelfId, bookTitle) {
+  const shelf = (state.customShelves || []).find(s => s.id === shelfId);
+  if (!shelf || !shelf.bookTitles) return;
+
+  shelf.bookTitles = shelf.bookTitles.filter(t => t !== bookTitle);
+  localStorage.setItem(SHELVES_KEY, JSON.stringify(state.customShelves));
+
+  renderCustomShelvesView();
+  renderLibraryGrid();
+  showToast(`Removed from "${shelf.name}"`);
+}
+
+// Manage books modal inside shelf
+let shelfManageSearchQuery = '';
+
+function openManageShelfBooksModal() {
+  const shelf = (state.customShelves || []).find(s => s.id === state.activeShelfForDetail);
+  if (!shelf) return;
+
+  const modal = document.getElementById('manageShelfBooksModal');
+  const titleEl = document.getElementById('manageShelfModalTitle');
+  if (titleEl) titleEl.innerText = `Manage Books: ${shelf.name}`;
+
+  const searchInput = document.getElementById('shelfBookSearchInput');
+  if (searchInput) searchInput.value = '';
+  shelfManageSearchQuery = '';
+
+  renderManageShelfBooksList();
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeManageShelfBooksModal() {
+  const modal = document.getElementById('manageShelfBooksModal');
+  if (modal) modal.style.display = 'none';
+  renderCustomShelvesView();
+  renderLibraryGrid();
+}
+
+function filterShelfManageBooks(query) {
+  shelfManageSearchQuery = query || '';
+  renderManageShelfBooksList();
+}
+
+function renderManageShelfBooksList() {
+  const shelf = (state.customShelves || []).find(s => s.id === state.activeShelfForDetail);
+  const container = document.getElementById('manageShelfBooksList');
+  if (!shelf || !container) return;
+
+  let activeBooks = (state.books || []).filter(b => !b.notInterested);
+  const q = shelfManageSearchQuery.toLowerCase().trim();
+  if (q) {
+    activeBooks = activeBooks.filter(b => 
+      (b.title && b.title.toLowerCase().includes(q)) ||
+      (b.author && b.author.toLowerCase().includes(q))
+    );
+  }
+
+  container.innerHTML = activeBooks.map(book => {
+    const isChecked = (shelf.bookTitles || []).includes(book.title);
+    return `
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:rgba(255,255,255,0.04); border:1px solid ${isChecked ? 'var(--accent-gold)' : 'var(--border-subtle)'}; border-radius:12px; padding:8px 12px; cursor:pointer;" onclick="toggleBookInShelf('${shelf.id}', '${escapeHtml(book.title)}')">
+        <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
+          <img src="${getBookCoverUrl(book)}" style="width:36px; height:50px; border-radius:6px; object-fit:cover;" onerror="this.src='cover_placeholder.jpg'">
+          <div style="min-width:0; flex:1;">
+            <div style="font-size:0.88rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(book.title)}</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary);">${escapeHtml(book.author || 'Unknown')}</div>
+          </div>
+        </div>
+        <input type="checkbox" ${isChecked ? 'checked' : ''} style="width:20px; height:20px; accent-color:var(--accent-gold); cursor:pointer;" onclick="event.stopPropagation(); toggleBookInShelf('${shelf.id}', '${escapeHtml(book.title)}')">
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleBookInShelf(shelfId, bookTitle) {
+  const shelf = (state.customShelves || []).find(s => s.id === shelfId);
+  if (!shelf) return;
+  if (!Array.isArray(shelf.bookTitles)) shelf.bookTitles = [];
+
+  const idx = shelf.bookTitles.indexOf(bookTitle);
+  if (idx >= 0) {
+    shelf.bookTitles.splice(idx, 1);
+  } else {
+    shelf.bookTitles.push(bookTitle);
+  }
+
+  localStorage.setItem(SHELVES_KEY, JSON.stringify(state.customShelves));
+  renderManageShelfBooksList();
+}
+
+// Quick Shelf filter dropdown on Library screen
+function openShelfSelectorDropdown() {
+  const modal = document.getElementById('shelfSelectorDropdownModal');
+  const container = document.getElementById('shelfSelectorDropdownList');
+  if (!modal || !container) return;
+
+  const shelves = state.customShelves || [];
+  container.innerHTML = `
+    <div style="padding:10px 14px; background:${!state.activeShelfFilter ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.04)'}; border:1px solid ${!state.activeShelfFilter ? 'var(--accent-gold)' : 'var(--border-subtle)'}; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:space-between;" onclick="filterLibraryByShelf(null)">
+      <div style="display:flex; align-items:center; gap:10px;">
+        <span style="font-size:1.2rem;">📚</span>
+        <span style="font-weight:700; color:#fff; font-size:0.92rem;">Show All Books (No Shelf Filter)</span>
+      </div>
+      ${!state.activeShelfFilter ? '<span>✓</span>' : ''}
+    </div>
+    ${shelves.map(shelf => {
+      const isSelected = state.activeShelfFilter === shelf.id;
+      return `
+        <div style="padding:10px 14px; background:${isSelected ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.04)'}; border:1px solid ${isSelected ? 'var(--accent-gold)' : 'var(--border-subtle)'}; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:space-between;" onclick="filterLibraryByShelf('${shelf.id}')">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:1.2rem;">${shelf.icon || '📁'}</span>
+            <div>
+              <div style="font-weight:700; color:#fff; font-size:0.92rem;">${escapeHtml(shelf.name)}</div>
+              <div style="font-size:0.75rem; color:var(--text-secondary);">${(shelf.bookTitles || []).length} Books</div>
+            </div>
+          </div>
+          ${isSelected ? '<span>✓</span>' : ''}
+        </div>
+      `;
+    }).join('')}
+  `;
+
+  modal.style.display = 'flex';
+}
+
+function closeShelfSelectorDropdown() {
+  const modal = document.getElementById('shelfSelectorDropdownModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function filterLibraryByShelf(shelfId) {
+  state.activeShelfFilter = shelfId;
+  closeShelfSelectorDropdown();
+  renderLibraryGrid();
+  if (shelfId) {
+    const shelf = (state.customShelves || []).find(s => s.id === shelfId);
+    showToast(`Filtering by shelf: ${shelf ? shelf.name : ''}`);
+  } else {
+    showToast('Cleared shelf filter');
+  }
+}
+
+function clearShelfFilter() {
+  filterLibraryByShelf(null);
 }
 
