@@ -2,9 +2,9 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.4",
-    "name": "Mind Focus Books v0.0.4 - 1-to-10 Library Card Size & Modern Grouped Settings",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.4/MindFocusBooks-Native.apk",
+    "version": "v0.0.5",
+    "name": "Mind Focus Books v0.0.5 - 1-to-10 Library Card Size & Modern Grouped Settings",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.5/MindFocusBooks-Native.apk",
     "features": [
       "🎛️ 1 se 10 Card Size Customizer: Library me 1 se 10 kitabein per row apni marzi se set karein.",
       "🔢 Clean Search Header: Scanner aur Add Book buttons hamesha samne visible aur accessible.",
@@ -13,7 +13,7 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
       "🏠 Home Screen Sections Reorder & Toggle: Show/hide sections and reorder widgets with 🔼 / 🔽.",
       "📁 Custom Shelves & Folders: Create personal collections (e.g. Friends, Diwali) and manage books inside them."
     ],
-    "stagedAt": "2026-10-10T17:19:00.000Z",
+    "stagedAt": "2026-10-10T17:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
