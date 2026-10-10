@@ -1,14 +1,14 @@
 {
-  "id": "notice-v0.0.1",
-  "version": "v0.0.1",
+  "id": "notice-v0.0.2",
+  "version": "v0.0.2",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "🚫",
-  "title": "Mind Focus Books v0.0.1 Update Ready!",
-  "message": "v0.0.1 is live! New Not Interested Books Vault: Hide unwanted books from Library & Explore with 1-tap, and restore anytime from Profile.",
-  "btnText": "⚡ Update Now (v0.0.1)",
+  "icon": "📁",
+  "title": "Mind Focus Books v0.0.2 Update Ready!",
+  "message": "v0.0.2 is live! New Category-wise Not Interested Manager: Select categories, 1-tap Select All, and move bulk books to Not Interested.",
+  "btnText": "⚡ Update Now (v0.0.2)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.1/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-09T18:00:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.2/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-10T16:00:00.000Z"
 }

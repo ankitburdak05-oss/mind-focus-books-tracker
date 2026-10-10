@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.1)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.2)
 // ==========================================================================
 
-const APP_VERSION = '0.0.1';
-const CURRENT_APP_VERSION = 'v0.0.1';
+const APP_VERSION = '0.0.2';
+const CURRENT_APP_VERSION = 'v0.0.2';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -1628,13 +1628,28 @@ function renderNotInterestedView() {
       <div class="total-spent-empty-state">
         <div class="total-spent-empty-icon">🚫</div>
         <div class="total-spent-empty-title">Koi Book Not Interested Nahi Hai</div>
-        <div class="total-spent-empty-desc">Jab kisi kitab me abhi interest na ho, to Book Details me "🚫 Not Interested" par tap karein. Vo yahan safe rahegi aur Library se hide ho jayegi.</div>
+        <div class="total-spent-empty-desc">Jab kisi kitab me abhi interest na ho, to Book Details me "🚫 Not Interested" mark karein ya Category-wise ek sath hide karein.</div>
+        <button type="button" class="btn-save-gold" style="margin-top:16px; padding: 10px 18px; font-size: 0.85rem; background: linear-gradient(135deg, #ef4444, #dc2626); border:none; border-radius:10px; cursor:pointer;" onclick="openNiCategorySelectorView()">
+          📁 Choose Category to Hide Books
+        </button>
       </div>
     `;
     return;
   }
 
-  let html = '';
+  let html = `
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding: 0 4px;">
+      <span style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">${hiddenBooks.length} Hidden Book${hiddenBooks.length === 1 ? '' : 's'}</span>
+      <div style="display:flex; gap:8px;">
+        <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.75rem; background: rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3); border-radius:8px; cursor:pointer;" onclick="restoreAllNotInterestedBooks()">
+          🔄 Restore All
+        </button>
+        <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #ef4444, #dc2626); border:none; border-radius:8px; cursor:pointer;" onclick="openNiCategorySelectorView()">
+          + Add by Category
+        </button>
+      </div>
+    </div>
+  `;
   hiddenBooks.forEach(b => {
     const originalIndex = books.indexOf(b);
     const coverSrc = getBookCoverUrl(b);
@@ -1671,6 +1686,318 @@ function renderNotInterestedView() {
 
   container.innerHTML = html;
 }
+
+function restoreAllNotInterestedBooks() {
+  const hiddenBooks = state.books.filter(b => b && b.notInterested);
+  if (hiddenBooks.length === 0) return;
+  if (confirm(`Do you want to restore all ${hiddenBooks.length} hidden books back to Library & Explore?`)) {
+    hiddenBooks.forEach(b => {
+      b.notInterested = false;
+      delete b.notInterestedReason;
+      delete b.notInterestedDate;
+    });
+    saveBooks();
+    showToast(`✅ All ${hiddenBooks.length} books restored to Library!`);
+    renderNotInterestedView();
+    renderLibraryFilters();
+    renderLibraryGrid();
+    renderExploreBooksGrid();
+    renderHomeRecentBooks();
+    renderProfileView();
+  }
+}
+
+// ================= CATEGORY-WISE NOT INTERESTED MANAGER =================
+let currentNiSelectedCategory = null;
+let selectedNiBookIds = new Set();
+let currentNiCatSearch = '';
+
+function openNiCategorySelectorView() {
+  currentNiSelectedCategory = null;
+  selectedNiBookIds.clear();
+  currentNiCatSearch = '';
+
+  const searchInput = document.getElementById('niCategorySearchInput');
+  if (searchInput) searchInput.value = '';
+
+  // Switch to viewNiCategorySelect
+  document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+  const catView = document.getElementById('viewNiCategorySelect');
+  if (catView) catView.classList.add('active');
+
+  // Header reset
+  const titleEl = document.getElementById('niCatHeaderTitle');
+  const subEl = document.getElementById('niCatHeaderSubtitle');
+  const actBtn = document.getElementById('niCatHeaderActionBtn');
+  if (titleEl) titleEl.innerText = 'Select Category';
+  if (subEl) subEl.innerText = 'Choose category to move books into Not Interested';
+  if (actBtn) actBtn.style.display = 'none';
+
+  // State visibility
+  const gridState = document.getElementById('niCatGridState');
+  const booksState = document.getElementById('niCatBooksState');
+  const floatBar = document.getElementById('niFloatingActionBar');
+  if (gridState) gridState.style.display = 'block';
+  if (booksState) booksState.style.display = 'none';
+  if (floatBar) floatBar.style.display = 'none';
+
+  renderNiCategoriesList();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function getCategoryEmoji(catName) {
+  const c = (catName || '').toLowerCase();
+  if (c.includes('mindset') || c.includes('habit')) return '🧠';
+  if (c.includes('psych') || c.includes('dark')) return '🕵️';
+  if (c.includes('wealth') || c.includes('money') || c.includes('finance')) return '💰';
+  if (c.includes('focus') || c.includes('productiv')) return '🎯';
+  if (c.includes('memory') || c.includes('brain')) return '💡';
+  if (c.includes('fiction') || c.includes('novel') || c.includes('story')) return '📖';
+  if (c.includes('philosophy') || c.includes('wisdom')) return '🏛️';
+  if (c.includes('biograph') || c.includes('leader')) return '👤';
+  if (c.includes('science') || c.includes('tech')) return '🔬';
+  if (c.includes('health') || c.includes('fit')) return '🌿';
+  return '📚';
+}
+
+function renderNiCategoriesList(query) {
+  const container = document.getElementById('niCategoriesListContainer');
+  if (!container) return;
+
+  const books = state.books || [];
+  const q = (query !== undefined ? query : currentNiCatSearch).toLowerCase().trim();
+
+  // Distinct categories
+  const categories = Array.from(new Set(books.map(b => b.category).filter(Boolean))).sort();
+
+  const filtered = categories.filter(cat => !q || cat.toLowerCase().includes(q));
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+        <p style="font-size: 2.2rem; margin-bottom: 8px;">🔍</p>
+        <p style="font-weight: 700; color: #fff;">Koi Category Nahi Mili</p>
+        <p style="font-size: 0.8rem; margin-top: 4px;">Search term badal kar dekhein.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = filtered.map(cat => {
+    const catBooks = books.filter(b => b.category === cat);
+    const total = catBooks.length;
+    const hidden = catBooks.filter(b => b.notInterested).length;
+    const active = total - hidden;
+    const emoji = getCategoryEmoji(cat);
+
+    return `
+      <div class="ni-cat-card" onclick="openNiCategoryBooks('${escapeHtml(cat)}')">
+        <div class="ni-cat-card-left">
+          <div class="ni-cat-icon">${emoji}</div>
+          <div>
+            <div class="ni-cat-title">${escapeHtml(cat)}</div>
+            <div class="ni-cat-sub">${total} Books &bull; <span style="color:#10b981; font-weight:600;">${active} Active</span> ${hidden > 0 ? `&bull; <span style="color:#ef4444;">${hidden} Hidden</span>` : ''}</div>
+          </div>
+        </div>
+        <div class="ni-cat-arrow">&rsaquo;</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterNiCategories(val) {
+  currentNiCatSearch = val;
+  renderNiCategoriesList(val);
+}
+
+function openNiCategoryBooks(catName) {
+  currentNiSelectedCategory = catName;
+  selectedNiBookIds.clear();
+
+  // Header update
+  const titleEl = document.getElementById('niCatHeaderTitle');
+  const subEl = document.getElementById('niCatHeaderSubtitle');
+  if (titleEl) titleEl.innerText = `${catName} Books`;
+  if (subEl) subEl.innerText = `Select books to move into Not Interested`;
+
+  // State toggle
+  const gridState = document.getElementById('niCatGridState');
+  const booksState = document.getElementById('niCatBooksState');
+  if (gridState) gridState.style.display = 'none';
+  if (booksState) booksState.style.display = 'block';
+
+  renderNiCategoryBooksList();
+  updateNiSelectionUI();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function renderNiCategoryBooksList() {
+  const container = document.getElementById('niCategoryBooksListContainer');
+  const totalCountEl = document.getElementById('niCategoryTotalBooksCount');
+  if (!container) return;
+
+  const books = state.books || [];
+  const catBooks = books.filter(b => b.category === currentNiSelectedCategory);
+
+  if (totalCountEl) totalCountEl.innerText = catBooks.length;
+
+  if (catBooks.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
+        <p style="font-size: 2.2rem; margin-bottom: 8px;">📚</p>
+        <p style="font-weight: 700; color: #fff;">Is category me koi book nahi hai</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = catBooks.map(b => {
+    const bId = String(b.id || b.title);
+    const isSelected = selectedNiBookIds.has(bId);
+    const isAlreadyHidden = !!b.notInterested;
+    const coverSrc = getBookCoverUrl(b);
+    const bookTitle = escapeHtml(b.title || 'Untitled Book');
+    const bookAuthor = escapeHtml(b.author || 'Unknown');
+    const status = b.status || 'PENDING';
+
+    return `
+      <div class="ni-book-select-item ${isSelected ? 'selected' : ''} ${isAlreadyHidden ? 'already-hidden' : ''}" onclick="toggleNiBookSelect('${escapeHtml(bId)}')">
+        <div class="ni-custom-checkbox">
+          ${isSelected ? '✓' : ''}
+        </div>
+        <img class="ni-book-cover-mini" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='cover_placeholder.jpg'">
+        <div style="flex: 1; min-width: 0;">
+          <div style="font-weight: 700; font-size: 0.92rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${bookTitle}</div>
+          <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">${bookAuthor}</div>
+          <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
+            <span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.08); color: var(--text-secondary);">${status}</span>
+            ${isAlreadyHidden ? `<span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: rgba(239,68,68,0.2); color: #f87171; font-weight: 700;">Already in Not Interested 🚫</span>` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function toggleNiBookSelect(bId) {
+  if (selectedNiBookIds.has(bId)) {
+    selectedNiBookIds.delete(bId);
+  } else {
+    selectedNiBookIds.add(bId);
+  }
+  renderNiCategoryBooksList();
+  updateNiSelectionUI();
+}
+
+function toggleNiSelectAll(isChecked) {
+  const books = state.books || [];
+  const catBooks = books.filter(b => b.category === currentNiSelectedCategory);
+
+  if (isChecked) {
+    catBooks.forEach(b => {
+      selectedNiBookIds.add(String(b.id || b.title));
+    });
+  } else {
+    selectedNiBookIds.clear();
+  }
+
+  renderNiCategoryBooksList();
+  updateNiSelectionUI();
+}
+
+function updateNiSelectionUI() {
+  const count = selectedNiBookIds.size;
+  const countText = document.getElementById('niSelectedCountText');
+  const floatingBar = document.getElementById('niFloatingActionBar');
+  const floatingText = document.getElementById('niFloatingSelectedText');
+  const actionBtn = document.getElementById('niCatHeaderActionBtn');
+  const selectAllCb = document.getElementById('niSelectAllCheckbox');
+
+  if (countText) countText.innerText = `${count} Selected`;
+  if (floatingText) floatingText.innerText = `${count} Book${count === 1 ? '' : 's'} Selected`;
+
+  const books = state.books || [];
+  const catBooks = books.filter(b => b.category === currentNiSelectedCategory);
+  if (selectAllCb) {
+    selectAllCb.checked = catBooks.length > 0 && count === catBooks.length;
+  }
+
+  if (count > 0) {
+    if (floatingBar) floatingBar.style.display = 'flex';
+    if (actionBtn) {
+      actionBtn.style.display = 'block';
+      actionBtn.innerText = `🚫 Move (${count})`;
+    }
+  } else {
+    if (floatingBar) floatingBar.style.display = 'none';
+    if (actionBtn) actionBtn.style.display = 'none';
+  }
+}
+
+function confirmNiBulkMove() {
+  if (selectedNiBookIds.size === 0) {
+    showToast('Pehle kam se kam ek book select karein');
+    return;
+  }
+
+  const books = state.books || [];
+  let movedCount = 0;
+  const today = getTodayLocalDate();
+
+  books.forEach(b => {
+    const bId = String(b.id || b.title);
+    if (selectedNiBookIds.has(bId)) {
+      b.notInterested = true;
+      b.notInterestedReason = `Category: ${currentNiSelectedCategory || b.category || 'General'}`;
+      b.notInterestedDate = today;
+      movedCount++;
+    }
+  });
+
+  saveBooks();
+
+  if (typeof logActivity === 'function') {
+    logActivity('BULK_NOT_INTERESTED', `Moved ${movedCount} books from ${currentNiSelectedCategory} to Not Interested`);
+  }
+
+  showToast(`🚫 ${movedCount} book${movedCount === 1 ? '' : 's'} moved to Not Interested!`);
+
+  // Reset and return to viewNotInterested
+  selectedNiBookIds.clear();
+  currentNiSelectedCategory = null;
+
+  document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+  const notInterestedView = document.getElementById('viewNotInterested');
+  if (notInterestedView) notInterestedView.classList.add('active');
+
+  renderNotInterestedView();
+  renderLibraryFilters();
+  renderLibraryGrid();
+  renderExploreBooksGrid();
+  renderHomeRecentBooks();
+  renderProfileView();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function handleNiCategoryBack() {
+  const booksState = document.getElementById('niCatBooksState');
+  if (booksState && booksState.style.display !== 'none') {
+    // If viewing books inside a category, go back to category list
+    openNiCategorySelectorView();
+    return;
+  }
+  // Otherwise, go back to viewNotInterested
+  document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
+  const notInterestedView = document.getElementById('viewNotInterested');
+  if (notInterestedView) {
+    notInterestedView.classList.add('active');
+    renderNotInterestedView();
+  } else {
+    navigateBack();
+  }
+}
+
 
 function openSetBudgetPrompt() {
   const currentBudget = localStorage.getItem('mf_reading_budget_2026') || '5000';
@@ -2258,6 +2585,9 @@ function closeBookDetailView() {
       } else if (returnViewId === 'viewNotInterested') {
         renderNotInterestedView();
         switchTabNavOnly('profile');
+      } else if (returnViewId === 'viewNiCategorySelect') {
+        openNiCategorySelectorView();
+        switchTabNavOnly('profile');
       } else if (returnViewId === 'viewTotalSpent') {
         renderTotalSpentView();
         switchTabNavOnly('profile');
@@ -2302,6 +2632,13 @@ window.handleAppBackButton = function() {
     return true;
   }
 
+  // 1d. If in Not Interested Category Selector screen, handle its back step
+  const niCatView = document.getElementById('viewNiCategorySelect');
+  if (niCatView && niCatView.classList.contains('active')) {
+    handleNiCategoryBack();
+    return true;
+  }
+
   // 2. If Book Detail view is active, close detail and return to originating screen
   const detailView = document.getElementById('viewBookDetail');
   if (detailView && detailView.classList.contains('active')) {
@@ -2310,7 +2647,7 @@ window.handleAppBackButton = function() {
   }
 
   // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, Not Interested, etc.), go back to Profile
-  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog'];
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog'];
   for (const svId of subViews) {
     const sv = document.getElementById(svId);
     if (sv && sv.classList.contains('active')) {
@@ -3968,6 +4305,7 @@ function navigateToSubView(viewName) {
   if (viewName === 'bookAvailability') renderBookAvailabilityView();
   if (viewName === 'bookLending') renderBookLendingView();
   if (viewName === 'notInterested') renderNotInterestedView();
+  if (viewName === 'niCategorySelect') openNiCategorySelectorView();
 }
 
 function navigateBack() {
@@ -4001,7 +4339,8 @@ const appFeaturesGuideData = [
   { id: 19, title: 'App Features Directory & Sitemap', category: 'Security', icon: '🗺️', screenNum: 'Screen 19', location: 'Profile -> App Features Directory Button', purpose: 'Sabi 20+ features ki detailed list aur direct 1-tap launcher cards ke liye.', benefit: 'Kisi bhi feature ko bina dhoondhe 1-tap me launch karne ke liye.', actionText: 'Currently Active', route: 'self' },
   { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: '📋', screenNum: 'Screen 20', location: 'Profile -> Options -> Activity Audit Log', purpose: 'App me kiye gaye har action ki history audit log me dekhne ke liye.', benefit: 'System security aur app actions transparent rakhne ke liye.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' },
   { id: 21, title: 'Book Lending & Borrow Tracker', category: 'Library', icon: '🤝', screenNum: 'Screen 21', location: 'Profile -> Options -> Book Lending Tracker', purpose: 'Dosto ya rishtedaaro ko di hui kitabein track karne ke liye.', benefit: 'Physical kitabein kabhi gum hone se bachane aur timely return paane ke liye.', actionText: 'Open Lending Hub', route: 'sub_bookLending' },
-  { id: 22, title: 'Not Interested Books Vault', category: 'Library', icon: '🚫', screenNum: 'Screen 22', location: 'Profile -> Options -> Not Interested Books', purpose: 'Jo kitabein abhi padhne ka man na ho unhe Library & Explore se hide karne ke liye.', benefit: 'Library ko clean aur uncluttered rakhne ke liye, aur jab man kare 1-tap me wapas lane ke liye.', actionText: 'Open Not Interested', route: 'sub_notInterested' }
+  { id: 22, title: 'Not Interested Books Vault', category: 'Library', icon: '🚫', screenNum: 'Screen 22', location: 'Profile -> Options -> Not Interested Books', purpose: 'Jo kitabein abhi padhne ka man na ho unhe Library & Explore se hide karne ke liye.', benefit: 'Library ko clean aur uncluttered rakhne ke liye, aur jab man kare 1-tap me wapas lane ke liye.', actionText: 'Open Not Interested', route: 'sub_notInterested' },
+  { id: 23, title: 'Category Bulk Hide to Not Interested', category: 'Library', icon: '📁', screenNum: 'Screen 23', location: 'Profile -> Not Interested -> Add by Category', purpose: 'Poori category ya multiple kitabon ko ek sath select karke No Interest me daalne ke liye.', benefit: 'Ek-ek book alag kholne ki mehnat bachane aur 1-click multi-hide ke liye.', actionText: 'Open Category Picker', route: 'sub_niCategorySelect' }
 ];
 
 function renderAppFeaturesDirectoryView() {

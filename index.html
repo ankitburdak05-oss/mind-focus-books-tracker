@@ -1820,6 +1820,7 @@
           <h2 class="sub-screen-main-title">Not Interested Books</h2>
           <p class="sub-screen-sub-title" id="notInterestedSubScreenSubtitle">Hidden kitabein &bull; Padhne ka man ho to wapas laayein</p>
         </div>
+        <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #ef4444, #dc2626); border:none; white-space:nowrap;" onclick="openNiCategorySelectorView()">+ Add by Category</button>
       </div>
 
       <!-- Quick Info Banner -->
@@ -1835,6 +1836,72 @@
         <!-- Rendered dynamically by JS -->
       </div>
     </section>
+
+    <!-- ================= SUB-SCREEN: NOT INTERESTED CATEGORY SELECTOR ================= -->
+    <section id="viewNiCategorySelect" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="handleNiCategoryBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title" id="niCatHeaderTitle">Select Category</h2>
+          <p class="sub-screen-sub-title" id="niCatHeaderSubtitle">Choose category to move books into Not Interested</p>
+        </div>
+        <button type="button" class="btn-save-gold" id="niCatHeaderActionBtn" style="display:none; padding: 6px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #ef4444, #dc2626); border:none; white-space:nowrap;" onclick="confirmNiBulkMove()">🚫 Move Selected</button>
+      </div>
+
+      <!-- State 1: All Categories Grid -->
+      <div id="niCatGridState" style="padding: 14px 16px 40px;">
+        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.2); border-radius: 12px; padding: 12px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
+          <span style="font-size: 1.4rem;">📁</span>
+          <span style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
+            Jis category ki kitabein aapko abhi nahi chahiye, us <strong>Category</strong> par tap karein aur kitabein select karke <strong>Not Interested</strong> me daal dein.
+          </span>
+        </div>
+
+        <!-- Category Search Bar -->
+        <div style="position: relative; margin-bottom: 16px;">
+          <input type="text" id="niCategorySearchInput" placeholder="Search category (e.g. Mindset, Wealth)..." oninput="filterNiCategories(this.value)" style="width: 100%; padding: 10px 14px 10px 38px; border-radius: 12px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); color: #fff; font-size: 0.88rem;">
+          <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.95rem; opacity: 0.6;">🔍</span>
+        </div>
+
+        <!-- Categories List / Cards Container -->
+        <div id="niCategoriesListContainer" style="display: grid; grid-template-columns: 1fr; gap: 12px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- State 2: Books in Selected Category -->
+      <div id="niCatBooksState" style="display:none; padding: 12px 16px 80px;">
+        <!-- Category Top Action Bar -->
+        <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px 14px; margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <input type="checkbox" id="niSelectAllCheckbox" onchange="toggleNiSelectAll(this.checked)" style="width: 20px; height: 20px; cursor: pointer; accent-color: #ef4444;">
+            <label for="niSelectAllCheckbox" style="font-size: 0.88rem; font-weight: 700; color: #fff; cursor: pointer;">
+              Select All (<span id="niCategoryTotalBooksCount">0</span>)
+            </label>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;" id="niSelectedCountText">
+            0 Selected
+          </div>
+        </div>
+
+        <!-- Books List Container in this category -->
+        <div id="niCategoryBooksListContainer" style="display: flex; flex-direction: column; gap: 10px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Floating Bottom Action Bar for Bulk Selection -->
+      <div id="niFloatingActionBar" style="display:none; position: fixed; bottom: 80px; left: 16px; right: 16px; z-index: 100; background: rgba(24, 24, 27, 0.95); backdrop-filter: blur(16px); border: 1px solid rgba(239, 68, 68, 0.4); border-radius: 16px; padding: 12px 18px; box-shadow: 0 10px 30px rgba(0,0,0,0.6); align-items: center; justify-content: space-between;">
+        <div>
+          <div style="font-weight: 800; font-size: 0.92rem; color: #fff;" id="niFloatingSelectedText">0 Books Selected</div>
+          <div style="font-size: 0.72rem; color: var(--text-muted);">Library aur Explore se hide ho jayengi</div>
+        </div>
+        <button type="button" class="btn-save-gold" style="padding: 10px 18px; font-size: 0.85rem; font-weight: 700; background: linear-gradient(135deg, #ef4444, #dc2626); border: none; border-radius: 10px; cursor: pointer; box-shadow: 0 4px 14px rgba(239,68,68,0.4);" onclick="confirmNiBulkMove()">
+          🚫 Move to Not Interested
+        </button>
+      </div>
+    </section>
+
 
   </main>
 

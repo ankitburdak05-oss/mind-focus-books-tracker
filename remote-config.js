@@ -2,17 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.1",
-    "name": "Mind Focus Books v0.0.1 - Not Interested Books Vault",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.1/MindFocusBooks-Native.apk",
+    "version": "v0.0.2",
+    "name": "Mind Focus Books v0.0.2 - Category Bulk Not Interested Manager",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.2/MindFocusBooks-Native.apk",
     "features": [
-      "🚫 Not Interested Books Vault: Profile option to hide unwanted books from active Library & Explore.",
-      "🎯 Clean Focus Mode: Keeps Library and Explore uncluttered with only books you actually want to read.",
-      "🔄 1-Tap Instant Restore: Easily restore any book back to Library with a single tap at any time.",
-      "🏷️ Quick Reason Tags: Save why you shelved a book (Mood, Boring, Future, etc.) with hidden date tracking.",
-      "📖 Seamless Book Detail Integration: Not Interested status chip, action banner, and sub-screen."
+      "📁 Category-wise Not Interested Selector: Browse all book categories with icons & book counts.",
+      "☑️ 1-Tap Select All & Selective Checkboxes: Easily pick entire categories or select individual books.",
+      "🚫 Bulk Move to Not Interested: Move dozens of books out of Library & Explore in a single tap.",
+      "🔄 Instant Restore All: Bulk restore all hidden books back to Library with 1 tap.",
+      "🔍 Real-time Category Search: Instant search to quickly find and filter categories."
     ],
-    "stagedAt": "2026-10-09T18:00:00.000Z",
+    "stagedAt": "2026-10-10T16:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
