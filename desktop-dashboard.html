@@ -8,6 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=3.17.1">
+  <script src="book-pages-data.js"></script>
   <script src="books-data.js"></script>
   <style>
     :root {
@@ -1350,6 +1352,215 @@
         </div>
       </div>
 
+      <!-- ================= DESKTOP VIEW: BOOK DETAIL VIEW ================= -->
+      <div id="deskViewBookDetailWrap" class="desk-view-section" style="display:none; max-width:960px; margin:0 auto; padding-bottom:60px;">
+<section id="viewBookDetail" class="app-view">
+      <div class="detail-top-nav">
+        <button type="button" class="btn-back-nav" onclick="closeBookDetailView()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="19" y1="12" x2="5" y2="12"></line>
+            <polyline points="12 19 5 12 12 5"></polyline>
+          </svg>
+        </button>
+        <span class="detail-nav-title" id="detailNavBookNo">Book Details</span>
+        <button type="button" class="btn-detail-edit" onclick="openEditCurrentBookModal()">✏️ Edit Details</button>
+      </div>
+
+      <div class="detail-hero-section">
+        <div class="detail-cover-wrap">
+          <img id="detailBookCover" src="" alt="Cover" onerror="this.src='cover_placeholder.jpg'">
+        </div>
+        <div class="detail-info-block">
+          <h2 class="detail-book-title" id="detailBookTitle">Book Title</h2>
+          <div class="detail-book-author" id="detailBookAuthor">Author Name</div>
+          <div class="detail-genre-tags" id="detailCategoryTags">
+            <span class="detail-tag">Category</span>
+          </div>
+          <div class="detail-rating-row">
+            <span class="star-icon">⭐</span>
+            <span id="detailRatingVal">0.0 (Unrated)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1-Tap Reading Status Selector Chips -->
+      <div class="detail-status-chips-bar">
+        <span class="status-chips-label">Tracking Status:</span>
+        <div class="status-chips-wrap">
+          <button type="button" class="status-chip-btn" id="chipReading" onclick="quickSetBookStatus('READING')">📖 Reading</button>
+          <button type="button" class="status-chip-btn" id="chipCompleted" onclick="quickSetBookStatus('DONE')">✅ Finished</button>
+          <button type="button" class="status-chip-btn" id="chipWishlist" onclick="quickSetBookStatus('PENDING')">🔖 Want to Read</button>
+          <button type="button" class="status-chip-btn" id="chipLent" onclick="toggleBookLendingForCurrent()">🤝 Lent Out</button>
+          <button type="button" class="status-chip-btn" id="chipNotInterested" onclick="toggleNotInterestedForCurrent()">🚫 Not Interested</button>
+        </div>
+      </div>
+
+      <!-- Book Lending Active Status Banner -->
+      <div id="detailLentBanner" style="display:none; background: rgba(16, 185, 129, 0.12); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: 12px; padding: 12px 14px; margin-top: 14px; margin-bottom: 6px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div>
+            <div style="font-weight: 800; font-size: 0.88rem; color: #10b981; display:flex; align-items:center; gap:6px;">
+              <span>🤝</span> <span id="detailLentStatusText">With Rahul since 15 days</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px;" id="detailLentSubText">Phone: 9876543210 &bull; Given on 24 Sep 2026</div>
+          </div>
+          <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.75rem; white-space: nowrap;" onclick="markCurrentBookReturned()">Mark Returned ✅</button>
+        </div>
+      </div>
+
+      <!-- Book Not Interested Active Status Banner -->
+      <div id="detailNotInterestedBanner" style="display:none; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 12px; padding: 12px 14px; margin-top: 14px; margin-bottom: 6px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+          <div>
+            <div style="font-weight: 800; font-size: 0.88rem; color: #ef4444; display:flex; align-items:center; gap:6px;">
+              <span>🚫</span> <span id="detailNotInterestedStatusText">Marked as Not Interested</span>
+            </div>
+            <div style="font-size: 0.72rem; color: var(--text-secondary); margin-top: 2px;" id="detailNotInterestedSubText">Hidden from Library &amp; Explore &bull; Restore anytime</div>
+          </div>
+          <button type="button" class="btn-restore-ni" onclick="restoreCurrentBookToLibrary()">Restore to Library 🔄</button>
+        </div>
+      </div>
+
+      <!-- Two Big Action Buttons -->
+      <div class="detail-actions-row">
+        <button type="button" class="btn-gold-pill flex-1" onclick="openRealBookReaderForCurrent()">
+          <span>📖</span>
+          <span>Read Book Pages</span>
+        </button>
+        <button type="button" class="btn-secondary-action flex-1" id="detailContinueBtn" onclick="toggleReadingTimer()">
+          <span id="detailTimerIcon">⏱️</span>
+          <span id="detailTimerBtnText">Focus Timer</span>
+        </button>
+        <button type="button" class="btn-circle-add" onclick="openQuickLogModal()" title="Log Pages">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <line x1="12" y1="5" x2="12" y2="19"></line>
+            <line x1="5" y1="12" x2="19" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Real Book Reader Mode Indicator Banner -->
+      <div class="reader-mode-hint-banner" onclick="openRealBookReaderForCurrent()">
+        <span class="rmh-icon">📜</span>
+        <div class="rmh-text">
+          <div class="rmh-title">Real Book Reader Mode: <strong id="detailReaderModeName">Sepia Paper Mode (#fbf5e6)</strong></div>
+          <div class="rmh-sub">Warm vintage paper & dark brown ink • Dual Spread & Single Page</div>
+        </div>
+        <button type="button" class="rmh-open-btn">Read Now &rarr;</button>
+      </div>
+
+      <!-- Reading Progress Bar -->
+      <div class="detail-progress-card">
+        <div class="dpc-header">
+          <span class="dpc-percent" id="detailProgressPercent">0% completed</span>
+          <span class="dpc-pages" id="detailPagesRatio">0 / 200 pages</span>
+        </div>
+        <div class="dpc-track">
+          <div class="dpc-fill" id="detailProgressFill" style="width: 0%;"></div>
+        </div>
+      </div>
+
+      <!-- Tabs Navigation -->
+      <div class="detail-tabs-bar">
+        <button type="button" class="detail-tab-btn active" id="tabBtnOverview" onclick="switchDetailTab('overview')">Overview</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnNotes" onclick="switchDetailTab('notes')">Takeaways</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnChapters" onclick="switchDetailTab('chapters')">Chapters</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnReviews" onclick="switchDetailTab('reviews')">Rating & Price</button>
+      </div>
+
+      <!-- Tab Content: Overview -->
+      <div class="detail-tab-content active" id="tabContentOverview">
+        <div class="detail-card-box">
+          <h4 class="box-title">About this book</h4>
+          <p class="box-text" id="detailAboutText">Master the wisdom, discipline, and clarity detailed in this book.</p>
+        </div>
+
+        <div class="detail-card-box">
+          <h4 class="box-title">Reading & Inventory Details</h4>
+          <div class="reading-meta-list">
+            <div class="rm-item">
+              <span class="rm-icon">🔢</span>
+              <span class="rm-label">Book No</span>
+              <span class="rm-val" id="detailBookNoVal">-</span>
+            </div>
+            <div class="rm-item">
+              <span class="rm-icon">🌐</span>
+              <span class="rm-label">Language</span>
+              <span class="rm-val" id="detailLanguageVal">ENGLISH</span>
+            </div>
+            <div class="rm-item">
+              <span class="rm-icon">📌</span>
+              <span class="rm-label">Status</span>
+              <span class="rm-val" id="detailStatusVal">PENDING</span>
+            </div>
+            <div class="rm-item">
+              <span class="rm-icon">📦</span>
+              <span class="rm-label">Availability</span>
+              <span class="rm-val" id="detailAvailabilityVal">AVAILABLE</span>
+            </div>
+            <div class="rm-item">
+              <span class="rm-icon">📅</span>
+              <span class="rm-label">Start Date</span>
+              <span class="rm-val" id="detailDateStarted">Not Started Yet</span>
+            </div>
+            <div class="rm-item" onclick="promptSetTargetDate()" style="cursor:pointer;" title="Tap to set or edit target date">
+              <span class="rm-icon">🎯</span>
+              <span class="rm-label">End / Target Date</span>
+              <span class="rm-val" id="detailDateTarget">In Progress</span>
+            </div>
+            <div class="rm-item">
+              <span class="rm-icon">⏳</span>
+              <span class="rm-label">Days Spent</span>
+              <span class="rm-val" id="detailDaysSpent">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Notes -->
+      <div class="detail-tab-content" id="tabContentNotes">
+        <div class="detail-card-box">
+          <h4 class="box-title">Personal Key Takeaways & Quotes</h4>
+          <textarea id="detailNotesInput" placeholder="Add your reflections, key thoughts, or favourite quotes..." oninput="saveCurrentBookNotes(this.value)"></textarea>
+        </div>
+      </div>
+
+      <!-- Tab Content: Chapters -->
+      <div class="detail-tab-content" id="tabContentChapters">
+        <div class="detail-card-box" id="detailChaptersList">
+          <!-- Generated from pages -->
+        </div>
+      </div>
+
+      <!-- Tab Content: Reviews & Price -->
+      <div class="detail-tab-content" id="tabContentReviews">
+        <div class="detail-card-box">
+          <h4 class="box-title">My Rating (Tap star to rate)</h4>
+          <div class="rating-stars-picker" id="detailRatingPicker">
+            <span class="star-pick" onclick="setBookRating(1)">★</span>
+            <span class="star-pick" onclick="setBookRating(2)">★</span>
+            <span class="star-pick" onclick="setBookRating(3)">★</span>
+            <span class="star-pick" onclick="setBookRating(4)">★</span>
+            <span class="star-pick" onclick="setBookRating(5)">★</span>
+            <button type="button" class="btn-clear-rating" onclick="setBookRating(0)" title="Reset Rating">Clear</button>
+          </div>
+          <p class="box-text" id="detailReviewText">No rating given yet. Tap any star when you read!</p>
+        </div>
+
+        <div class="detail-card-box">
+          <h4 class="box-title">Purchase Price & Budget</h4>
+          <div class="rm-item">
+            <span class="rm-icon">💰</span>
+            <span class="rm-label">Price Paid</span>
+            <span class="rm-val" id="detailPriceVal">Not Added</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    
+      </div>
+
     </main>
   </div>
 
@@ -1393,472 +1604,835 @@
     </div>
   </div>
 
-  <script>
-    // ================= DESKTOP DASHBOARD ENGINE =================
-    const RESERVATIONS_STORAGE_KEY = 'mf_desk_reservations_v1';
 
-    // Default Seed Data matching the user's exact screenshot
-    const DEFAULT_RESERVATIONS = [
-      {
-        id: 'res-1',
-        title: 'The 7 Habits of Highly Effective People',
-        author: 'Stephen R. Covey',
-        cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=200&q=80',
-        holderName: 'Rahul Sharma',
-        holderRole: 'Friend',
-        holderInit: 'R',
-        queue: '#1 of 2',
-        expectedDate: 'Oct 20, 2025',
-        status: 'WAITING',
-        statusLabel: 'Waiting'
-      },
-      {
-        id: 'res-2',
-        title: 'Atomic Habits',
-        author: 'James Clear',
-        cover: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=200&q=80',
-        holderName: 'Priya Verma',
-        holderRole: 'Colleague',
-        holderInit: 'P',
-        queue: '#2 of 3',
-        expectedDate: 'Nov 05, 2025',
-        status: 'WAITING',
-        statusLabel: 'Waiting'
-      },
-      {
-        id: 'res-3',
-        title: 'Deep Work',
-        author: 'Cal Newport',
-        cover: 'hyperfocus_cover.jpg',
-        holderName: 'Sumit Gurjar',
-        holderRole: 'Friend',
-        holderInit: 'S',
-        queue: '#3 of 4',
-        expectedDate: 'Nov 18, 2025',
-        status: 'WAITING',
-        statusLabel: 'Waiting'
-      },
-      {
-        id: 'res-4',
-        title: 'The Psychology of Money',
-        author: 'Morgan Housel',
-        cover: 'https://images.unsplash.com/photo-1592496431122-2349e0fbc666?w=200&q=80',
-        holderName: 'Aman Singh',
-        holderRole: 'Friend',
-        holderInit: 'A',
-        queue: '#1 of 1',
-        expectedDate: 'Oct 10, 2025',
-        status: 'AVAILABLE_SOON',
-        statusLabel: 'Available Soon'
-      },
-      {
-        id: 'res-5',
-        title: 'Dune',
-        author: 'Frank Herbert',
-        cover: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=200&q=80',
-        holderName: 'Neha Jain',
-        holderRole: 'Colleague',
-        holderInit: 'N',
-        queue: '#1 of 1',
-        expectedDate: 'Oct 12, 2025',
-        status: 'AVAILABLE_SOON',
-        statusLabel: 'Available Soon'
-      }
-    ];
-
-    const DEFAULT_FULFILLED = [
-      {
-        title: 'Ikigai',
-        author: 'Héctor García & Francesc Miralles',
-        cover: 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=200&q=80',
-        date: 'Received on Oct 3, 2025'
-      },
-      {
-        title: 'Rich Dad Poor Dad',
-        author: 'Robert Kiyosaki',
-        cover: 'https://images.unsplash.com/photo-1553729459-efe14ef6055d?w=200&q=80',
-        date: 'Received on Sep 18, 2025'
-      },
-      {
-        title: 'The Alchemist',
-        author: 'Paulo Coelho',
-        cover: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=200&q=80',
-        date: 'Received on Aug 26, 2025'
-      }
-    ];
-
-    let deskReservations = [];
-    let currentFilter = 'ALL';
-    let searchQuery = '';
-
-    function loadReservations() {
-      try {
-        const saved = localStorage.getItem(RESERVATIONS_STORAGE_KEY);
-        if (saved) {
-          deskReservations = JSON.parse(saved);
-        } else {
-          deskReservations = [...DEFAULT_RESERVATIONS];
-          localStorage.setItem(RESERVATIONS_STORAGE_KEY, JSON.stringify(deskReservations));
-        }
-      } catch (e) {
-        deskReservations = [...DEFAULT_RESERVATIONS];
-      }
-      renderDesktopView();
-    }
-
-    function renderDesktopView() {
-      // 1. Metric Counts
-      const total = deskReservations.length;
-      const waitingCount = deskReservations.filter(r => r.status === 'WAITING').length;
-      const availableSoonCount = deskReservations.filter(r => r.status === 'AVAILABLE_SOON').length;
-
-      const metricActive = document.getElementById('metricActiveCount');
-      if (metricActive) metricActive.innerText = String(total).padStart(2, '0');
-
-      const metricAvail = document.getElementById('metricAvailableCount');
-      if (metricAvail) metricAvail.innerText = String(availableSoonCount).padStart(2, '0');
-
-      // 2. Filter tabs active state
-      document.querySelectorAll('#deskFilterGroup .filter-tab-btn').forEach(btn => {
-        const f = btn.getAttribute('data-filter');
-        btn.classList.toggle('active', f === currentFilter);
-        if (f === 'ALL') btn.innerText = `All (${total})`;
-        if (f === 'WAITING') btn.innerText = `Waiting (${waitingCount})`;
-        if (f === 'AVAILABLE_SOON') btn.innerText = `Available Soon (${availableSoonCount})`;
-      });
-
-      // 3. Filter Table Items
-      let list = deskReservations;
-      if (currentFilter !== 'ALL') {
-        list = list.filter(r => r.status === currentFilter);
-      }
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        list = list.filter(r => 
-          r.title.toLowerCase().includes(q) ||
-          r.author.toLowerCase().includes(q) ||
-          r.holderName.toLowerCase().includes(q)
-        );
-      }
-
-      // Render Table Rows
-      const tbody = document.getElementById('deskWaitlistTableBody');
-      if (tbody) {
-        if (list.length === 0) {
-          tbody.innerHTML = `
-            <tr>
-              <td colspan="7" style="text-align: center; padding: 40px; color: var(--text-muted);">
-                No reservations found in this view.
-              </td>
-            </tr>
-          `;
-        } else {
-          tbody.innerHTML = list.map((item, idx) => `
-            <tr>
-              <td class="table-index-col">${idx + 1}</td>
-              <td>
-                <div class="table-book-cell">
-                  <img src="${item.cover}" class="table-book-cover" onerror="this.src='cover_placeholder.jpg'">
-                  <div class="table-book-meta">
-                    <span class="table-book-title">${escapeHtml(item.title)}</span>
-                    <span class="table-book-author">${escapeHtml(item.author)}</span>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <div class="table-holder-cell">
-                  <div class="holder-avatar">${escapeHtml(item.holderInit || item.holderName[0] || 'U')}</div>
-                  <div class="holder-info">
-                    <span class="holder-name">${escapeHtml(item.holderName)}</span>
-                    <span class="holder-role">${escapeHtml(item.holderRole || 'Friend')}</span>
-                  </div>
-                </div>
-              </td>
-              <td>
-                <span class="queue-pill ${item.queue.startsWith('#1 of 1') ? 'first' : ''}">${escapeHtml(item.queue)}</span>
-              </td>
-              <td>
-                <div class="date-meta-text">
-                  <span>📅</span>
-                  <span>${escapeHtml(item.expectedDate)}</span>
-                </div>
-              </td>
-              <td>
-                <span class="status-badge ${item.status === 'AVAILABLE_SOON' ? 'available' : 'waiting'}">
-                  ${item.status === 'AVAILABLE_SOON' ? '● Available Soon' : '🕒 Waiting'}
-                </span>
-              </td>
-              <td style="text-align: right;">
-                <div class="table-actions-cell" style="justify-content: flex-end;">
-                  ${item.status === 'AVAILABLE_SOON' ? `
-                    <button type="button" class="btn-action-confirm" onclick="confirmReservation('${item.id}')">Confirm</button>
-                  ` : `
-                    <button type="button" class="btn-action-remind" onclick="remindHolder('${item.id}')">🔔 Remind</button>
-                  `}
-                  <button type="button" class="btn-action-more" onclick="deleteReservation('${item.id}')" title="Delete">✕</button>
-                </div>
-              </td>
-            </tr>
-          `).join('');
-        }
-      }
-
-      // Render Recently Fulfilled Cards
-      const fulfilledGrid = document.getElementById('deskFulfilledGrid');
-      if (fulfilledGrid) {
-        fulfilledGrid.innerHTML = DEFAULT_FULFILLED.map(item => `
-          <div class="fulfilled-card">
-            <img src="${item.cover}" class="fulfilled-thumb" onerror="this.src='cover_placeholder.jpg'">
-            <div class="fulfilled-info">
-              <div class="fulfilled-title">${escapeHtml(item.title)}</div>
-              <div class="fulfilled-author">${escapeHtml(item.author)}</div>
-              <div class="fulfilled-date">${escapeHtml(item.date)}</div>
-            </div>
-            <div class="fulfilled-pill">
-              <span>✓</span> Returned
-            </div>
+  <!-- ================= INJECTED FULL APP MODALS ================= -->
+<!-- ================= REAL 3D MULTI-LANGUAGE BOOK READER MODAL ================= -->
+  <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)">
+    <div class="real-book-reader-container" onclick="event.stopPropagation()">
+      <!-- Top Reader Navigation Bar -->
+      <div class="reader-top-bar">
+        <div class="reader-top-left">
+          <button type="button" class="reader-btn-icon" onclick="closeRealBookReader()" title="Close Book">✕</button>
+          <div class="reader-book-identity">
+            <span class="reader-badge" id="readerBookBadge">📖 REAL BOOK</span>
+            <h2 class="reader-title" id="readerBookTitleDisplay">Book Title</h2>
           </div>
-        `).join('');
-      }
-    }
+        </div>
 
-    function setDeskFilter(filter) {
-      currentFilter = filter;
-      renderDesktopView();
-    }
+        <!-- Center Language Switcher Pills -->
+        <div class="reader-lang-pills">
+          <button type="button" class="reader-lang-pill active" id="readerLangPillHindi" onclick="switchReaderLanguage('hindi')">हिंदी</button>
+          <button type="button" class="reader-lang-pill" id="readerLangPillHinglish" onclick="switchReaderLanguage('hinglish')">Hinglish</button>
+          <button type="button" class="reader-lang-pill" id="readerLangPillEnglish" onclick="switchReaderLanguage('english')">English</button>
+        </div>
 
-    function handleDeskSearch(val) {
-      searchQuery = val.trim();
-      renderDesktopView();
-    }
+        <!-- Right Controls: Explicit View Modes & Paper Tone Switchers -->
+        <div class="reader-top-right">
+          <!-- View Modes: 📖 Dual Spread vs 📄 Single Page -->
+          <div class="reader-btn-pill-group" title="Reading Mode: Dual Spread vs Single Page">
+            <button type="button" class="reader-pill-btn active" id="readerBtnSpread" onclick="setReaderSpreadMode('spread')" title="📖 Dual Spread Mode (असली खुली किताब)">📖 Spread</button>
+            <button type="button" class="reader-pill-btn" id="readerBtnSingle" onclick="setReaderSpreadMode('single')" title="📄 Single Page Mode (एक पन्ना)">📄 Single</button>
+          </div>
 
-    function remindHolder(id) {
-      const item = deskReservations.find(r => r.id === id);
-      if (item) {
-        alert(`🔔 Reminder notification sent to ${item.holderName} for "${item.title}"!`);
-      }
-    }
+          <!-- Paper Tones: 📜 Sepia, 🌙 Dark, ☀️ Light -->
+          <div class="reader-btn-pill-group" title="Paper Tone Switcher">
+            <button type="button" class="reader-pill-btn active" id="readerToneSepia" onclick="setReaderTheme('sepia')" title="📜 Sepia (आँखों के लिए आरामदायक)">📜 Sepia</button>
+            <button type="button" class="reader-pill-btn" id="readerToneDark" onclick="setReaderTheme('dark')" title="🌙 Dark (रात में पढ़ने के लिए)">🌙 Dark</button>
+            <button type="button" class="reader-pill-btn" id="readerToneLight" onclick="setReaderTheme('light')" title="☀️ Light (सफेद पन्ना)">☀️ Light</button>
+          </div>
 
-    function confirmReservation(id) {
-      const item = deskReservations.find(r => r.id === id);
-      if (item) {
-        alert(`🎉 Book Received! "${item.title}" is now added to your personal reading shelf.`);
-        deskReservations = deskReservations.filter(r => r.id !== id);
-        saveReservations();
-        renderDesktopView();
-      }
-    }
+          <!-- Font Size Controls -->
+          <div class="reader-font-controls">
+            <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(-1)" title="Smaller font">A-</button>
+            <span id="readerFontSizeDisplay" style="font-size:0.75rem; color:var(--text-muted); min-width:28px; text-align:center;">100%</span>
+            <button type="button" class="reader-btn-sm" onclick="adjustReaderFontSize(1)" title="Larger font">A+</button>
+          </div>
 
-    function deleteReservation(id) {
-      if (confirm('Delete this reservation item?')) {
-        deskReservations = deskReservations.filter(r => r.id !== id);
-        saveReservations();
-        renderDesktopView();
-      }
-    }
+          <!-- Reader Fullscreen Toggle -->
+          <button type="button" class="reader-btn-icon" onclick="toggleAppFullscreen()" title="Toggle Fullscreen Reading (⛶)">⛶</button>
+        </div>
+      </div>
 
-    function openReserveModal() {
-      document.getElementById('reserveModalOverlay').style.display = 'flex';
-    }
+      <!-- 3D Open Book Stage -->
+      <div class="real-book-stage-wrap" id="realBookStageWrap">
+        <div class="real-book-hardcover" id="realBookHardcover">
+          <div class="real-book-spread" id="realBookSpread">
+            <div class="reader-ribbon-bookmark"></div>
 
-    function closeReserveModal() {
-      document.getElementById('reserveModalOverlay').style.display = 'none';
-    }
-
-    function saveNewReservation() {
-      const title = document.getElementById('reserveBookTitle').value.trim();
-      const author = document.getElementById('reserveBookAuthor').value.trim() || 'Unknown Author';
-      const holderName = document.getElementById('reserveHolderName').value.trim() || 'Friend';
-      const holderRole = document.getElementById('reserveHolderRole').value.trim() || 'Colleague';
-      const dateVal = document.getElementById('reserveExpectedDate').value;
-
-      if (!title) {
-        alert('Please enter a book title');
-        return;
-      }
-
-      let formattedDate = 'Expected Soon';
-      if (dateVal) {
-        const d = new Date(dateVal);
-        formattedDate = d.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' });
-      }
-
-      const newItem = {
-        id: 'res-' + Date.now(),
-        title,
-        author,
-        cover: 'hyperfocus_cover.jpg',
-        holderName,
-        holderRole,
-        holderInit: holderName[0].toUpperCase(),
-        queue: '#1 of 1',
-        expectedDate: formattedDate,
-        status: 'WAITING',
-        statusLabel: 'Waiting'
-      };
-
-      deskReservations.unshift(newItem);
-      saveReservations();
-      closeReserveModal();
-      renderDesktopView();
-    }
-
-    function saveReservations() {
-      localStorage.setItem(RESERVATIONS_STORAGE_KEY, JSON.stringify(deskReservations));
-    }
-
-    // ================= DESKTOP TABS SWITCHER (KEEPS USER ON DESKTOP DASHBOARD) =================
-    function switchDeskTab(tabName) {
-      // 1. Update Sidebar Active State
-      document.querySelectorAll('.desk-sidebar .nav-item').forEach(btn => {
-        const t = btn.getAttribute('data-tab');
-        btn.classList.toggle('active', t === tabName);
-      });
-
-      // 2. Hide all view sections, show target section
-      document.querySelectorAll('.desk-view-section').forEach(sec => {
-        sec.style.display = 'none';
-        sec.classList.remove('active');
-      });
-
-      const tabMap = {
-        'reservation': 'deskViewReservation',
-        'home': 'deskViewHome',
-        'library': 'deskViewLibrary',
-        'explore': 'deskViewExplore',
-        'lending': 'deskViewLending',
-        'notes': 'deskViewNotes',
-        'stats': 'deskViewStats',
-        'profile': 'deskViewProfile',
-        'settings': 'deskViewSettings'
-      };
-
-      const targetId = tabMap[tabName] || 'deskViewReservation';
-      const targetSec = document.getElementById(targetId);
-      if (targetSec) {
-        targetSec.style.display = 'block';
-        targetSec.classList.add('active');
-      }
-
-      // Render tab-specific desktop data
-      if (tabName === 'library') renderDeskLibrary();
-      if (tabName === 'explore') renderDeskExplore();
-      if (tabName === 'home') renderDeskHome();
-      if (tabName === 'notes') renderDeskNotes();
-    }
-
-    function renderDeskLibrary() {
-      const tbody = document.getElementById('deskLibraryTableBody');
-      const badge = document.getElementById('deskLibraryTotalBadge');
-      if (!tbody) return;
-
-      const books = (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) ? DEFAULT_BOOKS : [];
-      if (badge) badge.innerText = books.length;
-
-      tbody.innerHTML = books.slice(0, 40).map((b, idx) => `
-        <tr>
-          <td class="table-index-col">${idx + 1}</td>
-          <td>
-            <div class="table-book-cell">
-              <img src="${b.cover_image || b.cover_url || 'cover_placeholder.jpg'}" class="table-book-cover" onerror="this.src='cover_placeholder.jpg'">
-              <div class="table-book-meta">
-                <span class="table-book-title">${escapeHtml(b.title)}</span>
-                <span class="table-book-author">${escapeHtml(b.author || 'Unknown')}</span>
+            <!-- Left Page (Spread mode) -->
+            <div class="reader-page-sheet page-sheet-left" id="readerPageLeft">
+              <div class="page-inner-sheet" id="pageInnerLeft">
+                <!-- Content dynamically rendered -->
+              </div>
+              <div class="reader-page-footer-wrap">
+                <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
               </div>
             </div>
-          </td>
-          <td>
-            <span class="queue-pill">${escapeHtml(b.category || 'General')}</span>
-          </td>
-          <td>
-            <span class="status-badge ${b.status === 'READING' ? 'waiting' : 'available'}">
-              ${b.status === 'READING' ? '📖 Reading' : '✓ Completed'}
-            </span>
-          </td>
-          <td style="color:var(--text-secondary); font-size:0.82rem;">${escapeHtml(b.language || 'HINDI')}</td>
-          <td style="text-align:right;">
-            <button type="button" class="btn-action-remind" onclick="alert('Viewing: ${escapeHtml(b.title)}')">Read Preview</button>
-          </td>
-        </tr>
-      `).join('');
-    }
 
-    function renderDeskExplore() {
-      const container = document.getElementById('deskExploreGrid');
-      if (!container) return;
-      const cats = [
-        { name: 'Self-Help & Habits', count: '48 Books', icon: '⚡' },
-        { name: 'Wealth & Money Psychology', count: '36 Books', icon: '💰' },
-        { name: 'Focus & Productivity', count: '29 Books', icon: '🎯' },
-        { name: 'Philosophy & Wisdom', count: '42 Books', icon: '🏛️' },
-        { name: 'Hindi Classic Literature', count: '65 Books', icon: '📜' },
-        { name: 'Biographies & Titans', count: '34 Books', icon: '👑' }
-      ];
-      container.innerHTML = cats.map(c => `
-        <div class="fulfilled-card" onclick="switchDeskTab('library')">
-          <div class="metric-icon-circle gold" style="width:44px; height:44px; font-size:1.3rem;">${c.icon}</div>
-          <div class="fulfilled-info">
-            <div class="fulfilled-title">${c.name}</div>
-            <div class="fulfilled-author">${c.count}</div>
+            <!-- Center Spine Shadow -->
+            <div class="reader-spine-divider">
+              <div class="reader-spine-crease"></div>
+            </div>
+
+            <!-- Right Page -->
+            <div class="reader-page-sheet page-sheet-right" id="readerPageRight">
+              <div class="page-inner-sheet" id="pageInnerRight">
+                <!-- Content dynamically rendered -->
+              </div>
+              <div class="reader-page-footer-wrap">
+                <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+              </div>
+            </div>
           </div>
-          <div class="fulfilled-pill">Explore &rarr;</div>
         </div>
-      `).join('');
-    }
+      </div>
 
-    function renderDeskHome() {
-      const container = document.getElementById('deskHomeFeaturedGrid');
-      if (!container) return;
-      const featured = [
-        { title: 'Hyperfocus', author: 'Chris Bailey', cover: 'hyperfocus_cover.jpg', tag: 'Currently Reading' },
-        { title: 'Atomic Habits', author: 'James Clear', cover: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=200&q=80', tag: 'Masterpiece' },
-        { title: 'The Psychology of Money', author: 'Morgan Housel', cover: 'https://images.unsplash.com/photo-1592496431122-2349e0fbc666?w=200&q=80', tag: 'Bestseller' }
-      ];
-      container.innerHTML = featured.map(f => `
-        <div class="fulfilled-card" onclick="switchDeskTab('library')">
-          <img src="${f.cover}" class="fulfilled-thumb" onerror="this.src='cover_placeholder.jpg'">
-          <div class="fulfilled-info">
-            <div class="fulfilled-title">${f.title}</div>
-            <div class="fulfilled-author">${f.author}</div>
-            <div class="fulfilled-date">${f.tag}</div>
+      <!-- Bottom Reader Bar -->
+      <div class="reader-bottom-bar">
+        <button type="button" class="reader-nav-btn" id="readerPrevPageBtn" onclick="prevReaderPage()">◀ Prev</button>
+        <div class="reader-page-slider-group">
+          <input type="range" class="reader-page-range" id="readerPageSlider" min="1" max="10" value="1" oninput="onReaderSliderInput(this.value)">
+          <span class="reader-page-indicator" id="readerPageIndicator">Page 1 / 4</span>
+        </div>
+        <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="nextReaderPage()">Next ▶</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= LEND BOOK MODAL ================= -->
+  <div class="modal-overlay" id="lendBookModalOverlay" style="display:none;" onclick="if(event.target === this) closeLendBookModal()">
+    <div class="modal-card modal-md" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">🤝 Lend Book to Friend</h3>
+        <button type="button" class="modal-close-btn" onclick="closeLendBookModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Select Book from Library *</label>
+          <select id="lendBookSelect" style="width: 100%; padding: 8px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 8px; color: #fff;">
+            <!-- Populated dynamically -->
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label>Borrower Name (Dost ka Naam) *</label>
+          <input type="text" id="lendBorrowerName" placeholder="e.g. Rahul Sharma" style="width: 100%;">
+        </div>
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Phone Number (Optional)</label>
+            <input type="tel" id="lendBorrowerPhone" placeholder="e.g. 9876543210">
           </div>
-          <div class="fulfilled-pill">Open</div>
-        </div>
-      `).join('');
-    }
-
-    function renderDeskNotes() {
-      const container = document.getElementById('deskNotesGrid');
-      if (!container) return;
-      const notes = [
-        { title: 'Deep Work Takeaway', book: 'Deep Work by Cal Newport', date: 'Oct 08, 2026', text: 'High-Quality Work Produced = (Time Spent) x (Intensity of Focus)' },
-        { title: 'Habit Loop Insight', book: 'Atomic Habits by James Clear', date: 'Oct 02, 2026', text: 'You do not rise to the level of your goals. You fall to the level of your systems.' },
-        { title: 'Focus Productivity', book: 'Hyperfocus by Chris Bailey', date: 'Sep 24, 2026', text: 'Scatterfocus unlocks creative connections by letting the mind wander purposefully.' }
-      ];
-      container.innerHTML = notes.map(n => `
-        <div class="fulfilled-card" style="flex-direction:column; align-items:flex-start; gap:8px;">
-          <div style="display:flex; justify-content:space-between; width:100%; align-items:center;">
-            <div class="fulfilled-title">${n.title}</div>
-            <span style="font-size:0.72rem; color:var(--text-muted);">${n.date}</span>
+          <div class="form-group flex-1">
+            <label>Date Given *</label>
+            <input type="date" id="lendDateInput">
           </div>
-          <div style="font-size:0.78rem; color:var(--accent-gold); font-weight:600;">${n.book}</div>
-          <div style="font-size:0.84rem; color:var(--text-secondary); line-height:1.4;">"${n.text}"</div>
         </div>
-      `).join('');
-    }
+        <div class="form-group" style="margin-top: 12px;">
+          <label>Notes / Expected Return (Optional)</label>
+          <input type="text" id="lendNotesInput" placeholder="e.g. 15 din baad exams ke baad dega" style="width: 100%;">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeLendBookModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="confirmLendBook()">Confirm &amp; Lend 🤝</button>
+      </div>
+    </div>
+  </div>
 
-    function escapeHtml(str) {
-      if (!str) return '';
-      return String(str)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
-    }
+  <!-- ================= NOT INTERESTED CONFIRMATION MODAL ================= -->
+  <div class="modal-overlay" id="notInterestedModalOverlay" style="display:none;" onclick="if(event.target === this) closeNotInterestedModal()">
+    <div class="modal-card modal-md" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title" style="color: #ef4444; display:flex; align-items:center; gap:8px;">
+          <span>🚫</span> Mark as Not Interested
+        </h3>
+        <button type="button" class="modal-close-btn" onclick="closeNotInterestedModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="background: rgba(239, 68, 68, 0.08); border: 1px solid rgba(239, 68, 68, 0.25); border-radius: 12px; padding: 12px; margin-bottom: 14px;">
+          <div style="font-weight: 700; color: #fff; font-size: 0.95rem; margin-bottom: 4px;" id="niTargetBookTitle">Book Title</div>
+          <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.4;">
+            Ye kitab aapki <strong>Library</strong> aur <strong>Explore</strong> se hide ho jayegi taaki reading focus bana rahe.
+            Aap ise Profile &gt; <em>Not Interested Books</em> me kabhi bhi dekh aur wapas 1-tap me restore kar sakte hain.
+          </div>
+        </div>
 
-    // Initialize on page load
-    window.addEventListener('DOMContentLoaded', loadReservations);
-  </script>
+        <div class="form-group" style="margin-bottom: 12px;">
+          <label style="font-weight: 600; font-size: 0.85rem; margin-bottom: 8px; display:block;">Select Reason (Optional):</label>
+          <div class="ni-reasons-wrap" style="display:flex; flex-direction:column; gap:8px;">
+            <label class="ni-reason-pill active" onclick="selectNiReason(this, '😴 Abhi Mood Nahi Hai')">
+              <input type="radio" name="niReasonRadio" value="😴 Abhi Mood Nahi Hai" checked style="display:none;">
+              <span>😴 Abhi Mood Nahi Hai (Not in mood right now)</span>
+            </label>
+            <label class="ni-reason-pill" onclick="selectNiReason(this, '🥱 Boring / Overhyped Lagi')">
+              <input type="radio" name="niReasonRadio" value="🥱 Boring / Overhyped Lagi" style="display:none;">
+              <span>🥱 Boring / Overhyped Lagi (Did not enjoy)</span>
+            </label>
+            <label class="ni-reason-pill" onclick="selectNiReason(this, '⏳ Baad Me Padhunga (Future)')">
+              <input type="radio" name="niReasonRadio" value="⏳ Baad Me Padhunga (Future)" style="display:none;">
+              <span>⏳ Baad Me Padhunga (Future shelf)</span>
+            </label>
+            <label class="ni-reason-pill" onclick="selectNiReason(this, '🚫 Topic Pasand Nahi Aaya')">
+              <input type="radio" name="niReasonRadio" value="🚫 Topic Pasand Nahi Aaya" style="display:none;">
+              <span>🚫 Topic Pasand Nahi Aaya (Wrong fit)</span>
+            </label>
+            <label class="ni-reason-pill" onclick="selectNiReason(this, '📁 Just Shelve (No reason)')">
+              <input type="radio" name="niReasonRadio" value="📁 Just Shelve (No reason)" style="display:none;">
+              <span>📁 Just Shelve (No specific reason)</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-top: 10px;">
+          <label style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; display:block;">Custom Note (Optional):</label>
+          <input type="text" id="niCustomNoteInput" placeholder="e.g. Chapter 2 ke baad bore lagi..." style="width: 100%; padding: 8px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 8px; color: #fff;">
+        </div>
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:space-between; gap:10px;">
+        <button type="button" class="btn-cancel" onclick="closeNotInterestedModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" style="background: linear-gradient(135deg, #ef4444, #dc2626); color:#fff; border:none;" onclick="confirmNotInterestedAction()">🚫 Move to Not Interested</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= COMPREHENSIVE EDIT / ADD BOOK MODAL (ALL 16 FIELDS) ================= -->
+  <div class="modal-overlay" id="editBookModalOverlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="editBookModalTitle">Edit Book Details</h3>
+        <button type="button" class="modal-close-btn" onclick="closeEditModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <!-- Quick Catalog Search & Auto-Fill -->
+        <div class="form-group quick-autofill-box" id="quickAutofillGroup">
+          <label style="color: var(--accent-gold); font-weight: 600; display: flex; align-items: center; gap: 6px;">
+            <span>⚡</span> Quick Search & Auto-Fill from Library / Classics
+          </label>
+          <div style="position: relative;">
+            <input type="text" id="quickCatalogSearchInput" placeholder="Search title or author (e.g. Atomic Habits, Deep Work)..." oninput="onQuickCatalogSearch(this.value)" autocomplete="off">
+            <div id="quickCatalogDropdown" class="quick-autofill-dropdown" style="display: none;"></div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Book No</label>
+            <input type="text" id="editBookNo" placeholder="e.g. book 151">
+          </div>
+          <div class="form-group flex-1">
+            <label>Language</label>
+            <input type="text" id="editBookLanguage" placeholder="e.g. HINDI, ENGLISH">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Book Title *</label>
+          <input type="text" id="editBookTitle" placeholder="Enter book title">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Author</label>
+            <input type="text" id="editBookAuthor" placeholder="Author name">
+          </div>
+          <div class="form-group flex-1">
+            <label>Category</label>
+            <input type="text" id="editBookCategory" placeholder="e.g. Productivity">
+          </div>
+        </div>
+
+        <!-- Book Cover Photo with Preview & Safe-Save Upload -->
+        <div class="form-group">
+          <label>Book Cover Photo</label>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div id="coverPreviewBox" class="cover-preview-box">
+              <span id="coverPlaceholderText" style="font-size:0.75rem; color:var(--text-muted);">No Cover</span>
+              <img id="coverPreviewImg" src="" alt="Cover" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:4px;">
+            </div>
+            <div style="display:flex; flex-direction:column; gap:6px; flex:1;">
+              <input type="text" id="editBookCover" placeholder="Paste Image URL or choose file below" oninput="onEditBookCoverUrlInput(this.value)">
+              <div style="display:flex; gap:6px; align-items:center;">
+                <label class="btn-restore" style="cursor:pointer; padding:4px 10px; font-size:11px;">
+                  📁 Upload Photo
+                  <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverImageUpload(this)">
+                </label>
+                <button type="button" class="btn-cancel" id="removeCoverBtn" onclick="removeCoverPhoto()" style="display:none; padding:4px 8px; font-size:11px;">
+                  Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Status</label>
+            <select id="editBookStatus" onchange="onEditBookStatusChange(this.value)">
+              <option value="PENDING">⏳ PENDING</option>
+              <option value="READING">📖 READING</option>
+              <option value="DONE">✅ DONE</option>
+              <option value="LENT">👥 LENT OUT</option>
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label>Availability</label>
+            <select id="editBookAvailability">
+              <option value="AVAILABLE">Available</option>
+              <option value="UNAVAILABLE">Unavailable</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Lent Details (visible when status is LENT) -->
+        <div class="form-row" id="editLentDetailsRow" style="display:none;">
+          <div class="form-group flex-1">
+            <label>Borrower Name (Dost ka naam)</label>
+            <input type="text" id="editLentTo" placeholder="e.g. Rahul Sharma">
+          </div>
+          <div class="form-group flex-1">
+            <label>Borrower Phone</label>
+            <input type="tel" id="editLentPhone" placeholder="e.g. 9876543210">
+          </div>
+        </div>
+
+        <!-- Pages Tracking -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Current Page</label>
+            <input type="number" id="editCurrentPage" min="0" placeholder="e.g. 0">
+          </div>
+          <div class="form-group flex-1">
+            <label>Total Pages</label>
+            <input type="number" id="editTotalPages" min="1" placeholder="e.g. 250">
+          </div>
+        </div>
+
+        <!-- Price & Rating -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Price (₹ Purchase Cost - Optional)</label>
+            <input type="number" id="editBookPrice" min="0" placeholder="Leave blank if not added">
+          </div>
+          <div class="form-group flex-1">
+            <label>Rating</label>
+            <select id="editBookRating">
+              <option value="0">☆☆☆☆☆ (No Rating / 0)</option>
+              <option value="1">★☆☆☆☆ (1 Star)</option>
+              <option value="2">★★☆☆☆ (2 Stars)</option>
+              <option value="3">★★★☆☆ (3 Stars)</option>
+              <option value="4">★★★★☆ (4 Stars)</option>
+              <option value="5">★★★★★ (5 Stars)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Dates & Count Days -->
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label>Start Date</label>
+            <input type="date" id="editStartDate" onchange="calculateCountDays()">
+          </div>
+          <div class="form-group flex-1">
+            <label>End Date</label>
+            <input type="date" id="editEndDate" onchange="calculateCountDays()">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Count Days (Auto-calculated)</label>
+          <input type="number" id="editCountDays" placeholder="0" min="0">
+        </div>
+
+        <div class="form-group">
+          <label>Key Learnings, Quotes & Takeaways</label>
+          <textarea id="editBookTakeaway" placeholder="What are the key learnings, quotes, or actionable insights from this book?"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="saveBookModal()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= QUICK LOG PAGES MODAL ================= -->
+  <div class="modal-overlay" id="quickLogModalOverlay">
+    <div class="modal-card modal-sm">
+      <div class="modal-header">
+        <h3 class="modal-title">Log Reading Pages</h3>
+        <button type="button" class="modal-close-btn" onclick="closeQuickLogModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <p class="quick-log-sub" id="quickLogBookName">Book Name</p>
+        <div class="form-group">
+          <label>Current Page Read</label>
+          <input type="number" id="quickLogPageInput" min="0" value="0">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeQuickLogModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="saveQuickLogPages()">Update Progress</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= EDIT PROFILE MODAL ================= -->
+  <div class="modal-overlay" id="editProfileModalOverlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Profile</h3>
+        <button type="button" class="modal-close-btn" onclick="closeEditProfileModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" id="inputProfileName" value="Ankit Burdak">
+        </div>
+        <div class="form-group">
+          <label>Username / Handle</label>
+          <input type="text" id="inputProfileHandle" value="@ankitburdak">
+        </div>
+        <div class="form-group">
+          <label>Profile Avatar</label>
+          <div class="avatar-upload-row">
+            <img src="ankit_avatar.png" id="previewEditAvatar" class="avatar-preview-sm" alt="Preview">
+            <label class="btn-restore" style="cursor:pointer;">
+              Choose Photo
+              <input type="file" id="avatarFileInput" accept="image/*" onchange="handleAvatarFileSelect(event)" style="display:none;">
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeEditProfileModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="saveProfileChanges()">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PIN SETUP & LOCK SCREEN ================= -->
+  <div class="pin-lock-overlay" id="pinLockOverlay" style="display:none;">
+    <div class="pin-lock-box">
+      <div class="pin-lock-icon">🔒</div>
+      <h3 class="pin-lock-title" id="pinScreenTitle">Enter Security PIN</h3>
+      <p class="pin-lock-sub" id="pinScreenSub">Access your personal library</p>
+      <div class="pin-dots-row">
+        <div class="pin-dot" id="pinDot0"></div>
+        <div class="pin-dot" id="pinDot1"></div>
+        <div class="pin-dot" id="pinDot2"></div>
+        <div class="pin-dot" id="pinDot3"></div>
+      </div>
+      <div class="pin-keypad">
+        <button type="button" class="pin-key" onclick="pressPinKey('1')">1</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('2')">2</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('3')">3</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('4')">4</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('5')">5</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('6')">6</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('7')">7</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('8')">8</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('9')">9</button>
+        <button type="button" class="pin-key pin-clear" onclick="clearPinInput()">C</button>
+        <button type="button" class="pin-key" onclick="pressPinKey('0')">0</button>
+        <button type="button" class="pin-key pin-back" onclick="deletePinKey()">&larr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= CARD 1: QUANTUM HOLOGRAPHIC BEACON MODAL ================= -->
+  <div class="holo-portal-overlay" id="inAppNoticeModalOverlay" style="display:none;" onclick="handleHoloOverlayClick(event)">
+    <div class="holo-notice-card" id="holoNoticeCard" onclick="event.stopPropagation()">
+      <div class="holo-telemetry-badge">
+        <span class="holo-live-dot"></span>
+        <span class="holo-telemetry-text">CARD 1 • QUANTUM BEACON TRANSMISSION</span>
+      </div>
+
+      <div class="holo-reactor-orb-container">
+        <div class="holo-reactor-orb">
+          <span id="inAppNoticeIcon">🚀</span>
+        </div>
+      </div>
+
+      <h3 class="holo-notice-title" id="inAppNoticeTitle">Mind Focus Books v3.20.2 Ready!</h3>
+
+      <div class="holo-message-capsule">
+        <div class="holo-corner-accents">
+          <span class="corner tl">⌜</span>
+          <span class="corner tr">⌝</span>
+          <span class="corner bl">⌞</span>
+          <span class="corner br">⌟</span>
+        </div>
+        <div class="holo-message-watermark">MINDFOCUS • CARD 1 TRANSMISSION</div>
+        <div class="holo-message-text" id="inAppNoticeMessage">
+          Major v3.20.2 update: Full App Features Directory & Sitemap (All 20 Screens listed with 1-tap launchers), 100% Real User Metrics & Pure Pricing!
+        </div>
+      </div>
+
+      <div class="holo-notice-footer">
+        <div class="holo-footer-meta">
+          <span>⚡ CARD 1 • ENCRYPTED END-TO-END</span>
+        </div>
+        <button type="button" class="holo-dismiss-btn" id="inAppNoticeDismissBtn" onclick="onHoloNoticeActionClick()">
+          <span id="inAppNoticeBtnText">⚡ Update Now</span>
+          <span>✦</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= VISION-OS FROSTED GLASS UPDATE MODAL ================= -->
+  <div class="modal-overlay" id="updateCheckerModalOverlay" style="display:none;" onclick="handleUpdateOverlayClick(event)">
+    <div class="modal-content update-glass-card" onclick="event.stopPropagation()">
+      <div style="display:flex; justify-content:flex-end; margin-bottom:-10px;">
+        <button class="modal-close" style="background:none; border:none; color:#94a3b8; font-size:1.8rem; cursor:pointer;" onclick="closeUpdateCheckerModal()">&times;</button>
+      </div>
+
+      <div class="update-glass-rocket-icon">
+        🚀
+      </div>
+
+      <div class="update-glass-title" id="updateModalTitle">New Version Update Ready:</div>
+      <div class="update-glass-version-tag" id="updateTargetVersionBadge">v0.0.5 Ready</div>
+      <div class="update-glass-sub" id="updateModalDesc">Mind Focus Books v0.0.5 • 1-to-10 Library Card Size &amp; Grouped Settings</div>
+
+      <div class="update-glass-checklist">
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>🎛️ <strong>1 to 10 Card Size Customizer:</strong> Library me 1 se 10 kitabein per row apni marzi se set karein</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>🔍 <strong>Clean Search Header:</strong> Scanner aur Add Book buttons hamesha visible</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>⚙️ <strong>Grouped Settings &amp; Adjustments:</strong> Customization, Vaults &amp; Tools cards</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>🔢 <strong>Book Sequence Studio:</strong> 1st, 2nd, 3rd number par custom book ordering</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>📁 <strong>Custom Shelves &amp; Personal Folders:</strong> Create and manage custom book collections</span>
+        </div>
+        <div class="update-glass-item">
+          <span class="update-glass-check">✓</span>
+          <span>🚀 <strong>1-Tap Direct In-App APK Reinstall &amp; Auto Package Installer</strong></span>
+        </div>
+      </div>
+
+      <!-- Animated Progress Bar (when downloading) -->
+      <div class="update-progress-container" id="updateModalProgress" style="display:none; margin-bottom:1rem;">
+        <div class="update-progress-info" style="color:#cbd5e1; font-size:0.8rem; margin-bottom:4px; display:flex; justify-content:space-between;">
+          <span id="updateProgressText">Downloading Signed APK...</span>
+          <span id="updateProgressPct">0%</span>
+        </div>
+        <div class="update-progress-track" style="height:6px; background:rgba(255,255,255,0.1); border-radius:999px; overflow:hidden;">
+          <div class="update-progress-fill" id="updateProgressFill" style="height:100%; width:0%; background:linear-gradient(90deg, #3b82f6, #10b981); transition:width 0.2s ease;"></div>
+        </div>
+      </div>
+
+      <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerInAppUpdate()">
+        ⚡ Download &amp; Install v0.0.5 Now
+      </button>
+    </div>
+  </div>
+
+  <!-- ================= ADD NOTE & HIGHLIGHT MODAL ================= -->
+  <div class="modal-overlay" id="addNoteModalOverlay" style="display:none;" onclick="handleAddNoteOverlayClick(event)">
+    <div class="modal-card modal-sm" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">Add Note or Highlight</h3>
+        <button type="button" class="modal-close-btn" onclick="closeAddNoteModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Type</label>
+          <select id="addNoteType" style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 10px; color: var(--text-primary);">
+            <option value="Note">📝 Note</option>
+            <option value="Highlight">✨ Highlight</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Book</label>
+          <input type="text" id="addNoteBook" placeholder="e.g. Atomic Habits" style="width: 100%;">
+        </div>
+        <div class="form-group">
+          <label>Page Number</label>
+          <input type="number" id="addNotePage" placeholder="e.g. 25" style="width: 100%;">
+        </div>
+        <div class="form-group">
+          <label>Note / Quotation *</label>
+          <textarea id="addNoteContent" placeholder="Enter key insight, quote, or personal reflection..." style="width: 100%; height: 90px; background: rgba(0,0,0,0.25); border: 1px solid var(--border-subtle); border-radius: 10px; color: var(--text-primary); padding: 10px;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeAddNoteModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="saveNewNoteModal()">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FEATURE 1: BOOK SCANNER & ISBN CAPTURE MODAL ================= -->
+  <div class="modal-overlay" id="bookScannerModalOverlay" style="display:none;" onclick="if(event.target === this) closeBookScannerModal()">
+    <div class="modal-card modal-sm" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">📷 ISBN / Barcode Scanner</h3>
+        <button type="button" class="modal-close-btn" onclick="closeBookScannerModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="text-align: center; padding: 20px; background: rgba(0,0,0,0.3); border-radius: 12px; border: 1px dashed var(--border-subtle);">
+          <div style="font-size: 2.5rem; margin-bottom: 8px;">🔍</div>
+          <div style="font-size: 0.9rem; font-weight: 700; color: #fff;">Scan ISBN Barcode</div>
+          <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Enter ISBN-10 or ISBN-13 barcode manually or query Google Books database:</p>
+          <input type="text" id="scannerIsbnInput" placeholder="e.g. 9780143127741 or 0143127747" style="width: 100%; padding: 10px; margin-top: 12px; background: rgba(255,255,255,0.08); border: 1px solid var(--accent-gold); border-radius: 8px; color: #fff; text-align: center; font-size: 1rem; font-weight: 700;">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeBookScannerModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="fetchIsbnMetadata()">Fetch Book Info</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FEATURE 2: PHYSICAL PAGE OCR SCANNER MODAL ================= -->
+  <div class="modal-overlay" id="ocrScannerModalOverlay" style="display:none;" onclick="if(event.target === this) closeOcrScannerModal()">
+    <div class="modal-card modal-md" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">📸 OCR Page Quote Extractor</h3>
+        <button type="button" class="modal-close-btn" onclick="closeOcrScannerModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="padding: 12px; background: rgba(245, 158, 11, 0.1); border-radius: 10px; margin-bottom: 12px; font-size: 0.8rem; color: var(--accent-gold);">
+          Paste text from camera OCR or image text recognition to instantly extract quotes &amp; create notes.
+        </div>
+        <div class="form-group">
+          <label>Book Title</label>
+          <input type="text" id="ocrBookTitle" placeholder="Book title..." style="width: 100%;">
+        </div>
+        <div class="form-group">
+          <label>Page Number</label>
+          <input type="number" id="ocrPageNum" placeholder="e.g. 142" style="width: 100%;">
+        </div>
+        <div class="form-group">
+          <label>Extracted OCR Text</label>
+          <textarea id="ocrRawText" placeholder="Paste or type captured book text here..." style="width: 100%; height: 120px; background: rgba(0,0,0,0.3); border: 1px solid var(--border-subtle); border-radius: 8px; color: #fff; padding: 10px;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeOcrScannerModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="processOcrText()">Create Note from OCR</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FEATURE 4: DUPLICATE BOOK DETECTOR MODAL ================= -->
+  <div class="modal-overlay" id="duplicateDetectorModalOverlay" style="display:none;" onclick="if(event.target === this) closeDuplicateDetectorModal()">
+    <div class="modal-card modal-md" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">🔍 Duplicate Book Detector</h3>
+        <button type="button" class="modal-close-btn" onclick="closeDuplicateDetectorModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="duplicateDetectorResults">
+        <!-- Populated by JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeDuplicateDetectorModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FEATURE 6: READING SPEED BENCHMARK TEST MODAL ================= -->
+  <div class="modal-overlay" id="readingSpeedModalOverlay" style="display:none;" onclick="if(event.target === this) closeReadingSpeedModal()">
+    <div class="modal-card modal-md" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">⏱️ Reading Speed Benchmark Test</h3>
+        <button type="button" class="modal-close-btn" onclick="closeReadingSpeedModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="speedTestContainer">
+        <!-- Populated by JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeReadingSpeedModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FEATURE 17: TRASH & RESTORE CENTER MODAL ================= -->
+  <div class="modal-overlay" id="trashCenterModalOverlay" style="display:none;" onclick="if(event.target === this) closeTrashCenterModal()">
+    <div class="modal-card modal-lg" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">🗑️ Trash &amp; Restore Center</h3>
+        <button type="button" class="modal-close-btn" onclick="closeTrashCenterModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="trashCenterContainer">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:space-between;">
+        <button type="button" class="btn-secondary-action" style="color:#ef4444; border-color:#ef4444;" onclick="emptyTrashPermanently()">Empty Trash</button>
+        <button type="button" class="btn-cancel" onclick="closeTrashCenterModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= FEATURE 21: LIVE CAMERA ISBN / BARCODE SCANNER MODAL ================= -->
+  <div class="modal-overlay" id="isbnBarcodeScannerModalOverlay" style="display:none;" onclick="if(event.target === this) closeIsbnBarcodeScannerModal()">
+    <div class="modal-card modal-md" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">📷 Live Camera ISBN / Barcode Scanner</h3>
+        <button type="button" class="modal-close-btn" onclick="closeIsbnBarcodeScannerModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="padding: 12px; background: rgba(245, 158, 11, 0.12); border: 1px solid rgba(245, 158, 11, 0.3); border-radius: 10px; margin-bottom: 14px; font-size: 0.82rem; color: var(--accent-gold);">
+          Point camera at book barcode (ISBN-10 / ISBN-13) or enter ISBN below to auto-fetch details from OpenLibrary!
+        </div>
+
+        <!-- Camera Viewfinder -->
+        <div class="isbn-scanner-viewport" id="isbnCameraViewport" style="position:relative; width:100%; height:200px; background:#000; border-radius:12px; overflow:hidden; display:flex; align-items:center; justify-content:center; margin-bottom:14px;">
+          <video id="isbnCameraVideo" autoplay playsinline style="width:100%; height:100%; object-fit:cover; display:none;"></video>
+          <div id="isbnScannerPlaceholder" style="text-align:center; padding:20px;">
+            <div style="font-size:2.5rem; margin-bottom:8px;">📷</div>
+            <div style="font-size:0.85rem; color:#94a3b8;">Camera preview will start when you tap "Start Camera"</div>
+          </div>
+          <div class="scanner-laser-line" id="isbnScannerLaser" style="display:none; position:absolute; top:50%; left:10%; right:10%; height:2px; background:#ef4444; box-shadow:0 0 8px #ef4444; animation: laserScan 2s infinite ease-in-out;"></div>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-bottom:14px;">
+          <button type="button" id="btnStartIsbnCamera" class="btn-save-gold" style="flex:1; padding:8px;" onclick="toggleIsbnCameraScan()">📷 Start Camera Scan</button>
+        </div>
+
+        <!-- Manual ISBN Input -->
+        <div class="form-group" style="margin-bottom:14px;">
+          <label style="font-size:0.8rem; font-weight:700; color:var(--accent-gold);">Or Enter 10/13 Digit ISBN Number</label>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="manualIsbnInput" placeholder="e.g. 9780525538370 or 0525538371" style="flex:1; padding:8px 12px; background:rgba(0,0,0,0.3); border:1px solid var(--border-subtle); border-radius:8px; color:#fff;">
+            <button type="button" class="btn-save-gold" style="padding:8px 14px;" onclick="lookupIsbnBook()">Fetch Book</button>
+          </div>
+        </div>
+
+        <!-- Scanned Result Card -->
+        <div id="isbnScannedResultCard" style="display:none; background:rgba(255,255,255,0.05); border:1px solid var(--border-subtle); border-radius:12px; padding:12px; margin-top:10px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <img id="isbnResultCover" src="cover_placeholder.jpg" style="width:50px; height:75px; object-fit:cover; border-radius:6px;" onerror="this.src='cover_placeholder.jpg'">
+            <div style="flex:1;">
+              <h4 id="isbnResultTitle" style="font-size:0.95rem; font-weight:800; color:#fff; margin:0 0 4px 0;">Book Title</h4>
+              <div id="isbnResultAuthor" style="font-size:0.8rem; color:var(--accent-gold);">Author Name</div>
+              <div id="isbnResultMeta" style="font-size:0.72rem; color:var(--text-muted); margin-top:4px;">0 pages &bull; ISBN</div>
+            </div>
+          </div>
+          <button type="button" class="btn-save-gold" style="width:100%; margin-top:12px; padding:8px; font-weight:800;" onclick="importIsbnScannedBook()">➕ Add Scanned Book to Library</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeIsbnBarcodeScannerModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: CREATE CUSTOM SHELF / FOLDER ================= -->
+  <div class="modal-overlay" id="createShelfModal" style="display:none;" onclick="if(event.target===this)closeCreateShelfModal()">
+    <div class="modal-sheet" style="max-width: 420px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Create Custom Shelf / Folder</h3>
+        <button type="button" class="modal-close-btn" onclick="closeCreateShelfModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: #fff;">Shelf / Folder Name</label>
+          <input type="text" id="newShelfNameInput" placeholder="e.g. Mere Dosto ki Kitabein, Agli Diwali tak..." style="width: 100%; padding: 10px 14px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 12px; color: #fff; font-size: 0.9rem;">
+        </div>
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="font-size: 0.8rem; font-weight: 700; color: #fff;">Select Icon Emoji</label>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="shelfEmojiPicker">
+            <button type="button" class="color-dot-choice active" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('📁', this)">📁</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('🤝', this)">🤝</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('🪔', this)">🪔</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('⭐', this)">⭐</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('🎯', this)">🎯</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('💡', this)">💡</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('❤️', this)">❤️</button>
+            <button type="button" class="color-dot-choice" style="font-size:1.2rem; background:rgba(255,255,255,0.08); border-radius:10px; width:40px; height:40px; display:flex; align-items:center; justify-content:center;" onclick="pickShelfEmoji('🚀', this)">🚀</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-cancel" onclick="closeCreateShelfModal()">Cancel</button>
+        <button type="button" class="btn-save-gold" onclick="saveNewCustomShelf()">Create Shelf</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: MANAGE SHELF BOOKS ================= -->
+  <div class="modal-overlay" id="manageShelfBooksModal" style="display:none;" onclick="if(event.target===this)closeManageShelfBooksModal()">
+    <div class="modal-sheet" style="max-width: 480px; max-height: 85vh; display: flex; flex-direction: column;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="manageShelfModalTitle">Manage Books in Shelf</h3>
+        <button type="button" class="modal-close-btn" onclick="closeManageShelfBooksModal()">&times;</button>
+      </div>
+      <div style="padding: 10px 16px 0;">
+        <input type="text" id="shelfBookSearchInput" placeholder="Search books to add or remove..." oninput="filterShelfManageBooks(this.value)" style="width: 100%; padding: 8px 12px; background: rgba(255,255,255,0.06); border: 1px solid var(--border-subtle); border-radius: 10px; color: #fff; font-size: 0.85rem;">
+      </div>
+      <div class="modal-body" id="manageShelfBooksList" style="flex: 1; overflow-y: auto; padding: 12px 16px; display: flex; flex-direction: column; gap: 8px;">
+        <!-- Populated by JS -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-save-gold" style="width: 100%;" onclick="closeManageShelfBooksModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL: SHELVES SELECTOR DROPDOWN (LIBRARY QUICK FILTER) ================= -->
+  <div class="modal-overlay" id="shelfSelectorDropdownModal" style="display:none;" onclick="if(event.target===this)closeShelfSelectorDropdown()">
+    <div class="modal-sheet" style="max-width: 380px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Select Shelf / Folder</h3>
+        <button type="button" class="modal-close-btn" onclick="closeShelfSelectorDropdown()">&times;</button>
+      </div>
+      <div class="modal-body" id="shelfSelectorDropdownList" style="display: flex; flex-direction: column; gap: 8px; max-height: 360px; overflow-y: auto;">
+        <!-- Populated by JS -->
+      </div>
+      <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
+        <button type="button" class="btn-cancel" onclick="closeShelfSelectorDropdown()">Close</button>
+        <button type="button" class="btn-gold-pill" onclick="closeShelfSelectorDropdown(); navigateToSubView('customShelvesAdjust');">+ Manage Shelves</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden Placeholder Block for Missing Element IDs Referenced in app.js -->
+  <div style="display:none;" id="missingIdsAuditPlaceholderBlock">
+    <div id="genreDonutLegend"></div>
+    <div id="genreDonutSvgWrap"></div>
+    <div id="monthlyBarChartWrap"></div>
+    <div id="profilePageHandle"></div>
+    <div id="profileReaderToneSubText"></div>
+    <div id="profileThemePickerGrid"></div>
+    <div id="progAvgRating"></div>
+    <div id="progBooksRead"></div>
+    <div id="progPagesMonth"></div>
+    <div id="progTotalPrice"></div>
+    <select id="queueAddBookSelect"></select>
+    <div id="rgGoalSubtitle"></div>
+    <div id="rgProgressBar"></div>
+    <div id="appFeaturesGuideModalOverlay"></div>
+    <button type="button" id="themeBtnDark"></button>
+    <button type="button" id="themeBtnLight"></button>
+    <button type="button" id="themeBtnSepia"></button>
+    <button type="button" id="themeBtnWood"></button>
+  </div>
+
+  
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container" role="status" aria-live="polite"></div>
+
+    <!-- CORE MIND & FOCUS APP SCRIPTS -->
+  <script src="jspdf.umd.min.js"></script>
+  <script src="jspdf.plugin.autotable.min.js"></script>
+  <script src="broadcast-notice.js"></script>
+  <script src="remote-config.js"></script>
+  <script src="app.js"></script>
+  <!-- LUXURY DESKTOP WORKSPACE ENGINE -->
+  <script src="desktop-engine.js"></script>
 </body>
 </html>
