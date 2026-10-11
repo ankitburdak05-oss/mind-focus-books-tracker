@@ -6666,3 +6666,80 @@ input:checked + .slider-round:before {
   border-radius: 10px;
   transition: width 0.3s ease;
 }
+
+/* 5. Full Screen Drawer for Manage Shelf Books */
+.modal-drawer-fullscreen {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  display: flex;
+  flex-direction: column;
+  background: #090d16 !important;
+  border: none !important;
+  z-index: 999;
+}
+
+.modal-drawer-fullscreen .modal-header {
+  padding: 16px 18px;
+  background: rgba(18, 24, 38, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.modal-drawer-fullscreen .modal-body {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 14px 16px 20px;
+}
+
+.modal-drawer-fullscreen .modal-footer {
+  padding: 14px 18px 24px;
+  background: rgba(18, 24, 38, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* 6. Direct Hide / Restore Compact Pill Buttons in Category View */
+.btn-ni-direct {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-ni-hide {
+  background: rgba(239, 68, 68, 0.15);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+}
+
+.btn-ni-hide:active {
+  transform: scale(0.95);
+  background: rgba(239, 68, 68, 0.3);
+}
+
+.btn-ni-restore {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.35);
+}
+
+.btn-ni-restore:active {
+  transform: scale(0.95);
+  background: rgba(16, 185, 129, 0.3);
+}
+

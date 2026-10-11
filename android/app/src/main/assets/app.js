@@ -260,8 +260,8 @@ function loadBooks() {
             books.push(Object.assign({}, defBook));
           } else {
             const existing = existingMap.get(key);
-            // Ensure HD cover is present
-            if (!existing.cover_image && defBook.cover_url) {
+            // Ensure default HD cover is present ONLY if user has not set their own custom cover
+            if (!existing.customCover && !existing.cover_image && defBook.cover_url) {
               existing.cover_url = defBook.cover_url;
             }
           }
@@ -1960,12 +1960,57 @@ function renderNiCategoryBooksList() {
           <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">${bookAuthor}</div>
           <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
             <span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: rgba(255,255,255,0.08); color: var(--text-secondary);">${status}</span>
-            ${isAlreadyHidden ? `<span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: rgba(239,68,68,0.2); color: #f87171; font-weight: 700;">Already in Not Interested 🚫</span>` : ''}
+            ${isAlreadyHidden ? `<span style="font-size: 0.68rem; padding: 2px 6px; border-radius: 4px; background: rgba(239,68,68,0.2); color: #f87171; font-weight: 700;">Hidden</span>` : ''}
           </div>
+        </div>
+        <div style="margin-left: 8px;">
+          ${isAlreadyHidden ? `
+            <button type="button" class="btn-ni-direct btn-ni-restore" onclick="event.stopPropagation(); directRestoreFromCategory('${escapeHtml(b.title)}')" title="Restore to Library">
+              ↩ Restore
+            </button>
+          ` : `
+            <button type="button" class="btn-ni-direct btn-ni-hide" onclick="event.stopPropagation(); directHideFromCategory('${escapeHtml(b.title)}')" title="Hide from Library">
+              🚫 Hide
+            </button>
+          `}
         </div>
       </div>
     `;
   }).join('');
+}
+
+function directHideFromCategory(bookTitle) {
+  const book = (state.books || []).find(b => b.title === bookTitle);
+  if (!book) return;
+  book.notInterested = true;
+  book.notInterestedReason = `Category: ${currentNiSelectedCategory || book.category || 'General'}`;
+  book.notInterestedDate = getTodayLocalDate();
+  saveBooks();
+  renderNiCategoryBooksList();
+  renderLibraryFilters();
+  renderLibraryGrid();
+  renderExploreBooksGrid();
+  renderHomeRecentBooks();
+  renderNotInterestedView();
+  renderProfileView();
+  showToast(`🚫 "${book.title}" hidden from Library`);
+}
+
+function directRestoreFromCategory(bookTitle) {
+  const book = (state.books || []).find(b => b.title === bookTitle);
+  if (!book) return;
+  book.notInterested = false;
+  delete book.notInterestedReason;
+  delete book.notInterestedDate;
+  saveBooks();
+  renderNiCategoryBooksList();
+  renderLibraryFilters();
+  renderLibraryGrid();
+  renderExploreBooksGrid();
+  renderHomeRecentBooks();
+  renderNotInterestedView();
+  renderProfileView();
+  showToast(`✅ "${book.title}" restored to Library!`);
 }
 
 function toggleNiBookSelect(bId) {
@@ -3469,10 +3514,43 @@ function handleCoverImageUpload(input) {
   
   const reader = new FileReader();
   reader.onload = e => {
-    state.currentEditingCoverUrl = e.target.result;
-    document.getElementById('editBookCover').value = e.target.result;
-    updateCoverPreviewBox(e.target.result);
-    showToast('Photo selected! ✨');
+    const rawData = e.target.result;
+    // Optimize & compress image so it permanently persists in localStorage without exceeding 5MB quota
+    const img = new Image();
+    img.onload = () => {
+      const maxDim = 640;
+      let width = img.width;
+      let height = img.height;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) {
+          height = Math.round((height * maxDim) / width);
+          width = maxDim;
+        } else {
+          width = Math.round((width * maxDim) / height);
+          height = maxDim;
+        }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+
+      state.currentEditingCoverUrl = compressedDataUrl;
+      const elCover = document.getElementById('editBookCover');
+      if (elCover) elCover.value = compressedDataUrl;
+      updateCoverPreviewBox(compressedDataUrl);
+      showToast('Cover photo ready & optimized! 📸');
+    };
+    img.onerror = () => {
+      state.currentEditingCoverUrl = rawData;
+      const elCover = document.getElementById('editBookCover');
+      if (elCover) elCover.value = rawData;
+      updateCoverPreviewBox(rawData);
+      showToast('Photo selected! ✨');
+    };
+    img.src = rawData;
   };
   reader.readAsDataURL(file);
 }
@@ -3665,7 +3743,8 @@ function saveBookModal() {
     takeaway,
     notes: takeaway,
     cover_image: finalCover,
-    cover_url: finalCover
+    cover_url: finalCover,
+    customCover: !!(inputCover || state.currentEditingCoverUrl)
   };
 
   if (status === 'LENT') {
@@ -4345,10 +4424,12 @@ async function checkRemoteBroadcastNotice() {
 // ================= UTILITIES & HELPERS =================
 function getBookCoverUrl(book) {
   if (book.cover_image && book.cover_image.trim()) {
-    return book.cover_image.replace('-M.jpg', '-L.jpg');
+    const img = book.cover_image.trim();
+    return img.startsWith('data:') ? img : img.replace('-M.jpg', '-L.jpg');
   }
   if (book.cover_url && book.cover_url.trim()) {
-    return book.cover_url.replace('-M.jpg', '-L.jpg');
+    const url = book.cover_url.trim();
+    return url.startsWith('data:') ? url : url.replace('-M.jpg', '-L.jpg');
   }
   return 'cover_placeholder.jpg';
 }
