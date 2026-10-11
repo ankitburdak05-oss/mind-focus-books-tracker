@@ -2044,6 +2044,8 @@ function updateNiSelectionUI() {
   const countText = document.getElementById('niSelectedCountText');
   const floatingBar = document.getElementById('niFloatingActionBar');
   const floatingText = document.getElementById('niFloatingSelectedText');
+  const floatingSub = floatingBar ? floatingBar.querySelector('div div:last-child') : null;
+  const floatingBtn = document.getElementById('niFloatingActionBtn');
   const actionBtn = document.getElementById('niCatHeaderActionBtn');
   const selectAllCb = document.getElementById('niSelectAllCheckbox');
 
@@ -2057,10 +2059,44 @@ function updateNiSelectionUI() {
   }
 
   if (count > 0) {
+    // Check if selected books are hidden or active
+    let hiddenCount = 0;
+    let activeCount = 0;
+    books.forEach(b => {
+      const bId = String(b.id || b.title);
+      if (selectedNiBookIds.has(bId)) {
+        if (b.notInterested) hiddenCount++;
+        else activeCount++;
+      }
+    });
+
+    const isRestoreAction = hiddenCount > 0 && activeCount === 0;
+
     if (floatingBar) floatingBar.style.display = 'flex';
+    if (floatingSub) {
+      floatingSub.innerText = isRestoreAction ? 'Library aur Explore me wapas dikhengi' : 'Library aur Explore se hide ho jayengi';
+    }
+    if (floatingBtn) {
+      if (isRestoreAction) {
+        floatingBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        floatingBtn.style.boxShadow = '0 4px 14px rgba(16, 185, 129, 0.4)';
+        floatingBtn.innerHTML = `↩ Restore (${count})`;
+      } else {
+        floatingBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+        floatingBtn.style.boxShadow = '0 4px 14px rgba(239, 68, 68, 0.4)';
+        floatingBtn.innerHTML = `🚫 Move (${count})`;
+      }
+    }
+
     if (actionBtn) {
       actionBtn.style.display = 'block';
-      actionBtn.innerText = `🚫 Move (${count})`;
+      if (isRestoreAction) {
+        actionBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+        actionBtn.innerText = `↩ Restore (${count})`;
+      } else {
+        actionBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+        actionBtn.innerText = `🚫 Move (${count})`;
+      }
     }
   } else {
     if (floatingBar) floatingBar.style.display = 'none';
@@ -2075,34 +2111,60 @@ function confirmNiBulkMove() {
   }
 
   const books = state.books || [];
-  let movedCount = 0;
+  let hiddenSelectedCount = 0;
+  let activeSelectedCount = 0;
+
+  books.forEach(b => {
+    const bId = String(b.id || b.title);
+    if (selectedNiBookIds.has(bId)) {
+      if (b.notInterested) hiddenSelectedCount++;
+      else activeSelectedCount++;
+    }
+  });
+
+  const isRestoreMode = hiddenSelectedCount > 0 && activeSelectedCount === 0;
+  let processedCount = 0;
   const today = getTodayLocalDate();
 
   books.forEach(b => {
     const bId = String(b.id || b.title);
     if (selectedNiBookIds.has(bId)) {
-      b.notInterested = true;
-      b.notInterestedReason = `Category: ${currentNiSelectedCategory || b.category || 'General'}`;
-      b.notInterestedDate = today;
-      movedCount++;
+      if (isRestoreMode) {
+        // Restore all selected
+        b.notInterested = false;
+        delete b.notInterestedReason;
+        delete b.notInterestedDate;
+      } else {
+        // Hide all selected
+        b.notInterested = true;
+        b.notInterestedReason = `Category: ${currentNiSelectedCategory || b.category || 'General'}`;
+        b.notInterestedDate = today;
+      }
+      processedCount++;
     }
   });
 
   saveBooks();
 
   if (typeof logActivity === 'function') {
-    logActivity('BULK_NOT_INTERESTED', `Moved ${movedCount} books from ${currentNiSelectedCategory} to Not Interested`);
+    logActivity(
+      isRestoreMode ? 'BULK_RESTORE_BOOKS' : 'BULK_NOT_INTERESTED',
+      `${isRestoreMode ? 'Restored' : 'Moved'} ${processedCount} books from ${currentNiSelectedCategory}`
+    );
   }
 
-  showToast(`🚫 ${movedCount} book${movedCount === 1 ? '' : 's'} moved to Not Interested!`);
+  showToast(
+    isRestoreMode 
+      ? `✅ ${processedCount} book${processedCount === 1 ? '' : 's'} restored to Library!` 
+      : `🚫 ${processedCount} book${processedCount === 1 ? '' : 's'} moved to Not Interested!`
+  );
 
-  // Reset and return to viewNotInterested
+  // Reset selection
   selectedNiBookIds.clear();
-  currentNiSelectedCategory = null;
 
-  document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
-  const notInterestedView = document.getElementById('viewNotInterested');
-  if (notInterestedView) notInterestedView.classList.add('active');
+  // Re-render category view immediately so user sees restored state
+  renderNiCategoryBooksList();
+  updateNiSelectionUI();
 
   renderNotInterestedView();
   renderLibraryFilters();
@@ -2110,8 +2172,6 @@ function confirmNiBulkMove() {
   renderExploreBooksGrid();
   renderHomeRecentBooks();
   renderProfileView();
-
-  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function handleNiCategoryBack() {
