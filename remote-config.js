@@ -2,18 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.6",
-    "name": "Mind Focus Books v0.0.6 - 4 Core Adjust Studios, Luxury Settings & Instant Backup",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.6/MindFocusBooks-Native.apk",
+    "version": "v0.0.7",
+    "name": "Mind Focus Books v0.0.7 - Direct Hide/Restore, Fullscreen Shelf Drawer & Permanent Cover Lock",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.7/MindFocusBooks-Native.apk",
     "features": [
-      "👑 Book Sequence Studio: 1st, 2nd, 3rd manual ranking, 'Make #1' instant button aur gold badges.",
-      "🏠 Home Sections Adjust: Show, hide aur reorder home widgets (Currently Reading, KPIs, Stats, Featured).",
-      "🖼️ Library Layout & Size Adjust: 3 visual presets (Bada Grid, Standard, Compact) aur 1-to-10 fine-tuning.",
-      "📁 Custom Shelves & Folders: Personal book collections with live % completion progress bar.",
-      "⚙️ Grouped Settings Hub: Clean luxury cards, rounded icon boxes, iOS switches aur System & Storage group.",
-      "💾 1-Tap Quick Data Backup: Direct JSON export and download for all your books and reading progress."
+      "⚡ Direct Hide / Restore Pills: Category view me har book ke samne 1-tap hide aur restore pill.",
+      "📱 Full-Screen Shelf Drawer: Custom shelf ke andar Manage Books ab 100% full screen khulega.",
+      "📸 Permanent Custom Cover Lock: Upload kiya hua book cover ab app band karne par bhi kabhi reset nahi hoga.",
+      "👑 Book Sequence Studio: 1st, 2nd, 3rd manual ranking & gold badges.",
+      "⚙️ Grouped Settings Hub: iOS-style luxury switches aur System & Storage hub."
     ],
-    "stagedAt": "2026-10-11T09:14:00.000Z",
+    "stagedAt": "2026-10-11T22:32:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
