@@ -2,16 +2,15 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.8",
-    "name": "Mind Focus Books v0.0.8 - Smart Dynamic Bulk Restore & Clean Category Actions",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.8/MindFocusBooks-Native.apk",
+    "version": "v0.0.9",
+    "name": "Mind Focus Books v0.0.9 - Official Stability Release",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.9/MindFocusBooks-Native.apk",
     "features": [
-      "🔄 Smart Dynamic Bulk Restore: Select All karne par bar aur header button ab automatically 'Restore' mode me switch ho jata hai.",
-      "⚡ 1-Tap Direct Restore/Hide: Category view me individual books ko direct restore ya hide karein.",
-      "📱 Full-Screen Drawer: Custom shelves manage books ab phone par 100% full screen view me khulta hai.",
-      "📸 Permanent Custom Covers: Canvas auto-compressor se upload kiya cover app restart hone par bhi lock rahega."
+      "🛡️ Official v0.0.9 Stability Release: Book Details layout restored to classic clean design.",
+      "⚡ Smooth & Crash-Free performance across all views.",
+      "🔄 In-App Seamless Update."
     ],
-    "stagedAt": "2026-10-11T22:49:00.000Z",
+    "stagedAt": "2026-10-12T00:26:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
