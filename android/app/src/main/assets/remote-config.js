@@ -2,17 +2,16 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.7",
-    "name": "Mind Focus Books v0.0.7 - Direct Hide/Restore, Fullscreen Shelf Drawer & Permanent Cover Lock",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.7/MindFocusBooks-Native.apk",
+    "version": "v0.0.8",
+    "name": "Mind Focus Books v0.0.8 - Smart Dynamic Bulk Restore & Clean Category Actions",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.8/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Direct Hide / Restore Pills: Category view me har book ke samne 1-tap hide aur restore pill.",
-      "📱 Full-Screen Shelf Drawer: Custom shelf ke andar Manage Books ab 100% full screen khulega.",
-      "📸 Permanent Custom Cover Lock: Upload kiya hua book cover ab app band karne par bhi kabhi reset nahi hoga.",
-      "👑 Book Sequence Studio: 1st, 2nd, 3rd manual ranking & gold badges.",
-      "⚙️ Grouped Settings Hub: iOS-style luxury switches aur System & Storage hub."
+      "🔄 Smart Dynamic Bulk Restore: Select All karne par bar aur header button ab automatically 'Restore' mode me switch ho jata hai.",
+      "⚡ 1-Tap Direct Restore/Hide: Category view me individual books ko direct restore ya hide karein.",
+      "📱 Full-Screen Drawer: Custom shelves manage books ab phone par 100% full screen view me khulta hai.",
+      "📸 Permanent Custom Covers: Canvas auto-compressor se upload kiya cover app restart hone par bhi lock rahega."
     ],
-    "stagedAt": "2026-10-11T22:32:00.000Z",
+    "stagedAt": "2026-10-11T22:49:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
