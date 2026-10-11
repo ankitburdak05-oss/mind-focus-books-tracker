@@ -2092,11 +2092,11 @@
         <div style="background: rgba(139, 92, 246, 0.08); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; display: flex; align-items: center; gap: 10px;">
           <span style="font-size: 1.4rem;">💡</span>
           <span style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
-            Switch se section on/off karein aur <strong>🔼 / 🔽</strong> button se decide karein ki kaunsa dabba upar rahega aur kaunsa neeche.
+            Switch se section on/off karein aur <strong>▲ / ▼</strong> button se decide karein ki kaunsa dabba upar rahega aur kaunsa neeche.
           </span>
         </div>
 
-        <div class="home-sections-list" id="homeSectionsAdjustContainer">
+        <div class="ig-card" id="homeSectionsAdjustContainer" style="padding: 4px 0;">
           <!-- Populated by JS -->
         </div>
       </div>
@@ -2120,15 +2120,15 @@
           <span style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); font-size: 0.95rem; opacity: 0.6;">🔍</span>
         </div>
 
-        <div style="background: rgba(59, 130, 246, 0.08); border: 1px solid rgba(59, 130, 246, 0.2); border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+        <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.2); border-radius: 14px; padding: 12px 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
           <div style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.4;">
-            ⭐ <strong>Pin to Top</strong> se kitab 1st number par aa jayegi. Number badge par tap karke seedha rank number bhi type kar sakte ho!
+            👑 <strong>Top Rank Badges:</strong> <strong>"🔝 Make #1"</strong> dabate hi kitab sabse pehle number par aa jayegi. Badge par tap karke seedha rank number bhi type kar sakte ho!
           </div>
-          <span style="font-size: 1.2rem;">📌</span>
+          <span style="font-size: 1.3rem;">🔝</span>
         </div>
 
         <!-- Rank List Container -->
-        <div class="book-rank-list" id="bookOrderRankList">
+        <div class="book-rank-list" id="bookOrderRankList" style="display:flex; flex-direction:column; gap:10px;">
           <!-- Populated by JS -->
         </div>
       </div>
@@ -2146,57 +2146,122 @@
       </div>
 
       <div style="padding: 14px 16px 60px;">
-        <div style="display: flex; flex-direction: column; gap: 14px;">
-          <!-- Card Size Studio Card (1 to 10 Scale) -->
-          <div class="ig-card" style="padding: 16px; border: 1.5px solid var(--accent-gold); background: rgba(245, 158, 11, 0.05);">
+        <div style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- 3 Quick Visual Presets -->
+          <div>
+            <div style="font-size: 0.85rem; font-weight: 800; color: #fff; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px;">Quick Visual Presets</div>
+            <div class="layout-preset-grid">
+              <div class="layout-preset-card" id="presetCardBada" onclick="setLibraryColumns(2)">
+                <span class="layout-preset-icon">🖼️</span>
+                <span class="layout-preset-title">Bada Grid</span>
+                <span class="layout-preset-sub">2 Columns • Big Covers</span>
+              </div>
+              <div class="layout-preset-card" id="presetCardNormal" onclick="setLibraryColumns(3)">
+                <span class="layout-preset-icon">📱</span>
+                <span class="layout-preset-title">Standard</span>
+                <span class="layout-preset-sub">3 Columns • Balanced</span>
+              </div>
+              <div class="layout-preset-card" id="presetCardCompact" onclick="setLibraryColumns(4)">
+                <span class="layout-preset-icon">📄</span>
+                <span class="layout-preset-title">Compact</span>
+                <span class="layout-preset-sub">4 Columns • High Density</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fine-Tune Slider & Stepper (1 to 10 Scale) -->
+          <div class="ig-card" style="padding: 16px;">
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
               <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.5rem;">📐</span>
-                <span style="font-size: 1rem; font-weight: 800; color: #fff;">Cards Per Row (1 to 10 Size)</span>
+                <span style="font-size: 1.4rem;">📐</span>
+                <span style="font-size: 0.95rem; font-weight: 800; color: #fff;">Fine-Tune Cards Per Row</span>
               </div>
               <span id="settingsColsBadge" style="font-size: 0.85rem; font-weight: 800; color: #000; background: var(--accent-gold); padding: 4px 10px; border-radius: 8px;">3 Columns</span>
             </div>
-            <p id="settingsColsDescription" style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 14px 0; line-height: 1.4;">
-              Aap apni marzi se 1 se lekar 10 tak kitne bhi cards/columns ek row me rakh sakte hain.
+            <p id="settingsColsDescription" style="font-size: 0.8rem; color: var(--text-secondary); margin: 0 0 14px 0; line-height: 1.4;">
+              1 se lekar 10 tak koi bhi size chunein.
             </p>
 
             <!-- Slider + Stepper -->
-            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 14px;">
+            <div style="display: flex; align-items: center; gap: 12px;">
               <button type="button" class="btn-sec-reorder" style="width: 34px; height: 34px; font-size: 1rem;" onclick="stepLibraryColumns(-1)">➖</button>
               <input type="range" id="settingsColsRange" min="1" max="10" value="3" style="flex: 1; accent-color: var(--accent-gold); cursor: pointer;" oninput="setLibraryColumns(this.value)">
               <button type="button" class="btn-sec-reorder" style="width: 34px; height: 34px; font-size: 1rem;" onclick="stepLibraryColumns(1)">➕</button>
             </div>
+          </div>
 
-            <!-- 10 Number Buttons Row -->
-            <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;" id="settingsColsButtonsGrid">
-              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="1" onclick="setLibraryColumns(1)">1 (Giant)</button>
-              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="2" onclick="setLibraryColumns(2)">2 (Bada)</button>
-              <button type="button" class="card-size-num-btn active" style="width: 100%; height: 32px;" data-set-col="3" onclick="setLibraryColumns(3)">3 (Normal)</button>
-              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="4" onclick="setLibraryColumns(4)">4 (Grid)</button>
-              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="5" onclick="setLibraryColumns(5)">5 (Mini)</button>
-              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="6" onclick="setLibraryColumns(6)">6 Tiles</button>
-              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="7" onclick="setLibraryColumns(7)">7 Tiles</button>
-              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="8" onclick="setLibraryColumns(8)">8 Tiles</button>
-              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="9" onclick="setLibraryColumns(9)">9 Tiles</button>
-              <button type="button" class="card-size-num-btn" style="width: 100%; height: 32px;" data-set-col="10" onclick="setLibraryColumns(10)">10 (Micro)</button>
+          <!-- Card Detail Badges Toggles Group -->
+          <div class="ig-card">
+            <div style="padding: 14px 16px 8px; font-size: 0.8rem; font-weight: 800; color: var(--accent-gold); text-transform: uppercase; letter-spacing: 0.5px;">Card Information Tags</div>
+            
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-purple">👤</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Show Author Name</div>
+                  <div class="ig-sub">Card ke neeche lekhak ka naam dikhayein</div>
+                </div>
+              </div>
+              <label class="ig-switch">
+                <input type="checkbox" id="toggleCardAuthor" checked onchange="toggleCardInfoSetting('showAuthor', this.checked)">
+                <span class="ig-slider"></span>
+              </label>
+            </div>
+
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-green">📊</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Show Reading Progress Bar</div>
+                  <div class="ig-sub">Padhe gaye panno ki line dikhayein</div>
+                </div>
+              </div>
+              <label class="ig-switch">
+                <input type="checkbox" id="toggleCardProgress" checked onchange="toggleCardInfoSetting('showProgress', this.checked)">
+                <span class="ig-slider"></span>
+              </label>
+            </div>
+
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">⭐</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Show Rating Stars</div>
+                  <div class="ig-sub">Kitaab ki star rating badge dikhayein</div>
+                </div>
+              </div>
+              <label class="ig-switch">
+                <input type="checkbox" id="toggleCardRating" checked onchange="toggleCardInfoSetting('showRating', this.checked)">
+                <span class="ig-slider"></span>
+              </label>
+            </div>
+
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">🏷️</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Show Category Badge</div>
+                  <div class="ig-sub">Genre tag (Self-Help, Fiction etc.)</div>
+                </div>
+              </div>
+              <label class="ig-switch">
+                <input type="checkbox" id="toggleCardCategory" checked onchange="toggleCardInfoSetting('showCategory', this.checked)">
+                <span class="ig-slider"></span>
+              </label>
             </div>
           </div>
 
-          <!-- Option: Compact Horizontal List -->
-          <div class="ig-card" id="layoutChoiceCompactList" style="cursor: pointer; padding: 16px; border: 1.5px solid var(--border-card); transition: all 0.2s;" onclick="setLibraryLayout('compactList')">
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <span style="font-size: 1.5rem;">📑</span>
-                <span style="font-size: 1rem; font-weight: 700; color: #fff;">Chhota Compact List (1 Row Strip)</span>
+          <!-- Live Sample Mini Preview -->
+          <div class="live-preview-box">
+            <div id="layoutLiveSampleCard" style="width: 140px; background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 12px; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,0.4); text-align: center;">
+              <img src="hyperfocus_cover.jpg" style="width: 100%; height: 110px; object-fit: cover;" onerror="this.src='cover_placeholder.jpg'">
+              <div style="padding: 8px 6px;">
+                <div style="font-size: 0.8rem; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Hyperfocus</div>
+                <div id="samplePreviewAuthor" style="font-size: 0.7rem; color: var(--text-secondary);">Chris Bailey</div>
+                <div id="samplePreviewProgress" style="height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; margin-top: 6px; overflow: hidden;">
+                  <div style="width: 65%; height: 100%; background: #10b981;"></div>
+                </div>
               </div>
-              <span id="radioIndicatorCompactList" style="font-size: 1.2rem; color: var(--text-muted);">⚪</span>
-            </div>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 10px 0; line-height: 1.4;">
-              Ek screen par zyada kitabein bina scroll kiye adjust ho sakein. Har kitab ek compact horizontal row me dikhti hai.
-            </p>
-            <div style="display: flex; flex-direction: column; gap: 6px; opacity: 0.6;">
-              <div style="background: rgba(255,255,255,0.06); height: 32px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
-              <div style="background: rgba(255,255,255,0.06); height: 32px; border-radius: 6px; border: 1px dashed rgba(255,255,255,0.2);"></div>
             </div>
           </div>
         </div>
