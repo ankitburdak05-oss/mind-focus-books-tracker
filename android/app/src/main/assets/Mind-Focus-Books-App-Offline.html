@@ -1155,12 +1155,12 @@ body {
 
 /* ================= READING BUDGET & EXPENSES CARD ================= */
 .reading-budget-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 20px;
+  padding: 18px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(16, 185, 129, 0.15);
 }
 
 .rb-header {
@@ -1257,12 +1257,18 @@ body {
 }
 
 .rb-stat-item {
-  background: var(--bg-card-secondary, rgba(255, 255, 255, 0.03));
-  border: 1px solid var(--border-color);
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
   padding: 10px 12px;
   display: flex;
   flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.rb-stat-item:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.05);
 }
 
 .rb-stat-label {
@@ -2165,6 +2171,157 @@ body {
   border-radius: 50%;
   border: 2px solid var(--accent-gold);
   object-fit: cover;
+}
+
+/* ================= FULLSCREEN STUDIO EDIT BOOK MODAL ================= */
+.modal-overlay-fullscreen {
+  padding: 0 !important;
+  align-items: stretch !important;
+  justify-content: stretch !important;
+}
+
+.modal-card-fullscreen-studio {
+  width: 100vw !important;
+  height: 100vh !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+  border-radius: 0 !important;
+  border: none !important;
+  margin: 0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  overflow: hidden !important;
+  background: var(--bg-primary) !important;
+}
+
+@media (min-width: 768px) {
+  .modal-overlay-fullscreen {
+    padding: 24px !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+  .modal-card-fullscreen-studio {
+    width: 620px !important;
+    height: 92vh !important;
+    max-width: 620px !important;
+    max-height: 92vh !important;
+    border-radius: 20px !important;
+    border: 1px solid var(--border-subtle) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7) !important;
+  }
+}
+
+/* Frozen Sticky Studio Header */
+.modal-header.studio-header {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 100 !important;
+  background: var(--bg-primary) !important;
+  background: color-mix(in srgb, var(--bg-primary) 92%, transparent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-bottom: 1px solid var(--border-subtle) !important;
+  padding: 12px 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2) !important;
+  flex-shrink: 0 !important;
+}
+
+.btn-studio-back {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  color: var(--text-primary);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-studio-back:hover {
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.modal-close-btn.studio-close-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.modal-close-btn.studio-close-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: #ef4444;
+  color: #ef4444;
+  transform: scale(1.05);
+}
+
+/* Studio Scrollable Body */
+.modal-body.studio-body {
+  flex: 1 !important;
+  overflow-y: auto !important;
+  -webkit-overflow-scrolling: touch !important;
+  padding: 14px 16px 24px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 14px !important;
+}
+
+/* Studio Group Cards */
+.studio-card-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 16px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.2s;
+}
+
+.studio-card-box:focus-within {
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.studio-card-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  letter-spacing: 0.02em;
+}
+
+/* Frozen Sticky Studio Footer */
+.modal-footer.studio-footer {
+  position: sticky !important;
+  bottom: 0 !important;
+  z-index: 99 !important;
+  background: var(--bg-primary) !important;
+  background: color-mix(in srgb, var(--bg-primary) 92%, transparent) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border-top: 1px solid var(--border-subtle) !important;
+  padding: 12px 16px !important;
+  display: flex !important;
+  gap: 10px !important;
+  box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.2) !important;
+  flex-shrink: 0 !important;
 }
 
 /* ================= PIN LOCK SCREEN ================= */
@@ -3297,59 +3454,96 @@ body {
   transition: width 0.4s ease;
 }
 
-/* Reader Mode Hint Banner in Book Detail View */
-.reader-mode-hint-banner {
+/* Primary Flagship Read Book Pages Button & Actions */
+.btn-read-hero {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: rgba(245, 158, 11, 0.08);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  padding: 10px 14px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 50%, #b45309 100%);
+  border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: var(--radius-md);
-  margin-top: 10px;
+  padding: 10px 14px;
+  color: #0b0f19;
   cursor: pointer;
+  box-shadow: 0 4px 18px rgba(245, 158, 11, 0.35);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+}
+
+.btn-read-hero:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.5);
+  filter: brightness(1.05);
+}
+
+.btn-read-hero:active {
+  transform: translateY(1px);
+}
+
+.brh-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.brh-text-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.brh-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+}
+
+.brh-sub {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: rgba(15, 23, 42, 0.78);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brh-arrow {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-left: 2px;
+  line-height: 1;
+}
+
+.btn-timer-action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
   transition: all 0.2s ease;
 }
 
-.reader-mode-hint-banner:hover {
-  background: rgba(245, 158, 11, 0.15);
+.btn-timer-action:hover {
   border-color: var(--accent-gold);
-}
-
-.rmh-icon {
-  font-size: 1.4rem;
-}
-
-.rmh-text {
-  flex: 1;
-  min-width: 0;
-}
-
-.rmh-title {
-  font-size: 0.84rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-
-.rmh-title strong {
   color: var(--accent-gold);
-}
-
-.rmh-sub {
-  font-size: 0.74rem;
-  color: var(--text-secondary);
-}
-
-.rmh-open-btn {
-  background: var(--accent-gold);
-  color: #0b0f19;
-  border: none;
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 6px 14px;
-  border-radius: var(--radius-pill);
-  cursor: pointer;
-  white-space: nowrap;
 }
 
 .reader-pill-btn.active#readerToneSepia {
@@ -3917,21 +4111,22 @@ body {
 }
 
 .prog-time-pill.active {
-  background: var(--accent-gold);
-  color: #000000;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #0b0f19;
   font-weight: 800;
-  box-shadow: 0 4px 14px var(--accent-gold-glow);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
 }
 
 .progress-donut-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: linear-gradient(135deg, rgba(26, 32, 48, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.25);
   border-radius: 20px;
   padding: 20px;
   display: flex;
   align-items: center;
   gap: 20px;
   margin-bottom: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
 .donut-visual-container {
@@ -3953,24 +4148,27 @@ body {
 }
 
 .donut-big-number {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: 900;
-  color: var(--text-primary);
+  color: #ffd56b;
   line-height: 1;
+  text-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
 }
 
 .donut-sub-label {
-  font-size: 0.68rem;
-  color: var(--text-secondary);
-  font-weight: 600;
-  margin-top: 2px;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-top: 4px;
 }
 
 .donut-stats-col {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
 }
 
 .donut-stat-row {
@@ -3978,32 +4176,39 @@ body {
   align-items: center;
   justify-content: space-between;
   font-size: 0.85rem;
+  background: rgba(255, 255, 255, 0.03);
+  padding: 6px 10px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 .donut-stat-key {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: var(--text-secondary);
+  color: #cbd5e1;
+  font-weight: 600;
 }
 
 .donut-stat-dot {
-  width: 9px;
-  height: 9px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
 }
 
 .donut-stat-val {
   font-weight: 800;
-  color: var(--text-primary);
+  color: #f8fafc;
+  font-size: 0.95rem;
 }
 
 .streak-card-v4 {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: linear-gradient(135deg, rgba(30, 24, 18, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
   border-radius: 20px;
   padding: 18px;
   margin-bottom: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(245, 158, 11, 0.15);
 }
 
 .streak-card-header {
@@ -4014,24 +4219,27 @@ body {
 }
 
 .streak-title-badge {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: var(--text-primary);
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: #f8fafc;
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
 .streak-see-all-link {
-  color: var(--accent-gold);
-  font-size: 0.8rem;
+  color: #fbbf24;
+  font-size: 0.82rem;
   font-weight: 700;
   cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(245, 158, 11, 0.1);
 }
 
 .streak-sub-text {
   font-size: 0.78rem;
-  color: var(--text-muted);
+  color: #94a3b8;
   margin-bottom: 14px;
 }
 
@@ -4051,22 +4259,24 @@ body {
   background: rgba(255, 255, 255, 0.04);
   padding: 8px 4px;
   border-radius: 12px;
-  border: 1px solid var(--border-subtle);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: all 0.2s;
 }
 
 .streak-day-badge.active {
-  background: rgba(245, 158, 11, 0.15);
-  border-color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
 }
 
 .streak-day-name {
   font-size: 0.72rem;
-  font-weight: 700;
-  color: var(--text-secondary);
+  font-weight: 800;
+  color: #94a3b8;
 }
 
 .streak-day-badge.active .streak-day-name {
-  color: var(--accent-gold);
+  color: #ffd56b;
 }
 
 .streak-day-icon {
@@ -4074,11 +4284,12 @@ body {
 }
 
 .monthly-chart-card-v4 {
-  background: var(--bg-card);
-  border: 1px solid var(--border-subtle);
+  background: linear-gradient(135deg, rgba(20, 24, 36, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 20px;
   padding: 18px;
   margin-bottom: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
 .monthly-chart-header {
@@ -4089,15 +4300,18 @@ body {
 }
 
 .monthly-chart-title {
-  font-size: 0.98rem;
+  font-size: 1rem;
   font-weight: 800;
-  color: var(--text-primary);
+  color: #f8fafc;
 }
 
 .monthly-chart-count {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--accent-gold);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #ffd56b;
+  background: rgba(245, 158, 11, 0.12);
+  padding: 3px 8px;
+  border-radius: 6px;
 }
 
 .monthly-bars-container {
@@ -4132,15 +4346,16 @@ body {
 
 .monthly-bar-fill {
   width: 100%;
-  background: linear-gradient(180deg, var(--accent-gold), var(--accent-orange));
+  background: linear-gradient(180deg, #ffd56b 0%, #f59e0b 60%, #ea580c 100%);
   border-radius: 8px;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.4);
   transition: height 0.4s ease;
 }
 
 .monthly-bar-month {
   font-size: 0.62rem;
   font-weight: 700;
-  color: var(--text-muted);
+  color: #94a3b8;
 }
 
 /* ================= SCREEN 5: PROFILE ENHANCEMENTS ================= */
@@ -8009,32 +8224,26 @@ if (typeof window !== 'undefined') {
         </div>
       </div>
 
-      <!-- Two Big Action Buttons -->
+      <!-- Primary Action Buttons Row -->
       <div class="detail-actions-row">
-        <button type="button" class="btn-gold-pill flex-1" onclick="openRealBookReaderForCurrent()">
-          <span>📖</span>
-          <span>Read Book Pages</span>
+        <button type="button" class="btn-read-hero flex-1" onclick="openRealBookReaderForCurrent()">
+          <div class="brh-icon-box">📖</div>
+          <div class="brh-text-box">
+            <span class="brh-title">Read Book Pages</span>
+            <span class="brh-sub">Interactive 3D Reader &bull; Flip Pages</span>
+          </div>
+          <span class="brh-arrow">&rsaquo;</span>
         </button>
-        <button type="button" class="btn-secondary-action flex-1" id="detailContinueBtn" onclick="toggleReadingTimer()">
+        <button type="button" class="btn-timer-action" id="detailContinueBtn" onclick="toggleReadingTimer()" title="Focus Stopwatch Timer">
           <span id="detailTimerIcon">⏱️</span>
           <span id="detailTimerBtnText">Focus Timer</span>
         </button>
-        <button type="button" class="btn-circle-add" onclick="openQuickLogModal()" title="Log Pages">
+        <button type="button" class="btn-circle-add" onclick="openQuickLogModal()" title="Log Pages Read">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <line x1="12" y1="5" x2="12" y2="19"></line>
             <line x1="5" y1="12" x2="19" y2="12"></line>
           </svg>
         </button>
-      </div>
-
-      <!-- Real Book Reader Mode Indicator Banner -->
-      <div class="reader-mode-hint-banner" onclick="openRealBookReaderForCurrent()">
-        <span class="rmh-icon">📜</span>
-        <div class="rmh-text">
-          <div class="rmh-title">Real Book Reader Mode: <strong id="detailReaderModeName">Sepia Paper Mode (#fbf5e6)</strong></div>
-          <div class="rmh-sub">Warm vintage paper & dark brown ink • Dual Spread & Single Page</div>
-        </div>
-        <button type="button" class="rmh-open-btn">Read Now &rarr;</button>
       </div>
 
       <!-- Reading Progress Bar -->
@@ -9610,17 +9819,28 @@ if (typeof window !== 'undefined') {
   </div>
 
   <!-- ================= COMPREHENSIVE EDIT / ADD BOOK MODAL (ALL 16 FIELDS) ================= -->
-  <div class="modal-overlay" id="editBookModalOverlay">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 class="modal-title" id="editBookModalTitle">Edit Book Details</h3>
-        <button type="button" class="modal-close-btn" onclick="closeEditModal()">&times;</button>
+  <!-- ================= COMPREHENSIVE EDIT / ADD BOOK MODAL (ALL 16 FIELDS) ================= -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="editBookModalOverlay">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <!-- Frozen Sticky Header with Close Button -->
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeEditModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <h3 class="modal-title" id="editBookModalTitle">Edit Book Details</h3>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeEditModal()" title="Close">&times;</button>
       </div>
-      <div class="modal-body">
-        <!-- Quick Catalog Search & Auto-Fill -->
-        <div class="form-group quick-autofill-box" id="quickAutofillGroup">
-          <label style="color: var(--accent-gold); font-weight: 600; display: flex; align-items: center; gap: 6px;">
-            <span>⚡</span> Quick Search & Auto-Fill from Library / Classics
+
+      <div class="modal-body studio-body">
+        <!-- Card 1: Quick Catalog Search & Auto-Fill -->
+        <div class="studio-card-box quick-autofill-box" id="quickAutofillGroup">
+          <label style="color: var(--accent-gold); font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 0.85rem;">
+            <span>⚡</span> Quick Search &amp; Auto-Fill from Classics
           </label>
           <div style="position: relative;">
             <input type="text" id="quickCatalogSearchInput" placeholder="Search title or author (e.g. Atomic Habits, Deep Work)..." oninput="onQuickCatalogSearch(this.value)" autocomplete="off">
@@ -9628,49 +9848,53 @@ if (typeof window !== 'undefined') {
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label>Book No</label>
-            <input type="text" id="editBookNo" placeholder="e.g. book 151">
+        <!-- Card 2: Essential Book Details -->
+        <div class="studio-card-box">
+          <div class="studio-card-title">📋 Essential Details</div>
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Book No</label>
+              <input type="text" id="editBookNo" placeholder="e.g. book 151">
+            </div>
+            <div class="form-group flex-1">
+              <label>Language</label>
+              <input type="text" id="editBookLanguage" placeholder="e.g. HINDI, ENGLISH">
+            </div>
           </div>
-          <div class="form-group flex-1">
-            <label>Language</label>
-            <input type="text" id="editBookLanguage" placeholder="e.g. HINDI, ENGLISH">
+
+          <div class="form-group">
+            <label>Book Title *</label>
+            <input type="text" id="editBookTitle" placeholder="Enter book title">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Author</label>
+              <input type="text" id="editBookAuthor" placeholder="Author name">
+            </div>
+            <div class="form-group flex-1">
+              <label>Category</label>
+              <input type="text" id="editBookCategory" placeholder="e.g. Productivity">
+            </div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Book Title *</label>
-          <input type="text" id="editBookTitle" placeholder="Enter book title">
-        </div>
-
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label>Author</label>
-            <input type="text" id="editBookAuthor" placeholder="Author name">
-          </div>
-          <div class="form-group flex-1">
-            <label>Category</label>
-            <input type="text" id="editBookCategory" placeholder="e.g. Productivity">
-          </div>
-        </div>
-
-        <!-- Book Cover Photo with Preview & Safe-Save Upload -->
-        <div class="form-group">
-          <label>Book Cover Photo</label>
-          <div style="display:flex; gap:12px; align-items:center;">
+        <!-- Card 3: Book Cover Studio -->
+        <div class="studio-card-box">
+          <div class="studio-card-title">📸 Book Cover Photo</div>
+          <div style="display:flex; gap:14px; align-items:center;">
             <div id="coverPreviewBox" class="cover-preview-box">
               <span id="coverPlaceholderText" style="font-size:0.75rem; color:var(--text-muted);">No Cover</span>
-              <img id="coverPreviewImg" src="" alt="Cover" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:4px;">
+              <img id="coverPreviewImg" src="" alt="Cover" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:8px;">
             </div>
-            <div style="display:flex; flex-direction:column; gap:6px; flex:1;">
+            <div style="display:flex; flex-direction:column; gap:8px; flex:1;">
               <input type="text" id="editBookCover" placeholder="Paste Image URL or choose file below" oninput="onEditBookCoverUrlInput(this.value)">
-              <div style="display:flex; gap:6px; align-items:center;">
-                <label class="btn-restore" style="cursor:pointer; padding:4px 10px; font-size:11px;">
+              <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                <label class="btn-restore" style="cursor:pointer; padding:6px 14px; font-size:12px; font-weight:700;">
                   📁 Upload Photo
                   <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverImageUpload(this)">
                 </label>
-                <button type="button" class="btn-cancel" id="removeCoverBtn" onclick="removeCoverPhoto()" style="display:none; padding:4px 8px; font-size:11px;">
+                <button type="button" class="btn-cancel" id="removeCoverBtn" onclick="removeCoverPhoto()" style="display:none; padding:6px 12px; font-size:12px;">
                   Remove
                 </button>
               </div>
@@ -9678,93 +9902,111 @@ if (typeof window !== 'undefined') {
           </div>
         </div>
 
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label>Status</label>
-            <select id="editBookStatus" onchange="onEditBookStatusChange(this.value)">
-              <option value="PENDING">⏳ PENDING</option>
-              <option value="READING">📖 READING</option>
-              <option value="DONE">✅ DONE</option>
-              <option value="LENT">👥 LENT OUT</option>
-            </select>
+        <!-- Card 4: Reading Status & Availability -->
+        <div class="studio-card-box">
+          <div class="studio-card-title">📌 Status &amp; Lending</div>
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Status</label>
+              <select id="editBookStatus" onchange="onEditBookStatusChange(this.value)">
+                <option value="PENDING">⏳ PENDING</option>
+                <option value="READING">📖 READING</option>
+                <option value="DONE">✅ DONE</option>
+                <option value="LENT">👥 LENT OUT</option>
+              </select>
+            </div>
+            <div class="form-group flex-1">
+              <label>Availability</label>
+              <select id="editBookAvailability">
+                <option value="AVAILABLE">Available</option>
+                <option value="UNAVAILABLE">Unavailable</option>
+              </select>
+            </div>
           </div>
-          <div class="form-group flex-1">
-            <label>Availability</label>
-            <select id="editBookAvailability">
-              <option value="AVAILABLE">Available</option>
-              <option value="UNAVAILABLE">Unavailable</option>
-            </select>
+
+          <!-- Lent Details (visible when status is LENT) -->
+          <div class="form-row" id="editLentDetailsRow" style="display:none;">
+            <div class="form-group flex-1">
+              <label>Borrower Name (Dost ka naam)</label>
+              <input type="text" id="editLentTo" placeholder="e.g. Rahul Sharma">
+            </div>
+            <div class="form-group flex-1">
+              <label>Borrower Phone</label>
+              <input type="tel" id="editLentPhone" placeholder="e.g. 9876543210">
+            </div>
           </div>
         </div>
 
-        <!-- Lent Details (visible when status is LENT) -->
-        <div class="form-row" id="editLentDetailsRow" style="display:none;">
-          <div class="form-group flex-1">
-            <label>Borrower Name (Dost ka naam)</label>
-            <input type="text" id="editLentTo" placeholder="e.g. Rahul Sharma">
-          </div>
-          <div class="form-group flex-1">
-            <label>Borrower Phone</label>
-            <input type="tel" id="editLentPhone" placeholder="e.g. 9876543210">
-          </div>
-        </div>
-
-        <!-- Pages Tracking -->
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label>Current Page</label>
-            <input type="number" id="editCurrentPage" min="0" placeholder="e.g. 0">
-          </div>
-          <div class="form-group flex-1">
-            <label>Total Pages</label>
-            <input type="number" id="editTotalPages" min="1" placeholder="e.g. 250">
+        <!-- Card 5: Pages & Reading Progress -->
+        <div class="studio-card-box">
+          <div class="studio-card-title">📖 Reading Pages</div>
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Current Page</label>
+              <input type="number" id="editCurrentPage" min="0" placeholder="e.g. 0">
+            </div>
+            <div class="form-group flex-1">
+              <label>Total Pages</label>
+              <input type="number" id="editTotalPages" min="1" placeholder="e.g. 250">
+            </div>
           </div>
         </div>
 
-        <!-- Price & Rating -->
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label>Price (₹ Purchase Cost - Optional)</label>
-            <input type="number" id="editBookPrice" min="0" placeholder="Leave blank if not added">
-          </div>
-          <div class="form-group flex-1">
-            <label>Rating</label>
-            <select id="editBookRating">
-              <option value="0">☆☆☆☆☆ (No Rating / 0)</option>
-              <option value="1">★☆☆☆☆ (1 Star)</option>
-              <option value="2">★★☆☆☆ (2 Stars)</option>
-              <option value="3">★★★☆☆ (3 Stars)</option>
-              <option value="4">★★★★☆ (4 Stars)</option>
-              <option value="5">★★★★★ (5 Stars)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Dates & Count Days -->
-        <div class="form-row">
-          <div class="form-group flex-1">
-            <label>Start Date</label>
-            <input type="date" id="editStartDate" onchange="calculateCountDays()">
-          </div>
-          <div class="form-group flex-1">
-            <label>End Date</label>
-            <input type="date" id="editEndDate" onchange="calculateCountDays()">
+        <!-- Card 6: Purchase Price & Rating -->
+        <div class="studio-card-box">
+          <div class="studio-card-title">💰 Price &amp; Rating</div>
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Purchase Price (₹ - Optional)</label>
+              <input type="number" id="editBookPrice" min="0" placeholder="Leave blank if not added">
+            </div>
+            <div class="form-group flex-1">
+              <label>Rating</label>
+              <select id="editBookRating">
+                <option value="0">☆☆☆☆☆ (No Rating / 0)</option>
+                <option value="1">★☆☆☆☆ (1 Star)</option>
+                <option value="2">★★☆☆☆ (2 Stars)</option>
+                <option value="3">★★★☆☆ (3 Stars)</option>
+                <option value="4">★★★★☆ (4 Stars)</option>
+                <option value="5">★★★★★ (5 Stars)</option>
+              </select>
+            </div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label>Count Days (Auto-calculated)</label>
-          <input type="number" id="editCountDays" placeholder="0" min="0">
+        <!-- Card 7: Reading Schedule & Timeline -->
+        <div class="studio-card-box">
+          <div class="studio-card-title">📅 Timeline &amp; Dates</div>
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Start Date</label>
+              <input type="date" id="editStartDate" onchange="calculateCountDays()">
+            </div>
+            <div class="form-group flex-1">
+              <label>End Date</label>
+              <input type="date" id="editEndDate" onchange="calculateCountDays()">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>Count Days (Auto-calculated)</label>
+            <input type="number" id="editCountDays" placeholder="0" min="0">
+          </div>
         </div>
 
-        <div class="form-group">
-          <label>Key Learnings, Quotes & Takeaways</label>
-          <textarea id="editBookTakeaway" placeholder="What are the key learnings, quotes, or actionable insights from this book?"></textarea>
+        <!-- Card 8: Key Takeaways & Reflections -->
+        <div class="studio-card-box">
+          <div class="studio-card-title">💡 Key Learnings, Quotes &amp; Reflections</div>
+          <div class="form-group" style="margin-bottom:0;">
+            <textarea id="editBookTakeaway" rows="4" placeholder="What are the key learnings, quotes, or actionable insights from this book?"></textarea>
+          </div>
         </div>
       </div>
-      <div class="modal-footer">
+
+      <!-- Frozen Sticky Footer -->
+      <div class="modal-footer studio-footer">
         <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
-        <button type="button" class="btn-save-gold" onclick="saveBookModal()">Save Changes</button>
+        <button type="button" class="btn-save-gold" onclick="saveBookModal()" style="flex:1;">Save Changes ✅</button>
       </div>
     </div>
   </div>
@@ -15732,11 +15974,11 @@ const DEFAULT_BOOKS = [
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.8)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.10)
 // ==========================================================================
 
-const APP_VERSION = '0.0.8';
-const CURRENT_APP_VERSION = 'v0.0.8';
+const APP_VERSION = '0.0.10';
+const CURRENT_APP_VERSION = 'v0.0.10';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -18359,16 +18601,6 @@ function openBookDetailView(book) {
       }
     }
 
-    // Update Reader Mode Hint Name
-    const modeNameEl = document.getElementById('detailReaderModeName');
-    if (modeNameEl) {
-      const toneNames = {
-        'sepia': 'Sepia Paper Mode (#fbf5e6)',
-        'dark': 'Dark Night Mode (#121824)',
-        'light': 'Crisp Light Mode (#ffffff)'
-      };
-      modeNameEl.innerText = toneNames[readerState.theme || 'sepia'] || 'Sepia Paper Mode (#fbf5e6)';
-    }
 
     // Switch view to Detail
     document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
@@ -18920,16 +19152,7 @@ function setReaderTheme(theme) {
   
   updateProfileReaderToneDisplay();
   
-  // Update detail badge if present
-  const modeNameEl = document.getElementById('detailReaderModeName');
-  if (modeNameEl) {
-    const toneNames = {
-      'sepia': 'Sepia Paper Mode (#fbf5e6)',
-      'dark': 'Dark Night Mode (#121824)',
-      'light': 'Crisp Light Mode (#ffffff)'
-    };
-    modeNameEl.innerText = toneNames[theme] || 'Sepia Paper Mode (#fbf5e6)';
-  }
+
 }
 
 function setReaderSpreadMode(mode) {
