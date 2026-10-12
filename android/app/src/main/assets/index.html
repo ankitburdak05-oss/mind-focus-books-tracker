@@ -955,9 +955,12 @@
         </div>
       </div>
 
-      <!-- 1-Tap Reading Status Selector Chips -->
-      <div class="detail-status-chips-bar">
-        <span class="status-chips-label">Tracking Status:</span>
+      <!-- 1-Tap Reading Status Selector Card Box -->
+      <div class="detail-status-card-box detail-status-chips-bar">
+        <div class="dsc-header">
+          <span class="dsc-label">TRACKING STATUS</span>
+          <span class="dsc-hint">Tap to change</span>
+        </div>
         <div class="status-chips-wrap">
           <button type="button" class="status-chip-btn" id="chipReading" onclick="quickSetBookStatus('READING')">📖 Reading</button>
           <button type="button" class="status-chip-btn" id="chipCompleted" onclick="quickSetBookStatus('DONE')">✅ Finished</button>

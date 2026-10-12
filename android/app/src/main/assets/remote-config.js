@@ -2,17 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.11",
-    "name": "Mind Focus Books v0.0.11 - 3D Golden Luminary Book Icon & Studio Suite",
+    "version": "v0.0.12",
+    "name": "Mind Focus Books v0.0.12 - Boxed Tracking Status & Compact Reader Button",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
+      "📦 Boxed Tracking Status Card: Placed all 5 status options inside a dedicated luxury glassmorphic card container.",
+      "👌 Compact Read Book Pages Button: Sleek, proportional height and balanced action row alongside Focus Timer and Quick Add.",
       "✨ Brand-New 3D Golden Luminary Book App Icon with Ambient Light Beam",
-      "📱 Fullscreen Edit Details Studio: 100% full-screen mobile studio with FROZEN sticky header & close (✕) button",
-      "📖 New Premium Read Book Pages Flagship Action",
-      "📊 Luxury Reading Progress Suite with 100% features and stats preserved",
-      "🗑️ Clean Removal of Sepia reader mode box"
+      "📱 Fullscreen Edit Details Studio with frozen sticky header & close (✕) button",
+      "🚫 Zero Repeated Update Popups: Strict mathematical version comparison engine."
     ],
-    "stagedAt": "2026-10-12T14:07:00.000Z",
+    "stagedAt": "2026-10-12T14:35:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
