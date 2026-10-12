@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.8)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.10)
 // ==========================================================================
 
-const APP_VERSION = '0.0.8';
-const CURRENT_APP_VERSION = 'v0.0.8';
+const APP_VERSION = '0.0.10';
+const CURRENT_APP_VERSION = 'v0.0.10';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -2626,16 +2626,6 @@ function openBookDetailView(book) {
       }
     }
 
-    // Update Reader Mode Hint Name
-    const modeNameEl = document.getElementById('detailReaderModeName');
-    if (modeNameEl) {
-      const toneNames = {
-        'sepia': 'Sepia Paper Mode (#fbf5e6)',
-        'dark': 'Dark Night Mode (#121824)',
-        'light': 'Crisp Light Mode (#ffffff)'
-      };
-      modeNameEl.innerText = toneNames[readerState.theme || 'sepia'] || 'Sepia Paper Mode (#fbf5e6)';
-    }
 
     // Switch view to Detail
     document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
@@ -3187,16 +3177,7 @@ function setReaderTheme(theme) {
   
   updateProfileReaderToneDisplay();
   
-  // Update detail badge if present
-  const modeNameEl = document.getElementById('detailReaderModeName');
-  if (modeNameEl) {
-    const toneNames = {
-      'sepia': 'Sepia Paper Mode (#fbf5e6)',
-      'dark': 'Dark Night Mode (#121824)',
-      'light': 'Crisp Light Mode (#ffffff)'
-    };
-    modeNameEl.innerText = toneNames[theme] || 'Sepia Paper Mode (#fbf5e6)';
-  }
+
 }
 
 function setReaderSpreadMode(mode) {
