@@ -3,7 +3,7 @@ window.__REMOTE_BROADCAST_NOTICE__ = {
   "version": "v0.0.11",
   "type": "card1",
   "card": "card1",
-  "active": true,
+  "active": false,
   "icon": "✨",
   "title": "Mind Focus Books v0.0.11 Update Ready!",
   "message": "v0.0.11 is live! Naya 3D Golden Luminary Book Icon, Fullscreen Studio Editor & Frozen Close Button ab phone par tayar hain.",

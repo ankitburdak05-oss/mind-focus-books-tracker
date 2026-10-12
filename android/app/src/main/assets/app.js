@@ -4115,13 +4115,30 @@ function downloadAppUpdate() {
   triggerInAppUpdate();
 }
 
+function isNewerVersion(remote, current) {
+  if (!remote || !current) return false;
+  if (remote === current) return false;
+  const clean = v => String(v).trim().replace(/^v/i, '');
+  const r = clean(remote).split('.').map(n => parseInt(n, 10) || 0);
+  const c = clean(current).split('.').map(n => parseInt(n, 10) || 0);
+  for (let i = 0; i < Math.max(r.length, c.length); i++) {
+    const rv = r[i] || 0;
+    const cv = c[i] || 0;
+    if (rv > cv) return true;
+    if (rv < cv) return false;
+  }
+  return false;
+}
+
 async function checkForBackgroundUpdates() {
   const homeCard = document.getElementById('homeUpdateCard');
   const homeTitle = document.getElementById('homeUpdateTitle');
   const homeSub = document.getElementById('homeUpdateSub');
   
-  const installedVer = localStorage.getItem('mf_installed_version') || CURRENT_APP_VERSION;
-  const hasInstalledCurrent = installedVer === CURRENT_APP_VERSION;
+  // Persist that current running version is active & installed
+  try {
+    localStorage.setItem('mf_installed_version', CURRENT_APP_VERSION);
+  } catch (e) {}
 
   let activeRel = null;
 
@@ -4146,7 +4163,8 @@ async function checkForBackgroundUpdates() {
   }
 
   const remoteVer = activeRel?.version || CURRENT_APP_VERSION;
-  const isNewAvailable = remoteVer !== installedVer || !hasInstalledCurrent;
+  // A new update is ONLY available if remoteVer is strictly GREATER than CURRENT_APP_VERSION
+  const isNewAvailable = isNewerVersion(remoteVer, CURRENT_APP_VERSION);
 
   if (homeCard) {
     if (isNewAvailable) {
@@ -4159,8 +4177,8 @@ async function checkForBackgroundUpdates() {
   }
 
   if (isNewAvailable) {
-    // Auto-popup Vision-OS modal on launch if update is ready
-    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + remoteVer);
+    // Auto-popup Vision-OS modal on launch if update is strictly newer and not yet dismissed
+    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + remoteVer) || localStorage.getItem('mf_update_skipped_' + remoteVer);
     if (!dismissed) {
       setTimeout(() => {
         const noticeOverlay = document.getElementById('inAppNoticeModalOverlay');
@@ -4290,15 +4308,14 @@ function openUpdateCheckerModal() {
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
   const rel = cfg?.activeRelease || null;
   const targetVer = rel?.version || CURRENT_APP_VERSION;
-  const installedVer = localStorage.getItem('mf_installed_version');
-  const isInstalled = installedVer === targetVer;
+  const isNewAvailable = isNewerVersion(targetVer, CURRENT_APP_VERSION);
 
   const titleEl = document.getElementById('updateModalTitle');
   const badge = document.getElementById('updateTargetVersionBadge');
   const desc = document.getElementById('updateModalDesc');
   const btn = document.getElementById('updateModalActionBtn');
 
-  if (!isInstalled) {
+  if (isNewAvailable) {
     if (titleEl) titleEl.innerText = 'New Version Update Ready:';
     if (badge) badge.innerText = `${targetVer} Ready`;
     if (desc) desc.innerText = rel?.name || `Mind Focus Books ${targetVer} is ready to install!`;
@@ -4307,13 +4324,13 @@ function openUpdateCheckerModal() {
       btn.innerText = `⚡ Download & Install ${targetVer} Now`;
     }
   } else {
-    // Installed — Reinstall anytime
+    // Already on current or latest version!
     if (titleEl) titleEl.innerText = 'Mind Focus Books is Up to Date';
-    if (badge) badge.innerText = `${targetVer} (Installed)`;
-    if (desc) desc.innerText = 'You have the latest version installed • Tap below to re-download or reinstall official APK anytime';
+    if (badge) badge.innerText = `${CURRENT_APP_VERSION} (Installed)`;
+    if (desc) desc.innerText = `Aapke phone me latest version ${CURRENT_APP_VERSION} already installed hai aur sab kuch up-to-date hai.`;
     if (btn) {
       btn.disabled = false;
-      btn.innerText = `⚡ Re-download & Install APK (${targetVer})`;
+      btn.innerText = `✓ Up to Date (${CURRENT_APP_VERSION})`;
     }
   }
 
@@ -4357,6 +4374,7 @@ function closeUpdateCheckerModal() {
   const targetVer = cfg?.activeRelease?.version || CURRENT_APP_VERSION;
   try {
     sessionStorage.setItem('mf_update_dismissed_' + targetVer, '1');
+    localStorage.setItem('mf_update_skipped_' + targetVer, '1');
   } catch (e) {}
 }
 
@@ -4445,9 +4463,9 @@ async function checkRemoteBroadcastNotice() {
     if (res.ok) {
       const data = await res.json();
       if (data && data.active) {
-        // If notice is an update for CURRENT_APP_VERSION, app already has this update! NEVER POP UP!
+        // If notice is an update for CURRENT_APP_VERSION or older, NEVER POP UP!
         const noticeVer = data.version || (data.id && data.id.replace('notice-', ''));
-        if (noticeVer && noticeVer === CURRENT_APP_VERSION) {
+        if (noticeVer && !isNewerVersion(noticeVer, CURRENT_APP_VERSION)) {
           return;
         }
         // If already dismissed, DO NOT POP UP!
