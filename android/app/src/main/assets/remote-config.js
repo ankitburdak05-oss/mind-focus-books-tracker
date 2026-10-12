@@ -2,16 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.10",
-    "name": "Mind Focus Books v0.0.10 - Fullscreen Studio Editor & Premium Upgrade",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.10/MindFocusBooks-Native.apk",
+    "version": "v0.0.11",
+    "name": "Mind Focus Books v0.0.11 - 3D Golden Luminary Book Icon & Studio Suite",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "📖 New Premium Read Book Pages: Redesigned flagship interactive reading button with subtitle and luxury finish.",
-      "🗑️ Clean Removal: Completely removed Sepia reader mode box and deleted its code as requested.",
-      "📱 Fullscreen Edit Details Studio: 100% full-screen mobile studio with FROZEN sticky header & close (✕) button that never scrolls away.",
-      "📊 Luxury Reading Progress Suite: Upgraded Donut chart, streak flame badges, 12-month progress bars, and budget investment card with 100% features preserved."
+      "✨ Brand-New 3D Golden Luminary Book App Icon with Ambient Light Beam",
+      "📱 Fullscreen Edit Details Studio: 100% full-screen mobile studio with FROZEN sticky header & close (✕) button",
+      "📖 New Premium Read Book Pages Flagship Action",
+      "📊 Luxury Reading Progress Suite with 100% features and stats preserved",
+      "🗑️ Clean Removal of Sepia reader mode box"
     ],
-    "stagedAt": "2026-10-12T13:35:00.000Z",
+    "stagedAt": "2026-10-12T14:07:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

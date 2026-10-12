@@ -1,14 +1,14 @@
 {
-  "id": "notice-v0.0.8",
-  "version": "v0.0.8",
+  "id": "notice-v0.0.11",
+  "version": "v0.0.11",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "🔄",
-  "title": "Mind Focus Books v0.0.8 Update Ready!",
-  "message": "v0.0.8 is live! Smart Dynamic Bulk Restore & Clean Category Actions ab phone par tayar hain.",
-  "btnText": "⚡ Update Now (v0.0.8)",
+  "icon": "✨",
+  "title": "Mind Focus Books v0.0.11 Update Ready!",
+  "message": "v0.0.11 is live! Naya 3D Golden Luminary Book Icon, Fullscreen Studio Editor & Frozen Close Button ab phone par tayar hain.",
+  "btnText": "⚡ Update Now (v0.0.11)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.8/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-11T22:49:00.000Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-12T14:07:00.000Z"
 }
