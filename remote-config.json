@@ -2,17 +2,23 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.15",
-    "name": "Mind Focus Books v0.0.15 - In-Reader Add Page, OCR Scanner, Language Launcher & Hyperfocus Pages",
+    "version": "v0.0.16",
+    "name": "Mind Focus Books v0.0.16 - Dictionary Book 1-Tap Fix & 10 Modern Preferences Suite",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "➕ In-Reader Add Page Modal: Directly add new pages with page numbers and chapter headings inside the 3D book reader.",
-      "📸 Auto-OCR Text Scanner: Laser-scanning camera dropzone to convert photos of real book pages into digital text via Tesseract OCR.",
-      "✏️ Page Edit & Re-Scan Modal: Edit typo, re-scan page photos, or delete pages with live synchronization to custom storage.",
-      "🌐 Multi-Language Launcher Modal: Choose Hindi, Hinglish, or English edition before reading, plus 1-tap Add Page banner.",
-      "📖 3D Vocabulary Dictionary & Hyperfocus Pages: Book 0 instant lexicon launch and Hyperfocus real multi-language pages."
+      "📖 1-Tap Dictionary Book Fix: Instant launch of 3D Vocabulary Dictionary directly on tapping Book 0 card anywhere in Library, Home or Explore.",
+      "🎯 Daily Pages Reading Goal: Configurable 5 to 50 pages/day with finish date calculation and habit tracking.",
+      "🌐 Reader Default Language: Automatic selection of Hindi, Hinglish or English reading editions.",
+      "🔤 Reader Font Zoom: Full multi-level zoom (85% to 150%) with persistent scaling across page turns.",
+      "💡 Keep Screen Awake: Screen wake lock API preventing display timeout while reading.",
+      "🚀 Default Start Tab: Choose Home, Library, Explore, Progress, Profile or Settings on startup.",
+      "📅 Date Formats: DD/MM/YYYY, YYYY-MM-DD, Month DD, and standard display formats.",
+      "🔠 App Text Size Scaling: 85% to 125% interface scaling.",
+      "🍃 Reduce Motion & Animations: Instant transition toggle for focus and battery saving.",
+      "📳 Subtle Haptic Feedback: Tactile vibration on tab switching, page flips, and actions.",
+      "💾 Visual Backup Reminders: Weekly or monthly backup prompts to keep your reading data safe."
     ],
-    "stagedAt": "2026-10-14T14:25:00.000Z",
+    "stagedAt": "2026-10-14T15:35:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

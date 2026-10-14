@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.15)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.16)
 // ==========================================================================
 
-const APP_VERSION = '0.0.15';
-const CURRENT_APP_VERSION = 'v0.0.15';
+const APP_VERSION = '0.0.16';
+const CURRENT_APP_VERSION = 'v0.0.16';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -13,6 +13,16 @@ const BOOK_ORDER_KEY = 'mf_custom_book_order';
 const LAYOUT_KEY = 'mf_library_layout_mode';
 const SHELVES_KEY = 'mf_custom_shelves';
 const COLS_KEY = 'mf_library_cols';
+
+// Global Dictionary Book Identifier Helper
+function isDictionaryBook(book) {
+  if (!book) return false;
+  if (book.isDictionary === true) return true;
+  if (book.no === 'book 0' || book.no === '0') return true;
+  const t = (book.title || '').toLowerCase();
+  if (t.includes('dictionary') || t.includes('lexicon') || t.includes('vocabulary')) return true;
+  return false;
+}
 
 // Global Application State
 let state = {
@@ -94,6 +104,11 @@ function initApp() {
 
   // Initial Renders
   renderApp();
+  
+  // Apply User Preferences & Startup Navigation
+  if (typeof runStartupPrefs === 'function') {
+    try { runStartupPrefs(); } catch (e) { console.warn(e); }
+  }
   
   // Check for in-app updates in background immediately on startup
   setTimeout(checkForBackgroundUpdates, 300);
@@ -256,23 +271,49 @@ function loadBooks() {
         
         DEFAULT_BOOKS.forEach(defBook => {
           const key = defBook.title ? defBook.title.trim().toLowerCase() : '';
+          const isDefDict = isDictionaryBook(defBook);
           if (!existingMap.has(key)) {
-            books.push(Object.assign({}, defBook));
+            if (isDefDict) {
+              books.unshift(Object.assign({}, defBook));
+            } else {
+              books.push(Object.assign({}, defBook));
+            }
           } else {
             const existing = existingMap.get(key);
             // Ensure default HD cover is present ONLY if user has not set their own custom cover
             if (!existing.customCover && !existing.cover_image && defBook.cover_url) {
               existing.cover_url = defBook.cover_url;
             }
+            if (isDefDict) {
+              existing.isDictionary = true;
+              existing.no = 'book 0';
+            }
           }
         });
       }
+    }
+
+    // Strict Placement: Position Dictionary Book at index 0
+    const dictIdx = books.findIndex(b => isDictionaryBook(b));
+    if (dictIdx > 0) {
+      const [dictBook] = books.splice(dictIdx, 1);
+      dictBook.isDictionary = true;
+      dictBook.no = 'book 0';
+      books.unshift(dictBook);
+    } else if (dictIdx === 0) {
+      books[0].isDictionary = true;
+      books[0].no = 'book 0';
     }
     
     // Ensure all books have proper defaults (Rating = 0 unless user rated, Price = 0 unless user-set)
     const priceSanitized = localStorage.getItem('mf_price_sanitized_v3_20_final');
     books.forEach((b, idx) => {
-      if (!b.no && !b.book_no) b.no = `book ${idx + 1}`;
+      if (isDictionaryBook(b)) {
+        b.no = 'book 0';
+        b.isDictionary = true;
+      } else if (!b.no && !b.book_no) {
+        b.no = `book ${idx}`;
+      }
       if (!b.rating) b.rating = 0;
       if (!b.current_page) b.current_page = 0;
       if (!b.pages && !b.total_pages) b.pages = 250;
@@ -321,6 +362,8 @@ function saveBooks() {
 function switchTab(tabId) {
   state.previousTab = state.activeTab;
   state.activeTab = tabId;
+  
+  if (typeof triggerHaptic === 'function') triggerHaptic(15);
   
   // Hide all views
   const views = document.querySelectorAll('.app-view');
@@ -489,8 +532,10 @@ function renderHomeRecentBooks() {
   const recent = filtered.slice(0, 12);
   list.innerHTML = recent.map((book) => {
     const originalIndex = state.books.indexOf(book);
+    const isDict = isDictionaryBook(book);
+    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByIndex(${originalIndex >= 0 ? originalIndex : 0})`;
     return `
-    <div class="recent-book-card" onclick="openBookDetailViewByIndex(${originalIndex >= 0 ? originalIndex : 0})">
+    <div class="recent-book-card ${isDict ? 'book-card-dictionary' : ''}" onclick="${clickHandler}">
       <div class="recent-cover-box">
         <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.src='cover_placeholder.jpg'">
       </div>
@@ -693,12 +738,13 @@ function renderLibraryGrid() {
     const current = book.current_page || 0;
     const pct = Math.min(100, Math.round((current / total) * 100));
     
-    const isDict = !!(book.isDictionary || book.no === 'book 0' || (book.title && book.title.toLowerCase().includes('dictionary')));
+    const isDict = isDictionaryBook(book);
+    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByIndex(${originalIndex})`;
     
     // Compact Horizontal List Mode (1 Row per Book)
     if (isCompactList) {
       return `
-        <div class="compact-book-row ${isDict ? 'book-card-dictionary' : ''}" onclick="openBookDetailViewByIndex(${originalIndex})">
+        <div class="compact-book-row ${isDict ? 'book-card-dictionary' : ''}" onclick="${clickHandler}">
           <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
           <div class="compact-book-info">
             <div class="compact-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
@@ -717,7 +763,7 @@ function renderLibraryGrid() {
 
     // Grid Mode (1 to 10 Columns)
     return `
-      <div class="grid-book-card ${isDict ? 'book-card-dictionary' : ''}" onclick="openBookDetailViewByIndex(${originalIndex})">
+      <div class="grid-book-card ${isDict ? 'book-card-dictionary' : ''}" onclick="${clickHandler}">
         <div class="grid-cover-wrap">
           <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
         </div>
@@ -2523,15 +2569,20 @@ function openCurrentReadingDetail() {
 
 function openBookDetailViewByIndex(idx) {
   if (idx >= 0 && idx < state.books.length) {
+    const b = state.books[idx];
+    if (isDictionaryBook(b)) {
+      openDictionaryModal();
+      return;
+    }
     state.currentBookIndex = idx;
-    state.currentBook = state.books[idx];
+    state.currentBook = b;
     openBookDetailView(state.currentBook);
   }
 }
 
 function openBookDetailView(book) {
   try {
-    if (book && (book.isDictionary || book.no === 'book 0' || (book.title && book.title.toLowerCase().includes('dictionary')))) {
+    if (isDictionaryBook(book)) {
       openDictionaryModal();
       return;
     }
@@ -2759,11 +2810,16 @@ function formatDateDisplay(dateStr) {
         const _df = (typeof getPrefs === 'function') ? getPrefs().dateFmt : 'short';
         if (_df === 'slash') return `${String(d).padStart(2, '0')}/${String(m + 1).padStart(2, '0')}/${y}`;
         if (_df === 'iso') return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        if (_df === 'month_dd') return `${months[m]} ${d}, ${y}`;
         return `${String(d).padStart(2, '0')} ${months[m]} ${y}`;
       }
     }
     const dt = new Date(dateStr);
     if (!isNaN(dt.getTime())) {
+      const _df = (typeof getPrefs === 'function') ? getPrefs().dateFmt : 'short';
+      if (_df === 'slash') return dt.toLocaleDateString('en-GB');
+      if (_df === 'iso') return dt.toISOString().split('T')[0];
+      if (_df === 'month_dd') return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
       return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     }
     return dateStr;
@@ -3200,7 +3256,7 @@ function saveQuickLogPages() {
 function openRealBookReaderForCurrent() {
   const curIdx = state.currentBookIndex !== -1 ? state.currentBookIndex : 0;
   const book = state.books && state.books[curIdx];
-  if (book && (book.isDictionary || book.no === 'book 0' || (book.title && book.title.toLowerCase().includes('dictionary')))) {
+  if (isDictionaryBook(book)) {
     openDictionaryModal();
     return;
   }
@@ -3216,7 +3272,7 @@ function openRealBookReader(bookIdx, lang) {
     readerState.activeBookIdx = bookIdx;
   }
   const book = state.books && state.books[readerState.activeBookIdx];
-  if (book && (book.isDictionary || book.no === 'book 0' || (book.title && book.title.toLowerCase().includes('dictionary')))) {
+  if (isDictionaryBook(book)) {
     openDictionaryModal();
     return;
   }
@@ -3402,18 +3458,27 @@ function cycleReaderTheme() {
 }
 
 function adjustReaderFontSize(delta) {
-  readerState.fontSizePct = Math.max(75, Math.min(150, readerState.fontSizePct + (delta * 10)));
+  readerState.fontSizePct = Math.max(75, Math.min(160, (readerState.fontSizePct || 100) + (delta * 10)));
   const disp = document.getElementById('readerFontSizeDisplay');
   if (disp) disp.innerText = `${readerState.fontSizePct}%`;
   
+  const scale = readerState.fontSizePct / 100;
   const sheets = document.querySelectorAll('.page-inner-sheet');
-  sheets.forEach(s => s.style.fontSize = `${readerState.fontSizePct / 100}rem`);
+  sheets.forEach(s => {
+    if (!s || !s.style) return;
+    if (typeof s.style.setProperty === 'function') {
+      s.style.setProperty('--reader-zoom', scale);
+    }
+    s.style.zoom = scale;
+    s.style.fontSize = `${scale}rem`;
+  });
 }
 
 function prevReaderPage() {
   const step = readerState.spreadMode === 'spread' ? 2 : 1;
   if (readerState.currentPage > 1) {
     readerState.currentPage = Math.max(1, readerState.currentPage - step);
+    if (typeof triggerHaptic === 'function') triggerHaptic(15);
     renderRealBookPages();
   }
 }
@@ -3426,6 +3491,7 @@ function nextReaderPage() {
   
   if (readerState.currentPage < totalPages) {
     readerState.currentPage = Math.min(totalPages, readerState.currentPage + step);
+    if (typeof triggerHaptic === 'function') triggerHaptic(15);
     renderRealBookPages();
   }
 }
@@ -3661,6 +3727,9 @@ function renderRealBookPages() {
       if (footerRight) footerRight.innerText = `Page ${curPageData.pageNo || readerState.currentPage} of ${totalPages}`;
     }
   }
+
+  // Re-apply user font zoom to the rendered page sheet
+  adjustReaderFontSize(0);
 }
 
 // ================= COMPREHENSIVE 16-FIELD EDIT / ADD BOOK MODAL =================
@@ -4381,12 +4450,19 @@ function openDictionaryModal() {
   const allWords = typeof DICTIONARY_WORDS !== 'undefined' ? DICTIONARY_WORDS : [];
   renderDictionaryWords(allWords);
 
+  overlay.style.display = 'flex';
   overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (typeof triggerHaptic === 'function') triggerHaptic(25);
 }
 
 function closeDictionaryModal() {
   const overlay = document.getElementById('dictionaryModalOverlay');
-  if (overlay) overlay.classList.remove('active');
+  if (overlay) {
+    overlay.classList.remove('active');
+    overlay.style.display = 'none';
+  }
+  document.body.style.overflow = '';
 }
 
 function initDictionaryAlphabetBar() {
@@ -7916,18 +7992,89 @@ function switchCoverView(side) {
 // ===== Settings: 10 new preferences (v0.1) =====
 const PREFS_KEY = 'mf_prefs_v1';
 const PREF_DEFAULTS = {
-  pagesGoal: 15, readerLang: 'hindi', readerFont: 100, keepAwake: false,
-  startTab: 'home', dateFmt: 'short', textSize: 100,
-  reduceMotion: false, haptics: false, backupRemind: 'off'
+  pagesGoal: 15,
+  readerLang: 'hindi',
+  readerFont: 100,
+  keepAwake: false,
+  startTab: 'home',
+  dateFmt: 'short',
+  textSize: 100,
+  reduceMotion: false,
+  haptics: false,
+  backupRemind: 'off'
 };
+
 const PREF_META = {
-  pagesGoal: { title: 'Daily Pages Goal', options: [[5, '5 pages'], [10, '10 pages'], [15, '15 pages'], [20, '20 pages'], [30, '30 pages'], [50, '50 pages']] },
-  readerLang: { title: 'Reader Default Language', options: [['hindi', 'Hindi'], ['hinglish', 'Hinglish'], ['english', 'English']] },
-  readerFont: { title: 'Reader Font Size', options: [[85, '85%'], [100, '100%'], [115, '115%'], [130, '130%'], [150, '150%']] },
-  startTab: { title: 'Default Start Screen', options: [['home', 'Home'], ['library', 'Library'], ['explore', 'Explore'], ['progress', 'Progress']] },
-  dateFmt: { title: 'Date Format', options: [['short', '04 Oct 2026'], ['slash', '04/10/2026'], ['iso', '2026-10-04']] },
-  textSize: { title: 'App Text Size', options: [[90, 'Small (90%)'], [100, 'Normal (100%)'], [110, 'Large (110%)'], [120, 'Extra large (120%)']] },
-  backupRemind: { title: 'Backup Reminder', options: [['off', 'Off'], ['weekly', 'Every week'], ['monthly', 'Every month']] }
+  pagesGoal: {
+    title: 'Daily Pages Goal',
+    options: [
+      [5, '5 pages/day'],
+      [10, '10 pages/day'],
+      [15, '15 pages/day (Default)'],
+      [20, '20 pages/day'],
+      [25, '25 pages/day'],
+      [30, '30 pages/day'],
+      [50, '50 pages/day']
+    ]
+  },
+  readerLang: {
+    title: 'Reader Default Language',
+    options: [
+      ['hindi', 'Hindi (हिंदी)'],
+      ['hinglish', 'Hinglish (रोमन हिंदी)'],
+      ['english', 'English']
+    ]
+  },
+  readerFont: {
+    title: 'Reader Font Zoom',
+    options: [
+      [85, '85% (Compact)'],
+      [90, '90% (Small)'],
+      [100, '100% (Default)'],
+      [115, '115% (Comfortable)'],
+      [130, '130% (Large)'],
+      [140, '140% (Extra Large)'],
+      [150, '150% (Maximum)']
+    ]
+  },
+  startTab: {
+    title: 'Default Start Tab',
+    options: [
+      ['home', 'Home (मुख्य)'],
+      ['library', 'Library (लाइब्रेरी)'],
+      ['explore', 'Explore (एक्सप्लोर)'],
+      ['progress', 'Progress (प्रगति)'],
+      ['profile', 'Profile (प्रोफाइल)'],
+      ['appSettings', 'Settings (सेटिंग्स)']
+    ]
+  },
+  dateFmt: {
+    title: 'Date Format',
+    options: [
+      ['slash', 'DD/MM/YYYY (14/10/2026)'],
+      ['iso', 'YYYY-MM-DD (2026-10-14)'],
+      ['month_dd', 'Month DD (Oct 14, 2026)'],
+      ['short', '14 Oct 2026 (Short)']
+    ]
+  },
+  textSize: {
+    title: 'Text Size Scaling',
+    options: [
+      [85, '85% (Compact)'],
+      [90, '90% (Small)'],
+      [100, '100% (Default)'],
+      [110, '110% (Medium)'],
+      [125, '125% (Large)']
+    ]
+  },
+  backupRemind: {
+    title: 'Visual Backup Reminders',
+    options: [
+      ['off', 'Off (बंद)'],
+      ['weekly', 'Weekly (हर 7 दिन)'],
+      ['monthly', 'Monthly (हर 30 दिन)']
+    ]
+  }
 };
 
 function getPrefs() {
@@ -7940,7 +8087,7 @@ function getPrefs() {
 function savePref(key, value) {
   const p = getPrefs();
   p[key] = value;
-  try { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); } catch (e) { /* storage full: keep running */ }
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); } catch (e) { /* storage full */ }
   applyPrefs();
 }
 
@@ -7950,12 +8097,29 @@ function prefLabel(key, value) {
   return hit ? hit[1] : String(value);
 }
 
+function triggerHaptic(duration = 15) {
+  try {
+    const p = (typeof getPrefs === 'function') ? getPrefs() : { haptics: true };
+    if (!p.haptics) return;
+    if (typeof AndroidInterface !== 'undefined' && AndroidInterface.vibrate) {
+      AndroidInterface.vibrate(duration);
+    } else if (navigator && navigator.vibrate) {
+      navigator.vibrate(duration);
+    }
+  } catch (e) { /* ignore */ }
+}
+
 function applyPrefs() {
   const p = getPrefs();
   if (document.documentElement && document.documentElement.style) {
     document.documentElement.style.fontSize = p.textSize + '%';
   }
-  if (document.body && document.body.classList) document.body.classList.toggle('pref-reduce-motion', !!p.reduceMotion);
+  if (document.body && document.body.style && typeof document.body.style.setProperty === 'function') {
+    document.body.style.setProperty('--app-font-scale', p.textSize / 100);
+  }
+  if (document.body && document.body.classList) {
+    document.body.classList.toggle('pref-reduce-motion', !!p.reduceMotion);
+  }
   Object.keys(PREF_META).forEach(k => {
     const el = document.getElementById('igPref_' + k);
     if (el) el.innerText = prefLabel(k, p[k]);
@@ -7964,12 +8128,30 @@ function applyPrefs() {
     const el = document.getElementById('prefToggle_' + k);
     if (el) el.checked = !!p[k];
   });
+  if (typeof readerState !== 'undefined') {
+    readerState.fontSizePct = p.readerFont || 100;
+  }
+}
+
+function togglePrefFromRow(key) {
+  const checkbox = document.getElementById('prefToggle_' + key);
+  if (!checkbox) return;
+  checkbox.checked = !checkbox.checked;
+  togglePref(key, checkbox.checked);
 }
 
 function togglePref(key, checked) {
   savePref(key, !!checked);
-  if (key === 'keepAwake' && !checked) prefReleaseWake();
-  showToast((checked ? 'On: ' : 'Off: ') + ({ keepAwake: 'Keep screen awake', reduceMotion: 'Reduce animations', haptics: 'Haptic feedback' }[key] || key));
+  if (key === 'keepAwake') {
+    if (checked) prefRequestWake();
+    else prefReleaseWake();
+  }
+  triggerHaptic(25);
+  showToast((checked ? '✅ On: ' : '⚪ Off: ') + ({
+    keepAwake: 'Keep screen awake',
+    reduceMotion: 'Reduce animations',
+    haptics: 'Haptic feedback'
+  }[key] || key));
 }
 
 function openPrefPicker(key) {
@@ -8065,10 +8247,15 @@ document.addEventListener('visibilitychange', () => {
 function runStartupPrefs() {
   const p = getPrefs();
   applyPrefs();
-  const home = document.getElementById('viewHome');
   const isLocked = !!(state.pin && state.pin.length === 4);
-  if (!isLocked && p.startTab && p.startTab !== 'home' && home && home.classList.contains('active') && typeof switchTab === 'function') {
-    try { switchTab(p.startTab); } catch (e) { /* ignore */ }
+  if (!isLocked && p.startTab && p.startTab !== 'home') {
+    try {
+      if (p.startTab === 'appSettings' || p.startTab === 'settings') {
+        if (typeof navigateToSubView === 'function') navigateToSubView('appSettings');
+      } else if (typeof switchTab === 'function') {
+        switchTab(p.startTab);
+      }
+    } catch (e) { console.warn(e); }
   }
   if (p.backupRemind && p.backupRemind !== 'off') {
     const last = parseInt(localStorage.getItem('mf_last_backup_ts') || '0', 10);
@@ -8076,7 +8263,7 @@ function runStartupPrefs() {
     const today = new Date().toDateString();
     if (Date.now() - last > limit && localStorage.getItem('mf_backup_toast_day') !== today) {
       try { localStorage.setItem('mf_backup_toast_day', today); } catch (e) { /* ignore */ }
-      setTimeout(() => showToast('💾 Backup due: Settings > Quick Data Backup', 4200), 1200);
+      setTimeout(() => showToast('💾 Backup reminder: Profile > Quick Data Backup', 4500), 1200);
     }
   }
 }
@@ -8084,7 +8271,7 @@ function runStartupPrefs() {
 applyPrefs();
 document.addEventListener('DOMContentLoaded', () => { 
   applyPrefs(); 
-  setTimeout(runStartupPrefs, 700); 
+  setTimeout(runStartupPrefs, 300); 
 });
 
 (function wireSettingsHubRefresh() {

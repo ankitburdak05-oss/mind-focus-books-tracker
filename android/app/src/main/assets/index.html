@@ -2180,7 +2180,7 @@
                 <span class="ig-badge-val" id="igPref_readerFont">-</span><span class="ig-arrow">&rsaquo;</span>
               </div>
             </div>
-            <div class="ig-row">
+            <div class="ig-row" onclick="togglePrefFromRow('keepAwake')">
               <div class="ig-row-left">
                 <div class="ig-icon-box ig-icon-emerald">💡</div>
                 <div class="ig-text-box">
@@ -2215,7 +2215,7 @@
                 <div class="ig-icon-box ig-icon-gold">📅</div>
                 <div class="ig-text-box">
                   <div class="ig-title">Date Format</div>
-                  <div class="ig-sub">04 Oct 2026, 04/10/2026 ya 2026-10-04</div>
+                  <div class="ig-sub">DD/MM/YYYY, YYYY-MM-DD, Month DD</div>
                 </div>
               </div>
               <div class="ig-row-right">
@@ -2227,7 +2227,7 @@
                 <div class="ig-icon-box ig-icon-purple">🔠</div>
                 <div class="ig-text-box">
                   <div class="ig-title">App Text Size</div>
-                  <div class="ig-sub">Poore app ka text chhota ya bada karein</div>
+                  <div class="ig-sub">Poore app ka text chhota ya bada karein (85% - 125%)</div>
                 </div>
               </div>
               <div class="ig-row-right">
@@ -2240,7 +2240,7 @@
         <div class="ig-settings-group" data-ig-category="prefComfort">
           <div class="ig-group-header">Comfort & Safety</div>
           <div class="ig-card">
-            <div class="ig-row">
+            <div class="ig-row" onclick="togglePrefFromRow('reduceMotion')">
               <div class="ig-row-left">
                 <div class="ig-icon-box ig-icon-emerald">🍃</div>
                 <div class="ig-text-box">
@@ -2252,7 +2252,7 @@
                 <label class="pref-switch" onclick="event.stopPropagation()"><input type="checkbox" id="prefToggle_reduceMotion" onchange="togglePref('reduceMotion', this.checked)"><span class="pref-slider"></span></label>
               </div>
             </div>
-            <div class="ig-row">
+            <div class="ig-row" onclick="togglePrefFromRow('haptics')">
               <div class="ig-row-left">
                 <div class="ig-icon-box ig-icon-blue">📳</div>
                 <div class="ig-text-box">
@@ -2316,7 +2316,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" id="settingsAppVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.15 (Up to date)</span>
+                <span class="ig-badge-val" id="settingsAppVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.16 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -3371,7 +3371,7 @@
   </div>
 
   <!-- ================= 3D INTERACTIVE VOCABULARY DICTIONARY MODAL ================= -->
-  <div class="modal-overlay" id="dictionaryModalOverlay">
+  <div class="modal-overlay" id="dictionaryModalOverlay" onclick="if(event.target === this) closeDictionaryModal()">
     <div class="modal-card modal-lg dictionary-modal-card">
       <div class="modal-header dict-sticky-header">
         <div style="display:flex; align-items:center; gap:10px;">

@@ -7933,11 +7933,18 @@ body.pref-reduce-motion *,body.pref-reduce-motion *:before,body.pref-reduce-moti
 
 /* 4. Dictionary card styling in library grid */
 .book-card-dictionary {
-  border-color: rgba(245, 158, 11, 0.45) !important;
-  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.15) !important;
+  border: 1.5px solid rgba(245, 158, 11, 0.6) !important;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2) !important;
+  cursor: pointer !important;
+  position: relative;
 }
 
 .book-card-dictionary:hover {
   border-color: #f59e0b !important;
-  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.25) !important;
+  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.35) !important;
+  transform: translateY(-3px) scale(1.02);
+}
+
+#dictionaryModalOverlay {
+  z-index: 100000 !important;
 }
