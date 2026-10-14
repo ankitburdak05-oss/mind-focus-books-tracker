@@ -2,16 +2,17 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.14",
-    "name": "Mind Focus Books v0.0.14 - Premium Book Detail Ring, Reader Tools & 10 Settings Preferences",
+    "version": "v0.0.15",
+    "name": "Mind Focus Books v0.0.15 - In-Reader Add Page, OCR Scanner, Language Launcher & Hyperfocus Pages",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "✨ Premium Book Detail Screen: Dynamic SVG progress ring, finish date ETA line, and 4 quick statistics (Streak, Notes, Highlights, Parts).",
-      "🔖 Reading Tools Suite: Direct in-reader cover photo update, quick note capturing, page bookmarking, and book editor shortcut.",
-      "⚙️ 10 Modern App Preferences: Daily pages goal, reader default language, reader font zoom, keep screen awake, default start tab, date formats, text size zoom, reduce animations, haptics, and smart backup reminders.",
-      "⚡ Quick Page Log Modal & 3D Vocabulary Dictionary: Live slider, pill increments, and 101+ word dictionary with audio pronunciation."
+      "➕ In-Reader Add Page Modal: Directly add new pages with page numbers and chapter headings inside the 3D book reader.",
+      "📸 Auto-OCR Text Scanner: Laser-scanning camera dropzone to convert photos of real book pages into digital text via Tesseract OCR.",
+      "✏️ Page Edit & Re-Scan Modal: Edit typo, re-scan page photos, or delete pages with live synchronization to custom storage.",
+      "🌐 Multi-Language Launcher Modal: Choose Hindi, Hinglish, or English edition before reading, plus 1-tap Add Page banner.",
+      "📖 3D Vocabulary Dictionary & Hyperfocus Pages: Book 0 instant lexicon launch and Hyperfocus real multi-language pages."
     ],
-    "stagedAt": "2026-10-14T11:45:00.000Z",
+    "stagedAt": "2026-10-14T14:25:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

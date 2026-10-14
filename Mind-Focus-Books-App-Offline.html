@@ -7655,6 +7655,307 @@ body.pref-reduce-motion *,body.pref-reduce-motion *:before,body.pref-reduce-moti
 
 
 
+/* ==========================================================================
+   MULTI-LANGUAGE REAL BOOK READER & OCR SCANNER STYLES
+   ========================================================================== */
+
+/* 1. Language Selector Dialog */
+.lang-select-dialog {
+  max-width: 540px !important;
+  border-radius: 20px !important;
+  background: var(--bg-card) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.lang-select-book-preview {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 0.9rem;
+  align-items: center;
+}
+
+.lang-select-cover-wrap {
+  width: 72px;
+  height: 104px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #1e293b;
+}
+
+.lang-select-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lang-select-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lang-select-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.lang-options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.lang-option-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-primary);
+  width: 100%;
+}
+
+.lang-option-card:hover {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: #f59e0b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+}
+
+.lang-option-card.active-lang-card {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.06));
+}
+
+.lang-card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.lang-flag {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.lang-card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.lang-card-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.lang-recommended-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+}
+
+.lang-hinglish-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(59, 130, 246, 0.25);
+  color: #93c5fd;
+  border: 1px solid rgba(59, 130, 246, 0.45);
+}
+
+.lang-eng-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(16, 185, 129, 0.25);
+  color: #6ee7b7;
+  border: 1px solid rgba(16, 185, 129, 0.45);
+}
+
+.lang-card-sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
+.lang-card-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.lang-pages-count {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.lang-open-arrow {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+/* 2. Auto-OCR Camera Dropzone & Laser Animation */
+.page-ocr-dropzone {
+  border: 2px dashed rgba(99, 102, 241, 0.45);
+  background: rgba(99, 102, 241, 0.04);
+  border-radius: 14px;
+  padding: 16px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.page-ocr-dropzone:hover,
+.page-ocr-dropzone.dragover {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+}
+
+.ocr-scan-spinner {
+  font-size: 2rem;
+  display: inline-block;
+  animation: ocrPulseAnim 1.2s infinite ease-in-out;
+}
+
+@keyframes ocrPulseAnim {
+  0% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.22); opacity: 1; filter: drop-shadow(0 0 10px #6366f1); }
+  100% { transform: scale(1); opacity: 0.7; }
+}
+
+.ocr-scan-laser {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #6366f1, #10b981, transparent);
+  box-shadow: 0 0 10px #6366f1;
+  animation: ocrLaserScanAnim 1.5s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes ocrLaserScanAnim {
+  0% { top: 0%; opacity: 0.8; }
+  50% { top: 100%; opacity: 1; }
+  100% { top: 0%; opacity: 0.8; }
+}
+
+/* 3. Page Footer Toolbar with Edit/Delete Buttons */
+.reader-page-footer-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: auto;
+  position: relative;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 0 0 8px 8px;
+}
+
+[data-reader-theme="dark"] .reader-page-footer-wrap {
+  border-top-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.reader-page-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.reader-page-act-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  line-height: 1;
+}
+
+[data-reader-theme="dark"] .reader-page-act-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+}
+
+.reader-page-act-btn:hover {
+  background: rgba(99, 102, 241, 0.18);
+  border-color: #6366f1;
+  color: #6366f1;
+  transform: translateY(-1px);
+}
+
+.reader-page-act-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  color: #ef4444;
+  transform: translateY(-1px);
+}
+
+/* 4. Dictionary card styling in library grid */
+.book-card-dictionary {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.15) !important;
+}
+
+.book-card-dictionary:hover {
+  border-color: #f59e0b !important;
+  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.25) !important;
+}
+
 </style>
   <script>
 // ==========================================================================
@@ -7684,6 +7985,25 @@ const BOOK_PAGES_DATA = {
         pages: [
           {
             pageNo: 1,
+            type: 'title',
+            heading: 'हायपरफ़ोकस',
+            content: `
+<div class="reader-title-page">
+  <div class="reader-book-main-title">हायपरफ़ोकस</div>
+  <div class="reader-book-subtitle">कम प्रयास में अधिक सफलता कैसे प्राप्त करें</div>
+  <div class="reader-divider">✦ ✦ ✦</div>
+  <div class="reader-book-author-text">क्रिस बेली</div>
+  <div class="reader-book-translator-text">अनुवाद : अजय तिवारी</div>
+  <div class="reader-publisher-badge">
+    <div class="pub-logo-icon">🦅</div>
+    <div class="pub-name">मंजुल पब्लिशिंग हाउस</div>
+    <div class="pub-sub">MANJUL PUBLISHING HOUSE</div>
+  </div>
+</div>
+`
+          },
+          {
+            pageNo: 2,
             type: 'praise',
             heading: 'पुस्तक की प्रशस्ति',
             content: `
@@ -7698,12 +8018,12 @@ const BOOK_PAGES_DATA = {
 </div>
 <div class="reader-praise-block">
   <p class="reader-quote-text">“यह पुस्तक एक जीवन रेखा है, एक ऐसी दुनिया में जहां पर हम सभी बहुत कुछ करने के लिए व्यग्र हैं और करने के लिए बहुत समय नहीं है। क्रिस बेली की अभूतपूर्व और सामयिक पुस्तक की बदौलत, मुझे लगता है कि मेरे पास अब, वास्तव में इतने वर्षों में पहली बार, सबसे महत्त्वपूर्ण, मूल्य-निर्मित करने वाली चीज़ों पर फ़ोकस करने की क्षमता आ गई है। यदि आप तनाव से राहत पाने के साथ ही अपनी उत्पादकता और ख़ुशी दोनों में बढ़ोतरी करना चाहते हैं तो इस पुस्तक को अवश्य पढ़ें।”</p>
-  <p class="reader-quote-author">— <strong>जेम्स सिट्रिन</strong>, <em>करियर प्लेブック</em> के लेखक</p>
+  <p class="reader-quote-author">— <strong>जेम्स सिट्रिन</strong>, <em>करियर प्लेबुक</em> के लेखक</p>
 </div>
 `
           },
           {
-            pageNo: 2,
+            pageNo: 3,
             type: 'praise',
             heading: 'विश्वप्रसिद्ध विचारकों की राय',
             content: `
@@ -7725,6 +8045,36 @@ const BOOK_PAGES_DATA = {
   <p class="reader-quote-author">— <strong>काई-फ़ू ली</strong>, <em>गूगल चाइना के संस्थापक, सिनोवेशन वेंचर्स के चेयरमैन एवं सीईओ</em></p>
 </div>
 `
+          },
+          {
+            pageNo: 4,
+            type: 'summary',
+            heading: 'पुस्तक का सार (Back Cover)',
+            content: `
+<div class="reader-page-header">पुस्तक का सार एवं मुख्य दर्शन</div>
+<div class="reader-callout-box">
+  <p class="reader-lead-text">“रचनात्मक बनने और सार्थक जीवन जीने के लिए आपके पास जो कुछ है, वह ध्यान ही है।”</p>
+</div>
+<p class="reader-body-para">ध्यान से हमारी उत्पादकता कैसे बढ़ती है। काम आसान नहीं, बल्कि और अधिक कठिन कैसे करते हैं। हम बेहतरीन कार्य तब कर पाते हैं, जब हम एकाग्र होते हैं।</p>
+<p class="reader-body-para">ना ही कभी ध्यान की इतनी कमी रही और न ही कभी उसकी इतनी माँग रही, ऐसा पहले कभी नहीं हुआ कि हम इतने व्यस्त रहे हों और इतना कम काम कर पाए हों।</p>
+<div class="reader-highlight-card">
+  <div class="reader-highlight-title">दिमाग़ की दो मानसिक प्रणालियाँ:</div>
+  <p class="reader-body-para" style="margin-bottom:0.6rem;">क्रिस बेली तर्क करते हैं कि हम अपने ध्यान का प्रबंधन सर्वश्रेष्ठ तरीक़े से कैसे करें, जब हमारा दिमाग़ दो मानसिक प्रणालियों के बीच 'स्विच' करता है :</p>
+  <div class="reader-mode-item">
+    <span class="mode-badge mode-hyper">1. हायपरफ़ोकस (Hyperfocus)</span>
+    <p>यह हमारी <strong>गहन एकाग्रता प्रणाली</strong> होती है। जब हम किसी एक महत्त्वपूर्ण कार्य पर 100% ध्यान लगाकर काम पूरा करते हैं।</p>
+  </div>
+  <div class="reader-mode-item" style="margin-top:0.6rem;">
+    <span class="mode-badge mode-scatter">2. स्कैटरफ़ोकस (Scatterfocus)</span>
+    <p>यह हमारी <strong>रचनात्मक और नवोन्मेषी प्रणाली</strong> होती है। जब दिमाग़ आज़ाद होकर विश्राम करता है और नए विचारों को जोड़ता है।</p>
+  </div>
+  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 अपने कार्य में सबसे रचनात्मक और कुशल बनने की कुंजी इन दोनों प्रणालियों के संयोजन में निहित है।</p>
+</div>
+<div class="reader-meta-footer">
+  <span>ISBN: 978-93-5543-300-8</span>
+  <span>मूल्य: ₹350 (Non-Fiction)</span>
+</div>
+`
           }
         ]
       },
@@ -7737,6 +8087,25 @@ const BOOK_PAGES_DATA = {
         pages: [
           {
             pageNo: 1,
+            type: 'title',
+            heading: 'HYPERFOCUS (Hinglish)',
+            content: `
+<div class="reader-title-page">
+  <div class="reader-book-main-title">HYPERFOCUS</div>
+  <div class="reader-book-subtitle">Kam Mehnat Me Double Kaam Kaise Karein</div>
+  <div class="reader-divider">✦ ✦ ✦</div>
+  <div class="reader-book-author-text">Chris Bailey</div>
+  <div class="reader-book-translator-text">Easy Hinglish Version for Fast Readers</div>
+  <div class="reader-publisher-badge">
+    <div class="pub-logo-icon">🦅</div>
+    <div class="pub-name">Manjul Publishing House</div>
+    <div class="pub-sub">INTERNATIONAL BESTSELLER</div>
+  </div>
+</div>
+`
+          },
+          {
+            pageNo: 2,
             type: 'praise',
             heading: 'Pustak Ki Prashasti & Praises',
             content: `
@@ -7756,7 +8125,7 @@ const BOOK_PAGES_DATA = {
 `
           },
           {
-            pageNo: 2,
+            pageNo: 3,
             type: 'praise',
             heading: 'Top Experts Ki Ray',
             content: `
@@ -7778,6 +8147,35 @@ const BOOK_PAGES_DATA = {
   <p class="reader-quote-author">— <strong>Kai-Fu Lee</strong>, Google China Founder & Sinovation Chairman</p>
 </div>
 `
+          },
+          {
+            pageNo: 4,
+            type: 'summary',
+            heading: 'Core Concept: Dimaag Ke Do Modes',
+            content: `
+<div class="reader-page-header">Core Concept & Mind Modes</div>
+<div class="reader-callout-box">
+  <p class="reader-lead-text">“Creative banne aur meaningful life jeene ke liye aapke paas jo sabse keemti cheez hai, wo hai aapka Dhyan (Attention).”</p>
+</div>
+<p class="reader-body-para">Khabar hai? Na pehle kabhi attention ki itni kami thi, aur na hi itni demand thi. Hum itne busy kabhi nahi rahe, fir bhi din ke aakhir me lagta hai ki kuch khaas kaam hua hi nahi.</p>
+<div class="reader-highlight-card">
+  <div class="reader-highlight-title">Hamare Dimaag Ke 2 Modes:</div>
+  <p class="reader-body-para" style="margin-bottom:0.6rem;">Chris Bailey samjhate hain ki jab hamara mind do systems ke beech switch karta hai:</p>
+  <div class="reader-mode-item">
+    <span class="mode-badge mode-hyper">1. Hyperfocus (गहन एकाग्रता)</span>
+    <p>Jab aap apna poora 100% focus kisi ek high-priority task par lock kar dete ho. Yahan distraction zero hota hai.</p>
+  </div>
+  <div class="reader-mode-item" style="margin-top:0.6rem;">
+    <span class="mode-badge mode-scatter">2. Scatterfocus (रचनात्मक फैलाव)</span>
+    <p>Jab aap dimaag ko aazaad ghoomne dete ho taaki subconscious mind naye ideas aur dots connect kar sake.</p>
+  </div>
+  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 Kam mehnat me double productivity pane ka raaz in dono modes ko switch karna seekhne me hai.</p>
+</div>
+<div class="reader-meta-footer">
+  <span>ISBN: 978-93-5543-300-8</span>
+  <span>Price: ₹350 (Non-Fiction)</span>
+</div>
+`
           }
         ]
       },
@@ -7790,6 +8188,24 @@ const BOOK_PAGES_DATA = {
         pages: [
           {
             pageNo: 1,
+            type: 'title',
+            heading: 'HYPERFOCUS',
+            content: `
+<div class="reader-title-page">
+  <div class="reader-book-main-title">HYPERFOCUS</div>
+  <div class="reader-book-subtitle">How to Work Less and Achieve More</div>
+  <div class="reader-divider">✦ ✦ ✦</div>
+  <div class="reader-book-author-text">Chris Bailey</div>
+  <div class="reader-publisher-badge">
+    <div class="pub-logo-icon">📖</div>
+    <div class="pub-name">Manjul Publishing House</div>
+    <div class="pub-sub">INTERNATIONAL BESTSELLER</div>
+  </div>
+</div>
+`
+          },
+          {
+            pageNo: 2,
             type: 'praise',
             heading: 'Praise for Hyperfocus',
             content: `
@@ -7809,7 +8225,7 @@ const BOOK_PAGES_DATA = {
 `
           },
           {
-            pageNo: 2,
+            pageNo: 3,
             type: 'praise',
             heading: 'Acclaim from Thought Leaders',
             content: `
@@ -7829,6 +8245,35 @@ const BOOK_PAGES_DATA = {
 <div class="reader-praise-block">
   <p class="reader-quote-text">“A fantastic guide to managing attention. It is not just theory, but a rich toolbox of best practices. I can't wait to put these ideas into action.”</p>
   <p class="reader-quote-author">— <strong>Kai-Fu Lee</strong>, Founder of Google China & Chairman of Sinovation</p>
+</div>
+`
+          },
+          {
+            pageNo: 4,
+            type: 'summary',
+            heading: 'The Core Premise (Back Cover)',
+            content: `
+<div class="reader-page-header">The Core Premise</div>
+<div class="reader-callout-box">
+  <p class="reader-lead-text">“The most important tool you have for becoming productive, creative, and living a meaningful life is your attention.”</p>
+</div>
+<p class="reader-body-para">Never has focus been in such short supply, and never has its value been so high. We are constantly busy, yet we feel we achieve far less than we could.</p>
+<div class="reader-highlight-card">
+  <div class="reader-highlight-title">Our Brain Shifts Between Two Modes:</div>
+  <p class="reader-body-para" style="margin-bottom:0.6rem;">Chris Bailey explains how we perform at our best when we understand how our brain toggles between two core networks:</p>
+  <div class="reader-mode-item">
+    <span class="mode-badge mode-hyper">1. Hyperfocus (Deep Concentration)</span>
+    <p>The deep immersion mode where you dedicate 100% of your limited working memory to a single critical objective without distraction.</p>
+  </div>
+  <div class="reader-mode-item" style="margin-top:0.6rem;">
+    <span class="mode-badge mode-scatter">2. Scatterfocus (Creative Expansion)</span>
+    <p>The exploratory, restorative mode where your mind intentionally wanders, sparking creative ideas and connecting distant concepts.</p>
+  </div>
+  <p style="margin-top:0.8rem; font-weight:700; color:#10b981;">💡 The master key to extraordinary accomplishment is knowing when and how to seamlessly navigate between both systems.</p>
+</div>
+<div class="reader-meta-footer">
+  <span>ISBN: 978-93-5543-300-8</span>
+  <span>Cover Price: ₹350 (Non-Fiction)</span>
 </div>
 `
           }
@@ -7923,7 +8368,6 @@ if (typeof window !== 'undefined') {
   window.getBookPagesData = getBookPagesData;
   window.hasBookPagesAvailable = hasBookPagesAvailable;
 }
-
 
 </script>
 </head>
@@ -10229,7 +10673,7 @@ if (typeof window !== 'undefined') {
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" id="settingsAppVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.14 (Up to date)</span>
+                <span class="ig-badge-val" id="settingsAppVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.15 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -10543,13 +10987,10 @@ if (typeof window !== 'undefined') {
 
         <!-- Right Controls: Explicit View Modes & Paper Tone Switchers -->
         <div class="reader-top-right">
-          <!-- Reader tools: Edit / Photo / Page bookmark / Quick note -->
-          <div class="reader-btn-pill-group reader-tools-group" title="Book tools">
-            <button type="button" class="reader-pill-btn" onclick="readerEditBook()" title="Edit book details">✏️ Edit</button>
-            <button type="button" class="reader-pill-btn" onclick="readerPickPhoto()" title="Change cover photo">📷 Photo</button>
-            <button type="button" class="reader-pill-btn" id="readerBtnBookmark" onclick="readerToggleBookmark()" title="Bookmark this page">🔖 Mark</button>
-            <button type="button" class="reader-pill-btn" onclick="readerQuickNote()" title="Add a note for this page">📝 Note</button>
-            <input type="file" id="readerPhotoInput" accept="image/*" hidden onchange="readerHandlePhoto(this)">
+          <!-- Add Page & Cover Controls -->
+          <div class="reader-btn-pill-group" title="Book Tools">
+            <button type="button" class="reader-pill-btn" onclick="openAddCustomPageModal()" title="Add new page">➕ Add Page</button>
+            <button type="button" class="reader-pill-btn" onclick="openBookCoverModal()" title="View Book Cover">📕 Cover</button>
           </div>
 
           <!-- View Modes: 📖 Dual Spread vs 📄 Single Page -->
@@ -10590,6 +11031,10 @@ if (typeof window !== 'undefined') {
               </div>
               <div class="reader-page-footer-wrap">
                 <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
+                <div class="reader-page-actions" id="pageActionsLeft">
+                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('left')" title="Edit Page">✏️ Edit</button>
+                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('left')" title="Delete Page">🗑️</button>
+                </div>
               </div>
             </div>
 
@@ -10605,6 +11050,10 @@ if (typeof window !== 'undefined') {
               </div>
               <div class="reader-page-footer-wrap">
                 <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+                <div class="reader-page-actions" id="pageActionsRight">
+                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('right')" title="Edit Page">✏️ Edit</button>
+                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('right')" title="Delete Page">🗑️</button>
+                </div>
               </div>
             </div>
           </div>
@@ -10619,6 +11068,316 @@ if (typeof window !== 'undefined') {
           <span class="reader-page-indicator" id="readerPageIndicator">Page 1 / 4</span>
         </div>
         <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="nextReaderPage()">Next ▶</button>
+      </div>
+  <!-- ================= 1. LANGUAGE SELECTION LAUNCHER MODAL ================= -->
+  <div class="modal-overlay" id="bookLanguageSelectModal" onclick="handleLangSelectOverlayClick(event)">
+    <div class="modal-content lang-select-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span style="font-size:1.5rem;">📖</span>
+          <div>
+            <h3 class="modal-title" id="langSelectBookTitle">किताब पढ़ें / Read Book</h3>
+            <div style="font-size:0.75rem; color:var(--text-secondary);" id="langSelectBookAuthor">Select Reading Language</div>
+          </div>
+        </div>
+        <button class="modal-close-btn" onclick="closeLanguageSelectModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:1.25rem; gap:1rem;">
+        <!-- Book Preview Card -->
+        <div class="lang-select-book-preview">
+          <div class="lang-select-cover-wrap">
+            <img id="langSelectCoverImg" src="hyperfocus_cover.jpg" alt="Cover" class="lang-select-cover">
+          </div>
+          <div class="lang-select-info">
+            <span class="lang-select-badge" id="langSelectCategoryBadge">Focus &amp; Productivity</span>
+            <h4 id="langSelectTitleEn" style="margin:0.25rem 0 0.15rem; font-size:1rem; font-weight:800; color:var(--text-primary);">Hyperfocus: How to Work Less to Achieve More</h4>
+            <div class="lang-select-author-txt" id="langSelectAuthorTxt" style="font-size:0.8rem; color:var(--text-secondary);">by Chris Bailey • अनुवाद: अजय तिवारी</div>
+            <div class="lang-select-isbn-row" id="langSelectIsbnRow" style="margin-top:0.4rem; font-size:0.75rem; color:var(--text-muted); display:flex; gap:0.6rem; flex-wrap:wrap;">
+              <span>ISBN: <strong style="color:var(--text-primary);">978-93-5543-300-8</strong></span>
+              <span>• Price: <strong style="color:#10b981;">₹350</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-top:0.1rem; display:flex; justify-content:space-between; align-items:center;">
+          <span>🌐 भाषा चुनें (Choose Language):</span>
+          <span style="font-size:0.72rem; color:var(--text-muted);">1-Tap to Open Real Book</span>
+        </div>
+
+        <div class="lang-options-grid">
+          <!-- Option 1: Hindi -->
+          <button type="button" class="lang-option-card active-lang-card" onclick="selectBookLanguageAndOpen('hindi')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🇮🇳</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">हिंदी (Hindi) <span class="lang-recommended-pill">मूल पुस्तक</span></div>
+                <div class="lang-card-sub">हायपरफ़ोकस: कम प्रयास में अधिक सफलता कैसे प्राप्त करें (अजय तिवारी)</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langHindiCountBadge">4 पृष्ठ</span>
+              <span class="lang-open-arrow">पढ़ें ›</span>
+            </div>
+          </button>
+
+          <!-- Option 2: Hinglish -->
+          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('hinglish')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🔤</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">Hinglish (हिंग्लिश) <span class="lang-hinglish-pill">Roman Hindi</span></div>
+                <div class="lang-card-sub">Simple Roman Hindi me padhein — aasaan aur fast reading experience</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langHinglishCountBadge">4 Pages</span>
+              <span class="lang-open-arrow">Read ›</span>
+            </div>
+          </button>
+
+          <!-- Option 3: English -->
+          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('english')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🇬🇧</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">English <span class="lang-eng-pill">Original</span></div>
+                <div class="lang-card-sub">Hyperfocus: How to Work Less to Achieve More (Original edition)</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langEnglishCountBadge">4 Pages</span>
+              <span class="lang-open-arrow">Read ›</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- Add Custom Pages Banner -->
+        <div class="lang-custom-add-banner" style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:10px 14px; margin-top:8px;">
+          <div>
+            <div style="font-weight:700; font-size:0.82rem; color:var(--text-primary);">📝 Single Page Type/Add Karna Hai?</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary);">Keval ek bhasha mein custom page likhein ya jodein</div>
+          </div>
+          <button type="button" class="btn btn-sm" onclick="openAddCustomPageModal()" style="background:var(--accent-gold); color:#000; border:none; font-weight:800; border-radius:8px; padding:6px 12px; cursor:pointer;">
+            ➕ Add Page
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:flex-end;">
+        <button type="button" class="btn" onclick="closeLanguageSelectModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 2. ADD CUSTOM BOOK PAGE MODAL (WITH AUTO-OCR SCANNER) ================= -->
+  <div class="modal-overlay" id="addCustomPageModal" onclick="handleAddPageOverlayClick(event)">
+    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">➕</span>
+          <h3 class="modal-title">नया बुक पेज जोड़ें (Add Book Page)</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeAddCustomPageModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:0.9rem;">
+        
+        <!-- AUTO-OCR PHOTO UPLOAD & SCAN DROPZONE -->
+        <div class="page-ocr-dropzone" id="pageOcrDropzone" onclick="document.getElementById('customPagePhotoInput').click()">
+          <input type="file" id="customPagePhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleCustomPagePhotoUpload(this)">
+          
+          <div id="ocrLaserScanLine" class="ocr-scan-laser" style="display:none;"></div>
+
+          <!-- Default Prompt State -->
+          <div id="ocrDropzonePrompt">
+            <div style="font-size:2.2rem; line-height:1; margin-bottom:0.4rem;">📸</div>
+            <div style="font-weight:800; font-size:0.95rem; color:var(--text-primary);">
+              Book Page ki Photo Yahan Dalein ya Camera se Kheenche
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:3px;">
+              ⚡ <strong>Photo dalte hi automatic text mein convert ho jayega!</strong>
+            </div>
+            <div style="margin-top:8px; display:flex; justify-content:center; gap:6px; flex-wrap:wrap;">
+              <span style="background:rgba(99,102,241,0.12); color:#6366f1; border:1px solid rgba(99,102,241,0.25); font-size:0.72rem; padding:3px 8px; border-radius:12px; font-weight:600;">
+                📷 Gallery / Camera
+              </span>
+              <span style="background:rgba(16,185,129,0.12); color:#10b981; border:1px solid rgba(16,185,129,0.25); font-size:0.72rem; padding:3px 8px; border-radius:12px; font-weight:600;">
+                📋 Drag &amp; Drop / Ctrl+V Paste
+              </span>
+            </div>
+          </div>
+
+          <!-- Loading / Scanning State -->
+          <div id="ocrScanningState" style="display:none; text-align:center; padding:10px 4px;">
+            <div class="ocr-scan-spinner">⚡</div>
+            <div style="font-weight:800; font-size:0.9rem; color:#6366f1; margin-top:4px;" id="ocrScanProgressText">
+              Photo scan ho rahi hai aur text convert ho raha hai...
+            </div>
+            <div style="max-width:280px; margin:8px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:6px; overflow:hidden;">
+              <div id="ocrScanProgressBar" style="width:20%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+            <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:5px;" id="ocrScanStatusSub">
+              AI text recognition chal raha hai...
+            </div>
+          </div>
+
+          <!-- Success Preview State -->
+          <div id="ocrUploadedPreview" style="display:none; align-items:center; gap:10px; text-align:left; padding:4px 6px;">
+            <img id="ocrThumbnailImg" src="" alt="Thumbnail" style="width:46px; height:56px; object-fit:cover; border-radius:6px; border:1px solid var(--border-color); box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+            <div style="flex:1;">
+              <div style="font-weight:700; font-size:0.84rem; color:#10b981; display:flex; align-items:center; gap:4px;">
+                <span>✅</span> <span>Text successfully convert ho gaya!</span>
+              </div>
+              <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:2px;" id="ocrExtractSummaryText">
+                Text neeche box mein daal diya gaya hai. Aap ise edit ya save kar sakte hain.
+              </div>
+            </div>
+            <button type="button" class="btn btn-sm" onclick="event.stopPropagation(); document.getElementById('customPagePhotoInput').click();" style="font-size:0.72rem; padding:4px 8px;">
+              🔄 Change Photo
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label">Book Select Karein:</label>
+            <select id="customPageBookSelect" class="form-control" style="width:100%; padding:8px; border-radius:8px; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.15);">
+              <!-- Options populated dynamically -->
+            </select>
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">Language (भाषा):</label>
+            <select id="customPageLangSelect" class="form-control" style="width:100%; padding:8px; border-radius:8px; background:rgba(255,255,255,0.06); color:#fff; border:1px solid rgba(255,255,255,0.15);">
+              <option value="hindi">हिंदी (Hindi)</option>
+              <option value="hinglish">Hinglish (हिंग्लिश)</option>
+              <option value="english">English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label">Page Number:</label>
+            <input type="number" id="customPageNoInput" class="form-control" min="1" value="5" style="width:100%;">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">Page Heading / Chapter (Optional):</label>
+            <input type="text" id="customPageHeadingInput" class="form-control" placeholder="e.g. अध्याय 1: ऑटोपायलट मोड" style="width:100%;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Page Content (Text ya Paragraphs):</label>
+            <span style="font-size:0.72rem; color:var(--text-muted);">Photo se auto-filled • You can edit</span>
+          </div>
+          <textarea id="customPageContentInput" class="form-control" style="min-height:160px; font-size:0.9rem; line-height:1.5; width:100%;" placeholder="Photo daalte hi text yahan automatically aa jayega, ya aap type bhi kar sakte hain..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn" onclick="closeAddCustomPageModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveCustomBookPage()">💾 Save Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 3. EDIT BOOK PAGE MODAL (WITH PHOTO RE-SCAN & OCR) ================= -->
+  <div class="modal-overlay" id="editBookPageModal" onclick="handleEditPageOverlayClick(event)">
+    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">✏️</span>
+          <h3 class="modal-title" id="editPageModalTitle">पेज एडिट करें (Edit Page)</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeEditBookPageModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:0.9rem;">
+        
+        <!-- AUTO-OCR PHOTO RE-SCAN DROPZONE -->
+        <div class="page-ocr-dropzone" id="editPageOcrDropzone" onclick="document.getElementById('editPagePhotoInput').click()">
+          <input type="file" id="editPagePhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleEditPagePhotoUpload(this)">
+          
+          <div id="editOcrLaserScanLine" class="ocr-scan-laser" style="display:none;"></div>
+
+          <div id="editOcrDropzonePrompt">
+            <div style="font-size:1.8rem; line-height:1; margin-bottom:4px;">📸 🔄</div>
+            <div style="font-weight:800; font-size:0.9rem; color:var(--text-primary);">
+              Nayi Photo se Text Badlein (Re-Scan Photo)
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
+              ⚡ <strong>Photo dalte hi naya text automatically text box mein replace ho jayega!</strong>
+            </div>
+          </div>
+
+          <div id="editOcrScanningState" style="display:none; text-align:center; padding:8px 4px;">
+            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
+            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="editOcrScanProgressText">
+              Photo scan ho rahi hai...
+            </div>
+            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
+              <div id="editOcrScanProgressBar" style="width:20%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group flex-1">
+            <label class="form-label">Page Number:</label>
+            <input type="number" id="editPageNoInput" class="form-control" min="1" readonly style="background:rgba(255,255,255,0.06); opacity:0.85; width:100%;">
+          </div>
+          <div class="form-group flex-1">
+            <label class="form-label">Language:</label>
+            <input type="text" id="editPageLangInput" class="form-control" readonly style="background:rgba(255,255,255,0.06); opacity:0.85; width:100%;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Page Heading / Title:</label>
+          <input type="text" id="editPageHeadingInput" class="form-control" placeholder="Page heading..." style="width:100%;">
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Page Content (Text ya HTML):</label>
+            <span style="font-size:0.72rem; color:var(--text-muted);">Editable</span>
+          </div>
+          <textarea id="editPageContentInput" class="form-control" style="min-height:180px; font-size:0.9rem; line-height:1.5; width:100%;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn btn-danger" onclick="confirmDeleteCurrentEditPage()" style="background:#ef4444; color:#fff; border:none; font-weight:700;">
+          🗑️ Delete Page
+        </button>
+        <div style="display:flex; gap:0.5rem;">
+          <button type="button" class="btn" onclick="closeEditBookPageModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="saveEditedBookPage()">💾 Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 4. BOOK COVER VIEWER MODAL ================= -->
+  <div class="modal-overlay" id="bookCoverViewerModal" onclick="handleCoverViewerOverlayClick(event)">
+    <div class="modal-content" style="max-width:460px; text-align:center; padding:1.25rem;" onclick="event.stopPropagation()">
+      <div class="modal-header" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border-color);">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">📕</span>
+          <h3 class="modal-title" id="coverModalTitle">पुस्तक कवर / Book Cover</h3>
+        </div>
+        <button class="modal-close-btn" onclick="closeBookCoverModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:0.8rem 0; gap:0.75rem;">
+        <div style="display:flex; justify-content:center; gap:0.5rem; margin-bottom:0.5rem;">
+          <button type="button" class="btn btn-sm btn-primary" id="coverTabFrontBtn" onclick="switchCoverView('front')">Front Cover</button>
+          <button type="button" class="btn btn-sm" id="coverTabBackBtn" onclick="switchCoverView('back')">Back Cover</button>
+        </div>
+        <div style="max-height:65vh; overflow:hidden; display:flex; justify-content:center; align-items:center; background:rgba(0,0,0,0.03); border-radius:12px; padding:10px;">
+          <img id="coverViewerImg" src="hyperfocus_cover.jpg" alt="Book Cover" style="max-width:100%; max-height:55vh; border-radius:8px; box-shadow:0 8px 24px rgba(0,0,0,0.25); object-fit:contain;">
+        </div>
+        <div id="coverViewerCaption" style="font-size:0.82rem; font-weight:600; color:var(--text-secondary); margin-top:0.25rem;">
+          हायपरफ़ोकस (Hyperfocus) • Front Cover
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:center; padding-top:0.5rem; border-top:1px solid var(--border-color);">
+        <button type="button" class="btn" onclick="closeBookCoverModal()">Close</button>
       </div>
     </div>
   </div>
@@ -11459,6 +12218,7 @@ if (typeof window !== 'undefined') {
   <!-- SCRIPTS -->
   <script src="jspdf.umd.min.js"></script>
   <script src="jspdf.plugin.autotable.min.js"></script>
+  <script src="tesseract.min.js" onerror="this.onerror=null;this.src='https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js'"></script>
   <script>
 const DEFAULT_BOOKS = [
   {
@@ -17122,15 +17882,16 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 </script>
+  <script src="book-pages-data.js"></script>
   <script src="broadcast-notice.js"></script>
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.14)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.15)
 // ==========================================================================
 
-const APP_VERSION = '0.0.14';
-const CURRENT_APP_VERSION = 'v0.0.14';
+const APP_VERSION = '0.0.15';
+const CURRENT_APP_VERSION = 'v0.0.15';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -17820,10 +18581,12 @@ function renderLibraryGrid() {
     const current = book.current_page || 0;
     const pct = Math.min(100, Math.round((current / total) * 100));
     
+    const isDict = !!(book.isDictionary || book.no === 'book 0' || (book.title && book.title.toLowerCase().includes('dictionary')));
+    
     // Compact Horizontal List Mode (1 Row per Book)
     if (isCompactList) {
       return `
-        <div class="compact-book-row" onclick="openBookDetailViewByIndex(${originalIndex})">
+        <div class="compact-book-row ${isDict ? 'book-card-dictionary' : ''}" onclick="openBookDetailViewByIndex(${originalIndex})">
           <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
           <div class="compact-book-info">
             <div class="compact-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
@@ -17842,7 +18605,7 @@ function renderLibraryGrid() {
 
     // Grid Mode (1 to 10 Columns)
     return `
-      <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
+      <div class="grid-book-card ${isDict ? 'book-card-dictionary' : ''}" onclick="openBookDetailViewByIndex(${originalIndex})">
         <div class="grid-cover-wrap">
           <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
         </div>
@@ -19656,6 +20419,11 @@ function openBookDetailViewByIndex(idx) {
 
 function openBookDetailView(book) {
   try {
+    if (book && (book.isDictionary || book.no === 'book 0' || (book.title && book.title.toLowerCase().includes('dictionary')))) {
+      openDictionaryModal();
+      return;
+    }
+
     // Record exactly which view we came from so Back button returns to the exact same place!
     const activeView = document.querySelector('.app-view.active');
     if (activeView && activeView.id !== 'viewBookDetail') {
@@ -20318,16 +21086,27 @@ function saveQuickLogPages() {
 
 // ================= REAL 3D BOOK PAGE READER ENGINE =================
 function openRealBookReaderForCurrent() {
-  if (state.currentBookIndex !== -1) {
-    openRealBookReader(state.currentBookIndex);
-  } else {
-    openRealBookReader(0);
+  const curIdx = state.currentBookIndex !== -1 ? state.currentBookIndex : 0;
+  const book = state.books && state.books[curIdx];
+  if (book && (book.isDictionary || book.no === 'book 0' || (book.title && book.title.toLowerCase().includes('dictionary')))) {
+    openDictionaryModal();
+    return;
   }
+  if (typeof openLanguageSelectModal === 'function' && typeof hasBookPagesAvailable === 'function' && hasBookPagesAvailable(book)) {
+    openLanguageSelectModal(curIdx);
+    return;
+  }
+  openRealBookReader(curIdx);
 }
 
 function openRealBookReader(bookIdx, lang) {
   if (bookIdx !== undefined && bookIdx !== null && bookIdx >= 0 && bookIdx < state.books.length) {
     readerState.activeBookIdx = bookIdx;
+  }
+  const book = state.books && state.books[readerState.activeBookIdx];
+  if (book && (book.isDictionary || book.no === 'book 0' || (book.title && book.title.toLowerCase().includes('dictionary')))) {
+    openDictionaryModal();
+    return;
   }
   if (lang) {
     readerState.lang = lang;
@@ -20570,6 +21349,13 @@ function onReaderSliderInput(val) {
 
 function getBookPagesArray(book, lang) {
   if (!book) return [];
+  
+  // 1. Prefer getBookPagesData engine (supports base pages + custom/edited pages from localStorage)
+  if (typeof getBookPagesData === 'function') {
+    const d = getBookPagesData(book, lang);
+    if (d && d.pages && d.pages.length) return d.pages;
+  }
+
   const titleLower = (book.title || '').toLowerCase();
   
   // Check if book exists in BOOK_PAGES_DATA
@@ -24379,109 +25165,640 @@ function addQuoteToNotes() {
   showToast('📝 Added to notes');
 }
 
-// ===== Reader tools: Edit / Photo / Page bookmark / Quick note =====
-function readerBook() {
-  return state.books[readerState.activeBookIdx] || null;
-}
+// =========================================================================
+// MULTI-LANGUAGE REAL BOOK READER SUITE: LANGUAGE LAUNCHER, OCR SCANNER & COVERS
+// =========================================================================
 
-function readerEditBook() {
-  const idx = readerState.activeBookIdx;
-  if (idx < 0 || idx >= state.books.length) return;
-  closeRealBookReader();
-  openEditModal(idx);
-}
+// --- 1. Language Selection Launcher Modal ---
+function openLanguageSelectModal(origIdx) {
+  readerState.activeBookIdx = (origIdx !== undefined && origIdx !== null) ? origIdx : 1;
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
 
-function readerPickPhoto() {
-  const input = document.getElementById('readerPhotoInput');
-  if (input) { input.value = ''; input.click(); }
-}
+  const isHyper = b.title && b.title.toLowerCase().includes('hyperfocus');
 
-function readerHandlePhoto(input) {
-  const file = input.files && input.files[0];
-  const book = readerBook();
-  if (!file || !book) return;
-  const fr = new FileReader();
-  fr.onload = e => {
-    const img = new Image();
-    img.onload = () => {
-      const maxDim = 640;
-      let w = img.width, h = img.height;
-      if (w > maxDim || h > maxDim) {
-        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
-        else { w = Math.round(w * maxDim / h); h = maxDim; }
-      }
-      const canvas = document.createElement('canvas');
-      canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      book.cover_image = canvas.toDataURL('image/jpeg', 0.82);
-      book.customCover = true;
-      try { 
-        saveBooks(); 
-      } catch (err) { 
-        showToast('Photo too large to save'); 
-        return; 
-      }
-      showToast('📷 Cover photo updated');
-      
-      // Update book detail cover immediately if currently open
-      const detailCover = document.getElementById('detailBookCover');
-      if (detailCover && state.currentBookIndex === readerState.activeBookIdx) {
-        detailCover.src = book.cover_image;
-      }
-      renderLibraryGrid();
-      renderHomeRecentBooks();
-    };
-    img.onerror = () => showToast('Could not read this image');
-    img.src = e.target.result;
-  };
-  fr.readAsDataURL(file);
-}
+  const titleEl = document.getElementById('langSelectBookTitle');
+  if (titleEl) titleEl.innerText = isHyper ? 'हायपरफ़ोकस (किताब पढ़ें)' : (b.title + ' (किताब पढ़ें)');
 
-function readerToggleBookmark() {
-  const book = readerBook();
-  if (!book) return;
-  if (!Array.isArray(book.pageBookmarks)) book.pageBookmarks = [];
-  const key = (readerState.lang || 'hindi') + ':' + readerState.currentPage;
-  const i = book.pageBookmarks.indexOf(key);
-  if (i > -1) {
-    book.pageBookmarks.splice(i, 1);
-    showToast('Bookmark removed (page ' + readerState.currentPage + ')');
-  } else {
-    book.pageBookmarks.push(key);
-    showToast('🔖 Page ' + readerState.currentPage + ' bookmarked');
+  const authorEl = document.getElementById('langSelectBookAuthor');
+  if (authorEl) authorEl.innerText = isHyper ? 'Chris Bailey (क्रिस बेली) • 3 Languages Available' : ('by ' + (b.author || 'Author') + ' • Select Reading Language');
+
+  const coverEl = document.getElementById('langSelectCoverImg');
+  if (coverEl) coverEl.src = getBookCoverUrl(b) || 'hyperfocus_cover.jpg';
+
+  const badgeEl = document.getElementById('langSelectCategoryBadge');
+  if (badgeEl) badgeEl.innerText = (b.category || 'Focus & Concentration').toUpperCase();
+
+  const titleEnEl = document.getElementById('langSelectTitleEn');
+  if (titleEnEl) titleEnEl.innerText = b.title || 'Hyperfocus';
+
+  const authorTxtEl = document.getElementById('langSelectAuthorTxt');
+  if (authorTxtEl) authorTxtEl.innerText = 'by ' + (b.author || 'Chris Bailey') + (isHyper ? ' • अनुवाद: अजय तिवारी' : '');
+
+  const isbnRowEl = document.getElementById('langSelectIsbnRow');
+  if (isbnRowEl) {
+    const isbn = b.isbn || (isHyper ? '978-93-5543-300-8' : 'N/A');
+    const price = b.price || (isHyper ? 350 : 0);
+    isbnRowEl.innerHTML = '<span>ISBN: <strong style="color:var(--text-primary);">' + escapeHtml(isbn) + '</strong></span><span>• Price: <strong style="color:#10b981;">₹' + price + '</strong></span>';
   }
-  saveBooks();
-  const btn = document.getElementById('readerBtnBookmark');
-  if (btn) btn.classList.toggle('active', book.pageBookmarks.indexOf(key) > -1);
+
+  // Update language counts
+  if (typeof getBookPagesData === 'function') {
+    const hiD = getBookPagesData(b, 'hindi');
+    const hingD = getBookPagesData(b, 'hinglish');
+    const engD = getBookPagesData(b, 'english');
+
+    const hiBadge = document.getElementById('langHindiCountBadge');
+    if (hiBadge) hiBadge.innerText = (hiD && hiD.pages ? hiD.pages.length : 4) + ' पृष्ठ';
+    const hingBadge = document.getElementById('langHinglishCountBadge');
+    if (hingBadge) hingBadge.innerText = (hingD && hingD.pages ? hingD.pages.length : 4) + ' Pages';
+    const engBadge = document.getElementById('langEnglishCountBadge');
+    if (engBadge) engBadge.innerText = (engD && engD.pages ? engD.pages.length : 4) + ' Pages';
+  }
+
+  const modal = document.getElementById('bookLanguageSelectModal');
+  if (modal) modal.classList.add('active');
 }
 
-function readerQuickNote() {
-  const book = readerBook();
-  if (!book) return;
-  const container = document.querySelector('.real-book-reader-container');
-  if (!container || container.querySelector('.reader-note-sheet')) return;
-  const sheet = document.createElement('div');
-  sheet.className = 'reader-note-sheet';
-  sheet.innerHTML = '<b>Note for page ' + readerState.currentPage + '</b>' +
-    '<textarea rows="3" placeholder="Write what you learned on this page"></textarea>' +
-    '<div class="reader-note-actions"><button type="button" class="reader-pill-btn" data-act="cancel">Cancel</button>' +
-    '<button type="button" class="reader-pill-btn active" data-act="save">Save note</button></div>';
-  sheet.addEventListener('click', ev => {
-    const act = ev.target && ev.target.dataset && ev.target.dataset.act;
-    if (!act) return;
-    if (act === 'save') {
-      const text = sheet.querySelector('textarea').value.trim();
-      if (!text) { showToast('Write something first'); return; }
-      const line = '[p.' + readerState.currentPage + '] ' + text;
-      const prev = (book.takeaway || '').trim();
-      book.takeaway = prev ? prev + '\n' + line : line;
-      saveBooks();
-      showToast('📝 Note saved');
+function closeLanguageSelectModal() {
+  const modal = document.getElementById('bookLanguageSelectModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleLangSelectOverlayClick(event) {
+  if (event.target.id === 'bookLanguageSelectModal') {
+    closeLanguageSelectModal();
+  }
+}
+
+function selectBookLanguageAndOpen(lang) {
+  readerState.lang = lang || 'hindi';
+  closeLanguageSelectModal();
+  openRealBookReader(readerState.activeBookIdx, readerState.lang);
+}
+
+// --- 2. Add Custom Book Page & Auto-OCR Text Scanner Engine ---
+let isOcrListenersBound = false;
+function initCustomPageOcrListeners() {
+  if (isOcrListenersBound) return;
+  isOcrListenersBound = true;
+
+  const dropzone = document.getElementById('pageOcrDropzone');
+  if (dropzone) {
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('dragover');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const dt = e.dataTransfer;
+      const files = dt ? dt.files : null;
+      if (files && files.length > 0) {
+        processCustomPagePhotoFile(files[0]);
+      }
+    });
+  }
+
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) {
+    modal.addEventListener('paste', (e) => {
+      const items = (e.clipboardData || (e.originalEvent && e.originalEvent.clipboardData)) ? (e.clipboardData || e.originalEvent.clipboardData).items : null;
+      if (items) {
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].type && items[i].type.indexOf('image') !== -1) {
+            const blob = items[i].getAsFile();
+            if (blob) {
+              processCustomPagePhotoFile(blob);
+              break;
+            }
+          }
+        }
+      }
+    });
+  }
+}
+
+function openAddCustomPageModal() {
+  const select = document.getElementById('customPageBookSelect');
+  if (select) {
+    let opts = '';
+    state.books.forEach((b, idx) => {
+      const sel = idx === readerState.activeBookIdx ? ' selected' : '';
+      opts += '<option value="' + idx + '"' + sel + '>' + escapeHtml(b.no + ' • ' + b.title) + '</option>';
+    });
+    select.innerHTML = opts;
+  }
+
+  const langSelect = document.getElementById('customPageLangSelect');
+  if (langSelect) langSelect.value = readerState.lang || 'hindi';
+
+  const b = state.books[readerState.activeBookIdx] || state.books[0];
+  const pages = getBookPagesArray(b, readerState.lang || 'hindi');
+  const nextPg = (pages && pages.length) ? (pages.length + 1) : 5;
+
+  const noInput = document.getElementById('customPageNoInput');
+  if (noInput) noInput.value = nextPg;
+
+  const headingInput = document.getElementById('customPageHeadingInput');
+  if (headingInput) headingInput.value = '';
+
+  const contentInput = document.getElementById('customPageContentInput');
+  if (contentInput) contentInput.value = '';
+
+  const photoInput = document.getElementById('customPagePhotoInput');
+  if (photoInput) photoInput.value = '';
+  const promptEl = document.getElementById('ocrDropzonePrompt');
+  const scanEl = document.getElementById('ocrScanningState');
+  const previewEl = document.getElementById('ocrUploadedPreview');
+  const laserEl = document.getElementById('ocrLaserScanLine');
+  if (promptEl) promptEl.style.display = 'block';
+  if (scanEl) scanEl.style.display = 'none';
+  if (previewEl) previewEl.style.display = 'none';
+  if (laserEl) laserEl.style.display = 'none';
+
+  initCustomPageOcrListeners();
+
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeAddCustomPageModal() {
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleAddPageOverlayClick(event) {
+  if (event.target.id === 'addCustomPageModal') {
+    closeAddCustomPageModal();
+  }
+}
+
+function handleCustomPagePhotoUpload(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  processCustomPagePhotoFile(input.files[0]);
+}
+
+function processCustomPagePhotoFile(file) {
+  if (!file || !file.type.startsWith('image/')) {
+    showToast('Please select a valid image file!', 'warning');
+    return;
+  }
+
+  const promptEl = document.getElementById('ocrDropzonePrompt');
+  const scanEl = document.getElementById('ocrScanningState');
+  const previewEl = document.getElementById('ocrUploadedPreview');
+  const laserEl = document.getElementById('ocrLaserScanLine');
+  const progressText = document.getElementById('ocrScanProgressText');
+  const progressBar = document.getElementById('ocrScanProgressBar');
+  const subText = document.getElementById('ocrScanStatusSub');
+  const thumbImg = document.getElementById('ocrThumbnailImg');
+
+  if (promptEl) promptEl.style.display = 'none';
+  if (scanEl) scanEl.style.display = 'block';
+  if (previewEl) previewEl.style.display = 'none';
+  if (laserEl) laserEl.style.display = 'block';
+  if (progressBar) progressBar.style.width = '15%';
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    if (thumbImg) thumbImg.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+
+  if (typeof Tesseract === 'undefined') {
+    if (laserEl) laserEl.style.display = 'none';
+    if (scanEl) scanEl.style.display = 'none';
+    if (promptEl) promptEl.style.display = 'block';
+    showToast('OCR engine loading... Please type text manually.', 'info');
+    return;
+  }
+
+  if (progressText) progressText.innerText = 'AI model shuru ho raha hai...';
+  if (subText) subText.innerText = 'Tesseract OCR engine initialize ho raha hai...';
+
+  Tesseract.recognize(file, 'eng+hin', {
+    logger: m => {
+      if (m.status === 'recognizing text') {
+        const pct = Math.floor((m.progress || 0) * 100);
+        if (progressBar) progressBar.style.width = `${Math.max(20, pct)}%`;
+        if (progressText) progressText.innerText = `Photo se text padha ja raha hai: ${pct}%`;
+        if (subText) subText.innerText = 'Aksharon aur shabdon ko pehchaan rahe hain...';
+      }
     }
-    sheet.remove();
+  }).then(({ data: { text } }) => {
+    if (laserEl) laserEl.style.display = 'none';
+    if (scanEl) scanEl.style.display = 'none';
+    if (previewEl) previewEl.style.display = 'flex';
+
+    const cleanText = (text || '').trim();
+    const contentInput = document.getElementById('customPageContentInput');
+    if (contentInput) {
+      contentInput.value = cleanText || 'No text detected from image. You can type here.';
+    }
+
+    showToast('⚡ Photo se text automatically convert ho gaya!', 'success');
+  }).catch(err => {
+    console.error('OCR Error:', err);
+    if (laserEl) laserEl.style.display = 'none';
+    if (scanEl) scanEl.style.display = 'none';
+    if (promptEl) promptEl.style.display = 'block';
+    showToast('Photo scan nahi ho saki. Kripya type karein.', 'warning');
   });
-  container.appendChild(sheet);
-  sheet.querySelector('textarea').focus();
+}
+
+function saveCustomBookPage() {
+  const select = document.getElementById('customPageBookSelect');
+  const bookIdx = select ? parseInt(select.value) : readerState.activeBookIdx;
+  const b = state.books[bookIdx];
+  if (!b) {
+    showToast('Kripya book select karein!', 'warning');
+    return;
+  }
+
+  const lang = document.getElementById('customPageLangSelect').value || 'hindi';
+  const pageNo = parseInt(document.getElementById('customPageNoInput').value) || 1;
+  const heading = document.getElementById('customPageHeadingInput').value.trim();
+  const rawContent = document.getElementById('customPageContentInput').value.trim();
+
+  if (!rawContent) {
+    showToast('Kripya page ka text enter ya scan karein!', 'warning');
+    return;
+  }
+
+  let formattedContent = rawContent;
+  if (!rawContent.includes('<p>') && !rawContent.includes('<div>')) {
+    const paragraphs = rawContent.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    formattedContent = (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+      paragraphs.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+  }
+
+  const newPage = {
+    pageNo: pageNo,
+    type: 'content',
+    heading: heading || ('Page ' + pageNo),
+    content: formattedContent
+  };
+
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const existingRaw = localStorage.getItem(storeKey);
+    if (existingRaw) {
+      store = JSON.parse(existingRaw);
+    }
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+
+    const existingIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === pageNo);
+    if (existingIdx >= 0) {
+      store[bookTitleKey][lang][existingIdx] = newPage;
+    } else {
+      store[bookTitleKey][lang].push(newPage);
+    }
+
+    const delKey = lang + '_deleted';
+    if (Array.isArray(store[bookTitleKey][delKey])) {
+      store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== pageNo);
+    }
+
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error saving custom book page:', e);
+  }
+
+  closeAddCustomPageModal();
+  showToast('Page ' + pageNo + ' "' + b.title + '" me safaltapoorvak jud gaya! 📖', 'success');
+
+  const readerModal = document.getElementById('realBookReaderModal');
+  if (readerModal && readerModal.classList.contains('active')) {
+    readerState.currentPage = pageNo;
+    renderRealBookPages();
+  }
+}
+
+// --- 3. Book Page Edit & Re-Scan Modal ---
+function openEditPageModalForCurrent(side) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const pages = getBookPagesArray(b, readerState.lang);
+  const isMobile = window.innerWidth <= 768;
+  const isSingle = isMobile || (readerState.spreadMode === 'single');
+
+  let targetPageNo = 1;
+  if (isSingle) {
+    targetPageNo = readerState.currentPage;
+  } else {
+    targetPageNo = (side === 'left') ? readerState.currentPage : (readerState.currentPage + 1);
+  }
+
+  const exists = pages.some(p => p.pageNo === targetPageNo);
+  if (!exists) {
+    showToast('Page ' + targetPageNo + ' edit karne ke liye uplabdh nahi hai.', 'warning');
+    return;
+  }
+
+  openEditPageModal(targetPageNo);
+}
+
+function openEditPageModal(pageNo) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const pages = getBookPagesArray(b, readerState.lang);
+  const page = pages.find(p => p.pageNo === pageNo);
+  if (!page) return;
+
+  const titleEl = document.getElementById('editPageModalTitle');
+  if (titleEl) titleEl.innerText = `पेज ${pageNo} एडिट करें (Edit Page)`;
+
+  const noInput = document.getElementById('editPageNoInput');
+  if (noInput) noInput.value = pageNo;
+
+  const langInput = document.getElementById('editPageLangInput');
+  if (langInput) langInput.value = (readerState.lang || 'hindi').toUpperCase();
+
+  const headingInput = document.getElementById('editPageHeadingInput');
+  if (headingInput) headingInput.value = page.heading || '';
+
+  const contentInput = document.getElementById('editPageContentInput');
+  if (contentInput) {
+    contentInput.value = page.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  }
+
+  const photoInput = document.getElementById('editPagePhotoInput');
+  if (photoInput) photoInput.value = '';
+  const promptEl = document.getElementById('editOcrDropzonePrompt');
+  const scanEl = document.getElementById('editOcrScanningState');
+  const laserEl = document.getElementById('editOcrLaserScanLine');
+  if (promptEl) promptEl.style.display = 'block';
+  if (scanEl) scanEl.style.display = 'none';
+  if (laserEl) laserEl.style.display = 'none';
+
+  const modal = document.getElementById('editBookPageModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeEditBookPageModal() {
+  const modal = document.getElementById('editBookPageModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleEditPageOverlayClick(event) {
+  if (event.target.id === 'editBookPageModal') {
+    closeEditBookPageModal();
+  }
+}
+
+function handleEditPagePhotoUpload(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  processEditPagePhotoFile(input.files[0]);
+}
+
+function processEditPagePhotoFile(file) {
+  if (!file || !file.type.startsWith('image/')) {
+    showToast('Please select a valid image file!', 'warning');
+    return;
+  }
+
+  const promptEl = document.getElementById('editOcrDropzonePrompt');
+  const scanEl = document.getElementById('editOcrScanningState');
+  const laserEl = document.getElementById('editOcrLaserScanLine');
+  const progressText = document.getElementById('editOcrScanProgressText');
+  const progressBar = document.getElementById('editOcrScanProgressBar');
+
+  if (promptEl) promptEl.style.display = 'none';
+  if (scanEl) scanEl.style.display = 'block';
+  if (laserEl) laserEl.style.display = 'block';
+  if (progressBar) progressBar.style.width = '20%';
+
+  if (typeof Tesseract === 'undefined') {
+    if (laserEl) laserEl.style.display = 'none';
+    if (scanEl) scanEl.style.display = 'none';
+    if (promptEl) promptEl.style.display = 'block';
+    showToast('OCR engine loading... Please type text manually.', 'info');
+    return;
+  }
+
+  Tesseract.recognize(file, 'eng+hin', {
+    logger: m => {
+      if (m.status === 'recognizing text') {
+        const pct = Math.floor((m.progress || 0) * 100);
+        if (progressBar) progressBar.style.width = `${Math.max(20, pct)}%`;
+        if (progressText) progressText.innerText = `Photo scan ho rahi hai: ${pct}%`;
+      }
+    }
+  }).then(({ data: { text } }) => {
+    if (laserEl) laserEl.style.display = 'none';
+    if (scanEl) scanEl.style.display = 'none';
+    if (promptEl) promptEl.style.display = 'block';
+
+    const cleanText = (text || '').trim();
+    const contentInput = document.getElementById('editPageContentInput');
+    if (contentInput && cleanText) {
+      contentInput.value = cleanText;
+    }
+    showToast('⚡ Naya text photo se replace ho gaya!', 'success');
+  }).catch(err => {
+    console.error('OCR Error:', err);
+    if (laserEl) laserEl.style.display = 'none';
+    if (scanEl) scanEl.style.display = 'none';
+    if (promptEl) promptEl.style.display = 'block';
+    showToast('Photo scan nahi ho saki.', 'warning');
+  });
+}
+
+function saveEditedBookPage() {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const pageNo = parseInt(document.getElementById('editPageNoInput').value) || 1;
+  const heading = document.getElementById('editPageHeadingInput').value.trim();
+  const rawContent = document.getElementById('editPageContentInput').value.trim();
+
+  if (!rawContent) {
+    showToast('Kripya page ka text enter karein!', 'warning');
+    return;
+  }
+
+  let formattedContent = rawContent;
+  if (!rawContent.includes('<p>') && !rawContent.includes('<div>')) {
+    const paragraphs = rawContent.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    formattedContent = (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+      paragraphs.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+  }
+
+  const updatedPage = {
+    pageNo: pageNo,
+    type: 'content',
+    heading: heading || ('Page ' + pageNo),
+    content: formattedContent
+  };
+
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const raw = localStorage.getItem(storeKey);
+    if (raw) store = JSON.parse(raw);
+
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    const lang = readerState.lang || 'hindi';
+
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+
+    const existingIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === pageNo);
+    if (existingIdx >= 0) {
+      store[bookTitleKey][lang][existingIdx] = updatedPage;
+    } else {
+      store[bookTitleKey][lang].push(updatedPage);
+    }
+
+    const delKey = lang + '_deleted';
+    if (Array.isArray(store[bookTitleKey][delKey])) {
+      store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== pageNo);
+    }
+
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error saving edited page:', e);
+  }
+
+  closeEditBookPageModal();
+  showToast('Page ' + pageNo + ' safaltapoorvak update ho gaya! 💾', 'success');
+  renderRealBookPages();
+}
+
+function deleteBookPage(pageNo) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const raw = localStorage.getItem(storeKey);
+    if (raw) store = JSON.parse(raw);
+
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    const lang = readerState.lang || 'hindi';
+
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+
+    store[bookTitleKey][lang] = store[bookTitleKey][lang].filter(p => p.pageNo !== pageNo);
+
+    const delKey = lang + '_deleted';
+    if (!Array.isArray(store[bookTitleKey][delKey])) store[bookTitleKey][delKey] = [];
+    if (!store[bookTitleKey][delKey].includes(pageNo)) {
+      store[bookTitleKey][delKey].push(pageNo);
+    }
+
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error deleting book page:', e);
+  }
+
+  closeEditBookPageModal();
+  showToast('Page ' + pageNo + ' delete kar diya gaya! 🗑️', 'info');
+
+  if (readerState.currentPage > 1) {
+    readerState.currentPage = Math.max(1, readerState.currentPage - 1);
+  }
+  renderRealBookPages();
+}
+
+function confirmDeleteCurrentEditPage() {
+  const noInput = document.getElementById('editPageNoInput');
+  const pageNo = noInput ? parseInt(noInput.value) : readerState.currentPage;
+  if (confirm(`Kya aap sach me Page ${pageNo} ko delete karna chahte hain?`)) {
+    deleteBookPage(pageNo);
+  }
+}
+
+function deletePageForCurrent(side) {
+  const isMobile = window.innerWidth <= 768;
+  const isSingle = isMobile || (readerState.spreadMode === 'single');
+
+  let targetPageNo = 1;
+  if (isSingle) {
+    targetPageNo = readerState.currentPage;
+  } else {
+    targetPageNo = (side === 'left') ? readerState.currentPage : (readerState.currentPage + 1);
+  }
+
+  if (confirm(`Kya aap sach me Page ${targetPageNo} ko delete karna chahte hain?`)) {
+    deleteBookPage(targetPageNo);
+  }
+}
+
+// --- 4. Book Cover Viewer (Front & Back Covers) ---
+let currentCoverView = 'front';
+function openBookCoverModal() {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  currentCoverView = 'front';
+
+  const imgEl = document.getElementById('coverViewerImg');
+  const capEl = document.getElementById('coverViewerCaption');
+  const frontBtn = document.getElementById('coverTabFrontBtn');
+  const backBtn = document.getElementById('coverTabBackBtn');
+
+  if (frontBtn && backBtn) {
+    frontBtn.classList.add('btn-primary');
+    backBtn.classList.remove('btn-primary');
+  }
+
+  if (imgEl) {
+    imgEl.src = getBookCoverUrl(b) || 'hyperfocus_cover.jpg';
+  }
+  if (capEl) {
+    capEl.innerText = (b ? b.title : 'Hyperfocus') + ' • Front Cover';
+  }
+
+  const modal = document.getElementById('bookCoverViewerModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeBookCoverModal() {
+  const modal = document.getElementById('bookCoverViewerModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleCoverViewerOverlayClick(event) {
+  if (event.target.id === 'bookCoverViewerModal') {
+    closeBookCoverModal();
+  }
+}
+
+function switchCoverView(side) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  currentCoverView = side;
+
+  const imgEl = document.getElementById('coverViewerImg');
+  const capEl = document.getElementById('coverViewerCaption');
+  const frontBtn = document.getElementById('coverTabFrontBtn');
+  const backBtn = document.getElementById('coverTabBackBtn');
+
+  if (side === 'front') {
+    if (frontBtn) frontBtn.classList.add('btn-primary');
+    if (backBtn) backBtn.classList.remove('btn-primary');
+    if (imgEl) imgEl.src = getBookCoverUrl(b) || 'hyperfocus_cover.jpg';
+    if (capEl) capEl.innerText = (b ? b.title : 'Hyperfocus') + ' • Front Cover';
+  } else {
+    if (frontBtn) frontBtn.classList.remove('btn-primary');
+    if (backBtn) backBtn.classList.add('btn-primary');
+    if (imgEl) imgEl.src = (b && b.backCover) ? b.backCover : 'hyperfocus_back.jpg';
+    if (capEl) capEl.innerText = (b ? b.title : 'Hyperfocus') + ' • Back Cover';
+  }
 }
 
 // ===== Settings: 10 new preferences (v0.1) =====
