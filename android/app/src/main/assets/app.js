@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.10)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.13)
 // ==========================================================================
 
-const APP_VERSION = '0.0.12';
-const CURRENT_APP_VERSION = 'v0.0.12';
+const APP_VERSION = '0.0.13';
+const CURRENT_APP_VERSION = 'v0.0.13';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -2348,6 +2348,55 @@ function renderGenreDonutChart() {
   `).join('');
 }
 
+// Dynamic Daily Motivational Quotes Suite
+const DAILY_READING_QUOTES = [
+  { text: "Books are the quietest and most constant friends; they are the most accessible and wisest of counselors, and the most patient of teachers.", author: "Charles W. Eliot" },
+  { text: "A reader lives a thousand lives before he dies. The man who never reads lives only one.", author: "George R.R. Martin" },
+  { text: "Reading is essential for those who seek to rise above the ordinary.", author: "Jim Rohn" },
+  { text: "Today a reader, tomorrow a leader.", author: "Margaret Fuller" },
+  { text: "The more that you read, the more things you will know. The more that you learn, the more places you'll go.", author: "Dr. Seuss" },
+  { text: "There is no friend as loyal as a book.", author: "Ernest Hemingway" },
+  { text: "Think before you speak. Read before you think.", author: "Fran Lebowitz" },
+  { text: "Show me a family of readers, and I will show you the people who move the world.", author: "Napoleon Bonaparte" },
+  { text: "Reading is to the mind what exercise is to the body.", author: "Joseph Addison" },
+  { text: "Once you learn to read, you will be forever free.", author: "Frederick Douglass" },
+  { text: "A book is a dream that you hold in your hand.", author: "Neil Gaiman" },
+  { text: "Continuous learning through books is the minimum requirement for success in any field.", author: "Brian Tracy" },
+  { text: "Knowledge has a beginning but no end. Read every single day.", author: "Geeta Wisdom" },
+  { text: "Spend each day trying to be a little wiser than you were when you woke up.", author: "Charlie Munger" },
+  { text: "Discipline will take you where motivation cannot.", author: "Jim Ryun" },
+  { text: "In the case of good books, the point is not how many you can get through, but rather how many can get through to you.", author: "Mortimer J. Adler" }
+];
+
+let currentProfileDailyQuoteIndex = 0;
+
+function refreshDailyQuote(shuffle = false) {
+  const quoteTextEl = document.getElementById('profileQuoteText');
+  const quoteAuthorEl = document.getElementById('profileQuoteAuthor');
+  if (!quoteTextEl || !quoteAuthorEl) return;
+
+  if (shuffle) {
+    let nextIdx;
+    do {
+      nextIdx = Math.floor(Math.random() * DAILY_READING_QUOTES.length);
+    } while (nextIdx === currentProfileDailyQuoteIndex && DAILY_READING_QUOTES.length > 1);
+    currentProfileDailyQuoteIndex = nextIdx;
+    showToast('✨ Daily quote shuffled!');
+  } else {
+    // Deterministic daily rotation based on day of the year
+    const now = new Date();
+    const start = new Date(now.getFullYear(), 0, 0);
+    const diff = now - start;
+    const oneDay = 1000 * 60 * 60 * 24;
+    const dayOfYear = Math.floor(diff / oneDay);
+    currentProfileDailyQuoteIndex = Math.abs(dayOfYear) % DAILY_READING_QUOTES.length;
+  }
+
+  const q = DAILY_READING_QUOTES[currentProfileDailyQuoteIndex];
+  quoteTextEl.innerText = `"${q.text}"`;
+  quoteAuthorEl.innerHTML = `&mdash; ${q.author}`;
+}
+
 // ================= VIEW 5: PROFILE =================
 function renderProfileView() {
   const total = state.books.length;
@@ -2363,6 +2412,38 @@ function renderProfileView() {
 
   const elR = document.getElementById('profileStatReading');
   if (elR) elR.innerText = reading;
+
+  // Deep Reading Metrics: Pages Read, Top Genre, Focus Time
+  const totalPagesRead = (state.books || []).reduce((acc, b) => acc + (parseInt(b.current_page, 10) || 0), 0);
+  const elPages = document.getElementById('profileStatPages');
+  if (elPages) elPages.innerText = totalPagesRead.toLocaleString();
+
+  // Top Genre
+  const genreCounts = {};
+  (state.books || []).forEach(b => {
+    const cat = (b.category || '').trim();
+    if (cat) genreCounts[cat] = (genreCounts[cat] || 0) + 1;
+  });
+  let topGenre = 'Self-Help';
+  let maxCount = 0;
+  for (const [cat, cnt] of Object.entries(genreCounts)) {
+    if (cnt > maxCount) {
+      maxCount = cnt;
+      topGenre = cat;
+    }
+  }
+  const elGenre = document.getElementById('profileStatTopGenre');
+  if (elGenre) elGenre.innerText = topGenre;
+
+  // Focus Time
+  const totalMinutes = state.stats?.totalMinutesRead || 0;
+  const hours = (totalMinutes / 60).toFixed(1);
+  const timeDisplay = totalMinutes >= 60 ? `${hours}h` : `${totalMinutes}m`;
+  const elTime = document.getElementById('profileStatTime');
+  if (elTime) elTime.innerText = timeDisplay;
+
+  // Refresh dynamic quote
+  refreshDailyQuote(false);
   
   const pinStatusText = document.getElementById('pinStatusSubText');
   if (pinStatusText) {
@@ -2385,12 +2466,25 @@ function renderProfileView() {
 
 function updateLastBackupDisplay() {
   const el = document.getElementById('lastBackupText');
-  if (!el) return;
+  const lastTime = localStorage.getItem('mf_last_backup_time');
+  if (el) {
+    if (lastTime) {
+      el.innerText = `Last backup: ${lastTime} • Exported`;
+    } else {
+      el.innerText = `No manual backup yet • Tap 'Backup Now'`;
+    }
+  }
+  updateBackupStatusUI();
+}
+
+function updateBackupStatusUI() {
+  const badge = document.getElementById('profileBackupStatusText');
+  if (!badge) return;
   const lastTime = localStorage.getItem('mf_last_backup_time');
   if (lastTime) {
-    el.innerText = `Last backup: ${lastTime} • Exported`;
+    badge.innerText = `🟢 Backed up: ${lastTime} • Tap to re-backup`;
   } else {
-    el.innerText = `No manual backup yet • Tap 'Backup Now'`;
+    badge.innerText = `🟡 No backup yet • Tap to backup library`;
   }
 }
 
@@ -2948,23 +3042,98 @@ function toggleReadingTimer() {
   }
 }
 
-// Quick Log Pages Modal
+// Quick Log Pages Modal (Upgraded v0.0.13)
 function openQuickLogModal() {
   if (!state.currentBook) return;
+  const book = state.currentBook;
+  const total = book.pages || book.total_pages || 250;
+  const current = Math.min(total, Math.max(0, parseInt(book.current_page, 10) || 0));
+
   const nameEl = document.getElementById('quickLogBookName');
-  if (nameEl) nameEl.innerText = state.currentBook.title;
-  
+  if (nameEl) nameEl.innerText = book.title;
+
+  const totalEl = document.getElementById('quickLogTotalPages');
+  if (totalEl) totalEl.innerText = total;
+
   const pageInput = document.getElementById('quickLogPageInput');
   if (pageInput) {
-    pageInput.value = state.currentBook.current_page || 0;
-    pageInput.max = state.currentBook.pages || state.currentBook.total_pages || 500;
+    pageInput.value = current;
+    pageInput.max = total;
+    pageInput.min = 0;
   }
+
+  const slider = document.getElementById('quickLogPageSlider');
+  if (slider) {
+    slider.max = total;
+    slider.min = 0;
+    slider.value = current;
+  }
+
+  const midMark = document.getElementById('quickLogSliderMidMark');
+  if (midMark) midMark.innerText = `Pg ${Math.round(total / 2)}`;
+
+  const maxMark = document.getElementById('quickLogSliderMaxMark');
+  if (maxMark) maxMark.innerText = `Pg ${total}`;
+
+  updateQuickLogPrediction(current, total);
   
   document.getElementById('quickLogModalOverlay')?.classList.add('active');
 }
 
 function closeQuickLogModal() {
   document.getElementById('quickLogModalOverlay')?.classList.remove('active');
+}
+
+function onQuickLogSliderChange(val) {
+  const pageInput = document.getElementById('quickLogPageInput');
+  const num = parseInt(val, 10) || 0;
+  if (pageInput) pageInput.value = num;
+  const total = state.currentBook?.pages || state.currentBook?.total_pages || 250;
+  updateQuickLogPrediction(num, total);
+}
+
+function onQuickLogInputChange(val) {
+  const slider = document.getElementById('quickLogPageSlider');
+  const total = state.currentBook?.pages || state.currentBook?.total_pages || 250;
+  let num = parseInt(val, 10);
+  if (isNaN(num)) num = 0;
+  if (num < 0) num = 0;
+  if (num > total) num = total;
+  if (slider) slider.value = num;
+  updateQuickLogPrediction(num, total);
+}
+
+function quickAddPages(amount) {
+  const pageInput = document.getElementById('quickLogPageInput');
+  const slider = document.getElementById('quickLogPageSlider');
+  const total = state.currentBook?.pages || state.currentBook?.total_pages || 250;
+  let cur = parseInt(pageInput ? pageInput.value : 0, 10) || 0;
+  let next = Math.min(total, cur + amount);
+  if (pageInput) pageInput.value = next;
+  if (slider) slider.value = next;
+  updateQuickLogPrediction(next, total);
+}
+
+function quickMarkBookCompleted() {
+  const pageInput = document.getElementById('quickLogPageInput');
+  const slider = document.getElementById('quickLogPageSlider');
+  const total = state.currentBook?.pages || state.currentBook?.total_pages || 250;
+  if (pageInput) pageInput.value = total;
+  if (slider) slider.value = total;
+  updateQuickLogPrediction(total, total);
+}
+
+function updateQuickLogPrediction(current, total) {
+  const predText = document.getElementById('quickLogPredictionText');
+  if (!predText) return;
+  const remaining = Math.max(0, total - current);
+  if (remaining === 0) {
+    predText.innerText = `Mubarak ho! Yeh kitaab poori ho chuki hai! 🎉`;
+    return;
+  }
+  // Standard comfortable pace estimation (15 pages/day)
+  const daysLeft = Math.max(1, Math.ceil(remaining / 15));
+  predText.innerText = `Is speed se aap yeh kitaab ${daysLeft} din me khatam kar lenge! (${remaining} pgs bache)`;
 }
 
 function saveQuickLogPages() {
@@ -4069,37 +4238,263 @@ function exportDataPDF() {
     }
     
     const doc = new window.jspdf.jsPDF();
-    doc.setFontSize(18);
-    doc.text('Mind & Focus Books Tracker — Reading Report', 14, 20);
-    doc.setFontSize(11);
-    doc.text(`Generated on: ${new Date().toLocaleDateString()} | Total Books: ${state.books.length}`, 14, 28);
     
-    const tableData = state.books.map((b, i) => [
+    // Header Banner
+    doc.setFillColor(15, 23, 42); // slate-900
+    doc.rect(0, 0, 210, 36, 'F');
+    
+    // Gold accent strip
+    doc.setFillColor(245, 158, 11); // amber-500
+    doc.rect(0, 36, 210, 2, 'F');
+
+    // Title & Brand
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(15);
+    doc.setTextColor(255, 255, 255);
+    doc.text('Mind & Focus Books Tracker — Reading Report', 14, 18);
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(203, 213, 225);
+    const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    doc.text(`Generated on: ${dateStr}  |  App Version: ${CURRENT_APP_VERSION}  |  Reader Vault`, 14, 28);
+
+    // Summary Statistics Card
+    const totalBooks = (state.books || []).length;
+    const completed = (state.books || []).filter(b => b.status === 'DONE').length;
+    const totalPages = (state.books || []).reduce((acc, b) => acc + (parseInt(b.current_page, 10) || 0), 0);
+    const streak = state.stats?.readingStreak || 0;
+
+    doc.setFillColor(248, 250, 252);
+    doc.setDrawColor(226, 232, 240);
+    doc.roundedRect(14, 42, 182, 18, 3, 3, 'FD');
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(15, 23, 42);
+    doc.text(`Total Books: ${totalBooks}`, 20, 53);
+    doc.text(`Completed: ${completed}`, 65, 53);
+    doc.text(`Pages Read: ${totalPages.toLocaleString()}`, 110, 53);
+    doc.text(`Streak: ${streak} Days 🔥`, 160, 53);
+
+    const tableData = (state.books || []).map((b, i) => [
       b.no || i + 1,
-      b.title,
-      b.author,
-      b.category,
-      b.status,
+      b.title || 'Untitled',
+      b.author || 'Unknown',
+      b.category || 'General',
+      b.status || 'PENDING',
       `${b.current_page || 0}/${b.pages || 250}`,
       b.rating ? `${b.rating} ★` : '-'
     ]);
     
     if (doc.autoTable) {
       doc.autoTable({
-        startY: 34,
+        startY: 65,
         head: [['#', 'Title', 'Author', 'Category', 'Status', 'Pages', 'Rating']],
         body: tableData,
         theme: 'striped',
-        headStyles: { fillColor: [245, 158, 11] }
+        headStyles: {
+          fillColor: [245, 158, 11],
+          textColor: [15, 23, 42],
+          fontStyle: 'bold',
+          fontSize: 9
+        },
+        styles: {
+          fontSize: 8,
+          cellPadding: 3
+        },
+        alternateRowStyles: {
+          fillColor: [248, 250, 252]
+        }
       });
     }
     
     doc.save(`MindFocusBooks_Report_${getTodayLocalDate()}.pdf`);
-    showToast('PDF Report generated! 📑');
+    
+    const nowStr = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    localStorage.setItem('mf_last_backup_time', nowStr);
+    updateLastBackupDisplay();
+    
+    showToast('Prettier PDF Report generated & backed up! 📑✨');
   } catch (e) {
     console.error(e);
     showToast('Error generating PDF report');
   }
+}
+
+// ================= 3D VOCABULARY DICTIONARY (101+ WORDS) =================
+let currentDictFilterAlpha = 'ALL';
+
+function openDictionaryModal() {
+  const overlay = document.getElementById('dictionaryModalOverlay');
+  if (!overlay) return;
+  
+  // Render Alphabet pills
+  initDictionaryAlphabetBar();
+  
+  // Reset search
+  const searchInput = document.getElementById('dictSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('dictSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+
+  // Render all words
+  currentDictFilterAlpha = 'ALL';
+  const allWords = typeof DICTIONARY_WORDS !== 'undefined' ? DICTIONARY_WORDS : [];
+  renderDictionaryWords(allWords);
+
+  overlay.classList.add('active');
+}
+
+function closeDictionaryModal() {
+  const overlay = document.getElementById('dictionaryModalOverlay');
+  if (overlay) overlay.classList.remove('active');
+}
+
+function initDictionaryAlphabetBar() {
+  const bar = document.getElementById('dictAlphabetBar');
+  if (!bar) return;
+  const letters = ['ALL', ...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')];
+  bar.innerHTML = letters.map(l => `
+    <button type="button" class="dict-alpha-btn ${l === currentDictFilterAlpha ? 'active' : ''}" onclick="filterDictionaryByAlpha('${l}')">${l}</button>
+  `).join('');
+}
+
+function filterDictionaryByAlpha(letter) {
+  currentDictFilterAlpha = letter;
+  const buttons = document.querySelectorAll('.dict-alpha-btn');
+  buttons.forEach(btn => {
+    btn.classList.toggle('active', btn.innerText.trim().toUpperCase() === letter);
+  });
+  
+  const searchInput = document.getElementById('dictSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('dictSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+
+  const allWords = typeof DICTIONARY_WORDS !== 'undefined' ? DICTIONARY_WORDS : [];
+  if (letter === 'ALL') {
+    renderDictionaryWords(allWords);
+  } else {
+    const filtered = allWords.filter(w => (w.word || '').toUpperCase().startsWith(letter));
+    renderDictionaryWords(filtered);
+  }
+}
+
+function onDictionarySearchInput(val) {
+  const q = (val || '').trim().toLowerCase();
+  const clearBtn = document.getElementById('dictSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = q ? 'inline-block' : 'none';
+
+  const allWords = typeof DICTIONARY_WORDS !== 'undefined' ? DICTIONARY_WORDS : [];
+  if (!q) {
+    filterDictionaryByAlpha(currentDictFilterAlpha);
+    return;
+  }
+
+  // Deactivate letter buttons during global search
+  document.querySelectorAll('.dict-alpha-btn').forEach(b => b.classList.remove('active'));
+
+  const matches = allWords.filter(w => {
+    return (w.word && w.word.toLowerCase().includes(q)) ||
+           (w.hindi && w.hindi.toLowerCase().includes(q)) ||
+           (w.phonetic && w.phonetic.toLowerCase().includes(q)) ||
+           (w.definition && w.definition.toLowerCase().includes(q)) ||
+           (w.syn && w.syn.toLowerCase().includes(q));
+  });
+
+  renderDictionaryWords(matches, q);
+}
+
+function clearDictionarySearch() {
+  const searchInput = document.getElementById('dictSearchInput');
+  if (searchInput) searchInput.value = '';
+  const clearBtn = document.getElementById('dictSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+  filterDictionaryByAlpha('ALL');
+}
+
+function speakDictionaryWord(word) {
+  try {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(word);
+      utterance.rate = 0.9;
+      utterance.lang = 'en-US';
+      window.speechSynthesis.speak(utterance);
+      showToast(`🔊 Pronouncing: "${word}"`);
+    } else {
+      showToast(`Audio: "${word}"`);
+    }
+  } catch (e) {
+    showToast(`Audio: "${word}"`);
+  }
+}
+
+function renderDictionaryWords(words, highlightQuery = '') {
+  const container = document.getElementById('dictCardsContainer');
+  const countBadge = document.getElementById('dictTotalCountBadge');
+  const countText = document.getElementById('dictShowingCountText');
+
+  const totalPossible = typeof DICTIONARY_WORDS !== 'undefined' ? DICTIONARY_WORDS.length : 101;
+  if (countBadge) countBadge.innerText = `${totalPossible} Words`;
+  if (countText) countText.innerText = `Showing ${words.length} of ${totalPossible} words`;
+
+  if (!container) return;
+
+  if (!words || words.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center; padding: 40px 20px; color: var(--text-muted);">
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">🔍</div>
+        <div style="font-weight:700; font-size:1rem; color:var(--text-secondary);">No matching words found</div>
+        <div style="font-size:0.8rem; margin-top:4px;">Try searching with different spelling or reset filters.</div>
+        <button type="button" class="btn-save-gold" style="margin-top:14px; padding:6px 14px; font-size:0.8rem;" onclick="clearDictionarySearch()">View All Words</button>
+      </div>
+    `;
+    return;
+  }
+
+  const highlight = (text) => {
+    if (!highlightQuery || !text) return text || '';
+    const escaped = highlightQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
+    return String(text).replace(regex, '<mark style="background:#f59e0b; color:#0f172a; padding:0 3px; border-radius:3px; font-weight:800;">$1</mark>');
+  };
+
+  container.innerHTML = words.map(w => {
+    const escapedWord = (w.word || '').replace(/'/g, "\\'");
+    return `
+      <div class="dict-card">
+        <div class="dict-card-header">
+          <div class="dict-word-title">
+            <span>${highlight(w.word)}</span>
+            ${w.phonetic ? `<span class="dict-phonetic-badge">${w.phonetic}</span>` : ''}
+            ${w.type ? `<span class="dict-type-badge">${w.type}</span>` : ''}
+          </div>
+          <button type="button" class="dict-audio-btn" onclick="speakDictionaryWord('${escapedWord}')" title="Listen Pronunciation">
+            <span>🔊</span> Listen
+          </button>
+        </div>
+        <div class="dict-hindi-text">
+          <span>🇮🇳</span> ${highlight(w.hindi)}
+        </div>
+        <div class="dict-def-text">
+          ${w.definition || ''}
+        </div>
+        ${w.example ? `
+          <div class="dict-example-box">
+            <div>💬 "${w.example}"</div>
+            ${w.exampleHindi ? `<div class="dict-example-hindi">👉 ${w.exampleHindi}</div>` : ''}
+          </div>
+        ` : ''}
+        ${w.syn ? `
+          <div class="dict-syn-chips">
+            <strong>Synonyms:</strong> ${w.syn}
+          </div>
+        ` : ''}
+      </div>
+    `;
+  }).join('');
 }
 
 // ================= IN-APP UPDATE CHECKER & DOWNLOADER =================

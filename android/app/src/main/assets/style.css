@@ -7022,3 +7022,562 @@ input:checked + .slider-round:before {
   background: rgba(16, 185, 129, 0.3);
 }
 
+/* ==========================================================================
+   V0.0.13 SUITE: QUICK LOG SLIDER, 3D DICTIONARY, PROFILE METRICS & BACKUP
+   ========================================================================== */
+
+/* 1. Upgraded Quick Log Modal */
+.quick-log-modal-card {
+  max-width: 420px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(20, 27, 44, 0.96) 0%, rgba(13, 18, 30, 0.98) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.65), 0 0 20px rgba(245, 158, 11, 0.12);
+}
+
+.ql-header-icon-box {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+}
+
+.quick-log-counter-box {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px 14px;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.ql-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: var(--accent-gold, #f59e0b);
+}
+
+.ql-display-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+#quickLogPageInput {
+  width: 90px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1.5px solid rgba(245, 158, 11, 0.5);
+  border-radius: 10px;
+  text-align: center;
+  padding: 4px 6px;
+  outline: none;
+}
+
+#quickLogPageInput:focus {
+  border-color: #f59e0b;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.4);
+}
+
+.ql-total-slash {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.ql-slider-wrap {
+  margin-bottom: 16px;
+}
+
+.ql-range-slider {
+  width: 100%;
+  height: 8px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  accent-color: #f59e0b;
+}
+
+.ql-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.6);
+  cursor: pointer;
+  border: 2px solid #fff;
+}
+
+.ql-slider-marks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.68rem;
+  color: var(--text-muted, #64748b);
+  margin-top: 4px;
+  font-weight: 600;
+}
+
+.ql-pills-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-secondary, #94a3b8);
+  margin-bottom: 6px;
+}
+
+.ql-quick-pills-row {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.ql-pill-btn {
+  flex: 1;
+  min-width: 52px;
+  padding: 7px 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.ql-pill-btn:hover {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+  color: #fbbf24;
+}
+
+.ql-pill-btn:active {
+  transform: scale(0.95);
+}
+
+.ql-pill-finish {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.35);
+  color: #34d399;
+}
+
+.ql-pill-finish:hover {
+  background: rgba(16, 185, 129, 0.3);
+  border-color: #10b981;
+  color: #6ee7b7;
+}
+
+.ql-smart-prediction-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px dashed rgba(245, 158, 11, 0.3);
+  border-radius: 10px;
+  padding: 8px 12px;
+}
+
+.ql-predict-icon {
+  font-size: 1.1rem;
+}
+
+.ql-predict-text {
+  font-size: 0.74rem;
+  font-weight: 600;
+  color: #fde68a;
+  line-height: 1.3;
+}
+
+/* 2. 3D Vocabulary Dictionary Modal */
+.dictionary-modal-card {
+  max-width: 650px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(16, 23, 38, 0.98) 0%, rgba(10, 14, 26, 0.99) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.75), 0 0 25px rgba(16, 185, 129, 0.15);
+  overflow: hidden;
+}
+
+.dict-sticky-header {
+  padding: 16px 20px;
+  background: rgba(16, 23, 38, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dict-header-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.18);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+}
+
+.dict-count-pill {
+  font-size: 0.68rem;
+  font-weight: 800;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  color: #34d399;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.dict-controls-box {
+  padding: 12px 20px;
+  background: rgba(0, 0, 0, 0.25);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.dict-search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.dict-search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 0.95rem;
+  color: var(--text-muted, #64748b);
+  pointer-events: none;
+}
+
+#dictSearchInput {
+  width: 100%;
+  padding: 10px 36px 10px 36px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  color: #fff;
+  font-size: 0.88rem;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+#dictSearchInput:focus {
+  border-color: #10b981;
+  background: rgba(255, 255, 255, 0.09);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+}
+
+.dict-search-clear {
+  position: absolute;
+  right: 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.dict-alphabet-bar {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.dict-alpha-btn {
+  padding: 4px 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 6px;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s ease;
+}
+
+.dict-alpha-btn.active {
+  background: #10b981;
+  color: #0b1320;
+  border-color: #34d399;
+}
+
+.dict-cards-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.dict-card {
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 14px 16px;
+  transition: all 0.2s ease;
+}
+
+.dict-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(16, 185, 129, 0.35);
+  transform: translateY(-1px);
+}
+
+.dict-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.dict-word-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--accent-gold, #f59e0b);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dict-phonetic-badge {
+  font-size: 0.76rem;
+  font-weight: 600;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #fde68a;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.dict-audio-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  color: #34d399;
+  font-size: 0.76rem;
+  padding: 3px 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.dict-audio-btn:hover {
+  background: rgba(16, 185, 129, 0.2);
+}
+
+.dict-type-badge {
+  font-size: 0.68rem;
+  font-style: italic;
+  color: var(--text-muted, #64748b);
+  background: rgba(0, 0, 0, 0.25);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.dict-hindi-text {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #34d399;
+  margin-bottom: 4px;
+}
+
+.dict-def-text {
+  font-size: 0.8rem;
+  color: var(--text-secondary, #cbd5e1);
+  line-height: 1.4;
+  margin-bottom: 8px;
+}
+
+.dict-example-box {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 3px solid var(--accent-gold, #f59e0b);
+  padding: 8px 10px;
+  border-radius: 0 8px 8px 0;
+  font-size: 0.78rem;
+  color: #e2e8f0;
+  margin-bottom: 6px;
+}
+
+.dict-example-hindi {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  margin-top: 3px;
+  font-style: italic;
+}
+
+.dict-syn-chips {
+  font-size: 0.72rem;
+  color: var(--text-muted, #64748b);
+}
+
+.dict-syn-chips strong {
+  color: #f59e0b;
+}
+
+.dict-modal-footer {
+  padding: 12px 20px;
+  background: rgba(16, 23, 38, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 3. Profile Deep Metrics Row */
+.profile-metrics-row-v5 {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.profile-metric-card {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.pmc-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.pmc-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pmc-val {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pmc-lbl {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted, #64748b);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 4. Profile Visual Backup Card */
+.profile-backup-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px 14px;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.profile-backup-card:hover {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(16, 185, 129, 0.15) 100%);
+  border-color: rgba(59, 130, 246, 0.45);
+}
+
+.pbc-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pbc-icon {
+  font-size: 1.3rem;
+}
+
+.pbc-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #93c5fd;
+}
+
+.pbc-status {
+  font-size: 0.7rem;
+  color: var(--text-secondary, #94a3b8);
+  margin-top: 1px;
+}
+
+.btn-backup-mini {
+  padding: 5px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: rgba(59, 130, 246, 0.2);
+  border: 1px solid #3b82f6;
+  color: #bfdbfe;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* 5. Dynamic Daily Quote Card Top Row */
+.pqc-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.pqc-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: var(--accent-gold, #f59e0b);
+}
+
+.btn-pqc-refresh {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-pqc-refresh:hover {
+  color: #fff;
+  border-color: var(--accent-gold);
+}
+

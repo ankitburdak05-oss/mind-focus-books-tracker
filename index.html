@@ -585,26 +585,67 @@
         <!-- Screen 5: 3 Stat Pill Boxes -->
         <div class="profile-pills-row-v5">
           <div class="profile-pill-stat">
-            <div class="profile-pill-val" id="profileStatBooks">12</div>
+            <div class="profile-pill-val" id="profileStatBooks">0</div>
             <div class="profile-pill-lbl">Books Read</div>
           </div>
           <div class="profile-pill-stat">
-            <div class="profile-pill-val" id="profileStatStreak">7</div>
+            <div class="profile-pill-val" id="profileStatStreak">0</div>
             <div class="profile-pill-lbl">Day Streak</div>
           </div>
           <div class="profile-pill-stat">
-            <div class="profile-pill-val" id="profileStatReading">3</div>
+            <div class="profile-pill-val" id="profileStatReading">0</div>
             <div class="profile-pill-lbl">Currently Reading</div>
           </div>
         </div>
 
-        <button type="button" class="btn-edit-profile" onclick="openEditProfileModal()" style="margin-top: 6px;">Edit Profile</button>
+        <!-- Deep Reading Metrics Row (Pages Read, Top Genre, Focus Time) -->
+        <div class="profile-metrics-row-v5">
+          <div class="profile-metric-card">
+            <div class="pmc-icon">📑</div>
+            <div class="pmc-info">
+              <div class="pmc-val" id="profileStatPages">0</div>
+              <div class="pmc-lbl">Pages Read</div>
+            </div>
+          </div>
+          <div class="profile-metric-card">
+            <div class="pmc-icon">🏷️</div>
+            <div class="pmc-info">
+              <div class="pmc-val" id="profileStatTopGenre">Self-Help</div>
+              <div class="pmc-lbl">Top Genre</div>
+            </div>
+          </div>
+          <div class="profile-metric-card">
+            <div class="pmc-icon">⏱️</div>
+            <div class="pmc-info">
+              <div class="pmc-val" id="profileStatTime">0h</div>
+              <div class="pmc-lbl">Focus Time</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1-Tap Visual Data Backup Status Pill Banner -->
+        <div class="profile-backup-card" onclick="exportDataJSON()" title="Tap to download JSON backup">
+          <div class="pbc-left">
+            <span class="pbc-icon">💾</span>
+            <div>
+              <div class="pbc-title">Data Backup &amp; Vault</div>
+              <div class="pbc-status" id="profileBackupStatusText">🟢 Backed up: Tap to download backup</div>
+            </div>
+          </div>
+          <button type="button" class="btn-backup-mini">Backup Now</button>
+        </div>
+
+        <button type="button" class="btn-edit-profile" onclick="openEditProfileModal()" style="margin-top: 8px;">Edit Profile</button>
       </div>
 
-      <!-- Screen 5: Charles W. Eliot Quote Card -->
-      <div class="profile-quote-card-v5">
-        <div class="profile-quote-text">"Books are the quietest and most constant friends."</div>
-        <div class="profile-quote-author">&mdash; Charles W. Eliot</div>
+      <!-- Screen 5: Dynamic Daily Rotating Quote Card -->
+      <div class="profile-quote-card-v5" id="profileDailyQuoteCard">
+        <div class="pqc-top-row">
+          <span class="pqc-badge">✨ QUOTE OF THE DAY</span>
+          <button type="button" class="btn-pqc-refresh" onclick="refreshDailyQuote(true)" title="Shuffle Quote">🔄 Shuffle</button>
+        </div>
+        <div class="profile-quote-text" id="profileQuoteText">"Books are the quietest and most constant friends."</div>
+        <div class="profile-quote-author" id="profileQuoteAuthor">&mdash; Charles W. Eliot</div>
       </div>
 
 
@@ -614,6 +655,16 @@
       <!-- Group 1: Preferences & Customization -->
       <div class="profile-group-header">⚙️ Customization &amp; Adjustments</div>
       <div class="profile-menu-group">
+        <!-- 📖 3D VOCABULARY DICTIONARY (101+ Core Words) -->
+        <div class="profile-menu-item" style="border-left: 3px solid #10b981; background: linear-gradient(135deg, rgba(16, 185, 129, 0.12), rgba(245, 158, 11, 0.08));" onclick="openDictionaryModal()">
+          <div class="pmi-icon" style="background: rgba(16, 185, 129, 0.2); color:#10b981;">📖</div>
+          <div class="pmi-text">
+            <div class="pmi-title" style="font-weight: 800; color: #34d399;">3D Vocabulary Dictionary</div>
+            <div class="pmi-sub">101+ Core English-Hindi words with phonetics, audio &amp; real examples</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
         <!-- ⚙️ APP SETTINGS & ADJUSTMENTS SUITE -->
         <div class="profile-menu-item" style="border-left: 3px solid #ec4899; background: linear-gradient(135deg, rgba(131, 58, 180, 0.12), rgba(253, 29, 29, 0.08));" onclick="navigateToSubView('appSettings')">
           <div class="pmi-icon grad-purple">⚙️</div>
@@ -2783,23 +2834,98 @@
     </div>
   </div>
 
-  <!-- ================= QUICK LOG PAGES MODAL ================= -->
+  <!-- ================= QUICK LOG PAGES MODAL (UPGRADED) ================= -->
   <div class="modal-overlay" id="quickLogModalOverlay">
-    <div class="modal-card modal-sm">
+    <div class="modal-card modal-sm quick-log-modal-card">
       <div class="modal-header">
-        <h3 class="modal-title">Log Reading Pages</h3>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="ql-header-icon-box">⚡</div>
+          <div>
+            <h3 class="modal-title" style="margin:0; font-size:1.05rem;">Quick Page Logger</h3>
+            <p class="quick-log-sub" id="quickLogBookName" style="margin:2px 0 0; font-size:0.75rem; color:var(--text-muted);">Book Name</p>
+          </div>
+        </div>
         <button type="button" class="modal-close-btn" onclick="closeQuickLogModal()">&times;</button>
       </div>
-      <div class="modal-body">
-        <p class="quick-log-sub" id="quickLogBookName">Book Name</p>
-        <div class="form-group">
-          <label>Current Page Read</label>
-          <input type="number" id="quickLogPageInput" min="0" value="0">
+      <div class="modal-body" style="padding: 16px 20px;">
+        <!-- Page Counter Display -->
+        <div class="quick-log-counter-box">
+          <span class="ql-label">LOG CURRENT PAGE</span>
+          <div class="ql-display-row">
+            <input type="number" id="quickLogPageInput" min="0" value="0" oninput="onQuickLogInputChange(this.value)">
+            <span class="ql-total-slash">/ <span id="quickLogTotalPages">250</span> Pages</span>
+          </div>
+        </div>
+
+        <!-- Live Range Slider -->
+        <div class="ql-slider-wrap">
+          <input type="range" id="quickLogPageSlider" min="0" max="250" value="0" class="ql-range-slider" oninput="onQuickLogSliderChange(this.value)">
+          <div class="ql-slider-marks">
+            <span>Pg 0</span>
+            <span id="quickLogSliderMidMark">Mid</span>
+            <span id="quickLogSliderMaxMark">End</span>
+          </div>
+        </div>
+
+        <!-- 1-Tap Quick Increment Pills -->
+        <div class="ql-pills-label">Quick Add Pages:</div>
+        <div class="ql-quick-pills-row">
+          <button type="button" class="ql-pill-btn" onclick="quickAddPages(5)">+5</button>
+          <button type="button" class="ql-pill-btn" onclick="quickAddPages(10)">+10</button>
+          <button type="button" class="ql-pill-btn" onclick="quickAddPages(25)">+25</button>
+          <button type="button" class="ql-pill-btn" onclick="quickAddPages(50)">+50</button>
+          <button type="button" class="ql-pill-btn ql-pill-finish" onclick="quickMarkBookCompleted()">Finish ✅</button>
+        </div>
+
+        <!-- Smart Prediction Card -->
+        <div class="ql-smart-prediction-card" id="quickLogPredictionCard">
+          <span class="ql-predict-icon">🎯</span>
+          <span class="ql-predict-text" id="quickLogPredictionText">Reading progress prediction loading...</span>
         </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn-cancel" onclick="closeQuickLogModal()">Cancel</button>
-        <button type="button" class="btn-save-gold" onclick="saveQuickLogPages()">Update Progress</button>
+        <button type="button" class="btn-save-gold" onclick="saveQuickLogPages()">Update Progress ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 3D INTERACTIVE VOCABULARY DICTIONARY MODAL ================= -->
+  <div class="modal-overlay" id="dictionaryModalOverlay">
+    <div class="modal-card modal-lg dictionary-modal-card">
+      <div class="modal-header dict-sticky-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="dict-header-icon">📖</div>
+          <div>
+            <h3 class="modal-title" style="margin:0; font-size:1.1rem; display:flex; align-items:center; gap:8px;">
+              <span>3D Vocabulary Dictionary</span>
+              <span class="dict-count-pill" id="dictTotalCountBadge">101 Words</span>
+            </h3>
+            <p style="margin:2px 0 0; font-size:0.75rem; color:var(--text-muted);">Master English &amp; Hindi Vocabulary with Phonetics &amp; Real Examples</p>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn" onclick="closeDictionaryModal()">&times;</button>
+      </div>
+
+      <!-- Search & Alphabet Bar -->
+      <div class="dict-controls-box">
+        <div class="dict-search-wrap">
+          <span class="dict-search-icon">🔍</span>
+          <input type="text" id="dictSearchInput" placeholder="Search word, meaning, Hindi (e.g. Focus, Ambition, Adapt)..." oninput="onDictionarySearchInput(this.value)">
+          <button type="button" class="dict-search-clear" id="dictSearchClearBtn" onclick="clearDictionarySearch()" style="display:none;">✕</button>
+        </div>
+        <div class="dict-alphabet-bar" id="dictAlphabetBar">
+          <!-- Dynamically populated alphabet pills via JS -->
+        </div>
+      </div>
+
+      <div class="modal-body dict-cards-body" id="dictCardsContainer">
+        <!-- Rendered via JS -->
+      </div>
+
+      <div class="modal-footer dict-modal-footer">
+        <span style="font-size:0.75rem; color:var(--text-muted);" id="dictShowingCountText">Showing 101 words</span>
+        <button type="button" class="btn-save-gold" onclick="closeDictionaryModal()">Close Dictionary</button>
       </div>
     </div>
   </div>
@@ -3256,6 +3382,7 @@
   <script src="jspdf.umd.min.js"></script>
   <script src="jspdf.plugin.autotable.min.js"></script>
   <script src="books-data.js"></script>
+  <script src="dictionary-data.js"></script>
   <script src="broadcast-notice.js"></script>
   <script src="remote-config.js"></script>
   <script src="app.js"></script>

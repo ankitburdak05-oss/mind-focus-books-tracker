@@ -2,17 +2,16 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.12",
-    "name": "Mind Focus Books v0.0.12 - Boxed Tracking Status & Compact Reader Button",
+    "version": "v0.0.13",
+    "name": "Mind Focus Books v0.0.13 - Quick Log Slider, 3D Dictionary, Deep Profile Metrics & Backup Status",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "📦 Boxed Tracking Status Card: Placed all 5 status options inside a dedicated luxury glassmorphic card container.",
-      "👌 Compact Read Book Pages Button: Sleek, proportional height and balanced action row alongside Focus Timer and Quick Add.",
-      "✨ Brand-New 3D Golden Luminary Book App Icon with Ambient Light Beam",
-      "📱 Fullscreen Edit Details Studio with frozen sticky header & close (✕) button",
-      "🚫 Zero Repeated Update Popups: Strict mathematical version comparison engine."
+      "⚡ Quick Page Log Modal: Live interactive range slider, 1-tap quick increment pills (+5, +10, +25, +50, Finish), and smart reading completion prediction.",
+      "📖 3D Vocabulary Dictionary: 101+ core English-Hindi words with search-as-you-type, A-Z filter, phonetics, audio pronunciation & real examples.",
+      "👤 Profile Tab Deep Metrics & Dynamic Quotes: Total Pages Read, Top Genre, Focus Time, and daily rotating reading quotes with shuffle.",
+      "💾 1-Tap Visual Backup Status & Styled PDF Report: Visual backup indicator badge and upgraded high-fidelity reading report layout."
     ],
-    "stagedAt": "2026-10-12T14:35:00.000Z",
+    "stagedAt": "2026-10-14T10:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
