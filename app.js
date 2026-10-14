@@ -2721,6 +2721,12 @@ function openBookDetailView(book) {
     }
 
 
+    try { 
+      renderPremiumDetailExtras(book, total, current, pct); 
+    } catch (e) { 
+      console.warn('premium detail extras', e); 
+    }
+
     // Switch view to Detail
     document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
     const detailView = document.getElementById('viewBookDetail');
@@ -2743,6 +2749,9 @@ function formatDateDisplay(dateStr) {
       const m = parseInt(parts[1], 10) - 1;
       const d = parseInt(parts[2], 10);
       if (m >= 0 && m < 12 && d > 0 && d <= 31) {
+        const _df = (typeof getPrefs === 'function') ? getPrefs().dateFmt : 'short';
+        if (_df === 'slash') return `${String(d).padStart(2, '0')}/${String(m + 1).padStart(2, '0')}/${y}`;
+        if (_df === 'iso') return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         return `${String(d).padStart(2, '0')} ${months[m]} ${y}`;
       }
     }
@@ -3570,6 +3579,10 @@ function renderRealBookPages() {
   document.getElementById('readerToneSepia')?.classList.toggle('active', readerState.theme === 'sepia');
   document.getElementById('readerToneDark')?.classList.toggle('active', readerState.theme === 'dark');
   document.getElementById('readerToneLight')?.classList.toggle('active', readerState.theme === 'light');
+  
+  const curPageBmKey = (readerState.lang || 'hindi') + ':' + readerState.currentPage;
+  const isCurPageBookmarked = Array.isArray(book.pageBookmarks) && book.pageBookmarks.includes(curPageBmKey);
+  document.getElementById('readerBtnBookmark')?.classList.toggle('active', isCurPageBookmarked);
   
   const spreadEl = document.getElementById('realBookSpread');
   if (spreadEl) {
@@ -7134,4 +7147,393 @@ function filterLibraryByShelf(shelfId) {
 function clearShelfFilter() {
   filterLibraryByShelf(null);
 }
+
+// ===== Premium book detail extras =====
+const PD_QUOTES = [
+  'Discipline today builds the freedom of tomorrow.',
+  'Read ten honest pages instead of waiting for a perfect hour.',
+  'One chapter a day beats one weekend a month.',
+  'Small habits, repeated consistently, lead to remarkable results.'
+];
+let pdQuoteIdx = 0;
+
+function pdDateStr(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function renderPremiumDetailExtras(book, total, current, pct) {
+  const ring = document.getElementById('pdRingFg');
+  if (ring) ring.style.strokeDashoffset = String(213.6 * (1 - Math.min(100, pct) / 100));
+  const ringPct = document.getElementById('pdRingPct');
+  if (ringPct) ringPct.innerText = pct + '%';
+
+  const eta = document.getElementById('pdEta');
+  if (eta) {
+    let msg = '';
+    if (book.status === 'DONE') {
+      msg = '🎉 Finished';
+    } else if (book.status === 'READING' && book.start_date && current > 0) {
+      const days = Math.max(1, calculateDaysElapsed(book.start_date, getTodayLocalDate()));
+      const rate = current / days;
+      const left = Math.max(0, total - current);
+      if (rate > 0 && left > 0) {
+        const d = new Date();
+        d.setDate(d.getDate() + Math.ceil(left / rate));
+        msg = '⚡ ' + rate.toFixed(1) + ' pages/day • finish by ' + formatDateDisplay(pdDateStr(d));
+        const goal = (typeof getPrefs === 'function') ? getPrefs().pagesGoal : 15;
+        if (goal > 0) {
+          const g = new Date();
+          g.setDate(g.getDate() + Math.ceil(left / goal));
+          msg += ' • 🎯 ' + goal + '/day: ' + formatDateDisplay(pdDateStr(g));
+        }
+      }
+    }
+    eta.innerText = msg;
+  }
+
+  const notesCount = (book.takeaway || book.notes || '').split(/\n/).filter(l => l.trim()).length;
+  const hl = Array.isArray(book.highlights) ? book.highlights.length : 0;
+  const parts = pct >= 100 ? 3 : pct >= 70 ? 2 : pct >= 30 ? 1 : 0;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+  set('pdStatStreak', (state.stats && state.stats.readingStreak) || 0);
+  set('pdStatNotes', notesCount);
+  set('pdStatHl', hl);
+  set('pdStatParts', parts + '/3');
+
+  const bm = document.getElementById('pdBookmarkBtn');
+  if (bm) bm.classList.toggle('on', !!book.bookmarked);
+  const q = document.getElementById('pdQuoteText');
+  if (q) q.innerText = '\u201C' + PD_QUOTES[pdQuoteIdx % PD_QUOTES.length] + '\u201D';
+}
+
+function toggleBookBookmark() {
+  if (!state.currentBook) return;
+  state.currentBook.bookmarked = !state.currentBook.bookmarked;
+  saveBooks();
+  const bm = document.getElementById('pdBookmarkBtn');
+  if (bm) bm.classList.toggle('on', state.currentBook.bookmarked);
+  showToast(state.currentBook.bookmarked ? '🔖 Bookmarked' : 'Bookmark removed');
+}
+
+function shareCurrentBook() {
+  const b = state.currentBook;
+  if (!b) return;
+  const total = b.pages || b.total_pages || 200;
+  const text = 'I\'m reading "' + b.title + '" by ' + (b.author || 'Unknown') + ' \u2014 page ' + (b.current_page || 0) + ' of ' + total;
+  if (navigator.share) {
+    navigator.share({ text }).catch(() => {});
+  } else if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard')).catch(() => showToast(text));
+  } else {
+    showToast(text);
+  }
+}
+
+function nextDetailQuote() {
+  pdQuoteIdx++;
+  const q = document.getElementById('pdQuoteText');
+  if (q) q.innerText = '\u201C' + PD_QUOTES[pdQuoteIdx % PD_QUOTES.length] + '\u201D';
+}
+
+function addQuoteToNotes() {
+  const b = state.currentBook;
+  if (!b) return;
+  const quote = PD_QUOTES[pdQuoteIdx % PD_QUOTES.length];
+  if (!Array.isArray(b.highlights)) b.highlights = [];
+  if (!b.highlights.includes(quote)) b.highlights.push(quote);
+  const existing = (b.takeaway || '').trim();
+  if (!existing.includes(quote)) b.takeaway = existing ? existing + '\n' + quote : quote;
+  saveBooks();
+  const input = document.getElementById('detailNotesInput');
+  if (input) input.value = b.takeaway;
+  const total = b.pages || b.total_pages || 200;
+  const current = b.current_page || 0;
+  renderPremiumDetailExtras(b, total, current, Math.min(100, Math.round((current / total) * 100)));
+  showToast('📝 Added to notes');
+}
+
+// ===== Reader tools: Edit / Photo / Page bookmark / Quick note =====
+function readerBook() {
+  return state.books[readerState.activeBookIdx] || null;
+}
+
+function readerEditBook() {
+  const idx = readerState.activeBookIdx;
+  if (idx < 0 || idx >= state.books.length) return;
+  closeRealBookReader();
+  openEditModal(idx);
+}
+
+function readerPickPhoto() {
+  const input = document.getElementById('readerPhotoInput');
+  if (input) { input.value = ''; input.click(); }
+}
+
+function readerHandlePhoto(input) {
+  const file = input.files && input.files[0];
+  const book = readerBook();
+  if (!file || !book) return;
+  const fr = new FileReader();
+  fr.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const maxDim = 640;
+      let w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+        else { w = Math.round(w * maxDim / h); h = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      book.cover_image = canvas.toDataURL('image/jpeg', 0.82);
+      book.customCover = true;
+      try { 
+        saveBooks(); 
+      } catch (err) { 
+        showToast('Photo too large to save'); 
+        return; 
+      }
+      showToast('📷 Cover photo updated');
+      
+      // Update book detail cover immediately if currently open
+      const detailCover = document.getElementById('detailBookCover');
+      if (detailCover && state.currentBookIndex === readerState.activeBookIdx) {
+        detailCover.src = book.cover_image;
+      }
+      renderLibraryGrid();
+      renderHomeRecentBooks();
+    };
+    img.onerror = () => showToast('Could not read this image');
+    img.src = e.target.result;
+  };
+  fr.readAsDataURL(file);
+}
+
+function readerToggleBookmark() {
+  const book = readerBook();
+  if (!book) return;
+  if (!Array.isArray(book.pageBookmarks)) book.pageBookmarks = [];
+  const key = (readerState.lang || 'hindi') + ':' + readerState.currentPage;
+  const i = book.pageBookmarks.indexOf(key);
+  if (i > -1) {
+    book.pageBookmarks.splice(i, 1);
+    showToast('Bookmark removed (page ' + readerState.currentPage + ')');
+  } else {
+    book.pageBookmarks.push(key);
+    showToast('🔖 Page ' + readerState.currentPage + ' bookmarked');
+  }
+  saveBooks();
+  const btn = document.getElementById('readerBtnBookmark');
+  if (btn) btn.classList.toggle('active', book.pageBookmarks.indexOf(key) > -1);
+}
+
+function readerQuickNote() {
+  const book = readerBook();
+  if (!book) return;
+  const container = document.querySelector('.real-book-reader-container');
+  if (!container || container.querySelector('.reader-note-sheet')) return;
+  const sheet = document.createElement('div');
+  sheet.className = 'reader-note-sheet';
+  sheet.innerHTML = '<b>Note for page ' + readerState.currentPage + '</b>' +
+    '<textarea rows="3" placeholder="Write what you learned on this page"></textarea>' +
+    '<div class="reader-note-actions"><button type="button" class="reader-pill-btn" data-act="cancel">Cancel</button>' +
+    '<button type="button" class="reader-pill-btn active" data-act="save">Save note</button></div>';
+  sheet.addEventListener('click', ev => {
+    const act = ev.target && ev.target.dataset && ev.target.dataset.act;
+    if (!act) return;
+    if (act === 'save') {
+      const text = sheet.querySelector('textarea').value.trim();
+      if (!text) { showToast('Write something first'); return; }
+      const line = '[p.' + readerState.currentPage + '] ' + text;
+      const prev = (book.takeaway || '').trim();
+      book.takeaway = prev ? prev + '\n' + line : line;
+      saveBooks();
+      showToast('📝 Note saved');
+    }
+    sheet.remove();
+  });
+  container.appendChild(sheet);
+  sheet.querySelector('textarea').focus();
+}
+
+// ===== Settings: 10 new preferences (v0.1) =====
+const PREFS_KEY = 'mf_prefs_v1';
+const PREF_DEFAULTS = {
+  pagesGoal: 15, readerLang: 'hindi', readerFont: 100, keepAwake: false,
+  startTab: 'home', dateFmt: 'short', textSize: 100,
+  reduceMotion: false, haptics: false, backupRemind: 'off'
+};
+const PREF_META = {
+  pagesGoal: { title: 'Daily Pages Goal', options: [[5, '5 pages'], [10, '10 pages'], [15, '15 pages'], [20, '20 pages'], [30, '30 pages'], [50, '50 pages']] },
+  readerLang: { title: 'Reader Default Language', options: [['hindi', 'Hindi'], ['hinglish', 'Hinglish'], ['english', 'English']] },
+  readerFont: { title: 'Reader Font Size', options: [[85, '85%'], [100, '100%'], [115, '115%'], [130, '130%'], [150, '150%']] },
+  startTab: { title: 'Default Start Screen', options: [['home', 'Home'], ['library', 'Library'], ['explore', 'Explore'], ['progress', 'Progress']] },
+  dateFmt: { title: 'Date Format', options: [['short', '04 Oct 2026'], ['slash', '04/10/2026'], ['iso', '2026-10-04']] },
+  textSize: { title: 'App Text Size', options: [[90, 'Small (90%)'], [100, 'Normal (100%)'], [110, 'Large (110%)'], [120, 'Extra large (120%)']] },
+  backupRemind: { title: 'Backup Reminder', options: [['off', 'Off'], ['weekly', 'Every week'], ['monthly', 'Every month']] }
+};
+
+function getPrefs() {
+  try {
+    const raw = localStorage.getItem(PREFS_KEY);
+    return Object.assign({}, PREF_DEFAULTS, raw ? JSON.parse(raw) : {});
+  } catch (e) { return Object.assign({}, PREF_DEFAULTS); }
+}
+
+function savePref(key, value) {
+  const p = getPrefs();
+  p[key] = value;
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); } catch (e) { /* storage full: keep running */ }
+  applyPrefs();
+}
+
+function prefLabel(key, value) {
+  const meta = PREF_META[key];
+  const hit = meta && meta.options.find(o => o[0] === value);
+  return hit ? hit[1] : String(value);
+}
+
+function applyPrefs() {
+  const p = getPrefs();
+  if (document.documentElement && document.documentElement.style) {
+    document.documentElement.style.fontSize = p.textSize + '%';
+  }
+  if (document.body && document.body.classList) document.body.classList.toggle('pref-reduce-motion', !!p.reduceMotion);
+  Object.keys(PREF_META).forEach(k => {
+    const el = document.getElementById('igPref_' + k);
+    if (el) el.innerText = prefLabel(k, p[k]);
+  });
+  ['keepAwake', 'reduceMotion', 'haptics'].forEach(k => {
+    const el = document.getElementById('prefToggle_' + k);
+    if (el) el.checked = !!p[k];
+  });
+}
+
+function togglePref(key, checked) {
+  savePref(key, !!checked);
+  if (key === 'keepAwake' && !checked) prefReleaseWake();
+  showToast((checked ? 'On: ' : 'Off: ') + ({ keepAwake: 'Keep screen awake', reduceMotion: 'Reduce animations', haptics: 'Haptic feedback' }[key] || key));
+}
+
+function openPrefPicker(key) {
+  const meta = PREF_META[key];
+  if (!meta) return;
+  closePrefPicker();
+  const current = getPrefs()[key];
+  const overlay = document.createElement('div');
+  overlay.className = 'pref-picker-overlay';
+  overlay.id = 'prefPickerOverlay';
+  overlay.addEventListener('click', e => { if (e.target === overlay) closePrefPicker(); });
+  const sheet = document.createElement('div');
+  sheet.className = 'pref-picker-sheet';
+  const title = document.createElement('h3');
+  title.innerText = meta.title;
+  sheet.appendChild(title);
+  meta.options.forEach(opt => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pref-picker-opt' + (opt[0] === current ? ' selected' : '');
+    b.innerText = opt[1];
+    b.addEventListener('click', () => {
+      savePref(key, opt[0]);
+      closePrefPicker();
+      showToast(meta.title + ': ' + opt[1]);
+    });
+    sheet.appendChild(b);
+  });
+  overlay.appendChild(sheet);
+  document.body.appendChild(overlay);
+}
+
+function closePrefPicker() {
+  const o = document.getElementById('prefPickerOverlay');
+  if (o) o.remove();
+}
+
+// --- Keep screen awake while the reader is open ---
+let prefWakeLock = null;
+async function prefRequestWake() {
+  try {
+    if (getPrefs().keepAwake && navigator.wakeLock && !prefWakeLock) {
+      prefWakeLock = await navigator.wakeLock.request('screen');
+      prefWakeLock.addEventListener('release', () => { prefWakeLock = null; });
+    }
+  } catch (e) { prefWakeLock = null; }
+}
+function prefReleaseWake() {
+  try { if (prefWakeLock) prefWakeLock.release(); } catch (e) { /* ignore */ }
+  prefWakeLock = null;
+}
+document.addEventListener('visibilitychange', () => {
+  const m = document.getElementById('realBookReaderModal');
+  if (document.visibilityState === 'visible' && m && m.classList.contains('active')) prefRequestWake();
+});
+
+// --- Reader picks up the default language / font size and the wake lock ---
+(function wirePrefsIntoReader() {
+  const openOrig = openRealBookReader;
+  openRealBookReader = function (bookIdx, lang) {
+    const p = getPrefs();
+    openOrig(bookIdx, lang || p.readerLang);
+    readerState.fontSizePct = p.readerFont;
+    adjustReaderFontSize(0);
+    prefRequestWake();
+  };
+  const closeOrig = closeRealBookReader;
+  closeRealBookReader = function () {
+    closeOrig();
+    prefReleaseWake();
+  };
+})();
+
+// --- Haptic feedback on toasts ---
+(function wireHaptics() {
+  const toastOrig = showToast;
+  showToast = function (message, duration) {
+    try { if (getPrefs().haptics && navigator.vibrate) navigator.vibrate(12); } catch (e) { /* ignore */ }
+    return toastOrig(message, duration);
+  };
+})();
+
+// --- Backup reminder: remember when the user last exported ---
+(function wireBackupStamp() {
+  if (typeof exportDataJSON !== 'function') return;
+  const exportOrig = exportDataJSON;
+  exportDataJSON = function () {
+    try { localStorage.setItem('mf_last_backup_ts', String(Date.now())); } catch (e) { /* ignore */ }
+    return exportOrig.apply(this, arguments);
+  };
+})();
+
+function runStartupPrefs() {
+  const p = getPrefs();
+  applyPrefs();
+  const home = document.getElementById('viewHome');
+  const isLocked = !!(state.pin && state.pin.length === 4);
+  if (!isLocked && p.startTab && p.startTab !== 'home' && home && home.classList.contains('active') && typeof switchTab === 'function') {
+    try { switchTab(p.startTab); } catch (e) { /* ignore */ }
+  }
+  if (p.backupRemind && p.backupRemind !== 'off') {
+    const last = parseInt(localStorage.getItem('mf_last_backup_ts') || '0', 10);
+    const limit = (p.backupRemind === 'weekly' ? 7 : 30) * 86400000;
+    const today = new Date().toDateString();
+    if (Date.now() - last > limit && localStorage.getItem('mf_backup_toast_day') !== today) {
+      try { localStorage.setItem('mf_backup_toast_day', today); } catch (e) { /* ignore */ }
+      setTimeout(() => showToast('💾 Backup due: Settings > Quick Data Backup', 4200), 1200);
+    }
+  }
+}
+
+applyPrefs();
+document.addEventListener('DOMContentLoaded', () => { 
+  applyPrefs(); 
+  setTimeout(runStartupPrefs, 700); 
+});
+
+(function wireSettingsHubRefresh() {
+  if (typeof renderAppSettingsHub !== 'function') return;
+  const hubOrig = renderAppSettingsHub;
+  renderAppSettingsHub = function () { hubOrig(); applyPrefs(); };
+})();
 

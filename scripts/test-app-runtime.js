@@ -21,7 +21,7 @@ global.document = {
   querySelectorAll: () => [],
   querySelector: () => null,
   createElement: () => ({ style: {}, classList: { add: ()=>{}, remove: ()=>{} }, appendChild: ()=>{} }),
-  body: { classList: { add: ()=>{}, remove: ()=>{} }, style: {} }
+  body: { classList: { add: ()=>{}, remove: ()=>{}, toggle: ()=>{} }, style: {} }
 };
 
 try {

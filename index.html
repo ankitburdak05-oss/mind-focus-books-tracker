@@ -986,7 +986,11 @@
           </svg>
         </button>
         <span class="detail-nav-title" id="detailNavBookNo">Book Details</span>
-        <button type="button" class="btn-detail-edit" onclick="openEditCurrentBookModal()">✏️ Edit Details</button>
+        <div class="pd-head-actions">
+          <button type="button" class="pd-ib" id="pdBookmarkBtn" onclick="toggleBookBookmark()" aria-label="Bookmark">🔖</button>
+          <button type="button" class="pd-ib" onclick="shareCurrentBook()" aria-label="Share">↗</button>
+          <button type="button" class="btn-detail-edit" onclick="openEditCurrentBookModal()">✏️ Edit</button>
+        </div>
       </div>
 
       <div class="detail-hero-section">
@@ -1069,14 +1073,24 @@
         </button>
       </div>
 
-      <!-- Reading Progress Bar -->
-      <div class="detail-progress-card">
-        <div class="dpc-header">
-          <span class="dpc-percent" id="detailProgressPercent">0% completed</span>
-          <span class="dpc-pages" id="detailPagesRatio">0 / 200 pages</span>
+      <!-- Reading Progress (premium) -->
+      <div class="detail-progress-card pd-progress">
+        <div class="pd-prog-top">
+          <div class="pd-ring"><svg viewBox="0 0 80 80"><circle class="pd-ring-bg" cx="40" cy="40" r="34"/><circle class="pd-ring-fg" id="pdRingFg" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/></svg><b id="pdRingPct">0%</b></div>
+          <div class="pd-prog-main">
+            <div class="dpc-header">
+              <span class="dpc-percent" id="detailProgressPercent">0% completed</span>
+              <span class="dpc-pages" id="detailPagesRatio">0 / 200 pages</span>
+            </div>
+            <div class="dpc-track"><div class="dpc-fill" id="detailProgressFill" style="width: 0%;"></div></div>
+            <div class="pd-eta" id="pdEta"></div>
+          </div>
         </div>
-        <div class="dpc-track">
-          <div class="dpc-fill" id="detailProgressFill" style="width: 0%;"></div>
+        <div class="pd-stats">
+          <div><span>🔥</span><b id="pdStatStreak">0</b><small>Day streak</small></div>
+          <div><span>📝</span><b id="pdStatNotes">0</b><small>Notes</small></div>
+          <div><span>✏️</span><b id="pdStatHl">0</b><small>Highlights</small></div>
+          <div><span>📚</span><b id="pdStatParts">0/3</b><small>Parts</small></div>
         </div>
       </div>
 
@@ -1175,6 +1189,10 @@
             <span class="rm-val" id="detailPriceVal">Not Added</span>
           </div>
         </div>
+      </div>
+      <div class="pd-quote-card">
+        <div><p id="pdQuoteText"></p><small>Today's reading mantra</small></div>
+        <div class="pd-quote-actions"><button type="button" class="pd-gold-btn" onclick="addQuoteToNotes()">📝 Add to notes</button><button type="button" class="pd-ib" onclick="nextDetailQuote()" aria-label="Next quote">›</button></div>
       </div>
     </section>
 
@@ -2123,6 +2141,144 @@
           </div>
         </div>
 
+        <div class="ig-settings-group" data-ig-category="prefReading">
+          <div class="ig-group-header">Reading Habits</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="openPrefPicker('pagesGoal')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">🎯</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Daily Pages Goal</div>
+                  <div class="ig-sub">Roz kitne pages padhne hain, finish date isi se banegi</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_pagesGoal">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('readerLang')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">🌐</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Reader Default Language</div>
+                  <div class="ig-sub">Book kholte hi Hindi, Hinglish ya English page</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_readerLang">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('readerFont')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-purple">🔤</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Reader Font Size</div>
+                  <div class="ig-sub">Reader me default text size set karein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_readerFont">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-emerald">💡</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Keep Screen Awake</div>
+                  <div class="ig-sub">Padhte waqt screen band na ho</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <label class="pref-switch" onclick="event.stopPropagation()"><input type="checkbox" id="prefToggle_keepAwake" onchange="togglePref('keepAwake', this.checked)"><span class="pref-slider"></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ig-settings-group" data-ig-category="prefApp">
+          <div class="ig-group-header">App Behaviour</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="openPrefPicker('startTab')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">🚀</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Default Start Screen</div>
+                  <div class="ig-sub">App khulte hi kaunsa tab dikhe</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_startTab">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('dateFmt')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">📅</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Date Format</div>
+                  <div class="ig-sub">04 Oct 2026, 04/10/2026 ya 2026-10-04</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_dateFmt">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('textSize')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-purple">🔠</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">App Text Size</div>
+                  <div class="ig-sub">Poore app ka text chhota ya bada karein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_textSize">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ig-settings-group" data-ig-category="prefComfort">
+          <div class="ig-group-header">Comfort & Safety</div>
+          <div class="ig-card">
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-emerald">🍃</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Reduce Animations</div>
+                  <div class="ig-sub">Animations kam karein, focus aur battery ke liye</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <label class="pref-switch" onclick="event.stopPropagation()"><input type="checkbox" id="prefToggle_reduceMotion" onchange="togglePref('reduceMotion', this.checked)"><span class="pref-slider"></span></label>
+              </div>
+            </div>
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">📳</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Haptic Feedback</div>
+                  <div class="ig-sub">Action par halki vibration (Android phone)</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <label class="pref-switch" onclick="event.stopPropagation()"><input type="checkbox" id="prefToggle_haptics" onchange="togglePref('haptics', this.checked)"><span class="pref-slider"></span></label>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('backupRemind')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">💾</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Backup Reminder</div>
+                  <div class="ig-sub">Data khone se bachane ke liye roz/hafte ka reminder</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_backupRemind">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Group 6: System & App Version -->
         <div class="ig-settings-group" data-ig-category="system">
           <div class="ig-group-header">System &amp; Storage</div>
@@ -2160,7 +2316,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.8 (Up to date)</span>
+                <span class="ig-badge-val" id="settingsAppVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.13 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -2474,6 +2630,15 @@
 
         <!-- Right Controls: Explicit View Modes & Paper Tone Switchers -->
         <div class="reader-top-right">
+          <!-- Reader tools: Edit / Photo / Page bookmark / Quick note -->
+          <div class="reader-btn-pill-group reader-tools-group" title="Book tools">
+            <button type="button" class="reader-pill-btn" onclick="readerEditBook()" title="Edit book details">✏️ Edit</button>
+            <button type="button" class="reader-pill-btn" onclick="readerPickPhoto()" title="Change cover photo">📷 Photo</button>
+            <button type="button" class="reader-pill-btn" id="readerBtnBookmark" onclick="readerToggleBookmark()" title="Bookmark this page">🔖 Mark</button>
+            <button type="button" class="reader-pill-btn" onclick="readerQuickNote()" title="Add a note for this page">📝 Note</button>
+            <input type="file" id="readerPhotoInput" accept="image/*" hidden onchange="readerHandlePhoto(this)">
+          </div>
+
           <!-- View Modes: 📖 Dual Spread vs 📄 Single Page -->
           <div class="reader-btn-pill-group" title="Reading Mode: Dual Spread vs Single Page">
             <button type="button" class="reader-pill-btn active" id="readerBtnSpread" onclick="setReaderSpreadMode('spread')" title="📖 Dual Spread Mode (असली खुली किताब)">📖 Spread</button>

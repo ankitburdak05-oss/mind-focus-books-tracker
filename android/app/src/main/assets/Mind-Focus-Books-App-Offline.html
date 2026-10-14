@@ -7595,6 +7595,65 @@ input:checked + .slider-round:before {
   border-color: var(--accent-gold);
 }
 
+/* ===== Premium book detail ===== */
+.pd-head-actions{display:flex;gap:8px;align-items:center}
+.pd-ib{width:38px;height:38px;border-radius:50%;border:1px solid var(--accent-gold-glow);background:var(--bg-card);color:var(--text-primary);display:grid;place-items:center;font-size:16px;cursor:pointer;transition:transform .15s,background .2s}
+.pd-ib:active{transform:scale(.92)}
+.pd-ib.on{background:var(--accent-gold);color:#1a1204;border-color:var(--accent-gold)}
+.pd-gold-btn{border:0;border-radius:999px;padding:10px 14px;font-size:13px;font-weight:700;color:#1a1204;white-space:nowrap;cursor:pointer;background:linear-gradient(135deg,var(--accent-gold-light),var(--accent-gold-dark))}
+#viewBookDetail .detail-cover-wrap{transform:perspective(600px) rotateY(-10deg);transition:transform .35s;box-shadow:-6px 10px 0 -3px rgba(0,0,0,.35),0 20px 36px rgba(0,0,0,.45)}
+#viewBookDetail .detail-cover-wrap:hover{transform:perspective(600px) rotateY(0)}
+#viewBookDetail .detail-card-box,#viewBookDetail .detail-progress-card{border:1px solid var(--accent-gold-glow);box-shadow:0 0 22px var(--accent-gold-glow);border-radius:20px}
+#viewBookDetail .detail-tabs-bar{overflow-x:auto;scrollbar-width:none;gap:6px}
+#viewBookDetail .detail-tabs-bar::-webkit-scrollbar{display:none}
+#viewBookDetail .detail-tab-btn{flex:none;white-space:nowrap}
+.pd-prog-top{display:flex;gap:14px;align-items:center}
+.pd-prog-main{flex:1;min-width:0}
+.pd-ring{position:relative;width:78px;height:78px;flex:none}
+.pd-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pd-ring circle{fill:none;stroke-width:7;stroke-linecap:round}
+.pd-ring-bg{stroke:rgba(255,255,255,.08)}
+.pd-ring-fg{stroke:var(--accent-gold);transition:stroke-dashoffset .6s}
+.pd-ring b{position:absolute;inset:0;display:grid;place-items:center;font-size:17px;color:var(--text-primary)}
+.pd-eta{margin-top:8px;font-size:12px;color:var(--text-secondary)}
+.pd-stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:14px;border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden}
+.pd-stats>div{text-align:center;padding:10px 2px;border-right:1px solid rgba(255,255,255,.08);display:flex;flex-direction:column;gap:1px}
+.pd-stats>div:last-child{border-right:0}
+.pd-stats b{font-size:17px;color:var(--text-primary)}
+.pd-stats small{font-size:11px;color:var(--text-secondary)}
+.pd-quote-card{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:14px 0 24px;padding:14px;background:var(--bg-card);border:1px solid var(--accent-gold-glow);border-radius:20px;box-shadow:0 0 22px var(--accent-gold-glow)}
+.pd-quote-card p{margin:0;font-style:italic;font-weight:600;font-size:15px;line-height:1.35;color:var(--text-primary)}
+.pd-quote-card small{color:var(--text-secondary);font-size:12px}
+.pd-quote-actions{display:flex;gap:8px;align-items:center;flex:none}
+@media (max-width:420px){.pd-quote-card{flex-direction:column;align-items:stretch}.pd-quote-actions{justify-content:space-between}}
+@media (prefers-reduced-motion:reduce){#viewBookDetail *{transition:none!important}}
+
+/* ===== Reader tools ===== */
+.reader-tools-group .reader-pill-btn{white-space:nowrap}
+.reader-tools-group .reader-pill-btn.active{background:var(--accent-gold);color:#1a1204}
+.reader-note-sheet{position:absolute;left:12px;right:12px;bottom:12px;z-index:30;display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:18px;background:var(--bg-card,#121a30);border:1px solid var(--accent-gold-glow,rgba(246,178,60,.4));box-shadow:0 18px 40px rgba(0,0,0,.55);color:var(--text-primary,#fff)}
+.reader-note-sheet textarea{width:100%;border-radius:12px;padding:10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.06);color:inherit;font:inherit;resize:vertical}
+.reader-note-actions{display:flex;gap:8px;justify-content:flex-end}
+@media (max-width:640px){.reader-tools-group{flex-wrap:wrap}}
+
+/* ===== Settings: new preferences ===== */
+.pref-switch{position:relative;display:inline-block;width:46px;height:26px;flex:none}
+.pref-switch input{position:absolute;inset:0;opacity:0;width:100%;height:100%;margin:0;cursor:pointer;z-index:2}
+.pref-slider{position:absolute;inset:0;border-radius:999px;background:rgba(255,255,255,.14);transition:background .2s}
+.pref-slider:before{content:"";position:absolute;left:3px;top:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s}
+.pref-switch input:checked+.pref-slider{background:var(--accent-gold)}
+.pref-switch input:checked+.pref-slider:before{transform:translateX(20px)}
+.pref-switch input:focus-visible+.pref-slider{outline:2px solid var(--accent-gold);outline-offset:2px}
+.pref-picker-overlay{position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.6);display:flex;align-items:flex-end;justify-content:center}
+.pref-picker-sheet{width:100%;max-width:480px;background:var(--bg-card);border:1px solid var(--accent-gold-glow);border-bottom:0;border-radius:22px 22px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;gap:8px;animation:prefSheetUp .22s ease-out}
+.pref-picker-sheet h3{margin:0 0 6px;font-size:16px;color:var(--text-primary)}
+.pref-picker-opt{border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);color:var(--text-primary);border-radius:14px;padding:13px 14px;font:inherit;font-weight:600;text-align:left;cursor:pointer}
+.pref-picker-opt.selected{border-color:var(--accent-gold);background:rgba(246,178,60,.12);color:var(--accent-gold)}
+.pref-picker-opt.selected:after{content:" \2713";float:right}
+@keyframes prefSheetUp{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+body.pref-reduce-motion *,body.pref-reduce-motion *:before,body.pref-reduce-motion *:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+
+
 
 </style>
   <script>
@@ -8840,7 +8899,11 @@ if (typeof window !== 'undefined') {
           </svg>
         </button>
         <span class="detail-nav-title" id="detailNavBookNo">Book Details</span>
-        <button type="button" class="btn-detail-edit" onclick="openEditCurrentBookModal()">✏️ Edit Details</button>
+        <div class="pd-head-actions">
+          <button type="button" class="pd-ib" id="pdBookmarkBtn" onclick="toggleBookBookmark()" aria-label="Bookmark">🔖</button>
+          <button type="button" class="pd-ib" onclick="shareCurrentBook()" aria-label="Share">↗</button>
+          <button type="button" class="btn-detail-edit" onclick="openEditCurrentBookModal()">✏️ Edit</button>
+        </div>
       </div>
 
       <div class="detail-hero-section">
@@ -8923,14 +8986,24 @@ if (typeof window !== 'undefined') {
         </button>
       </div>
 
-      <!-- Reading Progress Bar -->
-      <div class="detail-progress-card">
-        <div class="dpc-header">
-          <span class="dpc-percent" id="detailProgressPercent">0% completed</span>
-          <span class="dpc-pages" id="detailPagesRatio">0 / 200 pages</span>
+      <!-- Reading Progress (premium) -->
+      <div class="detail-progress-card pd-progress">
+        <div class="pd-prog-top">
+          <div class="pd-ring"><svg viewBox="0 0 80 80"><circle class="pd-ring-bg" cx="40" cy="40" r="34"/><circle class="pd-ring-fg" id="pdRingFg" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/></svg><b id="pdRingPct">0%</b></div>
+          <div class="pd-prog-main">
+            <div class="dpc-header">
+              <span class="dpc-percent" id="detailProgressPercent">0% completed</span>
+              <span class="dpc-pages" id="detailPagesRatio">0 / 200 pages</span>
+            </div>
+            <div class="dpc-track"><div class="dpc-fill" id="detailProgressFill" style="width: 0%;"></div></div>
+            <div class="pd-eta" id="pdEta"></div>
+          </div>
         </div>
-        <div class="dpc-track">
-          <div class="dpc-fill" id="detailProgressFill" style="width: 0%;"></div>
+        <div class="pd-stats">
+          <div><span>🔥</span><b id="pdStatStreak">0</b><small>Day streak</small></div>
+          <div><span>📝</span><b id="pdStatNotes">0</b><small>Notes</small></div>
+          <div><span>✏️</span><b id="pdStatHl">0</b><small>Highlights</small></div>
+          <div><span>📚</span><b id="pdStatParts">0/3</b><small>Parts</small></div>
         </div>
       </div>
 
@@ -9029,6 +9102,10 @@ if (typeof window !== 'undefined') {
             <span class="rm-val" id="detailPriceVal">Not Added</span>
           </div>
         </div>
+      </div>
+      <div class="pd-quote-card">
+        <div><p id="pdQuoteText"></p><small>Today's reading mantra</small></div>
+        <div class="pd-quote-actions"><button type="button" class="pd-gold-btn" onclick="addQuoteToNotes()">📝 Add to notes</button><button type="button" class="pd-ib" onclick="nextDetailQuote()" aria-label="Next quote">›</button></div>
       </div>
     </section>
 
@@ -9977,6 +10054,144 @@ if (typeof window !== 'undefined') {
           </div>
         </div>
 
+        <div class="ig-settings-group" data-ig-category="prefReading">
+          <div class="ig-group-header">Reading Habits</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="openPrefPicker('pagesGoal')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">🎯</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Daily Pages Goal</div>
+                  <div class="ig-sub">Roz kitne pages padhne hain, finish date isi se banegi</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_pagesGoal">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('readerLang')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">🌐</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Reader Default Language</div>
+                  <div class="ig-sub">Book kholte hi Hindi, Hinglish ya English page</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_readerLang">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('readerFont')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-purple">🔤</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Reader Font Size</div>
+                  <div class="ig-sub">Reader me default text size set karein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_readerFont">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-emerald">💡</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Keep Screen Awake</div>
+                  <div class="ig-sub">Padhte waqt screen band na ho</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <label class="pref-switch" onclick="event.stopPropagation()"><input type="checkbox" id="prefToggle_keepAwake" onchange="togglePref('keepAwake', this.checked)"><span class="pref-slider"></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ig-settings-group" data-ig-category="prefApp">
+          <div class="ig-group-header">App Behaviour</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="openPrefPicker('startTab')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">🚀</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Default Start Screen</div>
+                  <div class="ig-sub">App khulte hi kaunsa tab dikhe</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_startTab">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('dateFmt')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">📅</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Date Format</div>
+                  <div class="ig-sub">04 Oct 2026, 04/10/2026 ya 2026-10-04</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_dateFmt">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('textSize')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-purple">🔠</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">App Text Size</div>
+                  <div class="ig-sub">Poore app ka text chhota ya bada karein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_textSize">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="ig-settings-group" data-ig-category="prefComfort">
+          <div class="ig-group-header">Comfort & Safety</div>
+          <div class="ig-card">
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-emerald">🍃</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Reduce Animations</div>
+                  <div class="ig-sub">Animations kam karein, focus aur battery ke liye</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <label class="pref-switch" onclick="event.stopPropagation()"><input type="checkbox" id="prefToggle_reduceMotion" onchange="togglePref('reduceMotion', this.checked)"><span class="pref-slider"></span></label>
+              </div>
+            </div>
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">📳</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Haptic Feedback</div>
+                  <div class="ig-sub">Action par halki vibration (Android phone)</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <label class="pref-switch" onclick="event.stopPropagation()"><input type="checkbox" id="prefToggle_haptics" onchange="togglePref('haptics', this.checked)"><span class="pref-slider"></span></label>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('backupRemind')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">💾</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Backup Reminder</div>
+                  <div class="ig-sub">Data khone se bachane ke liye roz/hafte ka reminder</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_backupRemind">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Group 6: System & App Version -->
         <div class="ig-settings-group" data-ig-category="system">
           <div class="ig-group-header">System &amp; Storage</div>
@@ -10014,7 +10229,7 @@ if (typeof window !== 'undefined') {
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.8 (Up to date)</span>
+                <span class="ig-badge-val" id="settingsAppVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.13 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -10328,6 +10543,15 @@ if (typeof window !== 'undefined') {
 
         <!-- Right Controls: Explicit View Modes & Paper Tone Switchers -->
         <div class="reader-top-right">
+          <!-- Reader tools: Edit / Photo / Page bookmark / Quick note -->
+          <div class="reader-btn-pill-group reader-tools-group" title="Book tools">
+            <button type="button" class="reader-pill-btn" onclick="readerEditBook()" title="Edit book details">✏️ Edit</button>
+            <button type="button" class="reader-pill-btn" onclick="readerPickPhoto()" title="Change cover photo">📷 Photo</button>
+            <button type="button" class="reader-pill-btn" id="readerBtnBookmark" onclick="readerToggleBookmark()" title="Bookmark this page">🔖 Mark</button>
+            <button type="button" class="reader-pill-btn" onclick="readerQuickNote()" title="Add a note for this page">📝 Note</button>
+            <input type="file" id="readerPhotoInput" accept="image/*" hidden onchange="readerHandlePhoto(this)">
+          </div>
+
           <!-- View Modes: 📖 Dual Spread vs 📄 Single Page -->
           <div class="reader-btn-pill-group" title="Reading Mode: Dual Spread vs Single Page">
             <button type="button" class="reader-pill-btn active" id="readerBtnSpread" onclick="setReaderSpreadMode('spread')" title="📖 Dual Spread Mode (असली खुली किताब)">📖 Spread</button>
@@ -19624,6 +19848,12 @@ function openBookDetailView(book) {
     }
 
 
+    try { 
+      renderPremiumDetailExtras(book, total, current, pct); 
+    } catch (e) { 
+      console.warn('premium detail extras', e); 
+    }
+
     // Switch view to Detail
     document.querySelectorAll('.app-view').forEach(v => v.classList.remove('active'));
     const detailView = document.getElementById('viewBookDetail');
@@ -19646,6 +19876,9 @@ function formatDateDisplay(dateStr) {
       const m = parseInt(parts[1], 10) - 1;
       const d = parseInt(parts[2], 10);
       if (m >= 0 && m < 12 && d > 0 && d <= 31) {
+        const _df = (typeof getPrefs === 'function') ? getPrefs().dateFmt : 'short';
+        if (_df === 'slash') return `${String(d).padStart(2, '0')}/${String(m + 1).padStart(2, '0')}/${y}`;
+        if (_df === 'iso') return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         return `${String(d).padStart(2, '0')} ${months[m]} ${y}`;
       }
     }
@@ -20473,6 +20706,10 @@ function renderRealBookPages() {
   document.getElementById('readerToneSepia')?.classList.toggle('active', readerState.theme === 'sepia');
   document.getElementById('readerToneDark')?.classList.toggle('active', readerState.theme === 'dark');
   document.getElementById('readerToneLight')?.classList.toggle('active', readerState.theme === 'light');
+  
+  const curPageBmKey = (readerState.lang || 'hindi') + ':' + readerState.currentPage;
+  const isCurPageBookmarked = Array.isArray(book.pageBookmarks) && book.pageBookmarks.includes(curPageBmKey);
+  document.getElementById('readerBtnBookmark')?.classList.toggle('active', isCurPageBookmarked);
   
   const spreadEl = document.getElementById('realBookSpread');
   if (spreadEl) {
@@ -24037,6 +24274,395 @@ function filterLibraryByShelf(shelfId) {
 function clearShelfFilter() {
   filterLibraryByShelf(null);
 }
+
+// ===== Premium book detail extras =====
+const PD_QUOTES = [
+  'Discipline today builds the freedom of tomorrow.',
+  'Read ten honest pages instead of waiting for a perfect hour.',
+  'One chapter a day beats one weekend a month.',
+  'Small habits, repeated consistently, lead to remarkable results.'
+];
+let pdQuoteIdx = 0;
+
+function pdDateStr(d) {
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+function renderPremiumDetailExtras(book, total, current, pct) {
+  const ring = document.getElementById('pdRingFg');
+  if (ring) ring.style.strokeDashoffset = String(213.6 * (1 - Math.min(100, pct) / 100));
+  const ringPct = document.getElementById('pdRingPct');
+  if (ringPct) ringPct.innerText = pct + '%';
+
+  const eta = document.getElementById('pdEta');
+  if (eta) {
+    let msg = '';
+    if (book.status === 'DONE') {
+      msg = '🎉 Finished';
+    } else if (book.status === 'READING' && book.start_date && current > 0) {
+      const days = Math.max(1, calculateDaysElapsed(book.start_date, getTodayLocalDate()));
+      const rate = current / days;
+      const left = Math.max(0, total - current);
+      if (rate > 0 && left > 0) {
+        const d = new Date();
+        d.setDate(d.getDate() + Math.ceil(left / rate));
+        msg = '⚡ ' + rate.toFixed(1) + ' pages/day • finish by ' + formatDateDisplay(pdDateStr(d));
+        const goal = (typeof getPrefs === 'function') ? getPrefs().pagesGoal : 15;
+        if (goal > 0) {
+          const g = new Date();
+          g.setDate(g.getDate() + Math.ceil(left / goal));
+          msg += ' • 🎯 ' + goal + '/day: ' + formatDateDisplay(pdDateStr(g));
+        }
+      }
+    }
+    eta.innerText = msg;
+  }
+
+  const notesCount = (book.takeaway || book.notes || '').split(/\n/).filter(l => l.trim()).length;
+  const hl = Array.isArray(book.highlights) ? book.highlights.length : 0;
+  const parts = pct >= 100 ? 3 : pct >= 70 ? 2 : pct >= 30 ? 1 : 0;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+  set('pdStatStreak', (state.stats && state.stats.readingStreak) || 0);
+  set('pdStatNotes', notesCount);
+  set('pdStatHl', hl);
+  set('pdStatParts', parts + '/3');
+
+  const bm = document.getElementById('pdBookmarkBtn');
+  if (bm) bm.classList.toggle('on', !!book.bookmarked);
+  const q = document.getElementById('pdQuoteText');
+  if (q) q.innerText = '\u201C' + PD_QUOTES[pdQuoteIdx % PD_QUOTES.length] + '\u201D';
+}
+
+function toggleBookBookmark() {
+  if (!state.currentBook) return;
+  state.currentBook.bookmarked = !state.currentBook.bookmarked;
+  saveBooks();
+  const bm = document.getElementById('pdBookmarkBtn');
+  if (bm) bm.classList.toggle('on', state.currentBook.bookmarked);
+  showToast(state.currentBook.bookmarked ? '🔖 Bookmarked' : 'Bookmark removed');
+}
+
+function shareCurrentBook() {
+  const b = state.currentBook;
+  if (!b) return;
+  const total = b.pages || b.total_pages || 200;
+  const text = 'I\'m reading "' + b.title + '" by ' + (b.author || 'Unknown') + ' \u2014 page ' + (b.current_page || 0) + ' of ' + total;
+  if (navigator.share) {
+    navigator.share({ text }).catch(() => {});
+  } else if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => showToast('Copied to clipboard')).catch(() => showToast(text));
+  } else {
+    showToast(text);
+  }
+}
+
+function nextDetailQuote() {
+  pdQuoteIdx++;
+  const q = document.getElementById('pdQuoteText');
+  if (q) q.innerText = '\u201C' + PD_QUOTES[pdQuoteIdx % PD_QUOTES.length] + '\u201D';
+}
+
+function addQuoteToNotes() {
+  const b = state.currentBook;
+  if (!b) return;
+  const quote = PD_QUOTES[pdQuoteIdx % PD_QUOTES.length];
+  if (!Array.isArray(b.highlights)) b.highlights = [];
+  if (!b.highlights.includes(quote)) b.highlights.push(quote);
+  const existing = (b.takeaway || '').trim();
+  if (!existing.includes(quote)) b.takeaway = existing ? existing + '\n' + quote : quote;
+  saveBooks();
+  const input = document.getElementById('detailNotesInput');
+  if (input) input.value = b.takeaway;
+  const total = b.pages || b.total_pages || 200;
+  const current = b.current_page || 0;
+  renderPremiumDetailExtras(b, total, current, Math.min(100, Math.round((current / total) * 100)));
+  showToast('📝 Added to notes');
+}
+
+// ===== Reader tools: Edit / Photo / Page bookmark / Quick note =====
+function readerBook() {
+  return state.books[readerState.activeBookIdx] || null;
+}
+
+function readerEditBook() {
+  const idx = readerState.activeBookIdx;
+  if (idx < 0 || idx >= state.books.length) return;
+  closeRealBookReader();
+  openEditModal(idx);
+}
+
+function readerPickPhoto() {
+  const input = document.getElementById('readerPhotoInput');
+  if (input) { input.value = ''; input.click(); }
+}
+
+function readerHandlePhoto(input) {
+  const file = input.files && input.files[0];
+  const book = readerBook();
+  if (!file || !book) return;
+  const fr = new FileReader();
+  fr.onload = e => {
+    const img = new Image();
+    img.onload = () => {
+      const maxDim = 640;
+      let w = img.width, h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+        else { w = Math.round(w * maxDim / h); h = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      book.cover_image = canvas.toDataURL('image/jpeg', 0.82);
+      book.customCover = true;
+      try { 
+        saveBooks(); 
+      } catch (err) { 
+        showToast('Photo too large to save'); 
+        return; 
+      }
+      showToast('📷 Cover photo updated');
+      
+      // Update book detail cover immediately if currently open
+      const detailCover = document.getElementById('detailBookCover');
+      if (detailCover && state.currentBookIndex === readerState.activeBookIdx) {
+        detailCover.src = book.cover_image;
+      }
+      renderLibraryGrid();
+      renderHomeRecentBooks();
+    };
+    img.onerror = () => showToast('Could not read this image');
+    img.src = e.target.result;
+  };
+  fr.readAsDataURL(file);
+}
+
+function readerToggleBookmark() {
+  const book = readerBook();
+  if (!book) return;
+  if (!Array.isArray(book.pageBookmarks)) book.pageBookmarks = [];
+  const key = (readerState.lang || 'hindi') + ':' + readerState.currentPage;
+  const i = book.pageBookmarks.indexOf(key);
+  if (i > -1) {
+    book.pageBookmarks.splice(i, 1);
+    showToast('Bookmark removed (page ' + readerState.currentPage + ')');
+  } else {
+    book.pageBookmarks.push(key);
+    showToast('🔖 Page ' + readerState.currentPage + ' bookmarked');
+  }
+  saveBooks();
+  const btn = document.getElementById('readerBtnBookmark');
+  if (btn) btn.classList.toggle('active', book.pageBookmarks.indexOf(key) > -1);
+}
+
+function readerQuickNote() {
+  const book = readerBook();
+  if (!book) return;
+  const container = document.querySelector('.real-book-reader-container');
+  if (!container || container.querySelector('.reader-note-sheet')) return;
+  const sheet = document.createElement('div');
+  sheet.className = 'reader-note-sheet';
+  sheet.innerHTML = '<b>Note for page ' + readerState.currentPage + '</b>' +
+    '<textarea rows="3" placeholder="Write what you learned on this page"></textarea>' +
+    '<div class="reader-note-actions"><button type="button" class="reader-pill-btn" data-act="cancel">Cancel</button>' +
+    '<button type="button" class="reader-pill-btn active" data-act="save">Save note</button></div>';
+  sheet.addEventListener('click', ev => {
+    const act = ev.target && ev.target.dataset && ev.target.dataset.act;
+    if (!act) return;
+    if (act === 'save') {
+      const text = sheet.querySelector('textarea').value.trim();
+      if (!text) { showToast('Write something first'); return; }
+      const line = '[p.' + readerState.currentPage + '] ' + text;
+      const prev = (book.takeaway || '').trim();
+      book.takeaway = prev ? prev + '\n' + line : line;
+      saveBooks();
+      showToast('📝 Note saved');
+    }
+    sheet.remove();
+  });
+  container.appendChild(sheet);
+  sheet.querySelector('textarea').focus();
+}
+
+// ===== Settings: 10 new preferences (v0.1) =====
+const PREFS_KEY = 'mf_prefs_v1';
+const PREF_DEFAULTS = {
+  pagesGoal: 15, readerLang: 'hindi', readerFont: 100, keepAwake: false,
+  startTab: 'home', dateFmt: 'short', textSize: 100,
+  reduceMotion: false, haptics: false, backupRemind: 'off'
+};
+const PREF_META = {
+  pagesGoal: { title: 'Daily Pages Goal', options: [[5, '5 pages'], [10, '10 pages'], [15, '15 pages'], [20, '20 pages'], [30, '30 pages'], [50, '50 pages']] },
+  readerLang: { title: 'Reader Default Language', options: [['hindi', 'Hindi'], ['hinglish', 'Hinglish'], ['english', 'English']] },
+  readerFont: { title: 'Reader Font Size', options: [[85, '85%'], [100, '100%'], [115, '115%'], [130, '130%'], [150, '150%']] },
+  startTab: { title: 'Default Start Screen', options: [['home', 'Home'], ['library', 'Library'], ['explore', 'Explore'], ['progress', 'Progress']] },
+  dateFmt: { title: 'Date Format', options: [['short', '04 Oct 2026'], ['slash', '04/10/2026'], ['iso', '2026-10-04']] },
+  textSize: { title: 'App Text Size', options: [[90, 'Small (90%)'], [100, 'Normal (100%)'], [110, 'Large (110%)'], [120, 'Extra large (120%)']] },
+  backupRemind: { title: 'Backup Reminder', options: [['off', 'Off'], ['weekly', 'Every week'], ['monthly', 'Every month']] }
+};
+
+function getPrefs() {
+  try {
+    const raw = localStorage.getItem(PREFS_KEY);
+    return Object.assign({}, PREF_DEFAULTS, raw ? JSON.parse(raw) : {});
+  } catch (e) { return Object.assign({}, PREF_DEFAULTS); }
+}
+
+function savePref(key, value) {
+  const p = getPrefs();
+  p[key] = value;
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); } catch (e) { /* storage full: keep running */ }
+  applyPrefs();
+}
+
+function prefLabel(key, value) {
+  const meta = PREF_META[key];
+  const hit = meta && meta.options.find(o => o[0] === value);
+  return hit ? hit[1] : String(value);
+}
+
+function applyPrefs() {
+  const p = getPrefs();
+  if (document.documentElement && document.documentElement.style) {
+    document.documentElement.style.fontSize = p.textSize + '%';
+  }
+  if (document.body && document.body.classList) document.body.classList.toggle('pref-reduce-motion', !!p.reduceMotion);
+  Object.keys(PREF_META).forEach(k => {
+    const el = document.getElementById('igPref_' + k);
+    if (el) el.innerText = prefLabel(k, p[k]);
+  });
+  ['keepAwake', 'reduceMotion', 'haptics'].forEach(k => {
+    const el = document.getElementById('prefToggle_' + k);
+    if (el) el.checked = !!p[k];
+  });
+}
+
+function togglePref(key, checked) {
+  savePref(key, !!checked);
+  if (key === 'keepAwake' && !checked) prefReleaseWake();
+  showToast((checked ? 'On: ' : 'Off: ') + ({ keepAwake: 'Keep screen awake', reduceMotion: 'Reduce animations', haptics: 'Haptic feedback' }[key] || key));
+}
+
+function openPrefPicker(key) {
+  const meta = PREF_META[key];
+  if (!meta) return;
+  closePrefPicker();
+  const current = getPrefs()[key];
+  const overlay = document.createElement('div');
+  overlay.className = 'pref-picker-overlay';
+  overlay.id = 'prefPickerOverlay';
+  overlay.addEventListener('click', e => { if (e.target === overlay) closePrefPicker(); });
+  const sheet = document.createElement('div');
+  sheet.className = 'pref-picker-sheet';
+  const title = document.createElement('h3');
+  title.innerText = meta.title;
+  sheet.appendChild(title);
+  meta.options.forEach(opt => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pref-picker-opt' + (opt[0] === current ? ' selected' : '');
+    b.innerText = opt[1];
+    b.addEventListener('click', () => {
+      savePref(key, opt[0]);
+      closePrefPicker();
+      showToast(meta.title + ': ' + opt[1]);
+    });
+    sheet.appendChild(b);
+  });
+  overlay.appendChild(sheet);
+  document.body.appendChild(overlay);
+}
+
+function closePrefPicker() {
+  const o = document.getElementById('prefPickerOverlay');
+  if (o) o.remove();
+}
+
+// --- Keep screen awake while the reader is open ---
+let prefWakeLock = null;
+async function prefRequestWake() {
+  try {
+    if (getPrefs().keepAwake && navigator.wakeLock && !prefWakeLock) {
+      prefWakeLock = await navigator.wakeLock.request('screen');
+      prefWakeLock.addEventListener('release', () => { prefWakeLock = null; });
+    }
+  } catch (e) { prefWakeLock = null; }
+}
+function prefReleaseWake() {
+  try { if (prefWakeLock) prefWakeLock.release(); } catch (e) { /* ignore */ }
+  prefWakeLock = null;
+}
+document.addEventListener('visibilitychange', () => {
+  const m = document.getElementById('realBookReaderModal');
+  if (document.visibilityState === 'visible' && m && m.classList.contains('active')) prefRequestWake();
+});
+
+// --- Reader picks up the default language / font size and the wake lock ---
+(function wirePrefsIntoReader() {
+  const openOrig = openRealBookReader;
+  openRealBookReader = function (bookIdx, lang) {
+    const p = getPrefs();
+    openOrig(bookIdx, lang || p.readerLang);
+    readerState.fontSizePct = p.readerFont;
+    adjustReaderFontSize(0);
+    prefRequestWake();
+  };
+  const closeOrig = closeRealBookReader;
+  closeRealBookReader = function () {
+    closeOrig();
+    prefReleaseWake();
+  };
+})();
+
+// --- Haptic feedback on toasts ---
+(function wireHaptics() {
+  const toastOrig = showToast;
+  showToast = function (message, duration) {
+    try { if (getPrefs().haptics && navigator.vibrate) navigator.vibrate(12); } catch (e) { /* ignore */ }
+    return toastOrig(message, duration);
+  };
+})();
+
+// --- Backup reminder: remember when the user last exported ---
+(function wireBackupStamp() {
+  if (typeof exportDataJSON !== 'function') return;
+  const exportOrig = exportDataJSON;
+  exportDataJSON = function () {
+    try { localStorage.setItem('mf_last_backup_ts', String(Date.now())); } catch (e) { /* ignore */ }
+    return exportOrig.apply(this, arguments);
+  };
+})();
+
+function runStartupPrefs() {
+  const p = getPrefs();
+  applyPrefs();
+  const home = document.getElementById('viewHome');
+  const isLocked = !!(state.pin && state.pin.length === 4);
+  if (!isLocked && p.startTab && p.startTab !== 'home' && home && home.classList.contains('active') && typeof switchTab === 'function') {
+    try { switchTab(p.startTab); } catch (e) { /* ignore */ }
+  }
+  if (p.backupRemind && p.backupRemind !== 'off') {
+    const last = parseInt(localStorage.getItem('mf_last_backup_ts') || '0', 10);
+    const limit = (p.backupRemind === 'weekly' ? 7 : 30) * 86400000;
+    const today = new Date().toDateString();
+    if (Date.now() - last > limit && localStorage.getItem('mf_backup_toast_day') !== today) {
+      try { localStorage.setItem('mf_backup_toast_day', today); } catch (e) { /* ignore */ }
+      setTimeout(() => showToast('💾 Backup due: Settings > Quick Data Backup', 4200), 1200);
+    }
+  }
+}
+
+applyPrefs();
+document.addEventListener('DOMContentLoaded', () => { 
+  applyPrefs(); 
+  setTimeout(runStartupPrefs, 700); 
+});
+
+(function wireSettingsHubRefresh() {
+  if (typeof renderAppSettingsHub !== 'function') return;
+  const hubOrig = renderAppSettingsHub;
+  renderAppSettingsHub = function () { hubOrig(); applyPrefs(); };
+})();
 
 
 </script>
