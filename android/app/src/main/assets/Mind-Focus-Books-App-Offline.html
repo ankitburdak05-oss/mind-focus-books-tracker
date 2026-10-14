@@ -2009,10 +2009,19 @@ body {
   align-items: center;
   justify-content: center;
   padding: 16px;
+  pointer-events: none;
+}
+
+.modal-overlay:not(.active) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
 }
 
 .modal-overlay.active {
-  display: flex;
+  display: flex !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
   animation: fadeIn 0.2s ease-out;
 }
 
@@ -2534,7 +2543,15 @@ body {
   transition: opacity 0.25s ease;
 }
 
+.real-book-reader-overlay:not(.active) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
 .real-book-reader-overlay.active {
+  display: flex !important;
+  visibility: visible !important;
   opacity: 1;
   pointer-events: auto;
 }
@@ -7962,6 +7979,11 @@ body.pref-reduce-motion *,body.pref-reduce-motion *:before,body.pref-reduce-moti
 #dictionaryModalOverlay {
   z-index: 100000 !important;
 }
+#dictionaryModalOverlay:not(.active) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
 
 </style>
   <script>
@@ -10680,7 +10702,7 @@ if (typeof window !== 'undefined') {
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" id="settingsAppVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.16 (Up to date)</span>
+                <span class="ig-badge-val" id="settingsAppVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.17 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -10973,7 +10995,7 @@ if (typeof window !== 'undefined') {
   </nav>
 
   <!-- ================= REAL 3D MULTI-LANGUAGE BOOK READER MODAL ================= -->
-  <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)">
+  <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)" style="display:none;">
     <div class="real-book-reader-container" onclick="event.stopPropagation()">
       <!-- Top Reader Navigation Bar -->
       <div class="reader-top-bar">
@@ -11077,7 +11099,7 @@ if (typeof window !== 'undefined') {
         <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="nextReaderPage()">Next ▶</button>
       </div>
   <!-- ================= 1. LANGUAGE SELECTION LAUNCHER MODAL ================= -->
-  <div class="modal-overlay" id="bookLanguageSelectModal" onclick="handleLangSelectOverlayClick(event)">
+  <div class="modal-overlay" id="bookLanguageSelectModal" onclick="handleLangSelectOverlayClick(event)" style="display:none;">
     <div class="modal-content lang-select-dialog" onclick="event.stopPropagation()">
       <div class="modal-header">
         <div style="display:flex; align-items:center; gap:0.6rem;">
@@ -11176,7 +11198,7 @@ if (typeof window !== 'undefined') {
   </div>
 
   <!-- ================= 2. ADD CUSTOM BOOK PAGE MODAL (WITH AUTO-OCR SCANNER) ================= -->
-  <div class="modal-overlay" id="addCustomPageModal" onclick="handleAddPageOverlayClick(event)">
+  <div class="modal-overlay" id="addCustomPageModal" onclick="handleAddPageOverlayClick(event)" style="display:none;">
     <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
       <div class="modal-header">
         <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -11287,7 +11309,7 @@ if (typeof window !== 'undefined') {
   </div>
 
   <!-- ================= 3. EDIT BOOK PAGE MODAL (WITH PHOTO RE-SCAN & OCR) ================= -->
-  <div class="modal-overlay" id="editBookPageModal" onclick="handleEditPageOverlayClick(event)">
+  <div class="modal-overlay" id="editBookPageModal" onclick="handleEditPageOverlayClick(event)" style="display:none;">
     <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
       <div class="modal-header">
         <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -11362,7 +11384,7 @@ if (typeof window !== 'undefined') {
   </div>
 
   <!-- ================= 4. BOOK COVER VIEWER MODAL ================= -->
-  <div class="modal-overlay" id="bookCoverViewerModal" onclick="handleCoverViewerOverlayClick(event)">
+  <div class="modal-overlay" id="bookCoverViewerModal" onclick="handleCoverViewerOverlayClick(event)" style="display:none;">
     <div class="modal-content" style="max-width:460px; text-align:center; padding:1.25rem;" onclick="event.stopPropagation()">
       <div class="modal-header" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border-color);">
         <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -11487,7 +11509,7 @@ if (typeof window !== 'undefined') {
 
   <!-- ================= COMPREHENSIVE EDIT / ADD BOOK MODAL (ALL 16 FIELDS) ================= -->
   <!-- ================= COMPREHENSIVE EDIT / ADD BOOK MODAL (ALL 16 FIELDS) ================= -->
-  <div class="modal-overlay modal-overlay-fullscreen" id="editBookModalOverlay">
+  <div class="modal-overlay modal-overlay-fullscreen" id="editBookModalOverlay" style="display:none;">
     <div class="modal-card modal-card-fullscreen-studio">
       <!-- Frozen Sticky Header with Close Button -->
       <div class="modal-header studio-header">
@@ -11679,7 +11701,7 @@ if (typeof window !== 'undefined') {
   </div>
 
   <!-- ================= QUICK LOG PAGES MODAL (UPGRADED) ================= -->
-  <div class="modal-overlay" id="quickLogModalOverlay">
+  <div class="modal-overlay" id="quickLogModalOverlay" style="display:none;">
     <div class="modal-card modal-sm quick-log-modal-card">
       <div class="modal-header">
         <div style="display:flex; align-items:center; gap:10px;">
@@ -11735,7 +11757,7 @@ if (typeof window !== 'undefined') {
   </div>
 
   <!-- ================= 3D INTERACTIVE VOCABULARY DICTIONARY MODAL ================= -->
-  <div class="modal-overlay" id="dictionaryModalOverlay" onclick="if(event.target === this) closeDictionaryModal()">
+  <div class="modal-overlay" id="dictionaryModalOverlay" onclick="if(event.target === this) closeDictionaryModal()" style="display:none;">
     <div class="modal-card modal-lg dictionary-modal-card">
       <div class="modal-header dict-sticky-header">
         <div style="display:flex; align-items:center; gap:10px;">
@@ -11775,7 +11797,7 @@ if (typeof window !== 'undefined') {
   </div>
 
   <!-- ================= EDIT PROFILE MODAL ================= -->
-  <div class="modal-overlay" id="editProfileModalOverlay">
+  <div class="modal-overlay" id="editProfileModalOverlay" style="display:none;">
     <div class="modal-card">
       <div class="modal-header">
         <h3 class="modal-title">Edit Profile</h3>
@@ -17894,11 +17916,11 @@ if (typeof module !== 'undefined' && module.exports) {
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.16)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.17)
 // ==========================================================================
 
-const APP_VERSION = '0.0.16';
-const CURRENT_APP_VERSION = 'v0.0.16';
+const APP_VERSION = '0.0.17';
+const CURRENT_APP_VERSION = 'v0.0.17';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -18013,7 +18035,7 @@ function initApp() {
 // Ensure at least one book is currently reading
 function ensureCurrentlyReadingBook() {
   if (!state.books || state.books.length === 0) return;
-  const activeBooks = state.books.filter(b => !b.notInterested);
+  const activeBooks = state.books.filter(b => !b.notInterested && !isDictionaryBook(b));
   const readingBook = activeBooks.find(b => b.status === 'READING');
   if (readingBook) {
     state.currentBookIndex = state.books.indexOf(readingBook);
@@ -18428,7 +18450,8 @@ function renderHomeRecentBooks() {
   list.innerHTML = recent.map((book) => {
     const originalIndex = state.books.indexOf(book);
     const isDict = isDictionaryBook(book);
-    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByIndex(${originalIndex >= 0 ? originalIndex : 0})`;
+    const titleEsc = escapeHtml(book.title).replace(/'/g, "\\'");
+    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByTitle('${titleEsc}')`;
     return `
     <div class="recent-book-card ${isDict ? 'book-card-dictionary' : ''}" onclick="${clickHandler}">
       <div class="recent-cover-box">
@@ -18634,7 +18657,8 @@ function renderLibraryGrid() {
     const pct = Math.min(100, Math.round((current / total) * 100));
     
     const isDict = isDictionaryBook(book);
-    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByIndex(${originalIndex})`;
+    const titleEsc = escapeHtml(book.title).replace(/'/g, "\\'");
+    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByTitle('${titleEsc}')`;
     
     // Compact Horizontal List Mode (1 Row per Book)
     if (isCompactList) {
@@ -18758,7 +18782,7 @@ function renderExploreBooksGrid() {
     const pct = Math.min(100, Math.round((current / total) * 100));
     
     return `
-      <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
+      <div class="grid-book-card" onclick="openBookDetailViewByTitle('${escapeHtml(book.title).replace(/'/g, "\\'")}')">
         <div class="grid-cover-wrap">
           <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
         </div>
@@ -20462,6 +20486,19 @@ function openCurrentReadingDetail() {
   if (state.currentBook) openBookDetailView(state.currentBook);
 }
 
+function openBookDetailViewByTitle(title) {
+  if (!title) return;
+  const book = state.books.find(b => b.title === title || (b.title && b.title.trim().toLowerCase() === title.trim().toLowerCase()));
+  if (!book) return;
+  if (isDictionaryBook(book)) {
+    openDictionaryModal();
+    return;
+  }
+  state.currentBook = book;
+  state.currentBookIndex = state.books.indexOf(book);
+  openBookDetailView(book);
+}
+
 function openBookDetailViewByIndex(idx) {
   if (idx >= 0 && idx < state.books.length) {
     const b = state.books[idx];
@@ -21011,6 +21048,8 @@ function toggleReadingTimer() {
 
 // Quick Log Pages Modal (Upgraded v0.0.13)
 function openQuickLogModal() {
+  const qlOverlay = document.getElementById('quickLogModalOverlay');
+  if (qlOverlay) { qlOverlay.style.display = 'flex'; qlOverlay.classList.add('active'); }
   if (!state.currentBook) return;
   const book = state.currentBook;
   const total = book.pages || book.total_pages || 250;
@@ -21048,6 +21087,8 @@ function openQuickLogModal() {
 }
 
 function closeQuickLogModal() {
+  const qlOverlay = document.getElementById('quickLogModalOverlay');
+  if (qlOverlay) { qlOverlay.classList.remove('active'); qlOverlay.style.display = 'none'; }
   document.getElementById('quickLogModalOverlay')?.classList.remove('active');
 }
 
@@ -21149,12 +21190,12 @@ function saveQuickLogPages() {
 
 // ================= REAL 3D BOOK PAGE READER ENGINE =================
 function openRealBookReaderForCurrent() {
-  const curIdx = state.currentBookIndex !== -1 ? state.currentBookIndex : 0;
-  const book = state.books && state.books[curIdx];
-  if (isDictionaryBook(book)) {
-    openDictionaryModal();
-    return;
+  if (!state.currentBook || isDictionaryBook(state.currentBook)) {
+    ensureCurrentlyReadingBook();
   }
+  const book = state.currentBook || state.books.find(b => !isDictionaryBook(b));
+  if (!book) return;
+  const curIdx = state.books.indexOf(book);
   if (typeof openLanguageSelectModal === 'function' && typeof hasBookPagesAvailable === 'function' && hasBookPagesAvailable(book)) {
     openLanguageSelectModal(curIdx);
     return;
@@ -21191,6 +21232,7 @@ function openRealBookReader(bookIdx, lang) {
   if (!modal) return;
   
   modal.setAttribute('data-reader-theme', readerState.theme);
+  modal.style.display = 'flex';
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
   
@@ -21203,6 +21245,7 @@ function closeRealBookReader() {
   const modal = document.getElementById('realBookReaderModal');
   if (!modal) return;
   modal.classList.remove('active');
+  modal.style.display = 'none';
   document.body.style.overflow = '';
 }
 
@@ -21663,12 +21706,20 @@ function openAddBookModal() {
 }
 
 function openEditCurrentBookModal() {
-  if (state.currentBookIndex !== -1) {
-    openEditModal(state.currentBookIndex);
+  if (!state.currentBook || isDictionaryBook(state.currentBook)) {
+    ensureCurrentlyReadingBook();
+  }
+  if (state.currentBook) {
+    const idx = state.books.indexOf(state.currentBook);
+    if (idx !== -1) {
+      openEditModal(idx);
+    }
   }
 }
 
 function openEditModal(index) {
+  const editOverlay = document.getElementById('editBookModalOverlay');
+  if (editOverlay) { editOverlay.style.display = 'flex'; editOverlay.classList.add('active'); }
   if (index < 0 || index >= state.books.length) return;
   state.editingBookIndex = index;
   const book = state.books[index];
@@ -21871,6 +21922,8 @@ function calculateCountDays() {
 }
 
 function closeEditModal() {
+  const editOverlay = document.getElementById('editBookModalOverlay');
+  if (editOverlay) { editOverlay.classList.remove('active'); editOverlay.style.display = 'none'; }
   document.getElementById('editBookModalOverlay')?.classList.remove('active');
 }
 
@@ -25300,12 +25353,12 @@ function openLanguageSelectModal(origIdx) {
   }
 
   const modal = document.getElementById('bookLanguageSelectModal');
-  if (modal) modal.classList.add('active');
+  if (modal) { modal.style.display = 'flex'; modal.classList.add('active'); }
 }
 
 function closeLanguageSelectModal() {
   const modal = document.getElementById('bookLanguageSelectModal');
-  if (modal) modal.classList.remove('active');
+  if (modal) { modal.classList.remove('active'); modal.style.display = 'none'; }
 }
 
 function handleLangSelectOverlayClick(event) {

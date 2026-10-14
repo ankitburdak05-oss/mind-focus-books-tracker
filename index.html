@@ -2316,7 +2316,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" id="settingsAppVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.16 (Up to date)</span>
+                <span class="ig-badge-val" id="settingsAppVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.17 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -2609,7 +2609,7 @@
   </nav>
 
   <!-- ================= REAL 3D MULTI-LANGUAGE BOOK READER MODAL ================= -->
-  <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)">
+  <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)" style="display:none;">
     <div class="real-book-reader-container" onclick="event.stopPropagation()">
       <!-- Top Reader Navigation Bar -->
       <div class="reader-top-bar">
@@ -2713,7 +2713,7 @@
         <button type="button" class="reader-nav-btn" id="readerNextPageBtn" onclick="nextReaderPage()">Next ▶</button>
       </div>
   <!-- ================= 1. LANGUAGE SELECTION LAUNCHER MODAL ================= -->
-  <div class="modal-overlay" id="bookLanguageSelectModal" onclick="handleLangSelectOverlayClick(event)">
+  <div class="modal-overlay" id="bookLanguageSelectModal" onclick="handleLangSelectOverlayClick(event)" style="display:none;">
     <div class="modal-content lang-select-dialog" onclick="event.stopPropagation()">
       <div class="modal-header">
         <div style="display:flex; align-items:center; gap:0.6rem;">
@@ -2812,7 +2812,7 @@
   </div>
 
   <!-- ================= 2. ADD CUSTOM BOOK PAGE MODAL (WITH AUTO-OCR SCANNER) ================= -->
-  <div class="modal-overlay" id="addCustomPageModal" onclick="handleAddPageOverlayClick(event)">
+  <div class="modal-overlay" id="addCustomPageModal" onclick="handleAddPageOverlayClick(event)" style="display:none;">
     <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
       <div class="modal-header">
         <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -2923,7 +2923,7 @@
   </div>
 
   <!-- ================= 3. EDIT BOOK PAGE MODAL (WITH PHOTO RE-SCAN & OCR) ================= -->
-  <div class="modal-overlay" id="editBookPageModal" onclick="handleEditPageOverlayClick(event)">
+  <div class="modal-overlay" id="editBookPageModal" onclick="handleEditPageOverlayClick(event)" style="display:none;">
     <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
       <div class="modal-header">
         <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -2998,7 +2998,7 @@
   </div>
 
   <!-- ================= 4. BOOK COVER VIEWER MODAL ================= -->
-  <div class="modal-overlay" id="bookCoverViewerModal" onclick="handleCoverViewerOverlayClick(event)">
+  <div class="modal-overlay" id="bookCoverViewerModal" onclick="handleCoverViewerOverlayClick(event)" style="display:none;">
     <div class="modal-content" style="max-width:460px; text-align:center; padding:1.25rem;" onclick="event.stopPropagation()">
       <div class="modal-header" style="padding-bottom:0.75rem; border-bottom:1px solid var(--border-color);">
         <div style="display:flex; align-items:center; gap:0.5rem;">
@@ -3123,7 +3123,7 @@
 
   <!-- ================= COMPREHENSIVE EDIT / ADD BOOK MODAL (ALL 16 FIELDS) ================= -->
   <!-- ================= COMPREHENSIVE EDIT / ADD BOOK MODAL (ALL 16 FIELDS) ================= -->
-  <div class="modal-overlay modal-overlay-fullscreen" id="editBookModalOverlay">
+  <div class="modal-overlay modal-overlay-fullscreen" id="editBookModalOverlay" style="display:none;">
     <div class="modal-card modal-card-fullscreen-studio">
       <!-- Frozen Sticky Header with Close Button -->
       <div class="modal-header studio-header">
@@ -3315,7 +3315,7 @@
   </div>
 
   <!-- ================= QUICK LOG PAGES MODAL (UPGRADED) ================= -->
-  <div class="modal-overlay" id="quickLogModalOverlay">
+  <div class="modal-overlay" id="quickLogModalOverlay" style="display:none;">
     <div class="modal-card modal-sm quick-log-modal-card">
       <div class="modal-header">
         <div style="display:flex; align-items:center; gap:10px;">
@@ -3371,7 +3371,7 @@
   </div>
 
   <!-- ================= 3D INTERACTIVE VOCABULARY DICTIONARY MODAL ================= -->
-  <div class="modal-overlay" id="dictionaryModalOverlay" onclick="if(event.target === this) closeDictionaryModal()">
+  <div class="modal-overlay" id="dictionaryModalOverlay" onclick="if(event.target === this) closeDictionaryModal()" style="display:none;">
     <div class="modal-card modal-lg dictionary-modal-card">
       <div class="modal-header dict-sticky-header">
         <div style="display:flex; align-items:center; gap:10px;">
@@ -3411,7 +3411,7 @@
   </div>
 
   <!-- ================= EDIT PROFILE MODAL ================= -->
-  <div class="modal-overlay" id="editProfileModalOverlay">
+  <div class="modal-overlay" id="editProfileModalOverlay" style="display:none;">
     <div class="modal-card">
       <div class="modal-header">
         <h3 class="modal-title">Edit Profile</h3>

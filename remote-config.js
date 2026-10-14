@@ -2,21 +2,15 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.16",
-    "name": "Mind Focus Books v0.0.16 - Dictionary Book 1-Tap Fix & 10 Modern Preferences Suite",
+    "version": "v0.0.17",
+    "name": "Mind Focus Books v0.0.17 - Instant 1-Tap Book Fix, Detail View Unblock & 10 Modern Preferences",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "📖 1-Tap Dictionary Book Fix: Instant launch of 3D Vocabulary Dictionary directly on tapping Book 0 card anywhere in Library, Home or Explore.",
-      "🎯 Daily Pages Reading Goal: Configurable 5 to 50 pages/day with finish date calculation and habit tracking.",
-      "🌐 Reader Default Language: Automatic selection of Hindi, Hinglish or English reading editions.",
-      "🔤 Reader Font Zoom: Full multi-level zoom (85% to 150%) with persistent scaling across page turns.",
-      "💡 Keep Screen Awake: Screen wake lock API preventing display timeout while reading.",
-      "🚀 Default Start Tab: Choose Home, Library, Explore, Progress, Profile or Settings on startup.",
-      "📅 Date Formats: DD/MM/YYYY, YYYY-MM-DD, Month DD, and standard display formats.",
-      "🔠 App Text Size Scaling: 85% to 125% interface scaling.",
-      "🍃 Reduce Motion & Animations: Instant transition toggle for focus and battery saving.",
-      "📳 Subtle Haptic Feedback: Tactile vibration on tab switching, page flips, and actions.",
-      "💾 Visual Backup Reminders: Weekly or monthly backup prompts to keep your reading data safe."
+      "🎯 Instant 1-Tap Book Detail: Guaranteed title-based instant opening of every book in Library, Home and Explore.",
+      "📖 Fixed Dictionary Book Launch: Book 0 always launches 3D Vocabulary Dictionary directly with zero pointer conflicts.",
+      "🛡️ Active Modal Touch Guard: Complete removal of phantom overlays preventing touches on Book Detail controls.",
+      "⚙️ 10 Modern Preferences: Daily Pages Goal, Reader Language, Font Zoom, Wake Lock, Default Tab, Date Formats, Text Scaling, Reduced Motion, Haptics & Backup Reminders.",
+      "📱 100% Offline Single-File & Android Native Package Synchronized."
     ],
     "stagedAt": "2026-10-14T15:35:00.000Z",
     "isDeployed": true
@@ -46,19 +40,6 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
     "isDeployed": true
   },
   "previousRelease": {
-    "version": "v3.17.1",
-    "name": "Mind Focus Books v3.17.1 - Real Book Page Reader & Full 16-Field Editor",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.1/MindFocusBooks-Native.apk",
-    "features": [
-      "📖 Real 3D Book Page Reader: Multi-language (Hindi, Hinglish, English) page flip reader",
-      "✏️ Complete 16-Field Edit Modal: All book parameters safely editable",
-      "⭐ 100% Honest Ratings: Unrated books default to 0.0",
-      "📅 Real Dates & Pricing: Blank until user records them"
-    ],
-    "stagedAt": "2026-09-30T16:45:00.000Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
     "version": "v3.17.0",
     "name": "Mind Focus Books v3.17.0 - Ultra-Clean Mobile Redesign & Legacy Purge",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.0/MindFocusBooks-Native.apk",
@@ -71,7 +52,7 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
       "💾 One-Tap Backup & Export System (JSON, CSV, PDF)",
       "🏷️ Official v3.17.0 Release"
     ],
-    "stagedAt": "2026-09-30T13:45:00.000Z",
+    "stagedAt": "2026-09-29T18:45:00.000Z",
     "isDeployed": true
   },
   "features": {

@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.16)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.17)
 // ==========================================================================
 
-const APP_VERSION = '0.0.16';
-const CURRENT_APP_VERSION = 'v0.0.16';
+const APP_VERSION = '0.0.17';
+const CURRENT_APP_VERSION = 'v0.0.17';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -118,7 +118,7 @@ function initApp() {
 // Ensure at least one book is currently reading
 function ensureCurrentlyReadingBook() {
   if (!state.books || state.books.length === 0) return;
-  const activeBooks = state.books.filter(b => !b.notInterested);
+  const activeBooks = state.books.filter(b => !b.notInterested && !isDictionaryBook(b));
   const readingBook = activeBooks.find(b => b.status === 'READING');
   if (readingBook) {
     state.currentBookIndex = state.books.indexOf(readingBook);
@@ -533,7 +533,8 @@ function renderHomeRecentBooks() {
   list.innerHTML = recent.map((book) => {
     const originalIndex = state.books.indexOf(book);
     const isDict = isDictionaryBook(book);
-    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByIndex(${originalIndex >= 0 ? originalIndex : 0})`;
+    const titleEsc = escapeHtml(book.title).replace(/'/g, "\\'");
+    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByTitle('${titleEsc}')`;
     return `
     <div class="recent-book-card ${isDict ? 'book-card-dictionary' : ''}" onclick="${clickHandler}">
       <div class="recent-cover-box">
@@ -739,7 +740,8 @@ function renderLibraryGrid() {
     const pct = Math.min(100, Math.round((current / total) * 100));
     
     const isDict = isDictionaryBook(book);
-    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByIndex(${originalIndex})`;
+    const titleEsc = escapeHtml(book.title).replace(/'/g, "\\'");
+    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByTitle('${titleEsc}')`;
     
     // Compact Horizontal List Mode (1 Row per Book)
     if (isCompactList) {
@@ -863,7 +865,7 @@ function renderExploreBooksGrid() {
     const pct = Math.min(100, Math.round((current / total) * 100));
     
     return `
-      <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
+      <div class="grid-book-card" onclick="openBookDetailViewByTitle('${escapeHtml(book.title).replace(/'/g, "\\'")}')">
         <div class="grid-cover-wrap">
           <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
         </div>
@@ -2567,6 +2569,19 @@ function openCurrentReadingDetail() {
   if (state.currentBook) openBookDetailView(state.currentBook);
 }
 
+function openBookDetailViewByTitle(title) {
+  if (!title) return;
+  const book = state.books.find(b => b.title === title || (b.title && b.title.trim().toLowerCase() === title.trim().toLowerCase()));
+  if (!book) return;
+  if (isDictionaryBook(book)) {
+    openDictionaryModal();
+    return;
+  }
+  state.currentBook = book;
+  state.currentBookIndex = state.books.indexOf(book);
+  openBookDetailView(book);
+}
+
 function openBookDetailViewByIndex(idx) {
   if (idx >= 0 && idx < state.books.length) {
     const b = state.books[idx];
@@ -3116,6 +3131,8 @@ function toggleReadingTimer() {
 
 // Quick Log Pages Modal (Upgraded v0.0.13)
 function openQuickLogModal() {
+  const qlOverlay = document.getElementById('quickLogModalOverlay');
+  if (qlOverlay) { qlOverlay.style.display = 'flex'; qlOverlay.classList.add('active'); }
   if (!state.currentBook) return;
   const book = state.currentBook;
   const total = book.pages || book.total_pages || 250;
@@ -3153,6 +3170,8 @@ function openQuickLogModal() {
 }
 
 function closeQuickLogModal() {
+  const qlOverlay = document.getElementById('quickLogModalOverlay');
+  if (qlOverlay) { qlOverlay.classList.remove('active'); qlOverlay.style.display = 'none'; }
   document.getElementById('quickLogModalOverlay')?.classList.remove('active');
 }
 
@@ -3254,12 +3273,12 @@ function saveQuickLogPages() {
 
 // ================= REAL 3D BOOK PAGE READER ENGINE =================
 function openRealBookReaderForCurrent() {
-  const curIdx = state.currentBookIndex !== -1 ? state.currentBookIndex : 0;
-  const book = state.books && state.books[curIdx];
-  if (isDictionaryBook(book)) {
-    openDictionaryModal();
-    return;
+  if (!state.currentBook || isDictionaryBook(state.currentBook)) {
+    ensureCurrentlyReadingBook();
   }
+  const book = state.currentBook || state.books.find(b => !isDictionaryBook(b));
+  if (!book) return;
+  const curIdx = state.books.indexOf(book);
   if (typeof openLanguageSelectModal === 'function' && typeof hasBookPagesAvailable === 'function' && hasBookPagesAvailable(book)) {
     openLanguageSelectModal(curIdx);
     return;
@@ -3296,6 +3315,7 @@ function openRealBookReader(bookIdx, lang) {
   if (!modal) return;
   
   modal.setAttribute('data-reader-theme', readerState.theme);
+  modal.style.display = 'flex';
   modal.classList.add('active');
   document.body.style.overflow = 'hidden';
   
@@ -3308,6 +3328,7 @@ function closeRealBookReader() {
   const modal = document.getElementById('realBookReaderModal');
   if (!modal) return;
   modal.classList.remove('active');
+  modal.style.display = 'none';
   document.body.style.overflow = '';
 }
 
@@ -3768,12 +3789,20 @@ function openAddBookModal() {
 }
 
 function openEditCurrentBookModal() {
-  if (state.currentBookIndex !== -1) {
-    openEditModal(state.currentBookIndex);
+  if (!state.currentBook || isDictionaryBook(state.currentBook)) {
+    ensureCurrentlyReadingBook();
+  }
+  if (state.currentBook) {
+    const idx = state.books.indexOf(state.currentBook);
+    if (idx !== -1) {
+      openEditModal(idx);
+    }
   }
 }
 
 function openEditModal(index) {
+  const editOverlay = document.getElementById('editBookModalOverlay');
+  if (editOverlay) { editOverlay.style.display = 'flex'; editOverlay.classList.add('active'); }
   if (index < 0 || index >= state.books.length) return;
   state.editingBookIndex = index;
   const book = state.books[index];
@@ -3976,6 +4005,8 @@ function calculateCountDays() {
 }
 
 function closeEditModal() {
+  const editOverlay = document.getElementById('editBookModalOverlay');
+  if (editOverlay) { editOverlay.classList.remove('active'); editOverlay.style.display = 'none'; }
   document.getElementById('editBookModalOverlay')?.classList.remove('active');
 }
 
@@ -7405,12 +7436,12 @@ function openLanguageSelectModal(origIdx) {
   }
 
   const modal = document.getElementById('bookLanguageSelectModal');
-  if (modal) modal.classList.add('active');
+  if (modal) { modal.style.display = 'flex'; modal.classList.add('active'); }
 }
 
 function closeLanguageSelectModal() {
   const modal = document.getElementById('bookLanguageSelectModal');
-  if (modal) modal.classList.remove('active');
+  if (modal) { modal.classList.remove('active'); modal.style.display = 'none'; }
 }
 
 function handleLangSelectOverlayClick(event) {

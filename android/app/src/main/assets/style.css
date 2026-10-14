@@ -1995,10 +1995,19 @@ body {
   align-items: center;
   justify-content: center;
   padding: 16px;
+  pointer-events: none;
+}
+
+.modal-overlay:not(.active) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
 }
 
 .modal-overlay.active {
-  display: flex;
+  display: flex !important;
+  pointer-events: auto !important;
+  visibility: visible !important;
   animation: fadeIn 0.2s ease-out;
 }
 
@@ -2520,7 +2529,15 @@ body {
   transition: opacity 0.25s ease;
 }
 
+.real-book-reader-overlay:not(.active) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
 .real-book-reader-overlay.active {
+  display: flex !important;
+  visibility: visible !important;
   opacity: 1;
   pointer-events: auto;
 }
@@ -7947,4 +7964,9 @@ body.pref-reduce-motion *,body.pref-reduce-motion *:before,body.pref-reduce-moti
 
 #dictionaryModalOverlay {
   z-index: 100000 !important;
+}
+#dictionaryModalOverlay:not(.active) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
 }
