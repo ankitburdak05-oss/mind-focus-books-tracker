@@ -31,7 +31,9 @@ try {
   if (global.domLoaded) {
     global.domLoaded();
     console.log('initApp SUCCEEDED WITH ZERO ERRORS!');
+    process.exit(0);
   }
 } catch (err) {
   console.error('SIMULATED RUNTIME ERROR:', err);
+  process.exit(1);
 }
