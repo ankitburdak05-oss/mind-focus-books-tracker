@@ -5,9 +5,9 @@ window.__REMOTE_BROADCAST_NOTICE__ = {
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v0.0.14 Ready!",
-  "message": "Naya v0.0.14 release update ready hai! 3D Dictionary Book Reader me sabhi 101 words add ho gaye hain. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
-  "btnText": "⚡ Update Now (v0.0.14)",
+  "title": "Mind Focus Books v0.0.20 Ready!",
+  "message": "Naya v0.0.20 release update ready hai! 3D Dictionary Book Reader me sabhi 101 words add ho gaye hain. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
+  "btnText": "⚡ Update Now (v0.0.20)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
   "timestamp": "2026-10-15T06:33:00.000Z"

@@ -3,10 +3,10 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "updatedAt": "2026-10-15T06:33:00.000Z",
   "activeRelease": {
     "version": "v0.0.20",
-    "name": "Mind Focus Books v0.0.14 (Stable Release)",
+    "name": "Mind Focus Books v0.0.20 (Official Release)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.14 Release: 3D Dictionary Book Reader with all 101 A-Z words & audio speech.",
+      "⚡ Official v0.0.20 Release: 3D Dictionary Book Reader with all 101 A-Z words & audio speech.",
       "📖 35 Interactive 3D Pages for Dictionary Book with Phonetics, Hindi meanings, definitions & bilingual examples.",
       "🔊 One-tap voice pronunciation for all vocabulary words.",
       "⚡ Quick Page Log Modal, Reading Slider & Quick Pills.",
