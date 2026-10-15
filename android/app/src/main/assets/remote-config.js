@@ -1,18 +1,19 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-10-02T14:55:00.000Z",
+  "updatedAt": "2026-10-15T06:10:00.000Z",
   "activeRelease": {
-    "version": "v0.0.19",
-    "name": "Mind Focus Books v0.0.13 (Stable Release)",
+    "version": "v0.0.14",
+    "name": "Mind Focus Books v0.0.14",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Stable v0.0.13 Core Release: Quick Page Log Modal, 3D Dictionary, Deep Profile Metrics & Backup Status.",
-      "📖 3D Flipping Pages Dictionary: Full 35-page interactive reader with all 101 A-Z English-Hindi vocabulary words, audio pronunciation & examples.",
+      "⚡ Official v0.0.14 Release: 3D Dictionary Book Reader with all 101 A-Z words & audio speech.",
+      "📖 35 Interactive 3D Pages for Dictionary Book with Phonetics, Hindi meanings, definitions & bilingual examples.",
+      "🔊 One-tap voice pronunciation for all vocabulary words.",
+      "⚡ Quick Page Log Modal, Reading Slider & Quick Pills.",
       "👤 Deep Profile Metrics & Dynamic Quotes.",
-      "💾 1-Tap Visual Backup Status & Styled PDF Report.",
       "🛡️ Safe In-Place Update: 100% of your reading progress, notes and data are fully preserved."
     ],
-    "stagedAt": "2026-10-15T05:10:00.000Z",
+    "stagedAt": "2026-10-15T06:10:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
