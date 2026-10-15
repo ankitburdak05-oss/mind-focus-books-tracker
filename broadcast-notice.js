@@ -1,14 +1,14 @@
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v0.0.23",
-  "version": "v0.0.23",
+  "id": "notice-v0.0.24",
+  "version": "v0.0.24",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v0.0.23 Ready!",
-  "message": "Naya v0.0.23 release update ready hai! ➕ Add Page aur ✏️ Edit Page modal ab turant screen ke saamne open honge bina back kiye, aur BOOK_PAGES_DATA error poori tarah fix ho gaya hai. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
-  "btnText": "⚡ Update Now (v0.0.23)",
+  "title": "Mind Focus Books v0.0.24 Ready!",
+  "message": "Naya v0.0.24 release update ready hai! App ka full code audit complete ho chuka hai, null-safety guards, service worker v23 caching, aur 100% stable offline bundle shamil hai. Click karke turant update karein, aapka saara reading data aur notes 100% surakshit rahenge.",
+  "btnText": "⚡ Update Now (v0.0.24)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-15T12:15:00.000Z"
+  "timestamp": "2026-10-15T13:05:00.000Z"
 };
