@@ -1,9 +1,9 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-10-15T06:10:00.000Z",
+  "updatedAt": "2026-10-15T06:33:00.000Z",
   "activeRelease": {
-    "version": "v0.0.14",
-    "name": "Mind Focus Books v0.0.14",
+    "version": "v0.0.20",
+    "name": "Mind Focus Books v0.0.14 (Stable Release)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
       "⚡ Official v0.0.14 Release: 3D Dictionary Book Reader with all 101 A-Z words & audio speech.",
@@ -13,7 +13,7 @@
       "👤 Deep Profile Metrics & Dynamic Quotes.",
       "🛡️ Safe In-Place Update: 100% of your reading progress, notes and data are fully preserved."
     ],
-    "stagedAt": "2026-10-15T06:10:00.000Z",
+    "stagedAt": "2026-10-15T06:33:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

@@ -1,6 +1,6 @@
 {
-  "id": "notice-v0.0.14",
-  "version": "v0.0.14",
+  "id": "notice-v0.0.20",
+  "version": "v0.0.20",
   "type": "card1",
   "card": "card1",
   "active": true,
@@ -10,5 +10,5 @@
   "btnText": "⚡ Update Now (v0.0.14)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-15T06:10:00.000Z"
+  "timestamp": "2026-10-15T06:33:00.000Z"
 }
