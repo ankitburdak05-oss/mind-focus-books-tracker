@@ -2121,6 +2121,145 @@
               </div>
             </div>
           </div>
+        <!-- Group: Reading Habits (Claude Preference 1-4) -->
+        <div class="ig-settings-group" data-ig-category="prefReading">
+          <div class="ig-group-header">Reading Habits</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="openPrefPicker('pagesGoal')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">🎯</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Daily Pages Goal</div>
+                  <div class="ig-sub">Roz kitne pages padhne hain, finish date isi se banegi</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_pagesGoal">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('readerLang')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">🌐</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Reader Default Language</div>
+                  <div class="ig-sub">Book kholte hi Hindi, Hinglish ya English page</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_readerLang">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('readerFont')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-purple">🔤</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Reader Font Size</div>
+                  <div class="ig-sub">Reader me default text size set karein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_readerFont">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-emerald">💡</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Keep Screen Awake</div>
+                  <div class="ig-sub">Padhte waqt screen band na ho</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <label class="pref-switch" onclick="event.stopPropagation()"><input type="checkbox" id="prefToggle_keepAwake" onchange="togglePref('keepAwake', this.checked)"><span class="pref-slider"></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group: App Behaviour (Claude Preference 5-7) -->
+        <div class="ig-settings-group" data-ig-category="prefApp">
+          <div class="ig-group-header">App Behaviour</div>
+          <div class="ig-card">
+            <div class="ig-row" onclick="openPrefPicker('startTab')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">🚀</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Default Start Screen</div>
+                  <div class="ig-sub">App khulte hi kaunsa tab dikhe</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_startTab">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('dateFmt')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">📅</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Date Format</div>
+                  <div class="ig-sub">04 Oct 2026, 04/10/2026 ya 2026-10-04</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_dateFmt">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('textSize')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-purple">🔠</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">App Text Size</div>
+                  <div class="ig-sub">Poore app ka text chhota ya bada karein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_textSize">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Group: Comfort & Safety (Claude Preference 8-10) -->
+        <div class="ig-settings-group" data-ig-category="prefComfort">
+          <div class="ig-group-header">Comfort & Safety</div>
+          <div class="ig-card">
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-emerald">🍃</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Reduce Animations</div>
+                  <div class="ig-sub">Animations kam karein, focus aur battery ke liye</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <label class="pref-switch" onclick="event.stopPropagation()"><input type="checkbox" id="prefToggle_reduceMotion" onchange="togglePref('reduceMotion', this.checked)"><span class="pref-slider"></span></label>
+              </div>
+            </div>
+            <div class="ig-row">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-blue">📳</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Haptic Feedback</div>
+                  <div class="ig-sub">Action par halki vibration (Android phone)</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <label class="pref-switch" onclick="event.stopPropagation()"><input type="checkbox" id="prefToggle_haptics" onchange="togglePref('haptics', this.checked)"><span class="pref-slider"></span></label>
+              </div>
+            </div>
+            <div class="ig-row" onclick="openPrefPicker('backupRemind')">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">💾</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Backup Reminder</div>
+                  <div class="ig-sub">Weekly ya monthly JSON backup yaad dilayein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" id="igPref_backupRemind">-</span><span class="ig-arrow">&rsaquo;</span>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Group 6: System & App Version -->

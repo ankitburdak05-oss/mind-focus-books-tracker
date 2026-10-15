@@ -2737,17 +2737,22 @@ function formatDateDisplay(dateStr) {
   if (!dateStr) return '-';
   try {
     const parts = String(dateStr).trim().split('-');
+    const _df = (typeof getPrefs === 'function') ? getPrefs().dateFmt : 'short';
     if (parts.length === 3) {
       const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const y = parts[0];
       const m = parseInt(parts[1], 10) - 1;
       const d = parseInt(parts[2], 10);
       if (m >= 0 && m < 12 && d > 0 && d <= 31) {
+        if (_df === 'slash') return `${String(d).padStart(2, '0')}/${String(m + 1).padStart(2, '0')}/${y}`;
+        if (_df === 'iso') return `${y}-${String(m + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
         return `${String(d).padStart(2, '0')} ${months[m]} ${y}`;
       }
     }
     const dt = new Date(dateStr);
     if (!isNaN(dt.getTime())) {
+      if (_df === 'slash') return dt.toLocaleDateString('en-GB');
+      if (_df === 'iso') return dt.toISOString().slice(0, 10);
       return dt.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
     }
     return dateStr;
@@ -7293,3 +7298,178 @@ function clearShelfFilter() {
   filterLibraryByShelf(null);
 }
 
+
+
+// ===== Settings: 10 new preferences (v0.1) =====
+const PREFS_KEY = 'mf_prefs_v1';
+const PREF_DEFAULTS = {
+  pagesGoal: 15, readerLang: 'hindi', readerFont: 100, keepAwake: false,
+  startTab: 'home', dateFmt: 'short', textSize: 100,
+  reduceMotion: false, haptics: false, backupRemind: 'off'
+};
+const PREF_META = {
+  pagesGoal: { title: 'Daily Pages Goal', options: [[5, '5 pages'], [10, '10 pages'], [15, '15 pages'], [20, '20 pages'], [30, '30 pages'], [50, '50 pages']] },
+  readerLang: { title: 'Reader Default Language', options: [['hindi', 'Hindi'], ['hinglish', 'Hinglish'], ['english', 'English']] },
+  readerFont: { title: 'Reader Font Size', options: [[85, '85%'], [100, '100%'], [115, '115%'], [130, '130%'], [150, '150%']] },
+  startTab: { title: 'Default Start Screen', options: [['home', 'Home'], ['library', 'Library'], ['explore', 'Explore'], ['progress', 'Progress']] },
+  dateFmt: { title: 'Date Format', options: [['short', '04 Oct 2026'], ['slash', '04/10/2026'], ['iso', '2026-10-04']] },
+  textSize: { title: 'App Text Size', options: [[90, 'Small (90%)'], [100, 'Normal (100%)'], [110, 'Large (110%)'], [120, 'Extra large (120%)']] },
+  backupRemind: { title: 'Backup Reminder', options: [['off', 'Off'], ['weekly', 'Every week'], ['monthly', 'Every month']] }
+};
+
+function getPrefs() {
+  try {
+    const raw = localStorage.getItem(PREFS_KEY);
+    return Object.assign({}, PREF_DEFAULTS, raw ? JSON.parse(raw) : {});
+  } catch (e) { return Object.assign({}, PREF_DEFAULTS); }
+}
+
+function savePref(key, value) {
+  const p = getPrefs();
+  p[key] = value;
+  try { localStorage.setItem(PREFS_KEY, JSON.stringify(p)); } catch (e) { /* storage full: keep running */ }
+  applyPrefs();
+}
+
+function prefLabel(key, value) {
+  const meta = PREF_META[key];
+  const hit = meta && meta.options.find(o => o[0] === value);
+  return hit ? hit[1] : String(value);
+}
+
+function applyPrefs() {
+  const p = getPrefs();
+  document.documentElement.style.fontSize = p.textSize + '%';
+  if (document.body) document.body.classList.toggle('pref-reduce-motion', !!p.reduceMotion);
+  Object.keys(PREF_META).forEach(k => {
+    const el = document.getElementById('igPref_' + k);
+    if (el) el.innerText = prefLabel(k, p[k]);
+  });
+  ['keepAwake', 'reduceMotion', 'haptics'].forEach(k => {
+    const el = document.getElementById('prefToggle_' + k);
+    if (el) el.checked = !!p[k];
+  });
+}
+
+function togglePref(key, checked) {
+  savePref(key, !!checked);
+  if (key === 'keepAwake' && !checked) prefReleaseWake();
+  showToast((checked ? 'On: ' : 'Off: ') + ({ keepAwake: 'Keep screen awake', reduceMotion: 'Reduce animations', haptics: 'Haptic feedback' }[key] || key));
+}
+
+function openPrefPicker(key) {
+  const meta = PREF_META[key];
+  if (!meta) return;
+  closePrefPicker();
+  const current = getPrefs()[key];
+  const overlay = document.createElement('div');
+  overlay.className = 'pref-picker-overlay';
+  overlay.id = 'prefPickerOverlay';
+  overlay.addEventListener('click', e => { if (e.target === overlay) closePrefPicker(); });
+  const sheet = document.createElement('div');
+  sheet.className = 'pref-picker-sheet';
+  const title = document.createElement('h3');
+  title.innerText = meta.title;
+  sheet.appendChild(title);
+  meta.options.forEach(opt => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'pref-picker-opt' + (opt[0] === current ? ' selected' : '');
+    b.innerText = opt[1];
+    b.addEventListener('click', () => {
+      savePref(key, opt[0]);
+      closePrefPicker();
+      showToast(meta.title + ': ' + opt[1]);
+    });
+    sheet.appendChild(b);
+  });
+  overlay.appendChild(sheet);
+  document.body.appendChild(overlay);
+}
+
+function closePrefPicker() {
+  const o = document.getElementById('prefPickerOverlay');
+  if (o) o.remove();
+}
+
+// --- Keep screen awake while the reader is open ---
+let prefWakeLock = null;
+async function prefRequestWake() {
+  try {
+    if (getPrefs().keepAwake && navigator.wakeLock && !prefWakeLock) {
+      prefWakeLock = await navigator.wakeLock.request('screen');
+      prefWakeLock.addEventListener('release', () => { prefWakeLock = null; });
+    }
+  } catch (e) { prefWakeLock = null; }
+}
+function prefReleaseWake() {
+  try { if (prefWakeLock) prefWakeLock.release(); } catch (e) { /* ignore */ }
+  prefWakeLock = null;
+}
+document.addEventListener('visibilitychange', () => {
+  const m = document.getElementById('realBookReaderModal');
+  if (document.visibilityState === 'visible' && m && m.classList.contains('active')) prefRequestWake();
+});
+
+// --- Reader picks up the default language / font size and the wake lock ---
+(function wirePrefsIntoReader() {
+  const openOrig = openRealBookReader;
+  openRealBookReader = function (bookIdx, lang) {
+    const p = getPrefs();
+    openOrig(bookIdx, lang || p.readerLang);
+    readerState.fontSizePct = p.readerFont;
+    adjustReaderFontSize(0);
+    prefRequestWake();
+  };
+  const closeOrig = closeRealBookReader;
+  closeRealBookReader = function () {
+    closeOrig();
+    prefReleaseWake();
+  };
+})();
+
+// --- Haptic feedback on toasts ---
+(function wireHaptics() {
+  const toastOrig = showToast;
+  showToast = function (message, duration) {
+    try { if (getPrefs().haptics && navigator.vibrate) navigator.vibrate(12); } catch (e) { /* ignore */ }
+    return toastOrig(message, duration);
+  };
+})();
+
+// --- Backup reminder: remember when the user last exported ---
+(function wireBackupStamp() {
+  if (typeof exportDataJSON !== 'function') return;
+  const exportOrig = exportDataJSON;
+  exportDataJSON = function () {
+    try { localStorage.setItem('mf_last_backup_ts', String(Date.now())); } catch (e) { /* ignore */ }
+    return exportOrig.apply(this, arguments);
+  };
+})();
+
+function runStartupPrefs() {
+  const p = getPrefs();
+  applyPrefs();
+  const home = document.getElementById('viewHome');
+  if (p.startTab && p.startTab !== 'home' && home && home.classList.contains('active') && typeof switchTab === 'function') {
+    try { switchTab(p.startTab); } catch (e) { /* ignore */ }
+  }
+  if (p.backupRemind && p.backupRemind !== 'off') {
+    const last = parseInt(localStorage.getItem('mf_last_backup_ts') || '0', 10);
+    const limit = (p.backupRemind === 'weekly' ? 7 : 30) * 86400000;
+    const today = new Date().toDateString();
+    if (Date.now() - last > limit && localStorage.getItem('mf_backup_toast_day') !== today) {
+      try { localStorage.setItem('mf_backup_toast_day', today); } catch (e) { /* ignore */ }
+      setTimeout(() => showToast('💾 Backup due: Settings > Quick Data Backup', 4200), 1200);
+    }
+  }
+}
+
+applyPrefs();
+document.addEventListener('DOMContentLoaded', () => { applyPrefs(); setTimeout(runStartupPrefs, 700); });
+
+(function wireSettingsHubRefresh() {
+  if (typeof renderAppSettingsHub !== 'function') return;
+  const hubOrig = renderAppSettingsHub;
+  renderAppSettingsHub = function () { hubOrig(); applyPrefs(); };
+})();
