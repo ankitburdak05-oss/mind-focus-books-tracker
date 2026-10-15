@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.22)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.23)
 // ==========================================================================
 
-const APP_VERSION = '0.0.22';
-const CURRENT_APP_VERSION = 'v0.0.22';
+const APP_VERSION = '0.0.23';
+const CURRENT_APP_VERSION = 'v0.0.23';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -7353,7 +7353,9 @@ function prefLabel(key, value) {
 
 function applyPrefs() {
   const p = getPrefs();
-  document.documentElement.style.fontSize = p.textSize + '%';
+  if (document.documentElement && document.documentElement.style) {
+    document.documentElement.style.fontSize = p.textSize + '%';
+  }
   if (document.body) document.body.classList.toggle('pref-reduce-motion', !!p.reduceMotion);
   Object.keys(PREF_META).forEach(k => {
     const el = document.getElementById('igPref_' + k);
@@ -7582,12 +7584,19 @@ function openLanguageSelectModal(origIdx) {
   if (engBadge) engBadge.innerText = (engPages ? engPages.length : 0) + ' Pages';
 
   const modal = document.getElementById('bookLanguageSelectModal');
-  if (modal) modal.classList.add('active');
+  if (modal) {
+    modal.style.zIndex = '100050';
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+  }
 }
 
 function closeLanguageSelectModal() {
   const modal = document.getElementById('bookLanguageSelectModal');
-  if (modal) modal.classList.remove('active');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
 }
 
 function handleLangSelectOverlayClick(event) {
@@ -7618,9 +7627,9 @@ function openAddCustomPageModal() {
   const langSelect = document.getElementById('customPageLangSelect');
   if (langSelect) langSelect.value = readerState.lang || 'hindi';
 
-  const b = state.books[readerState.activeBookIdx];
-  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
-  const nextPg = (data && data.pages) ? (data.pages.length + 1) : 3;
+  const b = state.books[readerState.activeBookIdx] || state.books[0];
+  const pages = getBookPagesArray(b, readerState.lang || 'hindi');
+  const nextPg = (pages && pages.length) ? (pages.length + 1) : 3;
 
   const noInput = document.getElementById('customPageNoInput');
   if (noInput) noInput.value = nextPg;
@@ -7646,12 +7655,19 @@ function openAddCustomPageModal() {
   initCustomPageOcrListeners();
 
   const modal = document.getElementById('addCustomPageModal');
-  if (modal) modal.classList.add('active');
+  if (modal) {
+    modal.style.zIndex = '100050';
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+  }
 }
 
 function closeAddCustomPageModal() {
   const modal = document.getElementById('addCustomPageModal');
-  if (modal) modal.classList.remove('active');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
 }
 
 function handleAddPageOverlayClick(event) {
@@ -7975,50 +7991,49 @@ function saveCustomBookPage() {
 // PER-PAGE EDIT & DELETE CONTROLLER
 // =========================================================================
 function openEditPageModalForCurrent(side) {
-  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
-  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
-  const pages = (data && data.pages) ? data.pages : [];
+  const b = state.books[readerState.activeBookIdx] || state.books[0];
+  const pages = getBookPagesArray(b, readerState.lang);
   const isMobile = window.innerWidth <= 768;
   const isSingle = isMobile || (readerState.spreadMode === 'single');
 
   let targetPageNo = 1;
   if (isSingle) {
-    targetPageNo = readerState.currentPage;
+    targetPageNo = readerState.currentPage || 1;
   } else {
-    targetPageNo = (side === 'left') ? readerState.currentPage : (readerState.currentPage + 1);
+    targetPageNo = (side === 'left') ? (readerState.currentPage || 1) : ((readerState.currentPage || 1) + 1);
   }
 
-  // Verify page exists
+  // Verify page exists or fallback
   const exists = pages.some(p => p.pageNo === targetPageNo);
-  if (!exists) {
-    showToast('Page ' + targetPageNo + ' edit karne ke liye uplabdh nahi hai.', 'warning');
-    return;
+  if (!exists && pages.length > 0) {
+    targetPageNo = pages[0].pageNo || 1;
   }
 
   openEditPageModal(targetPageNo);
 }
 
 function deletePageForCurrent(side) {
+  const b = state.books[readerState.activeBookIdx] || state.books[0];
+  const pages = getBookPagesArray(b, readerState.lang);
   const isMobile = window.innerWidth <= 768;
   const isSingle = isMobile || (readerState.spreadMode === 'single');
 
   let targetPageNo = 1;
   if (isSingle) {
-    targetPageNo = readerState.currentPage;
+    targetPageNo = readerState.currentPage || 1;
   } else {
-    targetPageNo = (side === 'left') ? readerState.currentPage : (readerState.currentPage + 1);
+    targetPageNo = (side === 'left') ? (readerState.currentPage || 1) : ((readerState.currentPage || 1) + 1);
   }
 
   deleteBookPage(targetPageNo);
 }
 
 function openEditPageModal(pageNo) {
-  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const b = state.books[readerState.activeBookIdx] || state.books[0];
   if (!b) return;
 
-  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
-  const pages = (data && data.pages) ? data.pages : [];
-  const pageObj = pages.find(p => p.pageNo === pageNo);
+  const pages = getBookPagesArray(b, readerState.lang);
+  const pageObj = pages.find(p => p.pageNo === pageNo) || pages[0];
 
   readerState.currentEditingPageNo = pageNo;
 
@@ -8065,12 +8080,19 @@ function openEditPageModal(pageNo) {
   if (laserEl) laserEl.style.display = 'none';
 
   const modal = document.getElementById('editBookPageModal');
-  if (modal) modal.classList.add('active');
+  if (modal) {
+    modal.style.zIndex = '100050';
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+  }
 }
 
 function closeEditBookPageModal() {
   const modal = document.getElementById('editBookPageModal');
-  if (modal) modal.classList.remove('active');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+  }
   readerState.currentEditingPageNo = null;
 }
 

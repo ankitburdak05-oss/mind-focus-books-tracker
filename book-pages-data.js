@@ -2,7 +2,7 @@
 // MIND FOCUS BOOKS • MULTI-LANGUAGE REAL 3D BOOK PAGES DATA
 // ==========================================================================
 
-const BOOK_PAGES_DATA = {
+var BOOK_PAGES_DATA = (typeof window !== 'undefined' && window.BOOK_PAGES_DATA) ? window.BOOK_PAGES_DATA : {
   'hyperfocus': {
     bookNo: 'book 1',
     title: 'Hyperfocus: How to Work Less to Achieve More',

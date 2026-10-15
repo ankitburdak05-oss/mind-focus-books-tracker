@@ -1,20 +1,20 @@
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-10-15T08:50:00.000Z",
+  "updatedAt": "2026-10-15T12:15:00.000Z",
   "activeRelease": {
-    "version": "v0.0.22",
-    "name": "Mind Focus Books v0.0.22 (Tesseract OCR, Page Editor & Language Launcher)",
+    "version": "v0.0.23",
+    "name": "Mind Focus Books v0.0.23 (Add/Edit Page Fix & Redundancy Guard)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.22 Release: 📸 Tesseract OCR, ➕ Add Page, ✏️ Edit Page & 🌐 Language Launcher.",
+      "⚡ Official v0.0.23 Release: Add Page & Edit Page Modals Stacking Fix.",
+      "✏️ Instant Add/Edit Modals: Modals ab direct 3D reader ke upar instant open honge (bina back kiye).",
+      "🛡️ BOOK_PAGES_DATA Syntax Fix: Duplicate script declaration error poori tarah solve kiya gaya.",
       "📸 Tesseract OCR Photo Scanner: Camera ya gallery photo se turant text conversion.",
-      "➕ Add Page Button: Kisi bhi kitab me naya custom page jodne ki suvidha.",
-      "✏️ Edit Page Modal: Har page par per-page edit & delete action buttons with Photo Re-scan.",
       "🌐 Language Select Launcher: Hindi, Hinglish, English options with 1-click Auto-OCR all-language translator.",
-      "🔄 Phone Header Refresh: Screen par Refresh button add kiya gaya aur Fullscreen button browser mode ke liye reserve hua.",
+      "🔄 Phone Header Refresh: Screen par Refresh button browser aur phone mode me seamlessly synced.",
       "🛡️ Safe In-Place Update: 100% data, reading progress aur notes surakshit rahenge."
     ],
-    "stagedAt": "2026-10-15T08:50:00.000Z",
+    "stagedAt": "2026-10-15T12:15:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

@@ -8668,4 +8668,27 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 }
 
 .real-book-reader-container.single-page-mode .page-sheet-right {
-  widt
+  width: 100% !important;
+  max-width: 680px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   PAGE MODALS HIGH Z-INDEX (Always Above Real Book Reader)
+   ========================================================================== */
+#bookLanguageSelectModal,
+#addCustomPageModal,
+#editBookPageModal,
+#bookCoverViewerModal {
+  z-index: 100050 !important;
+}
+
+#bookLanguageSelectModal.active,
+#addCustomPageModal.active,
+#editBookPageModal.active,
+#bookCoverViewerModal.active {
+  display: flex !important;
+  z-index: 100050 !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}

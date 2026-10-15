@@ -1,14 +1,14 @@
 {
-  "id": "notice-v0.0.22",
-  "version": "v0.0.22",
+  "id": "notice-v0.0.23",
+  "version": "v0.0.23",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v0.0.22 Ready!",
-  "message": "Naya v0.0.22 release update ready hai! 📸 Tesseract OCR Photo Scanner, ➕ Add Page Button, ✏️ Edit Page Modal aur 🌐 Language Select Launcher add ho gaye hain. Phone header me 🔄 Refresh button bhi shuru ho gaya hai. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
-  "btnText": "⚡ Update Now (v0.0.22)",
+  "title": "Mind Focus Books v0.0.23 Ready!",
+  "message": "Naya v0.0.23 release update ready hai! ➕ Add Page aur ✏️ Edit Page modal ab turant screen ke saamne open honge bina back kiye, aur BOOK_PAGES_DATA error poori tarah fix ho gaya hai. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
+  "btnText": "⚡ Update Now (v0.0.23)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-15T08:50:00.000Z"
+  "timestamp": "2026-10-15T12:15:00.000Z"
 }
