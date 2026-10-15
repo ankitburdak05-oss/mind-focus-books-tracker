@@ -8103,7 +8103,7 @@ function handleEditPageOverlayClick(event) {
 }
 
 function saveEditedBookPage() {
-  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const b = (state.books && state.books[readerState.activeBookIdx]) || (state.books && state.books[1]) || (state.books && state.books[0]);
   if (!b) return;
 
   const pageNo = parseInt(document.getElementById('editPageNoInput').value) || readerState.currentEditingPageNo || 1;
@@ -8164,7 +8164,7 @@ function saveEditedBookPage() {
 }
 
 function deleteBookPage(pageNo) {
-  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const b = (state.books && state.books[readerState.activeBookIdx]) || (state.books && state.books[1]) || (state.books && state.books[0]);
   if (!b) return;
 
   if (!confirm('Kya aap sach me Page ' + pageNo + ' delete karna chahte hain?')) {
@@ -8461,7 +8461,7 @@ async function runAutoOcrForAllLanguages(imageSrc) {
           ps.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
       };
 
-      const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+      const b = (state.books && state.books[readerState.activeBookIdx]) || (state.books && state.books[1]) || (state.books && state.books[0]) || { title: 'Hyperfocus' };
       const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
 
       // Find highest page count across all languages

@@ -1,5 +1,5 @@
 // Mind Focus Books • A-Z English-Hindi Comprehensive Vocabulary Lexicon
-const DICTIONARY_WORDS = [
+var DICTIONARY_WORDS = (typeof window !== 'undefined' && window.DICTIONARY_WORDS) ? window.DICTIONARY_WORDS : [
   // A
   { word: "Abandon", phonetic: "अबैंडन", type: "verb", hindi: "त्याग देना, छोड़ देना", definition: "To give up completely; desert or leave behind.", example: "Never abandon your reading habits.", exampleHindi: "अपनी पढ़ने की आदतों को कभी मत छोड़ो।", syn: "Desert, Discard, Renounce" },
   { word: "Ability", phonetic: "एबिलिटी", type: "noun", hindi: "क्षमता, योग्यता, सामर्थ्य", definition: "Possession of the means or skill to do something.", example: "Reading books improves your thinking ability.", exampleHindi: "किताबें पढ़ने से आपकी सोचने की क्षमता बढ़ती है।", syn: "Capability, Competence, Skill" },

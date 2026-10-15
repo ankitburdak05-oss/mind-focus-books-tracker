@@ -1,10 +1,13 @@
-const CACHE_NAME = 'books-tracker-v7';
+const CACHE_NAME = 'books-tracker-v23';
 const ASSETS = [
   './',
   './index.html',
   './style.css',
+  './book-pages-data.js',
   './books-data.js',
   './dictionary-data.js',
+  './broadcast-notice.js',
+  './remote-config.js',
   './app.js',
   './manifest.json',
   './icon-192.png',

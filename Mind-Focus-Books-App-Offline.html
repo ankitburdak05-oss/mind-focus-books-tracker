@@ -12826,7 +12826,7 @@ if (typeof window !== 'undefined') {
 
 </script>
   <script>
-const DEFAULT_BOOKS = [
+var DEFAULT_BOOKS = (typeof window !== 'undefined' && window.DEFAULT_BOOKS) ? window.DEFAULT_BOOKS : [
   {
     "no": "book 0",
     "title": "A-Z English-Hindi Focus Vocabulary Lexicon",
@@ -18316,7 +18316,7 @@ const DEFAULT_BOOKS = [
 </script>
   <script>
 // Mind Focus Books • A-Z English-Hindi Comprehensive Vocabulary Lexicon
-const DICTIONARY_WORDS = [
+var DICTIONARY_WORDS = (typeof window !== 'undefined' && window.DICTIONARY_WORDS) ? window.DICTIONARY_WORDS : [
   // A
   { word: "Abandon", phonetic: "अबैंडन", type: "verb", hindi: "त्याग देना, छोड़ देना", definition: "To give up completely; desert or leave behind.", example: "Never abandon your reading habits.", exampleHindi: "अपनी पढ़ने की आदतों को कभी मत छोड़ो।", syn: "Desert, Discard, Renounce" },
   { word: "Ability", phonetic: "एबिलिटी", type: "noun", hindi: "क्षमता, योग्यता, सामर्थ्य", definition: "Possession of the means or skill to do something.", example: "Reading books improves your thinking ability.", exampleHindi: "किताबें पढ़ने से आपकी सोचने की क्षमता बढ़ती है।", syn: "Capability, Competence, Skill" },
@@ -18490,8 +18490,120 @@ if (typeof module !== 'undefined' && module.exports) {
 }
 
 </script>
-  <script src="broadcast-notice.js"></script>
-  <script src="remote-config.js"></script>
+  <script>
+window.__REMOTE_BROADCAST_NOTICE__ = {
+  "id": "notice-v0.0.23",
+  "version": "v0.0.23",
+  "type": "card1",
+  "card": "card1",
+  "active": true,
+  "icon": "🚀",
+  "title": "Mind Focus Books v0.0.23 Ready!",
+  "message": "Naya v0.0.23 release update ready hai! ➕ Add Page aur ✏️ Edit Page modal ab turant screen ke saamne open honge bina back kiye, aur BOOK_PAGES_DATA error poori tarah fix ho gaya hai. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
+  "btnText": "⚡ Update Now (v0.0.23)",
+  "action": "update",
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-15T12:15:00.000Z"
+};
+
+</script>
+  <script>
+window.__DEFAULT_REMOTE_CONFIG__ = {
+  "version": "1.0.0",
+  "updatedAt": "2026-10-15T12:15:00.000Z",
+  "activeRelease": {
+    "version": "v0.0.23",
+    "name": "Mind Focus Books v0.0.23 (Add/Edit Page Fix & Redundancy Guard)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
+    "features": [
+      "⚡ Official v0.0.23 Release: Add Page & Edit Page Modals Stacking Fix.",
+      "✏️ Instant Add/Edit Modals: Modals ab direct 3D reader ke upar instant open honge (bina back kiye).",
+      "🛡️ BOOK_PAGES_DATA Syntax Fix: Duplicate script declaration error poori tarah solve kiya gaya.",
+      "📸 Tesseract OCR Photo Scanner: Camera ya gallery photo se turant text conversion.",
+      "🌐 Language Select Launcher: Hindi, Hinglish, English options with 1-click Auto-OCR all-language translator.",
+      "🔄 Phone Header Refresh: Screen par Refresh button browser aur phone mode me seamlessly synced.",
+      "🛡️ Safe In-Place Update: 100% data, reading progress aur notes surakshit rahenge."
+    ],
+    "stagedAt": "2026-10-15T12:15:00.000Z",
+    "isDeployed": true
+  },
+  "stagedRelease": {
+    "version": "v3.19.0",
+    "name": "Mind Focus Books v3.19.0 - Screens 4 to 20 Master Suite Upgrade",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.19.0/MindFocusBooks-Native.apk",
+    "features": [
+      "📊 Screen 4: Reading Progress Donut, Weekly Streak Days (M-S) & 12-Month Bar Chart",
+      "👤 Screen 5: Profile Identity with Glowing Aura, 3 Stat Pills & Charles Eliot Quote",
+      "⏱️ Screen 8: Scenic Focus Timer with Pomodoro, Deep Work & Circular Dial",
+      "📝 Screen 9: Notes & Highlights Manager with Filters and Floating Action Add (+)",
+      "🎨 Screen 10: Reading Themes & Typography Sliders (Font Size, Spacing, Brightness)",
+      "🎯 Screen 11: Reading Goals with Donut Progress & Daily Habit Streaks",
+      "🏆 Screen 12: Achievements & Badges Showcase with Dynamic Progress Unlocks",
+      "💡 Screen 13: Scenic Daily Motivation Quotes with Save & Share Collection",
+      "✈️ Screen 14: Offline Mode & Asset Caching Manager",
+      "☁️ Screen 15: Cross-Device Cloud Sync with Multi-Device Indicators",
+      "📈 Screen 16: Deep Reading Analytics & Velocity Patterns",
+      "✨ Screen 17: Curated Book Recommendations",
+      "🛠️ Screen 18: App Customization with Accent Color Palettes & Wallpapers",
+      "📖 Screen 19: Reading Reflection Journal with Daily Logged Entries",
+      "🛡️ Screen 20: Privacy & Security with Biometric & PIN Protection"
+    ],
+    "stagedAt": "2026-10-01T09:15:00.000Z",
+    "isDeployed": true
+  },
+  "previousRelease": {
+    "version": "v3.17.0",
+    "name": "Mind Focus Books v3.17.0 - Ultra-Clean Mobile Redesign & Legacy Purge",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.0/MindFocusBooks-Native.apk",
+    "features": [
+      "✨ Brand-New Ultra-Clean Mobile Design across all 5 Navigation Tabs (Home, Library, Explore, Progress, Profile)",
+      "🗑️ 100% Legacy Code Cleanup: Removed all obsolete bloat for ultra-fast, smooth, crash-free mobile performance",
+      "📖 Dedicated Reading Detail Screen with tabs, daily goals, page logger & focus timer",
+      "📊 Interactive Native Analytics: Monthly Reading Progress Bar Chart & Reading by Genre Donut Chart",
+      "🛡️ Safe-Save Book Editor with live HD cover preview (preserves 313 real covers)",
+      "💾 One-Tap Backup & Export System (JSON, CSV, PDF)",
+      "🏷️ Official v3.17.0 Release"
+    ],
+    "stagedAt": "2026-09-29T18:45:00.000Z",
+    "isDeployed": true
+  },
+  "features": {
+    "appEmergencyLockdown": false,
+    "lockdownMessage": "",
+    "maintenanceMode": false,
+    "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
+    "chatHelpDeskEnabled": true,
+    "telemetryEnabled": true,
+    "mobileDevToolsEnabled": true,
+    "broadcastNoticeEnabled": true,
+    "appUpdatesEnabled": true,
+    "streakShieldsEnabled": true,
+    "flashcardsEnabled": true,
+    "ambientAudioEnabled": true,
+    "visualPhysicsEnabled": true,
+    "barcodeScannerEnabled": true,
+    "audiobookVoiceEnabled": true,
+    "quotesEnabled": true,
+    "communityBooksSync": true,
+    "dictionaryBookEnabled": true,
+    "pdfExportEnabled": true
+  },
+  "globalBanner": {
+    "active": false,
+    "text": "✨ Welcome to Mind Focus Books Tracker! Read distraction-free.",
+    "type": "info",
+    "link": ""
+  },
+  "bookOfTheDay": {
+    "title": "Atomic Habits",
+    "author": "James Clear",
+    "category": "Self Improvement",
+    "cover": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80",
+    "quote": "You do not rise to the level of your goals. You fall to the level of your systems."
+  }
+};
+
+</script>
   <script>
 // ==========================================================================
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.23)
@@ -26598,7 +26710,7 @@ function handleEditPageOverlayClick(event) {
 }
 
 function saveEditedBookPage() {
-  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const b = (state.books && state.books[readerState.activeBookIdx]) || (state.books && state.books[1]) || (state.books && state.books[0]);
   if (!b) return;
 
   const pageNo = parseInt(document.getElementById('editPageNoInput').value) || readerState.currentEditingPageNo || 1;
@@ -26659,7 +26771,7 @@ function saveEditedBookPage() {
 }
 
 function deleteBookPage(pageNo) {
-  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const b = (state.books && state.books[readerState.activeBookIdx]) || (state.books && state.books[1]) || (state.books && state.books[0]);
   if (!b) return;
 
   if (!confirm('Kya aap sach me Page ' + pageNo + ' delete karna chahte hain?')) {
@@ -26956,7 +27068,7 @@ async function runAutoOcrForAllLanguages(imageSrc) {
           ps.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
       };
 
-      const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+      const b = (state.books && state.books[readerState.activeBookIdx]) || (state.books && state.books[1]) || (state.books && state.books[0]) || { title: 'Hyperfocus' };
       const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
 
       // Find highest page count across all languages

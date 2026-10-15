@@ -1,4 +1,4 @@
-const DEFAULT_BOOKS = [
+var DEFAULT_BOOKS = (typeof window !== 'undefined' && window.DEFAULT_BOOKS) ? window.DEFAULT_BOOKS : [
   {
     "no": "book 0",
     "title": "A-Z English-Hindi Focus Vocabulary Lexicon",
