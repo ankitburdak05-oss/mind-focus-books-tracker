@@ -2,16 +2,17 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.13",
-    "name": "Mind Focus Books v0.0.13 - Quick Log Slider, 3D Dictionary, Deep Profile Metrics & Backup Status",
+    "version": "v0.0.19",
+    "name": "Mind Focus Books v0.0.13 (Stable Release)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Quick Page Log Modal: Live interactive range slider, 1-tap quick increment pills (+5, +10, +25, +50, Finish), and smart reading completion prediction.",
-      "📖 3D Vocabulary Dictionary: 101+ core English-Hindi words with search-as-you-type, A-Z filter, phonetics, audio pronunciation & real examples.",
-      "👤 Profile Tab Deep Metrics & Dynamic Quotes: Total Pages Read, Top Genre, Focus Time, and daily rotating reading quotes with shuffle.",
-      "💾 1-Tap Visual Backup Status & Styled PDF Report: Visual backup indicator badge and upgraded high-fidelity reading report layout."
+      "⚡ Stable v0.0.13 Core Release: Quick Page Log Modal, 3D Dictionary, Deep Profile Metrics & Backup Status.",
+      "📖 3D Vocabulary Dictionary: 101+ core English-Hindi words with search-as-you-type, A-Z filter & phonetics.",
+      "👤 Deep Profile Metrics & Dynamic Quotes.",
+      "💾 1-Tap Visual Backup Status & Styled PDF Report.",
+      "🛡️ Safe In-Place Update: 100% of your reading progress, notes and data are fully preserved."
     ],
-    "stagedAt": "2026-10-14T10:30:00.000Z",
+    "stagedAt": "2026-10-15T05:10:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
