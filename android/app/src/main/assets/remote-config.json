@@ -1,19 +1,25 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-10-15T06:33:00.000Z",
+  "updatedAt": "2026-10-15T07:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.20",
-    "name": "Mind Focus Books v0.0.20 (Official Release)",
+    "version": "v0.0.21",
+    "name": "Mind Focus Books v0.0.21 (10 Power Settings & Customization)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.20 Release: 3D Dictionary Book Reader with all 101 A-Z words & audio speech.",
-      "📖 35 Interactive 3D Pages for Dictionary Book with Phonetics, Hindi meanings, definitions & bilingual examples.",
-      "🔊 One-tap voice pronunciation for all vocabulary words.",
-      "⚡ Quick Page Log Modal, Reading Slider & Quick Pills.",
-      "👤 Deep Profile Metrics & Dynamic Quotes.",
+      "⚡ Official v0.0.21 Release: 10 New Power Settings & Customization Suite.",
+      "🎯 Daily Pages Reading Goal (5 to 50 pages/day).",
+      "🌐 Reader Default Language (Hindi / Hinglish / English).",
+      "🔤 Reader Font Zoom (85% to 150%).",
+      "💡 Keep Screen Awake (Screen Wake Lock API).",
+      "🚀 Default Start Tab (Home, Library, Explore, Progress).",
+      "📅 Date Formats (04 Oct 2026, 04/10/2026, 2026-10-04).",
+      "🔠 App Text Size Scaling (90% to 120%).",
+      "🍃 Reduce Motion & Animations (Battery & Focus).",
+      "📳 Subtle Haptics on Actions (Vibration).",
+      "💾 Visual Backup Reminders (Weekly / Monthly).",
       "🛡️ Safe In-Place Update: 100% of your reading progress, notes and data are fully preserved."
     ],
-    "stagedAt": "2026-10-15T06:33:00.000Z",
+    "stagedAt": "2026-10-15T07:55:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

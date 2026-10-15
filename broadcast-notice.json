@@ -1,14 +1,14 @@
 {
-  "id": "notice-v0.0.20",
-  "version": "v0.0.20",
+  "id": "notice-v0.0.21",
+  "version": "v0.0.21",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v0.0.20 Ready!",
-  "message": "Naya v0.0.20 release update ready hai! 3D Dictionary Book Reader me sabhi 101 words add ho gaye hain. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
-  "btnText": "⚡ Update Now (v0.0.20)",
+  "title": "Mind Focus Books v0.0.21 Ready!",
+  "message": "Naya v0.0.21 release update ready hai! Settings me 10 Super Features (Daily Pages Goal, Keep Screen Awake, Reader Font & Lang, Date Formats, Haptics) add ho gaye hain. Click karke turant update karein, aapka data 100% surakshit rahega.",
+  "btnText": "⚡ Update Now (v0.0.21)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-15T06:33:00.000Z"
+  "timestamp": "2026-10-15T07:55:00.000Z"
 }
