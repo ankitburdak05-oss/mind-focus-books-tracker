@@ -2,15 +2,15 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-02T14:55:00.000Z",
   "activeRelease": {
-    "version": "v0.0.17",
-    "name": "Mind Focus Books v0.0.17 - Instant 1-Tap Book Fix, Detail View Unblock & 10 Modern Preferences",
+    "version": "v0.0.18",
+    "name": "Mind Focus Books v0.0.18 - Smooth Touch Scroll, Fast Cache-Busting & Reader Engine",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "🎯 Instant 1-Tap Book Detail: Guaranteed title-based instant opening of every book in Library, Home and Explore.",
-      "📖 Fixed Dictionary Book Launch: Book 0 always launches 3D Vocabulary Dictionary directly with zero pointer conflicts.",
-      "🛡️ Active Modal Touch Guard: Complete removal of phantom overlays preventing touches on Book Detail controls.",
-      "⚙️ 10 Modern Preferences: Daily Pages Goal, Reader Language, Font Zoom, Wake Lock, Default Tab, Date Formats, Text Scaling, Reduced Motion, Haptics & Backup Reminders.",
-      "📱 100% Offline Single-File & Android Native Package Synchronized."
+      "⚡ Instant Responsive Clicks: Index-based exact book opening with zero escaping syntax errors across all books.",
+      "📜 Unrestricted Fluid Scrolling: Complete touch & scroll freeze elimination across Library, Home, and Book Detail.",
+      "🚀 Direct Browser Cache-Busting: Immediate refresh on browser load without stale caching.",
+      "📖 3D Multi-Language Reader & Tools Suite: Add Page with OCR Scanner, Edit Page, and Language Selector fully active.",
+      "⚙️ 10 Modern App Preferences: Daily reading goal, theme, font zoom, haptics, wake lock, date formats fully functional."
     ],
     "stagedAt": "2026-10-14T15:35:00.000Z",
     "isDeployed": true

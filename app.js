@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.17)
 // ==========================================================================
 
-const APP_VERSION = '0.0.17';
-const CURRENT_APP_VERSION = 'v0.0.17';
+const APP_VERSION = '0.0.18';
+const CURRENT_APP_VERSION = 'v0.0.18';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -533,8 +533,7 @@ function renderHomeRecentBooks() {
   list.innerHTML = recent.map((book) => {
     const originalIndex = state.books.indexOf(book);
     const isDict = isDictionaryBook(book);
-    const titleEsc = escapeHtml(book.title).replace(/'/g, "\\'");
-    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByTitle('${titleEsc}')`;
+    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByIndex(${originalIndex})`;
     return `
     <div class="recent-book-card ${isDict ? 'book-card-dictionary' : ''}" onclick="${clickHandler}">
       <div class="recent-cover-box">
@@ -740,8 +739,7 @@ function renderLibraryGrid() {
     const pct = Math.min(100, Math.round((current / total) * 100));
     
     const isDict = isDictionaryBook(book);
-    const titleEsc = escapeHtml(book.title).replace(/'/g, "\\'");
-    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByTitle('${titleEsc}')`;
+    const clickHandler = isDict ? 'openDictionaryModal()' : `openBookDetailViewByIndex(${originalIndex})`;
     
     // Compact Horizontal List Mode (1 Row per Book)
     if (isCompactList) {
@@ -865,7 +863,7 @@ function renderExploreBooksGrid() {
     const pct = Math.min(100, Math.round((current / total) * 100));
     
     return `
-      <div class="grid-book-card" onclick="openBookDetailViewByTitle('${escapeHtml(book.title).replace(/'/g, "\\'")}')">
+      <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
         <div class="grid-cover-wrap">
           <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
         </div>
@@ -2571,7 +2569,13 @@ function openCurrentReadingDetail() {
 
 function openBookDetailViewByTitle(title) {
   if (!title) return;
-  const book = state.books.find(b => b.title === title || (b.title && b.title.trim().toLowerCase() === title.trim().toLowerCase()));
+  const raw = String(title).trim().toLowerCase();
+  const unescaped = raw.replace(/&amp;/g, '&').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+  const book = state.books.find(b => {
+    if (!b || !b.title) return false;
+    const bt = b.title.trim().toLowerCase();
+    return bt === raw || bt === unescaped || bt.replace(/&/g, '&amp;') === raw;
+  });
   if (!book) return;
   if (isDictionaryBook(book)) {
     openDictionaryModal();
