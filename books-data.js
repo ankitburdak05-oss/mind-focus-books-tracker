@@ -13,6 +13,8 @@ const DEFAULT_BOOKS = [
     "takeaway": "Real 3D Interactive Flipping Pages Dictionary with English words, Hindi meanings, pronunciations, audio speech, and examples.",
     "availability": "AVAILABLE",
     "isDictionary": true,
+    "total_pages": 35,
+    "pages": 35,
     "price": 0,
     "cover_url": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80"
   },

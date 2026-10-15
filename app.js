@@ -3432,8 +3432,166 @@ function onReaderSliderInput(val) {
   renderRealBookPages();
 }
 
+function isDictionaryBook(book) {
+  if (!book) return false;
+  if (book.isDictionary === true) return true;
+  const t = (book.title || '').toLowerCase();
+  if (t.includes('vocabulary') || t.includes('lexicon') || t.includes('dictionary')) return true;
+  if (book.no === 'book 0' || (book.author && book.author.toLowerCase().includes('lexicon'))) return true;
+  return false;
+}
+
+function generateDictionaryBookPages(lang) {
+  const words = (typeof DICTIONARY_WORDS !== 'undefined' && Array.isArray(DICTIONARY_WORDS)) ? DICTIONARY_WORDS : [];
+  if (!words || words.length === 0) {
+    return [
+      {
+        pageNo: 1,
+        content: `
+          <div class="reader-title-page">
+            <div style="font-size: 2.2rem; margin-bottom: 8px;">📖</div>
+            <h1 class="reader-book-main-title">A-Z English-Hindi Focus Vocabulary Lexicon</h1>
+            <div class="reader-book-subtitle">Vocabulary & Language Edition</div>
+            <p style="margin-top: 16px; opacity: 0.8;">Loading 101 Vocabulary Power Words...</p>
+          </div>
+        `
+      }
+    ];
+  }
+
+  const pages = [];
+  const totalWords = words.length;
+  const wordsPerPage = 3;
+
+  // Title / Preface Page
+  let titleSub = '101 Essential Power Words for Mind, Focus & Daily Mastery';
+  let titleDesc = 'यह द्विभाषी शब्दकोश विशेष रूप से गहरी एकाग्रता, उत्पादकता और मानसिक शक्ति के लिए 101 महत्वपूर्ण अंग्रेजी शब्दों, उनके हिंदी अर्थ, उच्चारण, परिभाषा एवं उदाहरणों का संपूर्ण संग्रह प्रस्तुत करता है।';
+  if (lang === 'english') {
+    titleSub = '101 Essential Power Words for Mind, Focus & Productivity';
+    titleDesc = 'A comprehensive A-Z bilingual vocabulary guide featuring curated power words with accurate phonetics, Hindi translations, clear definitions, audio pronunciations, and contextual examples.';
+  } else if (lang === 'hinglish') {
+    titleSub = '101 Power Words with Hindi Meanings & Daily Usage Examples';
+    titleDesc = 'Ye dictionary deep focus, mindset aur vocabulary building ke liye banayi gayi hai. Har word ka sahi pronunciation, Hindi matlab aur realistic example sentence diya gaya hai.';
+  }
+
+  pages.push({
+    pageNo: 1,
+    content: `
+      <div class="reader-title-page">
+        <div style="font-size: 2.4rem; margin-bottom: 8px;">📖 🔤</div>
+        <h1 class="reader-book-main-title">A-Z English-Hindi Focus Vocabulary Lexicon</h1>
+        <div class="reader-book-subtitle">${titleSub}</div>
+        <div class="reader-divider">✦ ✦ ✦</div>
+        <div class="reader-book-author-text">Oxford Focus Lexicon • Master Edition</div>
+        <div class="reader-book-translator-text">अंग्रेजी-हिंदी शब्दकोश • 101 पावर वोकैबुलरी शब्द</div>
+        
+        <div style="margin: 16px auto; max-width: 420px; font-size: 0.88rem; line-height: 1.6; opacity: 0.9;">
+          ${titleDesc}
+        </div>
+
+        <div style="margin: 14px auto; padding: 10px 14px; background: rgba(125,125,125,0.08); border-radius: 8px; font-size: 0.8rem; line-height: 1.5; max-width: 420px; text-align: left;">
+          <strong>💡 How to Read / कैसे पढ़ें:</strong><br>
+          • <strong>Word & Phonetics:</strong> अंग्रेजी शब्द और उसका हिंदी उच्चारण [कोष्ठक में]।<br>
+          • <strong>🔊 Listen:</strong> सही उच्चारण सुनने के लिए बटन दबाएं।<br>
+          • <strong>🇮🇳 Hindi Meaning:</strong> शब्द का सटीक हिंदी अर्थ।<br>
+          • <strong>💬 Example:</strong> दैनिक जीवन और पुस्तकों में व्यावहारिक उपयोग।
+        </div>
+
+        <div class="reader-publisher-badge">
+          <span class="pub-name">MIND FOCUS LEXICON EDITIONS</span>
+          <span class="pub-sub">COMPLETE 101 ENTRIES • A TO Z MASTER COLLECTION</span>
+        </div>
+      </div>
+    `
+  });
+
+  let pageNum = 2;
+  for (let i = 0; i < totalWords; i += wordsPerPage) {
+    const chunk = words.slice(i, i + wordsPerPage);
+    const startIdx = i + 1;
+    const endIdx = Math.min(i + wordsPerPage, totalWords);
+    
+    const firstLetter = chunk[0].word.charAt(0).toUpperCase();
+    const lastLetter = chunk[chunk.length - 1].word.charAt(0).toUpperCase();
+    const letterSpan = (firstLetter === lastLetter) ? `Section [ ${firstLetter} ]` : `Section [ ${firstLetter} – ${lastLetter} ]`;
+
+    let entriesHtml = chunk.map(w => {
+      const escapedWord = (w.word || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const safeWord = escapeHtml(w.word);
+      const safePhonetic = escapeHtml(w.phonetic || '');
+      const safeType = escapeHtml(w.type || '');
+      const safeHindi = escapeHtml(w.hindi || '');
+      const safeDef = escapeHtml(w.definition || '');
+      const safeEx = escapeHtml(w.example || '');
+      const safeExHi = escapeHtml(w.exampleHindi || '');
+      const safeSyn = escapeHtml(w.syn || '');
+
+      return `
+        <div class="reader-dict-entry">
+          <div class="reader-dict-entry-top">
+            <div style="display:inline-flex; align-items:baseline; flex-wrap:wrap; gap:6px;">
+              <span class="reader-dict-word">${safeWord}</span>
+              ${safePhonetic ? `<span class="reader-dict-phonetic">[${safePhonetic}]</span>` : ''}
+              ${safeType ? `<span class="reader-dict-type">${safeType}</span>` : ''}
+            </div>
+            <button type="button" class="reader-dict-audio-btn" onclick="speakDictionaryWord('${escapedWord}')" title="Listen Pronunciation">
+              <span>🔊</span> Listen
+            </button>
+          </div>
+          <div class="reader-dict-hindi">
+            <span>🇮🇳</span> ${safeHindi}
+          </div>
+          ${safeDef ? `<div class="reader-dict-def">${safeDef}</div>` : ''}
+          ${safeEx ? `
+            <div class="reader-dict-example">
+              <div class="reader-dict-example-en">💬 “${safeEx}”</div>
+              ${safeExHi ? `<div class="reader-dict-example-hi">👉 ${safeExHi}</div>` : ''}
+            </div>
+          ` : ''}
+          ${safeSyn ? `
+            <div class="reader-dict-syn">
+              <strong>Synonyms:</strong> ${safeSyn}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }).join('');
+
+    if (endIdx === totalWords) {
+      entriesHtml += `
+        <div style="margin-top:10px; text-align:center; padding:8px 12px; border-radius:8px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.25); font-size:0.82rem; font-weight:700; color:#10b981;">
+          🎉 Congratulations! You have mastered all 101 Vocabulary Power Words!
+        </div>
+      `;
+    }
+
+    pages.push({
+      pageNo: pageNum++,
+      content: `
+        <div class="reader-dict-page">
+          <div class="reader-dict-header">
+            <span>📖 A-Z VOCABULARY LEXICON</span>
+            <span>${letterSpan} • ${startIdx}–${endIdx} OF ${totalWords}</span>
+          </div>
+          <div class="reader-dict-container">
+            ${entriesHtml}
+          </div>
+        </div>
+      `
+    });
+  }
+
+  return pages;
+}
+
 function getBookPagesArray(book, lang) {
   if (!book) return [];
+  
+  // Real 3D Book reader support for Dictionary Book (Book 0 / Vocabulary Lexicon)
+  if (isDictionaryBook(book)) {
+    return generateDictionaryBookPages(lang);
+  }
+
   const titleLower = (book.title || '').toLowerCase();
   
   // Check if book exists in BOOK_PAGES_DATA

@@ -7595,6 +7595,143 @@ input:checked + .slider-round:before {
   border-color: var(--accent-gold);
 }
 
+/* ================= REAL BOOK READER DICTIONARY PAGES ================= */
+.reader-dict-page {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.reader-dict-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(125, 125, 125, 0.25);
+  padding-bottom: 6px;
+  margin-bottom: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  opacity: 0.85;
+}
+
+.reader-dict-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.reader-dict-entry {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(125, 125, 125, 0.18);
+  background: rgba(125, 125, 125, 0.04);
+  transition: background 0.15s ease;
+}
+
+.reader-dict-entry-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.reader-dict-word {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 0.2px;
+}
+
+.reader-dict-phonetic {
+  font-size: 0.82rem;
+  opacity: 0.75;
+  font-style: italic;
+  margin-left: 6px;
+}
+
+.reader-dict-type {
+  font-size: 0.68rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.18);
+  color: #b45309;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-left: 6px;
+}
+
+[data-reader-theme="dark"] .reader-dict-type {
+  color: #fbbf24;
+}
+
+.reader-dict-audio-btn {
+  background: transparent;
+  border: 1px solid rgba(125, 125, 125, 0.3);
+  border-radius: 12px;
+  color: inherit;
+  font-size: 0.74rem;
+  padding: 2px 8px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: inherit;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.reader-dict-audio-btn:hover {
+  border-color: #f59e0b;
+  color: #f59e0b;
+}
+
+.reader-dict-hindi {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #0d8a5f;
+  margin-bottom: 4px;
+}
+
+[data-reader-theme="dark"] .reader-dict-hindi {
+  color: #34d399;
+}
+
+.reader-dict-def {
+  font-size: 0.86rem;
+  line-height: 1.48;
+  margin-bottom: 6px;
+  opacity: 0.92;
+}
+
+.reader-dict-example {
+  background: rgba(125, 125, 125, 0.06);
+  border-left: 3px solid #f59e0b;
+  padding: 6px 10px;
+  border-radius: 0 6px 6px 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  margin-bottom: 4px;
+}
+
+.reader-dict-example-en {
+  font-style: italic;
+}
+
+.reader-dict-example-hi {
+  margin-top: 2px;
+  opacity: 0.88;
+}
+
+.reader-dict-syn {
+  font-size: 0.78rem;
+  opacity: 0.82;
+  margin-top: 4px;
+}
+
+
 
 </style>
   <script>
@@ -11251,6 +11388,8 @@ const DEFAULT_BOOKS = [
     "takeaway": "Real 3D Interactive Flipping Pages Dictionary with English words, Hindi meanings, pronunciations, audio speech, and examples.",
     "availability": "AVAILABLE",
     "isDictionary": true,
+    "total_pages": 35,
+    "pages": 35,
     "price": 0,
     "cover_url": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80"
   },
@@ -16906,7 +17045,7 @@ if (typeof module !== 'undefined' && module.exports) {
 // ==========================================================================
 
 const APP_VERSION = '0.0.13';
-const CURRENT_APP_VERSION = 'v0.0.13';
+const CURRENT_APP_VERSION = 'v0.0.19';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -20335,8 +20474,166 @@ function onReaderSliderInput(val) {
   renderRealBookPages();
 }
 
+function isDictionaryBook(book) {
+  if (!book) return false;
+  if (book.isDictionary === true) return true;
+  const t = (book.title || '').toLowerCase();
+  if (t.includes('vocabulary') || t.includes('lexicon') || t.includes('dictionary')) return true;
+  if (book.no === 'book 0' || (book.author && book.author.toLowerCase().includes('lexicon'))) return true;
+  return false;
+}
+
+function generateDictionaryBookPages(lang) {
+  const words = (typeof DICTIONARY_WORDS !== 'undefined' && Array.isArray(DICTIONARY_WORDS)) ? DICTIONARY_WORDS : [];
+  if (!words || words.length === 0) {
+    return [
+      {
+        pageNo: 1,
+        content: `
+          <div class="reader-title-page">
+            <div style="font-size: 2.2rem; margin-bottom: 8px;">📖</div>
+            <h1 class="reader-book-main-title">A-Z English-Hindi Focus Vocabulary Lexicon</h1>
+            <div class="reader-book-subtitle">Vocabulary & Language Edition</div>
+            <p style="margin-top: 16px; opacity: 0.8;">Loading 101 Vocabulary Power Words...</p>
+          </div>
+        `
+      }
+    ];
+  }
+
+  const pages = [];
+  const totalWords = words.length;
+  const wordsPerPage = 3;
+
+  // Title / Preface Page
+  let titleSub = '101 Essential Power Words for Mind, Focus & Daily Mastery';
+  let titleDesc = 'यह द्विभाषी शब्दकोश विशेष रूप से गहरी एकाग्रता, उत्पादकता और मानसिक शक्ति के लिए 101 महत्वपूर्ण अंग्रेजी शब्दों, उनके हिंदी अर्थ, उच्चारण, परिभाषा एवं उदाहरणों का संपूर्ण संग्रह प्रस्तुत करता है।';
+  if (lang === 'english') {
+    titleSub = '101 Essential Power Words for Mind, Focus & Productivity';
+    titleDesc = 'A comprehensive A-Z bilingual vocabulary guide featuring curated power words with accurate phonetics, Hindi translations, clear definitions, audio pronunciations, and contextual examples.';
+  } else if (lang === 'hinglish') {
+    titleSub = '101 Power Words with Hindi Meanings & Daily Usage Examples';
+    titleDesc = 'Ye dictionary deep focus, mindset aur vocabulary building ke liye banayi gayi hai. Har word ka sahi pronunciation, Hindi matlab aur realistic example sentence diya gaya hai.';
+  }
+
+  pages.push({
+    pageNo: 1,
+    content: `
+      <div class="reader-title-page">
+        <div style="font-size: 2.4rem; margin-bottom: 8px;">📖 🔤</div>
+        <h1 class="reader-book-main-title">A-Z English-Hindi Focus Vocabulary Lexicon</h1>
+        <div class="reader-book-subtitle">${titleSub}</div>
+        <div class="reader-divider">✦ ✦ ✦</div>
+        <div class="reader-book-author-text">Oxford Focus Lexicon • Master Edition</div>
+        <div class="reader-book-translator-text">अंग्रेजी-हिंदी शब्दकोश • 101 पावर वोकैबुलरी शब्द</div>
+        
+        <div style="margin: 16px auto; max-width: 420px; font-size: 0.88rem; line-height: 1.6; opacity: 0.9;">
+          ${titleDesc}
+        </div>
+
+        <div style="margin: 14px auto; padding: 10px 14px; background: rgba(125,125,125,0.08); border-radius: 8px; font-size: 0.8rem; line-height: 1.5; max-width: 420px; text-align: left;">
+          <strong>💡 How to Read / कैसे पढ़ें:</strong><br>
+          • <strong>Word & Phonetics:</strong> अंग्रेजी शब्द और उसका हिंदी उच्चारण [कोष्ठक में]।<br>
+          • <strong>🔊 Listen:</strong> सही उच्चारण सुनने के लिए बटन दबाएं।<br>
+          • <strong>🇮🇳 Hindi Meaning:</strong> शब्द का सटीक हिंदी अर्थ।<br>
+          • <strong>💬 Example:</strong> दैनिक जीवन और पुस्तकों में व्यावहारिक उपयोग।
+        </div>
+
+        <div class="reader-publisher-badge">
+          <span class="pub-name">MIND FOCUS LEXICON EDITIONS</span>
+          <span class="pub-sub">COMPLETE 101 ENTRIES • A TO Z MASTER COLLECTION</span>
+        </div>
+      </div>
+    `
+  });
+
+  let pageNum = 2;
+  for (let i = 0; i < totalWords; i += wordsPerPage) {
+    const chunk = words.slice(i, i + wordsPerPage);
+    const startIdx = i + 1;
+    const endIdx = Math.min(i + wordsPerPage, totalWords);
+    
+    const firstLetter = chunk[0].word.charAt(0).toUpperCase();
+    const lastLetter = chunk[chunk.length - 1].word.charAt(0).toUpperCase();
+    const letterSpan = (firstLetter === lastLetter) ? `Section [ ${firstLetter} ]` : `Section [ ${firstLetter} – ${lastLetter} ]`;
+
+    let entriesHtml = chunk.map(w => {
+      const escapedWord = (w.word || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const safeWord = escapeHtml(w.word);
+      const safePhonetic = escapeHtml(w.phonetic || '');
+      const safeType = escapeHtml(w.type || '');
+      const safeHindi = escapeHtml(w.hindi || '');
+      const safeDef = escapeHtml(w.definition || '');
+      const safeEx = escapeHtml(w.example || '');
+      const safeExHi = escapeHtml(w.exampleHindi || '');
+      const safeSyn = escapeHtml(w.syn || '');
+
+      return `
+        <div class="reader-dict-entry">
+          <div class="reader-dict-entry-top">
+            <div style="display:inline-flex; align-items:baseline; flex-wrap:wrap; gap:6px;">
+              <span class="reader-dict-word">${safeWord}</span>
+              ${safePhonetic ? `<span class="reader-dict-phonetic">[${safePhonetic}]</span>` : ''}
+              ${safeType ? `<span class="reader-dict-type">${safeType}</span>` : ''}
+            </div>
+            <button type="button" class="reader-dict-audio-btn" onclick="speakDictionaryWord('${escapedWord}')" title="Listen Pronunciation">
+              <span>🔊</span> Listen
+            </button>
+          </div>
+          <div class="reader-dict-hindi">
+            <span>🇮🇳</span> ${safeHindi}
+          </div>
+          ${safeDef ? `<div class="reader-dict-def">${safeDef}</div>` : ''}
+          ${safeEx ? `
+            <div class="reader-dict-example">
+              <div class="reader-dict-example-en">💬 “${safeEx}”</div>
+              ${safeExHi ? `<div class="reader-dict-example-hi">👉 ${safeExHi}</div>` : ''}
+            </div>
+          ` : ''}
+          ${safeSyn ? `
+            <div class="reader-dict-syn">
+              <strong>Synonyms:</strong> ${safeSyn}
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }).join('');
+
+    if (endIdx === totalWords) {
+      entriesHtml += `
+        <div style="margin-top:10px; text-align:center; padding:8px 12px; border-radius:8px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.25); font-size:0.82rem; font-weight:700; color:#10b981;">
+          🎉 Congratulations! You have mastered all 101 Vocabulary Power Words!
+        </div>
+      `;
+    }
+
+    pages.push({
+      pageNo: pageNum++,
+      content: `
+        <div class="reader-dict-page">
+          <div class="reader-dict-header">
+            <span>📖 A-Z VOCABULARY LEXICON</span>
+            <span>${letterSpan} • ${startIdx}–${endIdx} OF ${totalWords}</span>
+          </div>
+          <div class="reader-dict-container">
+            ${entriesHtml}
+          </div>
+        </div>
+      `
+    });
+  }
+
+  return pages;
+}
+
 function getBookPagesArray(book, lang) {
   if (!book) return [];
+  
+  // Real 3D Book reader support for Dictionary Book (Book 0 / Vocabulary Lexicon)
+  if (isDictionaryBook(book)) {
+    return generateDictionaryBookPages(lang);
+  }
+
   const titleLower = (book.title || '').toLowerCase();
   
   // Check if book exists in BOOK_PAGES_DATA
