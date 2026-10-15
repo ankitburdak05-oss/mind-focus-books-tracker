@@ -7751,6 +7751,938 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
 
 
+
+/* ==========================================================================
+   HEADER RESPONSIVENESS: FULLSCREEN ON DESKTOP, REFRESH ON PHONE
+   ========================================================================== */
+#headerFullscreenBtn {
+  display: inline-flex;
+}
+#headerRefreshBtn {
+  display: none;
+}
+@media (max-width: 768px) {
+  #headerFullscreenBtn {
+    display: none !important;
+  }
+  #headerRefreshBtn {
+    display: inline-flex !important;
+  }
+}
+@media all and (display-mode: standalone) {
+  #headerFullscreenBtn {
+    display: none !important;
+  }
+  #headerRefreshBtn {
+    display: inline-flex !important;
+  }
+}
+
+/* 1. Language Selector Dialog */
+.lang-select-dialog {
+  max-width: 540px !important;
+  border-radius: 20px !important;
+  background: var(--bg-card) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.lang-select-book-preview {
+  display: flex;
+  gap: 1rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 0.9rem;
+  align-items: center;
+}
+
+.lang-select-cover-wrap {
+  width: 72px;
+  height: 104px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #1e293b;
+}
+
+.lang-select-cover {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.lang-select-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lang-select-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba(99, 102, 241, 0.2);
+  color: #a5b4fc;
+  border: 1px solid rgba(99, 102, 241, 0.35);
+}
+
+.lang-options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.lang-option-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid var(--border-color);
+  border-radius: 14px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-primary);
+  width: 100%;
+}
+
+.lang-option-card:hover {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: #f59e0b;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 158, 11, 0.2);
+}
+
+.lang-option-card.active-lang-card {
+  border-color: #f59e0b;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.12), rgba(217, 119, 6, 0.06));
+}
+
+.lang-card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.lang-flag {
+  font-size: 1.6rem;
+  flex-shrink: 0;
+}
+
+.lang-card-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.lang-card-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.lang-card-sub {
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+  line-height: 1.35;
+}
+
+.lang-recommended-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: #f59e0b;
+  color: #000;
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.lang-hinglish-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.lang-eng-pill {
+  font-size: 0.65rem;
+  font-weight: 800;
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  padding: 2px 7px;
+  border-radius: 10px;
+}
+
+.lang-card-action {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
+}
+
+.lang-pages-count {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.lang-open-arrow {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #f59e0b;
+}
+
+.lang-custom-add-banner {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed var(--border-color);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+/* 2. Real Book Reader Overlay */
+.real-book-reader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(3, 5, 10, 0.94);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.real-book-reader-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.real-book-reader-container {
+  width: 100%;
+  max-width: 1100px;
+  height: 94vh;
+  max-height: 880px;
+  display: flex;
+  flex-direction: column;
+  background: #0f1422;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.8), 0 0 50px rgba(99, 102, 241, 0.15);
+  overflow: hidden;
+}
+
+/* Reader Top Bar */
+.reader-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 16px;
+  background: rgba(10, 14, 25, 0.95);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  gap: 10px;
+}
+
+.reader-top-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.reader-btn-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.reader-btn-icon:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.reader-book-identity {
+  display: flex;
+  flex-direction: column;
+}
+
+.reader-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #f59e0b;
+  letter-spacing: 0.05em;
+}
+
+.reader-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #f8fafc;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 260px;
+}
+
+/* Language Switcher Pills */
+.reader-lang-pills {
+  display: flex;
+  background: rgba(255, 255, 255, 0.06);
+  padding: 3px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reader-lang-pill {
+  padding: 5px 12px;
+  border-radius: 16px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reader-lang-pill:hover {
+  color: #fff;
+}
+
+.reader-lang-pill.active {
+  background: #f59e0b;
+  color: #0b0f19;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
+}
+
+.reader-top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reader-font-controls {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 2px 4px;
+}
+
+.reader-btn-sm {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 5px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reader-btn-sm:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* 3. 3D Open Book Stage */
+.real-book-stage-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: radial-gradient(circle at center, #1b2336 0%, #090c14 100%);
+  perspective: 1800px;
+  overflow: hidden;
+}
+
+.real-book-hardcover {
+  width: 100%;
+  height: 100%;
+  max-width: 980px;
+  background: #3e2723;
+  border-radius: 12px;
+  padding: 10px 14px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), inset 0 0 15px rgba(0, 0, 0, 0.7);
+  display: flex;
+  position: relative;
+}
+
+.real-book-spread {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  position: relative;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Bookmark Ribbon */
+.reader-ribbon-bookmark {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 70px;
+  background: linear-gradient(180deg, #dc2626, #991b1b);
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 50% 100%, 0 85%);
+  pointer-events: none;
+}
+
+/* Page Sheets */
+.reader-page-sheet {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 28px 18px;
+  overflow-y: auto;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Page Sheet Backgrounds & Themes */
+/* Default / Sepia Theme */
+[data-reader-theme="sepia"] .real-book-spread {
+  background: #fbf5e6;
+  color: #2b1f14;
+}
+[data-reader-theme="sepia"] .page-sheet-left {
+  background: linear-gradient(to right, #f4edd8 0%, #fbf5e6 88%, #ede2cb 100%);
+  border-right: 1px solid rgba(139, 90, 43, 0.15);
+}
+[data-reader-theme="sepia"] .page-sheet-right {
+  background: linear-gradient(to left, #f4edd8 0%, #fbf5e6 88%, #ede2cb 100%);
+}
+
+/* Dark Theme */
+[data-reader-theme="dark"] .real-book-spread {
+  background: #141923;
+  color: #e2e8f0;
+}
+[data-reader-theme="dark"] .page-sheet-left {
+  background: linear-gradient(to right, #0e121a 0%, #141923 88%, #090c12 100%);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+}
+[data-reader-theme="dark"] .page-sheet-right {
+  background: linear-gradient(to left, #0e121a 0%, #141923 88%, #090c12 100%);
+}
+
+/* Light / Paper Theme */
+[data-reader-theme="light"] .real-book-spread {
+  background: #ffffff;
+  color: #1e293b;
+}
+[data-reader-theme="light"] .page-sheet-left {
+  background: linear-gradient(to right, #f8fafc 0%, #ffffff 88%, #e2e8f0 100%);
+  border-right: 1px solid #cbd5e1;
+}
+[data-reader-theme="light"] .page-sheet-right {
+  background: linear-gradient(to left, #f8fafc 0%, #ffffff 88%, #e2e8f0 100%);
+}
+
+/* Center Spine Valley */
+.reader-spine-divider {
+  width: 28px;
+  flex-shrink: 0;
+  position: relative;
+  background: linear-gradient(to right, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.05) 45%, rgba(0,0,0,0.5) 50%, rgba(0,0,0,0.05) 55%, rgba(0,0,0,0.3) 100%);
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.reader-spine-crease {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 1px;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.page-inner-sheet {
+  flex: 1;
+  font-family: 'Merriweather', 'Georgia', 'Noto Serif Devanagari', serif;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+.reader-page-number-footer {
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.6;
+  margin-top: 14px;
+  font-family: inherit;
+  font-weight: 700;
+}
+
+/* Reader Typography & Layout Elements */
+.reader-title-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 100%;
+  padding: 20px 10px;
+}
+
+.reader-book-main-title {
+  font-size: 2rem;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+
+.reader-book-subtitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  opacity: 0.85;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.reader-divider {
+  letter-spacing: 0.4em;
+  opacity: 0.5;
+  margin: 14px 0 20px;
+  font-size: 0.85rem;
+}
+
+.reader-book-author-text {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.reader-book-translator-text {
+  font-size: 0.95rem;
+  font-style: italic;
+  opacity: 0.75;
+  margin-bottom: 24px;
+}
+
+.reader-publisher-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.15);
+  padding-top: 18px;
+  margin-top: 20px;
+  width: 80%;
+}
+
+[data-reader-theme="dark"] .reader-publisher-badge {
+  border-top-color: rgba(255, 255, 255, 0.15);
+}
+
+.pub-logo-icon {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.pub-name {
+  font-weight: 800;
+  font-size: 0.95rem;
+}
+
+.pub-sub {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+}
+
+.reader-page-header {
+  font-size: 1.15rem;
+  font-weight: 800;
+  border-bottom: 2px solid #f59e0b;
+  padding-bottom: 6px;
+  margin-bottom: 14px;
+  display: inline-block;
+}
+
+.reader-praise-block {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.12);
+}
+
+[data-reader-theme="dark"] .reader-praise-block {
+  border-bottom-color: rgba(255, 255, 255, 0.1);
+}
+
+.reader-quote-text {
+  font-style: italic;
+  margin: 0 0 6px;
+  line-height: 1.55;
+  font-size: 0.92rem;
+}
+
+.reader-quote-author {
+  font-size: 0.82rem;
+  text-align: right;
+  margin: 0;
+  opacity: 0.85;
+}
+
+.reader-callout-box {
+  background: rgba(245, 158, 11, 0.1);
+  border-left: 4px solid #f59e0b;
+  padding: 10px 14px;
+  border-radius: 0 10px 10px 0;
+  margin: 12px 0;
+}
+
+.reader-callout-title {
+  font-weight: 800;
+  font-size: 0.88rem;
+  margin-bottom: 4px;
+}
+
+.reader-highlight-card {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 12px;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+[data-reader-theme="dark"] .reader-highlight-card {
+  border-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.mode-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+.mode-hyper {
+  background: #f59e0b;
+  color: #000;
+}
+
+.mode-scatter {
+  background: #38bdf8;
+  color: #000;
+}
+
+.reader-book-back-summary {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.reader-book-back-price-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-top: 16px;
+}
+
+[data-reader-theme="dark"] .reader-book-back-price-box {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* Bottom Reader Bar */
+.reader-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background: rgba(10, 14, 25, 0.95);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+  gap: 16px;
+}
+
+.reader-nav-btn {
+  background: #f59e0b;
+  color: #0b0f19;
+  font-size: 0.85rem;
+  font-weight: 800;
+  padding: 8px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.reader-nav-btn:hover {
+  background: #d97706;
+  transform: translateY(-1px);
+}
+
+.reader-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.reader-page-slider-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  max-width: 460px;
+}
+
+.reader-page-range {
+  flex: 1;
+  accent-color: #f59e0b;
+  cursor: pointer;
+}
+
+.reader-page-indicator {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  min-width: 80px;
+  text-align: right;
+}
+
+/* Mobile & Tablet Responsiveness */
+@media (max-width: 768px) {
+  .real-book-reader-container {
+    height: 100vh;
+    max-height: none;
+    border-radius: 0;
+    border: none;
+  }
+  
+  .real-book-reader-overlay {
+    padding: 0;
+  }
+
+  .real-book-hardcover {
+    padding: 4px;
+    border-radius: 0;
+  }
+
+  /* Single page view on mobile */
+  .page-sheet-left {
+    display: none;
+  }
+
+  .reader-spine-divider {
+    display: none;
+  }
+
+  .reader-page-sheet {
+    padding: 16px 14px;
+  }
+
+  .reader-top-bar {
+    padding: 8px 10px;
+  }
+
+  .reader-title {
+    max-width: 140px;
+    font-size: 0.85rem;
+  }
+
+  .reader-lang-pill {
+    padding: 4px 8px;
+    font-size: 0.72rem;
+  }
+
+  .reader-bottom-bar {
+    padding: 8px 12px;
+    gap: 8px;
+  }
+
+  .reader-nav-btn {
+    padding: 7px 12px;
+    font-size: 0.78rem;
+  }
+
+  .reader-page-indicator {
+    min-width: 60px;
+    font-size: 0.75rem;
+  }
+}
+
+/* ==========================================
+   AUTO-OCR BOOK PAGE PHOTO DROPZONE & SCANNER
+   ========================================== */
+.page-ocr-dropzone {
+  border: 2px dashed rgba(99, 102, 241, 0.45);
+  background: rgba(99, 102, 241, 0.04);
+  border-radius: 14px;
+  padding: 16px 14px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.page-ocr-dropzone:hover,
+.page-ocr-dropzone.dragover {
+  border-color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(99, 102, 241, 0.15);
+}
+
+.ocr-scan-spinner {
+  font-size: 2rem;
+  display: inline-block;
+  animation: ocrPulseAnim 1.2s infinite ease-in-out;
+}
+
+@keyframes ocrPulseAnim {
+  0% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.22); opacity: 1; filter: drop-shadow(0 0 10px #6366f1); }
+  100% { transform: scale(1); opacity: 0.7; }
+}
+
+.ocr-scan-laser {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #6366f1, #10b981, transparent);
+  box-shadow: 0 0 10px #6366f1;
+  animation: ocrLaserScanAnim 1.5s infinite ease-in-out;
+  pointer-events: none;
+}
+
+@keyframes ocrLaserScanAnim {
+  0% { top: 0%; opacity: 0.8; }
+  50% { top: 100%; opacity: 1; }
+  100% { top: 0%; opacity: 0.8; }
+}
+
+/* Page Footer Toolbar with Edit/Delete Buttons */
+.reader-page-footer-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+  margin-top: auto;
+  position: relative;
+  z-index: 5;
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 0 0 8px 8px;
+}
+
+[data-reader-theme="dark"] .reader-page-footer-wrap {
+  border-top-color: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.reader-page-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.reader-page-act-btn {
+  background: rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  padding: 3px 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  line-height: 1;
+}
+
+[data-reader-theme="dark"] .reader-page-act-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #e2e8f0;
+}
+
+.reader-page-act-btn:hover {
+  background: rgba(99, 102, 241, 0.18);
+  border-color: #6366f1;
+  color: #6366f1;
+  transform: translateY(-1px);
+}
+
+.reader-page-act-btn.danger:hover {
+  background: rgba(239, 68, 68, 0.18);
+  border-color: #ef4444;
+  color: #ef4444;
+  transform: translateY(-1px);
+}
+
+/* Single Page Mode on Desktop */
+.real-book-reader-container.single-page-mode .page-sheet-left {
+  display: none !important;
+}
+
+.real-book-reader-container.single-page-mode .reader-spine-divider {
+  display: none !important;
+}
+
+.real-book-reader-container.single-page-mode .page-sheet-right {
+  widt
 </style>
   <script>
 // ==========================================================================
@@ -8044,6 +8976,13 @@ if (typeof window !== 'undefined') {
         <button type="button" class="header-icon-btn" id="headerFullscreenBtn" title="Toggle Fullscreen (F11)" onclick="toggleAppFullscreen()">
           <svg id="fullscreenIconSvg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
             <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
+          </svg>
+        </button>
+        <button type="button" class="header-icon-btn" id="headerRefreshBtn" title="Refresh App" onclick="refreshAppPage()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
           </svg>
         </button>
         <button type="button" class="header-icon-btn" id="headerSettingsBtn" title="App Adjustments &amp; Settings" onclick="navigateToSubView('appSettings')">
@@ -10308,7 +11247,7 @@ if (typeof window !== 'undefined') {
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.21 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.22 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -10600,6 +11539,141 @@ if (typeof window !== 'undefined') {
     </button>
   </nav>
 
+  <!-- 1. Language Selection Modal -->
+  <div class="modal-overlay" id="bookLanguageSelectModal" onclick="handleLangSelectOverlayClick(event)">
+    <div class="modal-content lang-select-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span style="font-size:1.5rem;">📖</span>
+          <div>
+            <h3 class="modal-title" id="langSelectBookTitle">किताब पढ़ें / Read Book</h3>
+            <div style="font-size:0.75rem; color:var(--text-secondary);" id="langSelectBookAuthor">Select Reading Language</div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeLanguageSelectModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:1.25rem; gap:1rem;">
+        <!-- Book Preview Card -->
+        <div class="lang-select-book-preview">
+          <div class="lang-select-cover-wrap">
+            <img id="langSelectCoverImg" src="hyperfocus_cover.jpg" alt="Cover" class="lang-select-cover">
+          </div>
+          <div class="lang-select-info">
+            <span class="lang-select-badge" id="langSelectCategoryBadge">Focus &amp; Productivity</span>
+            <h4 id="langSelectTitleEn" style="margin:0.25rem 0 0.15rem; font-size:1rem; font-weight:800; color:var(--text-primary);">Hyperfocus: How to Work Less to Achieve More</h4>
+            <div class="lang-select-author-txt" id="langSelectAuthorTxt" style="font-size:0.8rem; color:var(--text-secondary);">by Chris Bailey • अनुवाद: अजय तिवारी</div>
+            <div class="lang-select-isbn-row" id="langSelectIsbnRow" style="margin-top:0.4rem; font-size:0.75rem; color:var(--text-muted); display:flex; gap:0.6rem; flex-wrap:wrap;">
+              <span>ISBN: <strong style="color:var(--text-primary);">978-93-5543-300-8</strong></span>
+              <span>• Price: <strong style="color:#10b981;">₹350</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-top:0.1rem; display:flex; justify-content:space-between; align-items:center;">
+          <span>🌐 भाषा चुनें (Choose Language):</span>
+          <span style="font-size:0.72rem; color:var(--text-muted);">1-Tap to Open Real Book</span>
+        </div>
+
+        <div class="lang-options-grid">
+          <!-- Option 1: Hindi -->
+          <button type="button" class="lang-option-card active-lang-card" onclick="selectBookLanguageAndOpen('hindi')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🇮🇳</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">हिंदी (Hindi) <span class="lang-recommended-pill">मूल पुस्तक</span></div>
+                <div class="lang-card-sub">हायपरफ़ोकस: कम प्रयास में अधिक सफलता कैसे प्राप्त करें (अजय तिवारी)</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langHindiCountBadge">2 पृष्ठ</span>
+              <span class="lang-open-arrow">पढ़ें ›</span>
+            </div>
+          </button>
+
+          <!-- Option 2: Hinglish -->
+          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('hinglish')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🔤</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">Hinglish (हिंग्लिश) <span class="lang-hinglish-pill">Roman Hindi</span></div>
+                <div class="lang-card-sub">Simple Roman Hindi me padhein — aasaan aur fast reading experience</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langHinglishCountBadge">2 Pages</span>
+              <span class="lang-open-arrow">Read ›</span>
+            </div>
+          </button>
+
+          <!-- Option 3: English -->
+          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('english')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🇬🇧</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">English <span class="lang-eng-pill">Original</span></div>
+                <div class="lang-card-sub">Hyperfocus: How to Work Less to Achieve More (Original edition)</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langEnglishCountBadge">2 Pages</span>
+              <span class="lang-open-arrow">Read ›</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- FEATURE: INSTANT SCAN & CONVERT TO ALL LANGUAGES -->
+        <div class="lang-all-ocr-card" style="background:linear-gradient(135deg, rgba(99,102,241,0.09), rgba(16,185,129,0.09)); border:1.5px dashed rgba(99,102,241,0.45); border-radius:14px; padding:12px 14px; text-align:center; position:relative; overflow:hidden;">
+          <input type="file" id="langModalPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleLangModalAutoOcrAll(this)">
+          <div id="langModalOcrPrompt" onclick="document.getElementById('langModalPhotoInput').click()" style="cursor:pointer;">
+            <div style="font-size:1.9rem; line-height:1; margin-bottom:4px;">📸 ⚡</div>
+            <div style="font-weight:800; font-size:0.92rem; color:var(--text-primary);">
+              Book Page ki Photo Dalein (Auto-Add to All Languages)
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
+              ⚡ <strong>1-Click: Photo dalte hi हिंदी + Hinglish + English teeno bhashaon mein naya page ban jayega!</strong>
+            </div>
+            <div style="margin-top:8px;">
+              <span class="btn btn-sm btn-primary" style="font-size:0.74rem; font-weight:700; padding:4px 14px; border-radius:20px; pointer-events:none;">
+                📷 Scan &amp; Convert to All 3 Languages
+              </span>
+            </div>
+          </div>
+
+          <!-- Loading / Scanning State -->
+          <div id="langModalOcrScanning" style="display:none; padding:8px 0; text-align:center;">
+            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
+            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="langModalOcrStatus">
+              Photo scan karke teeno bhashaon mein convert ho raha hai...
+            </div>
+            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
+              <div id="langModalOcrProgressBar" style="width:25%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Success Badge -->
+          <div id="langModalOcrSuccess" style="display:none; align-items:center; gap:8px; justify-content:center; padding:4px 0; font-weight:700; color:#10b981; font-size:0.82rem;">
+            <span>✅</span> <span id="langModalOcrSuccessTxt">Teeno bhashaon mein naya page safaltapoorvak add ho gaya!</span>
+          </div>
+        </div>
+
+        <!-- Add Custom Pages Button -->
+        <div class="lang-custom-add-banner">
+          <div>
+            <div style="font-weight:700; font-size:0.82rem; color:var(--text-primary);">📝 Single Page Type/Add Karna Hai?</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary);">Keval ek bhasha mein custom page likhein ya jodein</div>
+          </div>
+          <button type="button" class="btn btn-sm" onclick="openAddCustomPageModal()" style="background:var(--accent-primary); color:#fff; border:none; font-weight:700; border-radius:8px;">
+            ➕ Add Page
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:flex-end;">
+        <button type="button" class="btn" onclick="closeLanguageSelectModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  
   <!-- ================= REAL 3D MULTI-LANGUAGE BOOK READER MODAL ================= -->
   <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)">
     <div class="real-book-reader-container" onclick="event.stopPropagation()">
@@ -10644,6 +11718,8 @@ if (typeof window !== 'undefined') {
 
           <!-- Reader Fullscreen Toggle -->
           <button type="button" class="reader-btn-icon" onclick="toggleAppFullscreen()" title="Toggle Fullscreen Reading (⛶)">⛶</button>
+          <!-- Add Page Button -->
+          <button type="button" class="reader-btn-sm" onclick="openAddCustomPageModal()" title="Add new page" style="font-weight:700; background:rgba(245,158,11,0.18); color:#f59e0b; border:1px solid rgba(245,158,11,0.35);">➕ Add Page</button>
         </div>
       </div>
 
@@ -10660,6 +11736,10 @@ if (typeof window !== 'undefined') {
               </div>
               <div class="reader-page-footer-wrap">
                 <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
+                <div class="reader-page-actions" id="pageActionsLeft">
+                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('left')" title="Edit Page">✏️ Edit</button>
+                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('left')" title="Delete Page">🗑️</button>
+                </div>
               </div>
             </div>
 
@@ -10675,6 +11755,10 @@ if (typeof window !== 'undefined') {
               </div>
               <div class="reader-page-footer-wrap">
                 <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+                <div class="reader-page-actions" id="pageActionsRight">
+                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('right')" title="Edit Page">✏️ Edit</button>
+                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('right')" title="Delete Page">🗑️</button>
+                </div>
               </div>
             </div>
           </div>
@@ -10692,6 +11776,194 @@ if (typeof window !== 'undefined') {
       </div>
     </div>
   </div>
+
+<!-- 3. Add Custom Book Page Modal -->
+  <div class="modal-overlay" id="addCustomPageModal" onclick="handleAddPageOverlayClick(event)">
+    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">➕</span>
+          <h3 class="modal-title">नया बुक पेज जोड़ें (Add Book Page)</h3>
+        </div>
+        <button class="modal-close" onclick="closeAddCustomPageModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:0.9rem;">
+        
+        <!-- AUTO-OCR PHOTO UPLOAD & SCAN DROPZONE -->
+        <div class="page-ocr-dropzone" id="pageOcrDropzone" onclick="document.getElementById('customPagePhotoInput').click()">
+          <input type="file" id="customPagePhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleCustomPagePhotoUpload(this)">
+          
+          <div id="ocrLaserScanLine" class="ocr-scan-laser" style="display:none;"></div>
+
+          <!-- Default Prompt State -->
+          <div id="ocrDropzonePrompt">
+            <div style="font-size:2.2rem; line-height:1; margin-bottom:0.4rem;">📸</div>
+            <div style="font-weight:800; font-size:0.95rem; color:var(--text-primary);">
+              Book Page ki Photo Yahan Dalein ya Camera se Kheenche
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:3px;">
+              ⚡ <strong>Photo dalte hi automatic text mein convert ho jayega!</strong>
+            </div>
+            <div style="margin-top:8px; display:flex; justify-content:center; gap:6px; flex-wrap:wrap;">
+              <span style="background:rgba(99,102,241,0.12); color:#6366f1; border:1px solid rgba(99,102,241,0.25); font-size:0.72rem; padding:3px 8px; border-radius:12px; font-weight:600;">
+                📷 Gallery / Camera
+              </span>
+              <span style="background:rgba(16,185,129,0.12); color:#10b981; border:1px solid rgba(16,185,129,0.25); font-size:0.72rem; padding:3px 8px; border-radius:12px; font-weight:600;">
+                📋 Drag &amp; Drop / Ctrl+V Paste
+              </span>
+            </div>
+          </div>
+
+          <!-- Loading / Scanning State -->
+          <div id="ocrScanningState" style="display:none; text-align:center; padding:10px 4px;">
+            <div class="ocr-scan-spinner">⚡</div>
+            <div style="font-weight:800; font-size:0.9rem; color:#6366f1; margin-top:4px;" id="ocrScanProgressText">
+              Photo scan ho rahi hai aur text convert ho raha hai...
+            </div>
+            <div style="max-width:280px; margin:8px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:6px; overflow:hidden;">
+              <div id="ocrScanProgressBar" style="width:20%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+            <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:5px;" id="ocrScanStatusSub">
+              AI text recognition chal raha hai...
+            </div>
+          </div>
+
+          <!-- Success Preview State -->
+          <div id="ocrUploadedPreview" style="display:none; align-items:center; gap:10px; text-align:left; padding:4px 6px;">
+            <img id="ocrThumbnailImg" src="" alt="Thumbnail" style="width:46px; height:56px; object-fit:cover; border-radius:6px; border:1px solid var(--border-color); box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+            <div style="flex:1;">
+              <div style="font-weight:700; font-size:0.84rem; color:#10b981; display:flex; align-items:center; gap:4px;">
+                <span>✅</span> <span>Text successfully convert ho gaya!</span>
+              </div>
+              <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:2px;" id="ocrExtractSummaryText">
+                Text neeche box mein daal diya gaya hai. Aap ise edit ya save kar sakte hain.
+              </div>
+            </div>
+            <button type="button" class="btn btn-sm" onclick="event.stopPropagation(); document.getElementById('customPagePhotoInput').click();" style="font-size:0.72rem; padding:4px 8px;">
+              🔄 Change Photo
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Book Select Karein:</label>
+            <select id="customPageBookSelect" class="form-control">
+              <!-- Populated with books -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Language (भाषा):</label>
+            <select id="customPageLangSelect" class="form-control">
+              <option value="hindi">हिंदी (Hindi)</option>
+              <option value="hinglish">Hinglish (हिंग्लिश)</option>
+              <option value="english">English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Page Number:</label>
+            <input type="number" id="customPageNoInput" class="form-control" min="1" value="3">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Page Heading / Chapter (Optional):</label>
+            <input type="text" id="customPageHeadingInput" class="form-control" placeholder="e.g. अध्याय 1: ऑटोपायलट मोड">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Page Content (Text ya Paragraphs):</label>
+            <span style="font-size:0.72rem; color:var(--text-muted);">Photo se auto-filled • You can edit</span>
+          </div>
+          <textarea id="customPageContentInput" class="form-control" style="min-height:160px; font-size:0.9rem; line-height:1.5;" placeholder="Photo daalte hi text yahan automatically aa jayega, ya aap type bhi kar sakte hain..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn" onclick="closeAddCustomPageModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveCustomBookPage()">💾 Save Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Edit Book Page Modal (with Photo Re-Scan & OCR) -->
+  <div class="modal-overlay" id="editBookPageModal" onclick="handleEditPageOverlayClick(event)">
+    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">✏️</span>
+          <h3 class="modal-title" id="editPageModalTitle">पेज एडिट करें (Edit Page)</h3>
+        </div>
+        <button class="modal-close" onclick="closeEditBookPageModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:0.9rem;">
+        
+        <!-- AUTO-OCR PHOTO RE-SCAN DROPZONE -->
+        <div class="page-ocr-dropzone" id="editPageOcrDropzone" onclick="document.getElementById('editPagePhotoInput').click()">
+          <input type="file" id="editPagePhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleEditPagePhotoUpload(this)">
+          
+          <div id="editOcrLaserScanLine" class="ocr-scan-laser" style="display:none;"></div>
+
+          <div id="editOcrDropzonePrompt">
+            <div style="font-size:1.8rem; line-height:1; margin-bottom:4px;">📸 🔄</div>
+            <div style="font-weight:800; font-size:0.9rem; color:var(--text-primary);">
+              Nayi Photo se Text Badlein (Re-Scan Photo)
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
+              ⚡ <strong>Photo dalte hi naya text automatically text box mein replace ho jayega!</strong>
+            </div>
+          </div>
+
+          <div id="editOcrScanningState" style="display:none; text-align:center; padding:8px 4px;">
+            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
+            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="editOcrScanProgressText">
+              Photo scan ho rahi hai...
+            </div>
+            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
+              <div id="editOcrScanProgressBar" style="width:20%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Page Number:</label>
+            <input type="number" id="editPageNoInput" class="form-control" min="1" readonly style="background:rgba(0,0,0,0.06); opacity:0.85;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Language:</label>
+            <input type="text" id="editPageLangInput" class="form-control" readonly style="background:rgba(0,0,0,0.06); opacity:0.85;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Page Heading / Title:</label>
+          <input type="text" id="editPageHeadingInput" class="form-control" placeholder="Page heading...">
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Page Content (Text ya HTML):</label>
+            <span style="font-size:0.72rem; color:var(--text-muted);">Editable</span>
+          </div>
+          <textarea id="editPageContentInput" class="form-control" style="min-height:180px; font-size:0.9rem; line-height:1.5;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn btn-danger" onclick="confirmDeleteCurrentEditPage()" style="background:#ef4444; color:#fff; border:none; font-weight:700;">
+          🗑️ Delete Page
+        </button>
+        <div style="display:flex; gap:0.5rem;">
+          <button type="button" class="btn" onclick="closeEditBookPageModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="saveEditedBookPage()">💾 Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
 
   <!-- ================= LEND BOOK MODAL ================= -->
   <div class="modal-overlay" id="lendBookModalOverlay" style="display:none;" onclick="if(event.target === this) closeLendBookModal()">
@@ -11529,6 +12801,8 @@ if (typeof window !== 'undefined') {
   <!-- SCRIPTS -->
   <script src="jspdf.umd.min.js"></script>
   <script src="jspdf.plugin.autotable.min.js"></script>
+  <script src="tesseract.min.js"></script>
+  <script src="book-pages-data.js"></script>
   <script>
 const DEFAULT_BOOKS = [
   {
@@ -17198,11 +18472,11 @@ if (typeof module !== 'undefined' && module.exports) {
   <script src="remote-config.js"></script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.21)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.22)
 // ==========================================================================
 
-const APP_VERSION = '0.0.21';
-const CURRENT_APP_VERSION = 'v0.0.21';
+const APP_VERSION = '0.0.22';
+const CURRENT_APP_VERSION = 'v0.0.22';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -20386,10 +21660,11 @@ function saveQuickLogPages() {
 
 // ================= REAL 3D BOOK PAGE READER ENGINE =================
 function openRealBookReaderForCurrent() {
-  if (state.currentBookIndex !== -1) {
-    openRealBookReader(state.currentBookIndex);
+  const targetIdx = (state.currentBookIndex !== -1) ? state.currentBookIndex : 0;
+  if (typeof openLanguageSelectModal === 'function') {
+    openLanguageSelectModal(targetIdx);
   } else {
-    openRealBookReader(0);
+    openRealBookReader(targetIdx);
   }
 }
 
@@ -20798,8 +22073,14 @@ function getBookPagesArray(book, lang) {
 
   const titleLower = (book.title || '').toLowerCase();
   
-  // Check if book exists in BOOK_PAGES_DATA
-  if (typeof BOOK_PAGES_DATA !== 'undefined' && BOOK_PAGES_DATA) {
+  // Check if book exists in BOOK_PAGES_DATA or has custom/edited pages
+  if (typeof getBookPagesData === 'function') {
+    const data = getBookPagesData(book, lang);
+    if (data && data.pages && data.pages.length > 0) {
+      return data.pages;
+    }
+  } else if (typeof BOOK_PAGES_DATA !== 'undefined' && BOOK_PAGES_DATA) {
+    const titleLower = (book.title || '').toLowerCase();
     for (const key of Object.keys(BOOK_PAGES_DATA)) {
       if (titleLower.includes(key)) {
         const item = BOOK_PAGES_DATA[key];
@@ -20952,19 +22233,23 @@ function renderRealBookPages() {
     const leftPageData = pages[readerState.currentPage - 1];
     const innerLeft = document.getElementById('pageInnerLeft');
     const footerLeft = document.getElementById('pageFooterLeft');
+    const actionsLeft = document.getElementById('pageActionsLeft');
     if (innerLeft && leftPageData) {
       innerLeft.innerHTML = leftPageData.content;
       if (footerLeft) footerLeft.innerText = `Page ${leftPageData.pageNo || readerState.currentPage}`;
     }
+    if (actionsLeft) actionsLeft.style.display = leftPageData ? 'inline-flex' : 'none';
     
     // Right Page (Next Page)
     const rightPageData = pages[readerState.currentPage];
     const innerRight = document.getElementById('pageInnerRight');
     const footerRight = document.getElementById('pageFooterRight');
+    const actionsRight = document.getElementById('pageActionsRight');
     if (innerRight) {
       if (rightPageData) {
         innerRight.innerHTML = rightPageData.content;
         if (footerRight) footerRight.innerText = `Page ${rightPageData.pageNo || (readerState.currentPage + 1)}`;
+        if (actionsRight) actionsRight.style.display = 'inline-flex';
       } else {
         innerRight.innerHTML = `
           <div style="display:flex; flex-direction:column; height:100%; align-items:center; justify-content:center; opacity:0.35; text-align:center;">
@@ -20973,6 +22258,7 @@ function renderRealBookPages() {
             <div style="font-size:0.8rem; margin-top:4px;">Mind & Focus Master Library</div>
           </div>`;
         if (footerRight) footerRight.innerText = `End`;
+        if (actionsRight) actionsRight.style.display = 'none';
       }
     }
   } else {
@@ -20980,9 +22266,11 @@ function renderRealBookPages() {
     const curPageData = pages[readerState.currentPage - 1];
     const innerRight = document.getElementById('pageInnerRight');
     const footerRight = document.getElementById('pageFooterRight');
+    const actionsRight = document.getElementById('pageActionsRight');
     if (innerRight && curPageData) {
       innerRight.innerHTML = curPageData.content;
       if (footerRight) footerRight.innerText = `Page ${curPageData.pageNo || readerState.currentPage} of ${totalPages}`;
+      if (actionsRight) actionsRight.style.display = 'inline-flex';
     }
   }
 }
@@ -24673,6 +25961,1076 @@ document.addEventListener('DOMContentLoaded', () => { applyPrefs(); setTimeout(r
   renderAppSettingsHub = function () { hubOrig(); applyPrefs(); };
 })();
 
+
+
+// =========================================================================
+// HEADER RESPONSIVENESS: FULLSCREEN ON DESKTOP, REFRESH ON PHONE
+// =========================================================================
+function refreshAppPage() {
+  showToast('🔄 Refreshing app...');
+  setTimeout(() => {
+    window.location.reload();
+  }, 200);
+}
+
+function initHeaderResponsiveButtons() {
+  const isMobile = window.innerWidth <= 768 || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || !!window.Android;
+  const fsBtn = document.getElementById('headerFullscreenBtn');
+  const rfBtn = document.getElementById('headerRefreshBtn');
+  if (fsBtn) fsBtn.style.display = isMobile ? 'none' : 'inline-flex';
+  if (rfBtn) rfBtn.style.display = isMobile ? 'inline-flex' : 'none';
+}
+window.addEventListener('resize', initHeaderResponsiveButtons);
+document.addEventListener('DOMContentLoaded', initHeaderResponsiveButtons);
+setTimeout(initHeaderResponsiveButtons, 100);
+
+
+
+// =========================================================================
+// LANGUAGE SELECT LAUNCHER, ADD PAGE & EDIT PAGE CONTROLLERS (v0.0.22)
+// =========================================================================
+function openLanguageSelectModal(origIdx) {
+  readerState.activeBookIdx = (origIdx !== undefined && origIdx !== null) ? origIdx : (state.currentBookIndex !== -1 ? state.currentBookIndex : 0);
+  const b = state.books[readerState.activeBookIdx] || state.books[0];
+  if (!b) return;
+
+  const isHyper = b.title && b.title.toLowerCase().includes('hyperfocus');
+  const isDict = isDictionaryBook(b);
+
+  const titleEl = document.getElementById('langSelectBookTitle');
+  if (titleEl) {
+    if (isDict) titleEl.innerText = 'शब्दावली शब्दकोश (101 Words)';
+    else if (isHyper) titleEl.innerText = 'हायपरफ़ोकस (किताब पढ़ें)';
+    else titleEl.innerText = (b.title || 'Book') + ' (किताब पढ़ें)';
+  }
+
+  const authorEl = document.getElementById('langSelectBookAuthor');
+  if (authorEl) {
+    if (isDict) authorEl.innerText = 'Oxford Focus Lexicon • 3 Languages Available';
+    else if (isHyper) authorEl.innerText = 'Chris Bailey (क्रिस बेली) • 3 Languages Available';
+    else authorEl.innerText = 'by ' + (b.author || 'Author') + ' • Select Reading Language';
+  }
+
+  const coverEl = document.getElementById('langSelectCoverImg');
+  if (coverEl) coverEl.src = getBookCoverUrl(b) || 'hyperfocus_cover.jpg';
+
+  const badgeEl = document.getElementById('langSelectCategoryBadge');
+  if (badgeEl) badgeEl.innerText = (b.category || 'Focus & Concentration').toUpperCase();
+
+  const titleEnEl = document.getElementById('langSelectTitleEn');
+  if (titleEnEl) titleEnEl.innerText = b.title || 'Book Title';
+
+  const authorTxtEl = document.getElementById('langSelectAuthorTxt');
+  if (authorTxtEl) authorTxtEl.innerText = 'by ' + (b.author || 'Author');
+
+  const isbnRowEl = document.getElementById('langSelectIsbnRow');
+  if (isbnRowEl) {
+    const isbn = b.isbn || (isHyper ? '978-93-5543-300-8' : 'N/A');
+    const price = b.price || (isHyper ? 350 : 0);
+    isbnRowEl.innerHTML = '<span>ISBN: <strong style="color:var(--text-primary);">' + escapeHtml(isbn) + '</strong></span><span>• Price: <strong style="color:#10b981;">₹' + price + '</strong></span>';
+  }
+
+  // Reset Auto-OCR dropzone in language select modal
+  const langOcrPrompt = document.getElementById('langModalOcrPrompt');
+  const langOcrScan = document.getElementById('langModalOcrScanning');
+  const langOcrSuccess = document.getElementById('langModalOcrSuccess');
+  const langOcrInput = document.getElementById('langModalPhotoInput');
+  if (langOcrPrompt) langOcrPrompt.style.display = 'block';
+  if (langOcrScan) langOcrScan.style.display = 'none';
+  if (langOcrSuccess) langOcrSuccess.style.display = 'none';
+  if (langOcrInput) langOcrInput.value = '';
+
+  // Count available pages per language
+  const hiPages = getBookPagesArray(b, 'hindi');
+  const hingPages = getBookPagesArray(b, 'hinglish');
+  const engPages = getBookPagesArray(b, 'english');
+
+  const hiBadge = document.getElementById('langHindiCountBadge');
+  if (hiBadge) hiBadge.innerText = (hiPages ? hiPages.length : 0) + ' पृष्ठ';
+
+  const hingBadge = document.getElementById('langHinglishCountBadge');
+  if (hingBadge) hingBadge.innerText = (hingPages ? hingPages.length : 0) + ' Pages';
+
+  const engBadge = document.getElementById('langEnglishCountBadge');
+  if (engBadge) engBadge.innerText = (engPages ? engPages.length : 0) + ' Pages';
+
+  const modal = document.getElementById('bookLanguageSelectModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeLanguageSelectModal() {
+  const modal = document.getElementById('bookLanguageSelectModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleLangSelectOverlayClick(event) {
+  if (event.target.id === 'bookLanguageSelectModal') {
+    closeLanguageSelectModal();
+  }
+}
+
+function selectBookLanguageAndOpen(lang) {
+  readerState.lang = lang || 'hindi';
+  closeLanguageSelectModal();
+  if (typeof closeBookDetailModal === 'function') closeBookDetailModal();
+  if (typeof closeBookDetailSheet === 'function') closeBookDetailSheet();
+  openRealBookReader(readerState.activeBookIdx, readerState.lang);
+}
+
+function openAddCustomPageModal() {
+  const select = document.getElementById('customPageBookSelect');
+  if (select) {
+    let opts = '';
+    state.books.forEach((b, idx) => {
+      const sel = idx === readerState.activeBookIdx ? ' selected' : '';
+      opts += '<option value="' + idx + '"' + sel + '>' + escapeHtml(b.no + ' • ' + b.title) + '</option>';
+    });
+    select.innerHTML = opts;
+  }
+
+  const langSelect = document.getElementById('customPageLangSelect');
+  if (langSelect) langSelect.value = readerState.lang || 'hindi';
+
+  const b = state.books[readerState.activeBookIdx];
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const nextPg = (data && data.pages) ? (data.pages.length + 1) : 3;
+
+  const noInput = document.getElementById('customPageNoInput');
+  if (noInput) noInput.value = nextPg;
+
+  const headingInput = document.getElementById('customPageHeadingInput');
+  if (headingInput) headingInput.value = '';
+
+  const contentInput = document.getElementById('customPageContentInput');
+  if (contentInput) contentInput.value = '';
+
+  // Reset Auto-OCR dropzone to clean state
+  const photoInput = document.getElementById('customPagePhotoInput');
+  if (photoInput) photoInput.value = '';
+  const promptEl = document.getElementById('ocrDropzonePrompt');
+  const scanEl = document.getElementById('ocrScanningState');
+  const previewEl = document.getElementById('ocrUploadedPreview');
+  const laserEl = document.getElementById('ocrLaserScanLine');
+  if (promptEl) promptEl.style.display = 'block';
+  if (scanEl) scanEl.style.display = 'none';
+  if (previewEl) previewEl.style.display = 'none';
+  if (laserEl) laserEl.style.display = 'none';
+
+  initCustomPageOcrListeners();
+
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeAddCustomPageModal() {
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) modal.classList.remove('active');
+}
+
+function handleAddPageOverlayClick(event) {
+  if (event.target.id === 'addCustomPageModal') {
+    closeAddCustomPageModal();
+  }
+}
+
+// =========================================================================
+// AUTO PHOTO-TO-TEXT (OCR) CONVERTER ENGINE
+// =========================================================================
+let isOcrListenersBound = false;
+
+function initCustomPageOcrListeners() {
+  if (isOcrListenersBound) return;
+  isOcrListenersBound = true;
+
+  const dropzone = document.getElementById('pageOcrDropzone');
+  if (dropzone) {
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.add('dragover');
+      });
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropzone.classList.remove('dragover');
+      });
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const dt = e.dataTransfer;
+      const files = dt ? dt.files : null;
+      if (files && files.length > 0) {
+        processCustomPagePhotoFile(files[0]);
+      }
+    });
+  }
+
+  // Also support pasting an image from clipboard (Ctrl+V)
+  const modal = document.getElementById('addCustomPageModal');
+  if (modal) {
+    modal.addEventListener('paste', (e) => {
+      const items = (e.clipboardData || (e.originalEvent && e.originalEvent.clipboardData)) ? (e.clipboardData || e.originalEvent.clipboardData).items : null;
+      if (items) {
+        for (let i = 0; i < items.length; i++) {
+          if (items[i].type && items[i].type.indexOf('image') !== -1) {
+            const blob = items[i].getAsFile();
+            if (blob) {
+              processCustomPagePhotoFile(blob);
+              break;
+            }
+          }
+        }
+      }
+    });
+  }
+}
+
+function handleCustomPagePhotoUpload(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  processCustomPagePhotoFile(file);
+}
+
+function processCustomPagePhotoFile(file) {
+  if (!file || !file.type.startsWith('image/')) {
+    showToast('Kripya ek valid photo chunein!', 'warning');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const dataUrl = e.target.result;
+    // Update thumbnail immediately
+    const thumbEl = document.getElementById('ocrThumbnailImg');
+    if (thumbEl) thumbEl.src = dataUrl;
+
+    // Start auto OCR extraction
+    runAutoPageOcr(dataUrl);
+  };
+  reader.readAsDataURL(file);
+}
+
+function preprocessImageForOcr(dataUrl, callback) {
+  const img = new Image();
+  img.onload = function() {
+    try {
+      const maxDim = 1600; // Optimal performance and recognition
+      let w = img.width;
+      let h = img.height;
+      if (w > maxDim || h > maxDim) {
+        if (w > h) {
+          h = Math.round((h * maxDim) / w);
+          w = maxDim;
+        } else {
+          w = Math.round((w * maxDim) / h);
+          h = maxDim;
+        }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = w;
+      canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, w, h);
+
+      // Contrast stretching for sharper text recognition
+      const imgData = ctx.getImageData(0, 0, w, h);
+      const d = imgData.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+        // Enhance contrast
+        const contrast = 1.15;
+        const adjusted = Math.min(255, Math.max(0, ((gray - 128) * contrast) + 128));
+        d[i] = adjusted;
+        d[i + 1] = adjusted;
+        d[i + 2] = adjusted;
+      }
+      ctx.putImageData(imgData, 0, 0);
+      callback(canvas.toDataURL('image/jpeg', 0.9));
+    } catch (e) {
+      console.warn('Preprocessing fallback to original:', e);
+      callback(dataUrl);
+    }
+  };
+  img.onerror = function() {
+    callback(dataUrl);
+  };
+  img.src = dataUrl;
+}
+
+async function runAutoPageOcr(imageSrc) {
+  const promptEl = document.getElementById('ocrDropzonePrompt');
+  const scanEl = document.getElementById('ocrScanningState');
+  const previewEl = document.getElementById('ocrUploadedPreview');
+  const laserEl = document.getElementById('ocrLaserScanLine');
+  const progressText = document.getElementById('ocrScanProgressText');
+  const progressBar = document.getElementById('ocrScanProgressBar');
+  const statusSub = document.getElementById('ocrScanStatusSub');
+  const contentInput = document.getElementById('customPageContentInput');
+  const headingInput = document.getElementById('customPageHeadingInput');
+  const langSelect = document.getElementById('customPageLangSelect');
+
+  if (promptEl) promptEl.style.display = 'none';
+  if (previewEl) previewEl.style.display = 'none';
+  if (scanEl) scanEl.style.display = 'block';
+  if (laserEl) laserEl.style.display = 'block';
+  if (progressBar) progressBar.style.width = '15%';
+  if (progressText) progressText.innerText = 'Photo process ho rahi hai...';
+  if (statusSub) statusSub.innerText = 'Contrast aur text clarity optimize ki ja rahi hai...';
+
+  if (typeof Tesseract === 'undefined') {
+    if (progressText) progressText.innerText = 'OCR engine shuru ho raha hai...';
+    await new Promise(r => setTimeout(r, 1500));
+    if (typeof Tesseract === 'undefined') {
+      if (progressText) progressText.innerText = 'OCR library load nahi ho payi. Kripya page refresh karein.';
+      if (laserEl) laserEl.style.display = 'none';
+      return;
+    }
+  }
+
+  preprocessImageForOcr(imageSrc, async function(processedUrl) {
+    const chosenLang = (langSelect && langSelect.value) ? langSelect.value : 'hindi';
+    let ocrLang = 'eng';
+    if (chosenLang === 'hindi') {
+      ocrLang = 'hin+eng';
+    }
+
+    try {
+      if (progressBar) progressBar.style.width = '30%';
+      if (progressText) progressText.innerText = 'Akshar pehchane ja rahe hain (Recognizing text)...';
+      if (statusSub) statusSub.innerText = 'Book ke sabhi shabdon ko text mein badla ja raha hai...';
+
+      let res = null;
+      try {
+        res = await Tesseract.recognize(processedUrl, ocrLang, {
+          logger: (m) => {
+            if (m && m.progress) {
+              const pct = Math.round(m.progress * 100);
+              if (progressBar) progressBar.style.width = Math.max(25, pct) + '%';
+              if (progressText) progressText.innerText = 'Scanning: ' + (m.status ? (m.status.charAt(0).toUpperCase() + m.status.slice(1)) : 'Recognizing') + ' (' + pct + '%)...';
+            }
+          }
+        });
+      } catch (langErr) {
+        console.warn('hin+eng language pack offline, falling back to eng:', langErr);
+        if (progressText) progressText.innerText = 'Standard OCR se text extract kiya ja raha hai...';
+        res = await Tesseract.recognize(processedUrl, 'eng', {
+          logger: (m) => {
+            if (m && m.progress) {
+              const pct = Math.round(m.progress * 100);
+              if (progressBar) progressBar.style.width = Math.max(25, pct) + '%';
+            }
+          }
+        });
+      }
+
+      const rawText = (res && res.data && res.data.text) ? res.data.text.trim() : '';
+
+      if (!rawText) {
+        if (scanEl) scanEl.style.display = 'none';
+        if (laserEl) laserEl.style.display = 'none';
+        if (promptEl) promptEl.style.display = 'block';
+        showToast('Photo mein text clear nahi mila. Kripya achhi lighting mein photo lein.', 'warning');
+        return;
+      }
+
+      // Format text into clean paragraphs
+      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+
+      // Auto-detect potential chapter heading from first short line
+      if (lines.length > 1 && lines[0].length <= 50 && headingInput && !headingInput.value.trim()) {
+        headingInput.value = lines[0];
+        const remaining = lines.slice(1).join('\n\n');
+        if (contentInput) contentInput.value = remaining;
+      } else {
+        if (contentInput) contentInput.value = lines.join('\n\n');
+      }
+
+      // Success Display
+      if (progressBar) progressBar.style.width = '100%';
+      if (scanEl) scanEl.style.display = 'none';
+      if (laserEl) laserEl.style.display = 'none';
+      if (previewEl) previewEl.style.display = 'flex';
+
+      showToast('Photo se text safaltapoorvak convert ho gaya! ⚡📝', 'success');
+    } catch (err) {
+      console.error('Auto-OCR recognition error:', err);
+      if (scanEl) scanEl.style.display = 'none';
+      if (laserEl) laserEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('OCR scan error: ' + (err.message || 'Photo text convert nahi ho paya'), 'error');
+    }
+  });
+}
+
+function saveCustomBookPage() {
+  const select = document.getElementById('customPageBookSelect');
+  const bookIdx = select ? parseInt(select.value) : readerState.activeBookIdx;
+  const b = state.books[bookIdx];
+  if (!b) {
+    alert('Please select a book!');
+    return;
+  }
+
+  const lang = document.getElementById('customPageLangSelect').value || 'hindi';
+  const pageNo = parseInt(document.getElementById('customPageNoInput').value) || 1;
+  const heading = document.getElementById('customPageHeadingInput').value.trim();
+  const rawContent = document.getElementById('customPageContentInput').value.trim();
+
+  if (!rawContent) {
+    alert('Please enter or scan some text for the page!');
+    return;
+  }
+
+  // Format content as paragraph HTML if plain text
+  let formattedContent = rawContent;
+  if (!rawContent.includes('<p>') && !rawContent.includes('<div>')) {
+    const paragraphs = rawContent.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    formattedContent = (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+      paragraphs.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+  }
+
+  const newPage = {
+    pageNo: pageNo,
+    type: 'content',
+    heading: heading || ('Page ' + pageNo),
+    content: formattedContent
+  };
+
+  // Persist to localStorage with deduplication
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const existingRaw = localStorage.getItem(storeKey);
+    if (existingRaw) {
+      store = JSON.parse(existingRaw);
+    }
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+
+    const existingIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === pageNo);
+    if (existingIdx >= 0) {
+      store[bookTitleKey][lang][existingIdx] = newPage;
+    } else {
+      store[bookTitleKey][lang].push(newPage);
+    }
+
+    // Remove from deleted list if present
+    const delKey = lang + '_deleted';
+    if (Array.isArray(store[bookTitleKey][delKey])) {
+      store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== pageNo);
+    }
+
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error saving custom book page:', e);
+  }
+
+  closeAddCustomPageModal();
+  showToast('Page ' + pageNo + ' added to "' + b.title + '" successfully! 📖', 'success');
+
+  // If reader is currently open for this book, refresh view
+  const readerModal = document.getElementById('realBookReaderModal');
+  if (readerModal && readerModal.classList.contains('active')) {
+    readerState.currentPage = pageNo;
+    renderRealBookPages();
+  }
+}
+
+// =========================================================================
+// PER-PAGE EDIT & DELETE CONTROLLER
+// =========================================================================
+function openEditPageModalForCurrent(side) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const pages = (data && data.pages) ? data.pages : [];
+  const isMobile = window.innerWidth <= 768;
+  const isSingle = isMobile || (readerState.spreadMode === 'single');
+
+  let targetPageNo = 1;
+  if (isSingle) {
+    targetPageNo = readerState.currentPage;
+  } else {
+    targetPageNo = (side === 'left') ? readerState.currentPage : (readerState.currentPage + 1);
+  }
+
+  // Verify page exists
+  const exists = pages.some(p => p.pageNo === targetPageNo);
+  if (!exists) {
+    showToast('Page ' + targetPageNo + ' edit karne ke liye uplabdh nahi hai.', 'warning');
+    return;
+  }
+
+  openEditPageModal(targetPageNo);
+}
+
+function deletePageForCurrent(side) {
+  const isMobile = window.innerWidth <= 768;
+  const isSingle = isMobile || (readerState.spreadMode === 'single');
+
+  let targetPageNo = 1;
+  if (isSingle) {
+    targetPageNo = readerState.currentPage;
+  } else {
+    targetPageNo = (side === 'left') ? readerState.currentPage : (readerState.currentPage + 1);
+  }
+
+  deleteBookPage(targetPageNo);
+}
+
+function openEditPageModal(pageNo) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const data = (typeof getBookPagesData === 'function') ? getBookPagesData(b, readerState.lang) : null;
+  const pages = (data && data.pages) ? data.pages : [];
+  const pageObj = pages.find(p => p.pageNo === pageNo);
+
+  readerState.currentEditingPageNo = pageNo;
+
+  const modalTitle = document.getElementById('editPageModalTitle');
+  if (modalTitle) {
+    modalTitle.innerText = `पेज ${pageNo} एडिट करें (${readerState.lang.toUpperCase()})`;
+  }
+
+  const noInput = document.getElementById('editPageNoInput');
+  if (noInput) noInput.value = pageNo;
+
+  const langInput = document.getElementById('editPageLangInput');
+  if (langInput) langInput.value = readerState.lang.toUpperCase();
+
+  const headingInput = document.getElementById('editPageHeadingInput');
+  if (headingInput) headingInput.value = (pageObj && pageObj.heading) ? pageObj.heading : ('Page ' + pageNo);
+
+  const contentInput = document.getElementById('editPageContentInput');
+  if (contentInput) {
+    let cleanText = '';
+    if (pageObj && pageObj.content) {
+      cleanText = pageObj.content
+        .replace(/<div class="reader-page-header">[\s\S]*?<\/div>/gi, '')
+        .replace(/<div class="reader-praise-block">/gi, '')
+        .replace(/<\/div>/gi, '')
+        .replace(/<p[^>]*>/gi, '')
+        .replace(/<\/p>/gi, '\n\n')
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<[^>]+>/g, '')
+        .trim();
+      if (!cleanText) cleanText = pageObj.content;
+    }
+    contentInput.value = cleanText;
+  }
+
+  // Reset OCR dropzone in edit modal
+  const promptEl = document.getElementById('editOcrDropzonePrompt');
+  const scanEl = document.getElementById('editOcrScanningState');
+  const laserEl = document.getElementById('editOcrLaserScanLine');
+  const photoInput = document.getElementById('editPagePhotoInput');
+  if (photoInput) photoInput.value = '';
+  if (promptEl) promptEl.style.display = 'block';
+  if (scanEl) scanEl.style.display = 'none';
+  if (laserEl) laserEl.style.display = 'none';
+
+  const modal = document.getElementById('editBookPageModal');
+  if (modal) modal.classList.add('active');
+}
+
+function closeEditBookPageModal() {
+  const modal = document.getElementById('editBookPageModal');
+  if (modal) modal.classList.remove('active');
+  readerState.currentEditingPageNo = null;
+}
+
+function handleEditPageOverlayClick(event) {
+  if (event.target.id === 'editBookPageModal') {
+    closeEditBookPageModal();
+  }
+}
+
+function saveEditedBookPage() {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  const pageNo = parseInt(document.getElementById('editPageNoInput').value) || readerState.currentEditingPageNo || 1;
+  const heading = document.getElementById('editPageHeadingInput').value.trim();
+  const rawContent = document.getElementById('editPageContentInput').value.trim();
+
+  if (!rawContent) {
+    alert('Kripya page ke liye kuch text likhein ya photo scan karein!');
+    return;
+  }
+
+  let formattedContent = rawContent;
+  if (!rawContent.includes('<p>') && !rawContent.includes('<div>')) {
+    const paragraphs = rawContent.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+    formattedContent = (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+      paragraphs.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+  }
+
+  const updatedPage = {
+    pageNo: pageNo,
+    type: 'content',
+    heading: heading || ('Page ' + pageNo),
+    content: formattedContent
+  };
+
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const raw = localStorage.getItem(storeKey);
+    if (raw) store = JSON.parse(raw);
+
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    const lang = readerState.lang || 'hindi';
+
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+
+    const existingIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === pageNo);
+    if (existingIdx >= 0) {
+      store[bookTitleKey][lang][existingIdx] = updatedPage;
+    } else {
+      store[bookTitleKey][lang].push(updatedPage);
+    }
+
+    const delKey = lang + '_deleted';
+    if (Array.isArray(store[bookTitleKey][delKey])) {
+      store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== pageNo);
+    }
+
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error saving edited page:', e);
+  }
+
+  closeEditBookPageModal();
+  showToast('Page ' + pageNo + ' safaltapoorvak update ho gaya! 💾', 'success');
+  renderRealBookPages();
+}
+
+function deleteBookPage(pageNo) {
+  const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+  if (!b) return;
+
+  if (!confirm('Kya aap sach me Page ' + pageNo + ' delete karna chahte hain?')) {
+    return;
+  }
+
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    let store = {};
+    const raw = localStorage.getItem(storeKey);
+    if (raw) store = JSON.parse(raw);
+
+    const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+    const lang = readerState.lang || 'hindi';
+
+    if (!store[bookTitleKey]) store[bookTitleKey] = {};
+    if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+
+    // Remove from custom additions
+    store[bookTitleKey][lang] = store[bookTitleKey][lang].filter(p => p.pageNo !== pageNo);
+
+    // Add to deleted list to hide base pages
+    const delKey = lang + '_deleted';
+    if (!Array.isArray(store[bookTitleKey][delKey])) store[bookTitleKey][delKey] = [];
+    if (!store[bookTitleKey][delKey].includes(pageNo)) {
+      store[bookTitleKey][delKey].push(pageNo);
+    }
+
+    localStorage.setItem(storeKey, JSON.stringify(store));
+  } catch (e) {
+    console.error('Error deleting book page:', e);
+  }
+
+  closeEditBookPageModal();
+  showToast('Page ' + pageNo + ' delete kar diya gaya! 🗑️', 'info');
+
+  if (readerState.currentPage > 1) {
+    readerState.currentPage = Math.max(1, readerState.currentPage - 1);
+  }
+  renderRealBookPages();
+}
+
+function confirmDeleteCurrentEditPage() {
+  if (readerState.currentEditingPageNo) {
+    deleteBookPage(readerState.currentEditingPageNo);
+  }
+}
+
+function handleEditPagePhotoUpload(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (!file.type.startsWith('image/')) {
+    showToast('Kripya valid photo chunein!', 'warning');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    runEditPageOcr(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function runEditPageOcr(imageSrc) {
+  const promptEl = document.getElementById('editOcrDropzonePrompt');
+  const scanEl = document.getElementById('editOcrScanningState');
+  const laserEl = document.getElementById('editOcrLaserScanLine');
+  const progressText = document.getElementById('editOcrScanProgressText');
+  const progressBar = document.getElementById('editOcrScanProgressBar');
+  const contentInput = document.getElementById('editPageContentInput');
+  const headingInput = document.getElementById('editPageHeadingInput');
+
+  if (promptEl) promptEl.style.display = 'none';
+  if (scanEl) scanEl.style.display = 'block';
+  if (laserEl) laserEl.style.display = 'block';
+  if (progressBar) progressBar.style.width = '20%';
+  if (progressText) progressText.innerText = 'Photo process ho rahi hai...';
+
+  if (typeof Tesseract === 'undefined') {
+    await new Promise(r => setTimeout(r, 1200));
+    if (typeof Tesseract === 'undefined') {
+      if (progressText) progressText.innerText = 'OCR library load nahi ho saki.';
+      return;
+    }
+  }
+
+  preprocessImageForOcr(imageSrc, async function(processedUrl) {
+    let ocrLang = readerState.lang === 'hindi' ? 'hin+eng' : 'eng';
+    try {
+      if (progressBar) progressBar.style.width = '40%';
+      let res = null;
+      try {
+        res = await Tesseract.recognize(processedUrl, ocrLang, {
+          logger: (m) => {
+            if (m && m.progress) {
+              const pct = Math.round(m.progress * 100);
+              if (progressBar) progressBar.style.width = Math.max(25, pct) + '%';
+            }
+          }
+        });
+      } catch (err) {
+        res = await Tesseract.recognize(processedUrl, 'eng');
+      }
+
+      const rawText = (res && res.data && res.data.text) ? res.data.text.trim() : '';
+      if (!rawText) {
+        if (scanEl) scanEl.style.display = 'none';
+        if (laserEl) laserEl.style.display = 'none';
+        if (promptEl) promptEl.style.display = 'block';
+        showToast('Photo me text nahi pehchana gaya.', 'warning');
+        return;
+      }
+
+      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+      if (lines.length > 1 && lines[0].length <= 50 && (!headingInput || !headingInput.value.trim())) {
+        if (headingInput) headingInput.value = lines[0];
+        if (contentInput) contentInput.value = lines.slice(1).join('\n\n');
+      } else {
+        if (contentInput) contentInput.value = lines.join('\n\n');
+      }
+
+      if (scanEl) scanEl.style.display = 'none';
+      if (laserEl) laserEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('Photo se naya text replace ho gaya! ⚡📝', 'success');
+    } catch (err) {
+      console.error('Edit page OCR error:', err);
+      if (scanEl) scanEl.style.display = 'none';
+      if (laserEl) laserEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('OCR scan error: ' + (err.message || 'Error'), 'error');
+    }
+  });
+}
+
+// =========================================================================
+// DEVANAGARI HINDI TO HINGLISH TRANSLITERATION ENGINE
+// =========================================================================
+function convertHindiToHinglish(hindiText) {
+  if (!hindiText || typeof hindiText !== 'string') return '';
+  const vowels = {
+    'अ': 'a', 'आ': 'aa', 'इ': 'i', 'ई': 'ee', 'उ': 'u', 'ऊ': 'oo',
+    'ऋ': 'ri', 'ए': 'e', 'ऐ': 'ai', 'ओ': 'o', 'औ': 'au', 'अं': 'an', 'अः': 'ah'
+  };
+  const matras = {
+    'ा': 'aa', 'ि': 'i', 'ी': 'ee', 'ु': 'u', 'ू': 'oo', 'ृ': 'ri',
+    'े': 'e', 'ै': 'ai', 'ो': 'o', 'ौ': 'au', 'ं': 'n', 'ँ': 'n', 'ः': 'h', '्': ''
+  };
+  const consonants = {
+    'क': 'k', 'ख': 'kh', 'ग': 'g', 'घ': 'gh', 'ङ': 'ng',
+    'च': 'ch', 'छ': 'chh', 'ज': 'j', 'झ': 'jh', 'ञ': 'ny',
+    'ट': 't', 'ठ': 'th', 'ड': 'd', 'ढ': 'dh', 'ण': 'n',
+    'त': 't', 'थ': 'th', 'द': 'd', 'ध': 'dh', 'न': 'n',
+    'प': 'p', 'फ': 'f', 'ब': 'b', 'भ': 'bh', 'म': 'm',
+    'य': 'y', 'र': 'r', 'ल': 'l', 'व': 'v', 'श': 'sh',
+    'ष': 'sh', 'स': 's', 'ह': 'h', 'क़': 'q', 'ख़': 'kh',
+    'ग़': 'gh', 'ज़': 'z', 'ड़': 'd', 'ढ़': 'dh', 'फ़': 'f'
+  };
+
+  let out = '';
+  const chars = Array.from(hindiText);
+  for (let i = 0; i < chars.length; i++) {
+    const ch = chars[i];
+    const next = chars[i + 1];
+
+    if (vowels[ch]) {
+      out += vowels[ch];
+    } else if (consonants[ch]) {
+      const c = consonants[ch];
+      if (next === '्') {
+        out += c;
+        i++;
+      } else if (next && matras[next] !== undefined) {
+        out += c + matras[next];
+        i++;
+      } else {
+        out += c + 'a';
+      }
+    } else if (matras[ch] !== undefined) {
+      out += matras[ch];
+    } else {
+      out += ch;
+    }
+  }
+  return out
+    .replace(/a\b/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// =========================================================================
+// AUTO-SCAN & CONVERT TO ALL 3 LANGUAGES (LANGUAGE MODAL)
+// =========================================================================
+function handleLangModalAutoOcrAll(input) {
+  if (!input || !input.files || !input.files[0]) return;
+  const file = input.files[0];
+  if (!file.type.startsWith('image/')) {
+    showToast('Kripya valid photo chunein!', 'warning');
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    runAutoOcrForAllLanguages(e.target.result);
+  };
+  reader.readAsDataURL(file);
+}
+
+async function runAutoOcrForAllLanguages(imageSrc) {
+  const promptEl = document.getElementById('langModalOcrPrompt');
+  const scanEl = document.getElementById('langModalOcrScanning');
+  const successEl = document.getElementById('langModalOcrSuccess');
+  const successTxt = document.getElementById('langModalOcrSuccessTxt');
+  const statusEl = document.getElementById('langModalOcrStatus');
+  const progressBar = document.getElementById('langModalOcrProgressBar');
+
+  if (promptEl) promptEl.style.display = 'none';
+  if (successEl) successEl.style.display = 'none';
+  if (scanEl) scanEl.style.display = 'block';
+  if (progressBar) progressBar.style.width = '20%';
+  if (statusEl) statusEl.innerText = 'Photo scan ki ja rahi hai...';
+
+  if (typeof Tesseract === 'undefined') {
+    await new Promise(r => setTimeout(r, 1200));
+    if (typeof Tesseract === 'undefined') {
+      if (statusEl) statusEl.innerText = 'OCR library load nahi ho saki.';
+      return;
+    }
+  }
+
+  preprocessImageForOcr(imageSrc, async function(processedUrl) {
+    try {
+      if (progressBar) progressBar.style.width = '40%';
+      if (statusEl) statusEl.innerText = 'Akshar pehchane ja rahe hain (Text Recognition)...';
+
+      let res = null;
+      try {
+        res = await Tesseract.recognize(processedUrl, 'hin+eng', {
+          logger: (m) => {
+            if (m && m.progress) {
+              const pct = Math.round(m.progress * 100);
+              if (progressBar) progressBar.style.width = Math.max(25, pct) + '%';
+            }
+          }
+        });
+      } catch (err) {
+        res = await Tesseract.recognize(processedUrl, 'eng');
+      }
+
+      const rawText = (res && res.data && res.data.text) ? res.data.text.trim() : '';
+      if (!rawText) {
+        if (scanEl) scanEl.style.display = 'none';
+        if (promptEl) promptEl.style.display = 'block';
+        showToast('Photo me koi readable text nahi mila.', 'warning');
+        return;
+      }
+
+      if (progressBar) progressBar.style.width = '80%';
+      if (statusEl) statusEl.innerText = 'Teeno bhashaon (हिंदी + Hinglish + English) mein convert ho raha hai...';
+
+      const hasDevanagari = /[\u0900-\u097F]/.test(rawText);
+      const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+
+      let hindiHeading = 'Naya Adhyay';
+      let hindiBody = rawText;
+      let hinglishHeading = 'Naya Adhyay';
+      let hinglishBody = '';
+      let englishHeading = 'New Chapter';
+      let englishBody = '';
+
+      if (hasDevanagari) {
+        if (lines.length > 1 && lines[0].length <= 60) {
+          hindiHeading = lines[0];
+          hindiBody = lines.slice(1).join('\n\n');
+        }
+        hinglishHeading = convertHindiToHinglish(hindiHeading);
+        hinglishBody = convertHindiToHinglish(hindiBody);
+        englishHeading = 'Hyperfocus • Chapter Excerpt';
+        englishBody = 'Transcribed Page (Hindi/Hinglish Original):\n\n' + hinglishBody;
+      } else {
+        if (lines.length > 1 && lines[0].length <= 60) {
+          englishHeading = lines[0];
+          englishBody = lines.slice(1).join('\n\n');
+        } else {
+          englishBody = rawText;
+        }
+        hinglishHeading = englishHeading;
+        hinglishBody = englishBody;
+        hindiHeading = englishHeading;
+        hindiBody = englishBody;
+      }
+
+      const formatHtml = (heading, body) => {
+        const ps = body.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+        return (heading ? '<div class="reader-page-header">' + escapeHtml(heading) + '</div>' : '') +
+          ps.map(p => '<p style="margin-bottom:14px; text-indent:1.5em; line-height:1.7;">' + escapeHtml(p.trim()) + '</p>').join('');
+      };
+
+      const b = state.books[readerState.activeBookIdx] || state.books[1] || state.books[0];
+      const bookTitleKey = (b.title || 'hyperfocus').toLowerCase();
+
+      // Find highest page count across all languages
+      const curDataHi = (typeof getBookPagesData === 'function') ? getBookPagesData(b, 'hindi') : null;
+      const curPages = (curDataHi && curDataHi.pages) ? curDataHi.pages.length : 2;
+      const newPageNo = curPages + 1;
+
+      const pageHindi = {
+        pageNo: newPageNo,
+        type: 'content',
+        heading: hindiHeading,
+        content: formatHtml(hindiHeading, hindiBody)
+      };
+
+      const pageHinglish = {
+        pageNo: newPageNo,
+        type: 'content',
+        heading: hinglishHeading,
+        content: formatHtml(hinglishHeading, hinglishBody)
+      };
+
+      const pageEnglish = {
+        pageNo: newPageNo,
+        type: 'content',
+        heading: englishHeading,
+        content: formatHtml(englishHeading, englishBody)
+      };
+
+      const storeKey = 'mindfocus_custom_book_pages';
+      let store = {};
+      const raw = localStorage.getItem(storeKey);
+      if (raw) store = JSON.parse(raw);
+      if (!store[bookTitleKey]) store[bookTitleKey] = {};
+
+      ['hindi', 'hinglish', 'english'].forEach(lang => {
+        if (!Array.isArray(store[bookTitleKey][lang])) store[bookTitleKey][lang] = [];
+        const pageData = lang === 'hindi' ? pageHindi : (lang === 'hinglish' ? pageHinglish : pageEnglish);
+        const exIdx = store[bookTitleKey][lang].findIndex(p => p.pageNo === newPageNo);
+        if (exIdx >= 0) {
+          store[bookTitleKey][lang][exIdx] = pageData;
+        } else {
+          store[bookTitleKey][lang].push(pageData);
+        }
+
+        const delKey = lang + '_deleted';
+        if (Array.isArray(store[bookTitleKey][delKey])) {
+          store[bookTitleKey][delKey] = store[bookTitleKey][delKey].filter(p => p !== newPageNo);
+        }
+      });
+
+      localStorage.setItem(storeKey, JSON.stringify(store));
+
+      // Refresh badges in modal
+      if (typeof getBookPagesData === 'function') {
+        const hiD = getBookPagesData(b, 'hindi');
+        const hingD = getBookPagesData(b, 'hinglish');
+        const engD = getBookPagesData(b, 'english');
+
+        const hiBadge = document.getElementById('langHindiCountBadge');
+        if (hiBadge) hiBadge.innerText = (hiD && hiD.pages ? hiD.pages.length : 0) + ' पृष्ठ';
+        const hingBadge = document.getElementById('langHinglishCountBadge');
+        if (hingBadge) hingBadge.innerText = (hingD && hingD.pages ? hingD.pages.length : 0) + ' Pages';
+        const engBadge = document.getElementById('langEnglishCountBadge');
+        if (engBadge) engBadge.innerText = (engD && engD.pages ? engD.pages.length : 0) + ' Pages';
+      }
+
+      if (progressBar) progressBar.style.width = '100%';
+      if (scanEl) scanEl.style.display = 'none';
+      if (successEl) successEl.style.display = 'flex';
+      if (successTxt) successTxt.innerText = 'Page ' + newPageNo + ' teeno bhashaon (हिंदी + Hinglish + English) mein add ho gaya!';
+
+      showToast('Page ' + newPageNo + ' teeno bhashaon mein safaltapoorvak save ho gaya! ⚡🎉', 'success');
+    } catch (err) {
+      console.error('Auto OCR all languages error:', err);
+      if (scanEl) scanEl.style.display = 'none';
+      if (promptEl) promptEl.style.display = 'block';
+      showToast('OCR Error: ' + (err.message || 'Error'), 'error');
+    }
+  });
+}
+
+// Cleanup any duplicate entries in localStorage
+function cleanupCorruptedCustomPages() {
+  try {
+    const storeKey = 'mindfocus_custom_book_pages';
+    const raw = localStorage.getItem(storeKey);
+    if (!raw) return;
+    const store = JSON.parse(raw);
+    let modified = false;
+
+    Object.keys(store).forEach(bookKey => {
+      ['hindi', 'hinglish', 'english'].forEach(lang => {
+        if (Array.isArray(store[bookKey][lang])) {
+          const map = new Map();
+          store[bookKey][lang].forEach(p => {
+            if (p && p.pageNo) {
+              map.set(p.pageNo, p);
+            }
+          });
+          if (map.size !== store[bookKey][lang].length) {
+            store[bookKey][lang] = Array.from(map.values()).sort((a, b) => a.pageNo - b.pageNo);
+            modified = true;
+          }
+        }
+      });
+    });
+
+    if (modified) {
+      localStorage.setItem(storeKey, JSON.stringify(store));
+      console.log('Cleaned up duplicate custom book pages from localStorage');
+    }
+  } catch (e) {
+    console.warn('Error during custom pages cleanup:', e);
+  }
+}
+cleanupCorruptedCustomPages();
+
+// =========================================================================
 </script>
 </body>
 </html>

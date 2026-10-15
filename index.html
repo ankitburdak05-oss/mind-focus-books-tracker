@@ -37,6 +37,13 @@
             <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"></path>
           </svg>
         </button>
+        <button type="button" class="header-icon-btn" id="headerRefreshBtn" title="Refresh App" onclick="refreshAppPage()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+        </button>
         <button type="button" class="header-icon-btn" id="headerSettingsBtn" title="App Adjustments &amp; Settings" onclick="navigateToSubView('appSettings')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
             <circle cx="12" cy="12" r="3"></circle>
@@ -2299,7 +2306,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.21 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.22 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -2591,6 +2598,141 @@
     </button>
   </nav>
 
+  <!-- 1. Language Selection Modal -->
+  <div class="modal-overlay" id="bookLanguageSelectModal" onclick="handleLangSelectOverlayClick(event)">
+    <div class="modal-content lang-select-dialog" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.6rem;">
+          <span style="font-size:1.5rem;">📖</span>
+          <div>
+            <h3 class="modal-title" id="langSelectBookTitle">किताब पढ़ें / Read Book</h3>
+            <div style="font-size:0.75rem; color:var(--text-secondary);" id="langSelectBookAuthor">Select Reading Language</div>
+          </div>
+        </div>
+        <button class="modal-close" onclick="closeLanguageSelectModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:1.25rem; gap:1rem;">
+        <!-- Book Preview Card -->
+        <div class="lang-select-book-preview">
+          <div class="lang-select-cover-wrap">
+            <img id="langSelectCoverImg" src="hyperfocus_cover.jpg" alt="Cover" class="lang-select-cover">
+          </div>
+          <div class="lang-select-info">
+            <span class="lang-select-badge" id="langSelectCategoryBadge">Focus &amp; Productivity</span>
+            <h4 id="langSelectTitleEn" style="margin:0.25rem 0 0.15rem; font-size:1rem; font-weight:800; color:var(--text-primary);">Hyperfocus: How to Work Less to Achieve More</h4>
+            <div class="lang-select-author-txt" id="langSelectAuthorTxt" style="font-size:0.8rem; color:var(--text-secondary);">by Chris Bailey • अनुवाद: अजय तिवारी</div>
+            <div class="lang-select-isbn-row" id="langSelectIsbnRow" style="margin-top:0.4rem; font-size:0.75rem; color:var(--text-muted); display:flex; gap:0.6rem; flex-wrap:wrap;">
+              <span>ISBN: <strong style="color:var(--text-primary);">978-93-5543-300-8</strong></span>
+              <span>• Price: <strong style="color:#10b981;">₹350</strong></span>
+            </div>
+          </div>
+        </div>
+
+        <div style="font-size:0.85rem; font-weight:700; color:var(--text-primary); margin-top:0.1rem; display:flex; justify-content:space-between; align-items:center;">
+          <span>🌐 भाषा चुनें (Choose Language):</span>
+          <span style="font-size:0.72rem; color:var(--text-muted);">1-Tap to Open Real Book</span>
+        </div>
+
+        <div class="lang-options-grid">
+          <!-- Option 1: Hindi -->
+          <button type="button" class="lang-option-card active-lang-card" onclick="selectBookLanguageAndOpen('hindi')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🇮🇳</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">हिंदी (Hindi) <span class="lang-recommended-pill">मूल पुस्तक</span></div>
+                <div class="lang-card-sub">हायपरफ़ोकस: कम प्रयास में अधिक सफलता कैसे प्राप्त करें (अजय तिवारी)</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langHindiCountBadge">2 पृष्ठ</span>
+              <span class="lang-open-arrow">पढ़ें ›</span>
+            </div>
+          </button>
+
+          <!-- Option 2: Hinglish -->
+          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('hinglish')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🔤</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">Hinglish (हिंग्लिश) <span class="lang-hinglish-pill">Roman Hindi</span></div>
+                <div class="lang-card-sub">Simple Roman Hindi me padhein — aasaan aur fast reading experience</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langHinglishCountBadge">2 Pages</span>
+              <span class="lang-open-arrow">Read ›</span>
+            </div>
+          </button>
+
+          <!-- Option 3: English -->
+          <button type="button" class="lang-option-card" onclick="selectBookLanguageAndOpen('english')">
+            <div class="lang-card-left">
+              <span class="lang-flag">🇬🇧</span>
+              <div class="lang-card-text">
+                <div class="lang-card-title">English <span class="lang-eng-pill">Original</span></div>
+                <div class="lang-card-sub">Hyperfocus: How to Work Less to Achieve More (Original edition)</div>
+              </div>
+            </div>
+            <div class="lang-card-action">
+              <span class="lang-pages-count" id="langEnglishCountBadge">2 Pages</span>
+              <span class="lang-open-arrow">Read ›</span>
+            </div>
+          </button>
+        </div>
+
+        <!-- FEATURE: INSTANT SCAN & CONVERT TO ALL LANGUAGES -->
+        <div class="lang-all-ocr-card" style="background:linear-gradient(135deg, rgba(99,102,241,0.09), rgba(16,185,129,0.09)); border:1.5px dashed rgba(99,102,241,0.45); border-radius:14px; padding:12px 14px; text-align:center; position:relative; overflow:hidden;">
+          <input type="file" id="langModalPhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleLangModalAutoOcrAll(this)">
+          <div id="langModalOcrPrompt" onclick="document.getElementById('langModalPhotoInput').click()" style="cursor:pointer;">
+            <div style="font-size:1.9rem; line-height:1; margin-bottom:4px;">📸 ⚡</div>
+            <div style="font-weight:800; font-size:0.92rem; color:var(--text-primary);">
+              Book Page ki Photo Dalein (Auto-Add to All Languages)
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
+              ⚡ <strong>1-Click: Photo dalte hi हिंदी + Hinglish + English teeno bhashaon mein naya page ban jayega!</strong>
+            </div>
+            <div style="margin-top:8px;">
+              <span class="btn btn-sm btn-primary" style="font-size:0.74rem; font-weight:700; padding:4px 14px; border-radius:20px; pointer-events:none;">
+                📷 Scan &amp; Convert to All 3 Languages
+              </span>
+            </div>
+          </div>
+
+          <!-- Loading / Scanning State -->
+          <div id="langModalOcrScanning" style="display:none; padding:8px 0; text-align:center;">
+            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
+            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="langModalOcrStatus">
+              Photo scan karke teeno bhashaon mein convert ho raha hai...
+            </div>
+            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
+              <div id="langModalOcrProgressBar" style="width:25%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+          </div>
+
+          <!-- Success Badge -->
+          <div id="langModalOcrSuccess" style="display:none; align-items:center; gap:8px; justify-content:center; padding:4px 0; font-weight:700; color:#10b981; font-size:0.82rem;">
+            <span>✅</span> <span id="langModalOcrSuccessTxt">Teeno bhashaon mein naya page safaltapoorvak add ho gaya!</span>
+          </div>
+        </div>
+
+        <!-- Add Custom Pages Button -->
+        <div class="lang-custom-add-banner">
+          <div>
+            <div style="font-weight:700; font-size:0.82rem; color:var(--text-primary);">📝 Single Page Type/Add Karna Hai?</div>
+            <div style="font-size:0.75rem; color:var(--text-secondary);">Keval ek bhasha mein custom page likhein ya jodein</div>
+          </div>
+          <button type="button" class="btn btn-sm" onclick="openAddCustomPageModal()" style="background:var(--accent-primary); color:#fff; border:none; font-weight:700; border-radius:8px;">
+            ➕ Add Page
+          </button>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:flex-end;">
+        <button type="button" class="btn" onclick="closeLanguageSelectModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  
   <!-- ================= REAL 3D MULTI-LANGUAGE BOOK READER MODAL ================= -->
   <div id="realBookReaderModal" class="real-book-reader-overlay" onclick="handleReaderOverlayClick(event)">
     <div class="real-book-reader-container" onclick="event.stopPropagation()">
@@ -2635,6 +2777,8 @@
 
           <!-- Reader Fullscreen Toggle -->
           <button type="button" class="reader-btn-icon" onclick="toggleAppFullscreen()" title="Toggle Fullscreen Reading (⛶)">⛶</button>
+          <!-- Add Page Button -->
+          <button type="button" class="reader-btn-sm" onclick="openAddCustomPageModal()" title="Add new page" style="font-weight:700; background:rgba(245,158,11,0.18); color:#f59e0b; border:1px solid rgba(245,158,11,0.35);">➕ Add Page</button>
         </div>
       </div>
 
@@ -2651,6 +2795,10 @@
               </div>
               <div class="reader-page-footer-wrap">
                 <div class="reader-page-number-footer" id="pageFooterLeft">Page 1</div>
+                <div class="reader-page-actions" id="pageActionsLeft">
+                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('left')" title="Edit Page">✏️ Edit</button>
+                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('left')" title="Delete Page">🗑️</button>
+                </div>
               </div>
             </div>
 
@@ -2666,6 +2814,10 @@
               </div>
               <div class="reader-page-footer-wrap">
                 <div class="reader-page-number-footer" id="pageFooterRight">Page 2</div>
+                <div class="reader-page-actions" id="pageActionsRight">
+                  <button type="button" class="reader-page-act-btn" onclick="openEditPageModalForCurrent('right')" title="Edit Page">✏️ Edit</button>
+                  <button type="button" class="reader-page-act-btn danger" onclick="deletePageForCurrent('right')" title="Delete Page">🗑️</button>
+                </div>
               </div>
             </div>
           </div>
@@ -2683,6 +2835,194 @@
       </div>
     </div>
   </div>
+
+<!-- 3. Add Custom Book Page Modal -->
+  <div class="modal-overlay" id="addCustomPageModal" onclick="handleAddPageOverlayClick(event)">
+    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">➕</span>
+          <h3 class="modal-title">नया बुक पेज जोड़ें (Add Book Page)</h3>
+        </div>
+        <button class="modal-close" onclick="closeAddCustomPageModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:0.9rem;">
+        
+        <!-- AUTO-OCR PHOTO UPLOAD & SCAN DROPZONE -->
+        <div class="page-ocr-dropzone" id="pageOcrDropzone" onclick="document.getElementById('customPagePhotoInput').click()">
+          <input type="file" id="customPagePhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleCustomPagePhotoUpload(this)">
+          
+          <div id="ocrLaserScanLine" class="ocr-scan-laser" style="display:none;"></div>
+
+          <!-- Default Prompt State -->
+          <div id="ocrDropzonePrompt">
+            <div style="font-size:2.2rem; line-height:1; margin-bottom:0.4rem;">📸</div>
+            <div style="font-weight:800; font-size:0.95rem; color:var(--text-primary);">
+              Book Page ki Photo Yahan Dalein ya Camera se Kheenche
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:3px;">
+              ⚡ <strong>Photo dalte hi automatic text mein convert ho jayega!</strong>
+            </div>
+            <div style="margin-top:8px; display:flex; justify-content:center; gap:6px; flex-wrap:wrap;">
+              <span style="background:rgba(99,102,241,0.12); color:#6366f1; border:1px solid rgba(99,102,241,0.25); font-size:0.72rem; padding:3px 8px; border-radius:12px; font-weight:600;">
+                📷 Gallery / Camera
+              </span>
+              <span style="background:rgba(16,185,129,0.12); color:#10b981; border:1px solid rgba(16,185,129,0.25); font-size:0.72rem; padding:3px 8px; border-radius:12px; font-weight:600;">
+                📋 Drag &amp; Drop / Ctrl+V Paste
+              </span>
+            </div>
+          </div>
+
+          <!-- Loading / Scanning State -->
+          <div id="ocrScanningState" style="display:none; text-align:center; padding:10px 4px;">
+            <div class="ocr-scan-spinner">⚡</div>
+            <div style="font-weight:800; font-size:0.9rem; color:#6366f1; margin-top:4px;" id="ocrScanProgressText">
+              Photo scan ho rahi hai aur text convert ho raha hai...
+            </div>
+            <div style="max-width:280px; margin:8px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:6px; overflow:hidden;">
+              <div id="ocrScanProgressBar" style="width:20%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+            <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:5px;" id="ocrScanStatusSub">
+              AI text recognition chal raha hai...
+            </div>
+          </div>
+
+          <!-- Success Preview State -->
+          <div id="ocrUploadedPreview" style="display:none; align-items:center; gap:10px; text-align:left; padding:4px 6px;">
+            <img id="ocrThumbnailImg" src="" alt="Thumbnail" style="width:46px; height:56px; object-fit:cover; border-radius:6px; border:1px solid var(--border-color); box-shadow:0 2px 6px rgba(0,0,0,0.15);">
+            <div style="flex:1;">
+              <div style="font-weight:700; font-size:0.84rem; color:#10b981; display:flex; align-items:center; gap:4px;">
+                <span>✅</span> <span>Text successfully convert ho gaya!</span>
+              </div>
+              <div style="font-size:0.72rem; color:var(--text-secondary); margin-top:2px;" id="ocrExtractSummaryText">
+                Text neeche box mein daal diya gaya hai. Aap ise edit ya save kar sakte hain.
+              </div>
+            </div>
+            <button type="button" class="btn btn-sm" onclick="event.stopPropagation(); document.getElementById('customPagePhotoInput').click();" style="font-size:0.72rem; padding:4px 8px;">
+              🔄 Change Photo
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Book Select Karein:</label>
+            <select id="customPageBookSelect" class="form-control">
+              <!-- Populated with books -->
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Language (भाषा):</label>
+            <select id="customPageLangSelect" class="form-control">
+              <option value="hindi">हिंदी (Hindi)</option>
+              <option value="hinglish">Hinglish (हिंग्लिश)</option>
+              <option value="english">English</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Page Number:</label>
+            <input type="number" id="customPageNoInput" class="form-control" min="1" value="3">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Page Heading / Chapter (Optional):</label>
+            <input type="text" id="customPageHeadingInput" class="form-control" placeholder="e.g. अध्याय 1: ऑटोपायलट मोड">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Page Content (Text ya Paragraphs):</label>
+            <span style="font-size:0.72rem; color:var(--text-muted);">Photo se auto-filled • You can edit</span>
+          </div>
+          <textarea id="customPageContentInput" class="form-control" style="min-height:160px; font-size:0.9rem; line-height:1.5;" placeholder="Photo daalte hi text yahan automatically aa jayega, ya aap type bhi kar sakte hain..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn" onclick="closeAddCustomPageModal()">Cancel</button>
+        <button type="button" class="btn btn-primary" onclick="saveCustomBookPage()">💾 Save Page</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Edit Book Page Modal (with Photo Re-Scan & OCR) -->
+  <div class="modal-overlay" id="editBookPageModal" onclick="handleEditPageOverlayClick(event)">
+    <div class="modal-content" style="max-width:540px;" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <div style="display:flex; align-items:center; gap:0.5rem;">
+          <span style="font-size:1.4rem;">✏️</span>
+          <h3 class="modal-title" id="editPageModalTitle">पेज एडिट करें (Edit Page)</h3>
+        </div>
+        <button class="modal-close" onclick="closeEditBookPageModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="gap:0.9rem;">
+        
+        <!-- AUTO-OCR PHOTO RE-SCAN DROPZONE -->
+        <div class="page-ocr-dropzone" id="editPageOcrDropzone" onclick="document.getElementById('editPagePhotoInput').click()">
+          <input type="file" id="editPagePhotoInput" accept="image/*" capture="environment" style="display:none;" onchange="handleEditPagePhotoUpload(this)">
+          
+          <div id="editOcrLaserScanLine" class="ocr-scan-laser" style="display:none;"></div>
+
+          <div id="editOcrDropzonePrompt">
+            <div style="font-size:1.8rem; line-height:1; margin-bottom:4px;">📸 🔄</div>
+            <div style="font-weight:800; font-size:0.9rem; color:var(--text-primary);">
+              Nayi Photo se Text Badlein (Re-Scan Photo)
+            </div>
+            <div style="font-size:0.75rem; color:var(--text-secondary); margin-top:2px;">
+              ⚡ <strong>Photo dalte hi naya text automatically text box mein replace ho jayega!</strong>
+            </div>
+          </div>
+
+          <div id="editOcrScanningState" style="display:none; text-align:center; padding:8px 4px;">
+            <div class="ocr-scan-spinner" style="font-size:1.6rem;">⚡</div>
+            <div style="font-weight:800; font-size:0.86rem; color:#6366f1; margin-top:4px;" id="editOcrScanProgressText">
+              Photo scan ho rahi hai...
+            </div>
+            <div style="max-width:240px; margin:6px auto 0; background:rgba(0,0,0,0.1); border-radius:10px; height:5px; overflow:hidden;">
+              <div id="editOcrScanProgressBar" style="width:20%; height:100%; background:linear-gradient(90deg, #6366f1, #10b981); transition:width 0.25s ease;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Page Number:</label>
+            <input type="number" id="editPageNoInput" class="form-control" min="1" readonly style="background:rgba(0,0,0,0.06); opacity:0.85;">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Language:</label>
+            <input type="text" id="editPageLangInput" class="form-control" readonly style="background:rgba(0,0,0,0.06); opacity:0.85;">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Page Heading / Title:</label>
+          <input type="text" id="editPageHeadingInput" class="form-control" placeholder="Page heading...">
+        </div>
+
+        <div class="form-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.35rem;">
+            <label class="form-label" style="margin:0;">Page Content (Text ya HTML):</label>
+            <span style="font-size:0.72rem; color:var(--text-muted);">Editable</span>
+          </div>
+          <textarea id="editPageContentInput" class="form-control" style="min-height:180px; font-size:0.9rem; line-height:1.5;"></textarea>
+        </div>
+      </div>
+      <div class="modal-footer" style="justify-content:space-between;">
+        <button type="button" class="btn btn-danger" onclick="confirmDeleteCurrentEditPage()" style="background:#ef4444; color:#fff; border:none; font-weight:700;">
+          🗑️ Delete Page
+        </button>
+        <div style="display:flex; gap:0.5rem;">
+          <button type="button" class="btn" onclick="closeEditBookPageModal()">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="saveEditedBookPage()">💾 Save Changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
 
   <!-- ================= LEND BOOK MODAL ================= -->
   <div class="modal-overlay" id="lendBookModalOverlay" style="display:none;" onclick="if(event.target === this) closeLendBookModal()">
@@ -3520,6 +3860,8 @@
   <!-- SCRIPTS -->
   <script src="jspdf.umd.min.js"></script>
   <script src="jspdf.plugin.autotable.min.js"></script>
+  <script src="tesseract.min.js"></script>
+  <script src="book-pages-data.js"></script>
   <script src="books-data.js"></script>
   <script src="dictionary-data.js"></script>
   <script src="broadcast-notice.js"></script>
