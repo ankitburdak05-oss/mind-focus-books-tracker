@@ -9599,6 +9599,35 @@ function generateSmartNotifications(force = false) {
   }
 }
 
+let currentNotifHubSection = 'inbox';
+
+function switchNotifHubSection(section) {
+  currentNotifHubSection = section;
+  const secInbox = document.getElementById('notifSectionInbox');
+  const secAlarm = document.getElementById('notifSectionAlarm');
+  const secStudio = document.getElementById('notifSectionStudio');
+
+  if (secInbox) secInbox.style.display = (section === 'inbox') ? 'block' : 'none';
+  if (secAlarm) secAlarm.style.display = (section === 'alarm') ? 'block' : 'none';
+  if (secStudio) secStudio.style.display = (section === 'studio') ? 'block' : 'none';
+
+  const tabInbox = document.getElementById('segTabInbox');
+  const tabAlarm = document.getElementById('segTabAlarm');
+  const tabStudio = document.getElementById('segTabStudio');
+
+  if (tabInbox) tabInbox.classList.toggle('active', section === 'inbox');
+  if (tabAlarm) tabAlarm.classList.toggle('active', section === 'alarm');
+  if (tabStudio) tabStudio.classList.toggle('active', section === 'studio');
+
+  if (section === 'inbox') {
+    renderNotificationsHub();
+  } else if (section === 'alarm') {
+    updateScheduleUI();
+  } else if (section === 'studio') {
+    initBotanicalStudio();
+  }
+}
+
 function renderNotificationsHub() {
   const container = document.getElementById('notificationsFeedContainer');
   if (!container) return;
@@ -9609,6 +9638,7 @@ function renderNotificationsHub() {
   const notesCount = userNotificationsState.filter(n => n.category === 'notes').length;
   const streaksCount = userNotificationsState.filter(n => n.category === 'streaks').length;
   const systemCount = userNotificationsState.filter(n => n.category === 'system').length;
+  const unreadCount = userNotificationsState.filter(n => !n.read).length;
 
   const setPill = (id, count) => {
     const el = document.getElementById(id);
@@ -9620,6 +9650,17 @@ function renderNotificationsHub() {
   setPill('pillCountStreaks', streaksCount);
   setPill('pillCountSystem', systemCount);
 
+  // Update Segmented Nav Badge and Header Summary
+  const segBadge = document.getElementById('segUnreadBadge');
+  if (segBadge) {
+    segBadge.innerText = unreadCount;
+    segBadge.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+  }
+  const summaryEl = document.getElementById('notifUnreadSummaryTxt');
+  if (summaryEl) {
+    summaryEl.innerText = unreadCount > 0 ? `${unreadCount} naye unread alert${unreadCount > 1 ? 's' : ''}` : 'Sabhi alerts padh liye gaye hain';
+  }
+
   // Update Active Pill UI
   const pills = document.querySelectorAll('.notif-pill');
   pills.forEach(p => {
@@ -9630,7 +9671,7 @@ function renderNotificationsHub() {
     }
   });
 
-  // Update Permission UI
+  // Update Permission UI and Sub-views
   updateBrowserNotificationUI();
   updateScheduleUI();
   initBotanicalStudio();
@@ -9671,18 +9712,21 @@ function renderNotificationsHub() {
     return;
   }
 
-  // Render cards
+  // Render cards (Full-Width, High-Contrast Modern Botanical Android Cards)
   container.innerHTML = filtered.map(notif => {
     const unreadClass = notif.read ? '' : 'unread';
     const timeStr = formatNotificationTime(notif.timestamp);
-    const catLabel = notif.category === 'reading' ? 'Reading' : (notif.category === 'notes' ? 'Note Flashback' : (notif.category === 'streaks' ? 'Daily Streak' : 'System Alert'));
+    const catLabel = notif.category === 'reading' ? 'Reading Reminder' : (notif.category === 'notes' ? 'Note Flashback' : (notif.category === 'streaks' ? 'Daily Streak' : 'System Alert'));
     
     let contextHtml = '';
     if (notif.bookTitle) {
       contextHtml = `
-        <div class="notif-context-chip">
-          ${notif.bookCover ? `<img src="${escapeHtml(notif.bookCover)}" alt="Cover" onerror="this.style.display='none'">` : '<span style="font-size:0.9rem;">📚</span>'}
-          <span style="font-weight:700;">${escapeHtml(notif.bookTitle)}</span>
+        <div class="notif-full-book-banner">
+          ${notif.bookCover ? `<img src="${escapeHtml(notif.bookCover)}" alt="Cover" class="notif-fbb-cover" onerror="this.src='icon-192.png'">` : '<div class="notif-fbb-icon">📚</div>'}
+          <div class="notif-fbb-info">
+            <span class="notif-fbb-tag">📖 Linked Book</span>
+            <h5 class="notif-fbb-title">${escapeHtml(notif.bookTitle)}</h5>
+          </div>
         </div>
       `;
     }
@@ -9690,39 +9734,38 @@ function renderNotificationsHub() {
     return `
       <div class="notif-card ${unreadClass}" id="notif_card_${escapeHtml(notif.id)}" onclick="markNotificationAsRead('${escapeHtml(notif.id)}')">
         ${!notif.read ? '<span class="notif-unread-glow" title="Unread Alert"></span>' : ''}
-        <div class="notif-card-top">
-          <div class="notif-icon-box ${escapeHtml(notif.iconClass || notif.category)}">
-            ${notif.icon || '🔔'}
-          </div>
-          <div class="notif-content">
-            <div class="notif-meta-row">
-              <span class="notif-category-tag">${catLabel}</span>
+        
+        <div class="notif-card-header-row">
+          <div class="notif-card-badge-wrap">
+            <div class="notif-icon-box ${escapeHtml(notif.iconClass || notif.category)}">
+              ${notif.icon || '🔔'}
+            </div>
+            <div class="notif-meta-col">
+              <span class="notif-category-tag ${escapeHtml(notif.category || 'system')}">${catLabel}</span>
               <span class="notif-time">${timeStr}</span>
             </div>
-            <h4 class="notif-title">${escapeHtml(notif.title)}</h4>
-            <p class="notif-body">${escapeHtml(notif.message)}</p>
-            ${contextHtml}
+          </div>
+          <div class="notif-card-dismiss-wrap">
+            ${!notif.read ? `
+              <button type="button" class="notif-btn-icon-read" onclick="event.stopPropagation(); markNotificationAsRead('${escapeHtml(notif.id)}')" title="Mark as read">✓ Read</button>
+            ` : ''}
+            <button type="button" class="notif-btn-icon-del" onclick="event.stopPropagation(); deleteNotification('${escapeHtml(notif.id)}')" title="Dismiss alert">✕</button>
           </div>
         </div>
-        <div class="notif-actions-row">
-          <div>
-            ${notif.actionLabel ? `
-              <button type="button" class="notif-btn-main" onclick="event.stopPropagation(); handleNotificationAction('${escapeHtml(notif.id)}')">
-                ${escapeHtml(notif.actionLabel)}
-              </button>
-            ` : ''}
-          </div>
-          <div class="notif-actions-right">
-            ${!notif.read ? `
-              <button type="button" class="notif-btn-text" onclick="event.stopPropagation(); markNotificationAsRead('${escapeHtml(notif.id)}')" title="Mark as read">
-                ✓ Read
-              </button>
-            ` : ''}
-            <button type="button" class="notif-btn-text" onclick="event.stopPropagation(); deleteNotification('${escapeHtml(notif.id)}')" title="Delete alert">
-              ✕ Dismiss
+
+        <div class="notif-content-body">
+          <h4 class="notif-title">${escapeHtml(notif.title)}</h4>
+          <p class="notif-body">${escapeHtml(notif.message)}</p>
+          ${contextHtml}
+        </div>
+
+        ${notif.actionLabel ? `
+          <div class="notif-actions-row">
+            <button type="button" class="notif-btn-main full-width-action" onclick="event.stopPropagation(); handleNotificationAction('${escapeHtml(notif.id)}')">
+              ${escapeHtml(notif.actionLabel)} &rarr;
             </button>
           </div>
-        </div>
+        ` : ''}
       </div>
     `;
   }).join('');

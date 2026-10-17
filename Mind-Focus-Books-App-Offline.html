@@ -9575,17 +9575,98 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   100% { transform: scale(1); }
 }
 
+/* ================= NOTIFICATION CENTER & SEGMENTED HUB ================= */
+.notif-segmented-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: rgba(15, 23, 42, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 6px;
+  margin: 10px 14px 16px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.35);
+  position: sticky;
+  top: 58px;
+  z-index: 25;
+}
+
+.notif-seg-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  padding: 10px 6px;
+  color: var(--text-secondary, #94a3b8);
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  white-space: nowrap;
+}
+
+.notif-seg-btn .seg-icon {
+  font-size: 1.05rem;
+}
+
+.notif-seg-btn .seg-title {
+  font-size: 0.78rem;
+  letter-spacing: 0.2px;
+}
+
+.notif-seg-btn.active {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.28));
+  color: #fff;
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+}
+
+.notif-seg-btn.active .seg-title {
+  color: #fbbf24;
+  font-weight: 800;
+}
+
+.seg-badge {
+  background: #ef4444;
+  color: #ffffff;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 1px 6px;
+  border-radius: 10px;
+  line-height: 1.2;
+}
+
 .notif-hub-container {
+  width: 100%;
   max-width: 680px;
   margin: 0 auto;
-  padding: 14px 16px 80px;
+  padding: 8px 12px 90px;
+  box-sizing: border-box;
+}
+
+.notif-hub-section {
+  width: 100%;
+  animation: fadeInNotifSec 0.25s ease-out;
+}
+
+@keyframes fadeInNotifSec {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 .notif-hero-card {
   background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.9));
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 18px;
-  padding: 16px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -9593,11 +9674,13 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   margin-bottom: 12px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
 }
+
 .notif-hero-left {
   display: flex;
   align-items: center;
   gap: 12px;
 }
+
 .notif-hero-icon {
   width: 44px;
   height: 44px;
@@ -9610,22 +9693,26 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
   flex-shrink: 0;
 }
+
 .notif-hero-title {
   font-size: 1rem;
   font-weight: 800;
   color: #fff;
 }
+
 .notif-hero-sub {
   font-size: 0.76rem;
   color: var(--text-secondary);
   margin-top: 2px;
 }
+
 .notif-hero-actions {
   display: flex;
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
 }
+
 .notif-tool-btn {
   background: rgba(255, 255, 255, 0.08);
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -9638,62 +9725,20 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   transition: all 0.18s ease;
   white-space: nowrap;
 }
+
 .notif-tool-btn:hover {
   background: rgba(255, 255, 255, 0.16);
   transform: translateY(-1px);
 }
+
 .notif-tool-btn.danger {
   border-color: rgba(239, 68, 68, 0.35);
   color: #fca5a5;
   background: rgba(239, 68, 68, 0.1);
 }
+
 .notif-tool-btn.danger:hover {
   background: rgba(239, 68, 68, 0.22);
-}
-
-.notif-pref-strip {
-  background: rgba(139, 92, 246, 0.08);
-  border: 1px solid rgba(139, 92, 246, 0.22);
-  border-radius: 14px;
-  padding: 10px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-.notif-pref-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.notif-pref-title {
-  display: block;
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: #fff;
-}
-.notif-pref-sub {
-  display: block;
-  font-size: 0.72rem;
-  color: var(--text-secondary);
-  line-height: 1.3;
-}
-.notif-perm-btn {
-  background: var(--accent-gold);
-  color: #111827;
-  border: none;
-  border-radius: 8px;
-  padding: 5px 12px;
-  font-size: 0.74rem;
-  font-weight: 800;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.18s ease;
-}
-.notif-perm-btn:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.1);
 }
 
 .notif-filter-scroller {
@@ -9705,9 +9750,11 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
+
 .notif-filter-scroller::-webkit-scrollbar {
   display: none;
 }
+
 .notif-pill {
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.09);
@@ -9723,16 +9770,19 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   gap: 6px;
   transition: all 0.18s ease;
 }
+
 .notif-pill:hover {
   background: rgba(255, 255, 255, 0.12);
   color: #fff;
 }
+
 .notif-pill.active {
   background: var(--accent-gold);
   color: #111827;
   border-color: var(--accent-gold);
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
 }
+
 .notif-pill-count {
   font-size: 0.68rem;
   padding: 1px 6px;
@@ -9740,37 +9790,64 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   background: rgba(0, 0, 0, 0.25);
   color: inherit;
 }
+
 .notif-pill.active .notif-pill-count {
   background: rgba(0, 0, 0, 0.35);
   color: #fff;
 }
 
-.notif-feed-list {
+/* ================= FULL-SCREEN NOTIFICATION CARDS ================= */
+.notif-feed-list.full-width-feed {
+  width: 100% !important;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-sizing: border-box;
+}
+
+.notif-card {
+  width: 100% !important;
+  box-sizing: border-box;
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.88), rgba(15, 23, 42, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 16px 16px 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-.notif-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-card);
-  border-radius: 16px;
-  padding: 14px;
-  position: relative;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+
 .notif-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  border-color: rgba(255, 255, 255, 0.16);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+  border-color: rgba(245, 158, 11, 0.3);
 }
+
 .notif-card.unread {
-  border-left: 4px solid var(--accent-gold);
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.75), rgba(15, 23, 42, 0.85));
-  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
+  border-left: 5px solid #f59e0b;
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.95), rgba(20, 28, 48, 0.98));
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.12);
 }
+
+.notif-card::before {
+  content: "";
+  position: absolute;
+  top: -24px;
+  right: -24px;
+  width: 110px;
+  height: 110px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.notif-card.unread::before {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.1) 0%, transparent 70%);
+}
+
 .notif-unread-glow {
   width: 8px;
   height: 8px;
@@ -9781,22 +9858,32 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   top: 14px;
   right: 14px;
 }
-.notif-card-top {
+
+.notif-card-header-row {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.notif-card-badge-wrap {
+  display: flex;
+  align-items: center;
   gap: 12px;
 }
+
 .notif-icon-box {
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.25rem;
+  font-size: 1.35rem;
   flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
 }
+
 .notif-icon-box.reading {
   background: linear-gradient(135deg, #3b82f6, #06b6d4);
 }
@@ -9813,106 +9900,181 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   background: linear-gradient(135deg, #10b981, #059669);
 }
 
-.notif-content {
-  flex: 1;
-  min-width: 0;
-  padding-right: 18px;
+.notif-meta-col {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-.notif-meta-row {
+
+.notif-category-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #fbbf24;
+}
+
+.notif-time {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.notif-card-dismiss-wrap {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 4px;
+  gap: 6px;
 }
-.notif-category-tag {
+
+.notif-btn-icon-read {
+  background: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #10b981;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.notif-btn-icon-read:hover {
+  background: #10b981;
+  color: #fff;
+}
+
+.notif-btn-icon-del {
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: #94a3b8;
+  font-size: 0.82rem;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.notif-btn-icon-del:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.notif-content-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.notif-title {
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.35;
+  letter-spacing: 0.2px;
+}
+
+.notif-body {
+  font-size: 0.86rem;
+  color: #cbd5e1;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.notif-full-book-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 8px 12px;
+  margin-top: 4px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.notif-fbb-cover {
+  width: 36px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.35);
+  flex-shrink: 0;
+}
+
+.notif-fbb-icon {
+  width: 36px;
+  height: 48px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.notif-fbb-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.notif-fbb-tag {
   font-size: 0.68rem;
   font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
-  color: var(--accent-gold);
+  color: #38bdf8;
+  letter-spacing: 0.5px;
 }
-.notif-time {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-}
-.notif-title {
-  font-size: 0.92rem;
-  font-weight: 800;
-  color: #fff;
-  margin: 0 0 4px 0;
-  line-height: 1.35;
-}
-.notif-body {
-  font-size: 0.81rem;
-  color: var(--text-secondary);
-  line-height: 1.45;
+
+.notif-fbb-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #f1f5f9;
   margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.notif-context-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-  padding: 6px 10px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 0.78rem;
-  color: #e2e8f0;
-  max-width: 100%;
-}
-.notif-context-chip img {
-  width: 24px;
-  height: 32px;
-  object-fit: cover;
-  border-radius: 4px;
-}
+
 .notif-actions-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-  gap: 8px;
-  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 4px;
 }
-.notif-actions-right {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-.notif-btn-main {
-  background: linear-gradient(135deg, var(--accent-gold), #f59e0b);
+
+.notif-btn-main.full-width-action {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 16px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
   color: #111827;
-  border: none;
-  border-radius: 8px;
-  padding: 6px 14px;
-  font-size: 0.76rem;
+  font-size: 0.84rem;
   font-weight: 800;
-  cursor: pointer;
-  transition: transform 0.15s ease, filter 0.15s ease;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-.notif-btn-main:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.1);
-}
-.notif-btn-text {
-  background: none;
   border: none;
-  color: var(--text-muted);
-  font-size: 0.74rem;
   cursor: pointer;
-  padding: 4px 8px;
-  border-radius: 6px;
-  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.25);
+  transition: transform 0.15s ease, filter 0.15s ease;
 }
-.notif-btn-text:hover {
-  color: #fff;
-  background: rgba(255, 255, 255, 0.08);
+
+.notif-btn-main.full-width-action:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
 }
+
 .notif-empty-state {
   text-align: center;
   padding: 46px 20px;
@@ -13715,349 +13877,376 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         </div>
       </div>
 
+      <!-- 🌟 TOP SEGMENTED NAVIGATION TABS: NO CLUTTER! -->
+      <div class="notif-segmented-nav">
+        <button type="button" class="notif-seg-btn active" id="segTabInbox" onclick="switchNotifHubSection('inbox')">
+          <span class="seg-icon">🔔</span>
+          <span class="seg-title">Alerts Feed</span>
+          <span class="seg-badge" id="segUnreadBadge">0</span>
+        </button>
+        <button type="button" class="notif-seg-btn" id="segTabAlarm" onclick="switchNotifHubSection('alarm')">
+          <span class="seg-icon">⏰</span>
+          <span class="seg-title">Reading Alarm</span>
+        </button>
+        <button type="button" class="notif-seg-btn" id="segTabStudio" onclick="switchNotifHubSection('studio')">
+          <span class="seg-icon">🌸</span>
+          <span class="seg-title">Custom Studio</span>
+        </button>
+      </div>
+
       <div class="notif-hub-container">
-        <!-- Banner & Quick Tools Bar -->
-        <div class="notif-hero-card">
-          <div class="notif-hero-left">
-            <div class="notif-hero-icon">🔔</div>
-            <div>
-              <div class="notif-hero-title">Alerts &amp; Reminders</div>
-              <div class="notif-hero-sub" id="notifUnreadSummaryTxt">Calculating updates...</div>
-            </div>
-          </div>
-          <div class="notif-hero-actions">
-            <button type="button" class="notif-tool-btn" onclick="triggerTestNotification()" title="Generate Test Alert">⚡ Test Alert</button>
-            <button type="button" class="notif-tool-btn danger" onclick="clearAllNotifications()" title="Clear All Alerts">🗑️ Clear</button>
-          </div>
-        </div>
 
-        <!-- Push Permission & Daily Time Toggle Bar -->
-        <div class="notif-pref-strip">
-          <div class="notif-pref-info">
-            <span style="font-size:1.15rem;">📲</span>
-            <div>
-              <span class="notif-pref-title">System &amp; Device Alerts</span>
-              <span class="notif-pref-sub" id="notifPermissionStatusTxt">Device notifications for daily reading reminders</span>
-            </div>
-          </div>
-          <button type="button" class="notif-perm-btn" id="notifPermissionToggleBtn" onclick="requestBrowserNotificationPermission()">Enable</button>
-        </div>
-
-        <!-- ⏰ Reading Reminder Time Scheduler & Alarm Setup Card -->
-        <div class="notif-schedule-card">
-          <div class="notif-sched-header">
-            <div class="notif-sched-title-wrap">
-              <span class="notif-sched-icon">⏰</span>
+        <!-- ================= OPTION 1: ALERTS INBOX (FULL-SCREEN NOTIFICATION CARDS) ================= -->
+        <div id="notifSectionInbox" class="notif-hub-section" style="display:block;">
+          <!-- Banner & Quick Tools Bar -->
+          <div class="notif-hero-card">
+            <div class="notif-hero-left">
+              <div class="notif-hero-icon">🔔</div>
               <div>
-                <h3 class="notif-sched-title">Daily Reading Reminder &amp; Alarm Time</h3>
-                <p class="notif-sched-sub" id="notifSchedSummarySub">Rozana reading ka reminder time set karein</p>
+                <div class="notif-hero-title">Alerts &amp; Reminders</div>
+                <div class="notif-hero-sub" id="notifUnreadSummaryTxt">Calculating updates...</div>
               </div>
             </div>
-            <label class="pref-switch" title="Toggle Daily Reminder Alarm">
-              <input type="checkbox" id="notifScheduleEnabledToggle" checked onchange="toggleReminderSchedule(this.checked)">
-              <span class="pref-slider"></span>
-            </label>
+            <div class="notif-hero-actions">
+              <button type="button" class="notif-tool-btn" onclick="triggerTestNotification()" title="Generate Test Alert">⚡ Test Alert</button>
+              <button type="button" class="notif-tool-btn danger" onclick="clearAllNotifications()" title="Clear All Alerts">🗑️ Clear</button>
+            </div>
           </div>
 
-          <div class="notif-sched-body" id="notifSchedBody">
-            <!-- Time Picker Row with Typeable Hour, Min, and AM/PM Buttons -->
-            <div class="notif-time-picker-row">
-              <div class="notif-time-selector-group">
-                <div class="notif-select-wrap">
-                  <label class="notif-sub-label">Hour (1-12)</label>
-                  <input type="number" id="notifHourInput" class="notif-type-input" min="1" max="12" value="9" placeholder="09" oninput="handleManualTimeType()">
-                  <select id="notifHourSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
-                    <option value="1">01</option>
-                    <option value="2">02</option>
-                    <option value="3">03</option>
-                    <option value="4">04</option>
-                    <option value="5">05</option>
-                    <option value="6">06</option>
-                    <option value="7">07</option>
-                    <option value="8">08</option>
-                    <option value="9" selected>09</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                  </select>
-                </div>
+          <!-- Category Filter Pills -->
+          <div class="notif-filter-scroller">
+            <button type="button" class="notif-pill active" id="notifPillAll" data-cat="all" onclick="setNotificationFilter('all')">
+              All <span class="notif-pill-count" id="pillCountAll">0</span>
+            </button>
+            <button type="button" class="notif-pill" id="notifPillReading" data-cat="reading" onclick="setNotificationFilter('reading')">
+              📖 Reading <span class="notif-pill-count" id="pillCountReading">0</span>
+            </button>
+            <button type="button" class="notif-pill" id="notifPillNotes" data-cat="notes" onclick="setNotificationFilter('notes')">
+              💡 Notes <span class="notif-pill-count" id="pillCountNotes">0</span>
+            </button>
+            <button type="button" class="notif-pill" id="notifPillStreaks" data-cat="streaks" onclick="setNotificationFilter('streaks')">
+              🔥 Streaks <span class="notif-pill-count" id="pillCountStreaks">0</span>
+            </button>
+            <button type="button" class="notif-pill" id="notifPillSystem" data-cat="system" onclick="setNotificationFilter('system')">
+              ⚙️ System <span class="notif-pill-count" id="pillCountSystem">0</span>
+            </button>
+          </div>
 
-                <span class="notif-colon">:</span>
+          <!-- Full Screen Notifications Feed List -->
+          <div id="notificationsFeedContainer" class="notif-feed-list full-width-feed">
+            <!-- Populated by JS -->
+          </div>
+        </div>
 
-                <div class="notif-select-wrap">
-                  <label class="notif-sub-label">Min (0-59)</label>
-                  <input type="number" id="notifMinInput" class="notif-type-input" min="0" max="59" value="30" placeholder="30" oninput="handleManualTimeType()">
-                  <select id="notifMinSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
-                    <option value="00">00</option>
-                    <option value="05">05</option>
-                    <option value="10">10</option>
-                    <option value="15">15</option>
-                    <option value="20">20</option>
-                    <option value="25">25</option>
-                    <option value="30" selected>30</option>
-                    <option value="35">35</option>
-                    <option value="40">40</option>
-                    <option value="45">45</option>
-                    <option value="50">50</option>
-                    <option value="55">55</option>
-                  </select>
-                </div>
-
-                <!-- AM / PM Switcher -->
-                <div class="notif-ampm-switcher">
-                  <button type="button" class="btn-ampm" id="btnAmToggle" onclick="setAmPm('AM')">AM</button>
-                  <button type="button" class="btn-ampm active" id="btnPmToggle" onclick="setAmPm('PM')">PM</button>
+        <!-- ================= OPTION 2: DAILY READING REMINDER & ALARM TIME ================= -->
+        <div id="notifSectionAlarm" class="notif-hub-section" style="display:none;">
+          <div class="notif-schedule-card">
+            <div class="notif-sched-header">
+              <div class="notif-sched-title-wrap">
+                <span class="notif-sched-icon">⏰</span>
+                <div>
+                  <h3 class="notif-sched-title">Daily Reading Reminder &amp; Alarm Time</h3>
+                  <p class="notif-sched-sub" id="notifSchedSummarySub">Rozana reading ka reminder time set karein</p>
                 </div>
               </div>
-
-              <div class="notif-time-display-badge" id="notifFormattedTimeBadge">
-                🌙 09:30 PM (Daily)
-              </div>
-              <input type="time" id="notifReminderTimeInput" style="display:none;" value="21:30">
-            </div>
-
-            <!-- Quick Preset Times -->
-            <div class="notif-presets-label">⚡ Quick Time Presets:</div>
-            <div class="notif-presets-grid">
-              <button type="button" class="notif-preset-btn" id="presetBtn_0800" onclick="setPresetReminderTime('08:00', '🌅 08:00 AM')">
-                <span class="npb-icon">🌅</span>
-                <span class="npb-time">08:00 AM</span>
-                <span class="npb-label">Subah Ki Chai</span>
-              </button>
-              <button type="button" class="notif-preset-btn" id="presetBtn_1400" onclick="setPresetReminderTime('14:00', '☀️ 02:00 PM')">
-                <span class="npb-icon">☀️</span>
-                <span class="npb-time">02:00 PM</span>
-                <span class="npb-label">Lunch Break</span>
-              </button>
-              <button type="button" class="notif-preset-btn" id="presetBtn_1900" onclick="setPresetReminderTime('19:00', '🌆 07:00 PM')">
-                <span class="npb-icon">🌆</span>
-                <span class="npb-time">07:00 PM</span>
-                <span class="npb-label">Shaam Fursat</span>
-              </button>
-              <button type="button" class="notif-preset-btn active" id="presetBtn_2130" onclick="setPresetReminderTime('21:30', '🌙 09:30 PM')">
-                <span class="npb-icon">🌙</span>
-                <span class="npb-time">09:30 PM</span>
-                <span class="npb-label">Bedtime Read</span>
-              </button>
-            </div>
-
-            <!-- Repeat Days Selector -->
-            <div class="notif-days-wrap">
-              <div class="notif-days-header">
-                <span class="notif-days-title">Repeat Days:</span>
-                <div class="notif-days-quick">
-                  <button type="button" class="btn-day-quick" onclick="setDaysSelection('all')">Everyday</button>
-                  <button type="button" class="btn-day-quick" onclick="setDaysSelection('weekdays')">Mon-Fri</button>
-                  <button type="button" class="btn-day-quick" onclick="setDaysSelection('weekends')">Weekends</button>
-                </div>
-              </div>
-              <div class="notif-days-chips">
-                <button type="button" class="day-chip active" data-day="0" onclick="toggleDayChip(0)">Sun</button>
-                <button type="button" class="day-chip active" data-day="1" onclick="toggleDayChip(1)">Mon</button>
-                <button type="button" class="day-chip active" data-day="2" onclick="toggleDayChip(2)">Tue</button>
-                <button type="button" class="day-chip active" data-day="3" onclick="toggleDayChip(3)">Wed</button>
-                <button type="button" class="day-chip active" data-day="4" onclick="toggleDayChip(4)">Thu</button>
-                <button type="button" class="day-chip active" data-day="5" onclick="toggleDayChip(5)">Fri</button>
-                <button type="button" class="day-chip active" data-day="6" onclick="toggleDayChip(6)">Sat</button>
-              </div>
-            </div>
-
-            <!-- Sound & Test Controls -->
-            <div class="notif-sched-footer">
-              <label class="notif-sound-toggle">
-                <input type="checkbox" id="notifSoundToggle" checked onchange="toggleReminderSound(this.checked)">
-                <span>🔔 Audio Chime</span>
+              <label class="pref-switch" title="Toggle Daily Reminder Alarm">
+                <input type="checkbox" id="notifScheduleEnabledToggle" checked onchange="toggleReminderSchedule(this.checked)">
+                <span class="pref-slider"></span>
               </label>
-              <div style="display:flex; align-items:center; gap:8px;">
-                <button type="button" class="notif-test-alarm-btn" onclick="triggerImmediateAlarmTest()" title="Test alarm right now with chime sound">
-                  ⏰ Test Alarm (3s)
+            </div>
+
+            <div class="notif-sched-body" id="notifSchedBody">
+              <!-- Time Picker Row with Typeable Hour, Min, and AM/PM Buttons -->
+              <div class="notif-time-picker-row">
+                <div class="notif-time-selector-group">
+                  <div class="notif-select-wrap">
+                    <label class="notif-sub-label">Hour (1-12)</label>
+                    <input type="number" id="notifHourInput" class="notif-type-input" min="1" max="12" value="9" placeholder="09" oninput="handleManualTimeType()">
+                    <select id="notifHourSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
+                      <option value="1">01</option>
+                      <option value="2">02</option>
+                      <option value="3">03</option>
+                      <option value="4">04</option>
+                      <option value="5">05</option>
+                      <option value="6">06</option>
+                      <option value="7">07</option>
+                      <option value="8">08</option>
+                      <option value="9" selected>09</option>
+                      <option value="10">10</option>
+                      <option value="11">11</option>
+                      <option value="12">12</option>
+                    </select>
+                  </div>
+
+                  <span class="notif-colon">:</span>
+
+                  <div class="notif-select-wrap">
+                    <label class="notif-sub-label">Min (0-59)</label>
+                    <input type="number" id="notifMinInput" class="notif-type-input" min="0" max="59" value="30" placeholder="30" oninput="handleManualTimeType()">
+                    <select id="notifMinSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
+                      <option value="00">00</option>
+                      <option value="05">05</option>
+                      <option value="10">10</option>
+                      <option value="15">15</option>
+                      <option value="20">20</option>
+                      <option value="25">25</option>
+                      <option value="30" selected>30</option>
+                      <option value="35">35</option>
+                      <option value="40">40</option>
+                      <option value="45">45</option>
+                      <option value="50">50</option>
+                      <option value="55">55</option>
+                    </select>
+                  </div>
+
+                  <!-- AM / PM Switcher -->
+                  <div class="notif-ampm-switcher">
+                    <button type="button" class="btn-ampm" id="btnAmToggle" onclick="setAmPm('AM')">AM</button>
+                    <button type="button" class="btn-ampm active" id="btnPmToggle" onclick="setAmPm('PM')">PM</button>
+                  </div>
+                </div>
+
+                <div class="notif-time-display-badge" id="notifFormattedTimeBadge">
+                  🌙 09:30 PM (Daily)
+                </div>
+                <input type="time" id="notifReminderTimeInput" style="display:none;" value="21:30">
+              </div>
+
+              <!-- Quick Preset Times -->
+              <div class="notif-presets-label">⚡ Quick Time Presets:</div>
+              <div class="notif-presets-grid">
+                <button type="button" class="notif-preset-btn" id="presetBtn_0800" onclick="setPresetReminderTime('08:00', '🌅 08:00 AM')">
+                  <span class="npb-icon">🌅</span>
+                  <span class="npb-time">08:00 AM</span>
+                  <span class="npb-label">Subah Ki Chai</span>
                 </button>
-                <button type="button" class="btn-save-gold" style="padding: 6px 14px; font-size: 0.76rem;" onclick="saveReminderScheduleConfig(true)">
-                  💾 Save Time
+                <button type="button" class="notif-preset-btn" id="presetBtn_1400" onclick="setPresetReminderTime('14:00', '☀️ 02:00 PM')">
+                  <span class="npb-icon">☀️</span>
+                  <span class="npb-time">02:00 PM</span>
+                  <span class="npb-label">Lunch Break</span>
                 </button>
+                <button type="button" class="notif-preset-btn" id="presetBtn_1900" onclick="setPresetReminderTime('19:00', '🌆 07:00 PM')">
+                  <span class="npb-icon">🌆</span>
+                  <span class="npb-time">07:00 PM</span>
+                  <span class="npb-label">Shaam Fursat</span>
+                </button>
+                <button type="button" class="notif-preset-btn active" id="presetBtn_2130" onclick="setPresetReminderTime('21:30', '🌙 09:30 PM')">
+                  <span class="npb-icon">🌙</span>
+                  <span class="npb-time">09:30 PM</span>
+                  <span class="npb-label">Bedtime Read</span>
+                </button>
+              </div>
+
+              <!-- Repeat Days Selector -->
+              <div class="notif-days-wrap">
+                <div class="notif-days-header">
+                  <span class="notif-days-title">Repeat Days:</span>
+                  <div class="notif-days-quick">
+                    <button type="button" class="btn-day-quick" onclick="setDaysSelection('all')">Everyday</button>
+                    <button type="button" class="btn-day-quick" onclick="setDaysSelection('weekdays')">Mon-Fri</button>
+                    <button type="button" class="btn-day-quick" onclick="setDaysSelection('weekends')">Weekends</button>
+                  </div>
+                </div>
+                <div class="notif-days-chips">
+                  <button type="button" class="day-chip active" data-day="0" onclick="toggleDayChip(0)">Sun</button>
+                  <button type="button" class="day-chip active" data-day="1" onclick="toggleDayChip(1)">Mon</button>
+                  <button type="button" class="day-chip active" data-day="2" onclick="toggleDayChip(2)">Tue</button>
+                  <button type="button" class="day-chip active" data-day="3" onclick="toggleDayChip(3)">Wed</button>
+                  <button type="button" class="day-chip active" data-day="4" onclick="toggleDayChip(4)">Thu</button>
+                  <button type="button" class="day-chip active" data-day="5" onclick="toggleDayChip(5)">Fri</button>
+                  <button type="button" class="day-chip active" data-day="6" onclick="toggleDayChip(6)">Sat</button>
+                </div>
+              </div>
+
+              <!-- Sound & Test Controls -->
+              <div class="notif-sched-footer">
+                <label class="notif-sound-toggle">
+                  <input type="checkbox" id="notifSoundToggle" checked onchange="toggleReminderSound(this.checked)">
+                  <span>🔔 Audio Chime</span>
+                </label>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <button type="button" class="notif-test-alarm-btn" onclick="triggerImmediateAlarmTest()" title="Test alarm right now with chime sound">
+                    ⏰ Test Alarm (3s)
+                  </button>
+                  <button type="button" class="btn-save-gold" style="padding: 6px 14px; font-size: 0.76rem;" onclick="saveReminderScheduleConfig(true)">
+                    💾 Save Time
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 🌺 BOTANICAL CUSTOM NOTIFICATION STUDIO & NOTE PICKER (v0.0.31) -->
-        <div class="botanical-studio-card">
-          <div class="botanical-card-header">
-            <div class="botanical-title-wrap">
-              <span class="botanical-header-icon">🌸🌿</span>
+        <!-- ================= OPTION 3: BOTANICAL CUSTOM NOTIFICATION STUDIO & NOTE PICKER ================= -->
+        <div id="notifSectionStudio" class="notif-hub-section" style="display:none;">
+          <!-- Push Permission Strip -->
+          <div class="notif-pref-strip">
+            <div class="notif-pref-info">
+              <span style="font-size:1.15rem;">📲</span>
               <div>
-                <h3 class="botanical-card-title">Botanical Notification Studio &amp; Notes Picker</h3>
-                <p class="botanical-card-sub">Apna custom notification likhein ya kisi book ke notes &amp; cover ko notification banayein</p>
+                <span class="notif-pref-title">System &amp; Device Alerts</span>
+                <span class="notif-pref-sub" id="notifPermissionStatusTxt">Device notifications for daily reading reminders</span>
               </div>
             </div>
-            <span class="botanical-pill-badge">🌺 Custom Studio</span>
+            <button type="button" class="notif-perm-btn" id="notifPermissionToggleBtn" onclick="requestBrowserNotificationPermission()">Enable</button>
           </div>
 
-          <!-- Mode Selector Tabs -->
-          <div class="botanical-mode-nav">
-            <button type="button" class="botanical-mode-btn active" id="btnModeBookNote" onclick="setNotifStudioMode('book_note')">
-              📖 Book Notes Alert
-            </button>
-            <button type="button" class="botanical-mode-btn" id="btnModeCustomNote" onclick="setNotifStudioMode('custom')">
-              ✍️ Write My Own Text
-            </button>
-            <button type="button" class="botanical-mode-btn" id="btnModeDailyQuote" onclick="setNotifStudioMode('daily_quote')">
-              ✨ Daily Wisdom Quote
-            </button>
-          </div>
-
-          <!-- Studio Body -->
-          <div class="botanical-studio-body">
-            <!-- Book & Note Selection Row (Active in 'book_note' mode) -->
-            <div id="studioBookPickerSection" class="studio-section">
-              <label class="studio-label">📚 Choose Book for Notification:</label>
-              <select id="studioBookSelect" class="studio-dropdown" onchange="onStudioBookSelectChanged()">
-                <!-- Populated with books from library -->
-              </select>
-
-              <!-- Book Preview Card with Cover Image & Details -->
-              <div class="studio-book-preview" id="studioBookPreviewBox">
-                <div class="studio-book-cover-frame">
-                  <img id="studioBookCoverImg" src="cover_placeholder.jpg" alt="Selected Book Cover" class="studio-book-cover">
-                  <div class="studio-cover-badge" id="studioBookStatusBadge">📖 In Progress</div>
-                </div>
-                <div class="studio-book-meta">
-                  <h4 class="studio-book-title" id="studioBookTitleTxt">Atomic Habits</h4>
-                  <p class="studio-book-author" id="studioBookAuthorTxt">by James Clear</p>
-                  <div class="studio-book-tags">
-                    <span class="studio-tag" id="studioBookPagesTxt">📄 320 pages</span>
-                    <span class="studio-tag" id="studioBookCategoryTxt">🌿 Mind Growth</span>
-                  </div>
-                  <p class="studio-book-hint">Is book ka cover phone ke notification me badi photo ke roop me aayega!</p>
+          <!-- Botanical Studio Card -->
+          <div class="botanical-studio-card">
+            <div class="botanical-card-header">
+              <div class="botanical-title-wrap">
+                <span class="botanical-header-icon">🌸🌿</span>
+                <div>
+                  <h3 class="botanical-card-title">Botanical Notification Studio &amp; Notes Picker</h3>
+                  <p class="botanical-card-sub">Apna custom notification likhein ya kisi book ke notes &amp; cover ko notification banayein</p>
                 </div>
               </div>
+              <span class="botanical-pill-badge">🌺 Custom Studio</span>
+            </div>
 
-              <!-- Pick Specific Note from this Book -->
-              <div class="studio-field-group" style="margin-top: 14px;">
-                <label class="studio-label">📝 Select Which Note to Display in Notification:</label>
-                <select id="studioNoteSelect" class="studio-dropdown" onchange="onStudioNoteSelectChanged()">
-                  <!-- Populated with notes of selected book -->
+            <!-- Mode Selector Tabs -->
+            <div class="botanical-mode-nav">
+              <button type="button" class="botanical-mode-btn active" id="btnModeBookNote" onclick="setNotifStudioMode('book_note')">
+                📖 Book Notes Alert
+              </button>
+              <button type="button" class="botanical-mode-btn" id="btnModeCustomNote" onclick="setNotifStudioMode('custom')">
+                ✍️ Write My Own Text
+              </button>
+              <button type="button" class="botanical-mode-btn" id="btnModeDailyQuote" onclick="setNotifStudioMode('daily_quote')">
+                ✨ Daily Wisdom Quote
+              </button>
+            </div>
+
+            <!-- Studio Body -->
+            <div class="botanical-studio-body">
+              <!-- Book & Note Selection Row (Active in 'book_note' mode) -->
+              <div id="studioBookPickerSection" class="studio-section">
+                <label class="studio-label">📚 Choose Book for Notification:</label>
+                <select id="studioBookSelect" class="studio-dropdown" onchange="onStudioBookSelectChanged()">
+                  <!-- Populated with books from library -->
                 </select>
-              </div>
-            </div>
 
-            <!-- Custom Notification Text Editor -->
-            <div class="studio-field-group">
-              <label class="studio-label">✏️ Notification Title:</label>
-              <input type="text" id="studioCustomTitle" class="studio-input" placeholder="e.g. Hyperfocus Note #1: Master Your Attention" oninput="updateLiveSimCard()">
-            </div>
-
-            <div class="studio-field-group">
-              <label class="studio-label">💬 Notification Message / Note Text:</label>
-              <textarea id="studioCustomMessage" class="studio-textarea" rows="3" placeholder="Apna note ya sandesh yahan likhein... (e.g. Focus on one high-impact task at a time for 25 minutes)." oninput="updateLiveSimCard()"></textarea>
-            </div>
-
-            <!-- Botanical Theme / Aura Palette -->
-            <div class="studio-theme-picker">
-              <label class="studio-label">🎨 Notification Visual Theme:</label>
-              <div class="botanical-themes-grid">
-                <button type="button" class="btn-botanical-theme active" data-theme="sakura" onclick="setStudioVisualTheme('sakura')">
-                  🌸 Sakura Bloom
-                </button>
-                <button type="button" class="btn-botanical-theme" data-theme="emerald" onclick="setStudioVisualTheme('emerald')">
-                  🌿 Emerald Forest
-                </button>
-                <button type="button" class="btn-botanical-theme" data-theme="sunset" onclick="setStudioVisualTheme('sunset')">
-                  🌅 Golden Twilight
-                </button>
-                <button type="button" class="btn-botanical-theme" data-theme="cosmic" onclick="setStudioVisualTheme('cosmic')">
-                  🌌 Cosmic Garden
-                </button>
-              </div>
-            </div>
-
-            <!-- 📱 ANDROID PHONE NOTIFICATION LIVE PREVIEW (1:1 Match with User's Uploaded Screenshot!) -->
-            <div class="android-shade-preview-wrap">
-              <div class="android-preview-header">
-                <span class="android-preview-label">📱 Live Phone Notification Preview (Status Bar):</span>
-                <span class="android-preview-sub">Phone ke notification drawer me bilkul aisa dikhega</span>
-              </div>
-
-              <div class="android-system-notif-card theme-sakura" id="androidSimCard">
-                <!-- App Header Row -->
-                <div class="asn-header">
-                  <div class="asn-header-left">
-                    <img src="icon-192.png" alt="App Icon" class="asn-app-icon">
-                    <span class="asn-app-name">Mind Focus Books</span>
-                    <span class="asn-dot">•</span>
-                    <span class="asn-time">now</span>
+                <!-- Book Preview Card with Cover Image & Details -->
+                <div class="studio-book-preview" id="studioBookPreviewBox">
+                  <div class="studio-book-cover-frame">
+                    <img id="studioBookCoverImg" src="cover_placeholder.jpg" alt="Selected Book Cover" class="studio-book-cover">
+                    <div class="studio-cover-badge" id="studioBookStatusBadge">📖 In Progress</div>
                   </div>
-                  <div class="asn-header-right">
-                    <span class="asn-expand-icon">⌵</span>
+                  <div class="studio-book-meta">
+                    <h4 class="studio-book-title" id="studioBookTitleTxt">Atomic Habits</h4>
+                    <p class="studio-book-author" id="studioBookAuthorTxt">by James Clear</p>
+                    <div class="studio-book-tags">
+                      <span class="studio-tag" id="studioBookPagesTxt">📄 320 pages</span>
+                      <span class="studio-tag" id="studioBookCategoryTxt">🌿 Mind Growth</span>
+                    </div>
+                    <p class="studio-book-hint">Is book ka cover phone ke notification me badi photo ke roop me aayega!</p>
                   </div>
                 </div>
 
-                <!-- Content Row -->
-                <div class="asn-body">
-                  <div class="asn-text-col">
-                    <div class="asn-title" id="asnSimTitle">Hyperfocus - Deep Work Note</div>
-                    <div class="asn-desc" id="asnSimDesc">Focus on one high-impact task at a time for 25 minutes. Deep attention produces extraordinary results.</div>
-                  </div>
-                  <div class="asn-small-badge">
-                    <img src="icon-192.png" alt="Badge" class="asn-mini-badge">
-                  </div>
-                </div>
-
-                <!-- Big Picture Banner (Matching User's Perplexity Notification Screenshot) -->
-                <div class="asn-big-picture-banner" id="asnSimBanner">
-                  <img id="asnSimBannerImg" src="hyperfocus_cover.jpg" alt="Notification Banner Cover" class="asn-banner-img">
-                  <div class="asn-banner-overlay">
-                    <div class="asn-banner-tag" id="asnSimBannerTag">🌿 Mind Focus Reading</div>
-                    <div class="asn-banner-quote" id="asnSimBannerQuote">"Where knowledge begins..."</div>
-                  </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="asn-actions">
-                  <button type="button" class="asn-btn primary" onclick="handleSimNotifAction('read')">📖 Open &amp; Read</button>
-                  <button type="button" class="asn-btn" onclick="handleSimNotifAction('notes')">📝 View All Notes</button>
+                <!-- Pick Specific Note from this Book -->
+                <div class="studio-field-group" style="margin-top: 14px;">
+                  <label class="studio-label">📝 Select Which Note to Display in Notification:</label>
+                  <select id="studioNoteSelect" class="studio-dropdown" onchange="onStudioNoteSelectChanged()">
+                    <!-- Populated with notes of selected book -->
+                  </select>
                 </div>
               </div>
-            </div>
 
-            <!-- Studio Action Buttons -->
-            <div class="studio-actions-footer">
-              <button type="button" class="btn-studio-action primary" onclick="sendCustomNotificationToDeviceNow()">
-                ⚡ Send To Phone Status Bar Now
-              </button>
-              <button type="button" class="btn-studio-action secondary" onclick="saveAsDailyReminderSchedule()">
-                ⏰ Set As Daily Alarm Notification
-              </button>
-              <button type="button" class="btn-studio-action tertiary" onclick="addCustomNotificationToFeed()">
-                ➕ Add to Alerts Hub List
-              </button>
+              <!-- Custom Notification Text Editor -->
+              <div class="studio-field-group">
+                <label class="studio-label">✏️ Notification Title:</label>
+                <input type="text" id="studioCustomTitle" class="studio-input" placeholder="e.g. Hyperfocus Note #1: Master Your Attention" oninput="updateLiveSimCard()">
+              </div>
+
+              <div class="studio-field-group">
+                <label class="studio-label">💬 Notification Message / Note Text:</label>
+                <textarea id="studioCustomMessage" class="studio-textarea" rows="3" placeholder="Apna note ya sandesh yahan likhein... (e.g. Focus on one high-impact task at a time for 25 minutes)." oninput="updateLiveSimCard()"></textarea>
+              </div>
+
+              <!-- Botanical Theme / Aura Palette -->
+              <div class="studio-theme-picker">
+                <label class="studio-label">🎨 Notification Visual Theme:</label>
+                <div class="botanical-themes-grid">
+                  <button type="button" class="btn-botanical-theme active" data-theme="sakura" onclick="setStudioVisualTheme('sakura')">
+                    🌸 Sakura Bloom
+                  </button>
+                  <button type="button" class="btn-botanical-theme" data-theme="emerald" onclick="setStudioVisualTheme('emerald')">
+                    🌿 Emerald Forest
+                  </button>
+                  <button type="button" class="btn-botanical-theme" data-theme="sunset" onclick="setStudioVisualTheme('sunset')">
+                    🌅 Golden Twilight
+                  </button>
+                  <button type="button" class="btn-botanical-theme" data-theme="cosmic" onclick="setStudioVisualTheme('cosmic')">
+                    🌌 Cosmic Garden
+                  </button>
+                </div>
+              </div>
+
+              <!-- 📱 ANDROID PHONE NOTIFICATION LIVE PREVIEW (1:1 Match with User's Uploaded Screenshot!) -->
+              <div class="android-shade-preview-wrap">
+                <div class="android-preview-header">
+                  <span class="android-preview-label">📱 Live Phone Notification Preview (Status Bar):</span>
+                  <span class="android-preview-sub">Phone ke notification drawer me bilkul aisa dikhega</span>
+                </div>
+
+                <div class="android-system-notif-card theme-sakura" id="androidSimCard">
+                  <!-- App Header Row -->
+                  <div class="asn-header">
+                    <div class="asn-header-left">
+                      <img src="icon-192.png" alt="App Icon" class="asn-app-icon">
+                      <span class="asn-app-name">Mind Focus Books</span>
+                      <span class="asn-dot">•</span>
+                      <span class="asn-time">now</span>
+                    </div>
+                    <div class="asn-header-right">
+                      <span class="asn-expand-icon">⌵</span>
+                    </div>
+                  </div>
+
+                  <!-- Content Row -->
+                  <div class="asn-body">
+                    <div class="asn-text-col">
+                      <div class="asn-title" id="asnSimTitle">Hyperfocus - Deep Work Note</div>
+                      <div class="asn-desc" id="asnSimDesc">Focus on one high-impact task at a time for 25 minutes. Deep attention produces extraordinary results.</div>
+                    </div>
+                    <div class="asn-small-badge">
+                      <img src="icon-192.png" alt="Badge" class="asn-mini-badge">
+                    </div>
+                  </div>
+
+                  <!-- Big Picture Banner (Matching User's Perplexity Notification Screenshot) -->
+                  <div class="asn-big-picture-banner" id="asnSimBanner">
+                    <img id="asnSimBannerImg" src="hyperfocus_cover.jpg" alt="Notification Banner Cover" class="asn-banner-img">
+                    <div class="asn-banner-overlay">
+                      <div class="asn-banner-tag" id="asnSimBannerTag">🌿 Mind Focus Reading</div>
+                      <div class="asn-banner-quote" id="asnSimBannerQuote">"Where knowledge begins..."</div>
+                    </div>
+                  </div>
+
+                  <!-- Action Buttons -->
+                  <div class="asn-actions">
+                    <button type="button" class="asn-btn primary" onclick="handleSimNotifAction('read')">📖 Open &amp; Read</button>
+                    <button type="button" class="asn-btn" onclick="handleSimNotifAction('notes')">📝 View All Notes</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Studio Action Buttons -->
+              <div class="studio-actions-footer">
+                <button type="button" class="btn-studio-action primary" onclick="sendCustomNotificationToDeviceNow()">
+                  ⚡ Send To Phone Status Bar Now
+                </button>
+                <button type="button" class="btn-studio-action secondary" onclick="saveAsDailyReminderSchedule()">
+                  ⏰ Set As Daily Alarm Notification
+                </button>
+                <button type="button" class="btn-studio-action tertiary" onclick="addCustomNotificationToFeed()">
+                  ➕ Add to Alerts Hub List
+                </button>
+              </div>
             </div>
           </div>
         </div>
 
-        <!-- Category Filter Pills -->
-        <div class="notif-filter-scroller">
-          <button type="button" class="notif-pill active" id="notifPillAll" data-cat="all" onclick="setNotificationFilter('all')">
-            All <span class="notif-pill-count" id="pillCountAll">0</span>
-          </button>
-          <button type="button" class="notif-pill" id="notifPillReading" data-cat="reading" onclick="setNotificationFilter('reading')">
-            📖 Reading <span class="notif-pill-count" id="pillCountReading">0</span>
-          </button>
-          <button type="button" class="notif-pill" id="notifPillNotes" data-cat="notes" onclick="setNotificationFilter('notes')">
-            💡 Notes <span class="notif-pill-count" id="pillCountNotes">0</span>
-          </button>
-          <button type="button" class="notif-pill" id="notifPillStreaks" data-cat="streaks" onclick="setNotificationFilter('streaks')">
-            🔥 Streaks <span class="notif-pill-count" id="pillCountStreaks">0</span>
-          </button>
-          <button type="button" class="notif-pill" id="notifPillSystem" data-cat="system" onclick="setNotificationFilter('system')">
-            ⚙️ System <span class="notif-pill-count" id="pillCountSystem">0</span>
-          </button>
-        </div>
-
-        <!-- Notifications Feed List -->
-        <div id="notificationsFeedContainer" class="notif-feed-list">
-          <!-- Populated by JS -->
-        </div>
       </div>
     </section>
 
@@ -31147,6 +31336,35 @@ function generateSmartNotifications(force = false) {
   }
 }
 
+let currentNotifHubSection = 'inbox';
+
+function switchNotifHubSection(section) {
+  currentNotifHubSection = section;
+  const secInbox = document.getElementById('notifSectionInbox');
+  const secAlarm = document.getElementById('notifSectionAlarm');
+  const secStudio = document.getElementById('notifSectionStudio');
+
+  if (secInbox) secInbox.style.display = (section === 'inbox') ? 'block' : 'none';
+  if (secAlarm) secAlarm.style.display = (section === 'alarm') ? 'block' : 'none';
+  if (secStudio) secStudio.style.display = (section === 'studio') ? 'block' : 'none';
+
+  const tabInbox = document.getElementById('segTabInbox');
+  const tabAlarm = document.getElementById('segTabAlarm');
+  const tabStudio = document.getElementById('segTabStudio');
+
+  if (tabInbox) tabInbox.classList.toggle('active', section === 'inbox');
+  if (tabAlarm) tabAlarm.classList.toggle('active', section === 'alarm');
+  if (tabStudio) tabStudio.classList.toggle('active', section === 'studio');
+
+  if (section === 'inbox') {
+    renderNotificationsHub();
+  } else if (section === 'alarm') {
+    updateScheduleUI();
+  } else if (section === 'studio') {
+    initBotanicalStudio();
+  }
+}
+
 function renderNotificationsHub() {
   const container = document.getElementById('notificationsFeedContainer');
   if (!container) return;
@@ -31157,6 +31375,7 @@ function renderNotificationsHub() {
   const notesCount = userNotificationsState.filter(n => n.category === 'notes').length;
   const streaksCount = userNotificationsState.filter(n => n.category === 'streaks').length;
   const systemCount = userNotificationsState.filter(n => n.category === 'system').length;
+  const unreadCount = userNotificationsState.filter(n => !n.read).length;
 
   const setPill = (id, count) => {
     const el = document.getElementById(id);
@@ -31168,6 +31387,17 @@ function renderNotificationsHub() {
   setPill('pillCountStreaks', streaksCount);
   setPill('pillCountSystem', systemCount);
 
+  // Update Segmented Nav Badge and Header Summary
+  const segBadge = document.getElementById('segUnreadBadge');
+  if (segBadge) {
+    segBadge.innerText = unreadCount;
+    segBadge.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+  }
+  const summaryEl = document.getElementById('notifUnreadSummaryTxt');
+  if (summaryEl) {
+    summaryEl.innerText = unreadCount > 0 ? `${unreadCount} naye unread alert${unreadCount > 1 ? 's' : ''}` : 'Sabhi alerts padh liye gaye hain';
+  }
+
   // Update Active Pill UI
   const pills = document.querySelectorAll('.notif-pill');
   pills.forEach(p => {
@@ -31178,7 +31408,7 @@ function renderNotificationsHub() {
     }
   });
 
-  // Update Permission UI
+  // Update Permission UI and Sub-views
   updateBrowserNotificationUI();
   updateScheduleUI();
   initBotanicalStudio();
@@ -31219,18 +31449,21 @@ function renderNotificationsHub() {
     return;
   }
 
-  // Render cards
+  // Render cards (Full-Width, High-Contrast Modern Botanical Android Cards)
   container.innerHTML = filtered.map(notif => {
     const unreadClass = notif.read ? '' : 'unread';
     const timeStr = formatNotificationTime(notif.timestamp);
-    const catLabel = notif.category === 'reading' ? 'Reading' : (notif.category === 'notes' ? 'Note Flashback' : (notif.category === 'streaks' ? 'Daily Streak' : 'System Alert'));
+    const catLabel = notif.category === 'reading' ? 'Reading Reminder' : (notif.category === 'notes' ? 'Note Flashback' : (notif.category === 'streaks' ? 'Daily Streak' : 'System Alert'));
     
     let contextHtml = '';
     if (notif.bookTitle) {
       contextHtml = `
-        <div class="notif-context-chip">
-          ${notif.bookCover ? `<img src="${escapeHtml(notif.bookCover)}" alt="Cover" onerror="this.style.display='none'">` : '<span style="font-size:0.9rem;">📚</span>'}
-          <span style="font-weight:700;">${escapeHtml(notif.bookTitle)}</span>
+        <div class="notif-full-book-banner">
+          ${notif.bookCover ? `<img src="${escapeHtml(notif.bookCover)}" alt="Cover" class="notif-fbb-cover" onerror="this.src='icon-192.png'">` : '<div class="notif-fbb-icon">📚</div>'}
+          <div class="notif-fbb-info">
+            <span class="notif-fbb-tag">📖 Linked Book</span>
+            <h5 class="notif-fbb-title">${escapeHtml(notif.bookTitle)}</h5>
+          </div>
         </div>
       `;
     }
@@ -31238,39 +31471,38 @@ function renderNotificationsHub() {
     return `
       <div class="notif-card ${unreadClass}" id="notif_card_${escapeHtml(notif.id)}" onclick="markNotificationAsRead('${escapeHtml(notif.id)}')">
         ${!notif.read ? '<span class="notif-unread-glow" title="Unread Alert"></span>' : ''}
-        <div class="notif-card-top">
-          <div class="notif-icon-box ${escapeHtml(notif.iconClass || notif.category)}">
-            ${notif.icon || '🔔'}
-          </div>
-          <div class="notif-content">
-            <div class="notif-meta-row">
-              <span class="notif-category-tag">${catLabel}</span>
+        
+        <div class="notif-card-header-row">
+          <div class="notif-card-badge-wrap">
+            <div class="notif-icon-box ${escapeHtml(notif.iconClass || notif.category)}">
+              ${notif.icon || '🔔'}
+            </div>
+            <div class="notif-meta-col">
+              <span class="notif-category-tag ${escapeHtml(notif.category || 'system')}">${catLabel}</span>
               <span class="notif-time">${timeStr}</span>
             </div>
-            <h4 class="notif-title">${escapeHtml(notif.title)}</h4>
-            <p class="notif-body">${escapeHtml(notif.message)}</p>
-            ${contextHtml}
+          </div>
+          <div class="notif-card-dismiss-wrap">
+            ${!notif.read ? `
+              <button type="button" class="notif-btn-icon-read" onclick="event.stopPropagation(); markNotificationAsRead('${escapeHtml(notif.id)}')" title="Mark as read">✓ Read</button>
+            ` : ''}
+            <button type="button" class="notif-btn-icon-del" onclick="event.stopPropagation(); deleteNotification('${escapeHtml(notif.id)}')" title="Dismiss alert">✕</button>
           </div>
         </div>
-        <div class="notif-actions-row">
-          <div>
-            ${notif.actionLabel ? `
-              <button type="button" class="notif-btn-main" onclick="event.stopPropagation(); handleNotificationAction('${escapeHtml(notif.id)}')">
-                ${escapeHtml(notif.actionLabel)}
-              </button>
-            ` : ''}
-          </div>
-          <div class="notif-actions-right">
-            ${!notif.read ? `
-              <button type="button" class="notif-btn-text" onclick="event.stopPropagation(); markNotificationAsRead('${escapeHtml(notif.id)}')" title="Mark as read">
-                ✓ Read
-              </button>
-            ` : ''}
-            <button type="button" class="notif-btn-text" onclick="event.stopPropagation(); deleteNotification('${escapeHtml(notif.id)}')" title="Delete alert">
-              ✕ Dismiss
+
+        <div class="notif-content-body">
+          <h4 class="notif-title">${escapeHtml(notif.title)}</h4>
+          <p class="notif-body">${escapeHtml(notif.message)}</p>
+          ${contextHtml}
+        </div>
+
+        ${notif.actionLabel ? `
+          <div class="notif-actions-row">
+            <button type="button" class="notif-btn-main full-width-action" onclick="event.stopPropagation(); handleNotificationAction('${escapeHtml(notif.id)}')">
+              ${escapeHtml(notif.actionLabel)} &rarr;
             </button>
           </div>
-        </div>
+        ` : ''}
       </div>
     `;
   }).join('');
