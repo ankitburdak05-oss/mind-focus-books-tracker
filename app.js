@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.24)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.25)
 // ==========================================================================
 
-const APP_VERSION = '0.0.24';
-const CURRENT_APP_VERSION = 'v0.0.24';
+const APP_VERSION = '0.0.25';
+const CURRENT_APP_VERSION = 'v0.0.25';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -2479,13 +2479,26 @@ function updateLastBackupDisplay() {
 
 function updateBackupStatusUI() {
   const badge = document.getElementById('profileBackupStatusText');
-  if (!badge) return;
   const lastTime = localStorage.getItem('mf_last_backup_time');
-  if (lastTime) {
-    badge.innerText = `🟢 Backed up: ${lastTime} • Tap to re-backup`;
-  } else {
-    badge.innerText = `🟡 No backup yet • Tap to backup library`;
+  if (badge) {
+    if (lastTime) {
+      badge.innerText = `🟢 Backed up: ${lastTime} • Tap to view options`;
+    } else {
+      badge.innerText = `🟡 No backup yet • Tap to backup library`;
+    }
   }
+  const subStatus = document.getElementById('backupSubScreenStatusText');
+  if (subStatus) {
+    if (lastTime) {
+      subStatus.innerText = `🟢 Backed up: ${lastTime} • Tap to re-backup`;
+    } else {
+      subStatus.innerText = `🟡 No backup yet • Tap to backup library`;
+    }
+  }
+}
+
+function renderBackupExportView() {
+  updateLastBackupDisplay();
 }
 
 function cycleReaderThemeFromProfile() {
@@ -5129,6 +5142,7 @@ function navigateToSubView(viewName) {
   if (viewName === 'offlineMode') renderOfflineModeView();
   if (viewName === 'syncDevices') renderSyncDevicesView();
   if (viewName === 'privacySecurity') renderPrivacySecurityView();
+  if (viewName === 'backupExport') renderBackupExportView();
   if (viewName === 'appFeaturesGuide') {
     renderAppFeaturesDirectoryView();
     const modal = document.getElementById('appFeaturesGuideModalOverlay');

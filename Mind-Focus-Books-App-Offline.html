@@ -9325,7 +9325,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         </div>
 
         <!-- 1-Tap Visual Data Backup Status Pill Banner -->
-        <div class="profile-backup-card" onclick="exportDataJSON()" title="Tap to download JSON backup">
+        <div class="profile-backup-card" onclick="navigateToSubView('backupExport')" title="Open Backup &amp; Export Center" style="cursor: pointer;">
           <div class="pbc-left">
             <span class="pbc-icon">💾</span>
             <div>
@@ -9333,7 +9333,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
               <div class="pbc-status" id="profileBackupStatusText">🟢 Backed up: Tap to download backup</div>
             </div>
           </div>
-          <button type="button" class="btn-backup-mini">Backup Now</button>
+          <button type="button" class="btn-backup-mini" onclick="event.stopPropagation(); exportDataJSON();">Backup Now</button>
         </div>
 
         <button type="button" class="btn-edit-profile" onclick="openEditProfileModal()" style="margin-top: 8px;">Edit Profile</button>
@@ -9547,6 +9547,16 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
       <!-- Group 4: Security, Sync & App Info -->
       <div class="profile-group-header">🛡️ Security, Cloud &amp; System</div>
       <div class="profile-menu-group">
+        <!-- 💾 BACKUP & EXPORT -->
+        <div class="profile-menu-item" style="border-left: 3px solid #10b981;" onclick="navigateToSubView('backupExport')">
+          <div class="pmi-icon grad-emerald">💾</div>
+          <div class="pmi-text">
+            <div class="pmi-title" style="font-weight: 800; color: #10b981;">Backup &amp; Export</div>
+            <div class="pmi-sub" id="profileBackupSubText">JSON &amp; CSV Backup, PDF Reports &amp; Restore Vault</div>
+          </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
         <div class="profile-menu-item" onclick="navigateToSubView('privacySecurity')">
           <div class="pmi-icon grad-emerald">🛡️</div>
           <div class="pmi-text">
@@ -9590,89 +9600,6 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
             <div class="pmi-sub" id="aboutAppSubText">Version 0.0.5 &bull; 1-Click Reinstall</div>
           </div>
           <div class="pmi-arrow">&rsaquo;</div>
-        </div>
-      </div>
-
-      <!-- Backup & Export Section (Screen 7 from Screenshots) -->
-      <div class="section-container" style="margin-top: 24px;">
-        <div class="section-header">
-          <div>
-            <h2 class="section-title">Backup & Export</h2>
-            <p class="view-sub-title" style="margin-top: 2px;">Keep your data safe and portable</p>
-          </div>
-        </div>
-
-        <!-- Data Backup Card -->
-        <div class="backup-card">
-          <div class="backup-meta">
-            <div class="backup-title">Data Backup</div>
-            <div class="backup-sub" id="lastBackupText">No manual backup yet • Tap 'Backup Now'</div>
-          </div>
-          <div class="backup-actions">
-            <button type="button" class="btn-backup-now" onclick="exportDataJSON()">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              Backup Now
-            </button>
-            <label class="btn-restore">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="17 8 12 3 7 8"></polyline>
-                <line x1="12" y1="3" x2="12" y2="15"></line>
-              </svg>
-              Restore
-              <input type="file" id="restoreFileInput" accept=".json" onchange="importDataJSON(event)" style="display:none;">
-            </label>
-          </div>
-        </div>
-
-        <!-- Export Data Cards -->
-        <div class="export-options-list">
-          <div class="export-card card-green" onclick="exportDataCSV()">
-            <div class="export-icon">📊</div>
-            <div class="export-info">
-              <div class="export-title">Export as CSV</div>
-              <div class="export-desc">Books, notes, progress</div>
-            </div>
-          </div>
-
-          <div class="export-card card-red" onclick="exportDataPDF()">
-            <div class="export-icon">📑</div>
-            <div class="export-info">
-              <div class="export-title">Export as PDF</div>
-              <div class="export-desc">Reading report, summary sheets</div>
-            </div>
-          </div>
-
-          <div class="export-card card-blue" onclick="exportDataJSON()">
-            <div class="export-icon">💾</div>
-            <div class="export-info">
-              <div class="export-title">Export as JSON</div>
-              <div class="export-desc">Full backup file, offline archive</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Privacy & Security Cards -->
-        <div class="privacy-cards-group">
-          <div class="privacy-card" onclick="openPinSetupModal()">
-            <div class="priv-icon">🔒</div>
-            <div class="priv-info">
-              <div class="priv-title">Set PIN Lock</div>
-              <div class="priv-desc">4-digit PIN for app access</div>
-            </div>
-          </div>
-
-          <div class="privacy-card">
-            <div class="priv-icon">🛡️</div>
-            <div class="priv-info">
-              <div class="priv-title">Device Privacy & Security</div>
-              <div class="priv-desc">4-Digit Security PIN & 100% Offline Storage</div>
-            </div>
-          </div>
         </div>
       </div>
     </section>
@@ -10420,6 +10347,105 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
       </div>
     </section>
 
+    <!-- ================= SUB-SCREEN: BACKUP & EXPORT ================= -->
+    <section id="viewBackupExport" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Backup &amp; Export</h2>
+          <p class="sub-screen-sub-title">Data Backup, File Formats &amp; Cloud Vault</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <!-- Quick Vault Status Card -->
+      <div class="profile-backup-card" style="margin-top: 8px; margin-bottom: 16px;" onclick="exportDataJSON()" title="Tap to download JSON backup">
+        <div class="pbc-left">
+          <span class="pbc-icon">💾</span>
+          <div>
+            <div class="pbc-title">Data Backup &amp; Vault</div>
+            <div class="pbc-status" id="backupSubScreenStatusText">🟢 Backed up: Tap to download backup</div>
+          </div>
+        </div>
+        <button type="button" class="btn-backup-mini">Backup Now</button>
+      </div>
+
+      <!-- Data Backup & Restore Card -->
+      <div class="backup-card">
+        <div class="backup-meta">
+          <div class="backup-title">Data Backup &amp; Restore</div>
+          <div class="backup-sub" id="lastBackupText">No manual backup yet • Tap 'Backup Now'</div>
+        </div>
+        <div class="backup-actions">
+          <button type="button" class="btn-backup-now" onclick="exportDataJSON()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Backup Now
+          </button>
+          <label class="btn-restore">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            Restore
+            <input type="file" id="restoreFileInput" accept=".json" onchange="importDataJSON(event)" style="display:none;">
+          </label>
+        </div>
+      </div>
+
+      <!-- Export Data Cards -->
+      <div class="profile-group-header" style="margin-top: 24px;">📄 Export Formats</div>
+      <div class="export-options-list">
+        <div class="export-card card-green" onclick="exportDataCSV()">
+          <div class="export-icon">📊</div>
+          <div class="export-info">
+            <div class="export-title">Export as CSV</div>
+            <div class="export-desc">Books, notes, progress spreadsheet</div>
+          </div>
+        </div>
+
+        <div class="export-card card-red" onclick="exportDataPDF()">
+          <div class="export-icon">📑</div>
+          <div class="export-info">
+            <div class="export-title">Export as PDF</div>
+            <div class="export-desc">Reading report, summary sheets &amp; book vault</div>
+          </div>
+        </div>
+
+        <div class="export-card card-blue" onclick="exportDataJSON()">
+          <div class="export-icon">💾</div>
+          <div class="export-info">
+            <div class="export-title">Export as JSON</div>
+            <div class="export-desc">Full backup file, offline archive</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Privacy & Security Cards -->
+      <div class="profile-group-header" style="margin-top: 24px;">🔒 Privacy &amp; Security</div>
+      <div class="privacy-cards-group">
+        <div class="privacy-card" onclick="openPinSetupModal()">
+          <div class="priv-icon">🔒</div>
+          <div class="priv-info">
+            <div class="priv-title">Set PIN Lock</div>
+            <div class="priv-desc">4-digit PIN for app access</div>
+          </div>
+        </div>
+
+        <div class="privacy-card" onclick="navigateToSubView('privacySecurity')">
+          <div class="priv-icon">🛡️</div>
+          <div class="priv-info">
+            <div class="priv-title">Device Privacy &amp; Security</div>
+            <div class="priv-desc">4-Digit Security PIN &amp; 100% Offline Storage</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ================= APP FEATURES DIRECTORY & SITEMAP ================= -->
     <section id="viewAppFeaturesGuide" class="app-view">
       <div class="sub-screen-header">
@@ -11000,7 +11026,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.24 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.25 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -18492,40 +18518,38 @@ if (typeof module !== 'undefined' && module.exports) {
 </script>
   <script>
 window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v0.0.24",
-  "version": "v0.0.24",
+  "id": "notice-v0.0.25",
+  "version": "v0.0.25",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "🚀",
-  "title": "Mind Focus Books v0.0.24 Ready!",
-  "message": "Naya v0.0.24 release update ready hai! App ka full code audit complete ho chuka hai, null-safety guards, service worker v23 caching, aur 100% stable offline bundle shamil hai. Click karke turant update karein, aapka saara reading data aur notes 100% surakshit rahenge.",
-  "btnText": "⚡ Update Now (v0.0.24)",
+  "icon": "💾",
+  "title": "Mind Focus Books v0.0.25 Ready!",
+  "message": "Naya v0.0.25 release update ready hai! Profile me naya dedicated 'Backup & Export' option add ho gaya hai, jisme Data Backup, Restore, CSV/PDF/JSON Exports aur Security Vault options ko ek jagah organize kar diya gaya hai. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
+  "btnText": "⚡ Update Now (v0.0.25)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-15T13:05:00.000Z"
+  "timestamp": "2026-10-17T11:00:00.000Z"
 };
 
 </script>
   <script>
 window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
-  "updatedAt": "2026-10-15T13:05:00.000Z",
+  "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.24",
-    "name": "Mind Focus Books v0.0.24 (Full Code Audit & Engine Polish)",
+    "version": "v0.0.25",
+    "name": "Mind Focus Books v0.0.25 (Dedicated Backup & Export Center)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.24 Release: Full Code Audit & Stability Engine Polish.",
-      "🛡️ Complete App Audit: 0 syntax & 0 runtime errors across all 8,500+ lines.",
-      "🚀 Service Worker v23: Seamless offline caching and asset integrity.",
-      "✏️ Add Page & Edit Page Modals: Instant top-level display above 3D reader.",
-      "📸 Tesseract OCR Photo Scanner: Camera/gallery image-to-text conversion.",
-      "🌐 3-Language Reading & Auto-OCR Launcher.",
-      "🔄 Phone Header Refresh Button: Real-time sync.",
-      "🛡️ Safe In-Place Update: 100% reading progress, notes and data safe."
+      "⚡ Official v0.0.25 Release: Profile Backup & Export Center Suite.",
+      "💾 Dedicated Backup & Export Sub-Screen: Profile me ek clean option banaya jisme Data Backup, Restore, aur Exports add kiye gaye.",
+      "📊 Multi-Format Exporting: 1-click me CSV, PDF aur full JSON backup files download karein.",
+      "🔄 1-Tap Quick Vault Banner: Live backup timestamp aur direct restore capability.",
+      "🔒 Integrated Security Cards: PIN Setup aur Privacy vault ek hi center me synced.",
+      "🛡️ Safe In-Place Update: 100% reading streak aur user notes surakshit rahenge."
     ],
-    "stagedAt": "2026-10-15T13:05:00.000Z",
+    "stagedAt": "2026-10-17T11:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
@@ -18607,11 +18631,11 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
 </script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.24)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.25)
 // ==========================================================================
 
-const APP_VERSION = '0.0.24';
-const CURRENT_APP_VERSION = 'v0.0.24';
+const APP_VERSION = '0.0.25';
+const CURRENT_APP_VERSION = 'v0.0.25';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -21087,13 +21111,26 @@ function updateLastBackupDisplay() {
 
 function updateBackupStatusUI() {
   const badge = document.getElementById('profileBackupStatusText');
-  if (!badge) return;
   const lastTime = localStorage.getItem('mf_last_backup_time');
-  if (lastTime) {
-    badge.innerText = `🟢 Backed up: ${lastTime} • Tap to re-backup`;
-  } else {
-    badge.innerText = `🟡 No backup yet • Tap to backup library`;
+  if (badge) {
+    if (lastTime) {
+      badge.innerText = `🟢 Backed up: ${lastTime} • Tap to view options`;
+    } else {
+      badge.innerText = `🟡 No backup yet • Tap to backup library`;
+    }
   }
+  const subStatus = document.getElementById('backupSubScreenStatusText');
+  if (subStatus) {
+    if (lastTime) {
+      subStatus.innerText = `🟢 Backed up: ${lastTime} • Tap to re-backup`;
+    } else {
+      subStatus.innerText = `🟡 No backup yet • Tap to backup library`;
+    }
+  }
+}
+
+function renderBackupExportView() {
+  updateLastBackupDisplay();
 }
 
 function cycleReaderThemeFromProfile() {
@@ -23737,6 +23774,7 @@ function navigateToSubView(viewName) {
   if (viewName === 'offlineMode') renderOfflineModeView();
   if (viewName === 'syncDevices') renderSyncDevicesView();
   if (viewName === 'privacySecurity') renderPrivacySecurityView();
+  if (viewName === 'backupExport') renderBackupExportView();
   if (viewName === 'appFeaturesGuide') {
     renderAppFeaturesDirectoryView();
     const modal = document.getElementById('appFeaturesGuideModalOverlay');

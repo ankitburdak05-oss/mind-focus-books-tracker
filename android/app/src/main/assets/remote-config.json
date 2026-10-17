@@ -1,21 +1,19 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-10-15T13:05:00.000Z",
+  "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.24",
-    "name": "Mind Focus Books v0.0.24 (Full Code Audit & Engine Polish)",
+    "version": "v0.0.25",
+    "name": "Mind Focus Books v0.0.25 (Dedicated Backup & Export Center)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.24 Release: Full Code Audit & Stability Engine Polish.",
-      "🛡️ Complete App Audit: 0 syntax & 0 runtime errors across all 8,500+ lines.",
-      "🚀 Service Worker v23: Seamless offline caching and asset integrity.",
-      "✏️ Add Page & Edit Page Modals: Instant top-level display above 3D reader.",
-      "📸 Tesseract OCR Photo Scanner: Camera/gallery image-to-text conversion.",
-      "🌐 3-Language Reading & Auto-OCR Launcher.",
-      "🔄 Phone Header Refresh Button: Real-time sync.",
-      "🛡️ Safe In-Place Update: 100% reading progress, notes and data safe."
+      "⚡ Official v0.0.25 Release: Profile Backup & Export Center Suite.",
+      "💾 Dedicated Backup & Export Sub-Screen: Profile me ek clean option banaya jisme Data Backup, Restore, aur Exports add kiye gaye.",
+      "📊 Multi-Format Exporting: 1-click me CSV, PDF aur full JSON backup files download karein.",
+      "🔄 1-Tap Quick Vault Banner: Live backup timestamp aur direct restore capability.",
+      "🔒 Integrated Security Cards: PIN Setup aur Privacy vault ek hi center me synced.",
+      "🛡️ Safe In-Place Update: 100% reading streak aur user notes surakshit rahenge."
     ],
-    "stagedAt": "2026-10-15T13:05:00.000Z",
+    "stagedAt": "2026-10-17T11:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
