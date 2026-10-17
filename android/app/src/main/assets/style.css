@@ -9906,4 +9906,391 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   border-radius: 20px;
   border: 1px dashed rgba(255, 255, 255, 0.12);
   margin-top: 10px;
-}
+}
+
+/* ==========================================================================
+   DAILY READING REMINDER SCHEDULE & ALARM TIME PICKER (v0.0.30)
+   ========================================================================== */
+.notif-schedule-card {
+  background: linear-gradient(135deg, rgba(26, 36, 56, 0.9), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+.notif-schedule-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #f59e0b, #ec4899, #6366f1);
+}
+
+.notif-sched-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.notif-sched-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.notif-sched-icon {
+  font-size: 1.4rem;
+  background: rgba(245, 158, 11, 0.15);
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  flex-shrink: 0;
+}
+.notif-sched-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+}
+.notif-sched-sub {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  margin: 2px 0 0 0;
+}
+
+.notif-time-picker-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.notif-time-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.notif-time-label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #e2e8f0;
+}
+.notif-time-input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: 800;
+  border-radius: 8px;
+  padding: 6px 10px;
+  outline: none;
+  color-scheme: dark;
+}
+.notif-time-display-badge {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #111827;
+  background: var(--accent-gold);
+  padding: 6px 12px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+  white-space: nowrap;
+}
+
+.notif-presets-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--accent-gold);
+  margin-bottom: 8px;
+}
+.notif-presets-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 14px;
+}
+@media (min-width: 480px) {
+  .notif-presets-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+.notif-preset-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 8px 10px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.18s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.notif-preset-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+.notif-preset-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1.5px solid var(--accent-gold);
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.2);
+}
+.notif-preset-btn .npb-icon {
+  font-size: 1rem;
+}
+.notif-preset-btn .npb-time {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #fff;
+}
+.notif-preset-btn .npb-label {
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+}
+
+.notif-days-wrap {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 10px 12px;
+  margin-bottom: 14px;
+}
+.notif-days-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.notif-days-title {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+.notif-days-quick {
+  display: flex;
+  gap: 4px;
+}
+.btn-day-quick {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: #cbd5e1;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-day-quick:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+}
+.notif-days-chips {
+  display: flex;
+  gap: 6px;
+  justify-content: space-between;
+}
+.day-chip {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted);
+  border-radius: 8px;
+  padding: 6px 0;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+.day-chip:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+.day-chip.active {
+  background: var(--accent-gold);
+  color: #111827;
+  border-color: var(--accent-gold);
+  font-weight: 800;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25);
+}
+
+.notif-sched-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  flex-wrap: wrap;
+}
+.notif-sound-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.76rem;
+  color: #e2e8f0;
+  cursor: pointer;
+}
+.notif-sound-toggle input {
+  accent-color: var(--accent-gold);
+}
+.notif-test-alarm-btn {
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--accent-gold);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.notif-test-alarm-btn:hover {
+  background: var(--accent-gold);
+  color: #111827;
+}
+
+/* ==========================================================================
+   SCHEDULED READING REMINDER ALARM MODAL POPUP
+   ========================================================================== */
+.reminder-alarm-sheet {
+  max-width: 420px;
+  text-align: center;
+  padding: 24px 20px 20px;
+  background: linear-gradient(145deg, #1e293b, #0f172a);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 22px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.2);
+  animation: alarmPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+@keyframes alarmPop {
+  0% { transform: scale(0.9) translateY(20px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+
+.reminder-alarm-glow-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #ef4444);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  margin: 0 auto 12px;
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.5);
+  animation: alarmRingPulse 1.8s infinite;
+}
+@keyframes alarmRingPulse {
+  0% { transform: scale(1); box-shadow: 0 0 16px rgba(245, 158, 11, 0.4); }
+  50% { transform: scale(1.1); box-shadow: 0 0 30px rgba(239, 68, 68, 0.7); }
+  100% { transform: scale(1); box-shadow: 0 0 16px rgba(245, 158, 11, 0.4); }
+}
+
+.reminder-alarm-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 4px 0;
+}
+.reminder-alarm-sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin: 0 0 16px 0;
+}
+
+.reminder-alarm-card {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 12px;
+}
+.reminder-alarm-cover {
+  width: 46px;
+  height: 66px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  flex-shrink: 0;
+}
+.reminder-alarm-info {
+  flex: 1;
+  min-width: 0;
+}
+.reminder-alarm-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  letter-spacing: 0.5px;
+}
+.reminder-alarm-book-name {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 2px 0 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.reminder-alarm-pages {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.reminder-alarm-progress-bar {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.reminder-alarm-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #f59e0b);
+  border-radius: 4px;
+  transition: width 0.3s;
+}
+
+.reminder-alarm-quote {
+  background: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 0.78rem;
+  color: #fde68a;
+  font-style: italic;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.reminder-alarm-actions {
+  display: flex;
+  gap: 10px;
+}
+

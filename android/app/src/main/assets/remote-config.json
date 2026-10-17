@@ -2,20 +2,20 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.29",
-    "name": "Mind Focus Books v0.0.29 (Notification Center & Alerts Hub)",
+    "version": "v0.0.30",
+    "name": "Mind Focus Books v0.0.30 (Daily Reminder Time & Alarm Scheduler)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.29 Release: Notification Center & Smart Alerts Hub.",
-      "🔔 Top Header Notification Bell: Dynamic unread counter badge aur instant 1-tap navigation.",
-      "📖 Currently Reading Book Reminders: Active books ke page progress aur daily reading goals ke timely reminders.",
-      "💡 Note Flashbacks & Wisdom Quotes: Saved notes se randomly quotes surface karke 3D Card modal me deep link.",
-      "🔥 Reading Streak Alerts: Daily reading habit barkarar rakhne ke reminders.",
-      "📲 Device & System Push Alerts: Browser push notification support aur instant test alerts.",
-      "🧹 Category Filters & Batch Tools: All, Reading, Notes, Streaks, System filters; Mark All as Read aur Clear tools.",
+      "⚡ Official v0.0.30 Release: Custom Reading Reminder Time & Daily Alarm Scheduler.",
+      "⏰ Custom Reminder Time Picker: Apni pasand ka koi bhi waqt (HH:MM AM/PM) set karein.",
+      "⚡ Quick Preset Time Buttons: Subah Ki Chai (08:00 AM), Lunch Break (02:00 PM), Shaam Fursat (07:00 PM) aur Bedtime Read (09:30 PM).",
+      "📅 Repeat Days Customizer: Everyday, Weekdays ya Weekends chunne ke liye flexible day chips (Sun-Sat).",
+      "🔔 Mindfulness Audio Chime: Alarm time par harmonic gentle chime sound jo focus promote kare.",
+      "📖 Interactive Reading Alarm Modal: Active reading book, page progress, motivation quote aur 1-tap 'Read Now' button ke sath.",
+      "💤 10-Minute Snooze & Instant 3s Test: Alarm test aur snooze karne ki poori suvidha.",
       "🛡️ Safe In-Place Update: 100% books, reading streaks aur user notes surakshit rahenge."
     ],
-    "stagedAt": "2026-10-17T14:00:00.000Z",
+    "stagedAt": "2026-10-17T14:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

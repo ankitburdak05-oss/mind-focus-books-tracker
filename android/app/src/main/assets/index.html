@@ -2459,7 +2459,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.29 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.30 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -2744,6 +2744,98 @@
             </div>
           </div>
           <button type="button" class="notif-perm-btn" id="notifPermissionToggleBtn" onclick="requestBrowserNotificationPermission()">Enable</button>
+        </div>
+
+        <!-- ⏰ Reading Reminder Time Scheduler & Alarm Setup Card -->
+        <div class="notif-schedule-card">
+          <div class="notif-sched-header">
+            <div class="notif-sched-title-wrap">
+              <span class="notif-sched-icon">⏰</span>
+              <div>
+                <h3 class="notif-sched-title">Daily Reading Reminder &amp; Alarm Time</h3>
+                <p class="notif-sched-sub" id="notifSchedSummarySub">Rozana reading ka reminder time set karein</p>
+              </div>
+            </div>
+            <label class="pref-switch" title="Toggle Daily Reminder Alarm">
+              <input type="checkbox" id="notifScheduleEnabledToggle" checked onchange="toggleReminderSchedule(this.checked)">
+              <span class="pref-slider"></span>
+            </label>
+          </div>
+
+          <div class="notif-sched-body" id="notifSchedBody">
+            <!-- Time Picker Row -->
+            <div class="notif-time-picker-row">
+              <div class="notif-time-input-wrap">
+                <span class="notif-time-label">Set Custom Time:</span>
+                <input type="time" id="notifReminderTimeInput" class="notif-time-input" value="21:30" onchange="handleReminderTimeChange(this.value)">
+              </div>
+              <div class="notif-time-display-badge" id="notifFormattedTimeBadge">
+                🌙 09:30 PM (Daily)
+              </div>
+            </div>
+
+            <!-- Quick Preset Times -->
+            <div class="notif-presets-label">⚡ Quick Time Presets:</div>
+            <div class="notif-presets-grid">
+              <button type="button" class="notif-preset-btn" id="presetBtn_0800" onclick="setPresetReminderTime('08:00', '🌅 08:00 AM')">
+                <span class="npb-icon">🌅</span>
+                <span class="npb-time">08:00 AM</span>
+                <span class="npb-label">Subah Ki Chai</span>
+              </button>
+              <button type="button" class="notif-preset-btn" id="presetBtn_1400" onclick="setPresetReminderTime('14:00', '☀️ 02:00 PM')">
+                <span class="npb-icon">☀️</span>
+                <span class="npb-time">02:00 PM</span>
+                <span class="npb-label">Lunch Break</span>
+              </button>
+              <button type="button" class="notif-preset-btn" id="presetBtn_1900" onclick="setPresetReminderTime('19:00', '🌆 07:00 PM')">
+                <span class="npb-icon">🌆</span>
+                <span class="npb-time">07:00 PM</span>
+                <span class="npb-label">Shaam Fursat</span>
+              </button>
+              <button type="button" class="notif-preset-btn active" id="presetBtn_2130" onclick="setPresetReminderTime('21:30', '🌙 09:30 PM')">
+                <span class="npb-icon">🌙</span>
+                <span class="npb-time">09:30 PM</span>
+                <span class="npb-label">Bedtime Read</span>
+              </button>
+            </div>
+
+            <!-- Repeat Days Selector -->
+            <div class="notif-days-wrap">
+              <div class="notif-days-header">
+                <span class="notif-days-title">Repeat Days:</span>
+                <div class="notif-days-quick">
+                  <button type="button" class="btn-day-quick" onclick="setDaysSelection('all')">Everyday</button>
+                  <button type="button" class="btn-day-quick" onclick="setDaysSelection('weekdays')">Mon-Fri</button>
+                  <button type="button" class="btn-day-quick" onclick="setDaysSelection('weekends')">Weekends</button>
+                </div>
+              </div>
+              <div class="notif-days-chips">
+                <button type="button" class="day-chip active" data-day="0" onclick="toggleDayChip(0)">Sun</button>
+                <button type="button" class="day-chip active" data-day="1" onclick="toggleDayChip(1)">Mon</button>
+                <button type="button" class="day-chip active" data-day="2" onclick="toggleDayChip(2)">Tue</button>
+                <button type="button" class="day-chip active" data-day="3" onclick="toggleDayChip(3)">Wed</button>
+                <button type="button" class="day-chip active" data-day="4" onclick="toggleDayChip(4)">Thu</button>
+                <button type="button" class="day-chip active" data-day="5" onclick="toggleDayChip(5)">Fri</button>
+                <button type="button" class="day-chip active" data-day="6" onclick="toggleDayChip(6)">Sat</button>
+              </div>
+            </div>
+
+            <!-- Sound & Test Controls -->
+            <div class="notif-sched-footer">
+              <label class="notif-sound-toggle">
+                <input type="checkbox" id="notifSoundToggle" checked onchange="toggleReminderSound(this.checked)">
+                <span>🔔 Audio Chime</span>
+              </label>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <button type="button" class="notif-test-alarm-btn" onclick="triggerImmediateAlarmTest()" title="Test alarm right now with chime sound">
+                  ⏰ Test Alarm (3s)
+                </button>
+                <button type="button" class="btn-save-gold" style="padding: 6px 14px; font-size: 0.76rem;" onclick="saveReminderScheduleConfig(true)">
+                  💾 Save Time
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
         <!-- Category Filter Pills -->
@@ -4137,6 +4229,44 @@
       <div class="modal-footer" style="display:flex; justify-content:space-between; align-items:center;">
         <button type="button" class="btn-cancel" onclick="closeShelfSelectorDropdown()">Close</button>
         <button type="button" class="btn-gold-pill" onclick="closeShelfSelectorDropdown(); navigateToSubView('customShelvesAdjust');">+ Manage Shelves</button>
+      </div>
+    </div>
+  <!-- ================= MODAL: SCHEDULED READING REMINDER ALARM (v0.0.30) ================= -->
+  <div class="modal-overlay" id="scheduledReminderModalOverlay" style="display:none;" onclick="if(event.target===this)closeScheduledReminderModal()">
+    <div class="modal-sheet reminder-alarm-sheet" onclick="event.stopPropagation()">
+      <div class="reminder-alarm-glow-ring">⏰</div>
+      <h3 class="reminder-alarm-title" id="schedModalTitle">Padhne Ka Time Ho Gaya! 📖</h3>
+      <p class="reminder-alarm-sub" id="schedModalSubtitle">Aapka daily reading reminder time ho chuka hai.</p>
+
+      <div class="reminder-alarm-card" id="schedModalBookCard">
+        <img id="schedModalCoverImg" src="cover_placeholder.jpg" alt="Cover" class="reminder-alarm-cover" onerror="this.src='cover_placeholder.jpg'">
+        <div class="reminder-alarm-info">
+          <div class="reminder-alarm-badge" id="schedModalBadge">CURRENTLY READING</div>
+          <h4 class="reminder-alarm-book-name" id="schedModalBookTitle">Book Title</h4>
+          <div class="reminder-alarm-pages" id="schedModalPagesTxt">Page 45 of 320 • 14% Complete</div>
+          <div class="reminder-alarm-progress-bar">
+            <div class="reminder-alarm-progress-fill" id="schedModalProgressFill" style="width: 14%;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="reminder-alarm-quote" id="schedModalQuoteBox">
+        <span style="font-size:1.1rem; color:var(--accent-gold);">💡</span>
+        <span id="schedModalQuoteTxt">"A small daily habit produces massive results over time."</span>
+      </div>
+
+      <div class="reminder-alarm-actions">
+        <button type="button" class="btn-save-gold" style="flex:1; padding:12px; font-size:0.9rem; font-weight:800;" onclick="handleScheduledModalReadNow()">
+          📖 Abhi Padhein / Read Now
+        </button>
+        <button type="button" class="btn-cancel" style="padding:12px 16px; font-size:0.82rem;" onclick="snoozeScheduledReminder(10)">
+          💤 10 Min Snooze
+        </button>
+      </div>
+      <div style="text-align:center; margin-top:8px;">
+        <button type="button" class="btn-link" style="color:var(--text-muted); font-size:0.75rem; background:none; border:none; cursor:pointer;" onclick="closeScheduledReminderModal()">
+          Baad Me Padhunga (Dismiss)
+        </button>
       </div>
     </div>
   </div>

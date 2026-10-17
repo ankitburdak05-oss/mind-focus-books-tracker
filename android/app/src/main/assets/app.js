@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.29)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.30)
 // ==========================================================================
 
-const APP_VERSION = '0.0.29';
-const CURRENT_APP_VERSION = 'v0.0.29';
+const APP_VERSION = '0.0.30';
+const CURRENT_APP_VERSION = 'v0.0.30';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -9348,16 +9348,30 @@ function cleanupCorruptedCustomPages() {
 cleanupCorruptedCustomPages();
 
 // =========================================================================
-// NOTIFICATION CENTER & ALERTS HUB (v0.0.29)
+// NOTIFICATION CENTER & ALERTS HUB (v0.0.30)
 // =========================================================================
 const NOTIFICATIONS_KEY = 'mf_notifications_v1';
+const SCHED_CONFIG_KEY = 'mf_reminder_schedule_v2';
+
 let userNotificationsState = [];
 let activeNotifFilter = 'all';
 
+let reminderScheduleConfig = {
+  enabled: true,
+  time: '21:30',
+  label: '🌙 09:30 PM (Daily)',
+  days: [0, 1, 2, 3, 4, 5, 6],
+  sound: true,
+  lastFiredDate: ''
+};
+let scheduleIntervalId = null;
+
 function initNotificationsHub() {
   loadNotifications();
+  loadReminderScheduleConfig();
   generateSmartNotifications(false);
   updateNotificationBadges();
+  startReminderScheduleTicker();
 }
 
 function loadNotifications() {
@@ -9618,6 +9632,7 @@ function renderNotificationsHub() {
 
   // Update Permission UI
   updateBrowserNotificationUI();
+  updateScheduleUI();
 
   // Filter list
   let filtered = userNotificationsState;
@@ -9865,6 +9880,329 @@ function formatNotificationTime(isoStr) {
     return new Date(isoStr).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short' });
   } catch (e) {
     return 'Recent';
+  }
+}
+
+// =========================================================================
+// DAILY READING REMINDER SCHEDULER & ALARM ENGINE (v0.0.30)
+// =========================================================================
+
+function loadReminderScheduleConfig() {
+  try {
+    const raw = localStorage.getItem(SCHED_CONFIG_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      reminderScheduleConfig = Object.assign(reminderScheduleConfig, parsed);
+    }
+  } catch (e) {
+    console.warn('Failed to load reminder schedule config:', e);
+  }
+}
+
+function saveReminderScheduleConfig(showToastMsg = false) {
+  try {
+    localStorage.setItem(SCHED_CONFIG_KEY, JSON.stringify(reminderScheduleConfig));
+  } catch (e) {
+    console.warn('Failed to save reminder schedule config:', e);
+  }
+  updateScheduleUI();
+  if (showToastMsg) {
+    showToast(`Daily Reminder Schedule Save Ho Gaya: ${reminderScheduleConfig.label} ⏰`, 'success');
+  }
+}
+
+function formatTimeAmPm(timeStr) {
+  if (!timeStr) return '09:30 PM';
+  try {
+    const parts = timeStr.split(':');
+    let h = parseInt(parts[0], 10);
+    const m = parts[1] || '00';
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return `${h < 10 ? '0' + h : h}:${m} ${ampm}`;
+  } catch (e) {
+    return timeStr;
+  }
+}
+
+function updateScheduleUI() {
+  const toggle = document.getElementById('notifScheduleEnabledToggle');
+  const timeInput = document.getElementById('notifReminderTimeInput');
+  const timeBadge = document.getElementById('notifFormattedTimeBadge');
+  const summarySub = document.getElementById('notifSchedSummarySub');
+  const soundToggle = document.getElementById('notifSoundToggle');
+  const schedBody = document.getElementById('notifSchedBody');
+
+  if (toggle) toggle.checked = !!reminderScheduleConfig.enabled;
+  if (timeInput) timeInput.value = reminderScheduleConfig.time || '21:30';
+  if (soundToggle) soundToggle.checked = !!reminderScheduleConfig.sound;
+
+  const formatted = formatTimeAmPm(reminderScheduleConfig.time);
+  const iconEmoji = (parseInt(reminderScheduleConfig.time.split(':')[0], 10) >= 19 || parseInt(reminderScheduleConfig.time.split(':')[0], 10) < 5) ? '🌙' : ((parseInt(reminderScheduleConfig.time.split(':')[0], 10) < 12) ? '🌅' : '☀️');
+  const fullLabel = `${iconEmoji} ${formatted}`;
+
+  if (timeBadge) {
+    timeBadge.innerText = fullLabel + (reminderScheduleConfig.enabled ? ' (Active)' : ' (Off)');
+  }
+  if (summarySub) {
+    if (reminderScheduleConfig.enabled) {
+      summarySub.innerText = `Rozana ${formatted} par daily reading alert aayega`;
+    } else {
+      summarySub.innerText = `Daily reminder alarm off hai (Switch on karein)`;
+    }
+  }
+
+  // Preset buttons
+  const presets = ['0800', '1400', '1900', '2130'];
+  const curClean = (reminderScheduleConfig.time || '').replace(':', '');
+  presets.forEach(p => {
+    const btn = document.getElementById('presetBtn_' + p);
+    if (btn) {
+      btn.classList.toggle('active', curClean === p);
+    }
+  });
+
+  // Day chips
+  const days = Array.isArray(reminderScheduleConfig.days) ? reminderScheduleConfig.days : [0,1,2,3,4,5,6];
+  const chips = document.querySelectorAll('.day-chip');
+  chips.forEach(c => {
+    const d = parseInt(c.getAttribute('data-day'), 10);
+    c.classList.toggle('active', days.includes(d));
+  });
+
+  if (schedBody) {
+    if (reminderScheduleConfig.enabled) {
+      schedBody.style.opacity = '1';
+      schedBody.style.pointerEvents = 'auto';
+    } else {
+      schedBody.style.opacity = '0.55';
+    }
+  }
+}
+
+function handleReminderTimeChange(newTime) {
+  if (!newTime) return;
+  reminderScheduleConfig.time = newTime;
+  reminderScheduleConfig.label = formatTimeAmPm(newTime);
+  saveReminderScheduleConfig(false);
+}
+
+function setPresetReminderTime(timeStr, labelStr) {
+  reminderScheduleConfig.time = timeStr;
+  reminderScheduleConfig.label = labelStr;
+  saveReminderScheduleConfig(false);
+  showToast(`Reminder Time Set: ${labelStr} ⏰`, 'info');
+}
+
+function toggleReminderSchedule(isEnabled) {
+  reminderScheduleConfig.enabled = isEnabled;
+  saveReminderScheduleConfig(false);
+  showToast(isEnabled ? 'Daily Reading Reminder alarm ON ho gaya! ⏰' : 'Daily Reading Reminder alarm OFF kar diya gaya.', isEnabled ? 'success' : 'info');
+}
+
+function toggleDayChip(dayIndex) {
+  let days = Array.isArray(reminderScheduleConfig.days) ? [...reminderScheduleConfig.days] : [0,1,2,3,4,5,6];
+  if (days.includes(dayIndex)) {
+    if (days.length === 1) {
+      showToast('Kam se kam 1 din active hona zaroori hai!', 'warning');
+      return;
+    }
+    days = days.filter(d => d !== dayIndex);
+  } else {
+    days.push(dayIndex);
+    days.sort();
+  }
+  reminderScheduleConfig.days = days;
+  saveReminderScheduleConfig(false);
+}
+
+function setDaysSelection(mode) {
+  if (mode === 'all') {
+    reminderScheduleConfig.days = [0, 1, 2, 3, 4, 5, 6];
+  } else if (mode === 'weekdays') {
+    reminderScheduleConfig.days = [1, 2, 3, 4, 5];
+  } else if (mode === 'weekends') {
+    reminderScheduleConfig.days = [0, 6];
+  }
+  saveReminderScheduleConfig(false);
+  showToast(`Repeat days set: ${mode.toUpperCase()}`, 'info');
+}
+
+function toggleReminderSound(enabled) {
+  reminderScheduleConfig.sound = enabled;
+  saveReminderScheduleConfig(false);
+  if (enabled) {
+    playReminderChime();
+    showToast('Alert Chime Sound Enabled! 🔔', 'success');
+  }
+}
+
+function playReminderChime() {
+  try {
+    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContextClass) return;
+    const ctx = new AudioContextClass();
+    const now = ctx.currentTime;
+
+    const playTone = (freq, start, duration) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, start);
+      gain.gain.setValueAtTime(0.18, start);
+      gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(start);
+      osc.stop(start + duration);
+    };
+
+    playTone(659.25, now, 0.4);        // E5
+    playTone(830.61, now + 0.12, 0.45); // G#5
+    playTone(987.77, now + 0.25, 0.8);  // B5
+  } catch (err) {
+    console.warn('Audio chime playback note:', err);
+  }
+}
+
+function startReminderScheduleTicker() {
+  if (scheduleIntervalId) clearInterval(scheduleIntervalId);
+  // Check every 15 seconds so we never miss the designated minute
+  scheduleIntervalId = setInterval(checkScheduledReminderTime, 15000);
+}
+
+function checkScheduledReminderTime() {
+  if (!reminderScheduleConfig.enabled) return;
+
+  const now = new Date();
+  const currentDay = now.getDay();
+  const scheduledDays = Array.isArray(reminderScheduleConfig.days) ? reminderScheduleConfig.days : [0,1,2,3,4,5,6];
+  if (!scheduledDays.includes(currentDay)) return;
+
+  const currentH = now.getHours();
+  const currentM = now.getMinutes();
+  const currentHHMM = `${currentH < 10 ? '0' + currentH : currentH}:${currentM < 10 ? '0' + currentM : currentM}`;
+
+  const todayDateStr = now.toISOString().slice(0, 10); // YYYY-MM-DD
+  const fireKey = `${todayDateStr}_${currentHHMM}`;
+
+  if (currentHHMM === reminderScheduleConfig.time && reminderScheduleConfig.lastFiredDate !== fireKey) {
+    reminderScheduleConfig.lastFiredDate = fireKey;
+    saveReminderScheduleConfig(false);
+    fireScheduledReminderAlarm();
+  }
+}
+
+function fireScheduledReminderAlarm() {
+  // 1. Play gentle mindfulness chime if sound is enabled
+  if (reminderScheduleConfig.sound) {
+    playReminderChime();
+  }
+
+  // 2. Find currently reading book
+  const activeBooks = (state.books || []).filter(b => !b.notInterested);
+  const readingBooks = activeBooks.filter(b => b.status === 'READING');
+  const targetBook = readingBooks.length > 0 ? readingBooks[0] : (activeBooks.length > 0 ? activeBooks[0] : { title: 'Atomic Habits', currentPage: 45, totalPages: 320 });
+
+  const curP = targetBook.currentPage || 1;
+  const totP = targetBook.totalPages || 200;
+  const pct = Math.round((curP / totP) * 100);
+
+  // 3. Add to notifications feed
+  const newNotif = {
+    id: 'notif_alarm_' + Date.now(),
+    category: 'reading',
+    icon: '⏰',
+    iconClass: 'reading',
+    title: `⏰ Daily Reading Alarm: "${targetBook.title}"`,
+    message: `Aapka scheduled reminder time ho chuka hai! Page ${curP} par hain (${pct}% complete). Aaj ka 15-20 min session shuru karein!`,
+    timestamp: new Date().toISOString(),
+    read: false,
+    actionType: 'open_book',
+    actionLabel: '📖 Read Book Now',
+    bookIndex: state.books ? state.books.indexOf(targetBook) : 0,
+    bookTitle: targetBook.title,
+    bookCover: targetBook.coverImage || ''
+  };
+  userNotificationsState.unshift(newNotif);
+  saveNotifications();
+
+  // 4. Send browser push notification if permitted
+  if ('Notification' in window && Notification.permission === 'granted') {
+    try {
+      new Notification(`⏰ Padhne Ka Time! "${targetBook.title}"`, {
+        body: `Rozana reading habit barkarar rakhein. Page ${curP}/${totP} (${pct}%). Start reading now!`,
+        icon: 'icon-192.png'
+      });
+    } catch (e) {
+      console.warn('System push error:', e);
+    }
+  }
+
+  // 5. Open Interactive Popup Modal
+  const modal = document.getElementById('scheduledReminderModalOverlay');
+  if (modal) {
+    const titleEl = document.getElementById('schedModalBookTitle');
+    const coverEl = document.getElementById('schedModalCoverImg');
+    const pagesEl = document.getElementById('schedModalPagesTxt');
+    const progressFill = document.getElementById('schedModalProgressFill');
+    const quoteEl = document.getElementById('schedModalQuoteTxt');
+
+    if (titleEl) titleEl.innerText = targetBook.title || 'Your Current Book';
+    if (coverEl) coverEl.src = targetBook.coverImage || 'cover_placeholder.jpg';
+    if (pagesEl) pagesEl.innerText = `Page ${curP} of ${totP} • ${pct}% Complete`;
+    if (progressFill) progressFill.style.width = pct + '%';
+
+    // Pick inspiring quote
+    const quotes = [
+      '"A reader lives a thousand lives before he dies." — George R.R. Martin',
+      '"Today a reader, tomorrow a leader." — Margaret Fuller',
+      '"Small disciplines repeated with consistency every day lead to great achievements." — John C. Maxwell',
+      '"The more that you read, the more things you will know." — Dr. Seuss'
+    ];
+    if (quoteEl) {
+      quoteEl.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+    }
+
+    modal.style.display = 'flex';
+  }
+}
+
+function triggerImmediateAlarmTest() {
+  showToast('⏰ Reading Alarm 3 seconds me bajega... (Chime test)', 'info');
+  setTimeout(() => {
+    fireScheduledReminderAlarm();
+  }, 3000);
+}
+
+function closeScheduledReminderModal() {
+  const modal = document.getElementById('scheduledReminderModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+
+function snoozeScheduledReminder(mins = 10) {
+  closeScheduledReminderModal();
+  showToast(`Reminder ${mins} minute ke liye snooze kar diya gaya hai! 💤`, 'info');
+  setTimeout(() => {
+    fireScheduledReminderAlarm();
+  }, mins * 60000);
+}
+
+function handleScheduledModalReadNow() {
+  closeScheduledReminderModal();
+  const activeBooks = (state.books || []).filter(b => !b.notInterested);
+  const readingBooks = activeBooks.filter(b => b.status === 'READING');
+  const targetBook = readingBooks.length > 0 ? readingBooks[0] : (activeBooks.length > 0 ? activeBooks[0] : null);
+
+  if (targetBook) {
+    const idx = state.books.indexOf(targetBook);
+    if (typeof openBookDetailViewByIndex === 'function' && idx >= 0) {
+      openBookDetailViewByIndex(idx);
+    } else {
+      openBookDetailView(targetBook);
+    }
+  } else {
+    switchTab('library');
   }
 }
 
