@@ -2,20 +2,20 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.28",
-    "name": "Mind Focus Books v0.0.28 (Interactive 3D Note Cards & Narration)",
+    "version": "v0.0.29",
+    "name": "Mind Focus Books v0.0.29 (Notification Center & Alerts Hub)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.28 Release: Interactive 3D Note Cards & Audio Narration.",
-      "🃏 3D Perspective Note Modal: Kisi bhi note par click karne par realistic 3D depth, brass corners aur physics tilt ke sath card open hota hai.",
-      "🔊 Text-to-Speech Voice Narration: 1-click me note ko bolkar sunne ke liye native audio narration player.",
-      "🎨 5 Luxurious Card Themes: Golden Obsidian, Royal Emerald, Deep Amethyst, Vintage Parchment aur Midnight Sapphire.",
-      "✏️ In-Place Note Editing: 3D card ke andar se hi note aur page number edit aur save karein.",
-      "⭐ Star Favorites & Search: Notes me star lagayein aur search bar se instant filter karein.",
-      "📥 1-Click Book Notes Export: Poori book ke personal reading notes ko clean text report me download karein.",
-      "🛡️ Safe In-Place Update: 100% reading streak aur user notes surakshit rahenge."
+      "⚡ Official v0.0.29 Release: Notification Center & Smart Alerts Hub.",
+      "🔔 Top Header Notification Bell: Dynamic unread counter badge aur instant 1-tap navigation.",
+      "📖 Currently Reading Book Reminders: Active books ke page progress aur daily reading goals ke timely reminders.",
+      "💡 Note Flashbacks & Wisdom Quotes: Saved notes se randomly quotes surface karke 3D Card modal me deep link.",
+      "🔥 Reading Streak Alerts: Daily reading habit barkarar rakhne ke reminders.",
+      "📲 Device & System Push Alerts: Browser push notification support aur instant test alerts.",
+      "🧹 Category Filters & Batch Tools: All, Reading, Notes, Streaks, System filters; Mark All as Read aur Clear tools.",
+      "🛡️ Safe In-Place Update: 100% books, reading streaks aur user notes surakshit rahenge."
     ],
-    "stagedAt": "2026-10-17T12:00:00.000Z",
+    "stagedAt": "2026-10-17T14:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

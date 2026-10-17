@@ -49,6 +49,13 @@
             <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
           </svg>
         </button>
+        <button type="button" class="header-icon-btn notif-bell-btn" id="headerNotificationBtn" title="Notification Center &amp; Alerts" onclick="navigateToSubView('notificationsHub')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+          </svg>
+          <span class="header-notif-badge" id="headerNotifBadge" style="display:none;">0</span>
+        </button>
         <button type="button" class="header-icon-btn" id="headerSearchBtn" title="Search Books" onclick="focusSearch()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
             <circle cx="11" cy="11" r="8"></circle>
@@ -845,6 +852,16 @@
             <div class="pmi-title">Book Recommendations</div>
             <div class="pmi-sub">AI-powered suggestions for you</div>
           </div>
+          <div class="pmi-arrow">&rsaquo;</div>
+        </div>
+
+        <div class="profile-menu-item" onclick="navigateToSubView('notificationsHub')">
+          <div class="pmi-icon grad-purple">🔔</div>
+          <div class="pmi-text">
+            <div class="pmi-title">Notification Center &amp; Alerts</div>
+            <div class="pmi-sub">Reading reminders, note flashbacks &amp; streak alerts</div>
+          </div>
+          <span class="pmi-badge" id="profileNotifBadge" style="display:none; background:linear-gradient(135deg, #ef4444, #f59e0b); color:#fff; font-size:10px; font-weight:800; padding:2px 7px; border-radius:12px; margin-right:8px;">0</span>
           <div class="pmi-arrow">&rsaquo;</div>
         </div>
       </div>
@@ -2442,7 +2459,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.28 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.29 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -2684,6 +2701,73 @@
           <div id="activeShelfBooksList" style="display: flex; flex-direction: column; gap: 8px; max-height: 340px; overflow-y: auto;">
             <!-- Populated by JS -->
           </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SUB-SCREEN: NOTIFICATION CENTER & ALERTS HUB (v0.0.29) ================= -->
+    <section id="viewNotificationsHub" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Notification Center</h2>
+          <p class="sub-screen-sub-title">Reading reminders, notes &amp; alerts</p>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button type="button" class="btn-save-gold" style="padding: 6px 10px; font-size: 0.74rem;" title="Mark All as Read" onclick="markAllNotificationsAsRead()">✓✓ Read All</button>
+        </div>
+      </div>
+
+      <div class="notif-hub-container">
+        <!-- Banner & Quick Tools Bar -->
+        <div class="notif-hero-card">
+          <div class="notif-hero-left">
+            <div class="notif-hero-icon">🔔</div>
+            <div>
+              <div class="notif-hero-title">Alerts &amp; Reminders</div>
+              <div class="notif-hero-sub" id="notifUnreadSummaryTxt">Calculating updates...</div>
+            </div>
+          </div>
+          <div class="notif-hero-actions">
+            <button type="button" class="notif-tool-btn" onclick="triggerTestNotification()" title="Generate Test Alert">⚡ Test Alert</button>
+            <button type="button" class="notif-tool-btn danger" onclick="clearAllNotifications()" title="Clear All Alerts">🗑️ Clear</button>
+          </div>
+        </div>
+
+        <!-- Push Permission & Daily Time Toggle Bar -->
+        <div class="notif-pref-strip">
+          <div class="notif-pref-info">
+            <span style="font-size:1.15rem;">📲</span>
+            <div>
+              <span class="notif-pref-title">System &amp; Device Alerts</span>
+              <span class="notif-pref-sub" id="notifPermissionStatusTxt">Device notifications for daily reading reminders</span>
+            </div>
+          </div>
+          <button type="button" class="notif-perm-btn" id="notifPermissionToggleBtn" onclick="requestBrowserNotificationPermission()">Enable</button>
+        </div>
+
+        <!-- Category Filter Pills -->
+        <div class="notif-filter-scroller">
+          <button type="button" class="notif-pill active" id="notifPillAll" data-cat="all" onclick="setNotificationFilter('all')">
+            All <span class="notif-pill-count" id="pillCountAll">0</span>
+          </button>
+          <button type="button" class="notif-pill" id="notifPillReading" data-cat="reading" onclick="setNotificationFilter('reading')">
+            📖 Reading <span class="notif-pill-count" id="pillCountReading">0</span>
+          </button>
+          <button type="button" class="notif-pill" id="notifPillNotes" data-cat="notes" onclick="setNotificationFilter('notes')">
+            💡 Notes <span class="notif-pill-count" id="pillCountNotes">0</span>
+          </button>
+          <button type="button" class="notif-pill" id="notifPillStreaks" data-cat="streaks" onclick="setNotificationFilter('streaks')">
+            🔥 Streaks <span class="notif-pill-count" id="pillCountStreaks">0</span>
+          </button>
+          <button type="button" class="notif-pill" id="notifPillSystem" data-cat="system" onclick="setNotificationFilter('system')">
+            ⚙️ System <span class="notif-pill-count" id="pillCountSystem">0</span>
+          </button>
+        </div>
+
+        <!-- Notifications Feed List -->
+        <div id="notificationsFeedContainer" class="notif-feed-list">
+          <!-- Populated by JS -->
         </div>
       </div>
     </section>

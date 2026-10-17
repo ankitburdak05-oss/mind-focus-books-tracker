@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.28)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.29)
 // ==========================================================================
 
-const APP_VERSION = '0.0.28';
-const CURRENT_APP_VERSION = 'v0.0.28';
+const APP_VERSION = '0.0.29';
+const CURRENT_APP_VERSION = 'v0.0.29';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -94,6 +94,9 @@ function initApp() {
 
   // Initial Renders
   renderApp();
+  
+  // Notification Center & Smart Reminders Init (v0.0.29)
+  initNotificationsHub();
   
   // Check for in-app updates in background immediately on startup
   setTimeout(checkForBackgroundUpdates, 300);
@@ -2997,7 +3000,7 @@ window.handleAppBackButton = function() {
   }
 
   // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, Not Interested, etc.), go back to Profile
-  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewBookNotesDetail', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewBookNotesDetail', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust', 'viewNotificationsHub'];
   for (const svId of subViews) {
     const sv = document.getElementById(svId);
     if (sv && sv.classList.contains('active')) {
@@ -5185,6 +5188,7 @@ function navigateToSubView(viewName) {
   if (viewName === 'bookOrderStudio') renderBookOrderStudioView();
   if (viewName === 'libraryLayoutAdjust') renderLibraryLayoutAdjustView();
   if (viewName === 'customShelvesAdjust') renderCustomShelvesView();
+  if (viewName === 'notificationsHub') renderNotificationsHub();
 }
 
 function navigateBack() {
@@ -5219,7 +5223,9 @@ const appFeaturesGuideData = [
   { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: '📋', screenNum: 'Screen 20', location: 'Profile -> Options -> Activity Audit Log', purpose: 'App me kiye gaye har action ki history audit log me dekhne ke liye.', benefit: 'System security aur app actions transparent rakhne ke liye.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' },
   { id: 21, title: 'Book Lending & Borrow Tracker', category: 'Library', icon: '🤝', screenNum: 'Screen 21', location: 'Profile -> Options -> Book Lending Tracker', purpose: 'Dosto ya rishtedaaro ko di hui kitabein track karne ke liye.', benefit: 'Physical kitabein kabhi gum hone se bachane aur timely return paane ke liye.', actionText: 'Open Lending Hub', route: 'sub_bookLending' },
   { id: 22, title: 'Not Interested Books Vault', category: 'Library', icon: '🚫', screenNum: 'Screen 22', location: 'Profile -> Options -> Not Interested Books', purpose: 'Jo kitabein abhi padhne ka man na ho unhe Library & Explore se hide karne ke liye.', benefit: 'Library ko clean aur uncluttered rakhne ke liye, aur jab man kare 1-tap me wapas lane ke liye.', actionText: 'Open Not Interested', route: 'sub_notInterested' },
-  { id: 23, title: 'Category Bulk Hide to Not Interested', category: 'Library', icon: '📁', screenNum: 'Screen 23', location: 'Profile -> Not Interested -> Add by Category', purpose: 'Poori category ya multiple kitabon ko ek sath select karke No Interest me daalne ke liye.', benefit: 'Ek-ek book alag kholne ki mehnat bachane aur 1-click multi-hide ke liye.', actionText: 'Open Category Picker', route: 'sub_niCategorySelect' }
+  { id: 23, title: 'Category Bulk Hide to Not Interested', category: 'Library', icon: '📁', screenNum: 'Screen 23', location: 'Profile -> Not Interested -> Add by Category', purpose: 'Poori category ya multiple kitabon ko ek sath select karke No Interest me daalne ke liye.', benefit: 'Ek-ek book alag kholne ki mehnat bachane aur 1-click multi-hide ke liye.', actionText: 'Open Category Picker', route: 'sub_niCategorySelect' },
+  { id: 24, title: 'Interactive 3D Note Cards & Audio Narration', category: 'Reading', icon: '✨', screenNum: 'Screen 24', location: 'Book Detail -> Notes -> Note Card Click', purpose: 'Notes ko interactive 3D perspective physics, TTS audio narration, 5 theme colors aur in-place edit ke sath explore karne ke liye.', benefit: 'Book takeaways aur insights ko memorable banane ke liye.', actionText: 'Open Notes Vault', route: 'sub_notesHighlights' },
+  { id: 25, title: 'Notification Center & Smart Alerts Hub', category: 'Security', icon: '🔔', screenNum: 'Screen 25', location: 'Header Bell Icon & Profile -> Notification Center', purpose: 'Currently reading books reminders, note flashbacks, streak alerts aur device notifications ke liye.', benefit: 'Kabhi bhi reading habit aur saved wisdom miss na hone ke liye.', actionText: 'Open Alerts Hub', route: 'sub_notificationsHub' }
 ];
 
 function renderAppFeaturesDirectoryView() {
@@ -9340,5 +9346,526 @@ function cleanupCorruptedCustomPages() {
   }
 }
 cleanupCorruptedCustomPages();
+
+// =========================================================================
+// NOTIFICATION CENTER & ALERTS HUB (v0.0.29)
+// =========================================================================
+const NOTIFICATIONS_KEY = 'mf_notifications_v1';
+let userNotificationsState = [];
+let activeNotifFilter = 'all';
+
+function initNotificationsHub() {
+  loadNotifications();
+  generateSmartNotifications(false);
+  updateNotificationBadges();
+}
+
+function loadNotifications() {
+  try {
+    const raw = localStorage.getItem(NOTIFICATIONS_KEY);
+    if (raw) {
+      userNotificationsState = JSON.parse(raw);
+      if (!Array.isArray(userNotificationsState)) userNotificationsState = [];
+    } else {
+      userNotificationsState = [];
+    }
+  } catch (err) {
+    console.warn('Failed to load notifications:', err);
+    userNotificationsState = [];
+  }
+}
+
+function saveNotifications() {
+  try {
+    localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(userNotificationsState));
+  } catch (err) {
+    console.warn('Failed to save notifications:', err);
+  }
+  updateNotificationBadges();
+}
+
+function updateNotificationBadges() {
+  const unreadCount = userNotificationsState.filter(n => !n.read).length;
+  
+  // Header Bell Badge
+  const headerBadge = document.getElementById('headerNotifBadge');
+  if (headerBadge) {
+    if (unreadCount > 0) {
+      headerBadge.style.display = 'flex';
+      headerBadge.innerText = unreadCount > 99 ? '99+' : unreadCount;
+    } else {
+      headerBadge.style.display = 'none';
+    }
+  }
+
+  // Profile Menu Badge
+  const profileBadge = document.getElementById('profileNotifBadge');
+  if (profileBadge) {
+    if (unreadCount > 0) {
+      profileBadge.style.display = 'inline-block';
+      profileBadge.innerText = unreadCount > 99 ? '99+' : unreadCount;
+    } else {
+      profileBadge.style.display = 'none';
+    }
+  }
+
+  // Subview Summary text
+  const summaryTxt = document.getElementById('notifUnreadSummaryTxt');
+  if (summaryTxt) {
+    if (unreadCount === 0) {
+      summaryTxt.innerText = 'Sabhi alerts padh liye gaye hain • No new reminders';
+    } else {
+      summaryTxt.innerText = `${unreadCount} unread alert${unreadCount === 1 ? '' : 's'} • Reading reminders & notes active`;
+    }
+  }
+}
+
+function generateSmartNotifications(force = false) {
+  const now = Date.now();
+  const ONE_DAY = 24 * 60 * 60 * 1000;
+  const HALF_DAY = 12 * 60 * 60 * 1000;
+
+  let addedNew = false;
+
+  // 1. Reading Reminder for Currently Reading Book
+  const activeBooks = (state.books || []).filter(b => !b.notInterested);
+  const readingBooks = activeBooks.filter(b => b.status === 'READING');
+  const targetReadingBook = readingBooks.length > 0 ? readingBooks[0] : (activeBooks.length > 0 ? activeBooks[0] : null);
+
+  if (targetReadingBook) {
+    const hasRecentReadingNotif = userNotificationsState.some(n => 
+      n.category === 'reading' && (now - new Date(n.timestamp).getTime()) < (force ? 0 : HALF_DAY)
+    );
+
+    if (!hasRecentReadingNotif || force) {
+      const curPage = targetReadingBook.currentPage || 1;
+      const totPage = targetReadingBook.totalPages || 250;
+      const pct = Math.round((curPage / totPage) * 100);
+      const bookIdx = state.books.indexOf(targetReadingBook);
+
+      const readingNotif = {
+        id: 'notif_read_' + (targetReadingBook.id || 'book') + '_' + now,
+        category: 'reading',
+        icon: '📖',
+        iconClass: 'reading',
+        title: `📖 Reading Reminder: "${targetReadingBook.title}"`,
+        message: `Aap "${targetReadingBook.title}" padh rahe hain (Page ${curPage}/${totPage}, ${pct}% pura). Aaj 15-20 minute nikaal kar agla adhyay zaroor padhein!`,
+        timestamp: new Date().toISOString(),
+        read: false,
+        actionType: 'open_book',
+        actionLabel: '📖 Continue Reading',
+        bookIndex: bookIdx >= 0 ? bookIdx : 0,
+        bookTitle: targetReadingBook.title,
+        bookCover: targetReadingBook.coverImage || ''
+      };
+
+      userNotificationsState.unshift(readingNotif);
+      addedNew = true;
+    }
+  }
+
+  // 2. Note Flashback & Wisdom Quotes
+  if (typeof loadUserNotes === 'function') {
+    loadUserNotes();
+  }
+  if (Array.isArray(userNotesState) && userNotesState.length > 0) {
+    const hasRecentNoteNotif = userNotificationsState.some(n => 
+      n.category === 'notes' && (now - new Date(n.timestamp).getTime()) < (force ? 0 : HALF_DAY)
+    );
+
+    if (!hasRecentNoteNotif || force) {
+      // Pick a random or starred note
+      const starred = userNotesState.filter(n => n.isFavorite);
+      const pool = starred.length > 0 ? starred : userNotesState;
+      const note = pool[Math.floor(Math.random() * pool.length)];
+
+      if (note && note.text) {
+        const snippet = note.text.length > 110 ? note.text.substring(0, 110) + '...' : note.text;
+        const noteNotif = {
+          id: 'notif_note_' + (note.id || 'note') + '_' + now,
+          category: 'notes',
+          icon: '💡',
+          iconClass: 'notes',
+          title: `💡 Note Flashback: "${note.bookTitle || 'Saved Note'}"`,
+          message: `Aapne ye wisdom note save kiya tha: "${snippet}". 3D Card me kholein aur read karein!`,
+          timestamp: new Date().toISOString(),
+          read: false,
+          actionType: 'open_note_3d',
+          actionLabel: '✨ Open 3D Note Card',
+          noteId: note.id,
+          bookTitle: note.bookTitle || 'Notes Vault'
+        };
+
+        userNotificationsState.unshift(noteNotif);
+        addedNew = true;
+      }
+    }
+  }
+
+  // 3. Reading Streak & Goals Alert
+  const streakDays = (state.stats && state.stats.streakDays) ? state.stats.streakDays : 1;
+  const hasRecentStreakNotif = userNotificationsState.some(n => 
+    n.category === 'streaks' && (now - new Date(n.timestamp).getTime()) < (force ? 0 : ONE_DAY)
+  );
+
+  if (!hasRecentStreakNotif || force) {
+    const streakNotif = {
+      id: 'notif_streak_' + now,
+      category: 'streaks',
+      icon: '🔥',
+      iconClass: 'streaks',
+      title: `🔥 Daily Reading Streak: ${streakDays} Din Active!`,
+      message: `Shandar! Aapka ${streakDays} din ka reading streak barkarar hai. Aaj apna daily reading target pura karke streak tootne na dein!`,
+      timestamp: new Date().toISOString(),
+      read: false,
+      actionType: 'open_progress',
+      actionLabel: '🔥 View Progress & Streak',
+      bookTitle: 'Reading Progress'
+    };
+
+    userNotificationsState.unshift(streakNotif);
+    addedNew = true;
+  }
+
+  // 4. Lent Book Follow-up Reminder (if any book is lent out)
+  if (Array.isArray(lendingRecords) && lendingRecords.length > 0) {
+    const unreturned = lendingRecords.filter(r => !r.returnDate);
+    if (unreturned.length > 0) {
+      const lent = unreturned[0];
+      const hasRecentLentNotif = userNotificationsState.some(n => 
+        n.category === 'system' && n.title.includes(lent.bookTitle) && (now - new Date(n.timestamp).getTime()) < (force ? 0 : ONE_DAY * 2)
+      );
+
+      if (!hasRecentLentNotif || force) {
+        const lentNotif = {
+          id: 'notif_lent_' + now,
+          category: 'system',
+          icon: '🤝',
+          iconClass: 'lending',
+          title: `🤝 Lent Book Reminder: "${lent.bookTitle}"`,
+          message: `Aapne "${lent.bookTitle}" apne mitra ${lent.borrowerName || 'Friend'} ko di hui hai (${lent.lendDate || 'recent'}). Kripya return status update karein!`,
+          timestamp: new Date().toISOString(),
+          read: false,
+          actionType: 'open_lending',
+          actionLabel: '🤝 Open Lending Tracker',
+          bookTitle: lent.bookTitle
+        };
+
+        userNotificationsState.unshift(lentNotif);
+        addedNew = true;
+      }
+    }
+  }
+
+  // 5. Default Welcome Alert if list is still empty
+  if (userNotificationsState.length === 0) {
+    userNotificationsState.push({
+      id: 'notif_welcome_' + now,
+      category: 'system',
+      icon: '✨',
+      iconClass: 'system',
+      title: '✨ Welcome to Mind & Focus Notification Center',
+      message: 'Aapki active kitabon ke reading reminders, saved notes flashbacks aur daily streaks ab yahan ek jagah dikhenge. Kabhi koi adhyay miss na karein!',
+      timestamp: new Date().toISOString(),
+      read: false,
+      actionType: 'open_guide',
+      actionLabel: '📖 Explore App Guide',
+      bookTitle: 'Mind & Focus'
+    });
+    addedNew = true;
+  }
+
+  // Keep list bounded to last 60 notifications
+  if (userNotificationsState.length > 60) {
+    userNotificationsState = userNotificationsState.slice(0, 60);
+  }
+
+  if (addedNew) {
+    saveNotifications();
+  }
+}
+
+function renderNotificationsHub() {
+  const container = document.getElementById('notificationsFeedContainer');
+  if (!container) return;
+
+  // Update Category Pill Counts
+  const totalCount = userNotificationsState.length;
+  const readingCount = userNotificationsState.filter(n => n.category === 'reading').length;
+  const notesCount = userNotificationsState.filter(n => n.category === 'notes').length;
+  const streaksCount = userNotificationsState.filter(n => n.category === 'streaks').length;
+  const systemCount = userNotificationsState.filter(n => n.category === 'system').length;
+
+  const setPill = (id, count) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = count;
+  };
+  setPill('pillCountAll', totalCount);
+  setPill('pillCountReading', readingCount);
+  setPill('pillCountNotes', notesCount);
+  setPill('pillCountStreaks', streaksCount);
+  setPill('pillCountSystem', systemCount);
+
+  // Update Active Pill UI
+  const pills = document.querySelectorAll('.notif-pill');
+  pills.forEach(p => {
+    if (p.getAttribute('data-cat') === activeNotifFilter) {
+      p.classList.add('active');
+    } else {
+      p.classList.remove('active');
+    }
+  });
+
+  // Update Permission UI
+  updateBrowserNotificationUI();
+
+  // Filter list
+  let filtered = userNotificationsState;
+  if (activeNotifFilter !== 'all') {
+    filtered = userNotificationsState.filter(n => n.category === activeNotifFilter);
+  }
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div class="notif-empty-state">
+        <span style="font-size: 2.8rem; display:block; margin-bottom: 10px;">🍃</span>
+        <h3 style="font-size: 1.05rem; font-weight: 800; color: #fff; margin: 0 0 6px 0;">Sab Shaant Hai!</h3>
+        <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0 0 16px 0; max-width: 340px; margin-left: auto; margin-right: auto; line-height: 1.4;">
+          Is category me filhal koi notification nahi hai. Naye reading reminders ya note flashbacks test karne ke liye button dabayein!
+        </p>
+        <button type="button" class="btn-save-gold" style="padding: 8px 16px; font-size: 0.8rem;" onclick="triggerTestNotification()">
+          ⚡ Generate Test Alert
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  // Render cards
+  container.innerHTML = filtered.map(notif => {
+    const unreadClass = notif.read ? '' : 'unread';
+    const timeStr = formatNotificationTime(notif.timestamp);
+    const catLabel = notif.category === 'reading' ? 'Reading' : (notif.category === 'notes' ? 'Note Flashback' : (notif.category === 'streaks' ? 'Daily Streak' : 'System Alert'));
+    
+    let contextHtml = '';
+    if (notif.bookTitle) {
+      contextHtml = `
+        <div class="notif-context-chip">
+          ${notif.bookCover ? `<img src="${escapeHtml(notif.bookCover)}" alt="Cover" onerror="this.style.display='none'">` : '<span style="font-size:0.9rem;">📚</span>'}
+          <span style="font-weight:700;">${escapeHtml(notif.bookTitle)}</span>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="notif-card ${unreadClass}" id="notif_card_${escapeHtml(notif.id)}" onclick="markNotificationAsRead('${escapeHtml(notif.id)}')">
+        ${!notif.read ? '<span class="notif-unread-glow" title="Unread Alert"></span>' : ''}
+        <div class="notif-card-top">
+          <div class="notif-icon-box ${escapeHtml(notif.iconClass || notif.category)}">
+            ${notif.icon || '🔔'}
+          </div>
+          <div class="notif-content">
+            <div class="notif-meta-row">
+              <span class="notif-category-tag">${catLabel}</span>
+              <span class="notif-time">${timeStr}</span>
+            </div>
+            <h4 class="notif-title">${escapeHtml(notif.title)}</h4>
+            <p class="notif-body">${escapeHtml(notif.message)}</p>
+            ${contextHtml}
+          </div>
+        </div>
+        <div class="notif-actions-row">
+          <div>
+            ${notif.actionLabel ? `
+              <button type="button" class="notif-btn-main" onclick="event.stopPropagation(); handleNotificationAction('${escapeHtml(notif.id)}')">
+                ${escapeHtml(notif.actionLabel)}
+              </button>
+            ` : ''}
+          </div>
+          <div class="notif-actions-right">
+            ${!notif.read ? `
+              <button type="button" class="notif-btn-text" onclick="event.stopPropagation(); markNotificationAsRead('${escapeHtml(notif.id)}')" title="Mark as read">
+                ✓ Read
+              </button>
+            ` : ''}
+            <button type="button" class="notif-btn-text" onclick="event.stopPropagation(); deleteNotification('${escapeHtml(notif.id)}')" title="Delete alert">
+              ✕ Dismiss
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function setNotificationFilter(category) {
+  activeNotifFilter = category;
+  renderNotificationsHub();
+}
+
+function markNotificationAsRead(id) {
+  const notif = userNotificationsState.find(n => n.id === id);
+  if (notif && !notif.read) {
+    notif.read = true;
+    saveNotifications();
+    renderNotificationsHub();
+  }
+}
+
+function markAllNotificationsAsRead() {
+  if (userNotificationsState.length === 0) return;
+  userNotificationsState.forEach(n => { n.read = true; });
+  saveNotifications();
+  renderNotificationsHub();
+  showToast('Sabhi notifications read mark ho gaye! ✓✓', 'success');
+}
+
+function deleteNotification(id) {
+  userNotificationsState = userNotificationsState.filter(n => n.id !== id);
+  saveNotifications();
+  renderNotificationsHub();
+  showToast('Notification dismiss ho gaya.', 'info');
+}
+
+function clearAllNotifications() {
+  if (userNotificationsState.length === 0) {
+    showToast('Koi notification nahi hai!', 'info');
+    return;
+  }
+  userNotificationsState = [];
+  saveNotifications();
+  renderNotificationsHub();
+  showToast('Sabhi notifications clear kar diye gaye! 🗑️', 'success');
+}
+
+function triggerTestNotification() {
+  generateSmartNotifications(true);
+  renderNotificationsHub();
+  
+  const newest = userNotificationsState[0];
+  if (newest) {
+    // Also trigger system browser notification if permitted
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try {
+        new Notification(newest.title, {
+          body: newest.message,
+          icon: 'icon-192.png'
+        });
+      } catch (e) {
+        console.warn('Browser notification error:', e);
+      }
+    }
+    showToast('Naya smart notification generate hua! 🔔', 'success');
+  }
+}
+
+function requestBrowserNotificationPermission() {
+  if (!('Notification' in window)) {
+    showToast('Aapka browser system push notifications support nahi karta.', 'warning');
+    return;
+  }
+
+  if (Notification.permission === 'granted') {
+    showToast('Device notifications pehle se hi enabled hain! 🔔', 'info');
+    return;
+  }
+
+  Notification.requestPermission().then(permission => {
+    updateBrowserNotificationUI();
+    if (permission === 'granted') {
+      showToast('Device notifications safaltapoorvak enable ho gaye! 🎉', 'success');
+      try {
+        new Notification('Mind & Focus Books Tracker', {
+          body: 'Reading reminders aur alerts ab aapko samay par milte rahenge!',
+          icon: 'icon-192.png'
+        });
+      } catch (e) {}
+    } else {
+      showToast('Notifications permission allow nahi ki gayi.', 'warning');
+    }
+  });
+}
+
+function updateBrowserNotificationUI() {
+  const statusTxt = document.getElementById('notifPermissionStatusTxt');
+  const toggleBtn = document.getElementById('notifPermissionToggleBtn');
+  if (!statusTxt || !toggleBtn) return;
+
+  if (!('Notification' in window)) {
+    statusTxt.innerText = 'Device notifications not supported in this browser';
+    toggleBtn.style.display = 'none';
+    return;
+  }
+
+  if (Notification.permission === 'granted') {
+    statusTxt.innerText = 'Device alerts active • Daily reading reminders on';
+    toggleBtn.innerText = '✓ Enabled';
+    toggleBtn.style.background = 'rgba(16, 185, 129, 0.2)';
+    toggleBtn.style.color = '#10b981';
+    toggleBtn.style.border = '1px solid #10b981';
+  } else if (Notification.permission === 'denied') {
+    statusTxt.innerText = 'Device alerts blocked in browser settings';
+    toggleBtn.innerText = 'Blocked';
+    toggleBtn.style.background = 'rgba(239, 68, 68, 0.2)';
+    toggleBtn.style.color = '#ef4444';
+    toggleBtn.style.border = '1px solid #ef4444';
+  } else {
+    statusTxt.innerText = 'Enable device alerts for daily reading reminders';
+    toggleBtn.innerText = 'Enable';
+    toggleBtn.style.background = 'var(--accent-gold)';
+    toggleBtn.style.color = '#111827';
+    toggleBtn.style.border = 'none';
+  }
+}
+
+function handleNotificationAction(notifId) {
+  const notif = userNotificationsState.find(n => n.id === notifId);
+  if (!notif) return;
+
+  // Mark as read immediately
+  notif.read = true;
+  saveNotifications();
+
+  if (notif.actionType === 'open_note_3d' && notif.noteId) {
+    if (typeof openNote3dCardModal === 'function') {
+      openNote3dCardModal(notif.noteId);
+      return;
+    }
+    navigateToSubView('notesHighlights');
+  } else if (notif.actionType === 'open_book') {
+    const bookIdx = typeof notif.bookIndex === 'number' ? notif.bookIndex : 0;
+    if (typeof openBookDetailViewByIndex === 'function') {
+      openBookDetailViewByIndex(bookIdx);
+    } else if (state.books && state.books[bookIdx]) {
+      openBookDetailView(state.books[bookIdx]);
+    }
+  } else if (notif.actionType === 'open_progress') {
+    switchTab('progress');
+  } else if (notif.actionType === 'open_lending') {
+    navigateToSubView('bookLending');
+  } else if (notif.actionType === 'open_guide') {
+    navigateToSubView('appFeaturesGuide');
+  } else {
+    showToast('Alert viewed!', 'info');
+  }
+}
+
+function formatNotificationTime(isoStr) {
+  if (!isoStr) return 'Just now';
+  try {
+    const diff = Date.now() - new Date(isoStr).getTime();
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 1) return 'Abhi-abhi';
+    if (minutes < 60) return `${minutes}m pehle`;
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) return `${hours}h pehle`;
+    const days = Math.floor(hours / 24);
+    if (days === 1) return 'Kal';
+    if (days < 7) return `${days} din pehle`;
+    return new Date(isoStr).toLocaleDateString('hi-IN', { day: 'numeric', month: 'short' });
+  } catch (e) {
+    return 'Recent';
+  }
+}
 
 // =========================================================================
