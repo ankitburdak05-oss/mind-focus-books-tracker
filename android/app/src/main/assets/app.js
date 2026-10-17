@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.32)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.33)
 // ==========================================================================
 
-const APP_VERSION = '0.0.32';
-const CURRENT_APP_VERSION = 'v0.0.32';
+const APP_VERSION = '0.0.33';
+const CURRENT_APP_VERSION = 'v0.0.33';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -9971,30 +9971,84 @@ function formatNotificationTime(isoStr) {
 }
 
 // =========================================================================
-// DAILY READING REMINDER SCHEDULER & ALARM ENGINE (v0.0.30)
+// MULTI-ALARM READING REMINDER & TAARIKH (DATE) SCHEDULER ENGINE (v0.0.33)
 // =========================================================================
+const MULTI_ALARMS_KEY = 'mf_multi_alarms_v2';
+let userScheduledAlarmsList = [];
+
+let currentAlarmDateMode = 'daily'; // 'daily' or 'specific'
+let currentAlarmAmPm = 'PM';
+let currentAlarmContentType = 'reading'; // 'reading', 'notes', 'custom'
+
+function getDefaultScheduledAlarms() {
+  return [
+    {
+      id: 'alarm_default_morning',
+      enabled: true,
+      time: '08:00',
+      ampm: 'AM',
+      timeFormatted: '08:00 AM',
+      dateMode: 'daily',
+      specificDate: '',
+      type: 'reading',
+      title: '🌅 Morning Reading Session',
+      message: 'Subah ki chai ke sath 15 minute reading karein aur din ko focus ke sath shuru karein!',
+      bookTitle: 'Hyperfocus',
+      bookCover: 'hyperfocus_cover.jpg',
+      sound: true,
+      lastFiredKey: ''
+    },
+    {
+      id: 'alarm_default_night',
+      enabled: true,
+      time: '21:30',
+      ampm: 'PM',
+      timeFormatted: '09:30 PM',
+      dateMode: 'daily',
+      specificDate: '',
+      type: 'notes',
+      title: '🌙 Night Note Flashback',
+      message: 'Sone se pehle book ke key notes aur highlights ko yaad karein!',
+      bookTitle: 'Atomic Habits',
+      bookCover: 'cover_placeholder.jpg',
+      sound: true,
+      lastFiredKey: ''
+    }
+  ];
+}
 
 function loadReminderScheduleConfig() {
-  try {
-    const raw = localStorage.getItem(SCHED_CONFIG_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      reminderScheduleConfig = Object.assign(reminderScheduleConfig, parsed);
-    }
-  } catch (e) {
-    console.warn('Failed to load reminder schedule config:', e);
-  }
+  loadScheduledAlarms();
 }
 
 function saveReminderScheduleConfig(showToastMsg = false) {
+  saveScheduledAlarms(showToastMsg);
+}
+
+function loadScheduledAlarms() {
   try {
-    localStorage.setItem(SCHED_CONFIG_KEY, JSON.stringify(reminderScheduleConfig));
+    const raw = localStorage.getItem(MULTI_ALARMS_KEY);
+    if (raw) {
+      userScheduledAlarmsList = JSON.parse(raw);
+    }
   } catch (e) {
-    console.warn('Failed to save reminder schedule config:', e);
+    console.warn('Failed to load multi alarms:', e);
   }
-  updateScheduleUI();
+  if (!Array.isArray(userScheduledAlarmsList) || userScheduledAlarmsList.length === 0) {
+    userScheduledAlarmsList = getDefaultScheduledAlarms();
+    saveScheduledAlarms(false);
+  }
+}
+
+function saveScheduledAlarms(showToastMsg = false) {
+  try {
+    localStorage.setItem(MULTI_ALARMS_KEY, JSON.stringify(userScheduledAlarmsList));
+  } catch (e) {
+    console.warn('Failed to save multi alarms:', e);
+  }
+  renderActiveAlarmsList();
   if (showToastMsg) {
-    showToast(`Daily Reminder Schedule Save Ho Gaya: ${reminderScheduleConfig.label} ⏰`, 'success');
+    showToast('Alarms list update ho gayi! ⏰', 'success');
   }
 }
 
@@ -10013,115 +10067,156 @@ function formatTimeAmPm(timeStr) {
 }
 
 function updateScheduleUI() {
-  const toggle = document.getElementById('notifScheduleEnabledToggle');
-  const timeInput = document.getElementById('notifReminderTimeInput');
-  const timeBadge = document.getElementById('notifFormattedTimeBadge');
-  const summarySub = document.getElementById('notifSchedSummarySub');
-  const soundToggle = document.getElementById('notifSoundToggle');
-  const schedBody = document.getElementById('notifSchedBody');
+  loadScheduledAlarms();
+  populateAlarmBooksDropdown();
+  renderActiveAlarmsList();
+  updateAlarmPreviewBadge();
 
-  if (toggle) toggle.checked = !!reminderScheduleConfig.enabled;
-  if (timeInput) timeInput.value = reminderScheduleConfig.time || '21:30';
-  if (soundToggle) soundToggle.checked = !!reminderScheduleConfig.sound;
-
-  const timeVal = reminderScheduleConfig.time || '21:30';
-  const parts = timeVal.split(':');
-  const h24 = parseInt(parts[0], 10) || 0;
-  const m = parts[1] || '00';
-  const isPm = h24 >= 12;
-  const h12 = h24 % 12 || 12;
-
-  const hourSelect = document.getElementById('notifHourSelect');
-  const minSelect = document.getElementById('notifMinSelect');
-  const hourInput = document.getElementById('notifHourInput');
-  const minInput = document.getElementById('notifMinInput');
-  const btnAm = document.getElementById('btnAmToggle');
-  const btnPm = document.getElementById('btnPmToggle');
-
-  if (hourSelect) hourSelect.value = String(h12);
-  if (hourInput && document.activeElement !== hourInput) hourInput.value = h12;
-  if (minInput && document.activeElement !== minInput) minInput.value = m;
-  if (minSelect) {
-    const opts = Array.from(minSelect.options).map(o => o.value);
-    if (opts.includes(m)) {
-      minSelect.value = m;
-    } else {
-      minSelect.value = '00';
-    }
-  }
-  if (btnAm) btnAm.classList.toggle('active', !isPm);
-  if (btnPm) btnPm.classList.toggle('active', isPm);
-
-  const formatted = formatTimeAmPm(reminderScheduleConfig.time);
-  const iconEmoji = (h24 >= 19 || h24 < 5) ? '🌙' : (h24 < 12 ? '🌅' : '☀️');
-  const fullLabel = `${iconEmoji} ${formatted}`;
-
-  if (timeBadge) {
-    timeBadge.innerText = fullLabel + (reminderScheduleConfig.enabled ? ' (Active)' : ' (Off)');
-  }
-  if (summarySub) {
-    if (reminderScheduleConfig.enabled) {
-      summarySub.innerText = `Rozana ${formatted} par daily reading alert aayega`;
-    } else {
-      summarySub.innerText = `Daily reminder alarm off hai (Switch on karein)`;
-    }
-  }
-
-  // Preset buttons
-  const presets = ['0800', '1400', '1900', '2130'];
-  const curClean = (reminderScheduleConfig.time || '').replace(':', '');
-  presets.forEach(p => {
-    const btn = document.getElementById('presetBtn_' + p);
-    if (btn) {
-      btn.classList.toggle('active', curClean === p);
-    }
-  });
-
-  // Day chips
-  const days = Array.isArray(reminderScheduleConfig.days) ? reminderScheduleConfig.days : [0,1,2,3,4,5,6];
-  const chips = document.querySelectorAll('.day-chip');
-  chips.forEach(c => {
-    const d = parseInt(c.getAttribute('data-day'), 10);
-    c.classList.toggle('active', days.includes(d));
-  });
-
-  if (schedBody) {
-    if (reminderScheduleConfig.enabled) {
-      schedBody.style.opacity = '1';
-      schedBody.style.pointerEvents = 'auto';
-    } else {
-      schedBody.style.opacity = '0.55';
-    }
+  const dateInput = document.getElementById('alarmDateInput');
+  if (dateInput && !dateInput.value) {
+    dateInput.value = new Date().toISOString().slice(0, 10);
   }
 }
 
-function handleAmPmTimeChange() {
-  const hourSelect = document.getElementById('notifHourSelect');
-  const minSelect = document.getElementById('notifMinSelect');
-  const btnPm = document.getElementById('btnPmToggle');
+function renderActiveAlarmsList() {
+  const container = document.getElementById('activeAlarmsListContainer');
+  const countBadge = document.getElementById('activeAlarmsCountBadge');
+  const summaryTxt = document.getElementById('cahActiveSummary');
+  if (!container) return;
 
-  const h12 = parseInt(hourSelect ? hourSelect.value : '9', 10);
-  const m = minSelect ? minSelect.value : '30';
-  const isPm = btnPm ? btnPm.classList.contains('active') : true;
+  const total = userScheduledAlarmsList.length;
+  const activeCount = userScheduledAlarmsList.filter(a => a.enabled).length;
 
-  let h24 = h12;
-  if (isPm) {
-    h24 = (h12 === 12) ? 12 : h12 + 12;
-  } else {
-    h24 = (h12 === 12) ? 0 : h12;
+  if (countBadge) countBadge.innerText = `${total} Schedule${total !== 1 ? 's' : ''}`;
+  if (summaryTxt) summaryTxt.innerText = `Din me ${activeCount} active alarms aapko timely alerts bhejenge`;
+
+  if (total === 0) {
+    container.innerHTML = `
+      <div class="neo-empty-box">
+        <span style="font-size: 2.2rem; display:block; margin-bottom: 6px;">⏰</span>
+        <h4 style="font-size: 0.95rem; font-weight:800; color:#fff; margin:0 0 4px 0;">Koi Alarm Schedule Nahi Hai</h4>
+        <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 12px 0;">Upar diye gaye form se naya reading ya note alert schedule karein!</p>
+        <button type="button" class="btn-neo-gold" onclick="openNewAlarmForm()" style="padding: 6px 14px; font-size: 0.78rem;">➕ Pehla Alarm Jodein</button>
+      </div>
+    `;
+    return;
   }
 
-  const h24Str = (h24 < 10 ? '0' + h24 : String(h24)) + ':' + m;
-  reminderScheduleConfig.time = h24Str;
-  reminderScheduleConfig.label = `${(h12 < 10 ? '0' + h12 : h12)}:${m} ${isPm ? 'PM' : 'AM'}`;
+  container.innerHTML = userScheduledAlarmsList.map(alarm => {
+    const isEn = !!alarm.enabled;
+    const catLabel = alarm.type === 'notes' ? '💡 Note Flashback' : (alarm.type === 'reading' ? '📖 Reading Alert' : '✍️ Custom Alert');
+    const dateLabel = alarm.dateMode === 'specific' ? `📅 ${alarm.specificDate || 'Specific Date'}` : '🔄 Rozana (Daily)';
+    const coverUrl = alarm.bookCover || 'cover_placeholder.jpg';
 
-  saveReminderScheduleConfig(false);
+    return `
+      <div class="alarm-item-card ${isEn ? 'active' : 'inactive'}" id="alarm_item_${escapeHtml(alarm.id)}">
+        <div class="aic-top-row">
+          <div class="aic-time-wrap">
+            <span class="aic-time-big">${escapeHtml(alarm.timeFormatted || formatTimeAmPm(alarm.time))}</span>
+            <span class="aic-date-chip">${escapeHtml(dateLabel)}</span>
+            <span class="aic-type-chip ${escapeHtml(alarm.type || 'reading')}">${catLabel}</span>
+          </div>
+          <div class="aic-switch-wrap">
+            <label class="pref-switch" title="Toggle Alarm On/Off">
+              <input type="checkbox" ${isEn ? 'checked' : ''} onchange="toggleAlarmItem('${escapeHtml(alarm.id)}', this.checked)">
+              <span class="pref-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="aic-content-box">
+          <div class="aic-title-txt">${escapeHtml(alarm.title || 'Reading Alarm')}</div>
+          <div class="aic-msg-txt">${escapeHtml(alarm.message || '')}</div>
+        </div>
+
+        ${alarm.bookTitle ? `
+          <div class="aic-book-banner">
+            <img src="${escapeHtml(coverUrl)}" alt="Cover" class="aic-book-thumb" onerror="this.src='icon-192.png'">
+            <div class="aic-book-info">
+              <span class="aic-book-tag">📖 Linked Book</span>
+              <span class="aic-book-name">${escapeHtml(alarm.bookTitle)}</span>
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="aic-actions-row">
+          <button type="button" class="aic-btn-test" onclick="testAlarmItem('${escapeHtml(alarm.id)}')" title="Test this alarm now">
+            ⚡ Test Alert (3s)
+          </button>
+          <button type="button" class="aic-btn-del" onclick="deleteAlarmItem('${escapeHtml(alarm.id)}')" title="Delete this alarm">
+            🗑️ Delete
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
-function handleManualTimeType() {
-  const hourInput = document.getElementById('notifHourInput');
-  const minInput = document.getElementById('notifMinInput');
-  const btnPm = document.getElementById('btnPmToggle');
+function openNewAlarmForm() {
+  const formCard = document.getElementById('newAlarmFormCard');
+  if (formCard) {
+    formCard.style.display = 'block';
+    formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function toggleAlarmForm(show) {
+  const formCard = document.getElementById('newAlarmFormCard');
+  if (formCard) {
+    formCard.style.display = show ? 'block' : 'none';
+  }
+}
+
+function setAlarmDateMode(mode) {
+  currentAlarmDateMode = mode;
+  const btnDaily = document.getElementById('btnDateModeDaily');
+  const btnSpecific = document.getElementById('btnDateModeSpecific');
+  const dateWrap = document.getElementById('alarmSpecificDateWrap');
+
+  if (btnDaily) btnDaily.classList.toggle('active', mode === 'daily');
+  if (btnSpecific) btnSpecific.classList.toggle('active', mode === 'specific');
+  if (dateWrap) dateWrap.style.display = (mode === 'specific') ? 'block' : 'none';
+
+  updateAlarmPreviewBadge();
+}
+
+function setQuickDate(shortcut) {
+  const dateInput = document.getElementById('alarmDateInput');
+  if (!dateInput) return;
+
+  const now = new Date();
+  if (shortcut === 'today') {
+    dateInput.value = now.toISOString().slice(0, 10);
+  } else if (shortcut === 'tomorrow') {
+    const tm = new Date(now.getTime() + 86400000);
+    dateInput.value = tm.toISOString().slice(0, 10);
+  } else if (shortcut === 'next_monday') {
+    const day = now.getDay();
+    const diff = (8 - day) % 7 || 7;
+    const nextMon = new Date(now.getTime() + diff * 86400000);
+    dateInput.value = nextMon.toISOString().slice(0, 10);
+  }
+  updateAlarmPreviewBadge();
+}
+
+function setAlarmAmPm(ampm) {
+  currentAlarmAmPm = ampm;
+  const btnAm = document.getElementById('btnAlarmAm');
+  const btnPm = document.getElementById('btnAlarmPm');
+  if (btnAm) btnAm.classList.toggle('active', ampm === 'AM');
+  if (btnPm) btnPm.classList.toggle('active', ampm === 'PM');
+  updateAlarmPreviewBadge();
+}
+
+function updateAlarmTimeFromInputs() {
+  updateAlarmPreviewBadge();
+}
+
+function updateAlarmPreviewBadge() {
+  const hourInput = document.getElementById('alarmHourInput');
+  const minInput = document.getElementById('alarmMinInput');
+  const badge = document.getElementById('alarmLiveBadge');
+  if (!badge) return;
 
   let h12 = parseInt(hourInput ? hourInput.value : '9', 10);
   let mVal = parseInt(minInput ? minInput.value : '30', 10);
@@ -10134,9 +10229,154 @@ function handleManualTimeType() {
   if (mVal < 0) mVal = 0;
   if (mVal > 59) mVal = 59;
 
+  const hStr = h12 < 10 ? '0' + h12 : String(h12);
   const mStr = mVal < 10 ? '0' + mVal : String(mVal);
-  const isPm = btnPm ? btnPm.classList.contains('active') : true;
+  const ampm = currentAlarmAmPm;
+  const timeStr = `${hStr}:${mStr} ${ampm}`;
 
+  let dateStr = '🔄 Rozana (Daily)';
+  if (currentAlarmDateMode === 'specific') {
+    const dateInput = document.getElementById('alarmDateInput');
+    dateStr = '📅 ' + (dateInput && dateInput.value ? dateInput.value : 'Choose Date');
+  }
+
+  badge.innerText = `⏰ ${timeStr} • ${dateStr}`;
+}
+
+function setQuickAlarmTime(timeStr, ampm) {
+  const parts = timeStr.split(':');
+  const hourInput = document.getElementById('alarmHourInput');
+  const minInput = document.getElementById('alarmMinInput');
+  if (hourInput) hourInput.value = parseInt(parts[0], 10);
+  if (minInput) minInput.value = parseInt(parts[1], 10);
+  setAlarmAmPm(ampm);
+}
+
+function setAlarmContentType(type) {
+  currentAlarmContentType = type;
+  const btnReading = document.getElementById('btnTypeReading');
+  const btnNotes = document.getElementById('btnTypeNotes');
+  const btnCustom = document.getElementById('btnTypeCustom');
+  const noteWrap = document.getElementById('alarmNoteSelectWrap');
+
+  if (btnReading) btnReading.classList.toggle('active', type === 'reading');
+  if (btnNotes) btnNotes.classList.toggle('active', type === 'notes');
+  if (btnCustom) btnCustom.classList.toggle('active', type === 'custom');
+  if (noteWrap) noteWrap.style.display = (type === 'notes') ? 'block' : 'none';
+
+  onAlarmBookChanged();
+}
+
+function populateAlarmBooksDropdown() {
+  const bookSelect = document.getElementById('alarmBookSelect');
+  if (!bookSelect) return;
+
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  if (!books || books.length === 0) return;
+
+  bookSelect.innerHTML = '';
+  books.forEach((b, idx) => {
+    const opt = document.createElement('option');
+    opt.value = b.id || ('book_' + idx);
+    opt.text = `📖 ${b.title || 'Untitled'} (${b.author || 'Unknown'})`;
+    bookSelect.appendChild(opt);
+  });
+
+  onAlarmBookChanged();
+}
+
+function onAlarmBookChanged() {
+  const bookSelect = document.getElementById('alarmBookSelect');
+  const noteSelect = document.getElementById('alarmNoteSelect');
+  const titleInput = document.getElementById('alarmCustomTitleInput');
+  const msgInput = document.getElementById('alarmCustomMsgInput');
+  if (!bookSelect) return;
+
+  const bookId = bookSelect.value;
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
+  if (!book) return;
+
+  // Populate Notes dropdown for this book
+  if (noteSelect) {
+    noteSelect.innerHTML = '';
+    let notesList = [];
+    if (Array.isArray(book.notes) && book.notes.length > 0) {
+      notesList = book.notes.map((n, i) => typeof n === 'string' ? { id: 'note_' + i, text: n } : n);
+    } else if (Array.isArray(book.key_takeaways) && book.key_takeaways.length > 0) {
+      notesList = book.key_takeaways.map((t, i) => ({ id: 'takeaway_' + i, text: t }));
+    }
+    if (Array.isArray(state.savedNotes)) {
+      const userNotes = state.savedNotes.filter(n => n.bookId === book.id || n.bookTitle === book.title);
+      userNotes.forEach((un, idx) => {
+        notesList.push({ id: un.id || ('un_' + idx), text: un.text || un.content || un.note });
+      });
+    }
+    if (notesList.length === 0) {
+      notesList.push({ id: 'def', text: `Key takeaway from ${book.title}: Consistency in reading creates lasting wisdom.` });
+    }
+    notesList.forEach((n, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      const textVal = n.text || '';
+      opt.text = textVal.length > 40 ? textVal.substring(0, 40) + '...' : textVal;
+      opt.dataset.fullText = textVal;
+      noteSelect.appendChild(opt);
+    });
+  }
+
+  // Pre-fill Title & Message according to type
+  if (currentAlarmContentType === 'reading') {
+    if (titleInput && (!titleInput.value || titleInput.value.includes('Reading Time') || titleInput.value.includes('Note Flashback'))) {
+      titleInput.value = `⏰ Reading Time: ${book.title}`;
+    }
+    if (msgInput && (!msgInput.value || msgInput.value.includes('session shuru') || msgInput.value.includes('Key insight'))) {
+      msgInput.value = `Aaj ka reading session shuru karein! "${book.title}" me naye pages complete karein.`;
+    }
+  } else if (currentAlarmContentType === 'notes') {
+    onAlarmNoteChanged();
+  }
+}
+
+function onAlarmNoteChanged() {
+  const bookSelect = document.getElementById('alarmBookSelect');
+  const noteSelect = document.getElementById('alarmNoteSelect');
+  const titleInput = document.getElementById('alarmCustomTitleInput');
+  const msgInput = document.getElementById('alarmCustomMsgInput');
+  if (!bookSelect || !noteSelect) return;
+
+  const bookId = bookSelect.value;
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
+  if (!book) return;
+
+  const selectedOpt = noteSelect.options[noteSelect.selectedIndex];
+  const fullText = selectedOpt ? (selectedOpt.dataset.fullText || selectedOpt.text) : '';
+
+  if (titleInput) {
+    titleInput.value = `💡 Note Flashback: ${book.title}`;
+  }
+  if (msgInput && fullText) {
+    msgInput.value = fullText;
+  }
+}
+
+function saveNewScheduledAlarm() {
+  const hourInput = document.getElementById('alarmHourInput');
+  const minInput = document.getElementById('alarmMinInput');
+  const dateInput = document.getElementById('alarmDateInput');
+  const titleInput = document.getElementById('alarmCustomTitleInput');
+  const msgInput = document.getElementById('alarmCustomMsgInput');
+  const bookSelect = document.getElementById('alarmBookSelect');
+  const soundCheck = document.getElementById('alarmSoundCheck');
+
+  let h12 = parseInt(hourInput ? hourInput.value : '9', 10);
+  let mVal = parseInt(minInput ? minInput.value : '30', 10);
+
+  if (isNaN(h12) || h12 < 1 || h12 > 12) h12 = 9;
+  if (isNaN(mVal) || mVal < 0 || mVal > 59) mVal = 0;
+
+  const isPm = currentAlarmAmPm === 'PM';
   let h24 = h12;
   if (isPm) {
     h24 = (h12 === 12) ? 12 : h12 + 12;
@@ -10144,88 +10384,132 @@ function handleManualTimeType() {
     h24 = (h12 === 12) ? 0 : h12;
   }
 
-  const h24Str = (h24 < 10 ? '0' + h24 : String(h24)) + ':' + mStr;
-  reminderScheduleConfig.time = h24Str;
-  reminderScheduleConfig.label = `${(h12 < 10 ? '0' + h12 : h12)}:${mStr} ${isPm ? 'PM' : 'AM'}`;
+  const hStr = h24 < 10 ? '0' + h24 : String(h24);
+  const mStr = mVal < 10 ? '0' + mVal : String(mVal);
+  const time24 = `${hStr}:${mStr}`;
+  const timeFormatted = `${(h12 < 10 ? '0' + h12 : h12)}:${mStr} ${currentAlarmAmPm}`;
 
-  // Keep hidden selects in sync
-  const hourSelect = document.getElementById('notifHourSelect');
-  const minSelect = document.getElementById('notifMinSelect');
-  if (hourSelect) hourSelect.value = String(h12);
-  if (minSelect) minSelect.value = mStr;
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const bookId = bookSelect ? bookSelect.value : '';
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
 
-  const timeBadge = document.getElementById('notifFormattedTimeBadge');
-  if (timeBadge) {
-    const iconEmoji = (h24 >= 19 || h24 < 5) ? '🌙' : (h24 < 12 ? '🌅' : '☀️');
-    timeBadge.innerText = `${iconEmoji} ${reminderScheduleConfig.label} (Active)`;
+  const specificDateVal = (currentAlarmDateMode === 'specific' && dateInput) ? dateInput.value : '';
+
+  const newAlarm = {
+    id: 'alarm_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+    enabled: true,
+    time: time24,
+    ampm: currentAlarmAmPm,
+    timeFormatted: timeFormatted,
+    dateMode: currentAlarmDateMode,
+    specificDate: specificDateVal,
+    type: currentAlarmContentType,
+    title: (titleInput && titleInput.value.trim()) || `⏰ Reading Alert: ${book ? book.title : 'Mind Focus'}`,
+    message: (msgInput && msgInput.value.trim()) || 'Aapka reading time ho gaya hai! Kitab kholiye aur focus karein.',
+    bookTitle: book ? book.title : 'Mind Focus',
+    bookCover: book ? getBookCoverUrl(book) : 'cover_placeholder.jpg',
+    sound: soundCheck ? !!soundCheck.checked : true,
+    lastFiredKey: ''
+  };
+
+  userScheduledAlarmsList.unshift(newAlarm);
+  saveScheduledAlarms(true);
+  showToast(`Alarm Schedule Ho Gaya: ${timeFormatted} (${currentAlarmDateMode === 'specific' ? specificDateVal : 'Rozana'}) ⏰`, 'success');
+}
+
+function toggleAlarmItem(id, enabled) {
+  const alarm = userScheduledAlarmsList.find(a => a.id === id);
+  if (alarm) {
+    alarm.enabled = enabled;
+    saveScheduledAlarms(false);
+    showToast(enabled ? `Alarm ON: ${alarm.timeFormatted} ⏰` : `Alarm OFF: ${alarm.timeFormatted}`, enabled ? 'success' : 'info');
   }
-  saveReminderScheduleConfig(false);
 }
 
-function setAmPm(ampm) {
-  const btnAm = document.getElementById('btnAmToggle');
-  const btnPm = document.getElementById('btnPmToggle');
-  if (btnAm) btnAm.classList.toggle('active', ampm === 'AM');
-  if (btnPm) btnPm.classList.toggle('active', ampm === 'PM');
-  handleAmPmTimeChange();
-  showToast(`Reminder set to ${ampm} ⏰`, 'info');
+function deleteAlarmItem(id) {
+  userScheduledAlarmsList = userScheduledAlarmsList.filter(a => a.id !== id);
+  saveScheduledAlarms(false);
+  showToast('Alarm delete kar diya gaya.', 'info');
 }
 
-function handleReminderTimeChange(newTime) {
-  if (!newTime) return;
-  reminderScheduleConfig.time = newTime;
-  reminderScheduleConfig.label = formatTimeAmPm(newTime);
-  saveReminderScheduleConfig(false);
+function testAlarmItem(id) {
+  const alarm = userScheduledAlarmsList.find(a => a.id === id);
+  if (!alarm) return;
+  showToast(`⏰ Alarm "${alarm.title}" 3 seconds me fire hoga...`, 'info');
+  setTimeout(() => {
+    fireSpecificScheduledAlarm(alarm);
+  }, 3000);
 }
 
-function setPresetReminderTime(timeStr, labelStr) {
-  reminderScheduleConfig.time = timeStr;
-  reminderScheduleConfig.label = labelStr;
-  saveReminderScheduleConfig(false);
-  showToast(`Reminder Time Set: ${labelStr} ⏰`, 'info');
+function testCurrentAlarmFromForm() {
+  const titleInput = document.getElementById('alarmCustomTitleInput');
+  const msgInput = document.getElementById('alarmCustomMsgInput');
+  const bookSelect = document.getElementById('alarmBookSelect');
+
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const bookId = bookSelect ? bookSelect.value : '';
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
+
+  const dummyAlarm = {
+    id: 'test_temp',
+    type: currentAlarmContentType,
+    title: (titleInput && titleInput.value.trim()) || '⏰ Test Reading Alarm',
+    message: (msgInput && msgInput.value.trim()) || 'Test notification message with full book cover!',
+    bookTitle: book ? book.title : 'Mind Focus Books',
+    bookCover: book ? getBookCoverUrl(book) : 'cover_placeholder.jpg',
+    sound: true
+  };
+
+  showToast('⚡ Test Alarm 3 seconds me fire hoga...', 'info');
+  setTimeout(() => {
+    fireSpecificScheduledAlarm(dummyAlarm);
+  }, 3000);
 }
 
-function toggleReminderSchedule(isEnabled) {
-  reminderScheduleConfig.enabled = isEnabled;
-  saveReminderScheduleConfig(false);
-  showToast(isEnabled ? 'Daily Reading Reminder alarm ON ho gaya! ⏰' : 'Daily Reading Reminder alarm OFF kar diya gaya.', isEnabled ? 'success' : 'info');
-}
-
-function toggleDayChip(dayIndex) {
-  let days = Array.isArray(reminderScheduleConfig.days) ? [...reminderScheduleConfig.days] : [0,1,2,3,4,5,6];
-  if (days.includes(dayIndex)) {
-    if (days.length === 1) {
-      showToast('Kam se kam 1 din active hona zaroori hai!', 'warning');
-      return;
-    }
-    days = days.filter(d => d !== dayIndex);
-  } else {
-    days.push(dayIndex);
-    days.sort();
-  }
-  reminderScheduleConfig.days = days;
-  saveReminderScheduleConfig(false);
-}
-
-function setDaysSelection(mode) {
-  if (mode === 'all') {
-    reminderScheduleConfig.days = [0, 1, 2, 3, 4, 5, 6];
-  } else if (mode === 'weekdays') {
-    reminderScheduleConfig.days = [1, 2, 3, 4, 5];
-  } else if (mode === 'weekends') {
-    reminderScheduleConfig.days = [0, 6];
-  }
-  saveReminderScheduleConfig(false);
-  showToast(`Repeat days set: ${mode.toUpperCase()}`, 'info');
-}
-
-function toggleReminderSound(enabled) {
-  reminderScheduleConfig.sound = enabled;
-  saveReminderScheduleConfig(false);
-  if (enabled) {
+function fireSpecificScheduledAlarm(alarm) {
+  if (alarm.sound) {
     playReminderChime();
-    showToast('Alert Chime Sound Enabled! 🔔', 'success');
   }
+
+  const notifId = 'notif_alarm_' + Date.now();
+  const bookTitle = alarm.bookTitle || 'Mind Focus Books';
+  const coverUrl = alarm.bookCover || 'icon-192.png';
+
+  const newNotif = {
+    id: notifId,
+    category: alarm.type === 'notes' ? 'notes' : 'reading',
+    icon: alarm.type === 'notes' ? '💡' : '⏰',
+    iconClass: alarm.type === 'notes' ? 'notes' : 'reading',
+    title: alarm.title || '⏰ Scheduled Reading Alert',
+    message: alarm.message || 'Aapka scheduled time ho gaya hai!',
+    timestamp: new Date().toISOString(),
+    read: false,
+    actionType: alarm.type === 'notes' ? 'open_note_3d' : 'open_book',
+    actionLabel: alarm.type === 'notes' ? '💡 View Note' : '📖 Read Book',
+    bookTitle: bookTitle,
+    bookCover: coverUrl,
+    noteId: alarm.noteId || ''
+  };
+
+  userNotificationsState.unshift(newNotif);
+  saveNotifications();
+  if (typeof renderNotificationsHub === 'function') {
+    renderNotificationsHub();
+  }
+
+  // Native Android Phone Notification (Big Picture with Book Cover!)
+  if (window.Android && typeof window.Android.postNativeNotification === 'function') {
+    window.Android.postNativeNotification(alarm.title, alarm.message, bookTitle, coverUrl);
+  } else if ('Notification' in window && Notification.permission === 'granted') {
+    try {
+      new Notification(alarm.title, {
+        body: alarm.message,
+        icon: 'icon-192.png'
+      });
+    } catch (e) {}
+  }
+
+  showToast(`⏰ Alarm Fired: ${alarm.title}`, 'success');
 }
 
 function playReminderChime() {
@@ -10239,7 +10523,6 @@ function playReminderChime() {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, start);
       gain.gain.setValueAtTime(0.18, start);
       gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
       osc.connect(gain);
@@ -10258,118 +10541,39 @@ function playReminderChime() {
 
 function startReminderScheduleTicker() {
   if (scheduleIntervalId) clearInterval(scheduleIntervalId);
-  // Check every 15 seconds so we never miss the designated minute
   scheduleIntervalId = setInterval(checkScheduledReminderTime, 15000);
 }
 
 function checkScheduledReminderTime() {
-  if (!reminderScheduleConfig.enabled) return;
+  if (!Array.isArray(userScheduledAlarmsList) || userScheduledAlarmsList.length === 0) return;
 
   const now = new Date();
-  const currentDay = now.getDay();
-  const scheduledDays = Array.isArray(reminderScheduleConfig.days) ? reminderScheduleConfig.days : [0,1,2,3,4,5,6];
-  if (!scheduledDays.includes(currentDay)) return;
-
   const currentH = now.getHours();
   const currentM = now.getMinutes();
   const currentHHMM = `${currentH < 10 ? '0' + currentH : currentH}:${currentM < 10 ? '0' + currentM : currentM}`;
-
   const todayDateStr = now.toISOString().slice(0, 10); // YYYY-MM-DD
   const fireKey = `${todayDateStr}_${currentHHMM}`;
 
-  if (currentHHMM === reminderScheduleConfig.time && reminderScheduleConfig.lastFiredDate !== fireKey) {
-    reminderScheduleConfig.lastFiredDate = fireKey;
-    saveReminderScheduleConfig(false);
-    fireScheduledReminderAlarm();
-  }
-}
+  userScheduledAlarmsList.forEach(alarm => {
+    if (!alarm.enabled) return;
 
-function fireScheduledReminderAlarm() {
-  // 1. Play gentle mindfulness chime if sound is enabled
-  if (reminderScheduleConfig.sound) {
-    playReminderChime();
-  }
-
-  // 2. Find currently reading book
-  const activeBooks = (state.books || []).filter(b => !b.notInterested);
-  const readingBooks = activeBooks.filter(b => b.status === 'READING');
-  const targetBook = readingBooks.length > 0 ? readingBooks[0] : (activeBooks.length > 0 ? activeBooks[0] : { title: 'Atomic Habits', currentPage: 45, totalPages: 320 });
-
-  const curP = targetBook.currentPage || 1;
-  const totP = targetBook.totalPages || 200;
-  const pct = Math.round((curP / totP) * 100);
-
-  // 3. Add to notifications feed
-  const newNotif = {
-    id: 'notif_alarm_' + Date.now(),
-    category: 'reading',
-    icon: '⏰',
-    iconClass: 'reading',
-    title: `⏰ Daily Reading Alarm: "${targetBook.title}"`,
-    message: `Aapka scheduled reminder time ho chuka hai! Page ${curP} par hain (${pct}% complete). Aaj ka 15-20 min session shuru karein!`,
-    timestamp: new Date().toISOString(),
-    read: false,
-    actionType: 'open_book',
-    actionLabel: '📖 Read Book Now',
-    bookIndex: state.books ? state.books.indexOf(targetBook) : 0,
-    bookTitle: targetBook.title,
-    bookCover: targetBook.coverImage || ''
-  };
-  userNotificationsState.unshift(newNotif);
-  saveNotifications();
-
-  // 4. Send device status bar notification if permitted
-  const notifTitle = reminderScheduleConfig.customTitle || `⏰ Padhne Ka Time! "${targetBook.title}"`;
-  const notifMsg = reminderScheduleConfig.customNote || `Rozana reading habit barkarar rakhein. Page ${curP}/${totP} (${pct}%). Start reading now!`;
-  const notifCover = getBookCoverUrl(targetBook);
-
-  if (window.Android && typeof window.Android.postNativeNotification === 'function') {
-    window.Android.postNativeNotification(notifTitle, notifMsg, targetBook.title, notifCover);
-  } else if ('Notification' in window && Notification.permission === 'granted') {
-    try {
-      new Notification(notifTitle, {
-        body: notifMsg,
-        icon: 'icon-192.png'
-      });
-    } catch (e) {
-      console.warn('System push error:', e);
-    }
-  }
-
-  // 5. Open Interactive Popup Modal
-  const modal = document.getElementById('scheduledReminderModalOverlay');
-  if (modal) {
-    const titleEl = document.getElementById('schedModalBookTitle');
-    const coverEl = document.getElementById('schedModalCoverImg');
-    const pagesEl = document.getElementById('schedModalPagesTxt');
-    const progressFill = document.getElementById('schedModalProgressFill');
-    const quoteEl = document.getElementById('schedModalQuoteTxt');
-
-    if (titleEl) titleEl.innerText = targetBook.title || 'Your Current Book';
-    if (coverEl) coverEl.src = targetBook.coverImage || 'cover_placeholder.jpg';
-    if (pagesEl) pagesEl.innerText = `Page ${curP} of ${totP} • ${pct}% Complete`;
-    if (progressFill) progressFill.style.width = pct + '%';
-
-    // Pick inspiring quote
-    const quotes = [
-      '"A reader lives a thousand lives before he dies." — George R.R. Martin',
-      '"Today a reader, tomorrow a leader." — Margaret Fuller',
-      '"Small disciplines repeated with consistency every day lead to great achievements." — John C. Maxwell',
-      '"The more that you read, the more things you will know." — Dr. Seuss'
-    ];
-    if (quoteEl) {
-      quoteEl.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+    // Check Date filter
+    if (alarm.dateMode === 'specific') {
+      if (alarm.specificDate && alarm.specificDate !== todayDateStr) {
+        return; // Not today
+      }
     }
 
-    modal.style.display = 'flex';
-  }
+    if (currentHHMM === alarm.time && alarm.lastFiredKey !== fireKey) {
+      alarm.lastFiredKey = fireKey;
+      saveScheduledAlarms(false);
+      fireSpecificScheduledAlarm(alarm);
+    }
+  });
 }
 
 function triggerImmediateAlarmTest() {
-  showToast('⏰ Reading Alarm 3 seconds me bajega... (Chime test)', 'info');
-  setTimeout(() => {
-    fireScheduledReminderAlarm();
-  }, 3000);
+  testCurrentAlarmFromForm();
 }
 
 function closeScheduledReminderModal() {
@@ -10380,9 +10584,6 @@ function closeScheduledReminderModal() {
 function snoozeScheduledReminder(mins = 10) {
   closeScheduledReminderModal();
   showToast(`Reminder ${mins} minute ke liye snooze kar diya gaya hai! 💤`, 'info');
-  setTimeout(() => {
-    fireScheduledReminderAlarm();
-  }, mins * 60000);
 }
 
 function handleScheduledModalReadNow() {
@@ -10584,9 +10785,16 @@ function setStudioVisualTheme(theme) {
   if (card) {
     card.className = `android-system-notif-card theme-${theme}`;
   }
-  document.querySelectorAll('.btn-botanical-theme').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
+  document.querySelectorAll('.cyber-theme-btn').forEach(btn => {
+    const d = btn.getAttribute('data-theme');
+    const isMatch = (d === theme) ||
+      (theme === 'sunset' && d === 'amber') ||
+      (theme === 'emerald' && d === 'cyan') ||
+      (theme === 'cosmic' && d === 'purple') ||
+      (theme === 'sakura' && d === 'rose');
+    btn.classList.toggle('active', isMatch);
   });
+  updateLiveSimCard();
 }
 
 function updateLiveSimCard() {
@@ -10605,19 +10813,19 @@ function updateLiveSimCard() {
   if (simDesc) simDesc.innerText = msgVal;
 
   let coverUrl = 'hyperfocus_cover.jpg';
-  let tagText = '🌿 Mind Focus Reading';
+  let tagText = '⚡ Mind Focus Reading';
 
   if (studioActiveMode === 'book_note' && studioSelectedBook) {
     coverUrl = getBookCoverUrl(studioSelectedBook);
     tagText = `📖 ${studioSelectedBook.title || 'Book Note'}`;
   } else if (studioActiveTheme === 'sakura') {
-    tagText = '🌸 Sakura Garden Wisdom';
+    tagText = '🔴 Laser Red Alert';
   } else if (studioActiveTheme === 'emerald') {
-    tagText = '🌿 Emerald Forest Zen';
+    tagText = '❄️ Hyper Cyan Focus';
   } else if (studioActiveTheme === 'sunset') {
-    tagText = '🌅 Sunset Glow Reflection';
+    tagText = '⚡ Cyber Amber Insight';
   } else if (studioActiveTheme === 'cosmic') {
-    tagText = '🌌 Cosmic Focus';
+    tagText = '🌌 Neon Violet Horizon';
   }
 
   if (simBannerImg) simBannerImg.src = coverUrl;

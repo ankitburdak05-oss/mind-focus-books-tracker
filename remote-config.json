@@ -2,17 +2,17 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.32",
-    "name": "Mind Focus Books v0.0.32 (Segmented Notification Hub, Full-Width Android Cards & Clutter-Free Layout)",
+    "version": "v0.0.33",
+    "name": "Mind Focus Books v0.0.33 (Multi-Alarm Scheduler with Date Support, Book Cover Push & Futuristic Studio)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
-      "📑 3 Dedicated Segmented Tabs: Alerts Feed, Reading Alarm & Custom Studio — zero clutter, completely organized.",
-      "📱 Full-Screen Width Notification Cards: Mobile screen-spanning 100% edge-to-edge cards with rich book banners.",
-      "📖 Direct Book Cover Banners: Har notification card ke andar book ka cover image aur title banner.",
-      "🌸 Botanical Nature Aesthetics: Enhanced glassmorphic contrast, smooth hover states, and status badges.",
-      "⚡ Instant Status Shade Actions: One-tap action button to open 3D notes or continue reading directly."
+      "⏰ Multi-Alarm & Reminders Scheduler: Din me alag-alag time par jitne chahe reading ya note alerts schedule karein.",
+      "📅 Taarikh (Date) Selection: Rozana (Daily) ya kisi khas taarikh (calendar date) par notification set karein.",
+      "🖼️ Phone Notification Book Covers: Native Android base64 bitmap decoding se phone drawer me book cover badi photo me aayega.",
+      "⚡ Sleek Futuristic Studio: Zero horizontal overflow, compact book thumbnail preview, no wall of text.",
+      "🎨 Cyber Neon Accent Themes: Cyber Amber, Hyper Cyan, Neon Violet aur Laser Red."
     ],
-    "stagedAt": "2026-10-17T21:35:00.000Z",
+    "stagedAt": "2026-10-17T22:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

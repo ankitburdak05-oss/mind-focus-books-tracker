@@ -422,10 +422,18 @@ public class MainActivity extends AppCompatActivity {
                             .setVibrate(new long[]{0, 350, 150, 350});
 
                     Bitmap bigBitmap = null;
-                    if (imageAssetOrUrl != null && !imageAssetOrUrl.isEmpty()) {
+                    if (imageAssetOrUrl != null && !imageAssetOrUrl.trim().isEmpty()) {
                         try {
-                            if (imageAssetOrUrl.startsWith("http://") || imageAssetOrUrl.startsWith("https://")) {
-                                java.net.URL url = new java.net.URL(imageAssetOrUrl);
+                            String trimmed = imageAssetOrUrl.trim();
+                            if (trimmed.startsWith("data:image")) {
+                                int commaIndex = trimmed.indexOf(",");
+                                if (commaIndex != -1) {
+                                    String base64Data = trimmed.substring(commaIndex + 1);
+                                    byte[] decodedBytes = android.util.Base64.decode(base64Data, android.util.Base64.DEFAULT);
+                                    bigBitmap = BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
+                                }
+                            } else if (trimmed.startsWith("http://") || trimmed.startsWith("https://")) {
+                                java.net.URL url = new java.net.URL(trimmed);
                                 java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
                                 conn.setConnectTimeout(8000);
                                 conn.setReadTimeout(12000);
@@ -434,9 +442,9 @@ public class MainActivity extends AppCompatActivity {
                                     bigBitmap = BitmapFactory.decodeStream(conn.getInputStream());
                                 }
                             } else {
-                                String assetPath = imageAssetOrUrl.startsWith("file:///android_asset/") 
-                                        ? imageAssetOrUrl.replace("file:///android_asset/", "") 
-                                        : imageAssetOrUrl;
+                                String assetPath = trimmed.startsWith("file:///android_asset/") 
+                                        ? trimmed.replace("file:///android_asset/", "") 
+                                        : trimmed;
                                 try (java.io.InputStream is = getAssets().open(assetPath)) {
                                     bigBitmap = BitmapFactory.decodeStream(is);
                                 }

@@ -2453,7 +2453,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.32 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.33 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -2773,309 +2773,292 @@
           </div>
         </div>
 
-        <!-- ================= OPTION 2: DAILY READING REMINDER & ALARM TIME ================= -->
+        <!-- ================= OPTION 2: MULTI-ALARM & SCHEDULES WITH DATE (TAARIKH) ================= -->
         <div id="notifSectionAlarm" class="notif-hub-section" style="display:none;">
-          <div class="notif-schedule-card">
-            <div class="notif-sched-header">
-              <div class="notif-sched-title-wrap">
-                <span class="notif-sched-icon">⏰</span>
-                <div>
-                  <h3 class="notif-sched-title">Daily Reading Reminder &amp; Alarm Time</h3>
-                  <p class="notif-sched-sub" id="notifSchedSummarySub">Rozana reading ka reminder time set karein</p>
-                </div>
+          <!-- Top Hero & Global Alarm Toggle -->
+          <div class="cyber-alarm-hero">
+            <div class="cah-left">
+              <span class="cah-icon">⏰</span>
+              <div>
+                <h3 class="cah-title">Multi-Schedule Reading Alarms</h3>
+                <p class="cah-sub" id="cahActiveSummary">Din me alag-alag time par notes aur reading alerts schedule karein</p>
               </div>
-              <label class="pref-switch" title="Toggle Daily Reminder Alarm">
-                <input type="checkbox" id="notifScheduleEnabledToggle" checked onchange="toggleReminderSchedule(this.checked)">
-                <span class="pref-slider"></span>
-              </label>
+            </div>
+            <button type="button" class="btn-neo-gold" onclick="openNewAlarmForm()" style="padding: 7px 12px; font-size: 0.76rem;">
+              ➕ Naya Alarm
+            </button>
+          </div>
+
+          <!-- Schedule New / Edit Alarm Form Card -->
+          <div class="cyber-card" id="newAlarmFormCard" style="display:block;">
+            <div class="cyber-card-header">
+              <span class="cch-title" id="alarmFormTitle">➕ Schedule New Reminder Alarm</span>
+              <button type="button" class="cch-close-btn" onclick="toggleAlarmForm(false)">✕</button>
             </div>
 
-            <div class="notif-sched-body" id="notifSchedBody">
-              <!-- Time Picker Row with Typeable Hour, Min, and AM/PM Buttons -->
-              <div class="notif-time-picker-row">
+            <div class="cyber-card-body">
+              <!-- Date (Taarikh) Selection -->
+              <div class="neo-field-group">
+                <label class="neo-label">📅 Taarikh / Schedule Frequency:</label>
+                <div class="neo-pill-tabs">
+                  <button type="button" class="neo-tab-pill active" id="btnDateModeDaily" onclick="setAlarmDateMode('daily')">
+                    🔄 Rozana (Daily)
+                  </button>
+                  <button type="button" class="neo-tab-pill" id="btnDateModeSpecific" onclick="setAlarmDateMode('specific')">
+                    📅 Khas Taarikh (Date)
+                  </button>
+                </div>
+                
+                <!-- Specific Date Picker Input Box (Hidden when Daily) -->
+                <div id="alarmSpecificDateWrap" style="display:none; margin-top: 10px;">
+                  <div class="neo-date-row">
+                    <input type="date" id="alarmDateInput" class="neo-input" onchange="updateAlarmPreviewBadge()">
+                    <div class="neo-date-shortcuts">
+                      <button type="button" class="neo-chip" onclick="setQuickDate('today')">Aaj</button>
+                      <button type="button" class="neo-chip" onclick="setQuickDate('tomorrow')">Kal</button>
+                      <button type="button" class="neo-chip" onclick="setQuickDate('next_monday')">Agla Somwar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Picker Row -->
+              <div class="neo-field-group">
+                <label class="neo-label">⏰ Alarm Time (Type ya Select Karein):</label>
                 <div class="notif-time-selector-group">
                   <div class="notif-select-wrap">
                     <label class="notif-sub-label">Hour (1-12)</label>
-                    <input type="number" id="notifHourInput" class="notif-type-input" min="1" max="12" value="9" placeholder="09" oninput="handleManualTimeType()">
-                    <select id="notifHourSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
-                      <option value="1">01</option>
-                      <option value="2">02</option>
-                      <option value="3">03</option>
-                      <option value="4">04</option>
-                      <option value="5">05</option>
-                      <option value="6">06</option>
-                      <option value="7">07</option>
-                      <option value="8">08</option>
-                      <option value="9" selected>09</option>
-                      <option value="10">10</option>
-                      <option value="11">11</option>
-                      <option value="12">12</option>
-                    </select>
+                    <input type="number" id="alarmHourInput" class="notif-type-input" min="1" max="12" value="9" placeholder="09" oninput="updateAlarmTimeFromInputs()">
                   </div>
 
                   <span class="notif-colon">:</span>
 
                   <div class="notif-select-wrap">
                     <label class="notif-sub-label">Min (0-59)</label>
-                    <input type="number" id="notifMinInput" class="notif-type-input" min="0" max="59" value="30" placeholder="30" oninput="handleManualTimeType()">
-                    <select id="notifMinSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
-                      <option value="00">00</option>
-                      <option value="05">05</option>
-                      <option value="10">10</option>
-                      <option value="15">15</option>
-                      <option value="20">20</option>
-                      <option value="25">25</option>
-                      <option value="30" selected>30</option>
-                      <option value="35">35</option>
-                      <option value="40">40</option>
-                      <option value="45">45</option>
-                      <option value="50">50</option>
-                      <option value="55">55</option>
-                    </select>
+                    <input type="number" id="alarmMinInput" class="notif-type-input" min="0" max="59" value="30" placeholder="30" oninput="updateAlarmTimeFromInputs()">
                   </div>
 
-                  <!-- AM / PM Switcher -->
                   <div class="notif-ampm-switcher">
-                    <button type="button" class="btn-ampm" id="btnAmToggle" onclick="setAmPm('AM')">AM</button>
-                    <button type="button" class="btn-ampm active" id="btnPmToggle" onclick="setAmPm('PM')">PM</button>
+                    <button type="button" class="btn-ampm" id="btnAlarmAm" onclick="setAlarmAmPm('AM')">AM</button>
+                    <button type="button" class="btn-ampm active" id="btnAlarmPm" onclick="setAlarmAmPm('PM')">PM</button>
                   </div>
                 </div>
 
-                <div class="notif-time-display-badge" id="notifFormattedTimeBadge">
-                  🌙 09:30 PM (Daily)
-                </div>
-                <input type="time" id="notifReminderTimeInput" style="display:none;" value="21:30">
-              </div>
-
-              <!-- Quick Preset Times -->
-              <div class="notif-presets-label">⚡ Quick Time Presets:</div>
-              <div class="notif-presets-grid">
-                <button type="button" class="notif-preset-btn" id="presetBtn_0800" onclick="setPresetReminderTime('08:00', '🌅 08:00 AM')">
-                  <span class="npb-icon">🌅</span>
-                  <span class="npb-time">08:00 AM</span>
-                  <span class="npb-label">Subah Ki Chai</span>
-                </button>
-                <button type="button" class="notif-preset-btn" id="presetBtn_1400" onclick="setPresetReminderTime('14:00', '☀️ 02:00 PM')">
-                  <span class="npb-icon">☀️</span>
-                  <span class="npb-time">02:00 PM</span>
-                  <span class="npb-label">Lunch Break</span>
-                </button>
-                <button type="button" class="notif-preset-btn" id="presetBtn_1900" onclick="setPresetReminderTime('19:00', '🌆 07:00 PM')">
-                  <span class="npb-icon">🌆</span>
-                  <span class="npb-time">07:00 PM</span>
-                  <span class="npb-label">Shaam Fursat</span>
-                </button>
-                <button type="button" class="notif-preset-btn active" id="presetBtn_2130" onclick="setPresetReminderTime('21:30', '🌙 09:30 PM')">
-                  <span class="npb-icon">🌙</span>
-                  <span class="npb-time">09:30 PM</span>
-                  <span class="npb-label">Bedtime Read</span>
-                </button>
-              </div>
-
-              <!-- Repeat Days Selector -->
-              <div class="notif-days-wrap">
-                <div class="notif-days-header">
-                  <span class="notif-days-title">Repeat Days:</span>
-                  <div class="notif-days-quick">
-                    <button type="button" class="btn-day-quick" onclick="setDaysSelection('all')">Everyday</button>
-                    <button type="button" class="btn-day-quick" onclick="setDaysSelection('weekdays')">Mon-Fri</button>
-                    <button type="button" class="btn-day-quick" onclick="setDaysSelection('weekends')">Weekends</button>
-                  </div>
-                </div>
-                <div class="notif-days-chips">
-                  <button type="button" class="day-chip active" data-day="0" onclick="toggleDayChip(0)">Sun</button>
-                  <button type="button" class="day-chip active" data-day="1" onclick="toggleDayChip(1)">Mon</button>
-                  <button type="button" class="day-chip active" data-day="2" onclick="toggleDayChip(2)">Tue</button>
-                  <button type="button" class="day-chip active" data-day="3" onclick="toggleDayChip(3)">Wed</button>
-                  <button type="button" class="day-chip active" data-day="4" onclick="toggleDayChip(4)">Thu</button>
-                  <button type="button" class="day-chip active" data-day="5" onclick="toggleDayChip(5)">Fri</button>
-                  <button type="button" class="day-chip active" data-day="6" onclick="toggleDayChip(6)">Sat</button>
+                <!-- Live Time Preview Badge -->
+                <div class="alarm-live-badge" id="alarmLiveBadge">
+                  ⏰ 09:30 PM • 🔄 Rozana (Daily)
                 </div>
               </div>
 
-              <!-- Sound & Test Controls -->
-              <div class="notif-sched-footer">
-                <label class="notif-sound-toggle">
-                  <input type="checkbox" id="notifSoundToggle" checked onchange="toggleReminderSound(this.checked)">
-                  <span>🔔 Audio Chime</span>
-                </label>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <button type="button" class="notif-test-alarm-btn" onclick="triggerImmediateAlarmTest()" title="Test alarm right now with chime sound">
-                    ⏰ Test Alarm (3s)
+              <!-- Quick Time Presets -->
+              <div class="neo-presets-row">
+                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('08:00', 'AM')">🌅 08:00 AM</button>
+                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('02:00', 'PM')">☀️ 02:00 PM</button>
+                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('07:30', 'PM')">🌆 07:30 PM</button>
+                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('09:30', 'PM')">🌙 09:30 PM</button>
+              </div>
+
+              <!-- What to Alert: Type Selector -->
+              <div class="neo-field-group">
+                <label class="neo-label">🔔 Kya Notification Aana Chahiye?</label>
+                <div class="neo-pill-tabs">
+                  <button type="button" class="neo-tab-pill active" id="btnTypeReading" onclick="setAlarmContentType('reading')">
+                    📖 Reading Alert
                   </button>
-                  <button type="button" class="btn-save-gold" style="padding: 6px 14px; font-size: 0.76rem;" onclick="saveReminderScheduleConfig(true)">
-                    💾 Save Time
+                  <button type="button" class="neo-tab-pill" id="btnTypeNotes" onclick="setAlarmContentType('notes')">
+                    💡 Book Note Flashback
+                  </button>
+                  <button type="button" class="neo-tab-pill" id="btnTypeCustom" onclick="setAlarmContentType('custom')">
+                    ✍️ Custom Alert
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
 
-        <!-- ================= OPTION 3: BOTANICAL CUSTOM NOTIFICATION STUDIO & NOTE PICKER ================= -->
-        <div id="notifSectionStudio" class="notif-hub-section" style="display:none;">
-          <!-- Push Permission Strip -->
-          <div class="notif-pref-strip">
-            <div class="notif-pref-info">
-              <span style="font-size:1.15rem;">📲</span>
-              <div>
-                <span class="notif-pref-title">System &amp; Device Alerts</span>
-                <span class="notif-pref-sub" id="notifPermissionStatusTxt">Device notifications for daily reading reminders</span>
-              </div>
-            </div>
-            <button type="button" class="notif-perm-btn" id="notifPermissionToggleBtn" onclick="requestBrowserNotificationPermission()">Enable</button>
-          </div>
-
-          <!-- Botanical Studio Card -->
-          <div class="botanical-studio-card">
-            <div class="botanical-card-header">
-              <div class="botanical-title-wrap">
-                <span class="botanical-header-icon">🌸🌿</span>
-                <div>
-                  <h3 class="botanical-card-title">Botanical Notification Studio &amp; Notes Picker</h3>
-                  <p class="botanical-card-sub">Apna custom notification likhein ya kisi book ke notes &amp; cover ko notification banayein</p>
-                </div>
-              </div>
-              <span class="botanical-pill-badge">🌺 Custom Studio</span>
-            </div>
-
-            <!-- Mode Selector Tabs -->
-            <div class="botanical-mode-nav">
-              <button type="button" class="botanical-mode-btn active" id="btnModeBookNote" onclick="setNotifStudioMode('book_note')">
-                📖 Book Notes Alert
-              </button>
-              <button type="button" class="botanical-mode-btn" id="btnModeCustomNote" onclick="setNotifStudioMode('custom')">
-                ✍️ Write My Own Text
-              </button>
-              <button type="button" class="botanical-mode-btn" id="btnModeDailyQuote" onclick="setNotifStudioMode('daily_quote')">
-                ✨ Daily Wisdom Quote
-              </button>
-            </div>
-
-            <!-- Studio Body -->
-            <div class="botanical-studio-body">
-              <!-- Book & Note Selection Row (Active in 'book_note' mode) -->
-              <div id="studioBookPickerSection" class="studio-section">
-                <label class="studio-label">📚 Choose Book for Notification:</label>
-                <select id="studioBookSelect" class="studio-dropdown" onchange="onStudioBookSelectChanged()">
-                  <!-- Populated with books from library -->
+              <!-- Book & Note Selection -->
+              <div id="alarmBookSelectSection" class="neo-field-group">
+                <label class="neo-label">📚 Book Chunein:</label>
+                <select id="alarmBookSelect" class="neo-dropdown" onchange="onAlarmBookChanged()">
+                  <!-- Populated by JS -->
                 </select>
 
-                <!-- Book Preview Card with Cover Image & Details -->
-                <div class="studio-book-preview" id="studioBookPreviewBox">
-                  <div class="studio-book-cover-frame">
-                    <img id="studioBookCoverImg" src="cover_placeholder.jpg" alt="Selected Book Cover" class="studio-book-cover">
-                    <div class="studio-cover-badge" id="studioBookStatusBadge">📖 In Progress</div>
-                  </div>
-                  <div class="studio-book-meta">
-                    <h4 class="studio-book-title" id="studioBookTitleTxt">Atomic Habits</h4>
-                    <p class="studio-book-author" id="studioBookAuthorTxt">by James Clear</p>
-                    <div class="studio-book-tags">
-                      <span class="studio-tag" id="studioBookPagesTxt">📄 320 pages</span>
-                      <span class="studio-tag" id="studioBookCategoryTxt">🌿 Mind Growth</span>
-                    </div>
-                    <p class="studio-book-hint">Is book ka cover phone ke notification me badi photo ke roop me aayega!</p>
-                  </div>
-                </div>
-
-                <!-- Pick Specific Note from this Book -->
-                <div class="studio-field-group" style="margin-top: 14px;">
-                  <label class="studio-label">📝 Select Which Note to Display in Notification:</label>
-                  <select id="studioNoteSelect" class="studio-dropdown" onchange="onStudioNoteSelectChanged()">
-                    <!-- Populated with notes of selected book -->
+                <!-- Book Note Dropdown (When type === 'notes') -->
+                <div id="alarmNoteSelectWrap" style="display:none; margin-top: 10px;">
+                  <label class="neo-label">📝 Konsa Note Aana Chahiye?</label>
+                  <select id="alarmNoteSelect" class="neo-dropdown" onchange="onAlarmNoteChanged()">
+                    <!-- Populated by JS -->
                   </select>
                 </div>
               </div>
 
-              <!-- Custom Notification Text Editor -->
-              <div class="studio-field-group">
-                <label class="studio-label">✏️ Notification Title:</label>
-                <input type="text" id="studioCustomTitle" class="studio-input" placeholder="e.g. Hyperfocus Note #1: Master Your Attention" oninput="updateLiveSimCard()">
+              <!-- Custom Title & Message (for custom or editable notes) -->
+              <div class="neo-field-group">
+                <label class="neo-label">✏️ Notification Title:</label>
+                <input type="text" id="alarmCustomTitleInput" class="neo-input" placeholder="e.g. ⏰ Reading Time: Atomic Habits">
               </div>
 
-              <div class="studio-field-group">
-                <label class="studio-label">💬 Notification Message / Note Text:</label>
-                <textarea id="studioCustomMessage" class="studio-textarea" rows="3" placeholder="Apna note ya sandesh yahan likhein... (e.g. Focus on one high-impact task at a time for 25 minutes)." oninput="updateLiveSimCard()"></textarea>
+              <div class="neo-field-group">
+                <label class="neo-label">💬 Custom Message / Note Text:</label>
+                <textarea id="alarmCustomMsgInput" class="neo-textarea" rows="2" placeholder="Notification me aane wala sandesh..."></textarea>
               </div>
 
-              <!-- Botanical Theme / Aura Palette -->
-              <div class="studio-theme-picker">
-                <label class="studio-label">🎨 Notification Visual Theme:</label>
-                <div class="botanical-themes-grid">
-                  <button type="button" class="btn-botanical-theme active" data-theme="sakura" onclick="setStudioVisualTheme('sakura')">
-                    🌸 Sakura Bloom
+              <!-- Sound Chime & Actions -->
+              <div class="alarm-form-footer">
+                <label class="neo-checkbox-label">
+                  <input type="checkbox" id="alarmSoundCheck" checked>
+                  <span>🔔 Audio Chime</span>
+                </label>
+                <div style="display:flex; gap: 8px;">
+                  <button type="button" class="btn-neo-secondary" onclick="testCurrentAlarmFromForm()">
+                    ⚡ Test (3s)
                   </button>
-                  <button type="button" class="btn-botanical-theme" data-theme="emerald" onclick="setStudioVisualTheme('emerald')">
-                    🌿 Emerald Forest
-                  </button>
-                  <button type="button" class="btn-botanical-theme" data-theme="sunset" onclick="setStudioVisualTheme('sunset')">
-                    🌅 Golden Twilight
-                  </button>
-                  <button type="button" class="btn-botanical-theme" data-theme="cosmic" onclick="setStudioVisualTheme('cosmic')">
-                    🌌 Cosmic Garden
+                  <button type="button" class="btn-neo-gold" onclick="saveNewScheduledAlarm()">
+                    💾 Alarm Schedule Karein
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <!-- 📱 ANDROID PHONE NOTIFICATION LIVE PREVIEW (1:1 Match with User's Uploaded Screenshot!) -->
+          <!-- Active Alarms Feed List -->
+          <div class="active-alarms-wrap">
+            <div class="aaw-header">
+              <span class="aaw-title">📋 Scheduled Alarms List</span>
+              <span class="aaw-count" id="activeAlarmsCountBadge">0 Alarms</span>
+            </div>
+            <div id="activeAlarmsListContainer" class="active-alarms-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= OPTION 3: FUTURISTIC CUSTOM NOTIFICATION STUDIO ================= -->
+        <div id="notifSectionStudio" class="notif-hub-section" style="display:none;">
+          <!-- Device Permission Strip -->
+          <div class="cyber-perm-strip">
+            <div class="cps-info">
+              <span style="font-size:1.15rem;">📲</span>
+              <div>
+                <span class="cps-title">Phone Status Bar Notifications</span>
+                <span class="cps-sub" id="notifPermissionStatusTxt">Android notification drawer alerts</span>
+              </div>
+            </div>
+            <button type="button" class="btn-neo-gold" id="notifPermissionToggleBtn" onclick="requestBrowserNotificationPermission()">Enable</button>
+          </div>
+
+          <!-- Futuristic Studio Container -->
+          <div class="cyber-studio-card">
+            <div class="cyber-studio-header">
+              <div class="csh-left">
+                <span class="csh-icon">⚡</span>
+                <div>
+                  <h3 class="csh-title">Instant Notification Studio</h3>
+                  <p class="csh-sub">Phone status bar me turant custom alert bhejein</p>
+                </div>
+              </div>
+              <span class="csh-badge">Studio</span>
+            </div>
+
+            <div class="cyber-studio-body">
+              <!-- Mode Tabs -->
+              <div class="neo-pill-tabs" style="margin-bottom: 12px;">
+                <button type="button" class="neo-tab-pill active" id="btnModeBookNote" onclick="setNotifStudioMode('book_note')">
+                  📖 Book Note Alert
+                </button>
+                <button type="button" class="neo-tab-pill" id="btnModeCustomNote" onclick="setNotifStudioMode('custom')">
+                  ✍️ Custom Text
+                </button>
+                <button type="button" class="neo-tab-pill" id="btnModeDailyQuote" onclick="setNotifStudioMode('daily_quote')">
+                  ✨ Daily Quote
+                </button>
+              </div>
+
+              <!-- Book & Note Select with Compact Cover Thumbnail -->
+              <div id="studioBookPickerSection">
+                <div class="compact-book-picker-row">
+                  <div class="cbp-select-col">
+                    <label class="neo-label">📚 Book Chunein:</label>
+                    <select id="studioBookSelect" class="neo-dropdown" onchange="onStudioBookSelectChanged()">
+                      <!-- Populated by JS -->
+                    </select>
+                  </div>
+                  <div class="cbp-thumb-box">
+                    <img id="studioBookCoverImg" src="cover_placeholder.jpg" alt="Cover" class="cbp-thumb-img">
+                  </div>
+                </div>
+
+                <div class="neo-field-group" style="margin-top: 10px;">
+                  <label class="neo-label">📝 Select Note for Notification:</label>
+                  <select id="studioNoteSelect" class="neo-dropdown" onchange="onStudioNoteSelectChanged()">
+                    <!-- Populated by JS -->
+                  </select>
+                </div>
+              </div>
+
+              <!-- Custom Inputs -->
+              <div class="neo-field-group">
+                <label class="neo-label">✏️ Notification Title:</label>
+                <input type="text" id="studioCustomTitle" class="neo-input" placeholder="e.g. Master Your Attention" oninput="updateLiveSimCard()">
+              </div>
+
+              <div class="neo-field-group">
+                <label class="neo-label">💬 Message / Note Text:</label>
+                <textarea id="studioCustomMessage" class="neo-textarea" rows="2" placeholder="Apna note ya sandesh yahan likhein..." oninput="updateLiveSimCard()"></textarea>
+              </div>
+
+              <!-- Futuristic Theme Palette -->
+              <div class="neo-field-group">
+                <label class="neo-label">🎨 Notification Accent Glow:</label>
+                <div class="cyber-themes-grid">
+                  <button type="button" class="cyber-theme-btn active" data-theme="amber" onclick="setStudioVisualTheme('sunset')">⚡ Cyber Amber</button>
+                  <button type="button" class="cyber-theme-btn" data-theme="cyan" onclick="setStudioVisualTheme('emerald')">❄️ Hyper Cyan</button>
+                  <button type="button" class="cyber-theme-btn" data-theme="purple" onclick="setStudioVisualTheme('cosmic')">🌌 Neon Violet</button>
+                  <button type="button" class="cyber-theme-btn" data-theme="rose" onclick="setStudioVisualTheme('sakura')">🔴 Laser Red</button>
+                </div>
+              </div>
+
+              <!-- Android Status Bar Live Preview -->
               <div class="android-shade-preview-wrap">
-                <div class="android-preview-header">
-                  <span class="android-preview-label">📱 Live Phone Notification Preview (Status Bar):</span>
-                  <span class="android-preview-sub">Phone ke notification drawer me bilkul aisa dikhega</span>
-                </div>
-
-                <div class="android-system-notif-card theme-sakura" id="androidSimCard">
-                  <!-- App Header Row -->
+                <div class="asp-label">📱 Phone Status Bar Preview:</div>
+                <div class="android-system-notif-card theme-sunset" id="androidSimCard">
                   <div class="asn-header">
                     <div class="asn-header-left">
-                      <img src="icon-192.png" alt="App Icon" class="asn-app-icon">
+                      <img src="icon-192.png" alt="App" class="asn-app-icon">
                       <span class="asn-app-name">Mind Focus Books</span>
                       <span class="asn-dot">•</span>
                       <span class="asn-time">now</span>
                     </div>
-                    <div class="asn-header-right">
-                      <span class="asn-expand-icon">⌵</span>
-                    </div>
+                    <span class="asn-expand-icon">⌵</span>
                   </div>
 
-                  <!-- Content Row -->
                   <div class="asn-body">
                     <div class="asn-text-col">
                       <div class="asn-title" id="asnSimTitle">Hyperfocus - Deep Work Note</div>
-                      <div class="asn-desc" id="asnSimDesc">Focus on one high-impact task at a time for 25 minutes. Deep attention produces extraordinary results.</div>
-                    </div>
-                    <div class="asn-small-badge">
-                      <img src="icon-192.png" alt="Badge" class="asn-mini-badge">
+                      <div class="asn-desc" id="asnSimDesc">Focus on one high-impact task at a time for 25 minutes.</div>
                     </div>
                   </div>
 
-                  <!-- Big Picture Banner (Matching User's Perplexity Notification Screenshot) -->
                   <div class="asn-big-picture-banner" id="asnSimBanner">
-                    <img id="asnSimBannerImg" src="hyperfocus_cover.jpg" alt="Notification Banner Cover" class="asn-banner-img">
+                    <img id="asnSimBannerImg" src="hyperfocus_cover.jpg" alt="Cover" class="asn-banner-img">
                     <div class="asn-banner-overlay">
-                      <div class="asn-banner-tag" id="asnSimBannerTag">🌿 Mind Focus Reading</div>
+                      <div class="asn-banner-tag" id="asnSimBannerTag">⚡ Mind Focus</div>
                       <div class="asn-banner-quote" id="asnSimBannerQuote">"Where knowledge begins..."</div>
                     </div>
                   </div>
 
-                  <!-- Action Buttons -->
                   <div class="asn-actions">
-                    <button type="button" class="asn-btn primary" onclick="handleSimNotifAction('read')">📖 Open &amp; Read</button>
-                    <button type="button" class="asn-btn" onclick="handleSimNotifAction('notes')">📝 View All Notes</button>
+                    <button type="button" class="asn-btn primary" onclick="handleSimNotifAction('read')">📖 Open Book</button>
+                    <button type="button" class="asn-btn" onclick="handleSimNotifAction('notes')">📝 Notes</button>
                   </div>
                 </div>
               </div>
 
-              <!-- Studio Action Buttons -->
+              <!-- Action Buttons -->
               <div class="studio-actions-footer">
                 <button type="button" class="btn-studio-action primary" onclick="sendCustomNotificationToDeviceNow()">
-                  ⚡ Send To Phone Status Bar Now
+                  🚀 Send To Phone Status Bar Now
                 </button>
-                <button type="button" class="btn-studio-action secondary" onclick="saveAsDailyReminderSchedule()">
-                  ⏰ Set As Daily Alarm Notification
-                </button>
-                <button type="button" class="btn-studio-action tertiary" onclick="addCustomNotificationToFeed()">
-                  ➕ Add to Alerts Hub List
+                <button type="button" class="btn-studio-action secondary" onclick="addCustomNotificationToFeed()">
+                  ➕ Add To Alerts Feed List
                 </button>
               </div>
             </div>

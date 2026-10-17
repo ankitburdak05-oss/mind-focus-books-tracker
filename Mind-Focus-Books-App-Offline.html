@@ -10585,381 +10585,792 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
 }
 
-.botanical-studio-card {
-  background: linear-gradient(145deg, rgba(20, 30, 24, 0.95), rgba(15, 23, 42, 0.98));
-  border: 1.5px solid rgba(52, 211, 153, 0.35);
-  border-radius: 20px;
-  padding: 16px;
-  margin-bottom: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(52, 211, 153, 0.15);
-  position: relative;
-  overflow: hidden;
-}
-
-.botanical-studio-card::before {
-  content: "";
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 140px;
-  height: 140px;
-  background: radial-gradient(circle, rgba(244, 114, 182, 0.25) 0%, rgba(52, 211, 153, 0.1) 60%, transparent 80%);
-  border-radius: 50%;
-  pointer-events: none;
-}
-
-.botanical-card-header {
+/* ==========================================================================
+   FUTURISTIC MULTI-ALARM & TAARIKH (DATE) SCHEDULER (v0.0.33)
+   ========================================================================== */
+.cyber-alarm-hero {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 18px;
+  padding: 14px 16px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   margin-bottom: 14px;
-  flex-wrap: wrap;
-}
-
-.botanical-title-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-  min-width: 200px;
-}
-
-.botanical-header-icon {
-  font-size: 1.6rem;
-  filter: drop-shadow(0 2px 8px rgba(52, 211, 153, 0.4));
-}
-
-.botanical-card-title {
-  font-size: 1.05rem;
-  font-weight: 800;
-  color: #a7f3d0;
-  margin: 0;
-  letter-spacing: -0.2px;
-}
-
-.botanical-card-sub {
-  font-size: 0.74rem;
-  color: #94a3b8;
-  margin: 2px 0 0 0;
-  line-height: 1.3;
-}
-
-.botanical-pill-badge {
-  background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(52, 211, 153, 0.2));
-  border: 1px solid rgba(244, 114, 182, 0.4);
-  color: #fbcfe8;
-  font-size: 0.68rem;
-  font-weight: 800;
-  padding: 4px 10px;
-  border-radius: 20px;
-  letter-spacing: 0.4px;
-}
-
-.botanical-mode-nav {
-  display: flex;
-  gap: 6px;
-  background: rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  padding: 4px;
-  margin-bottom: 14px;
-  overflow-x: auto;
-}
-
-.botanical-mode-btn {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  font-size: 0.74rem;
-  font-weight: 700;
-  padding: 7px 10px;
-  border-radius: 8px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.18s ease;
-}
-
-.botanical-mode-btn:hover {
-  color: #fff;
-}
-
-.botanical-mode-btn.active {
-  background: linear-gradient(135deg, #059669, #10b981);
-  color: #fff;
-  font-weight: 800;
-  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
-}
-
-.studio-section {
-  margin-bottom: 14px;
-}
-
-.studio-label {
-  display: block;
-  font-size: 0.72rem;
-  font-weight: 800;
-  color: #6ee7b7;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  margin-bottom: 6px;
-}
-
-.studio-dropdown {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   width: 100%;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1.5px solid rgba(52, 211, 153, 0.35);
-  color: #fff;
-  border-radius: 10px;
-  padding: 8px 12px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  outline: none;
-  color-scheme: dark;
-  transition: border-color 0.15s ease;
+  box-sizing: border-box;
 }
 
-.studio-dropdown:focus {
-  border-color: #34d399;
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
-}
-
-.studio-book-preview {
+.cah-left {
   display: flex;
-  gap: 12px;
-  background: rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(52, 211, 153, 0.2);
-  border-radius: 14px;
-  padding: 12px;
-  margin-top: 10px;
   align-items: center;
-}
-
-.studio-book-cover-frame {
-  position: relative;
-  flex-shrink: 0;
-}
-
-.studio-book-cover {
-  width: 58px;
-  height: 84px;
-  object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 12px rgba(52, 211, 153, 0.25);
-  border: 1.5px solid rgba(255, 255, 255, 0.15);
-}
-
-.studio-cover-badge {
-  position: absolute;
-  bottom: -4px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(16, 185, 129, 0.95);
-  color: #064e3b;
-  font-size: 0.55rem;
-  font-weight: 900;
-  padding: 2px 6px;
-  border-radius: 6px;
-  white-space: nowrap;
-  letter-spacing: 0.3px;
-}
-
-.studio-book-meta {
+  gap: 12px;
   flex: 1;
   min-width: 0;
 }
 
-.studio-book-title {
-  font-size: 0.92rem;
+.cah-icon {
+  font-size: 1.5rem;
+  background: rgba(245, 158, 11, 0.15);
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+}
+
+.cah-title {
+  font-size: 0.98rem;
   font-weight: 800;
   color: #fff;
-  margin: 0 0 2px 0;
+  margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.studio-book-author {
-  font-size: 0.74rem;
+.cah-sub {
+  font-size: 0.72rem;
   color: #94a3b8;
-  margin: 0 0 6px 0;
+  margin: 2px 0 0 0;
+  line-height: 1.3;
 }
 
-.studio-book-tags {
+.cyber-card {
+  background: linear-gradient(145deg, rgba(20, 28, 48, 0.95), rgba(11, 15, 25, 0.98));
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 18px rgba(56, 189, 248, 0.1);
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cyber-card-header {
   display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 14px;
+}
+
+.cch-title {
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.2px;
+}
+
+.cch-close-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: none;
+  color: #94a3b8;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.82rem;
+  transition: all 0.15s ease;
+}
+
+.cch-close-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+}
+
+.cyber-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.neo-field-group {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.neo-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-bottom: 6px;
 }
 
-.studio-tag {
-  background: rgba(255, 255, 255, 0.06);
+.neo-pill-tabs {
+  display: flex;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.35);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  font-size: 0.64rem;
+  border-radius: 12px;
+  padding: 4px;
+  width: 100%;
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.neo-tab-pill {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 9px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+  text-align: center;
+}
+
+.neo-tab-pill:hover {
+  color: #fff;
+}
+
+.neo-tab-pill.active {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.3), rgba(14, 165, 233, 0.45));
+  color: #ffffff;
+  border: 1px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 2px 10px rgba(56, 189, 248, 0.25);
+}
+
+.neo-date-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.neo-input, .neo-dropdown, .neo-textarea {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  outline: none;
+  color-scheme: dark;
+  transition: all 0.15s ease;
+}
+
+.neo-input:focus, .neo-dropdown:focus, .neo-textarea:focus {
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+}
+
+.neo-date-shortcuts {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.neo-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   color: #cbd5e1;
-  padding: 2px 7px;
-  border-radius: 6px;
-  font-weight: 600;
-}
-
-.studio-book-hint {
-  font-size: 0.68rem;
-  color: #fbcfe8;
-  margin: 0;
-  font-style: italic;
-}
-
-.studio-field-group {
-  margin-bottom: 12px;
-}
-
-.studio-input {
-  width: 100%;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
-  color: #fff;
-  border-radius: 10px;
-  padding: 9px 12px;
-  font-size: 0.84rem;
-  font-weight: 600;
-  outline: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
   transition: all 0.15s ease;
 }
 
-.studio-input:focus {
-  border-color: #34d399;
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.25);
-  background: rgba(15, 23, 42, 0.95);
+.neo-chip:hover {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  border-color: #38bdf8;
 }
 
-.studio-textarea {
-  width: 100%;
-  background: rgba(15, 23, 42, 0.85);
-  border: 1.5px solid rgba(255, 255, 255, 0.12);
-  color: #fff;
+.alarm-live-badge {
+  margin-top: 8px;
+  padding: 8px 12px;
   border-radius: 10px;
-  padding: 9px 12px;
-  font-size: 0.84rem;
-  font-weight: 500;
-  line-height: 1.45;
-  outline: none;
-  resize: vertical;
-  min-height: 70px;
-  transition: all 0.15s ease;
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.studio-textarea:focus {
-  border-color: #34d399;
-  box-shadow: 0 0 10px rgba(52, 211, 153, 0.25);
-  background: rgba(15, 23, 42, 0.95);
-}
-
-.studio-theme-picker {
-  margin-bottom: 16px;
-}
-
-.botanical-themes-grid {
+.neo-presets-row {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 @media (min-width: 480px) {
-  .botanical-themes-grid {
+  .neo-presets-row {
     grid-template-columns: repeat(4, 1fr);
   }
 }
 
-.btn-botanical-theme {
+.neo-preset-chip {
   background: rgba(255, 255, 255, 0.05);
-  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: #cbd5e1;
-  font-size: 0.72rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  padding: 8px 10px;
+  padding: 7px 8px;
   border-radius: 10px;
   cursor: pointer;
   text-align: center;
-  transition: all 0.18s ease;
+  transition: all 0.15s ease;
 }
 
-.btn-botanical-theme:hover {
+.neo-preset-chip:hover {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.alarm-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.neo-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #cbd5e1;
+  cursor: pointer;
+}
+
+.btn-neo-gold {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #111827;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-neo-gold:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+.btn-neo-secondary {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e2e8f0;
+  border-radius: 10px;
+  padding: 8px 14px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.btn-neo-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+/* ================= ACTIVE ALARMS LIST ================= */
+.active-alarms-wrap {
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 16px;
+}
+
+.aaw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.aaw-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.aaw-count {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.active-alarms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.alarm-item-card {
+  background: linear-gradient(145deg, rgba(30, 41, 59, 0.85), rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 14px;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.alarm-item-card.active {
+  border-left: 5px solid #f59e0b;
+}
+
+.alarm-item-card.inactive {
+  opacity: 0.55;
+  border-left: 5px solid #64748b;
+}
+
+.aic-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.aic-time-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.aic-time-big {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+
+.aic-date-chip {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.aic-type-chip {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+
+.aic-type-chip.reading {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.aic-type-chip.notes {
+  background: rgba(139, 92, 246, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+.aic-type-chip.custom {
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.aic-content-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.aic-title-txt {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #f1f5f9;
+}
+
+.aic-msg-txt {
+  font-size: 0.8rem;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+.aic-book-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 6px 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.aic-book-thumb {
+  width: 32px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.aic-book-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.aic-book-tag {
+  font-size: 0.64rem;
+  font-weight: 700;
+  color: #38bdf8;
+  text-transform: uppercase;
+}
+
+.aic-book-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.aic-actions-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.aic-btn-test {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.aic-btn-test:hover {
+  background: #f59e0b;
+  color: #111827;
+}
+
+.aic-btn-del {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.aic-btn-del:hover {
+  background: #ef4444;
+  color: #fff;
+}
+
+.neo-empty-box {
+  text-align: center;
+  padding: 36px 16px;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 18px;
+  border: 1px dashed rgba(255, 255, 255, 0.12);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ==========================================================================
+   FUTURISTIC CUSTOM NOTIFICATION STUDIO (COMPACT & RESPONSIVE)
+   ========================================================================== */
+.cyber-perm-strip {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(14, 165, 233, 0.15));
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 14px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cps-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.cps-title {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.cps-sub {
+  display: block;
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.cyber-studio-card {
+  background: linear-gradient(145deg, rgba(20, 28, 48, 0.95), rgba(11, 15, 25, 0.98));
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 18px rgba(245, 158, 11, 0.1);
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cyber-studio-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 14px;
+}
+
+.csh-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.csh-icon {
+  font-size: 1.4rem;
+  background: rgba(245, 158, 11, 0.18);
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+}
+
+.csh-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #fbbf24;
+  margin: 0;
+}
+
+.csh-sub {
+  font-size: 0.7rem;
+  color: #94a3b8;
+  margin: 2px 0 0 0;
+}
+
+.csh-badge {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+  font-size: 0.66rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 12px;
+}
+
+.cyber-studio-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.compact-book-picker-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cbp-select-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.cbp-thumb-box {
+  width: 44px;
+  height: 58px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.cbp-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cyber-themes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width: 480px) {
+  .cyber-themes-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.cyber-theme-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 8px 6px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.cyber-theme-btn:hover {
   background: rgba(255, 255, 255, 0.1);
   color: #fff;
 }
 
-.btn-botanical-theme.active {
-  background: linear-gradient(135deg, rgba(244, 114, 182, 0.25), rgba(52, 211, 153, 0.25));
-  border-color: #34d399;
-  color: #a7f3d0;
-  box-shadow: 0 2px 10px rgba(52, 211, 153, 0.3);
+.cyber-theme-btn.active {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.35));
+  border-color: #f59e0b;
+  color: #fbbf24;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
 }
 
-/* ==========================================================================
-   ANDROID SYSTEM NOTIFICATION DRAWER PREVIEW (1:1 Match with User's Photo)
-   ========================================================================== */
 .android-shade-preview-wrap {
-  margin-top: 16px;
-  margin-bottom: 16px;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 6px;
   background: rgba(0, 0, 0, 0.4);
   border: 1px dashed rgba(255, 255, 255, 0.15);
   border-radius: 16px;
-  padding: 14px;
+  padding: 12px;
+  overflow: hidden;
 }
 
-.android-preview-header {
-  margin-bottom: 10px;
-}
-
-.android-preview-label {
-  display: block;
-  font-size: 0.74rem;
+.asp-label {
+  font-size: 0.72rem;
   font-weight: 800;
   color: #38bdf8;
+  margin-bottom: 8px;
   letter-spacing: 0.3px;
 }
 
-.android-preview-sub {
-  display: block;
-  font-size: 0.66rem;
-  color: #94a3b8;
-  margin-top: 2px;
-}
-
-/* Authentic Android 13/14 Material You Notification Card */
 .android-system-notif-card {
   background: #ffffff;
   color: #1a1a1a;
-  border-radius: 24px;
-  padding: 14px 16px 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  border-radius: 20px;
+  padding: 12px 14px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  transition: all 0.25s ease;
-  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
-/* Visual Theme Variants for Android Card */
-.android-system-notif-card.theme-sakura {
-  border-left: 4px solid #ec4899;
-}
-.android-system-notif-card.theme-emerald {
-  border-left: 4px solid #10b981;
-}
 .android-system-notif-card.theme-sunset {
   border-left: 4px solid #f59e0b;
 }
+.android-system-notif-card.theme-emerald {
+  border-left: 4px solid #06b6d4;
+}
 .android-system-notif-card.theme-cosmic {
   border-left: 4px solid #8b5cf6;
+}
+.android-system-notif-card.theme-sakura {
+  border-left: 4px solid #ef4444;
 }
 
 .asn-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .asn-header-left {
@@ -10994,15 +11405,14 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 .asn-expand-icon {
   font-size: 0.8rem;
   color: #6b7280;
-  cursor: pointer;
 }
 
 .asn-body {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 10px;
+  gap: 10px;
+  margin-bottom: 8px;
 }
 
 .asn-text-col {
@@ -11011,11 +11421,11 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 }
 
 .asn-title {
-  font-size: 0.94rem;
+  font-size: 0.92rem;
   font-weight: 700;
   color: #111827;
   line-height: 1.25;
-  margin-bottom: 3px;
+  margin-bottom: 2px;
   word-break: break-word;
 }
 
@@ -11026,41 +11436,21 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   word-break: break-word;
 }
 
-.asn-small-badge {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: #111827;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.asn-mini-badge {
-  width: 22px;
-  height: 22px;
-  border-radius: 4px;
-  object-fit: cover;
-}
-
-/* Big Picture Banner (Matching Perplexity Notification Banner in Photo) */
 .asn-big-picture-banner {
   width: 100%;
-  height: 140px;
-  border-radius: 16px;
+  height: 120px;
+  border-radius: 12px;
   overflow: hidden;
   position: relative;
-  margin-bottom: 10px;
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+  margin-bottom: 8px;
   background: #1e293b;
+  box-sizing: border-box;
 }
 
 .asn-banner-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.3s;
 }
 
 .asn-banner-overlay {
@@ -11068,7 +11458,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 10px 14px;
+  padding: 8px 12px;
   background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.85) 80%);
   display: flex;
   flex-direction: column;
@@ -11078,16 +11468,14 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 .asn-banner-tag {
   font-size: 0.65rem;
   font-weight: 800;
-  color: #6ee7b7;
+  color: #38bdf8;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .asn-banner-quote {
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   font-weight: 600;
   color: #ffffff;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -11096,7 +11484,6 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 .asn-actions {
   display: flex;
   gap: 8px;
-  padding-top: 4px;
 }
 
 .asn-btn {
@@ -11105,8 +11492,8 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   color: #1f2937;
   font-size: 0.74rem;
   font-weight: 700;
-  padding: 6px 14px;
-  border-radius: 20px;
+  padding: 5px 12px;
+  border-radius: 16px;
   cursor: pointer;
   transition: all 0.15s ease;
 }
@@ -11116,15 +11503,13 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   color: #ffffff;
 }
 
-.asn-btn:hover {
-  transform: translateY(-1px);
-}
-
 .studio-actions-footer {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 14px;
+  margin-top: 10px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .btn-studio-action {
@@ -11140,12 +11525,13 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   align-items: center;
   justify-content: center;
   gap: 6px;
+  box-sizing: border-box;
 }
 
 .btn-studio-action.primary {
-  background: linear-gradient(135deg, #059669, #10b981);
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #111827;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
 }
 
 .btn-studio-action.primary:hover {
@@ -11154,24 +11540,13 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 }
 
 .btn-studio-action.secondary {
-  background: rgba(245, 158, 11, 0.15);
-  border: 1.5px solid var(--accent-gold);
-  color: var(--accent-gold);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #e2e8f0;
 }
 
 .btn-studio-action.secondary:hover {
-  background: var(--accent-gold);
-  color: #111827;
-}
-
-.btn-studio-action.tertiary {
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #cbd5e1;
-}
-
-.btn-studio-action.tertiary:hover {
-  background: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.15);
   color: #fff;
 }
 
@@ -13618,7 +13993,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.32 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.33 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -13938,309 +14313,292 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           </div>
         </div>
 
-        <!-- ================= OPTION 2: DAILY READING REMINDER & ALARM TIME ================= -->
+        <!-- ================= OPTION 2: MULTI-ALARM & SCHEDULES WITH DATE (TAARIKH) ================= -->
         <div id="notifSectionAlarm" class="notif-hub-section" style="display:none;">
-          <div class="notif-schedule-card">
-            <div class="notif-sched-header">
-              <div class="notif-sched-title-wrap">
-                <span class="notif-sched-icon">⏰</span>
-                <div>
-                  <h3 class="notif-sched-title">Daily Reading Reminder &amp; Alarm Time</h3>
-                  <p class="notif-sched-sub" id="notifSchedSummarySub">Rozana reading ka reminder time set karein</p>
-                </div>
+          <!-- Top Hero & Global Alarm Toggle -->
+          <div class="cyber-alarm-hero">
+            <div class="cah-left">
+              <span class="cah-icon">⏰</span>
+              <div>
+                <h3 class="cah-title">Multi-Schedule Reading Alarms</h3>
+                <p class="cah-sub" id="cahActiveSummary">Din me alag-alag time par notes aur reading alerts schedule karein</p>
               </div>
-              <label class="pref-switch" title="Toggle Daily Reminder Alarm">
-                <input type="checkbox" id="notifScheduleEnabledToggle" checked onchange="toggleReminderSchedule(this.checked)">
-                <span class="pref-slider"></span>
-              </label>
+            </div>
+            <button type="button" class="btn-neo-gold" onclick="openNewAlarmForm()" style="padding: 7px 12px; font-size: 0.76rem;">
+              ➕ Naya Alarm
+            </button>
+          </div>
+
+          <!-- Schedule New / Edit Alarm Form Card -->
+          <div class="cyber-card" id="newAlarmFormCard" style="display:block;">
+            <div class="cyber-card-header">
+              <span class="cch-title" id="alarmFormTitle">➕ Schedule New Reminder Alarm</span>
+              <button type="button" class="cch-close-btn" onclick="toggleAlarmForm(false)">✕</button>
             </div>
 
-            <div class="notif-sched-body" id="notifSchedBody">
-              <!-- Time Picker Row with Typeable Hour, Min, and AM/PM Buttons -->
-              <div class="notif-time-picker-row">
+            <div class="cyber-card-body">
+              <!-- Date (Taarikh) Selection -->
+              <div class="neo-field-group">
+                <label class="neo-label">📅 Taarikh / Schedule Frequency:</label>
+                <div class="neo-pill-tabs">
+                  <button type="button" class="neo-tab-pill active" id="btnDateModeDaily" onclick="setAlarmDateMode('daily')">
+                    🔄 Rozana (Daily)
+                  </button>
+                  <button type="button" class="neo-tab-pill" id="btnDateModeSpecific" onclick="setAlarmDateMode('specific')">
+                    📅 Khas Taarikh (Date)
+                  </button>
+                </div>
+                
+                <!-- Specific Date Picker Input Box (Hidden when Daily) -->
+                <div id="alarmSpecificDateWrap" style="display:none; margin-top: 10px;">
+                  <div class="neo-date-row">
+                    <input type="date" id="alarmDateInput" class="neo-input" onchange="updateAlarmPreviewBadge()">
+                    <div class="neo-date-shortcuts">
+                      <button type="button" class="neo-chip" onclick="setQuickDate('today')">Aaj</button>
+                      <button type="button" class="neo-chip" onclick="setQuickDate('tomorrow')">Kal</button>
+                      <button type="button" class="neo-chip" onclick="setQuickDate('next_monday')">Agla Somwar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Time Picker Row -->
+              <div class="neo-field-group">
+                <label class="neo-label">⏰ Alarm Time (Type ya Select Karein):</label>
                 <div class="notif-time-selector-group">
                   <div class="notif-select-wrap">
                     <label class="notif-sub-label">Hour (1-12)</label>
-                    <input type="number" id="notifHourInput" class="notif-type-input" min="1" max="12" value="9" placeholder="09" oninput="handleManualTimeType()">
-                    <select id="notifHourSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
-                      <option value="1">01</option>
-                      <option value="2">02</option>
-                      <option value="3">03</option>
-                      <option value="4">04</option>
-                      <option value="5">05</option>
-                      <option value="6">06</option>
-                      <option value="7">07</option>
-                      <option value="8">08</option>
-                      <option value="9" selected>09</option>
-                      <option value="10">10</option>
-                      <option value="11">11</option>
-                      <option value="12">12</option>
-                    </select>
+                    <input type="number" id="alarmHourInput" class="notif-type-input" min="1" max="12" value="9" placeholder="09" oninput="updateAlarmTimeFromInputs()">
                   </div>
 
                   <span class="notif-colon">:</span>
 
                   <div class="notif-select-wrap">
                     <label class="notif-sub-label">Min (0-59)</label>
-                    <input type="number" id="notifMinInput" class="notif-type-input" min="0" max="59" value="30" placeholder="30" oninput="handleManualTimeType()">
-                    <select id="notifMinSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
-                      <option value="00">00</option>
-                      <option value="05">05</option>
-                      <option value="10">10</option>
-                      <option value="15">15</option>
-                      <option value="20">20</option>
-                      <option value="25">25</option>
-                      <option value="30" selected>30</option>
-                      <option value="35">35</option>
-                      <option value="40">40</option>
-                      <option value="45">45</option>
-                      <option value="50">50</option>
-                      <option value="55">55</option>
-                    </select>
+                    <input type="number" id="alarmMinInput" class="notif-type-input" min="0" max="59" value="30" placeholder="30" oninput="updateAlarmTimeFromInputs()">
                   </div>
 
-                  <!-- AM / PM Switcher -->
                   <div class="notif-ampm-switcher">
-                    <button type="button" class="btn-ampm" id="btnAmToggle" onclick="setAmPm('AM')">AM</button>
-                    <button type="button" class="btn-ampm active" id="btnPmToggle" onclick="setAmPm('PM')">PM</button>
+                    <button type="button" class="btn-ampm" id="btnAlarmAm" onclick="setAlarmAmPm('AM')">AM</button>
+                    <button type="button" class="btn-ampm active" id="btnAlarmPm" onclick="setAlarmAmPm('PM')">PM</button>
                   </div>
                 </div>
 
-                <div class="notif-time-display-badge" id="notifFormattedTimeBadge">
-                  🌙 09:30 PM (Daily)
-                </div>
-                <input type="time" id="notifReminderTimeInput" style="display:none;" value="21:30">
-              </div>
-
-              <!-- Quick Preset Times -->
-              <div class="notif-presets-label">⚡ Quick Time Presets:</div>
-              <div class="notif-presets-grid">
-                <button type="button" class="notif-preset-btn" id="presetBtn_0800" onclick="setPresetReminderTime('08:00', '🌅 08:00 AM')">
-                  <span class="npb-icon">🌅</span>
-                  <span class="npb-time">08:00 AM</span>
-                  <span class="npb-label">Subah Ki Chai</span>
-                </button>
-                <button type="button" class="notif-preset-btn" id="presetBtn_1400" onclick="setPresetReminderTime('14:00', '☀️ 02:00 PM')">
-                  <span class="npb-icon">☀️</span>
-                  <span class="npb-time">02:00 PM</span>
-                  <span class="npb-label">Lunch Break</span>
-                </button>
-                <button type="button" class="notif-preset-btn" id="presetBtn_1900" onclick="setPresetReminderTime('19:00', '🌆 07:00 PM')">
-                  <span class="npb-icon">🌆</span>
-                  <span class="npb-time">07:00 PM</span>
-                  <span class="npb-label">Shaam Fursat</span>
-                </button>
-                <button type="button" class="notif-preset-btn active" id="presetBtn_2130" onclick="setPresetReminderTime('21:30', '🌙 09:30 PM')">
-                  <span class="npb-icon">🌙</span>
-                  <span class="npb-time">09:30 PM</span>
-                  <span class="npb-label">Bedtime Read</span>
-                </button>
-              </div>
-
-              <!-- Repeat Days Selector -->
-              <div class="notif-days-wrap">
-                <div class="notif-days-header">
-                  <span class="notif-days-title">Repeat Days:</span>
-                  <div class="notif-days-quick">
-                    <button type="button" class="btn-day-quick" onclick="setDaysSelection('all')">Everyday</button>
-                    <button type="button" class="btn-day-quick" onclick="setDaysSelection('weekdays')">Mon-Fri</button>
-                    <button type="button" class="btn-day-quick" onclick="setDaysSelection('weekends')">Weekends</button>
-                  </div>
-                </div>
-                <div class="notif-days-chips">
-                  <button type="button" class="day-chip active" data-day="0" onclick="toggleDayChip(0)">Sun</button>
-                  <button type="button" class="day-chip active" data-day="1" onclick="toggleDayChip(1)">Mon</button>
-                  <button type="button" class="day-chip active" data-day="2" onclick="toggleDayChip(2)">Tue</button>
-                  <button type="button" class="day-chip active" data-day="3" onclick="toggleDayChip(3)">Wed</button>
-                  <button type="button" class="day-chip active" data-day="4" onclick="toggleDayChip(4)">Thu</button>
-                  <button type="button" class="day-chip active" data-day="5" onclick="toggleDayChip(5)">Fri</button>
-                  <button type="button" class="day-chip active" data-day="6" onclick="toggleDayChip(6)">Sat</button>
+                <!-- Live Time Preview Badge -->
+                <div class="alarm-live-badge" id="alarmLiveBadge">
+                  ⏰ 09:30 PM • 🔄 Rozana (Daily)
                 </div>
               </div>
 
-              <!-- Sound & Test Controls -->
-              <div class="notif-sched-footer">
-                <label class="notif-sound-toggle">
-                  <input type="checkbox" id="notifSoundToggle" checked onchange="toggleReminderSound(this.checked)">
-                  <span>🔔 Audio Chime</span>
-                </label>
-                <div style="display:flex; align-items:center; gap:8px;">
-                  <button type="button" class="notif-test-alarm-btn" onclick="triggerImmediateAlarmTest()" title="Test alarm right now with chime sound">
-                    ⏰ Test Alarm (3s)
+              <!-- Quick Time Presets -->
+              <div class="neo-presets-row">
+                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('08:00', 'AM')">🌅 08:00 AM</button>
+                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('02:00', 'PM')">☀️ 02:00 PM</button>
+                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('07:30', 'PM')">🌆 07:30 PM</button>
+                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('09:30', 'PM')">🌙 09:30 PM</button>
+              </div>
+
+              <!-- What to Alert: Type Selector -->
+              <div class="neo-field-group">
+                <label class="neo-label">🔔 Kya Notification Aana Chahiye?</label>
+                <div class="neo-pill-tabs">
+                  <button type="button" class="neo-tab-pill active" id="btnTypeReading" onclick="setAlarmContentType('reading')">
+                    📖 Reading Alert
                   </button>
-                  <button type="button" class="btn-save-gold" style="padding: 6px 14px; font-size: 0.76rem;" onclick="saveReminderScheduleConfig(true)">
-                    💾 Save Time
+                  <button type="button" class="neo-tab-pill" id="btnTypeNotes" onclick="setAlarmContentType('notes')">
+                    💡 Book Note Flashback
+                  </button>
+                  <button type="button" class="neo-tab-pill" id="btnTypeCustom" onclick="setAlarmContentType('custom')">
+                    ✍️ Custom Alert
                   </button>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
 
-        <!-- ================= OPTION 3: BOTANICAL CUSTOM NOTIFICATION STUDIO & NOTE PICKER ================= -->
-        <div id="notifSectionStudio" class="notif-hub-section" style="display:none;">
-          <!-- Push Permission Strip -->
-          <div class="notif-pref-strip">
-            <div class="notif-pref-info">
-              <span style="font-size:1.15rem;">📲</span>
-              <div>
-                <span class="notif-pref-title">System &amp; Device Alerts</span>
-                <span class="notif-pref-sub" id="notifPermissionStatusTxt">Device notifications for daily reading reminders</span>
-              </div>
-            </div>
-            <button type="button" class="notif-perm-btn" id="notifPermissionToggleBtn" onclick="requestBrowserNotificationPermission()">Enable</button>
-          </div>
-
-          <!-- Botanical Studio Card -->
-          <div class="botanical-studio-card">
-            <div class="botanical-card-header">
-              <div class="botanical-title-wrap">
-                <span class="botanical-header-icon">🌸🌿</span>
-                <div>
-                  <h3 class="botanical-card-title">Botanical Notification Studio &amp; Notes Picker</h3>
-                  <p class="botanical-card-sub">Apna custom notification likhein ya kisi book ke notes &amp; cover ko notification banayein</p>
-                </div>
-              </div>
-              <span class="botanical-pill-badge">🌺 Custom Studio</span>
-            </div>
-
-            <!-- Mode Selector Tabs -->
-            <div class="botanical-mode-nav">
-              <button type="button" class="botanical-mode-btn active" id="btnModeBookNote" onclick="setNotifStudioMode('book_note')">
-                📖 Book Notes Alert
-              </button>
-              <button type="button" class="botanical-mode-btn" id="btnModeCustomNote" onclick="setNotifStudioMode('custom')">
-                ✍️ Write My Own Text
-              </button>
-              <button type="button" class="botanical-mode-btn" id="btnModeDailyQuote" onclick="setNotifStudioMode('daily_quote')">
-                ✨ Daily Wisdom Quote
-              </button>
-            </div>
-
-            <!-- Studio Body -->
-            <div class="botanical-studio-body">
-              <!-- Book & Note Selection Row (Active in 'book_note' mode) -->
-              <div id="studioBookPickerSection" class="studio-section">
-                <label class="studio-label">📚 Choose Book for Notification:</label>
-                <select id="studioBookSelect" class="studio-dropdown" onchange="onStudioBookSelectChanged()">
-                  <!-- Populated with books from library -->
+              <!-- Book & Note Selection -->
+              <div id="alarmBookSelectSection" class="neo-field-group">
+                <label class="neo-label">📚 Book Chunein:</label>
+                <select id="alarmBookSelect" class="neo-dropdown" onchange="onAlarmBookChanged()">
+                  <!-- Populated by JS -->
                 </select>
 
-                <!-- Book Preview Card with Cover Image & Details -->
-                <div class="studio-book-preview" id="studioBookPreviewBox">
-                  <div class="studio-book-cover-frame">
-                    <img id="studioBookCoverImg" src="cover_placeholder.jpg" alt="Selected Book Cover" class="studio-book-cover">
-                    <div class="studio-cover-badge" id="studioBookStatusBadge">📖 In Progress</div>
-                  </div>
-                  <div class="studio-book-meta">
-                    <h4 class="studio-book-title" id="studioBookTitleTxt">Atomic Habits</h4>
-                    <p class="studio-book-author" id="studioBookAuthorTxt">by James Clear</p>
-                    <div class="studio-book-tags">
-                      <span class="studio-tag" id="studioBookPagesTxt">📄 320 pages</span>
-                      <span class="studio-tag" id="studioBookCategoryTxt">🌿 Mind Growth</span>
-                    </div>
-                    <p class="studio-book-hint">Is book ka cover phone ke notification me badi photo ke roop me aayega!</p>
-                  </div>
-                </div>
-
-                <!-- Pick Specific Note from this Book -->
-                <div class="studio-field-group" style="margin-top: 14px;">
-                  <label class="studio-label">📝 Select Which Note to Display in Notification:</label>
-                  <select id="studioNoteSelect" class="studio-dropdown" onchange="onStudioNoteSelectChanged()">
-                    <!-- Populated with notes of selected book -->
+                <!-- Book Note Dropdown (When type === 'notes') -->
+                <div id="alarmNoteSelectWrap" style="display:none; margin-top: 10px;">
+                  <label class="neo-label">📝 Konsa Note Aana Chahiye?</label>
+                  <select id="alarmNoteSelect" class="neo-dropdown" onchange="onAlarmNoteChanged()">
+                    <!-- Populated by JS -->
                   </select>
                 </div>
               </div>
 
-              <!-- Custom Notification Text Editor -->
-              <div class="studio-field-group">
-                <label class="studio-label">✏️ Notification Title:</label>
-                <input type="text" id="studioCustomTitle" class="studio-input" placeholder="e.g. Hyperfocus Note #1: Master Your Attention" oninput="updateLiveSimCard()">
+              <!-- Custom Title & Message (for custom or editable notes) -->
+              <div class="neo-field-group">
+                <label class="neo-label">✏️ Notification Title:</label>
+                <input type="text" id="alarmCustomTitleInput" class="neo-input" placeholder="e.g. ⏰ Reading Time: Atomic Habits">
               </div>
 
-              <div class="studio-field-group">
-                <label class="studio-label">💬 Notification Message / Note Text:</label>
-                <textarea id="studioCustomMessage" class="studio-textarea" rows="3" placeholder="Apna note ya sandesh yahan likhein... (e.g. Focus on one high-impact task at a time for 25 minutes)." oninput="updateLiveSimCard()"></textarea>
+              <div class="neo-field-group">
+                <label class="neo-label">💬 Custom Message / Note Text:</label>
+                <textarea id="alarmCustomMsgInput" class="neo-textarea" rows="2" placeholder="Notification me aane wala sandesh..."></textarea>
               </div>
 
-              <!-- Botanical Theme / Aura Palette -->
-              <div class="studio-theme-picker">
-                <label class="studio-label">🎨 Notification Visual Theme:</label>
-                <div class="botanical-themes-grid">
-                  <button type="button" class="btn-botanical-theme active" data-theme="sakura" onclick="setStudioVisualTheme('sakura')">
-                    🌸 Sakura Bloom
+              <!-- Sound Chime & Actions -->
+              <div class="alarm-form-footer">
+                <label class="neo-checkbox-label">
+                  <input type="checkbox" id="alarmSoundCheck" checked>
+                  <span>🔔 Audio Chime</span>
+                </label>
+                <div style="display:flex; gap: 8px;">
+                  <button type="button" class="btn-neo-secondary" onclick="testCurrentAlarmFromForm()">
+                    ⚡ Test (3s)
                   </button>
-                  <button type="button" class="btn-botanical-theme" data-theme="emerald" onclick="setStudioVisualTheme('emerald')">
-                    🌿 Emerald Forest
-                  </button>
-                  <button type="button" class="btn-botanical-theme" data-theme="sunset" onclick="setStudioVisualTheme('sunset')">
-                    🌅 Golden Twilight
-                  </button>
-                  <button type="button" class="btn-botanical-theme" data-theme="cosmic" onclick="setStudioVisualTheme('cosmic')">
-                    🌌 Cosmic Garden
+                  <button type="button" class="btn-neo-gold" onclick="saveNewScheduledAlarm()">
+                    💾 Alarm Schedule Karein
                   </button>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <!-- 📱 ANDROID PHONE NOTIFICATION LIVE PREVIEW (1:1 Match with User's Uploaded Screenshot!) -->
+          <!-- Active Alarms Feed List -->
+          <div class="active-alarms-wrap">
+            <div class="aaw-header">
+              <span class="aaw-title">📋 Scheduled Alarms List</span>
+              <span class="aaw-count" id="activeAlarmsCountBadge">0 Alarms</span>
+            </div>
+            <div id="activeAlarmsListContainer" class="active-alarms-list">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- ================= OPTION 3: FUTURISTIC CUSTOM NOTIFICATION STUDIO ================= -->
+        <div id="notifSectionStudio" class="notif-hub-section" style="display:none;">
+          <!-- Device Permission Strip -->
+          <div class="cyber-perm-strip">
+            <div class="cps-info">
+              <span style="font-size:1.15rem;">📲</span>
+              <div>
+                <span class="cps-title">Phone Status Bar Notifications</span>
+                <span class="cps-sub" id="notifPermissionStatusTxt">Android notification drawer alerts</span>
+              </div>
+            </div>
+            <button type="button" class="btn-neo-gold" id="notifPermissionToggleBtn" onclick="requestBrowserNotificationPermission()">Enable</button>
+          </div>
+
+          <!-- Futuristic Studio Container -->
+          <div class="cyber-studio-card">
+            <div class="cyber-studio-header">
+              <div class="csh-left">
+                <span class="csh-icon">⚡</span>
+                <div>
+                  <h3 class="csh-title">Instant Notification Studio</h3>
+                  <p class="csh-sub">Phone status bar me turant custom alert bhejein</p>
+                </div>
+              </div>
+              <span class="csh-badge">Studio</span>
+            </div>
+
+            <div class="cyber-studio-body">
+              <!-- Mode Tabs -->
+              <div class="neo-pill-tabs" style="margin-bottom: 12px;">
+                <button type="button" class="neo-tab-pill active" id="btnModeBookNote" onclick="setNotifStudioMode('book_note')">
+                  📖 Book Note Alert
+                </button>
+                <button type="button" class="neo-tab-pill" id="btnModeCustomNote" onclick="setNotifStudioMode('custom')">
+                  ✍️ Custom Text
+                </button>
+                <button type="button" class="neo-tab-pill" id="btnModeDailyQuote" onclick="setNotifStudioMode('daily_quote')">
+                  ✨ Daily Quote
+                </button>
+              </div>
+
+              <!-- Book & Note Select with Compact Cover Thumbnail -->
+              <div id="studioBookPickerSection">
+                <div class="compact-book-picker-row">
+                  <div class="cbp-select-col">
+                    <label class="neo-label">📚 Book Chunein:</label>
+                    <select id="studioBookSelect" class="neo-dropdown" onchange="onStudioBookSelectChanged()">
+                      <!-- Populated by JS -->
+                    </select>
+                  </div>
+                  <div class="cbp-thumb-box">
+                    <img id="studioBookCoverImg" src="cover_placeholder.jpg" alt="Cover" class="cbp-thumb-img">
+                  </div>
+                </div>
+
+                <div class="neo-field-group" style="margin-top: 10px;">
+                  <label class="neo-label">📝 Select Note for Notification:</label>
+                  <select id="studioNoteSelect" class="neo-dropdown" onchange="onStudioNoteSelectChanged()">
+                    <!-- Populated by JS -->
+                  </select>
+                </div>
+              </div>
+
+              <!-- Custom Inputs -->
+              <div class="neo-field-group">
+                <label class="neo-label">✏️ Notification Title:</label>
+                <input type="text" id="studioCustomTitle" class="neo-input" placeholder="e.g. Master Your Attention" oninput="updateLiveSimCard()">
+              </div>
+
+              <div class="neo-field-group">
+                <label class="neo-label">💬 Message / Note Text:</label>
+                <textarea id="studioCustomMessage" class="neo-textarea" rows="2" placeholder="Apna note ya sandesh yahan likhein..." oninput="updateLiveSimCard()"></textarea>
+              </div>
+
+              <!-- Futuristic Theme Palette -->
+              <div class="neo-field-group">
+                <label class="neo-label">🎨 Notification Accent Glow:</label>
+                <div class="cyber-themes-grid">
+                  <button type="button" class="cyber-theme-btn active" data-theme="amber" onclick="setStudioVisualTheme('sunset')">⚡ Cyber Amber</button>
+                  <button type="button" class="cyber-theme-btn" data-theme="cyan" onclick="setStudioVisualTheme('emerald')">❄️ Hyper Cyan</button>
+                  <button type="button" class="cyber-theme-btn" data-theme="purple" onclick="setStudioVisualTheme('cosmic')">🌌 Neon Violet</button>
+                  <button type="button" class="cyber-theme-btn" data-theme="rose" onclick="setStudioVisualTheme('sakura')">🔴 Laser Red</button>
+                </div>
+              </div>
+
+              <!-- Android Status Bar Live Preview -->
               <div class="android-shade-preview-wrap">
-                <div class="android-preview-header">
-                  <span class="android-preview-label">📱 Live Phone Notification Preview (Status Bar):</span>
-                  <span class="android-preview-sub">Phone ke notification drawer me bilkul aisa dikhega</span>
-                </div>
-
-                <div class="android-system-notif-card theme-sakura" id="androidSimCard">
-                  <!-- App Header Row -->
+                <div class="asp-label">📱 Phone Status Bar Preview:</div>
+                <div class="android-system-notif-card theme-sunset" id="androidSimCard">
                   <div class="asn-header">
                     <div class="asn-header-left">
-                      <img src="icon-192.png" alt="App Icon" class="asn-app-icon">
+                      <img src="icon-192.png" alt="App" class="asn-app-icon">
                       <span class="asn-app-name">Mind Focus Books</span>
                       <span class="asn-dot">•</span>
                       <span class="asn-time">now</span>
                     </div>
-                    <div class="asn-header-right">
-                      <span class="asn-expand-icon">⌵</span>
-                    </div>
+                    <span class="asn-expand-icon">⌵</span>
                   </div>
 
-                  <!-- Content Row -->
                   <div class="asn-body">
                     <div class="asn-text-col">
                       <div class="asn-title" id="asnSimTitle">Hyperfocus - Deep Work Note</div>
-                      <div class="asn-desc" id="asnSimDesc">Focus on one high-impact task at a time for 25 minutes. Deep attention produces extraordinary results.</div>
-                    </div>
-                    <div class="asn-small-badge">
-                      <img src="icon-192.png" alt="Badge" class="asn-mini-badge">
+                      <div class="asn-desc" id="asnSimDesc">Focus on one high-impact task at a time for 25 minutes.</div>
                     </div>
                   </div>
 
-                  <!-- Big Picture Banner (Matching User's Perplexity Notification Screenshot) -->
                   <div class="asn-big-picture-banner" id="asnSimBanner">
-                    <img id="asnSimBannerImg" src="hyperfocus_cover.jpg" alt="Notification Banner Cover" class="asn-banner-img">
+                    <img id="asnSimBannerImg" src="hyperfocus_cover.jpg" alt="Cover" class="asn-banner-img">
                     <div class="asn-banner-overlay">
-                      <div class="asn-banner-tag" id="asnSimBannerTag">🌿 Mind Focus Reading</div>
+                      <div class="asn-banner-tag" id="asnSimBannerTag">⚡ Mind Focus</div>
                       <div class="asn-banner-quote" id="asnSimBannerQuote">"Where knowledge begins..."</div>
                     </div>
                   </div>
 
-                  <!-- Action Buttons -->
                   <div class="asn-actions">
-                    <button type="button" class="asn-btn primary" onclick="handleSimNotifAction('read')">📖 Open &amp; Read</button>
-                    <button type="button" class="asn-btn" onclick="handleSimNotifAction('notes')">📝 View All Notes</button>
+                    <button type="button" class="asn-btn primary" onclick="handleSimNotifAction('read')">📖 Open Book</button>
+                    <button type="button" class="asn-btn" onclick="handleSimNotifAction('notes')">📝 Notes</button>
                   </div>
                 </div>
               </div>
 
-              <!-- Studio Action Buttons -->
+              <!-- Action Buttons -->
               <div class="studio-actions-footer">
                 <button type="button" class="btn-studio-action primary" onclick="sendCustomNotificationToDeviceNow()">
-                  ⚡ Send To Phone Status Bar Now
+                  🚀 Send To Phone Status Bar Now
                 </button>
-                <button type="button" class="btn-studio-action secondary" onclick="saveAsDailyReminderSchedule()">
-                  ⏰ Set As Daily Alarm Notification
-                </button>
-                <button type="button" class="btn-studio-action tertiary" onclick="addCustomNotificationToFeed()">
-                  ➕ Add to Alerts Hub List
+                <button type="button" class="btn-studio-action secondary" onclick="addCustomNotificationToFeed()">
+                  ➕ Add To Alerts Feed List
                 </button>
               </div>
             </div>
@@ -21643,17 +22001,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.32",
-    "name": "Mind Focus Books v0.0.32 (Segmented Notification Hub, Full-Width Android Cards & Clutter-Free Layout)",
+    "version": "v0.0.33",
+    "name": "Mind Focus Books v0.0.33 (Multi-Alarm Scheduler with Date Support, Book Cover Push & Futuristic Studio)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
-      "📑 3 Dedicated Segmented Tabs: Alerts Feed, Reading Alarm & Custom Studio — zero clutter, completely organized.",
-      "📱 Full-Screen Width Notification Cards: Mobile screen-spanning 100% edge-to-edge cards with rich book banners.",
-      "📖 Direct Book Cover Banners: Har notification card ke andar book ka cover image aur title banner.",
-      "🌸 Botanical Nature Aesthetics: Enhanced glassmorphic contrast, smooth hover states, and status badges.",
-      "⚡ Instant Status Shade Actions: One-tap action button to open 3D notes or continue reading directly."
+      "⏰ Multi-Alarm & Reminders Scheduler: Din me alag-alag time par jitne chahe reading ya note alerts schedule karein.",
+      "📅 Taarikh (Date) Selection: Rozana (Daily) ya kisi khas taarikh (calendar date) par notification set karein.",
+      "🖼️ Phone Notification Book Covers: Native Android base64 bitmap decoding se phone drawer me book cover badi photo me aayega.",
+      "⚡ Sleek Futuristic Studio: Zero horizontal overflow, compact book thumbnail preview, no wall of text.",
+      "🎨 Cyber Neon Accent Themes: Cyber Amber, Hyper Cyan, Neon Violet aur Laser Red."
     ],
-    "stagedAt": "2026-10-17T21:35:00.000Z",
+    "stagedAt": "2026-10-17T22:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
@@ -21735,11 +22093,11 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
 </script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.32)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.33)
 // ==========================================================================
 
-const APP_VERSION = '0.0.32';
-const CURRENT_APP_VERSION = 'v0.0.32';
+const APP_VERSION = '0.0.33';
+const CURRENT_APP_VERSION = 'v0.0.33';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -31707,30 +32065,84 @@ function formatNotificationTime(isoStr) {
 }
 
 // =========================================================================
-// DAILY READING REMINDER SCHEDULER & ALARM ENGINE (v0.0.30)
+// MULTI-ALARM READING REMINDER & TAARIKH (DATE) SCHEDULER ENGINE (v0.0.33)
 // =========================================================================
+const MULTI_ALARMS_KEY = 'mf_multi_alarms_v2';
+let userScheduledAlarmsList = [];
+
+let currentAlarmDateMode = 'daily'; // 'daily' or 'specific'
+let currentAlarmAmPm = 'PM';
+let currentAlarmContentType = 'reading'; // 'reading', 'notes', 'custom'
+
+function getDefaultScheduledAlarms() {
+  return [
+    {
+      id: 'alarm_default_morning',
+      enabled: true,
+      time: '08:00',
+      ampm: 'AM',
+      timeFormatted: '08:00 AM',
+      dateMode: 'daily',
+      specificDate: '',
+      type: 'reading',
+      title: '🌅 Morning Reading Session',
+      message: 'Subah ki chai ke sath 15 minute reading karein aur din ko focus ke sath shuru karein!',
+      bookTitle: 'Hyperfocus',
+      bookCover: 'hyperfocus_cover.jpg',
+      sound: true,
+      lastFiredKey: ''
+    },
+    {
+      id: 'alarm_default_night',
+      enabled: true,
+      time: '21:30',
+      ampm: 'PM',
+      timeFormatted: '09:30 PM',
+      dateMode: 'daily',
+      specificDate: '',
+      type: 'notes',
+      title: '🌙 Night Note Flashback',
+      message: 'Sone se pehle book ke key notes aur highlights ko yaad karein!',
+      bookTitle: 'Atomic Habits',
+      bookCover: 'cover_placeholder.jpg',
+      sound: true,
+      lastFiredKey: ''
+    }
+  ];
+}
 
 function loadReminderScheduleConfig() {
-  try {
-    const raw = localStorage.getItem(SCHED_CONFIG_KEY);
-    if (raw) {
-      const parsed = JSON.parse(raw);
-      reminderScheduleConfig = Object.assign(reminderScheduleConfig, parsed);
-    }
-  } catch (e) {
-    console.warn('Failed to load reminder schedule config:', e);
-  }
+  loadScheduledAlarms();
 }
 
 function saveReminderScheduleConfig(showToastMsg = false) {
+  saveScheduledAlarms(showToastMsg);
+}
+
+function loadScheduledAlarms() {
   try {
-    localStorage.setItem(SCHED_CONFIG_KEY, JSON.stringify(reminderScheduleConfig));
+    const raw = localStorage.getItem(MULTI_ALARMS_KEY);
+    if (raw) {
+      userScheduledAlarmsList = JSON.parse(raw);
+    }
   } catch (e) {
-    console.warn('Failed to save reminder schedule config:', e);
+    console.warn('Failed to load multi alarms:', e);
   }
-  updateScheduleUI();
+  if (!Array.isArray(userScheduledAlarmsList) || userScheduledAlarmsList.length === 0) {
+    userScheduledAlarmsList = getDefaultScheduledAlarms();
+    saveScheduledAlarms(false);
+  }
+}
+
+function saveScheduledAlarms(showToastMsg = false) {
+  try {
+    localStorage.setItem(MULTI_ALARMS_KEY, JSON.stringify(userScheduledAlarmsList));
+  } catch (e) {
+    console.warn('Failed to save multi alarms:', e);
+  }
+  renderActiveAlarmsList();
   if (showToastMsg) {
-    showToast(`Daily Reminder Schedule Save Ho Gaya: ${reminderScheduleConfig.label} ⏰`, 'success');
+    showToast('Alarms list update ho gayi! ⏰', 'success');
   }
 }
 
@@ -31749,115 +32161,156 @@ function formatTimeAmPm(timeStr) {
 }
 
 function updateScheduleUI() {
-  const toggle = document.getElementById('notifScheduleEnabledToggle');
-  const timeInput = document.getElementById('notifReminderTimeInput');
-  const timeBadge = document.getElementById('notifFormattedTimeBadge');
-  const summarySub = document.getElementById('notifSchedSummarySub');
-  const soundToggle = document.getElementById('notifSoundToggle');
-  const schedBody = document.getElementById('notifSchedBody');
+  loadScheduledAlarms();
+  populateAlarmBooksDropdown();
+  renderActiveAlarmsList();
+  updateAlarmPreviewBadge();
 
-  if (toggle) toggle.checked = !!reminderScheduleConfig.enabled;
-  if (timeInput) timeInput.value = reminderScheduleConfig.time || '21:30';
-  if (soundToggle) soundToggle.checked = !!reminderScheduleConfig.sound;
-
-  const timeVal = reminderScheduleConfig.time || '21:30';
-  const parts = timeVal.split(':');
-  const h24 = parseInt(parts[0], 10) || 0;
-  const m = parts[1] || '00';
-  const isPm = h24 >= 12;
-  const h12 = h24 % 12 || 12;
-
-  const hourSelect = document.getElementById('notifHourSelect');
-  const minSelect = document.getElementById('notifMinSelect');
-  const hourInput = document.getElementById('notifHourInput');
-  const minInput = document.getElementById('notifMinInput');
-  const btnAm = document.getElementById('btnAmToggle');
-  const btnPm = document.getElementById('btnPmToggle');
-
-  if (hourSelect) hourSelect.value = String(h12);
-  if (hourInput && document.activeElement !== hourInput) hourInput.value = h12;
-  if (minInput && document.activeElement !== minInput) minInput.value = m;
-  if (minSelect) {
-    const opts = Array.from(minSelect.options).map(o => o.value);
-    if (opts.includes(m)) {
-      minSelect.value = m;
-    } else {
-      minSelect.value = '00';
-    }
-  }
-  if (btnAm) btnAm.classList.toggle('active', !isPm);
-  if (btnPm) btnPm.classList.toggle('active', isPm);
-
-  const formatted = formatTimeAmPm(reminderScheduleConfig.time);
-  const iconEmoji = (h24 >= 19 || h24 < 5) ? '🌙' : (h24 < 12 ? '🌅' : '☀️');
-  const fullLabel = `${iconEmoji} ${formatted}`;
-
-  if (timeBadge) {
-    timeBadge.innerText = fullLabel + (reminderScheduleConfig.enabled ? ' (Active)' : ' (Off)');
-  }
-  if (summarySub) {
-    if (reminderScheduleConfig.enabled) {
-      summarySub.innerText = `Rozana ${formatted} par daily reading alert aayega`;
-    } else {
-      summarySub.innerText = `Daily reminder alarm off hai (Switch on karein)`;
-    }
-  }
-
-  // Preset buttons
-  const presets = ['0800', '1400', '1900', '2130'];
-  const curClean = (reminderScheduleConfig.time || '').replace(':', '');
-  presets.forEach(p => {
-    const btn = document.getElementById('presetBtn_' + p);
-    if (btn) {
-      btn.classList.toggle('active', curClean === p);
-    }
-  });
-
-  // Day chips
-  const days = Array.isArray(reminderScheduleConfig.days) ? reminderScheduleConfig.days : [0,1,2,3,4,5,6];
-  const chips = document.querySelectorAll('.day-chip');
-  chips.forEach(c => {
-    const d = parseInt(c.getAttribute('data-day'), 10);
-    c.classList.toggle('active', days.includes(d));
-  });
-
-  if (schedBody) {
-    if (reminderScheduleConfig.enabled) {
-      schedBody.style.opacity = '1';
-      schedBody.style.pointerEvents = 'auto';
-    } else {
-      schedBody.style.opacity = '0.55';
-    }
+  const dateInput = document.getElementById('alarmDateInput');
+  if (dateInput && !dateInput.value) {
+    dateInput.value = new Date().toISOString().slice(0, 10);
   }
 }
 
-function handleAmPmTimeChange() {
-  const hourSelect = document.getElementById('notifHourSelect');
-  const minSelect = document.getElementById('notifMinSelect');
-  const btnPm = document.getElementById('btnPmToggle');
+function renderActiveAlarmsList() {
+  const container = document.getElementById('activeAlarmsListContainer');
+  const countBadge = document.getElementById('activeAlarmsCountBadge');
+  const summaryTxt = document.getElementById('cahActiveSummary');
+  if (!container) return;
 
-  const h12 = parseInt(hourSelect ? hourSelect.value : '9', 10);
-  const m = minSelect ? minSelect.value : '30';
-  const isPm = btnPm ? btnPm.classList.contains('active') : true;
+  const total = userScheduledAlarmsList.length;
+  const activeCount = userScheduledAlarmsList.filter(a => a.enabled).length;
 
-  let h24 = h12;
-  if (isPm) {
-    h24 = (h12 === 12) ? 12 : h12 + 12;
-  } else {
-    h24 = (h12 === 12) ? 0 : h12;
+  if (countBadge) countBadge.innerText = `${total} Schedule${total !== 1 ? 's' : ''}`;
+  if (summaryTxt) summaryTxt.innerText = `Din me ${activeCount} active alarms aapko timely alerts bhejenge`;
+
+  if (total === 0) {
+    container.innerHTML = `
+      <div class="neo-empty-box">
+        <span style="font-size: 2.2rem; display:block; margin-bottom: 6px;">⏰</span>
+        <h4 style="font-size: 0.95rem; font-weight:800; color:#fff; margin:0 0 4px 0;">Koi Alarm Schedule Nahi Hai</h4>
+        <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 12px 0;">Upar diye gaye form se naya reading ya note alert schedule karein!</p>
+        <button type="button" class="btn-neo-gold" onclick="openNewAlarmForm()" style="padding: 6px 14px; font-size: 0.78rem;">➕ Pehla Alarm Jodein</button>
+      </div>
+    `;
+    return;
   }
 
-  const h24Str = (h24 < 10 ? '0' + h24 : String(h24)) + ':' + m;
-  reminderScheduleConfig.time = h24Str;
-  reminderScheduleConfig.label = `${(h12 < 10 ? '0' + h12 : h12)}:${m} ${isPm ? 'PM' : 'AM'}`;
+  container.innerHTML = userScheduledAlarmsList.map(alarm => {
+    const isEn = !!alarm.enabled;
+    const catLabel = alarm.type === 'notes' ? '💡 Note Flashback' : (alarm.type === 'reading' ? '📖 Reading Alert' : '✍️ Custom Alert');
+    const dateLabel = alarm.dateMode === 'specific' ? `📅 ${alarm.specificDate || 'Specific Date'}` : '🔄 Rozana (Daily)';
+    const coverUrl = alarm.bookCover || 'cover_placeholder.jpg';
 
-  saveReminderScheduleConfig(false);
+    return `
+      <div class="alarm-item-card ${isEn ? 'active' : 'inactive'}" id="alarm_item_${escapeHtml(alarm.id)}">
+        <div class="aic-top-row">
+          <div class="aic-time-wrap">
+            <span class="aic-time-big">${escapeHtml(alarm.timeFormatted || formatTimeAmPm(alarm.time))}</span>
+            <span class="aic-date-chip">${escapeHtml(dateLabel)}</span>
+            <span class="aic-type-chip ${escapeHtml(alarm.type || 'reading')}">${catLabel}</span>
+          </div>
+          <div class="aic-switch-wrap">
+            <label class="pref-switch" title="Toggle Alarm On/Off">
+              <input type="checkbox" ${isEn ? 'checked' : ''} onchange="toggleAlarmItem('${escapeHtml(alarm.id)}', this.checked)">
+              <span class="pref-slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="aic-content-box">
+          <div class="aic-title-txt">${escapeHtml(alarm.title || 'Reading Alarm')}</div>
+          <div class="aic-msg-txt">${escapeHtml(alarm.message || '')}</div>
+        </div>
+
+        ${alarm.bookTitle ? `
+          <div class="aic-book-banner">
+            <img src="${escapeHtml(coverUrl)}" alt="Cover" class="aic-book-thumb" onerror="this.src='icon-192.png'">
+            <div class="aic-book-info">
+              <span class="aic-book-tag">📖 Linked Book</span>
+              <span class="aic-book-name">${escapeHtml(alarm.bookTitle)}</span>
+            </div>
+          </div>
+        ` : ''}
+
+        <div class="aic-actions-row">
+          <button type="button" class="aic-btn-test" onclick="testAlarmItem('${escapeHtml(alarm.id)}')" title="Test this alarm now">
+            ⚡ Test Alert (3s)
+          </button>
+          <button type="button" class="aic-btn-del" onclick="deleteAlarmItem('${escapeHtml(alarm.id)}')" title="Delete this alarm">
+            🗑️ Delete
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
 }
 
-function handleManualTimeType() {
-  const hourInput = document.getElementById('notifHourInput');
-  const minInput = document.getElementById('notifMinInput');
-  const btnPm = document.getElementById('btnPmToggle');
+function openNewAlarmForm() {
+  const formCard = document.getElementById('newAlarmFormCard');
+  if (formCard) {
+    formCard.style.display = 'block';
+    formCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function toggleAlarmForm(show) {
+  const formCard = document.getElementById('newAlarmFormCard');
+  if (formCard) {
+    formCard.style.display = show ? 'block' : 'none';
+  }
+}
+
+function setAlarmDateMode(mode) {
+  currentAlarmDateMode = mode;
+  const btnDaily = document.getElementById('btnDateModeDaily');
+  const btnSpecific = document.getElementById('btnDateModeSpecific');
+  const dateWrap = document.getElementById('alarmSpecificDateWrap');
+
+  if (btnDaily) btnDaily.classList.toggle('active', mode === 'daily');
+  if (btnSpecific) btnSpecific.classList.toggle('active', mode === 'specific');
+  if (dateWrap) dateWrap.style.display = (mode === 'specific') ? 'block' : 'none';
+
+  updateAlarmPreviewBadge();
+}
+
+function setQuickDate(shortcut) {
+  const dateInput = document.getElementById('alarmDateInput');
+  if (!dateInput) return;
+
+  const now = new Date();
+  if (shortcut === 'today') {
+    dateInput.value = now.toISOString().slice(0, 10);
+  } else if (shortcut === 'tomorrow') {
+    const tm = new Date(now.getTime() + 86400000);
+    dateInput.value = tm.toISOString().slice(0, 10);
+  } else if (shortcut === 'next_monday') {
+    const day = now.getDay();
+    const diff = (8 - day) % 7 || 7;
+    const nextMon = new Date(now.getTime() + diff * 86400000);
+    dateInput.value = nextMon.toISOString().slice(0, 10);
+  }
+  updateAlarmPreviewBadge();
+}
+
+function setAlarmAmPm(ampm) {
+  currentAlarmAmPm = ampm;
+  const btnAm = document.getElementById('btnAlarmAm');
+  const btnPm = document.getElementById('btnAlarmPm');
+  if (btnAm) btnAm.classList.toggle('active', ampm === 'AM');
+  if (btnPm) btnPm.classList.toggle('active', ampm === 'PM');
+  updateAlarmPreviewBadge();
+}
+
+function updateAlarmTimeFromInputs() {
+  updateAlarmPreviewBadge();
+}
+
+function updateAlarmPreviewBadge() {
+  const hourInput = document.getElementById('alarmHourInput');
+  const minInput = document.getElementById('alarmMinInput');
+  const badge = document.getElementById('alarmLiveBadge');
+  if (!badge) return;
 
   let h12 = parseInt(hourInput ? hourInput.value : '9', 10);
   let mVal = parseInt(minInput ? minInput.value : '30', 10);
@@ -31870,9 +32323,154 @@ function handleManualTimeType() {
   if (mVal < 0) mVal = 0;
   if (mVal > 59) mVal = 59;
 
+  const hStr = h12 < 10 ? '0' + h12 : String(h12);
   const mStr = mVal < 10 ? '0' + mVal : String(mVal);
-  const isPm = btnPm ? btnPm.classList.contains('active') : true;
+  const ampm = currentAlarmAmPm;
+  const timeStr = `${hStr}:${mStr} ${ampm}`;
 
+  let dateStr = '🔄 Rozana (Daily)';
+  if (currentAlarmDateMode === 'specific') {
+    const dateInput = document.getElementById('alarmDateInput');
+    dateStr = '📅 ' + (dateInput && dateInput.value ? dateInput.value : 'Choose Date');
+  }
+
+  badge.innerText = `⏰ ${timeStr} • ${dateStr}`;
+}
+
+function setQuickAlarmTime(timeStr, ampm) {
+  const parts = timeStr.split(':');
+  const hourInput = document.getElementById('alarmHourInput');
+  const minInput = document.getElementById('alarmMinInput');
+  if (hourInput) hourInput.value = parseInt(parts[0], 10);
+  if (minInput) minInput.value = parseInt(parts[1], 10);
+  setAlarmAmPm(ampm);
+}
+
+function setAlarmContentType(type) {
+  currentAlarmContentType = type;
+  const btnReading = document.getElementById('btnTypeReading');
+  const btnNotes = document.getElementById('btnTypeNotes');
+  const btnCustom = document.getElementById('btnTypeCustom');
+  const noteWrap = document.getElementById('alarmNoteSelectWrap');
+
+  if (btnReading) btnReading.classList.toggle('active', type === 'reading');
+  if (btnNotes) btnNotes.classList.toggle('active', type === 'notes');
+  if (btnCustom) btnCustom.classList.toggle('active', type === 'custom');
+  if (noteWrap) noteWrap.style.display = (type === 'notes') ? 'block' : 'none';
+
+  onAlarmBookChanged();
+}
+
+function populateAlarmBooksDropdown() {
+  const bookSelect = document.getElementById('alarmBookSelect');
+  if (!bookSelect) return;
+
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  if (!books || books.length === 0) return;
+
+  bookSelect.innerHTML = '';
+  books.forEach((b, idx) => {
+    const opt = document.createElement('option');
+    opt.value = b.id || ('book_' + idx);
+    opt.text = `📖 ${b.title || 'Untitled'} (${b.author || 'Unknown'})`;
+    bookSelect.appendChild(opt);
+  });
+
+  onAlarmBookChanged();
+}
+
+function onAlarmBookChanged() {
+  const bookSelect = document.getElementById('alarmBookSelect');
+  const noteSelect = document.getElementById('alarmNoteSelect');
+  const titleInput = document.getElementById('alarmCustomTitleInput');
+  const msgInput = document.getElementById('alarmCustomMsgInput');
+  if (!bookSelect) return;
+
+  const bookId = bookSelect.value;
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
+  if (!book) return;
+
+  // Populate Notes dropdown for this book
+  if (noteSelect) {
+    noteSelect.innerHTML = '';
+    let notesList = [];
+    if (Array.isArray(book.notes) && book.notes.length > 0) {
+      notesList = book.notes.map((n, i) => typeof n === 'string' ? { id: 'note_' + i, text: n } : n);
+    } else if (Array.isArray(book.key_takeaways) && book.key_takeaways.length > 0) {
+      notesList = book.key_takeaways.map((t, i) => ({ id: 'takeaway_' + i, text: t }));
+    }
+    if (Array.isArray(state.savedNotes)) {
+      const userNotes = state.savedNotes.filter(n => n.bookId === book.id || n.bookTitle === book.title);
+      userNotes.forEach((un, idx) => {
+        notesList.push({ id: un.id || ('un_' + idx), text: un.text || un.content || un.note });
+      });
+    }
+    if (notesList.length === 0) {
+      notesList.push({ id: 'def', text: `Key takeaway from ${book.title}: Consistency in reading creates lasting wisdom.` });
+    }
+    notesList.forEach((n, idx) => {
+      const opt = document.createElement('option');
+      opt.value = idx;
+      const textVal = n.text || '';
+      opt.text = textVal.length > 40 ? textVal.substring(0, 40) + '...' : textVal;
+      opt.dataset.fullText = textVal;
+      noteSelect.appendChild(opt);
+    });
+  }
+
+  // Pre-fill Title & Message according to type
+  if (currentAlarmContentType === 'reading') {
+    if (titleInput && (!titleInput.value || titleInput.value.includes('Reading Time') || titleInput.value.includes('Note Flashback'))) {
+      titleInput.value = `⏰ Reading Time: ${book.title}`;
+    }
+    if (msgInput && (!msgInput.value || msgInput.value.includes('session shuru') || msgInput.value.includes('Key insight'))) {
+      msgInput.value = `Aaj ka reading session shuru karein! "${book.title}" me naye pages complete karein.`;
+    }
+  } else if (currentAlarmContentType === 'notes') {
+    onAlarmNoteChanged();
+  }
+}
+
+function onAlarmNoteChanged() {
+  const bookSelect = document.getElementById('alarmBookSelect');
+  const noteSelect = document.getElementById('alarmNoteSelect');
+  const titleInput = document.getElementById('alarmCustomTitleInput');
+  const msgInput = document.getElementById('alarmCustomMsgInput');
+  if (!bookSelect || !noteSelect) return;
+
+  const bookId = bookSelect.value;
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
+  if (!book) return;
+
+  const selectedOpt = noteSelect.options[noteSelect.selectedIndex];
+  const fullText = selectedOpt ? (selectedOpt.dataset.fullText || selectedOpt.text) : '';
+
+  if (titleInput) {
+    titleInput.value = `💡 Note Flashback: ${book.title}`;
+  }
+  if (msgInput && fullText) {
+    msgInput.value = fullText;
+  }
+}
+
+function saveNewScheduledAlarm() {
+  const hourInput = document.getElementById('alarmHourInput');
+  const minInput = document.getElementById('alarmMinInput');
+  const dateInput = document.getElementById('alarmDateInput');
+  const titleInput = document.getElementById('alarmCustomTitleInput');
+  const msgInput = document.getElementById('alarmCustomMsgInput');
+  const bookSelect = document.getElementById('alarmBookSelect');
+  const soundCheck = document.getElementById('alarmSoundCheck');
+
+  let h12 = parseInt(hourInput ? hourInput.value : '9', 10);
+  let mVal = parseInt(minInput ? minInput.value : '30', 10);
+
+  if (isNaN(h12) || h12 < 1 || h12 > 12) h12 = 9;
+  if (isNaN(mVal) || mVal < 0 || mVal > 59) mVal = 0;
+
+  const isPm = currentAlarmAmPm === 'PM';
   let h24 = h12;
   if (isPm) {
     h24 = (h12 === 12) ? 12 : h12 + 12;
@@ -31880,88 +32478,132 @@ function handleManualTimeType() {
     h24 = (h12 === 12) ? 0 : h12;
   }
 
-  const h24Str = (h24 < 10 ? '0' + h24 : String(h24)) + ':' + mStr;
-  reminderScheduleConfig.time = h24Str;
-  reminderScheduleConfig.label = `${(h12 < 10 ? '0' + h12 : h12)}:${mStr} ${isPm ? 'PM' : 'AM'}`;
+  const hStr = h24 < 10 ? '0' + h24 : String(h24);
+  const mStr = mVal < 10 ? '0' + mVal : String(mVal);
+  const time24 = `${hStr}:${mStr}`;
+  const timeFormatted = `${(h12 < 10 ? '0' + h12 : h12)}:${mStr} ${currentAlarmAmPm}`;
 
-  // Keep hidden selects in sync
-  const hourSelect = document.getElementById('notifHourSelect');
-  const minSelect = document.getElementById('notifMinSelect');
-  if (hourSelect) hourSelect.value = String(h12);
-  if (minSelect) minSelect.value = mStr;
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const bookId = bookSelect ? bookSelect.value : '';
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
 
-  const timeBadge = document.getElementById('notifFormattedTimeBadge');
-  if (timeBadge) {
-    const iconEmoji = (h24 >= 19 || h24 < 5) ? '🌙' : (h24 < 12 ? '🌅' : '☀️');
-    timeBadge.innerText = `${iconEmoji} ${reminderScheduleConfig.label} (Active)`;
+  const specificDateVal = (currentAlarmDateMode === 'specific' && dateInput) ? dateInput.value : '';
+
+  const newAlarm = {
+    id: 'alarm_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4),
+    enabled: true,
+    time: time24,
+    ampm: currentAlarmAmPm,
+    timeFormatted: timeFormatted,
+    dateMode: currentAlarmDateMode,
+    specificDate: specificDateVal,
+    type: currentAlarmContentType,
+    title: (titleInput && titleInput.value.trim()) || `⏰ Reading Alert: ${book ? book.title : 'Mind Focus'}`,
+    message: (msgInput && msgInput.value.trim()) || 'Aapka reading time ho gaya hai! Kitab kholiye aur focus karein.',
+    bookTitle: book ? book.title : 'Mind Focus',
+    bookCover: book ? getBookCoverUrl(book) : 'cover_placeholder.jpg',
+    sound: soundCheck ? !!soundCheck.checked : true,
+    lastFiredKey: ''
+  };
+
+  userScheduledAlarmsList.unshift(newAlarm);
+  saveScheduledAlarms(true);
+  showToast(`Alarm Schedule Ho Gaya: ${timeFormatted} (${currentAlarmDateMode === 'specific' ? specificDateVal : 'Rozana'}) ⏰`, 'success');
+}
+
+function toggleAlarmItem(id, enabled) {
+  const alarm = userScheduledAlarmsList.find(a => a.id === id);
+  if (alarm) {
+    alarm.enabled = enabled;
+    saveScheduledAlarms(false);
+    showToast(enabled ? `Alarm ON: ${alarm.timeFormatted} ⏰` : `Alarm OFF: ${alarm.timeFormatted}`, enabled ? 'success' : 'info');
   }
-  saveReminderScheduleConfig(false);
 }
 
-function setAmPm(ampm) {
-  const btnAm = document.getElementById('btnAmToggle');
-  const btnPm = document.getElementById('btnPmToggle');
-  if (btnAm) btnAm.classList.toggle('active', ampm === 'AM');
-  if (btnPm) btnPm.classList.toggle('active', ampm === 'PM');
-  handleAmPmTimeChange();
-  showToast(`Reminder set to ${ampm} ⏰`, 'info');
+function deleteAlarmItem(id) {
+  userScheduledAlarmsList = userScheduledAlarmsList.filter(a => a.id !== id);
+  saveScheduledAlarms(false);
+  showToast('Alarm delete kar diya gaya.', 'info');
 }
 
-function handleReminderTimeChange(newTime) {
-  if (!newTime) return;
-  reminderScheduleConfig.time = newTime;
-  reminderScheduleConfig.label = formatTimeAmPm(newTime);
-  saveReminderScheduleConfig(false);
+function testAlarmItem(id) {
+  const alarm = userScheduledAlarmsList.find(a => a.id === id);
+  if (!alarm) return;
+  showToast(`⏰ Alarm "${alarm.title}" 3 seconds me fire hoga...`, 'info');
+  setTimeout(() => {
+    fireSpecificScheduledAlarm(alarm);
+  }, 3000);
 }
 
-function setPresetReminderTime(timeStr, labelStr) {
-  reminderScheduleConfig.time = timeStr;
-  reminderScheduleConfig.label = labelStr;
-  saveReminderScheduleConfig(false);
-  showToast(`Reminder Time Set: ${labelStr} ⏰`, 'info');
+function testCurrentAlarmFromForm() {
+  const titleInput = document.getElementById('alarmCustomTitleInput');
+  const msgInput = document.getElementById('alarmCustomMsgInput');
+  const bookSelect = document.getElementById('alarmBookSelect');
+
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const bookId = bookSelect ? bookSelect.value : '';
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
+
+  const dummyAlarm = {
+    id: 'test_temp',
+    type: currentAlarmContentType,
+    title: (titleInput && titleInput.value.trim()) || '⏰ Test Reading Alarm',
+    message: (msgInput && msgInput.value.trim()) || 'Test notification message with full book cover!',
+    bookTitle: book ? book.title : 'Mind Focus Books',
+    bookCover: book ? getBookCoverUrl(book) : 'cover_placeholder.jpg',
+    sound: true
+  };
+
+  showToast('⚡ Test Alarm 3 seconds me fire hoga...', 'info');
+  setTimeout(() => {
+    fireSpecificScheduledAlarm(dummyAlarm);
+  }, 3000);
 }
 
-function toggleReminderSchedule(isEnabled) {
-  reminderScheduleConfig.enabled = isEnabled;
-  saveReminderScheduleConfig(false);
-  showToast(isEnabled ? 'Daily Reading Reminder alarm ON ho gaya! ⏰' : 'Daily Reading Reminder alarm OFF kar diya gaya.', isEnabled ? 'success' : 'info');
-}
-
-function toggleDayChip(dayIndex) {
-  let days = Array.isArray(reminderScheduleConfig.days) ? [...reminderScheduleConfig.days] : [0,1,2,3,4,5,6];
-  if (days.includes(dayIndex)) {
-    if (days.length === 1) {
-      showToast('Kam se kam 1 din active hona zaroori hai!', 'warning');
-      return;
-    }
-    days = days.filter(d => d !== dayIndex);
-  } else {
-    days.push(dayIndex);
-    days.sort();
-  }
-  reminderScheduleConfig.days = days;
-  saveReminderScheduleConfig(false);
-}
-
-function setDaysSelection(mode) {
-  if (mode === 'all') {
-    reminderScheduleConfig.days = [0, 1, 2, 3, 4, 5, 6];
-  } else if (mode === 'weekdays') {
-    reminderScheduleConfig.days = [1, 2, 3, 4, 5];
-  } else if (mode === 'weekends') {
-    reminderScheduleConfig.days = [0, 6];
-  }
-  saveReminderScheduleConfig(false);
-  showToast(`Repeat days set: ${mode.toUpperCase()}`, 'info');
-}
-
-function toggleReminderSound(enabled) {
-  reminderScheduleConfig.sound = enabled;
-  saveReminderScheduleConfig(false);
-  if (enabled) {
+function fireSpecificScheduledAlarm(alarm) {
+  if (alarm.sound) {
     playReminderChime();
-    showToast('Alert Chime Sound Enabled! 🔔', 'success');
   }
+
+  const notifId = 'notif_alarm_' + Date.now();
+  const bookTitle = alarm.bookTitle || 'Mind Focus Books';
+  const coverUrl = alarm.bookCover || 'icon-192.png';
+
+  const newNotif = {
+    id: notifId,
+    category: alarm.type === 'notes' ? 'notes' : 'reading',
+    icon: alarm.type === 'notes' ? '💡' : '⏰',
+    iconClass: alarm.type === 'notes' ? 'notes' : 'reading',
+    title: alarm.title || '⏰ Scheduled Reading Alert',
+    message: alarm.message || 'Aapka scheduled time ho gaya hai!',
+    timestamp: new Date().toISOString(),
+    read: false,
+    actionType: alarm.type === 'notes' ? 'open_note_3d' : 'open_book',
+    actionLabel: alarm.type === 'notes' ? '💡 View Note' : '📖 Read Book',
+    bookTitle: bookTitle,
+    bookCover: coverUrl,
+    noteId: alarm.noteId || ''
+  };
+
+  userNotificationsState.unshift(newNotif);
+  saveNotifications();
+  if (typeof renderNotificationsHub === 'function') {
+    renderNotificationsHub();
+  }
+
+  // Native Android Phone Notification (Big Picture with Book Cover!)
+  if (window.Android && typeof window.Android.postNativeNotification === 'function') {
+    window.Android.postNativeNotification(alarm.title, alarm.message, bookTitle, coverUrl);
+  } else if ('Notification' in window && Notification.permission === 'granted') {
+    try {
+      new Notification(alarm.title, {
+        body: alarm.message,
+        icon: 'icon-192.png'
+      });
+    } catch (e) {}
+  }
+
+  showToast(`⏰ Alarm Fired: ${alarm.title}`, 'success');
 }
 
 function playReminderChime() {
@@ -31975,7 +32617,6 @@ function playReminderChime() {
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
       osc.type = 'sine';
-      osc.frequency.setValueAtTime(freq, start);
       gain.gain.setValueAtTime(0.18, start);
       gain.gain.exponentialRampToValueAtTime(0.0001, start + duration);
       osc.connect(gain);
@@ -31994,118 +32635,39 @@ function playReminderChime() {
 
 function startReminderScheduleTicker() {
   if (scheduleIntervalId) clearInterval(scheduleIntervalId);
-  // Check every 15 seconds so we never miss the designated minute
   scheduleIntervalId = setInterval(checkScheduledReminderTime, 15000);
 }
 
 function checkScheduledReminderTime() {
-  if (!reminderScheduleConfig.enabled) return;
+  if (!Array.isArray(userScheduledAlarmsList) || userScheduledAlarmsList.length === 0) return;
 
   const now = new Date();
-  const currentDay = now.getDay();
-  const scheduledDays = Array.isArray(reminderScheduleConfig.days) ? reminderScheduleConfig.days : [0,1,2,3,4,5,6];
-  if (!scheduledDays.includes(currentDay)) return;
-
   const currentH = now.getHours();
   const currentM = now.getMinutes();
   const currentHHMM = `${currentH < 10 ? '0' + currentH : currentH}:${currentM < 10 ? '0' + currentM : currentM}`;
-
   const todayDateStr = now.toISOString().slice(0, 10); // YYYY-MM-DD
   const fireKey = `${todayDateStr}_${currentHHMM}`;
 
-  if (currentHHMM === reminderScheduleConfig.time && reminderScheduleConfig.lastFiredDate !== fireKey) {
-    reminderScheduleConfig.lastFiredDate = fireKey;
-    saveReminderScheduleConfig(false);
-    fireScheduledReminderAlarm();
-  }
-}
+  userScheduledAlarmsList.forEach(alarm => {
+    if (!alarm.enabled) return;
 
-function fireScheduledReminderAlarm() {
-  // 1. Play gentle mindfulness chime if sound is enabled
-  if (reminderScheduleConfig.sound) {
-    playReminderChime();
-  }
-
-  // 2. Find currently reading book
-  const activeBooks = (state.books || []).filter(b => !b.notInterested);
-  const readingBooks = activeBooks.filter(b => b.status === 'READING');
-  const targetBook = readingBooks.length > 0 ? readingBooks[0] : (activeBooks.length > 0 ? activeBooks[0] : { title: 'Atomic Habits', currentPage: 45, totalPages: 320 });
-
-  const curP = targetBook.currentPage || 1;
-  const totP = targetBook.totalPages || 200;
-  const pct = Math.round((curP / totP) * 100);
-
-  // 3. Add to notifications feed
-  const newNotif = {
-    id: 'notif_alarm_' + Date.now(),
-    category: 'reading',
-    icon: '⏰',
-    iconClass: 'reading',
-    title: `⏰ Daily Reading Alarm: "${targetBook.title}"`,
-    message: `Aapka scheduled reminder time ho chuka hai! Page ${curP} par hain (${pct}% complete). Aaj ka 15-20 min session shuru karein!`,
-    timestamp: new Date().toISOString(),
-    read: false,
-    actionType: 'open_book',
-    actionLabel: '📖 Read Book Now',
-    bookIndex: state.books ? state.books.indexOf(targetBook) : 0,
-    bookTitle: targetBook.title,
-    bookCover: targetBook.coverImage || ''
-  };
-  userNotificationsState.unshift(newNotif);
-  saveNotifications();
-
-  // 4. Send device status bar notification if permitted
-  const notifTitle = reminderScheduleConfig.customTitle || `⏰ Padhne Ka Time! "${targetBook.title}"`;
-  const notifMsg = reminderScheduleConfig.customNote || `Rozana reading habit barkarar rakhein. Page ${curP}/${totP} (${pct}%). Start reading now!`;
-  const notifCover = getBookCoverUrl(targetBook);
-
-  if (window.Android && typeof window.Android.postNativeNotification === 'function') {
-    window.Android.postNativeNotification(notifTitle, notifMsg, targetBook.title, notifCover);
-  } else if ('Notification' in window && Notification.permission === 'granted') {
-    try {
-      new Notification(notifTitle, {
-        body: notifMsg,
-        icon: 'icon-192.png'
-      });
-    } catch (e) {
-      console.warn('System push error:', e);
-    }
-  }
-
-  // 5. Open Interactive Popup Modal
-  const modal = document.getElementById('scheduledReminderModalOverlay');
-  if (modal) {
-    const titleEl = document.getElementById('schedModalBookTitle');
-    const coverEl = document.getElementById('schedModalCoverImg');
-    const pagesEl = document.getElementById('schedModalPagesTxt');
-    const progressFill = document.getElementById('schedModalProgressFill');
-    const quoteEl = document.getElementById('schedModalQuoteTxt');
-
-    if (titleEl) titleEl.innerText = targetBook.title || 'Your Current Book';
-    if (coverEl) coverEl.src = targetBook.coverImage || 'cover_placeholder.jpg';
-    if (pagesEl) pagesEl.innerText = `Page ${curP} of ${totP} • ${pct}% Complete`;
-    if (progressFill) progressFill.style.width = pct + '%';
-
-    // Pick inspiring quote
-    const quotes = [
-      '"A reader lives a thousand lives before he dies." — George R.R. Martin',
-      '"Today a reader, tomorrow a leader." — Margaret Fuller',
-      '"Small disciplines repeated with consistency every day lead to great achievements." — John C. Maxwell',
-      '"The more that you read, the more things you will know." — Dr. Seuss'
-    ];
-    if (quoteEl) {
-      quoteEl.innerText = quotes[Math.floor(Math.random() * quotes.length)];
+    // Check Date filter
+    if (alarm.dateMode === 'specific') {
+      if (alarm.specificDate && alarm.specificDate !== todayDateStr) {
+        return; // Not today
+      }
     }
 
-    modal.style.display = 'flex';
-  }
+    if (currentHHMM === alarm.time && alarm.lastFiredKey !== fireKey) {
+      alarm.lastFiredKey = fireKey;
+      saveScheduledAlarms(false);
+      fireSpecificScheduledAlarm(alarm);
+    }
+  });
 }
 
 function triggerImmediateAlarmTest() {
-  showToast('⏰ Reading Alarm 3 seconds me bajega... (Chime test)', 'info');
-  setTimeout(() => {
-    fireScheduledReminderAlarm();
-  }, 3000);
+  testCurrentAlarmFromForm();
 }
 
 function closeScheduledReminderModal() {
@@ -32116,9 +32678,6 @@ function closeScheduledReminderModal() {
 function snoozeScheduledReminder(mins = 10) {
   closeScheduledReminderModal();
   showToast(`Reminder ${mins} minute ke liye snooze kar diya gaya hai! 💤`, 'info');
-  setTimeout(() => {
-    fireScheduledReminderAlarm();
-  }, mins * 60000);
 }
 
 function handleScheduledModalReadNow() {
@@ -32320,9 +32879,16 @@ function setStudioVisualTheme(theme) {
   if (card) {
     card.className = `android-system-notif-card theme-${theme}`;
   }
-  document.querySelectorAll('.btn-botanical-theme').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
+  document.querySelectorAll('.cyber-theme-btn').forEach(btn => {
+    const d = btn.getAttribute('data-theme');
+    const isMatch = (d === theme) ||
+      (theme === 'sunset' && d === 'amber') ||
+      (theme === 'emerald' && d === 'cyan') ||
+      (theme === 'cosmic' && d === 'purple') ||
+      (theme === 'sakura' && d === 'rose');
+    btn.classList.toggle('active', isMatch);
   });
+  updateLiveSimCard();
 }
 
 function updateLiveSimCard() {
@@ -32341,19 +32907,19 @@ function updateLiveSimCard() {
   if (simDesc) simDesc.innerText = msgVal;
 
   let coverUrl = 'hyperfocus_cover.jpg';
-  let tagText = '🌿 Mind Focus Reading';
+  let tagText = '⚡ Mind Focus Reading';
 
   if (studioActiveMode === 'book_note' && studioSelectedBook) {
     coverUrl = getBookCoverUrl(studioSelectedBook);
     tagText = `📖 ${studioSelectedBook.title || 'Book Note'}`;
   } else if (studioActiveTheme === 'sakura') {
-    tagText = '🌸 Sakura Garden Wisdom';
+    tagText = '🔴 Laser Red Alert';
   } else if (studioActiveTheme === 'emerald') {
-    tagText = '🌿 Emerald Forest Zen';
+    tagText = '❄️ Hyper Cyan Focus';
   } else if (studioActiveTheme === 'sunset') {
-    tagText = '🌅 Sunset Glow Reflection';
+    tagText = '⚡ Cyber Amber Insight';
   } else if (studioActiveTheme === 'cosmic') {
-    tagText = '🌌 Cosmic Focus';
+    tagText = '🌌 Neon Violet Horizon';
   }
 
   if (simBannerImg) simBannerImg.src = coverUrl;
