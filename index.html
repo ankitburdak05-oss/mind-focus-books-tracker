@@ -1227,6 +1227,9 @@
             <div class="bnd-hero-stats">
               <span class="bnd-stat-pill" id="bndNotesCountBadge">📝 0 Notes</span>
               <span class="bnd-stat-pill" id="bndPagesBadge">📄 250 Pages</span>
+              <button type="button" class="bnd-export-btn" onclick="exportCurrentBookNotes()" title="Export all notes for this book">
+                <span>📥 Export Notes</span>
+              </button>
             </div>
           </div>
         </div>
@@ -1253,11 +1256,26 @@
         </div>
       </div>
 
+      <!-- Live Search & Sort Bar -->
+      <div class="bnd-search-sort-bar">
+        <div class="bnd-search-wrap">
+          <span class="bnd-search-icon">🔍</span>
+          <input type="text" id="bndSearchInput" placeholder="Search in this book's notes..." oninput="onBndSearchInput(this.value)">
+        </div>
+        <select id="bndSortSelect" class="bnd-sort-select" onchange="onBndSortChange(this.value)">
+          <option value="newest">🕒 Newest</option>
+          <option value="oldest">⏳ Oldest</option>
+          <option value="page">📄 By Page</option>
+          <option value="favorite">⭐ Favorites</option>
+        </select>
+      </div>
+
       <!-- Filter Tabs -->
-      <div class="notes-tabs-bar" style="margin-top: 10px; margin-bottom: 12px;">
+      <div class="notes-tabs-bar" style="margin-top: 6px; margin-bottom: 12px;">
         <button type="button" class="notes-tab-chip active" id="bndTabAll" onclick="filterBndNotes('all')">All</button>
         <button type="button" class="notes-tab-chip" id="bndTabNotes" onclick="filterBndNotes('notes')">Notes</button>
         <button type="button" class="notes-tab-chip" id="bndTabHighlights" onclick="filterBndNotes('highlights')">Highlights</button>
+        <button type="button" class="notes-tab-chip" id="bndTabFavorites" onclick="filterBndNotes('favorites')">⭐ Favorites</button>
       </div>
 
       <!-- Notes Feed -->
@@ -2424,7 +2442,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.27 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.28 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -3721,6 +3739,95 @@
       <div class="modal-footer">
         <button type="button" class="btn-cancel" onclick="closeAddNoteModal()">Cancel</button>
         <button type="button" class="btn-save-gold" onclick="saveNewNoteModal()">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 3D INTERACTIVE NOTE CARD POPUP MODAL ================= -->
+  <div class="modal-overlay" id="note3dCardModalOverlay" style="display:none;" onclick="handleNote3dOverlayClick(event)">
+    <div class="note-3d-scene">
+      <div class="note-3d-card theme-gold" id="note3dCard" onclick="event.stopPropagation()">
+        <!-- Decorative Gold Foil Corners -->
+        <div class="n3d-corner n3d-tl"></div>
+        <div class="n3d-corner n3d-tr"></div>
+        <div class="n3d-corner n3d-bl"></div>
+        <div class="n3d-corner n3d-br"></div>
+
+        <!-- Header with Book Info & Close -->
+        <div class="n3d-header">
+          <div class="n3d-book-badge">
+            <img id="n3dBookCoverThumb" src="cover_placeholder.jpg" alt="Cover" class="n3d-thumb-img" onerror="this.src='cover_placeholder.jpg'">
+            <div>
+              <div id="n3dBookTitle" class="n3d-book-title">Atomic Habits</div>
+              <div id="n3dBookAuthor" class="n3d-book-author">James Clear</div>
+            </div>
+          </div>
+          <div class="n3d-header-actions">
+            <button type="button" class="n3d-fav-btn" id="n3dFavBtn" onclick="toggleNoteFavoriteCurrent()" title="Favorite this note">⭐</button>
+            <button type="button" class="n3d-close-btn" onclick="closeNote3dCardModal()" title="Close">&times;</button>
+          </div>
+        </div>
+
+        <!-- Note Meta & Theme Chips -->
+        <div class="n3d-meta-row">
+          <span class="n3d-type-chip" id="n3dTypeChip">📝 Personal Note</span>
+          <span class="n3d-page-chip" id="n3dPageChip">📄 Page 42</span>
+          <span class="n3d-date-chip" id="n3dDateChip">⏱️ 2 hours ago</span>
+        </div>
+
+        <!-- Quote / Reflection Body -->
+        <div class="n3d-body-wrap">
+          <div class="n3d-quote-mark left">“</div>
+          <div class="n3d-text-content" id="n3dNoteText"></div>
+          <div class="n3d-quote-mark right">”</div>
+
+          <!-- In-place edit form (hidden by default) -->
+          <div id="n3dEditContainer" style="display: none; width: 100%; margin-top: 8px;">
+            <textarea id="n3dEditTextarea" class="n3d-edit-input" placeholder="Edit note content..."></textarea>
+            <div style="display: flex; gap: 8px; margin-top: 8px; align-items: center;">
+              <input type="number" id="n3dEditPageInput" class="n3d-edit-page" placeholder="Page" min="1">
+              <button type="button" class="btn-save-gold" style="padding: 6px 14px; font-size: 0.8rem;" onclick="saveCurrentNote3dEdit()">Save</button>
+              <button type="button" class="btn-cancel" style="padding: 6px 12px; font-size: 0.8rem;" onclick="cancelCurrentNote3dEdit()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Card Theme Switcher Bar -->
+        <div class="n3d-theme-bar">
+          <span class="n3d-theme-label">Card Theme:</span>
+          <div class="n3d-theme-dots">
+            <button type="button" class="n3d-dot dot-gold active" id="dotThemeGold" onclick="setNote3dTheme('gold')" title="Golden Obsidian"></button>
+            <button type="button" class="n3d-dot dot-emerald" id="dotThemeEmerald" onclick="setNote3dTheme('emerald')" title="Royal Emerald"></button>
+            <button type="button" class="n3d-dot dot-amethyst" id="dotThemeAmethyst" onclick="setNote3dTheme('amethyst')" title="Deep Amethyst"></button>
+            <button type="button" class="n3d-dot dot-parchment" id="dotThemeParchment" onclick="setNote3dTheme('parchment')" title="Vintage Parchment"></button>
+            <button type="button" class="n3d-dot dot-midnight" id="dotThemeMidnight" onclick="setNote3dTheme('midnight')" title="Midnight Sapphire"></button>
+          </div>
+        </div>
+
+        <!-- Interactive Action Toolbar -->
+        <div class="n3d-toolbar">
+          <button type="button" class="n3d-tool-btn" id="n3dAudioBtn" onclick="toggleReadNoteAloud()" title="Listen to Note">
+            <span id="n3dAudioIcon">🔊</span>
+            <span id="n3dAudioLabel">Listen</span>
+          </button>
+          <button type="button" class="n3d-tool-btn" onclick="copyCurrentNote3d()" title="Copy to Clipboard">
+            <span>📋</span>
+            <span>Copy</span>
+          </button>
+          <button type="button" class="n3d-tool-btn" onclick="toggleCurrentNote3dEdit()" title="Edit Note">
+            <span>✏️</span>
+            <span>Edit</span>
+          </button>
+          <button type="button" class="n3d-tool-btn" onclick="shareOrExportCurrentNote()" title="Share Quote">
+            <span>📤</span>
+            <span>Share</span>
+          </button>
+          <button type="button" class="n3d-tool-btn delete" onclick="deleteCurrentNoteFrom3d()" title="Delete">
+            <span>🗑️</span>
+            <span>Delete</span>
+          </button>
+        </div>
+
       </div>
     </div>
   </div>

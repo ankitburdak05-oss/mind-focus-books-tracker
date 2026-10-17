@@ -9119,6 +9119,430 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   color: #111827;
   border-color: var(--accent-gold);
 }
+
+/* ==========================================================================
+   INTERACTIVE 3D NOTE MODAL & CARD STYLES
+   ========================================================================== */
+.note-3d-scene {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 440px;
+  padding: 16px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.note-3d-card {
+  position: relative;
+  width: 100%;
+  border-radius: 24px;
+  padding: 24px 22px 18px 22px;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: note3dEntry 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@keyframes note3dEntry {
+  0% {
+    opacity: 0;
+    transform: scale(0.72) rotateX(18deg) translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateX(0deg) translateY(0);
+  }
+}
+
+/* 3D Card Themes */
+.note-3d-card.theme-gold {
+  background: linear-gradient(150deg, #1e1b13 0%, #11141e 50%, #07090f 100%);
+  border: 1.5px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(245, 158, 11, 0.22);
+}
+.note-3d-card.theme-emerald {
+  background: linear-gradient(150deg, #09211a 0%, #0d1520 50%, #050a10 100%);
+  border: 1.5px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(16, 185, 129, 0.22);
+}
+.note-3d-card.theme-amethyst {
+  background: linear-gradient(150deg, #22122c 0%, #141124 50%, #080612 100%);
+  border: 1.5px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(168, 85, 247, 0.22);
+}
+.note-3d-card.theme-parchment {
+  background: linear-gradient(150deg, #282119 0%, #1f1a14 50%, #15110c 100%);
+  border: 1.5px solid rgba(217, 119, 6, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(180, 83, 9, 0.25);
+}
+.note-3d-card.theme-midnight {
+  background: linear-gradient(150deg, #0d1b2a 0%, #0f172a 50%, #030712 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(56, 189, 248, 0.22);
+}
+
+/* Decorative 3D Foil Corners */
+.n3d-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  opacity: 0.65;
+}
+.n3d-tl {
+  top: 8px; left: 8px;
+  border-top: 2px solid var(--accent-gold);
+  border-left: 2px solid var(--accent-gold);
+}
+.n3d-tr {
+  top: 8px; right: 8px;
+  border-top: 2px solid var(--accent-gold);
+  border-right: 2px solid var(--accent-gold);
+}
+.n3d-bl {
+  bottom: 8px; left: 8px;
+  border-bottom: 2px solid var(--accent-gold);
+  border-left: 2px solid var(--accent-gold);
+}
+.n3d-br {
+  bottom: 8px; right: 8px;
+  border-bottom: 2px solid var(--accent-gold);
+  border-right: 2px solid var(--accent-gold);
+}
+
+/* Header */
+.n3d-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.n3d-book-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.n3d-thumb-img {
+  width: 36px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  flex-shrink: 0;
+}
+.n3d-book-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+.n3d-book-author {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+.n3d-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.n3d-fav-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #fbbf24;
+  transition: transform 0.15s, background 0.15s;
+}
+.n3d-fav-btn:active {
+  transform: scale(0.9);
+}
+.n3d-fav-btn.active {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+.n3d-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.n3d-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+/* Meta Chips */
+.n3d-meta-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.n3d-type-chip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.n3d-page-chip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #e2e8f0;
+}
+.n3d-date-chip {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  color: var(--text-muted);
+}
+
+/* Quote Body Wrap */
+.n3d-body-wrap {
+  position: relative;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px 18px;
+  margin-bottom: 14px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.n3d-quote-mark {
+  font-family: Georgia, serif;
+  font-size: 2.2rem;
+  line-height: 0.8;
+  color: rgba(245, 158, 11, 0.35);
+  user-select: none;
+}
+.n3d-quote-mark.left {
+  margin-bottom: 6px;
+}
+.n3d-quote-mark.right {
+  text-align: right;
+  margin-top: 6px;
+}
+.n3d-text-content {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #f8fafc;
+  font-weight: 500;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.n3d-edit-input {
+  width: 100%;
+  min-height: 110px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--accent-gold);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+.n3d-edit-page {
+  width: 90px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.82rem;
+}
+
+/* Theme Switcher Dots */
+.n3d-theme-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+}
+.n3d-theme-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.n3d-theme-dots {
+  display: flex;
+  gap: 8px;
+}
+.n3d-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.n3d-dot:hover {
+  transform: scale(1.15);
+}
+.n3d-dot.active {
+  border-color: #fff;
+  transform: scale(1.15);
+}
+.dot-gold { background: #f59e0b; }
+.dot-emerald { background: #10b981; }
+.dot-amethyst { background: #a855f7; }
+.dot-parchment { background: #d97706; }
+.dot-midnight { background: #38bdf8; }
+
+/* 3D Toolbar */
+.n3d-toolbar {
+  display: flex;
+  gap: 6px;
+  justify-content: space-between;
+}
+.n3d-tool-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 8px 4px;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.n3d-tool-btn span:first-child {
+  font-size: 1.05rem;
+}
+.n3d-tool-btn:hover, .n3d-tool-btn:active {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fff;
+  border-color: rgba(245, 158, 11, 0.35);
+  transform: translateY(-2px);
+}
+.n3d-tool-btn.delete {
+  color: #f87171;
+}
+.n3d-tool-btn.delete:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* Search & Sort Bar in Notes Detail */
+.bnd-search-sort-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 8px;
+}
+.bnd-search-wrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.bnd-search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.bnd-search-wrap input {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.84rem;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.bnd-search-wrap input:focus {
+  border-color: var(--accent-gold);
+}
+.bnd-sort-select {
+  padding: 9px 10px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+}
+.bnd-export-btn {
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--accent-gold);
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.bnd-export-btn:hover {
+  background: var(--accent-gold);
+  color: #111827;
+}
+
+/* Note card cursor and 3D feel */
+.bnd-note-card {
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s, box-shadow 0.2s;
+}
+.bnd-note-card:hover {
+  transform: translateY(-2px) scale(1.008);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35), 0 0 15px rgba(245, 158, 11, 0.12);
+}
+.bnd-note-card:active {
+  transform: scale(0.985);
+}
+.bnd-note-card .bnd-fav-star {
+  font-size: 1rem;
+  color: #fbbf24;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: transform 0.15s;
+}
+.bnd-note-card .bnd-fav-star:hover {
+  transform: scale(1.25);
+}
 </style>
 </head>
 <body>
@@ -10335,6 +10759,9 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
             <div class="bnd-hero-stats">
               <span class="bnd-stat-pill" id="bndNotesCountBadge">📝 0 Notes</span>
               <span class="bnd-stat-pill" id="bndPagesBadge">📄 250 Pages</span>
+              <button type="button" class="bnd-export-btn" onclick="exportCurrentBookNotes()" title="Export all notes for this book">
+                <span>📥 Export Notes</span>
+              </button>
             </div>
           </div>
         </div>
@@ -10361,11 +10788,26 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         </div>
       </div>
 
+      <!-- Live Search & Sort Bar -->
+      <div class="bnd-search-sort-bar">
+        <div class="bnd-search-wrap">
+          <span class="bnd-search-icon">🔍</span>
+          <input type="text" id="bndSearchInput" placeholder="Search in this book's notes..." oninput="onBndSearchInput(this.value)">
+        </div>
+        <select id="bndSortSelect" class="bnd-sort-select" onchange="onBndSortChange(this.value)">
+          <option value="newest">🕒 Newest</option>
+          <option value="oldest">⏳ Oldest</option>
+          <option value="page">📄 By Page</option>
+          <option value="favorite">⭐ Favorites</option>
+        </select>
+      </div>
+
       <!-- Filter Tabs -->
-      <div class="notes-tabs-bar" style="margin-top: 10px; margin-bottom: 12px;">
+      <div class="notes-tabs-bar" style="margin-top: 6px; margin-bottom: 12px;">
         <button type="button" class="notes-tab-chip active" id="bndTabAll" onclick="filterBndNotes('all')">All</button>
         <button type="button" class="notes-tab-chip" id="bndTabNotes" onclick="filterBndNotes('notes')">Notes</button>
         <button type="button" class="notes-tab-chip" id="bndTabHighlights" onclick="filterBndNotes('highlights')">Highlights</button>
+        <button type="button" class="notes-tab-chip" id="bndTabFavorites" onclick="filterBndNotes('favorites')">⭐ Favorites</button>
       </div>
 
       <!-- Notes Feed -->
@@ -11532,7 +11974,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.27 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.28 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -12829,6 +13271,95 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
       <div class="modal-footer">
         <button type="button" class="btn-cancel" onclick="closeAddNoteModal()">Cancel</button>
         <button type="button" class="btn-save-gold" onclick="saveNewNoteModal()">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 3D INTERACTIVE NOTE CARD POPUP MODAL ================= -->
+  <div class="modal-overlay" id="note3dCardModalOverlay" style="display:none;" onclick="handleNote3dOverlayClick(event)">
+    <div class="note-3d-scene">
+      <div class="note-3d-card theme-gold" id="note3dCard" onclick="event.stopPropagation()">
+        <!-- Decorative Gold Foil Corners -->
+        <div class="n3d-corner n3d-tl"></div>
+        <div class="n3d-corner n3d-tr"></div>
+        <div class="n3d-corner n3d-bl"></div>
+        <div class="n3d-corner n3d-br"></div>
+
+        <!-- Header with Book Info & Close -->
+        <div class="n3d-header">
+          <div class="n3d-book-badge">
+            <img id="n3dBookCoverThumb" src="cover_placeholder.jpg" alt="Cover" class="n3d-thumb-img" onerror="this.src='cover_placeholder.jpg'">
+            <div>
+              <div id="n3dBookTitle" class="n3d-book-title">Atomic Habits</div>
+              <div id="n3dBookAuthor" class="n3d-book-author">James Clear</div>
+            </div>
+          </div>
+          <div class="n3d-header-actions">
+            <button type="button" class="n3d-fav-btn" id="n3dFavBtn" onclick="toggleNoteFavoriteCurrent()" title="Favorite this note">⭐</button>
+            <button type="button" class="n3d-close-btn" onclick="closeNote3dCardModal()" title="Close">&times;</button>
+          </div>
+        </div>
+
+        <!-- Note Meta & Theme Chips -->
+        <div class="n3d-meta-row">
+          <span class="n3d-type-chip" id="n3dTypeChip">📝 Personal Note</span>
+          <span class="n3d-page-chip" id="n3dPageChip">📄 Page 42</span>
+          <span class="n3d-date-chip" id="n3dDateChip">⏱️ 2 hours ago</span>
+        </div>
+
+        <!-- Quote / Reflection Body -->
+        <div class="n3d-body-wrap">
+          <div class="n3d-quote-mark left">“</div>
+          <div class="n3d-text-content" id="n3dNoteText"></div>
+          <div class="n3d-quote-mark right">”</div>
+
+          <!-- In-place edit form (hidden by default) -->
+          <div id="n3dEditContainer" style="display: none; width: 100%; margin-top: 8px;">
+            <textarea id="n3dEditTextarea" class="n3d-edit-input" placeholder="Edit note content..."></textarea>
+            <div style="display: flex; gap: 8px; margin-top: 8px; align-items: center;">
+              <input type="number" id="n3dEditPageInput" class="n3d-edit-page" placeholder="Page" min="1">
+              <button type="button" class="btn-save-gold" style="padding: 6px 14px; font-size: 0.8rem;" onclick="saveCurrentNote3dEdit()">Save</button>
+              <button type="button" class="btn-cancel" style="padding: 6px 12px; font-size: 0.8rem;" onclick="cancelCurrentNote3dEdit()">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3D Card Theme Switcher Bar -->
+        <div class="n3d-theme-bar">
+          <span class="n3d-theme-label">Card Theme:</span>
+          <div class="n3d-theme-dots">
+            <button type="button" class="n3d-dot dot-gold active" id="dotThemeGold" onclick="setNote3dTheme('gold')" title="Golden Obsidian"></button>
+            <button type="button" class="n3d-dot dot-emerald" id="dotThemeEmerald" onclick="setNote3dTheme('emerald')" title="Royal Emerald"></button>
+            <button type="button" class="n3d-dot dot-amethyst" id="dotThemeAmethyst" onclick="setNote3dTheme('amethyst')" title="Deep Amethyst"></button>
+            <button type="button" class="n3d-dot dot-parchment" id="dotThemeParchment" onclick="setNote3dTheme('parchment')" title="Vintage Parchment"></button>
+            <button type="button" class="n3d-dot dot-midnight" id="dotThemeMidnight" onclick="setNote3dTheme('midnight')" title="Midnight Sapphire"></button>
+          </div>
+        </div>
+
+        <!-- Interactive Action Toolbar -->
+        <div class="n3d-toolbar">
+          <button type="button" class="n3d-tool-btn" id="n3dAudioBtn" onclick="toggleReadNoteAloud()" title="Listen to Note">
+            <span id="n3dAudioIcon">🔊</span>
+            <span id="n3dAudioLabel">Listen</span>
+          </button>
+          <button type="button" class="n3d-tool-btn" onclick="copyCurrentNote3d()" title="Copy to Clipboard">
+            <span>📋</span>
+            <span>Copy</span>
+          </button>
+          <button type="button" class="n3d-tool-btn" onclick="toggleCurrentNote3dEdit()" title="Edit Note">
+            <span>✏️</span>
+            <span>Edit</span>
+          </button>
+          <button type="button" class="n3d-tool-btn" onclick="shareOrExportCurrentNote()" title="Share Quote">
+            <span>📤</span>
+            <span>Share</span>
+          </button>
+          <button type="button" class="n3d-tool-btn delete" onclick="deleteCurrentNoteFrom3d()" title="Delete">
+            <span>🗑️</span>
+            <span>Delete</span>
+          </button>
+        </div>
+
       </div>
     </div>
   </div>
@@ -19024,18 +19555,18 @@ if (typeof module !== 'undefined' && module.exports) {
 </script>
   <script>
 window.BROADCAST_NOTICE = {
-  "id": "notice-v0.0.27",
-  "version": "v0.0.27",
+  "id": "notice-v0.0.28",
+  "version": "v0.0.28",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "📖",
-  "title": "Mind Focus Books v0.0.27 Ready!",
-  "message": "Naya v0.0.27 release update ready hai! Profile ke 'Notes & Highlights' me ab kisi bhi book par click karte hi us book ke sabhi notes ek dedicated naye premium page me open hote hain. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
-  "btnText": "⚡ Update Now (v0.0.27)",
+  "icon": "✨",
+  "title": "Mind Focus Books v0.0.28 Ready!",
+  "message": "Naya v0.0.28 release update ready hai! Kisi bhi note par click karne par interactive 3D Card Modal open hota hai, jisme 3D Tilt physics, Text-to-Speech audio narration, 5 Theme switchers, In-place note editing, aur Star Favorites feature add kiya gaya hai. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
+  "btnText": "⚡ Update Now (v0.0.28)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-17T11:45:00.000Z"
+  "timestamp": "2026-10-17T12:00:00.000Z"
 };
 
 </script>
@@ -19044,18 +19575,20 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.27",
-    "name": "Mind Focus Books v0.0.27 (Dedicated Book Notes Detail Screen)",
+    "version": "v0.0.28",
+    "name": "Mind Focus Books v0.0.28 (Interactive 3D Note Cards & Narration)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.27 Release: Dedicated Book Notes Page & Premium Design.",
-      "📖 Dedicated Full-Screen Notes View: Book par click karte hi sirf us book ke notes ke liye naya premium designed page open hota hai.",
-      "🎨 Luxury Reading Journal Aesthetic: Book cover hero banner, dark gold gradient aura aur ambient glow design.",
-      "✍️ Quick Note Capture on Notes Page: Direct usi book ke page par note textarea, page number aur type select ke sath save karein.",
-      "📋 1-Tap Copy & Delete Actions: Kisi bhi quote/note ko clipboard me copy karein ya delete karein.",
+      "⚡ Official v0.0.28 Release: Interactive 3D Note Cards & Audio Narration.",
+      "🃏 3D Perspective Note Modal: Kisi bhi note par click karne par realistic 3D depth, brass corners aur physics tilt ke sath card open hota hai.",
+      "🔊 Text-to-Speech Voice Narration: 1-click me note ko bolkar sunne ke liye native audio narration player.",
+      "🎨 5 Luxurious Card Themes: Golden Obsidian, Royal Emerald, Deep Amethyst, Vintage Parchment aur Midnight Sapphire.",
+      "✏️ In-Place Note Editing: 3D card ke andar se hi note aur page number edit aur save karein.",
+      "⭐ Star Favorites & Search: Notes me star lagayein aur search bar se instant filter karein.",
+      "📥 1-Click Book Notes Export: Poori book ke personal reading notes ko clean text report me download karein.",
       "🛡️ Safe In-Place Update: 100% reading streak aur user notes surakshit rahenge."
     ],
-    "stagedAt": "2026-10-17T11:45:00.000Z",
+    "stagedAt": "2026-10-17T12:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
@@ -19137,11 +19670,11 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
 </script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.27)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.28)
 // ==========================================================================
 
-const APP_VERSION = '0.0.27';
-const CURRENT_APP_VERSION = 'v0.0.27';
+const APP_VERSION = '0.0.28';
+const CURRENT_APP_VERSION = 'v0.0.28';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -22097,6 +22630,11 @@ window.handleAppBackButton = function() {
     closeShelfSelectorDropdown();
     return true;
   }
+  const n3dModal = document.getElementById('note3dCardModalOverlay');
+  if (n3dModal && n3dModal.style.display !== 'none') {
+    closeNote3dCardModal();
+    return true;
+  }
 
   // 1d. If in an adjustment sub-view, back goes to Settings Hub
   const adjSubViews = ['viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
@@ -24699,10 +25237,18 @@ function openBookNotesDetailView(bookTitle) {
   }
 
   // Reset tab chips
-  ['All', 'Notes', 'Highlights'].forEach(t => {
+  ['All', 'Notes', 'Highlights', 'Favorites'].forEach(t => {
     const el = document.getElementById('bndTab' + t);
     if (el) el.classList.toggle('active', t.toLowerCase() === 'all');
   });
+
+  // Reset search and sort
+  bndSearchQuery = '';
+  bndSortOrder = 'newest';
+  const searchInput = document.getElementById('bndSearchInput');
+  if (searchInput) searchInput.value = '';
+  const sortSelect = document.getElementById('bndSortSelect');
+  if (sortSelect) sortSelect.value = 'newest';
 
   // Clear note input form
   const inputEl = document.getElementById('bndNewNoteInput');
@@ -24734,9 +25280,23 @@ function focusBookNotesInput() {
   }
 }
 
+let bndSearchQuery = '';
+let bndSortOrder = 'newest';
+let current3dNoteId = null;
+
+function onBndSearchInput(val) {
+  bndSearchQuery = (val || '').toLowerCase().trim();
+  renderBndNotesFeed();
+}
+
+function onBndSortChange(val) {
+  bndSortOrder = val || 'newest';
+  renderBndNotesFeed();
+}
+
 function filterBndNotes(cat) {
   activeBndFilter = cat;
-  ['All', 'Notes', 'Highlights'].forEach(t => {
+  ['All', 'Notes', 'Highlights', 'Favorites'].forEach(t => {
     const el = document.getElementById('bndTab' + t);
     if (el) el.classList.toggle('active', t.toLowerCase() === cat.toLowerCase());
   });
@@ -24759,19 +25319,43 @@ function renderBndNotesFeed() {
 
   if (!feed) return;
 
-  const filtered = allBookNotes.filter(n => {
-    if (activeBndFilter === 'all') return true;
-    if (activeBndFilter === 'notes') return (n.type || '').toLowerCase() === 'note';
-    if (activeBndFilter === 'highlights') return (n.type || '').toLowerCase() === 'highlight';
+  let filtered = allBookNotes.filter(n => {
+    if (activeBndFilter === 'notes' && (n.type || '').toLowerCase() !== 'note') return false;
+    if (activeBndFilter === 'highlights' && (n.type || '').toLowerCase() !== 'highlight') return false;
+    if (activeBndFilter === 'favorites' && !n.isFavorite) return false;
+    if (bndSearchQuery) {
+      const q = (n.quote || '').toLowerCase();
+      const p = String(n.page || '');
+      if (!q.includes(bndSearchQuery) && !p.includes(bndSearchQuery)) return false;
+    }
     return true;
+  });
+
+  // Sorting
+  filtered.sort((a, b) => {
+    if (bndSortOrder === 'favorite') {
+      return (b.isFavorite ? 1 : 0) - (a.isFavorite ? 1 : 0);
+    }
+    if (bndSortOrder === 'page') {
+      return (Number(a.page) || 0) - (Number(b.page) || 0);
+    }
+    if (bndSortOrder === 'oldest') {
+      return (a.createdAt || a.id || 0) > (b.createdAt || b.id || 0) ? 1 : -1;
+    }
+    // newest (default)
+    return (b.createdAt || b.id || 0) > (a.createdAt || a.id || 0) ? 1 : -1;
   });
 
   if (filtered.length === 0) {
     feed.innerHTML = `
       <div class="bnd-empty-state">
         <div class="bnd-empty-icon">📖✨</div>
-        <h4 style="font-size: 1rem; color: #fff; margin-bottom: 6px;">Is book ka koi note nahi hai abhi</h4>
-        <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 280px; margin: 0 auto 14px;">Upar box me apna pehla vichar ya quotation likhein aur "Save Note" dabayein.</p>
+        <h4 style="font-size: 1rem; color: #fff; margin-bottom: 6px;">
+          ${bndSearchQuery ? 'Koi matching note nahi mila' : 'Is book ka koi note nahi hai abhi'}
+        </h4>
+        <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 280px; margin: 0 auto 14px;">
+          ${bndSearchQuery ? 'Alag keyword search karein ya filter reset karein.' : 'Upar box me apna pehla vichar ya quotation likhein aur "Save Note" dabayein.'}
+        </p>
         <button type="button" class="btn-save-gold" onclick="focusBookNotesInput()" style="padding: 8px 18px; font-size: 0.85rem;">
           ✍️ Pehla Note Likhein
         </button>
@@ -24781,10 +25365,13 @@ function renderBndNotesFeed() {
   }
 
   feed.innerHTML = filtered.map(item => `
-    <div class="bnd-note-card">
+    <div class="bnd-note-card" onclick="openNote3dCardModal('${escapeHtml(item.id)}')">
       <div class="bnd-note-watermark">“</div>
       <div class="bnd-note-top-bar">
         <div class="bnd-note-badges">
+          <span class="bnd-fav-star" onclick="event.stopPropagation(); toggleNoteFavoriteInline('${escapeHtml(item.id)}')" title="Star Favorite">
+            ${item.isFavorite ? '⭐' : '☆'}
+          </span>
           <span class="bnd-badge-type ${(item.type || '').toLowerCase() === 'highlight' ? 'highlight' : 'note'}">
             ${(item.type || '').toLowerCase() === 'highlight' ? '✨ Highlight' : '📝 Note'}
           </span>
@@ -24792,15 +25379,18 @@ function renderBndNotesFeed() {
           <span class="bnd-badge-time">⏱️ ${escapeHtml(item.timeAgo || 'Saved')}</span>
         </div>
         <div class="bnd-note-actions">
-          <button type="button" class="bnd-act-btn" onclick="copyNoteQuote('${escapeHtml(encodeURIComponent(item.quote || ''))}')" title="Copy to clipboard">
+          <button type="button" class="bnd-act-btn" onclick="event.stopPropagation(); copyNoteQuote('${escapeHtml(encodeURIComponent(item.quote || ''))}')" title="Copy to clipboard">
             📋 Copy
           </button>
-          <button type="button" class="bnd-act-btn delete" onclick="deleteBndNote('${escapeHtml(item.id)}')" title="Delete Note">
+          <button type="button" class="bnd-act-btn delete" onclick="event.stopPropagation(); deleteBndNote('${escapeHtml(item.id)}')" title="Delete Note">
             🗑️
           </button>
         </div>
       </div>
       <div class="bnd-note-text">${escapeHtml(item.quote || '')}</div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+        <span style="font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; opacity: 0.85;">Tap to view in 3D ➔</span>
+      </div>
     </div>
   `).join('');
 }
@@ -24831,7 +25421,9 @@ function saveBndNote() {
     page: String(page),
     type: type,
     timeAgo: 'Just now',
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    isFavorite: false,
+    theme: 'gold'
   };
 
   userNotesState.unshift(newNote);
@@ -24879,6 +25471,327 @@ function copyNoteQuote(encodedQuote) {
   } catch (e) {
     showToast('Could not copy note');
   }
+}
+
+// ================= 3D INTERACTIVE NOTE CARD LOGIC =================
+function openNote3dCardModal(noteId) {
+  loadUserNotes();
+  const note = userNotesState.find(n => n.id === noteId);
+  if (!note) return;
+  current3dNoteId = noteId;
+
+  const matchedBook = (state.books || []).find(b => b.title && b.title.trim().toLowerCase() === (note.book || '').trim().toLowerCase());
+  const coverUrl = matchedBook ? getBookCoverUrl(matchedBook) : 'cover_placeholder.jpg';
+  const author = matchedBook ? (matchedBook.author || 'Author') : 'Mind & Focus';
+
+  const thumbEl = document.getElementById('n3dBookCoverThumb');
+  if (thumbEl) thumbEl.src = coverUrl;
+
+  const titleEl = document.getElementById('n3dBookTitle');
+  if (titleEl) titleEl.innerText = note.book || 'Book';
+
+  const authorEl = document.getElementById('n3dBookAuthor');
+  if (authorEl) authorEl.innerText = author;
+
+  const typeChip = document.getElementById('n3dTypeChip');
+  if (typeChip) typeChip.innerText = (note.type || '').toLowerCase() === 'highlight' ? '✨ Highlight' : '📝 Personal Note';
+
+  const pageChip = document.getElementById('n3dPageChip');
+  if (pageChip) pageChip.innerText = `📄 Page ${note.page || '1'}`;
+
+  const dateChip = document.getElementById('n3dDateChip');
+  if (dateChip) dateChip.innerText = `⏱️ ${note.timeAgo || 'Saved'}`;
+
+  const textEl = document.getElementById('n3dNoteText');
+  if (textEl) textEl.innerText = note.quote || '';
+
+  const favBtn = document.getElementById('n3dFavBtn');
+  if (favBtn) favBtn.classList.toggle('active', !!note.isFavorite);
+
+  // Reset audio button
+  const audioLabel = document.getElementById('n3dAudioLabel');
+  if (audioLabel) audioLabel.innerText = 'Listen';
+  const audioIcon = document.getElementById('n3dAudioIcon');
+  if (audioIcon) audioIcon.innerText = '🔊';
+
+  // Apply theme
+  const theme = note.theme || 'gold';
+  setNote3dTheme(theme, false);
+
+  // Hide edit container, show text
+  cancelCurrentNote3dEdit();
+
+  const overlay = document.getElementById('note3dCardModalOverlay');
+  if (overlay) overlay.style.display = 'flex';
+
+  // Attach 3D tilt interaction
+  attach3dCardTiltPhysics();
+}
+
+function closeNote3dCardModal() {
+  if (window.speechSynthesis && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+  }
+  const overlay = document.getElementById('note3dCardModalOverlay');
+  if (overlay) overlay.style.display = 'none';
+  current3dNoteId = null;
+}
+
+function handleNote3dOverlayClick(e) {
+  if (e.target.id === 'note3dCardModalOverlay') {
+    closeNote3dCardModal();
+  }
+}
+
+function attach3dCardTiltPhysics() {
+  const card = document.getElementById('note3dCard');
+  if (!card) return;
+
+  function handleMove(e) {
+    const rect = card.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = -((y - centerY) / centerY) * 10;
+    const rotateY = ((x - centerX) / centerX) * 10;
+    card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+  }
+
+  function handleLeave() {
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+  }
+
+  card.onmousemove = handleMove;
+  card.onmouseleave = handleLeave;
+  card.ontouchmove = handleMove;
+  card.ontouchend = handleLeave;
+}
+
+function setNote3dTheme(themeName, saveToNote = true) {
+  const card = document.getElementById('note3dCard');
+  if (!card) return;
+  card.classList.remove('theme-gold', 'theme-emerald', 'theme-amethyst', 'theme-parchment', 'theme-midnight');
+  card.classList.add('theme-' + themeName);
+
+  const dots = {
+    gold: 'dotThemeGold',
+    emerald: 'dotThemeEmerald',
+    amethyst: 'dotThemeAmethyst',
+    parchment: 'dotThemeParchment',
+    midnight: 'dotThemeMidnight'
+  };
+  Object.keys(dots).forEach(k => {
+    const el = document.getElementById(dots[k]);
+    if (el) el.classList.toggle('active', k === themeName);
+  });
+
+  if (saveToNote && current3dNoteId) {
+    const note = userNotesState.find(n => n.id === current3dNoteId);
+    if (note) {
+      note.theme = themeName;
+      try { localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState)); } catch (e) {}
+    }
+  }
+}
+
+function toggleNoteFavoriteCurrent() {
+  if (!current3dNoteId) return;
+  toggleNoteFavoriteInline(current3dNoteId);
+  const note = userNotesState.find(n => n.id === current3dNoteId);
+  const favBtn = document.getElementById('n3dFavBtn');
+  if (favBtn && note) {
+    favBtn.classList.toggle('active', !!note.isFavorite);
+  }
+}
+
+function toggleNoteFavoriteInline(noteId) {
+  loadUserNotes();
+  const note = userNotesState.find(n => n.id === noteId);
+  if (!note) return;
+  note.isFavorite = !note.isFavorite;
+  try { localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState)); } catch (e) {}
+  renderBndNotesFeed();
+  showToast(note.isFavorite ? 'Note starred as Favorite! ⭐' : 'Removed from Favorites');
+}
+
+function toggleReadNoteAloud() {
+  if (!current3dNoteId) return;
+  const note = userNotesState.find(n => n.id === current3dNoteId);
+  if (!note) return;
+
+  if (!('speechSynthesis' in window)) {
+    showToast('Audio narration not supported in this browser');
+    return;
+  }
+
+  const audioLabel = document.getElementById('n3dAudioLabel');
+  const audioIcon = document.getElementById('n3dAudioIcon');
+
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if (audioLabel) audioLabel.innerText = 'Listen';
+    if (audioIcon) audioIcon.innerText = '🔊';
+    showToast('Audio narration stopped');
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(note.quote);
+  utterance.rate = 0.95;
+  utterance.pitch = 1.0;
+  utterance.onend = () => {
+    if (audioLabel) audioLabel.innerText = 'Listen';
+    if (audioIcon) audioIcon.innerText = '🔊';
+  };
+  utterance.onerror = () => {
+    if (audioLabel) audioLabel.innerText = 'Listen';
+    if (audioIcon) audioIcon.innerText = '🔊';
+  };
+
+  if (audioLabel) audioLabel.innerText = 'Stop';
+  if (audioIcon) audioIcon.innerText = '⏹️';
+  window.speechSynthesis.speak(utterance);
+  showToast('Reading note aloud... 🗣️🎧');
+}
+
+function toggleCurrentNote3dEdit() {
+  const container = document.getElementById('n3dEditContainer');
+  const textEl = document.getElementById('n3dNoteText');
+  const textarea = document.getElementById('n3dEditTextarea');
+  const pageInput = document.getElementById('n3dEditPageInput');
+  if (!container || !textEl || !current3dNoteId) return;
+
+  const isEditing = container.style.display !== 'none';
+  if (isEditing) {
+    cancelCurrentNote3dEdit();
+  } else {
+    const note = userNotesState.find(n => n.id === current3dNoteId);
+    if (note) {
+      if (textarea) textarea.value = note.quote || '';
+      if (pageInput) pageInput.value = note.page || '1';
+    }
+    container.style.display = 'block';
+    textEl.style.display = 'none';
+    if (textarea) textarea.focus();
+  }
+}
+
+function saveCurrentNote3dEdit() {
+  if (!current3dNoteId) return;
+  const note = userNotesState.find(n => n.id === current3dNoteId);
+  if (!note) return;
+
+  const textarea = document.getElementById('n3dEditTextarea');
+  const pageInput = document.getElementById('n3dEditPageInput');
+  const newContent = textarea ? textarea.value.trim() : '';
+  const newPage = pageInput ? pageInput.value.trim() : '1';
+
+  if (!newContent) {
+    showToast('Note cannot be empty!');
+    return;
+  }
+
+  note.quote = newContent;
+  note.page = newPage;
+  try { localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState)); } catch (e) {}
+
+  const textEl = document.getElementById('n3dNoteText');
+  if (textEl) textEl.innerText = newContent;
+  const pageChip = document.getElementById('n3dPageChip');
+  if (pageChip) pageChip.innerText = `📄 Page ${newPage}`;
+
+  cancelCurrentNote3dEdit();
+  renderBndNotesFeed();
+  renderCurrentBookDetailNotes();
+  showToast('Note updated successfully! ✏️✨');
+}
+
+function cancelCurrentNote3dEdit() {
+  const container = document.getElementById('n3dEditContainer');
+  const textEl = document.getElementById('n3dNoteText');
+  if (container) container.style.display = 'none';
+  if (textEl) textEl.style.display = 'block';
+}
+
+function copyCurrentNote3d() {
+  if (!current3dNoteId) return;
+  const note = userNotesState.find(n => n.id === current3dNoteId);
+  if (note) {
+    copyNoteQuote(encodeURIComponent(note.quote || ''));
+  }
+}
+
+function shareOrExportCurrentNote() {
+  if (!current3dNoteId) return;
+  const note = userNotesState.find(n => n.id === current3dNoteId);
+  if (!note) return;
+
+  const shareText = `"${note.quote}"\n\n— From "${note.book}", Page ${note.page}\nSaved with Mind & Focus Books Tracker`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: `Quote from ${note.book}`,
+      text: shareText
+    }).catch(() => {});
+  } else {
+    copyNoteQuote(encodeURIComponent(shareText));
+    showToast('Quote copied for sharing! 📤✨');
+  }
+}
+
+function deleteCurrentNoteFrom3d() {
+  if (!current3dNoteId) return;
+  const noteId = current3dNoteId;
+  closeNote3dCardModal();
+  deleteBndNote(noteId);
+}
+
+function exportCurrentBookNotes() {
+  if (!currentBndBookTitle) {
+    showToast('No book selected');
+    return;
+  }
+  loadUserNotes();
+  const bookNotes = userNotesState.filter(n =>
+    n.book && n.book.trim().toLowerCase() === currentBndBookTitle.trim().toLowerCase()
+  );
+
+  if (bookNotes.length === 0) {
+    showToast('Is book me koi notes nahi hain export karne ke liye');
+    return;
+  }
+
+  const matchedBook = (state.books || []).find(b => b.title && b.title.trim().toLowerCase() === currentBndBookTitle.trim().toLowerCase());
+  const author = matchedBook ? (matchedBook.author || 'Author') : 'Unknown';
+
+  let exportContent = `=======================================================\n`;
+  exportContent += `MIND & FOCUS BOOKS TRACKER — READING JOURNAL NOTES\n`;
+  exportContent += `Book: ${currentBndBookTitle}\n`;
+  exportContent += `Author: ${author}\n`;
+  exportContent += `Total Notes: ${bookNotes.length}\n`;
+  exportContent += `Export Date: ${new Date().toLocaleDateString()}\n`;
+  exportContent += `=======================================================\n\n`;
+
+  bookNotes.forEach((n, idx) => {
+    exportContent += `[Entry #${idx + 1}] • ${n.type || 'Note'} • Page ${n.page || '1'}\n`;
+    exportContent += `Saved: ${n.timeAgo || 'Recently'}\n`;
+    exportContent += `"${n.quote}"\n`;
+    exportContent += `-------------------------------------------------------\n\n`;
+  });
+
+  const blob = new Blob([exportContent], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${currentBndBookTitle.replace(/[^a-zA-Z0-9]/g, '_')}_Notes.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast(`Notes exported for ${currentBndBookTitle}! 📥📄`);
 }
 
 function filterNotesCategory(cat) {

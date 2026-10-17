@@ -9104,4 +9104,428 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   background: var(--accent-gold);
   color: #111827;
   border-color: var(--accent-gold);
+}
+
+/* ==========================================================================
+   INTERACTIVE 3D NOTE MODAL & CARD STYLES
+   ========================================================================== */
+.note-3d-scene {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 440px;
+  padding: 16px;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.note-3d-card {
+  position: relative;
+  width: 100%;
+  border-radius: 24px;
+  padding: 24px 22px 18px 22px;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out, box-shadow 0.25s ease, border-color 0.25s ease;
+  animation: note3dEntry 0.38s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+@keyframes note3dEntry {
+  0% {
+    opacity: 0;
+    transform: scale(0.72) rotateX(18deg) translateY(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotateX(0deg) translateY(0);
+  }
+}
+
+/* 3D Card Themes */
+.note-3d-card.theme-gold {
+  background: linear-gradient(150deg, #1e1b13 0%, #11141e 50%, #07090f 100%);
+  border: 1.5px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(245, 158, 11, 0.22);
+}
+.note-3d-card.theme-emerald {
+  background: linear-gradient(150deg, #09211a 0%, #0d1520 50%, #050a10 100%);
+  border: 1.5px solid rgba(16, 185, 129, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(16, 185, 129, 0.22);
+}
+.note-3d-card.theme-amethyst {
+  background: linear-gradient(150deg, #22122c 0%, #141124 50%, #080612 100%);
+  border: 1.5px solid rgba(168, 85, 247, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(168, 85, 247, 0.22);
+}
+.note-3d-card.theme-parchment {
+  background: linear-gradient(150deg, #282119 0%, #1f1a14 50%, #15110c 100%);
+  border: 1.5px solid rgba(217, 119, 6, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(180, 83, 9, 0.25);
+}
+.note-3d-card.theme-midnight {
+  background: linear-gradient(150deg, #0d1b2a 0%, #0f172a 50%, #030712 100%);
+  border: 1.5px solid rgba(56, 189, 248, 0.5);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.85), 0 0 40px rgba(56, 189, 248, 0.22);
+}
+
+/* Decorative 3D Foil Corners */
+.n3d-corner {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+  opacity: 0.65;
+}
+.n3d-tl {
+  top: 8px; left: 8px;
+  border-top: 2px solid var(--accent-gold);
+  border-left: 2px solid var(--accent-gold);
+}
+.n3d-tr {
+  top: 8px; right: 8px;
+  border-top: 2px solid var(--accent-gold);
+  border-right: 2px solid var(--accent-gold);
+}
+.n3d-bl {
+  bottom: 8px; left: 8px;
+  border-bottom: 2px solid var(--accent-gold);
+  border-left: 2px solid var(--accent-gold);
+}
+.n3d-br {
+  bottom: 8px; right: 8px;
+  border-bottom: 2px solid var(--accent-gold);
+  border-right: 2px solid var(--accent-gold);
+}
+
+/* Header */
+.n3d-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.n3d-book-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.n3d-thumb-img {
+  width: 36px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.4);
+  flex-shrink: 0;
+}
+.n3d-book-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+.n3d-book-author {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+.n3d-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.n3d-fav-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #fbbf24;
+  transition: transform 0.15s, background 0.15s;
+}
+.n3d-fav-btn:active {
+  transform: scale(0.9);
+}
+.n3d-fav-btn.active {
+  background: rgba(245, 158, 11, 0.25);
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+.n3d-close-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  font-size: 1.25rem;
+  cursor: pointer;
+  line-height: 1;
+}
+.n3d-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+/* Meta Chips */
+.n3d-meta-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.n3d-type-chip {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.n3d-page-chip {
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.07);
+  color: #e2e8f0;
+}
+.n3d-date-chip {
+  font-size: 0.7rem;
+  padding: 3px 8px;
+  color: var(--text-muted);
+}
+
+/* Quote Body Wrap */
+.n3d-body-wrap {
+  position: relative;
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 18px 18px;
+  margin-bottom: 14px;
+  max-height: 280px;
+  overflow-y: auto;
+}
+.n3d-quote-mark {
+  font-family: Georgia, serif;
+  font-size: 2.2rem;
+  line-height: 0.8;
+  color: rgba(245, 158, 11, 0.35);
+  user-select: none;
+}
+.n3d-quote-mark.left {
+  margin-bottom: 6px;
+}
+.n3d-quote-mark.right {
+  text-align: right;
+  margin-top: 6px;
+}
+.n3d-text-content {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #f8fafc;
+  font-weight: 500;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.n3d-edit-input {
+  width: 100%;
+  min-height: 110px;
+  padding: 10px;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--accent-gold);
+  color: #fff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  box-sizing: border-box;
+}
+.n3d-edit-page {
+  width: 90px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-color);
+  color: #fff;
+  font-size: 0.82rem;
+}
+
+/* Theme Switcher Dots */
+.n3d-theme-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 12px;
+}
+.n3d-theme-label {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+.n3d-theme-dots {
+  display: flex;
+  gap: 8px;
+}
+.n3d-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform 0.15s, border-color 0.15s;
+}
+.n3d-dot:hover {
+  transform: scale(1.15);
+}
+.n3d-dot.active {
+  border-color: #fff;
+  transform: scale(1.15);
+}
+.dot-gold { background: #f59e0b; }
+.dot-emerald { background: #10b981; }
+.dot-amethyst { background: #a855f7; }
+.dot-parchment { background: #d97706; }
+.dot-midnight { background: #38bdf8; }
+
+/* 3D Toolbar */
+.n3d-toolbar {
+  display: flex;
+  gap: 6px;
+  justify-content: space-between;
+}
+.n3d-tool-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 8px 4px;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.n3d-tool-btn span:first-child {
+  font-size: 1.05rem;
+}
+.n3d-tool-btn:hover, .n3d-tool-btn:active {
+  background: rgba(245, 158, 11, 0.15);
+  color: #fff;
+  border-color: rgba(245, 158, 11, 0.35);
+  transform: translateY(-2px);
+}
+.n3d-tool-btn.delete {
+  color: #f87171;
+}
+.n3d-tool-btn.delete:hover {
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* Search & Sort Bar in Notes Detail */
+.bnd-search-sort-bar {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 8px;
+}
+.bnd-search-wrap {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.bnd-search-icon {
+  position: absolute;
+  left: 12px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+.bnd-search-wrap input {
+  width: 100%;
+  padding: 9px 12px 9px 34px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.84rem;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.bnd-search-wrap input:focus {
+  border-color: var(--accent-gold);
+}
+.bnd-sort-select {
+  padding: 9px 10px;
+  border-radius: 12px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.8rem;
+  cursor: pointer;
+  outline: none;
+}
+.bnd-export-btn {
+  background: rgba(245, 158, 11, 0.14);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: var(--accent-gold);
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.bnd-export-btn:hover {
+  background: var(--accent-gold);
+  color: #111827;
+}
+
+/* Note card cursor and 3D feel */
+.bnd-note-card {
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s, box-shadow 0.2s;
+}
+.bnd-note-card:hover {
+  transform: translateY(-2px) scale(1.008);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35), 0 0 15px rgba(245, 158, 11, 0.12);
+}
+.bnd-note-card:active {
+  transform: scale(0.985);
+}
+.bnd-note-card .bnd-fav-star {
+  font-size: 1rem;
+  color: #fbbf24;
+  cursor: pointer;
+  padding: 2px 4px;
+  transition: transform 0.15s;
+}
+.bnd-note-card .bnd-fav-star:hover {
+  transform: scale(1.25);
 }

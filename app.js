@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.27)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.28)
 // ==========================================================================
 
-const APP_VERSION = '0.0.27';
-const CURRENT_APP_VERSION = 'v0.0.27';
+const APP_VERSION = '0.0.28';
+const CURRENT_APP_VERSION = 'v0.0.28';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -2959,6 +2959,11 @@ window.handleAppBackButton = function() {
     closeShelfSelectorDropdown();
     return true;
   }
+  const n3dModal = document.getElementById('note3dCardModalOverlay');
+  if (n3dModal && n3dModal.style.display !== 'none') {
+    closeNote3dCardModal();
+    return true;
+  }
 
   // 1d. If in an adjustment sub-view, back goes to Settings Hub
   const adjSubViews = ['viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
@@ -5561,10 +5566,18 @@ function openBookNotesDetailView(bookTitle) {
   }
 
   // Reset tab chips
-  ['All', 'Notes', 'Highlights'].forEach(t => {
+  ['All', 'Notes', 'Highlights', 'Favorites'].forEach(t => {
     const el = document.getElementById('bndTab' + t);
     if (el) el.classList.toggle('active', t.toLowerCase() === 'all');
   });
+
+  // Reset search and sort
+  bndSearchQuery = '';
+  bndSortOrder = 'newest';
+  const searchInput = document.getElementById('bndSearchInput');
+  if (searchInput) searchInput.value = '';
+  const sortSelect = document.getElementById('bndSortSelect');
+  if (sortSelect) sortSelect.value = 'newest';
 
   // Clear note input form
   const inputEl = document.getElementById('bndNewNoteInput');
@@ -5596,9 +5609,23 @@ function focusBookNotesInput() {
   }
 }
 
+let bndSearchQuery = '';
+let bndSortOrder = 'newest';
+let current3dNoteId = null;
+
+function onBndSearchInput(val) {
+  bndSearchQuery = (val || '').toLowerCase().trim();
+  renderBndNotesFeed();
+}
+
+function onBndSortChange(val) {
+  bndSortOrder = val || 'newest';
+  renderBndNotesFeed();
+}
+
 function filterBndNotes(cat) {
   activeBndFilter = cat;
-  ['All', 'Notes', 'Highlights'].forEach(t => {
+  ['All', 'Notes', 'Highlights', 'Favorites'].forEach(t => {
     const el = document.getElementById('bndTab' + t);
     if (el) el.classList.toggle('active', t.toLowerCase() === cat.toLowerCase());
   });
@@ -5621,19 +5648,43 @@ function renderBndNotesFeed() {
 
   if (!feed) return;
 
-  const filtered = allBookNotes.filter(n => {
-    if (activeBndFilter === 'all') return true;
-    if (activeBndFilter === 'notes') return (n.type || '').toLowerCase() === 'note';
-    if (activeBndFilter === 'highlights') return (n.type || '').toLowerCase() === 'highlight';
+  let filtered = allBookNotes.filter(n => {
+    if (activeBndFilter === 'notes' && (n.type || '').toLowerCase() !== 'note') return false;
+    if (activeBndFilter === 'highlights' && (n.type || '').toLowerCase() !== 'highlight') return false;
+    if (activeBndFilter === 'favorites' && !n.isFavorite) return false;
+    if (bndSearchQuery) {
+      const q = (n.quote || '').toLowerCase();
+      const p = String(n.page || '');
+      if (!q.includes(bndSearchQuery) && !p.includes(bndSearchQuery)) return false;
+    }
     return true;
+  });
+
+  // Sorting
+  filtered.sort((a, b) => {
+    if (bndSortOrder === 'favorite') {
+      return (b.isFavorite ? 1 : 0) - (a.isFavorite ? 1 : 0);
+    }
+    if (bndSortOrder === 'page') {
+      return (Number(a.page) || 0) - (Number(b.page) || 0);
+    }
+    if (bndSortOrder === 'oldest') {
+      return (a.createdAt || a.id || 0) > (b.createdAt || b.id || 0) ? 1 : -1;
+    }
+    // newest (default)
+    return (b.createdAt || b.id || 0) > (a.createdAt || a.id || 0) ? 1 : -1;
   });
 
   if (filtered.length === 0) {
     feed.innerHTML = `
       <div class="bnd-empty-state">
         <div class="bnd-empty-icon">📖✨</div>
-        <h4 style="font-size: 1rem; color: #fff; margin-bottom: 6px;">Is book ka koi note nahi hai abhi</h4>
-        <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 280px; margin: 0 auto 14px;">Upar box me apna pehla vichar ya quotation likhein aur "Save Note" dabayein.</p>
+        <h4 style="font-size: 1rem; color: #fff; margin-bottom: 6px;">
+          ${bndSearchQuery ? 'Koi matching note nahi mila' : 'Is book ka koi note nahi hai abhi'}
+        </h4>
+        <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 280px; margin: 0 auto 14px;">
+          ${bndSearchQuery ? 'Alag keyword search karein ya filter reset karein.' : 'Upar box me apna pehla vichar ya quotation likhein aur "Save Note" dabayein.'}
+        </p>
         <button type="button" class="btn-save-gold" onclick="focusBookNotesInput()" style="padding: 8px 18px; font-size: 0.85rem;">
           ✍️ Pehla Note Likhein
         </button>
@@ -5643,10 +5694,13 @@ function renderBndNotesFeed() {
   }
 
   feed.innerHTML = filtered.map(item => `
-    <div class="bnd-note-card">
+    <div class="bnd-note-card" onclick="openNote3dCardModal('${escapeHtml(item.id)}')">
       <div class="bnd-note-watermark">“</div>
       <div class="bnd-note-top-bar">
         <div class="bnd-note-badges">
+          <span class="bnd-fav-star" onclick="event.stopPropagation(); toggleNoteFavoriteInline('${escapeHtml(item.id)}')" title="Star Favorite">
+            ${item.isFavorite ? '⭐' : '☆'}
+          </span>
           <span class="bnd-badge-type ${(item.type || '').toLowerCase() === 'highlight' ? 'highlight' : 'note'}">
             ${(item.type || '').toLowerCase() === 'highlight' ? '✨ Highlight' : '📝 Note'}
           </span>
@@ -5654,15 +5708,18 @@ function renderBndNotesFeed() {
           <span class="bnd-badge-time">⏱️ ${escapeHtml(item.timeAgo || 'Saved')}</span>
         </div>
         <div class="bnd-note-actions">
-          <button type="button" class="bnd-act-btn" onclick="copyNoteQuote('${escapeHtml(encodeURIComponent(item.quote || ''))}')" title="Copy to clipboard">
+          <button type="button" class="bnd-act-btn" onclick="event.stopPropagation(); copyNoteQuote('${escapeHtml(encodeURIComponent(item.quote || ''))}')" title="Copy to clipboard">
             📋 Copy
           </button>
-          <button type="button" class="bnd-act-btn delete" onclick="deleteBndNote('${escapeHtml(item.id)}')" title="Delete Note">
+          <button type="button" class="bnd-act-btn delete" onclick="event.stopPropagation(); deleteBndNote('${escapeHtml(item.id)}')" title="Delete Note">
             🗑️
           </button>
         </div>
       </div>
       <div class="bnd-note-text">${escapeHtml(item.quote || '')}</div>
+      <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+        <span style="font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; opacity: 0.85;">Tap to view in 3D ➔</span>
+      </div>
     </div>
   `).join('');
 }
@@ -5693,7 +5750,9 @@ function saveBndNote() {
     page: String(page),
     type: type,
     timeAgo: 'Just now',
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    isFavorite: false,
+    theme: 'gold'
   };
 
   userNotesState.unshift(newNote);
@@ -5741,6 +5800,327 @@ function copyNoteQuote(encodedQuote) {
   } catch (e) {
     showToast('Could not copy note');
   }
+}
+
+// ================= 3D INTERACTIVE NOTE CARD LOGIC =================
+function openNote3dCardModal(noteId) {
+  loadUserNotes();
+  const note = userNotesState.find(n => n.id === noteId);
+  if (!note) return;
+  current3dNoteId = noteId;
+
+  const matchedBook = (state.books || []).find(b => b.title && b.title.trim().toLowerCase() === (note.book || '').trim().toLowerCase());
+  const coverUrl = matchedBook ? getBookCoverUrl(matchedBook) : 'cover_placeholder.jpg';
+  const author = matchedBook ? (matchedBook.author || 'Author') : 'Mind & Focus';
+
+  const thumbEl = document.getElementById('n3dBookCoverThumb');
+  if (thumbEl) thumbEl.src = coverUrl;
+
+  const titleEl = document.getElementById('n3dBookTitle');
+  if (titleEl) titleEl.innerText = note.book || 'Book';
+
+  const authorEl = document.getElementById('n3dBookAuthor');
+  if (authorEl) authorEl.innerText = author;
+
+  const typeChip = document.getElementById('n3dTypeChip');
+  if (typeChip) typeChip.innerText = (note.type || '').toLowerCase() === 'highlight' ? '✨ Highlight' : '📝 Personal Note';
+
+  const pageChip = document.getElementById('n3dPageChip');
+  if (pageChip) pageChip.innerText = `📄 Page ${note.page || '1'}`;
+
+  const dateChip = document.getElementById('n3dDateChip');
+  if (dateChip) dateChip.innerText = `⏱️ ${note.timeAgo || 'Saved'}`;
+
+  const textEl = document.getElementById('n3dNoteText');
+  if (textEl) textEl.innerText = note.quote || '';
+
+  const favBtn = document.getElementById('n3dFavBtn');
+  if (favBtn) favBtn.classList.toggle('active', !!note.isFavorite);
+
+  // Reset audio button
+  const audioLabel = document.getElementById('n3dAudioLabel');
+  if (audioLabel) audioLabel.innerText = 'Listen';
+  const audioIcon = document.getElementById('n3dAudioIcon');
+  if (audioIcon) audioIcon.innerText = '🔊';
+
+  // Apply theme
+  const theme = note.theme || 'gold';
+  setNote3dTheme(theme, false);
+
+  // Hide edit container, show text
+  cancelCurrentNote3dEdit();
+
+  const overlay = document.getElementById('note3dCardModalOverlay');
+  if (overlay) overlay.style.display = 'flex';
+
+  // Attach 3D tilt interaction
+  attach3dCardTiltPhysics();
+}
+
+function closeNote3dCardModal() {
+  if (window.speechSynthesis && window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+  }
+  const overlay = document.getElementById('note3dCardModalOverlay');
+  if (overlay) overlay.style.display = 'none';
+  current3dNoteId = null;
+}
+
+function handleNote3dOverlayClick(e) {
+  if (e.target.id === 'note3dCardModalOverlay') {
+    closeNote3dCardModal();
+  }
+}
+
+function attach3dCardTiltPhysics() {
+  const card = document.getElementById('note3dCard');
+  if (!card) return;
+
+  function handleMove(e) {
+    const rect = card.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    const x = clientX - rect.left;
+    const y = clientY - rect.top;
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+    const rotateX = -((y - centerY) / centerY) * 10;
+    const rotateY = ((x - centerX) / centerX) * 10;
+    card.style.transform = `perspective(1000px) rotateX(${rotateX.toFixed(2)}deg) rotateY(${rotateY.toFixed(2)}deg) scale3d(1.02, 1.02, 1.02)`;
+  }
+
+  function handleLeave() {
+    card.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
+  }
+
+  card.onmousemove = handleMove;
+  card.onmouseleave = handleLeave;
+  card.ontouchmove = handleMove;
+  card.ontouchend = handleLeave;
+}
+
+function setNote3dTheme(themeName, saveToNote = true) {
+  const card = document.getElementById('note3dCard');
+  if (!card) return;
+  card.classList.remove('theme-gold', 'theme-emerald', 'theme-amethyst', 'theme-parchment', 'theme-midnight');
+  card.classList.add('theme-' + themeName);
+
+  const dots = {
+    gold: 'dotThemeGold',
+    emerald: 'dotThemeEmerald',
+    amethyst: 'dotThemeAmethyst',
+    parchment: 'dotThemeParchment',
+    midnight: 'dotThemeMidnight'
+  };
+  Object.keys(dots).forEach(k => {
+    const el = document.getElementById(dots[k]);
+    if (el) el.classList.toggle('active', k === themeName);
+  });
+
+  if (saveToNote && current3dNoteId) {
+    const note = userNotesState.find(n => n.id === current3dNoteId);
+    if (note) {
+      note.theme = themeName;
+      try { localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState)); } catch (e) {}
+    }
+  }
+}
+
+function toggleNoteFavoriteCurrent() {
+  if (!current3dNoteId) return;
+  toggleNoteFavoriteInline(current3dNoteId);
+  const note = userNotesState.find(n => n.id === current3dNoteId);
+  const favBtn = document.getElementById('n3dFavBtn');
+  if (favBtn && note) {
+    favBtn.classList.toggle('active', !!note.isFavorite);
+  }
+}
+
+function toggleNoteFavoriteInline(noteId) {
+  loadUserNotes();
+  const note = userNotesState.find(n => n.id === noteId);
+  if (!note) return;
+  note.isFavorite = !note.isFavorite;
+  try { localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState)); } catch (e) {}
+  renderBndNotesFeed();
+  showToast(note.isFavorite ? 'Note starred as Favorite! ⭐' : 'Removed from Favorites');
+}
+
+function toggleReadNoteAloud() {
+  if (!current3dNoteId) return;
+  const note = userNotesState.find(n => n.id === current3dNoteId);
+  if (!note) return;
+
+  if (!('speechSynthesis' in window)) {
+    showToast('Audio narration not supported in this browser');
+    return;
+  }
+
+  const audioLabel = document.getElementById('n3dAudioLabel');
+  const audioIcon = document.getElementById('n3dAudioIcon');
+
+  if (window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    if (audioLabel) audioLabel.innerText = 'Listen';
+    if (audioIcon) audioIcon.innerText = '🔊';
+    showToast('Audio narration stopped');
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(note.quote);
+  utterance.rate = 0.95;
+  utterance.pitch = 1.0;
+  utterance.onend = () => {
+    if (audioLabel) audioLabel.innerText = 'Listen';
+    if (audioIcon) audioIcon.innerText = '🔊';
+  };
+  utterance.onerror = () => {
+    if (audioLabel) audioLabel.innerText = 'Listen';
+    if (audioIcon) audioIcon.innerText = '🔊';
+  };
+
+  if (audioLabel) audioLabel.innerText = 'Stop';
+  if (audioIcon) audioIcon.innerText = '⏹️';
+  window.speechSynthesis.speak(utterance);
+  showToast('Reading note aloud... 🗣️🎧');
+}
+
+function toggleCurrentNote3dEdit() {
+  const container = document.getElementById('n3dEditContainer');
+  const textEl = document.getElementById('n3dNoteText');
+  const textarea = document.getElementById('n3dEditTextarea');
+  const pageInput = document.getElementById('n3dEditPageInput');
+  if (!container || !textEl || !current3dNoteId) return;
+
+  const isEditing = container.style.display !== 'none';
+  if (isEditing) {
+    cancelCurrentNote3dEdit();
+  } else {
+    const note = userNotesState.find(n => n.id === current3dNoteId);
+    if (note) {
+      if (textarea) textarea.value = note.quote || '';
+      if (pageInput) pageInput.value = note.page || '1';
+    }
+    container.style.display = 'block';
+    textEl.style.display = 'none';
+    if (textarea) textarea.focus();
+  }
+}
+
+function saveCurrentNote3dEdit() {
+  if (!current3dNoteId) return;
+  const note = userNotesState.find(n => n.id === current3dNoteId);
+  if (!note) return;
+
+  const textarea = document.getElementById('n3dEditTextarea');
+  const pageInput = document.getElementById('n3dEditPageInput');
+  const newContent = textarea ? textarea.value.trim() : '';
+  const newPage = pageInput ? pageInput.value.trim() : '1';
+
+  if (!newContent) {
+    showToast('Note cannot be empty!');
+    return;
+  }
+
+  note.quote = newContent;
+  note.page = newPage;
+  try { localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState)); } catch (e) {}
+
+  const textEl = document.getElementById('n3dNoteText');
+  if (textEl) textEl.innerText = newContent;
+  const pageChip = document.getElementById('n3dPageChip');
+  if (pageChip) pageChip.innerText = `📄 Page ${newPage}`;
+
+  cancelCurrentNote3dEdit();
+  renderBndNotesFeed();
+  renderCurrentBookDetailNotes();
+  showToast('Note updated successfully! ✏️✨');
+}
+
+function cancelCurrentNote3dEdit() {
+  const container = document.getElementById('n3dEditContainer');
+  const textEl = document.getElementById('n3dNoteText');
+  if (container) container.style.display = 'none';
+  if (textEl) textEl.style.display = 'block';
+}
+
+function copyCurrentNote3d() {
+  if (!current3dNoteId) return;
+  const note = userNotesState.find(n => n.id === current3dNoteId);
+  if (note) {
+    copyNoteQuote(encodeURIComponent(note.quote || ''));
+  }
+}
+
+function shareOrExportCurrentNote() {
+  if (!current3dNoteId) return;
+  const note = userNotesState.find(n => n.id === current3dNoteId);
+  if (!note) return;
+
+  const shareText = `"${note.quote}"\n\n— From "${note.book}", Page ${note.page}\nSaved with Mind & Focus Books Tracker`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: `Quote from ${note.book}`,
+      text: shareText
+    }).catch(() => {});
+  } else {
+    copyNoteQuote(encodeURIComponent(shareText));
+    showToast('Quote copied for sharing! 📤✨');
+  }
+}
+
+function deleteCurrentNoteFrom3d() {
+  if (!current3dNoteId) return;
+  const noteId = current3dNoteId;
+  closeNote3dCardModal();
+  deleteBndNote(noteId);
+}
+
+function exportCurrentBookNotes() {
+  if (!currentBndBookTitle) {
+    showToast('No book selected');
+    return;
+  }
+  loadUserNotes();
+  const bookNotes = userNotesState.filter(n =>
+    n.book && n.book.trim().toLowerCase() === currentBndBookTitle.trim().toLowerCase()
+  );
+
+  if (bookNotes.length === 0) {
+    showToast('Is book me koi notes nahi hain export karne ke liye');
+    return;
+  }
+
+  const matchedBook = (state.books || []).find(b => b.title && b.title.trim().toLowerCase() === currentBndBookTitle.trim().toLowerCase());
+  const author = matchedBook ? (matchedBook.author || 'Author') : 'Unknown';
+
+  let exportContent = `=======================================================\n`;
+  exportContent += `MIND & FOCUS BOOKS TRACKER — READING JOURNAL NOTES\n`;
+  exportContent += `Book: ${currentBndBookTitle}\n`;
+  exportContent += `Author: ${author}\n`;
+  exportContent += `Total Notes: ${bookNotes.length}\n`;
+  exportContent += `Export Date: ${new Date().toLocaleDateString()}\n`;
+  exportContent += `=======================================================\n\n`;
+
+  bookNotes.forEach((n, idx) => {
+    exportContent += `[Entry #${idx + 1}] • ${n.type || 'Note'} • Page ${n.page || '1'}\n`;
+    exportContent += `Saved: ${n.timeAgo || 'Recently'}\n`;
+    exportContent += `"${n.quote}"\n`;
+    exportContent += `-------------------------------------------------------\n\n`;
+  });
+
+  const blob = new Blob([exportContent], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${currentBndBookTitle.replace(/[^a-zA-Z0-9]/g, '_')}_Notes.txt`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+
+  showToast(`Notes exported for ${currentBndBookTitle}! 📥📄`);
 }
 
 function filterNotesCategory(cat) {

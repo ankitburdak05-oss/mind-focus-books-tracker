@@ -2,18 +2,20 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.27",
-    "name": "Mind Focus Books v0.0.27 (Dedicated Book Notes Detail Screen)",
+    "version": "v0.0.28",
+    "name": "Mind Focus Books v0.0.28 (Interactive 3D Note Cards & Narration)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.27 Release: Dedicated Book Notes Page & Premium Design.",
-      "📖 Dedicated Full-Screen Notes View: Book par click karte hi sirf us book ke notes ke liye naya premium designed page open hota hai.",
-      "🎨 Luxury Reading Journal Aesthetic: Book cover hero banner, dark gold gradient aura aur ambient glow design.",
-      "✍️ Quick Note Capture on Notes Page: Direct usi book ke page par note textarea, page number aur type select ke sath save karein.",
-      "📋 1-Tap Copy & Delete Actions: Kisi bhi quote/note ko clipboard me copy karein ya delete karein.",
+      "⚡ Official v0.0.28 Release: Interactive 3D Note Cards & Audio Narration.",
+      "🃏 3D Perspective Note Modal: Kisi bhi note par click karne par realistic 3D depth, brass corners aur physics tilt ke sath card open hota hai.",
+      "🔊 Text-to-Speech Voice Narration: 1-click me note ko bolkar sunne ke liye native audio narration player.",
+      "🎨 5 Luxurious Card Themes: Golden Obsidian, Royal Emerald, Deep Amethyst, Vintage Parchment aur Midnight Sapphire.",
+      "✏️ In-Place Note Editing: 3D card ke andar se hi note aur page number edit aur save karein.",
+      "⭐ Star Favorites & Search: Notes me star lagayein aur search bar se instant filter karein.",
+      "📥 1-Click Book Notes Export: Poori book ke personal reading notes ko clean text report me download karein.",
       "🛡️ Safe In-Place Update: 100% reading streak aur user notes surakshit rahenge."
     ],
-    "stagedAt": "2026-10-17T11:45:00.000Z",
+    "stagedAt": "2026-10-17T12:00:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
