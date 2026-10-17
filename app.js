@@ -9633,6 +9633,21 @@ function renderNotificationsHub() {
   // Update Permission UI
   updateBrowserNotificationUI();
   updateScheduleUI();
+  initBotanicalStudio();
+
+  // On native Android, prompt permission if not yet granted
+  if (window.Android && typeof window.Android.isNotificationPermissionGranted === 'function') {
+    if (!window.Android.isNotificationPermissionGranted()) {
+      if (!sessionStorage.getItem('mf_notif_perm_prompted')) {
+        sessionStorage.setItem('mf_notif_perm_prompted', '1');
+        setTimeout(() => {
+          if (window.Android && typeof window.Android.requestNotificationPermission === 'function') {
+            window.Android.requestNotificationPermission();
+          }
+        }, 500);
+      }
+    }
+  }
 
   // Filter list
   let filtered = userNotificationsState;
@@ -9775,8 +9790,14 @@ function triggerTestNotification() {
 }
 
 function requestBrowserNotificationPermission() {
+  if (window.Android && typeof window.Android.requestNotificationPermission === 'function') {
+    window.Android.requestNotificationPermission();
+    setTimeout(updateBrowserNotificationUI, 1200);
+    return;
+  }
+
   if (!('Notification' in window)) {
-    showToast('Aapka browser system push notifications support nahi karta.', 'warning');
+    showToast('Aapka browser system push notifications support nahi karta. In-app audio chime active hai!', 'warning');
     return;
   }
 
@@ -9806,9 +9827,32 @@ function updateBrowserNotificationUI() {
   const toggleBtn = document.getElementById('notifPermissionToggleBtn');
   if (!statusTxt || !toggleBtn) return;
 
+  // Check Native Android first
+  if (window.Android && typeof window.Android.isNotificationPermissionGranted === 'function') {
+    const isGranted = window.Android.isNotificationPermissionGranted();
+    if (isGranted) {
+      statusTxt.innerText = 'Phone status bar alerts active • Reminders & Notes on';
+      toggleBtn.innerText = '✓ Enabled';
+      toggleBtn.style.background = 'rgba(16, 185, 129, 0.2)';
+      toggleBtn.style.color = '#10b981';
+      toggleBtn.style.border = '1px solid #10b981';
+    } else {
+      statusTxt.innerText = 'Phone notification permission required for status bar alerts';
+      toggleBtn.innerText = '🔔 Enable Now';
+      toggleBtn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+      toggleBtn.style.color = '#ffffff';
+      toggleBtn.style.border = 'none';
+      toggleBtn.style.boxShadow = '0 0 12px rgba(16, 185, 129, 0.4)';
+    }
+    return;
+  }
+
   if (!('Notification' in window)) {
-    statusTxt.innerText = 'Device notifications not supported in this browser';
-    toggleBtn.style.display = 'none';
+    statusTxt.innerText = 'In-app audio alarms active (Device push available in APK)';
+    toggleBtn.style.display = 'inline-block';
+    toggleBtn.innerText = 'In-App Active';
+    toggleBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+    toggleBtn.style.color = '#cbd5e1';
     return;
   }
 
@@ -9946,10 +9990,14 @@ function updateScheduleUI() {
 
   const hourSelect = document.getElementById('notifHourSelect');
   const minSelect = document.getElementById('notifMinSelect');
+  const hourInput = document.getElementById('notifHourInput');
+  const minInput = document.getElementById('notifMinInput');
   const btnAm = document.getElementById('btnAmToggle');
   const btnPm = document.getElementById('btnPmToggle');
 
   if (hourSelect) hourSelect.value = String(h12);
+  if (hourInput && document.activeElement !== hourInput) hourInput.value = h12;
+  if (minInput && document.activeElement !== minInput) minInput.value = m;
   if (minSelect) {
     const opts = Array.from(minSelect.options).map(o => o.value);
     if (opts.includes(m)) {
@@ -10024,6 +10072,50 @@ function handleAmPmTimeChange() {
   reminderScheduleConfig.time = h24Str;
   reminderScheduleConfig.label = `${(h12 < 10 ? '0' + h12 : h12)}:${m} ${isPm ? 'PM' : 'AM'}`;
 
+  saveReminderScheduleConfig(false);
+}
+
+function handleManualTimeType() {
+  const hourInput = document.getElementById('notifHourInput');
+  const minInput = document.getElementById('notifMinInput');
+  const btnPm = document.getElementById('btnPmToggle');
+
+  let h12 = parseInt(hourInput ? hourInput.value : '9', 10);
+  let mVal = parseInt(minInput ? minInput.value : '30', 10);
+
+  if (isNaN(h12)) h12 = 9;
+  if (h12 < 1) h12 = 1;
+  if (h12 > 12) h12 = 12;
+
+  if (isNaN(mVal)) mVal = 0;
+  if (mVal < 0) mVal = 0;
+  if (mVal > 59) mVal = 59;
+
+  const mStr = mVal < 10 ? '0' + mVal : String(mVal);
+  const isPm = btnPm ? btnPm.classList.contains('active') : true;
+
+  let h24 = h12;
+  if (isPm) {
+    h24 = (h12 === 12) ? 12 : h12 + 12;
+  } else {
+    h24 = (h12 === 12) ? 0 : h12;
+  }
+
+  const h24Str = (h24 < 10 ? '0' + h24 : String(h24)) + ':' + mStr;
+  reminderScheduleConfig.time = h24Str;
+  reminderScheduleConfig.label = `${(h12 < 10 ? '0' + h12 : h12)}:${mStr} ${isPm ? 'PM' : 'AM'}`;
+
+  // Keep hidden selects in sync
+  const hourSelect = document.getElementById('notifHourSelect');
+  const minSelect = document.getElementById('notifMinSelect');
+  if (hourSelect) hourSelect.value = String(h12);
+  if (minSelect) minSelect.value = mStr;
+
+  const timeBadge = document.getElementById('notifFormattedTimeBadge');
+  if (timeBadge) {
+    const iconEmoji = (h24 >= 19 || h24 < 5) ? '🌙' : (h24 < 12 ? '🌅' : '☀️');
+    timeBadge.innerText = `${iconEmoji} ${reminderScheduleConfig.label} (Active)`;
+  }
   saveReminderScheduleConfig(false);
 }
 
@@ -10183,11 +10275,17 @@ function fireScheduledReminderAlarm() {
   userNotificationsState.unshift(newNotif);
   saveNotifications();
 
-  // 4. Send browser push notification if permitted
-  if ('Notification' in window && Notification.permission === 'granted') {
+  // 4. Send device status bar notification if permitted
+  const notifTitle = reminderScheduleConfig.customTitle || `⏰ Padhne Ka Time! "${targetBook.title}"`;
+  const notifMsg = reminderScheduleConfig.customNote || `Rozana reading habit barkarar rakhein. Page ${curP}/${totP} (${pct}%). Start reading now!`;
+  const notifCover = getBookCoverUrl(targetBook);
+
+  if (window.Android && typeof window.Android.postNativeNotification === 'function') {
+    window.Android.postNativeNotification(notifTitle, notifMsg, targetBook.title, notifCover);
+  } else if ('Notification' in window && Notification.permission === 'granted') {
     try {
-      new Notification(`⏰ Padhne Ka Time! "${targetBook.title}"`, {
-        body: `Rozana reading habit barkarar rakhein. Page ${curP}/${totP} (${pct}%). Start reading now!`,
+      new Notification(notifTitle, {
+        body: notifMsg,
         icon: 'icon-192.png'
       });
     } catch (e) {
@@ -10263,3 +10361,308 @@ function handleScheduledModalReadNow() {
 }
 
 // =========================================================================
+// BOTANICAL NOTIFICATION STUDIO & NOTES PICKER (v0.0.31)
+// =========================================================================
+let studioActiveMode = 'book_note';
+let studioActiveTheme = 'sakura';
+let studioSelectedBook = null;
+
+function initBotanicalStudio() {
+  const bookSelect = document.getElementById('studioBookSelect');
+  if (!bookSelect) return;
+
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  if (!books || books.length === 0) return;
+
+  // Clear & populate book dropdown
+  bookSelect.innerHTML = '';
+  books.forEach((b, idx) => {
+    const opt = document.createElement('option');
+    opt.value = b.id || ('book_' + idx);
+    opt.text = `📖 ${b.title || 'Untitled'} (${b.author || 'Unknown'})`;
+    bookSelect.appendChild(opt);
+  });
+
+  // Pick first reading book or default
+  const activeBook = books.find(b => b.status === 'READING' || b.reading_status === 'currently_reading') || books[0];
+  if (activeBook) {
+    bookSelect.value = activeBook.id || 'book_0';
+  }
+
+  onStudioBookSelectChanged();
+}
+
+function onStudioBookSelectChanged() {
+  const bookSelect = document.getElementById('studioBookSelect');
+  if (!bookSelect) return;
+
+  const bookId = bookSelect.value;
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
+  studioSelectedBook = book;
+
+  if (!book) return;
+
+  // Update book preview
+  const coverImg = document.getElementById('studioBookCoverImg');
+  const titleTxt = document.getElementById('studioBookTitleTxt');
+  const authorTxt = document.getElementById('studioBookAuthorTxt');
+  const pagesTxt = document.getElementById('studioBookPagesTxt');
+  const categoryTxt = document.getElementById('studioBookCategoryTxt');
+  const statusBadge = document.getElementById('studioBookStatusBadge');
+
+  const coverUrl = getBookCoverUrl(book);
+  if (coverImg) coverImg.src = coverUrl;
+  if (titleTxt) titleTxt.innerText = book.title || 'Untitled Book';
+  if (authorTxt) authorTxt.innerText = 'by ' + (book.author || 'Unknown');
+  if (pagesTxt) pagesTxt.innerText = `📄 ${book.total_pages || book.totalPages || 250} pages`;
+  if (categoryTxt) categoryTxt.innerText = `🌿 ${book.category || 'Mind Growth'}`;
+  if (statusBadge) {
+    statusBadge.innerText = (book.status === 'COMPLETED' || book.reading_status === 'completed') ? '✓ Finished' : '📖 In Progress';
+  }
+
+  // Populate Notes Dropdown for this book
+  populateStudioNotesDropdown(book);
+}
+
+function populateStudioNotesDropdown(book) {
+  const noteSelect = document.getElementById('studioNoteSelect');
+  if (!noteSelect) return;
+
+  noteSelect.innerHTML = '';
+
+  let notesList = [];
+  if (Array.isArray(book.notes) && book.notes.length > 0) {
+    notesList = book.notes.map((n, i) => typeof n === 'string' ? { id: 'note_' + i, text: n } : n);
+  } else if (Array.isArray(book.key_takeaways) && book.key_takeaways.length > 0) {
+    notesList = book.key_takeaways.map((t, i) => ({ id: 'takeaway_' + i, text: t }));
+  }
+
+  // Also check state.savedNotes / user notes
+  if (Array.isArray(state.savedNotes)) {
+    const userNotes = state.savedNotes.filter(n => n.bookId === book.id || n.bookTitle === book.title);
+    userNotes.forEach((un, idx) => {
+      notesList.push({ id: un.id || ('un_' + idx), text: un.text || un.content || un.note });
+    });
+  }
+
+  if (notesList.length === 0) {
+    notesList.push({ id: 'default_note', text: `Key insight from ${book.title}: Consistency in daily reading expands consciousness.` });
+  }
+
+  notesList.forEach((n, idx) => {
+    const opt = document.createElement('option');
+    opt.value = idx;
+    const textVal = n.text || n.title || '';
+    const preview = textVal.length > 45 ? textVal.substring(0, 45) + '...' : textVal;
+    opt.text = `📝 Note #${idx + 1}: ${preview}`;
+    noteSelect.appendChild(opt);
+  });
+
+  const customOpt = document.createElement('option');
+  customOpt.value = 'custom_write';
+  customOpt.text = '✍️ Type a new note for this book...';
+  noteSelect.appendChild(customOpt);
+
+  onStudioNoteSelectChanged();
+}
+
+function onStudioNoteSelectChanged() {
+  const noteSelect = document.getElementById('studioNoteSelect');
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+  if (!studioSelectedBook) return;
+
+  const val = noteSelect ? noteSelect.value : '0';
+
+  if (val === 'custom_write') {
+    if (titleInput) titleInput.value = `${studioSelectedBook.title} - My Note`;
+    if (msgInput) msgInput.value = '';
+    if (msgInput) msgInput.focus();
+  } else {
+    const idx = parseInt(val, 10) || 0;
+    let noteText = '';
+    if (Array.isArray(studioSelectedBook.notes) && studioSelectedBook.notes[idx]) {
+      const n = studioSelectedBook.notes[idx];
+      noteText = typeof n === 'string' ? n : (n.text || n.content || '');
+    } else if (Array.isArray(studioSelectedBook.key_takeaways) && studioSelectedBook.key_takeaways[idx]) {
+      noteText = studioSelectedBook.key_takeaways[idx];
+    } else {
+      noteText = `Key insight from ${studioSelectedBook.title}: Consistency in daily reading expands consciousness.`;
+    }
+
+    if (titleInput) titleInput.value = `${studioSelectedBook.title} - Note #${idx + 1}`;
+    if (msgInput) msgInput.value = noteText;
+  }
+
+  updateLiveSimCard();
+}
+
+function setNotifStudioMode(mode) {
+  studioActiveMode = mode;
+  ['btnModeBookNote', 'btnModeCustomNote', 'btnModeDailyQuote'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.classList.remove('active');
+  });
+
+  const activeBtnId = mode === 'book_note' ? 'btnModeBookNote' : (mode === 'custom' ? 'btnModeCustomNote' : 'btnModeDailyQuote');
+  const activeBtn = document.getElementById(activeBtnId);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  const pickerSection = document.getElementById('studioBookPickerSection');
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+
+  if (mode === 'book_note') {
+    if (pickerSection) pickerSection.style.display = 'block';
+    onStudioBookSelectChanged();
+  } else if (mode === 'custom') {
+    if (pickerSection) pickerSection.style.display = 'none';
+    if (titleInput) titleInput.value = 'Mera Secret Reading Reminder 🌿';
+    if (msgInput) msgInput.value = 'Aaj 30 minutes bina distraction ke deep reading karni hai!';
+    updateLiveSimCard();
+  } else if (mode === 'daily_quote') {
+    if (pickerSection) pickerSection.style.display = 'none';
+    const quotes = [
+      { t: 'Charles Eliot Quote 🌸', m: 'Books are the quietest and most constant of friends; they are the most accessible and wisest of counselors.' },
+      { t: 'Epictetus Stoic Wisdom 🌿', m: 'We have two ears and one mouth so that we can listen twice as much as we speak. Read deeply.' },
+      { t: 'Marcus Aurelius Reflection 🌲', m: 'When you arise in the morning think of what a privilege it is to be alive, to think, to enjoy, to love.' }
+    ];
+    const pick = quotes[Math.floor(Math.random() * quotes.length)];
+    if (titleInput) titleInput.value = pick.t;
+    if (msgInput) msgInput.value = pick.m;
+    updateLiveSimCard();
+  }
+}
+
+function setStudioVisualTheme(theme) {
+  studioActiveTheme = theme;
+  const card = document.getElementById('androidSimCard');
+  if (card) {
+    card.className = `android-system-notif-card theme-${theme}`;
+  }
+  document.querySelectorAll('.btn-botanical-theme').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
+  });
+}
+
+function updateLiveSimCard() {
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+  const simTitle = document.getElementById('asnSimTitle');
+  const simDesc = document.getElementById('asnSimDesc');
+  const simBannerImg = document.getElementById('asnSimBannerImg');
+  const simBannerQuote = document.getElementById('asnSimBannerQuote');
+  const simBannerTag = document.getElementById('asnSimBannerTag');
+
+  const titleVal = (titleInput && titleInput.value.trim()) || 'Mind Focus Books 📖';
+  const msgVal = (msgInput && msgInput.value.trim()) || 'Time for your daily reading session!';
+
+  if (simTitle) simTitle.innerText = titleVal;
+  if (simDesc) simDesc.innerText = msgVal;
+
+  let coverUrl = 'hyperfocus_cover.jpg';
+  let tagText = '🌿 Mind Focus Reading';
+
+  if (studioActiveMode === 'book_note' && studioSelectedBook) {
+    coverUrl = getBookCoverUrl(studioSelectedBook);
+    tagText = `📖 ${studioSelectedBook.title || 'Book Note'}`;
+  } else if (studioActiveTheme === 'sakura') {
+    tagText = '🌸 Sakura Garden Wisdom';
+  } else if (studioActiveTheme === 'emerald') {
+    tagText = '🌿 Emerald Forest Zen';
+  } else if (studioActiveTheme === 'sunset') {
+    tagText = '🌅 Sunset Glow Reflection';
+  } else if (studioActiveTheme === 'cosmic') {
+    tagText = '🌌 Cosmic Focus';
+  }
+
+  if (simBannerImg) simBannerImg.src = coverUrl;
+  if (simBannerTag) simBannerTag.innerText = tagText;
+  if (simBannerQuote) simBannerQuote.innerText = `"${msgVal.substring(0, 60)}${msgVal.length > 60 ? '...' : ''}"`;
+}
+
+function sendCustomNotificationToDeviceNow() {
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+  const title = (titleInput && titleInput.value.trim()) || 'Mind Focus Books 📖';
+  const message = (msgInput && msgInput.value.trim()) || 'Time for reading and mindfulness!';
+  const bookTitle = studioSelectedBook ? studioSelectedBook.title : 'Mind Focus Books';
+  const coverUrl = studioSelectedBook ? getBookCoverUrl(studioSelectedBook) : 'icon-192.png';
+
+  // Play audio chime
+  playMindfulAudioChime();
+
+  // If in Native Android APK, post real system notification to phone drawer!
+  if (window.Android && typeof window.Android.postNativeNotification === 'function') {
+    window.Android.postNativeNotification(title, message, bookTitle, coverUrl);
+    showToast('Phone status bar me notification bhej diya gaya hai! 📱🔔', 'success');
+  } else if ('Notification' in window && Notification.permission === 'granted') {
+    try {
+      new Notification(title, {
+        body: message,
+        icon: 'icon-192.png'
+      });
+      showToast('Device notification bhej diya gaya! 🔔', 'success');
+    } catch (e) {
+      showToast('Notification display hua! 🔔', 'success');
+    }
+  } else {
+    // Show in-app alarm modal as fallback
+    showReminderAlarmModal({
+      title: title,
+      body: message,
+      book: studioSelectedBook || (state.books && state.books[0])
+    });
+    showToast('In-App Notification Alert Active! 🔔 (Allow permission for status bar)', 'info');
+  }
+}
+
+function saveAsDailyReminderSchedule() {
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+  const title = (titleInput && titleInput.value.trim()) || 'Daily Reading';
+  const message = (msgInput && msgInput.value.trim()) || '';
+
+  reminderScheduleConfig.customNote = message;
+  reminderScheduleConfig.customTitle = title;
+  if (studioSelectedBook) {
+    reminderScheduleConfig.bookId = studioSelectedBook.id;
+    reminderScheduleConfig.bookTitle = studioSelectedBook.title;
+  }
+  saveReminderScheduleConfig(false);
+  showToast('Is note aur book ko Daily Reminder Alarm me set kar diya gaya! ⏰', 'success');
+}
+
+function addCustomNotificationToFeed() {
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+  const title = (titleInput && titleInput.value.trim()) || 'Mind Focus Note';
+  const message = (msgInput && msgInput.value.trim()) || 'Daily reminder note';
+
+  const newNotif = {
+    id: 'custom_alert_' + Date.now(),
+    type: 'custom_user_note',
+    category: studioActiveMode === 'book_note' ? 'notes' : 'reading',
+    title: title,
+    message: message,
+    bookTitle: studioSelectedBook ? studioSelectedBook.title : '',
+    bookCover: studioSelectedBook ? getBookCoverUrl(studioSelectedBook) : '',
+    actionType: studioActiveMode === 'book_note' ? 'open_note_3d' : 'open_book',
+    timestamp: new Date().toISOString(),
+    read: false
+  };
+
+  userNotificationsState.unshift(newNotif);
+  saveNotifications();
+  renderNotificationsHub();
+  showToast('Notification Alerts Feed me add ho gaya! ➕', 'success');
+}
+
+function handleSimNotifAction(action) {
+  if (action === 'read' && studioSelectedBook) {
+    openBookDetailView(studioSelectedBook);
+  } else {
+    navigateToSubView('notesHighlights');
+  }
+}

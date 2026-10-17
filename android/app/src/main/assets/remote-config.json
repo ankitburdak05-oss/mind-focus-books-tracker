@@ -2,20 +2,18 @@
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.30",
-    "name": "Mind Focus Books v0.0.30 (Daily Reminder Time & Alarm Scheduler)",
+    "version": "v0.0.31",
+    "name": "Mind Focus Books v0.0.31 (Botanical Notification Studio, Custom Notes & Big Picture Alerts)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.30 Release: Custom Reading Reminder Time & Daily Alarm Scheduler.",
-      "⏰ Custom Reminder Time Picker: Apni pasand ka koi bhi waqt (HH:MM AM/PM) set karein.",
-      "⚡ Quick Preset Time Buttons: Subah Ki Chai (08:00 AM), Lunch Break (02:00 PM), Shaam Fursat (07:00 PM) aur Bedtime Read (09:30 PM).",
-      "📅 Repeat Days Customizer: Everyday, Weekdays ya Weekends chunne ke liye flexible day chips (Sun-Sat).",
-      "🔔 Mindfulness Audio Chime: Alarm time par harmonic gentle chime sound jo focus promote kare.",
-      "📖 Interactive Reading Alarm Modal: Active reading book, page progress, motivation quote aur 1-tap 'Read Now' button ke sath.",
-      "💤 10-Minute Snooze & Instant 3s Test: Alarm test aur snooze karne ki poori suvidha.",
-      "🛡️ Safe In-Place Update: 100% books, reading streaks aur user notes surakshit rahenge."
+      "🌸 Botanical Notification Studio & Note Picker: Apni pasand ki kisi bhi book ka note aur cover phone notification me set karein.",
+      "⌨️ Typeable Hour & Minute Inputs: Time set karte waqt direct custom number type karein (HH:MM AM/PM).",
+      "📱 Native Android Status Bar Notifications: BigPicture banner style notification status bar me book cover aur notes ke sath.",
+      "🌿 4 Botanical Nature Visual Themes: Sakura Bloom, Emerald Forest, Golden Twilight aur Cosmic Garden.",
+      "🔔 Automatic Runtime Notification Permissions: Android 13+ status bar alerts ke liye direct permission bridge.",
+      "✍️ Custom Self-Written Reminder Text: Apna custom notification title aur sandesh likhne ki poori aazadi."
     ],
-    "stagedAt": "2026-10-17T14:30:00.000Z",
+    "stagedAt": "2026-10-17T15:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

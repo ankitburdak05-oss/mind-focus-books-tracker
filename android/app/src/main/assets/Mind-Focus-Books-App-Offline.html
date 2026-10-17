@@ -10400,6 +10400,620 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   gap: 10px;
 }
 
+/* ==========================================================================
+   BOTANICAL CUSTOM NOTIFICATION STUDIO & NOTES PICKER (v0.0.31)
+   ========================================================================== */
+.notif-type-input {
+  width: 54px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(245, 158, 11, 0.5);
+  color: #fff;
+  border-radius: 10px;
+  padding: 6px 4px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  outline: none;
+  color-scheme: dark;
+  text-align: center;
+  transition: all 0.18s ease;
+}
+.notif-type-input:focus {
+  border-color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.12);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
+}
+
+.botanical-studio-card {
+  background: linear-gradient(145deg, rgba(20, 30, 24, 0.95), rgba(15, 23, 42, 0.98));
+  border: 1.5px solid rgba(52, 211, 153, 0.35);
+  border-radius: 20px;
+  padding: 16px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45), 0 0 20px rgba(52, 211, 153, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.botanical-studio-card::before {
+  content: "";
+  position: absolute;
+  top: -50px;
+  right: -50px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(244, 114, 182, 0.25) 0%, rgba(52, 211, 153, 0.1) 60%, transparent 80%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.botanical-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.botanical-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.botanical-header-icon {
+  font-size: 1.6rem;
+  filter: drop-shadow(0 2px 8px rgba(52, 211, 153, 0.4));
+}
+
+.botanical-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #a7f3d0;
+  margin: 0;
+  letter-spacing: -0.2px;
+}
+
+.botanical-card-sub {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  margin: 2px 0 0 0;
+  line-height: 1.3;
+}
+
+.botanical-pill-badge {
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.2), rgba(52, 211, 153, 0.2));
+  border: 1px solid rgba(244, 114, 182, 0.4);
+  color: #fbcfe8;
+  font-size: 0.68rem;
+  font-weight: 800;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.4px;
+}
+
+.botanical-mode-nav {
+  display: flex;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+}
+
+.botanical-mode-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 7px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.18s ease;
+}
+
+.botanical-mode-btn:hover {
+  color: #fff;
+}
+
+.botanical-mode-btn.active {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #fff;
+  font-weight: 800;
+  box-shadow: 0 2px 10px rgba(16, 185, 129, 0.35);
+}
+
+.studio-section {
+  margin-bottom: 14px;
+}
+
+.studio-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #6ee7b7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 6px;
+}
+
+.studio-dropdown {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(52, 211, 153, 0.35);
+  color: #fff;
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  outline: none;
+  color-scheme: dark;
+  transition: border-color 0.15s ease;
+}
+
+.studio-dropdown:focus {
+  border-color: #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
+}
+
+.studio-book-preview {
+  display: flex;
+  gap: 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  border-radius: 14px;
+  padding: 12px;
+  margin-top: 10px;
+  align-items: center;
+}
+
+.studio-book-cover-frame {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.studio-book-cover {
+  width: 58px;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5), 0 0 12px rgba(52, 211, 153, 0.25);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.studio-cover-badge {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(16, 185, 129, 0.95);
+  color: #064e3b;
+  font-size: 0.55rem;
+  font-weight: 900;
+  padding: 2px 6px;
+  border-radius: 6px;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+.studio-book-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.studio-book-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 2px 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.studio-book-author {
+  font-size: 0.74rem;
+  color: #94a3b8;
+  margin: 0 0 6px 0;
+}
+
+.studio-book-tags {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+
+.studio-tag {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-size: 0.64rem;
+  color: #cbd5e1;
+  padding: 2px 7px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.studio-book-hint {
+  font-size: 0.68rem;
+  color: #fbcfe8;
+  margin: 0;
+  font-style: italic;
+}
+
+.studio-field-group {
+  margin-bottom: 12px;
+}
+
+.studio-input {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 0.84rem;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.studio-input:focus {
+  border-color: #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.25);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.studio-textarea {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  color: #fff;
+  border-radius: 10px;
+  padding: 9px 12px;
+  font-size: 0.84rem;
+  font-weight: 500;
+  line-height: 1.45;
+  outline: none;
+  resize: vertical;
+  min-height: 70px;
+  transition: all 0.15s ease;
+}
+
+.studio-textarea:focus {
+  border-color: #34d399;
+  box-shadow: 0 0 10px rgba(52, 211, 153, 0.25);
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.studio-theme-picker {
+  margin-bottom: 16px;
+}
+
+.botanical-themes-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+@media (min-width: 480px) {
+  .botanical-themes-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.btn-botanical-theme {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.18s ease;
+}
+
+.btn-botanical-theme:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.btn-botanical-theme.active {
+  background: linear-gradient(135deg, rgba(244, 114, 182, 0.25), rgba(52, 211, 153, 0.25));
+  border-color: #34d399;
+  color: #a7f3d0;
+  box-shadow: 0 2px 10px rgba(52, 211, 153, 0.3);
+}
+
+/* ==========================================================================
+   ANDROID SYSTEM NOTIFICATION DRAWER PREVIEW (1:1 Match with User's Photo)
+   ========================================================================== */
+.android-shade-preview-wrap {
+  margin-top: 16px;
+  margin-bottom: 16px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 14px;
+}
+
+.android-preview-header {
+  margin-bottom: 10px;
+}
+
+.android-preview-label {
+  display: block;
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #38bdf8;
+  letter-spacing: 0.3px;
+}
+
+.android-preview-sub {
+  display: block;
+  font-size: 0.66rem;
+  color: #94a3b8;
+  margin-top: 2px;
+}
+
+/* Authentic Android 13/14 Material You Notification Card */
+.android-system-notif-card {
+  background: #ffffff;
+  color: #1a1a1a;
+  border-radius: 24px;
+  padding: 14px 16px 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  transition: all 0.25s ease;
+  position: relative;
+}
+
+/* Visual Theme Variants for Android Card */
+.android-system-notif-card.theme-sakura {
+  border-left: 4px solid #ec4899;
+}
+.android-system-notif-card.theme-emerald {
+  border-left: 4px solid #10b981;
+}
+.android-system-notif-card.theme-sunset {
+  border-left: 4px solid #f59e0b;
+}
+.android-system-notif-card.theme-cosmic {
+  border-left: 4px solid #8b5cf6;
+}
+
+.asn-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.asn-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.asn-app-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.asn-app-name {
+  font-size: 0.72rem;
+  color: #4b5563;
+  font-weight: 600;
+}
+
+.asn-dot {
+  font-size: 0.7rem;
+  color: #9ca3af;
+}
+
+.asn-time {
+  font-size: 0.7rem;
+  color: #6b7280;
+}
+
+.asn-expand-icon {
+  font-size: 0.8rem;
+  color: #6b7280;
+  cursor: pointer;
+}
+
+.asn-body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.asn-text-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.asn-title {
+  font-size: 0.94rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.25;
+  margin-bottom: 3px;
+  word-break: break-word;
+}
+
+.asn-desc {
+  font-size: 0.78rem;
+  color: #4b5563;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.asn-small-badge {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.asn-mini-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+/* Big Picture Banner (Matching Perplexity Notification Banner in Photo) */
+.asn-big-picture-banner {
+  width: 100%;
+  height: 140px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  margin-bottom: 10px;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+  background: #1e293b;
+}
+
+.asn-banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s;
+}
+
+.asn-banner-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 14px;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.85) 80%);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.asn-banner-tag {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: #6ee7b7;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.asn-banner-quote {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.asn-actions {
+  display: flex;
+  gap: 8px;
+  padding-top: 4px;
+}
+
+.asn-btn {
+  background: #f3f4f6;
+  border: none;
+  color: #1f2937;
+  font-size: 0.74rem;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.asn-btn.primary {
+  background: #111827;
+  color: #ffffff;
+}
+
+.asn-btn:hover {
+  transform: translateY(-1px);
+}
+
+.studio-actions-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.btn-studio-action {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-studio-action.primary {
+  background: linear-gradient(135deg, #059669, #10b981);
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+}
+
+.btn-studio-action.primary:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.btn-studio-action.secondary {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1.5px solid var(--accent-gold);
+  color: var(--accent-gold);
+}
+
+.btn-studio-action.secondary:hover {
+  background: var(--accent-gold);
+  color: #111827;
+}
+
+.btn-studio-action.tertiary {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+}
+
+.btn-studio-action.tertiary:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+
 </style>
 </head>
 <body>
@@ -13146,12 +13760,13 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           </div>
 
           <div class="notif-sched-body" id="notifSchedBody">
-            <!-- Time Picker Row with Hour, Min, and AM/PM Buttons -->
+            <!-- Time Picker Row with Typeable Hour, Min, and AM/PM Buttons -->
             <div class="notif-time-picker-row">
               <div class="notif-time-selector-group">
                 <div class="notif-select-wrap">
-                  <label class="notif-sub-label">Hour</label>
-                  <select id="notifHourSelect" class="notif-dropdown" onchange="handleAmPmTimeChange()">
+                  <label class="notif-sub-label">Hour (1-12)</label>
+                  <input type="number" id="notifHourInput" class="notif-type-input" min="1" max="12" value="9" placeholder="09" oninput="handleManualTimeType()">
+                  <select id="notifHourSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
                     <option value="1">01</option>
                     <option value="2">02</option>
                     <option value="3">03</option>
@@ -13170,8 +13785,9 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
                 <span class="notif-colon">:</span>
 
                 <div class="notif-select-wrap">
-                  <label class="notif-sub-label">Minute</label>
-                  <select id="notifMinSelect" class="notif-dropdown" onchange="handleAmPmTimeChange()">
+                  <label class="notif-sub-label">Min (0-59)</label>
+                  <input type="number" id="notifMinInput" class="notif-type-input" min="0" max="59" value="30" placeholder="30" oninput="handleManualTimeType()">
+                  <select id="notifMinSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
                     <option value="00">00</option>
                     <option value="05">05</option>
                     <option value="10">10</option>
@@ -13260,6 +13876,161 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
                   💾 Save Time
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🌺 BOTANICAL CUSTOM NOTIFICATION STUDIO & NOTE PICKER (v0.0.31) -->
+        <div class="botanical-studio-card">
+          <div class="botanical-card-header">
+            <div class="botanical-title-wrap">
+              <span class="botanical-header-icon">🌸🌿</span>
+              <div>
+                <h3 class="botanical-card-title">Botanical Notification Studio &amp; Notes Picker</h3>
+                <p class="botanical-card-sub">Apna custom notification likhein ya kisi book ke notes &amp; cover ko notification banayein</p>
+              </div>
+            </div>
+            <span class="botanical-pill-badge">🌺 Custom Studio</span>
+          </div>
+
+          <!-- Mode Selector Tabs -->
+          <div class="botanical-mode-nav">
+            <button type="button" class="botanical-mode-btn active" id="btnModeBookNote" onclick="setNotifStudioMode('book_note')">
+              📖 Book Notes Alert
+            </button>
+            <button type="button" class="botanical-mode-btn" id="btnModeCustomNote" onclick="setNotifStudioMode('custom')">
+              ✍️ Write My Own Text
+            </button>
+            <button type="button" class="botanical-mode-btn" id="btnModeDailyQuote" onclick="setNotifStudioMode('daily_quote')">
+              ✨ Daily Wisdom Quote
+            </button>
+          </div>
+
+          <!-- Studio Body -->
+          <div class="botanical-studio-body">
+            <!-- Book & Note Selection Row (Active in 'book_note' mode) -->
+            <div id="studioBookPickerSection" class="studio-section">
+              <label class="studio-label">📚 Choose Book for Notification:</label>
+              <select id="studioBookSelect" class="studio-dropdown" onchange="onStudioBookSelectChanged()">
+                <!-- Populated with books from library -->
+              </select>
+
+              <!-- Book Preview Card with Cover Image & Details -->
+              <div class="studio-book-preview" id="studioBookPreviewBox">
+                <div class="studio-book-cover-frame">
+                  <img id="studioBookCoverImg" src="cover_placeholder.jpg" alt="Selected Book Cover" class="studio-book-cover">
+                  <div class="studio-cover-badge" id="studioBookStatusBadge">📖 In Progress</div>
+                </div>
+                <div class="studio-book-meta">
+                  <h4 class="studio-book-title" id="studioBookTitleTxt">Atomic Habits</h4>
+                  <p class="studio-book-author" id="studioBookAuthorTxt">by James Clear</p>
+                  <div class="studio-book-tags">
+                    <span class="studio-tag" id="studioBookPagesTxt">📄 320 pages</span>
+                    <span class="studio-tag" id="studioBookCategoryTxt">🌿 Mind Growth</span>
+                  </div>
+                  <p class="studio-book-hint">Is book ka cover phone ke notification me badi photo ke roop me aayega!</p>
+                </div>
+              </div>
+
+              <!-- Pick Specific Note from this Book -->
+              <div class="studio-field-group" style="margin-top: 14px;">
+                <label class="studio-label">📝 Select Which Note to Display in Notification:</label>
+                <select id="studioNoteSelect" class="studio-dropdown" onchange="onStudioNoteSelectChanged()">
+                  <!-- Populated with notes of selected book -->
+                </select>
+              </div>
+            </div>
+
+            <!-- Custom Notification Text Editor -->
+            <div class="studio-field-group">
+              <label class="studio-label">✏️ Notification Title:</label>
+              <input type="text" id="studioCustomTitle" class="studio-input" placeholder="e.g. Hyperfocus Note #1: Master Your Attention" oninput="updateLiveSimCard()">
+            </div>
+
+            <div class="studio-field-group">
+              <label class="studio-label">💬 Notification Message / Note Text:</label>
+              <textarea id="studioCustomMessage" class="studio-textarea" rows="3" placeholder="Apna note ya sandesh yahan likhein... (e.g. Focus on one high-impact task at a time for 25 minutes)." oninput="updateLiveSimCard()"></textarea>
+            </div>
+
+            <!-- Botanical Theme / Aura Palette -->
+            <div class="studio-theme-picker">
+              <label class="studio-label">🎨 Notification Visual Theme:</label>
+              <div class="botanical-themes-grid">
+                <button type="button" class="btn-botanical-theme active" data-theme="sakura" onclick="setStudioVisualTheme('sakura')">
+                  🌸 Sakura Bloom
+                </button>
+                <button type="button" class="btn-botanical-theme" data-theme="emerald" onclick="setStudioVisualTheme('emerald')">
+                  🌿 Emerald Forest
+                </button>
+                <button type="button" class="btn-botanical-theme" data-theme="sunset" onclick="setStudioVisualTheme('sunset')">
+                  🌅 Golden Twilight
+                </button>
+                <button type="button" class="btn-botanical-theme" data-theme="cosmic" onclick="setStudioVisualTheme('cosmic')">
+                  🌌 Cosmic Garden
+                </button>
+              </div>
+            </div>
+
+            <!-- 📱 ANDROID PHONE NOTIFICATION LIVE PREVIEW (1:1 Match with User's Uploaded Screenshot!) -->
+            <div class="android-shade-preview-wrap">
+              <div class="android-preview-header">
+                <span class="android-preview-label">📱 Live Phone Notification Preview (Status Bar):</span>
+                <span class="android-preview-sub">Phone ke notification drawer me bilkul aisa dikhega</span>
+              </div>
+
+              <div class="android-system-notif-card theme-sakura" id="androidSimCard">
+                <!-- App Header Row -->
+                <div class="asn-header">
+                  <div class="asn-header-left">
+                    <img src="icon-192.png" alt="App Icon" class="asn-app-icon">
+                    <span class="asn-app-name">Mind Focus Books</span>
+                    <span class="asn-dot">•</span>
+                    <span class="asn-time">now</span>
+                  </div>
+                  <div class="asn-header-right">
+                    <span class="asn-expand-icon">⌵</span>
+                  </div>
+                </div>
+
+                <!-- Content Row -->
+                <div class="asn-body">
+                  <div class="asn-text-col">
+                    <div class="asn-title" id="asnSimTitle">Hyperfocus - Deep Work Note</div>
+                    <div class="asn-desc" id="asnSimDesc">Focus on one high-impact task at a time for 25 minutes. Deep attention produces extraordinary results.</div>
+                  </div>
+                  <div class="asn-small-badge">
+                    <img src="icon-192.png" alt="Badge" class="asn-mini-badge">
+                  </div>
+                </div>
+
+                <!-- Big Picture Banner (Matching User's Perplexity Notification Screenshot) -->
+                <div class="asn-big-picture-banner" id="asnSimBanner">
+                  <img id="asnSimBannerImg" src="hyperfocus_cover.jpg" alt="Notification Banner Cover" class="asn-banner-img">
+                  <div class="asn-banner-overlay">
+                    <div class="asn-banner-tag" id="asnSimBannerTag">🌿 Mind Focus Reading</div>
+                    <div class="asn-banner-quote" id="asnSimBannerQuote">"Where knowledge begins..."</div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="asn-actions">
+                  <button type="button" class="asn-btn primary" onclick="handleSimNotifAction('read')">📖 Open &amp; Read</button>
+                  <button type="button" class="asn-btn" onclick="handleSimNotifAction('notes')">📝 View All Notes</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Studio Action Buttons -->
+            <div class="studio-actions-footer">
+              <button type="button" class="btn-studio-action primary" onclick="sendCustomNotificationToDeviceNow()">
+                ⚡ Send To Phone Status Bar Now
+              </button>
+              <button type="button" class="btn-studio-action secondary" onclick="saveAsDailyReminderSchedule()">
+                ⏰ Set As Daily Alarm Notification
+              </button>
+              <button type="button" class="btn-studio-action tertiary" onclick="addCustomNotificationToFeed()">
+                ➕ Add to Alerts Hub List
+              </button>
             </div>
           </div>
         </div>
@@ -20663,18 +21434,18 @@ if (typeof module !== 'undefined' && module.exports) {
 </script>
   <script>
 window.BROADCAST_NOTICE = {
-  "id": "notice-v0.0.30",
-  "version": "v0.0.30",
+  "id": "notice-v0.0.31",
+  "version": "v0.0.31",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "⏰",
-  "title": "Mind Focus Books v0.0.30 Ready!",
-  "message": "Naya v0.0.30 release update ready hai! Ab aap Notification Center me Daily Reading Reminder Time & Alarm Schedule set kar sakte hain — custom time picker, quick presets (Subah, Dopahar, Shaam, Bedtime), repeat days, audio chime aur interactive alarm popup ke sath. Update karein, aapka data 100% surakshit rahega.",
-  "btnText": "⚡ Update Now (v0.0.30)",
+  "icon": "🌸",
+  "title": "Mind Focus Books v0.0.31 Ready!",
+  "message": "Naya v0.0.31 release update ready hai! Ab aap Botanical Notification Studio me kisi bhi book ke notes aur cover ko phone notification me set kar sakte hain, direct typeable time (HH:MM AM/PM), Android status bar BigPicture alerts aur permission bridge ke sath. Update karein, aapka data 100% surakshit rahega.",
+  "btnText": "⚡ Update Now (v0.0.31)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-17T14:30:00.000Z"
+  "timestamp": "2026-10-17T15:30:00.000Z"
 };
 
 </script>
@@ -20683,20 +21454,18 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.30",
-    "name": "Mind Focus Books v0.0.30 (Daily Reminder Time & Alarm Scheduler)",
+    "version": "v0.0.31",
+    "name": "Mind Focus Books v0.0.31 (Botanical Notification Studio, Custom Notes & Big Picture Alerts)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.30 Release: Custom Reading Reminder Time & Daily Alarm Scheduler.",
-      "⏰ Custom Reminder Time Picker: Apni pasand ka koi bhi waqt (HH:MM AM/PM) set karein.",
-      "⚡ Quick Preset Time Buttons: Subah Ki Chai (08:00 AM), Lunch Break (02:00 PM), Shaam Fursat (07:00 PM) aur Bedtime Read (09:30 PM).",
-      "📅 Repeat Days Customizer: Everyday, Weekdays ya Weekends chunne ke liye flexible day chips (Sun-Sat).",
-      "🔔 Mindfulness Audio Chime: Alarm time par harmonic gentle chime sound jo focus promote kare.",
-      "📖 Interactive Reading Alarm Modal: Active reading book, page progress, motivation quote aur 1-tap 'Read Now' button ke sath.",
-      "💤 10-Minute Snooze & Instant 3s Test: Alarm test aur snooze karne ki poori suvidha.",
-      "🛡️ Safe In-Place Update: 100% books, reading streaks aur user notes surakshit rahenge."
+      "🌸 Botanical Notification Studio & Note Picker: Apni pasand ki kisi bhi book ka note aur cover phone notification me set karein.",
+      "⌨️ Typeable Hour & Minute Inputs: Time set karte waqt direct custom number type karein (HH:MM AM/PM).",
+      "📱 Native Android Status Bar Notifications: BigPicture banner style notification status bar me book cover aur notes ke sath.",
+      "🌿 4 Botanical Nature Visual Themes: Sakura Bloom, Emerald Forest, Golden Twilight aur Cosmic Garden.",
+      "🔔 Automatic Runtime Notification Permissions: Android 13+ status bar alerts ke liye direct permission bridge.",
+      "✍️ Custom Self-Written Reminder Text: Apna custom notification title aur sandesh likhne ki poori aazadi."
     ],
-    "stagedAt": "2026-10-17T14:30:00.000Z",
+    "stagedAt": "2026-10-17T15:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
@@ -30412,6 +31181,21 @@ function renderNotificationsHub() {
   // Update Permission UI
   updateBrowserNotificationUI();
   updateScheduleUI();
+  initBotanicalStudio();
+
+  // On native Android, prompt permission if not yet granted
+  if (window.Android && typeof window.Android.isNotificationPermissionGranted === 'function') {
+    if (!window.Android.isNotificationPermissionGranted()) {
+      if (!sessionStorage.getItem('mf_notif_perm_prompted')) {
+        sessionStorage.setItem('mf_notif_perm_prompted', '1');
+        setTimeout(() => {
+          if (window.Android && typeof window.Android.requestNotificationPermission === 'function') {
+            window.Android.requestNotificationPermission();
+          }
+        }, 500);
+      }
+    }
+  }
 
   // Filter list
   let filtered = userNotificationsState;
@@ -30554,8 +31338,14 @@ function triggerTestNotification() {
 }
 
 function requestBrowserNotificationPermission() {
+  if (window.Android && typeof window.Android.requestNotificationPermission === 'function') {
+    window.Android.requestNotificationPermission();
+    setTimeout(updateBrowserNotificationUI, 1200);
+    return;
+  }
+
   if (!('Notification' in window)) {
-    showToast('Aapka browser system push notifications support nahi karta.', 'warning');
+    showToast('Aapka browser system push notifications support nahi karta. In-app audio chime active hai!', 'warning');
     return;
   }
 
@@ -30585,9 +31375,32 @@ function updateBrowserNotificationUI() {
   const toggleBtn = document.getElementById('notifPermissionToggleBtn');
   if (!statusTxt || !toggleBtn) return;
 
+  // Check Native Android first
+  if (window.Android && typeof window.Android.isNotificationPermissionGranted === 'function') {
+    const isGranted = window.Android.isNotificationPermissionGranted();
+    if (isGranted) {
+      statusTxt.innerText = 'Phone status bar alerts active • Reminders & Notes on';
+      toggleBtn.innerText = '✓ Enabled';
+      toggleBtn.style.background = 'rgba(16, 185, 129, 0.2)';
+      toggleBtn.style.color = '#10b981';
+      toggleBtn.style.border = '1px solid #10b981';
+    } else {
+      statusTxt.innerText = 'Phone notification permission required for status bar alerts';
+      toggleBtn.innerText = '🔔 Enable Now';
+      toggleBtn.style.background = 'linear-gradient(135deg, #059669, #10b981)';
+      toggleBtn.style.color = '#ffffff';
+      toggleBtn.style.border = 'none';
+      toggleBtn.style.boxShadow = '0 0 12px rgba(16, 185, 129, 0.4)';
+    }
+    return;
+  }
+
   if (!('Notification' in window)) {
-    statusTxt.innerText = 'Device notifications not supported in this browser';
-    toggleBtn.style.display = 'none';
+    statusTxt.innerText = 'In-app audio alarms active (Device push available in APK)';
+    toggleBtn.style.display = 'inline-block';
+    toggleBtn.innerText = 'In-App Active';
+    toggleBtn.style.background = 'rgba(255, 255, 255, 0.1)';
+    toggleBtn.style.color = '#cbd5e1';
     return;
   }
 
@@ -30725,10 +31538,14 @@ function updateScheduleUI() {
 
   const hourSelect = document.getElementById('notifHourSelect');
   const minSelect = document.getElementById('notifMinSelect');
+  const hourInput = document.getElementById('notifHourInput');
+  const minInput = document.getElementById('notifMinInput');
   const btnAm = document.getElementById('btnAmToggle');
   const btnPm = document.getElementById('btnPmToggle');
 
   if (hourSelect) hourSelect.value = String(h12);
+  if (hourInput && document.activeElement !== hourInput) hourInput.value = h12;
+  if (minInput && document.activeElement !== minInput) minInput.value = m;
   if (minSelect) {
     const opts = Array.from(minSelect.options).map(o => o.value);
     if (opts.includes(m)) {
@@ -30803,6 +31620,50 @@ function handleAmPmTimeChange() {
   reminderScheduleConfig.time = h24Str;
   reminderScheduleConfig.label = `${(h12 < 10 ? '0' + h12 : h12)}:${m} ${isPm ? 'PM' : 'AM'}`;
 
+  saveReminderScheduleConfig(false);
+}
+
+function handleManualTimeType() {
+  const hourInput = document.getElementById('notifHourInput');
+  const minInput = document.getElementById('notifMinInput');
+  const btnPm = document.getElementById('btnPmToggle');
+
+  let h12 = parseInt(hourInput ? hourInput.value : '9', 10);
+  let mVal = parseInt(minInput ? minInput.value : '30', 10);
+
+  if (isNaN(h12)) h12 = 9;
+  if (h12 < 1) h12 = 1;
+  if (h12 > 12) h12 = 12;
+
+  if (isNaN(mVal)) mVal = 0;
+  if (mVal < 0) mVal = 0;
+  if (mVal > 59) mVal = 59;
+
+  const mStr = mVal < 10 ? '0' + mVal : String(mVal);
+  const isPm = btnPm ? btnPm.classList.contains('active') : true;
+
+  let h24 = h12;
+  if (isPm) {
+    h24 = (h12 === 12) ? 12 : h12 + 12;
+  } else {
+    h24 = (h12 === 12) ? 0 : h12;
+  }
+
+  const h24Str = (h24 < 10 ? '0' + h24 : String(h24)) + ':' + mStr;
+  reminderScheduleConfig.time = h24Str;
+  reminderScheduleConfig.label = `${(h12 < 10 ? '0' + h12 : h12)}:${mStr} ${isPm ? 'PM' : 'AM'}`;
+
+  // Keep hidden selects in sync
+  const hourSelect = document.getElementById('notifHourSelect');
+  const minSelect = document.getElementById('notifMinSelect');
+  if (hourSelect) hourSelect.value = String(h12);
+  if (minSelect) minSelect.value = mStr;
+
+  const timeBadge = document.getElementById('notifFormattedTimeBadge');
+  if (timeBadge) {
+    const iconEmoji = (h24 >= 19 || h24 < 5) ? '🌙' : (h24 < 12 ? '🌅' : '☀️');
+    timeBadge.innerText = `${iconEmoji} ${reminderScheduleConfig.label} (Active)`;
+  }
   saveReminderScheduleConfig(false);
 }
 
@@ -30962,11 +31823,17 @@ function fireScheduledReminderAlarm() {
   userNotificationsState.unshift(newNotif);
   saveNotifications();
 
-  // 4. Send browser push notification if permitted
-  if ('Notification' in window && Notification.permission === 'granted') {
+  // 4. Send device status bar notification if permitted
+  const notifTitle = reminderScheduleConfig.customTitle || `⏰ Padhne Ka Time! "${targetBook.title}"`;
+  const notifMsg = reminderScheduleConfig.customNote || `Rozana reading habit barkarar rakhein. Page ${curP}/${totP} (${pct}%). Start reading now!`;
+  const notifCover = getBookCoverUrl(targetBook);
+
+  if (window.Android && typeof window.Android.postNativeNotification === 'function') {
+    window.Android.postNativeNotification(notifTitle, notifMsg, targetBook.title, notifCover);
+  } else if ('Notification' in window && Notification.permission === 'granted') {
     try {
-      new Notification(`⏰ Padhne Ka Time! "${targetBook.title}"`, {
-        body: `Rozana reading habit barkarar rakhein. Page ${curP}/${totP} (${pct}%). Start reading now!`,
+      new Notification(notifTitle, {
+        body: notifMsg,
         icon: 'icon-192.png'
       });
     } catch (e) {
@@ -31042,6 +31909,311 @@ function handleScheduledModalReadNow() {
 }
 
 // =========================================================================
+// BOTANICAL NOTIFICATION STUDIO & NOTES PICKER (v0.0.31)
+// =========================================================================
+let studioActiveMode = 'book_note';
+let studioActiveTheme = 'sakura';
+let studioSelectedBook = null;
+
+function initBotanicalStudio() {
+  const bookSelect = document.getElementById('studioBookSelect');
+  if (!bookSelect) return;
+
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  if (!books || books.length === 0) return;
+
+  // Clear & populate book dropdown
+  bookSelect.innerHTML = '';
+  books.forEach((b, idx) => {
+    const opt = document.createElement('option');
+    opt.value = b.id || ('book_' + idx);
+    opt.text = `📖 ${b.title || 'Untitled'} (${b.author || 'Unknown'})`;
+    bookSelect.appendChild(opt);
+  });
+
+  // Pick first reading book or default
+  const activeBook = books.find(b => b.status === 'READING' || b.reading_status === 'currently_reading') || books[0];
+  if (activeBook) {
+    bookSelect.value = activeBook.id || 'book_0';
+  }
+
+  onStudioBookSelectChanged();
+}
+
+function onStudioBookSelectChanged() {
+  const bookSelect = document.getElementById('studioBookSelect');
+  if (!bookSelect) return;
+
+  const bookId = bookSelect.value;
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
+  studioSelectedBook = book;
+
+  if (!book) return;
+
+  // Update book preview
+  const coverImg = document.getElementById('studioBookCoverImg');
+  const titleTxt = document.getElementById('studioBookTitleTxt');
+  const authorTxt = document.getElementById('studioBookAuthorTxt');
+  const pagesTxt = document.getElementById('studioBookPagesTxt');
+  const categoryTxt = document.getElementById('studioBookCategoryTxt');
+  const statusBadge = document.getElementById('studioBookStatusBadge');
+
+  const coverUrl = getBookCoverUrl(book);
+  if (coverImg) coverImg.src = coverUrl;
+  if (titleTxt) titleTxt.innerText = book.title || 'Untitled Book';
+  if (authorTxt) authorTxt.innerText = 'by ' + (book.author || 'Unknown');
+  if (pagesTxt) pagesTxt.innerText = `📄 ${book.total_pages || book.totalPages || 250} pages`;
+  if (categoryTxt) categoryTxt.innerText = `🌿 ${book.category || 'Mind Growth'}`;
+  if (statusBadge) {
+    statusBadge.innerText = (book.status === 'COMPLETED' || book.reading_status === 'completed') ? '✓ Finished' : '📖 In Progress';
+  }
+
+  // Populate Notes Dropdown for this book
+  populateStudioNotesDropdown(book);
+}
+
+function populateStudioNotesDropdown(book) {
+  const noteSelect = document.getElementById('studioNoteSelect');
+  if (!noteSelect) return;
+
+  noteSelect.innerHTML = '';
+
+  let notesList = [];
+  if (Array.isArray(book.notes) && book.notes.length > 0) {
+    notesList = book.notes.map((n, i) => typeof n === 'string' ? { id: 'note_' + i, text: n } : n);
+  } else if (Array.isArray(book.key_takeaways) && book.key_takeaways.length > 0) {
+    notesList = book.key_takeaways.map((t, i) => ({ id: 'takeaway_' + i, text: t }));
+  }
+
+  // Also check state.savedNotes / user notes
+  if (Array.isArray(state.savedNotes)) {
+    const userNotes = state.savedNotes.filter(n => n.bookId === book.id || n.bookTitle === book.title);
+    userNotes.forEach((un, idx) => {
+      notesList.push({ id: un.id || ('un_' + idx), text: un.text || un.content || un.note });
+    });
+  }
+
+  if (notesList.length === 0) {
+    notesList.push({ id: 'default_note', text: `Key insight from ${book.title}: Consistency in daily reading expands consciousness.` });
+  }
+
+  notesList.forEach((n, idx) => {
+    const opt = document.createElement('option');
+    opt.value = idx;
+    const textVal = n.text || n.title || '';
+    const preview = textVal.length > 45 ? textVal.substring(0, 45) + '...' : textVal;
+    opt.text = `📝 Note #${idx + 1}: ${preview}`;
+    noteSelect.appendChild(opt);
+  });
+
+  const customOpt = document.createElement('option');
+  customOpt.value = 'custom_write';
+  customOpt.text = '✍️ Type a new note for this book...';
+  noteSelect.appendChild(customOpt);
+
+  onStudioNoteSelectChanged();
+}
+
+function onStudioNoteSelectChanged() {
+  const noteSelect = document.getElementById('studioNoteSelect');
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+  if (!studioSelectedBook) return;
+
+  const val = noteSelect ? noteSelect.value : '0';
+
+  if (val === 'custom_write') {
+    if (titleInput) titleInput.value = `${studioSelectedBook.title} - My Note`;
+    if (msgInput) msgInput.value = '';
+    if (msgInput) msgInput.focus();
+  } else {
+    const idx = parseInt(val, 10) || 0;
+    let noteText = '';
+    if (Array.isArray(studioSelectedBook.notes) && studioSelectedBook.notes[idx]) {
+      const n = studioSelectedBook.notes[idx];
+      noteText = typeof n === 'string' ? n : (n.text || n.content || '');
+    } else if (Array.isArray(studioSelectedBook.key_takeaways) && studioSelectedBook.key_takeaways[idx]) {
+      noteText = studioSelectedBook.key_takeaways[idx];
+    } else {
+      noteText = `Key insight from ${studioSelectedBook.title}: Consistency in daily reading expands consciousness.`;
+    }
+
+    if (titleInput) titleInput.value = `${studioSelectedBook.title} - Note #${idx + 1}`;
+    if (msgInput) msgInput.value = noteText;
+  }
+
+  updateLiveSimCard();
+}
+
+function setNotifStudioMode(mode) {
+  studioActiveMode = mode;
+  ['btnModeBookNote', 'btnModeCustomNote', 'btnModeDailyQuote'].forEach(id => {
+    const b = document.getElementById(id);
+    if (b) b.classList.remove('active');
+  });
+
+  const activeBtnId = mode === 'book_note' ? 'btnModeBookNote' : (mode === 'custom' ? 'btnModeCustomNote' : 'btnModeDailyQuote');
+  const activeBtn = document.getElementById(activeBtnId);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  const pickerSection = document.getElementById('studioBookPickerSection');
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+
+  if (mode === 'book_note') {
+    if (pickerSection) pickerSection.style.display = 'block';
+    onStudioBookSelectChanged();
+  } else if (mode === 'custom') {
+    if (pickerSection) pickerSection.style.display = 'none';
+    if (titleInput) titleInput.value = 'Mera Secret Reading Reminder 🌿';
+    if (msgInput) msgInput.value = 'Aaj 30 minutes bina distraction ke deep reading karni hai!';
+    updateLiveSimCard();
+  } else if (mode === 'daily_quote') {
+    if (pickerSection) pickerSection.style.display = 'none';
+    const quotes = [
+      { t: 'Charles Eliot Quote 🌸', m: 'Books are the quietest and most constant of friends; they are the most accessible and wisest of counselors.' },
+      { t: 'Epictetus Stoic Wisdom 🌿', m: 'We have two ears and one mouth so that we can listen twice as much as we speak. Read deeply.' },
+      { t: 'Marcus Aurelius Reflection 🌲', m: 'When you arise in the morning think of what a privilege it is to be alive, to think, to enjoy, to love.' }
+    ];
+    const pick = quotes[Math.floor(Math.random() * quotes.length)];
+    if (titleInput) titleInput.value = pick.t;
+    if (msgInput) msgInput.value = pick.m;
+    updateLiveSimCard();
+  }
+}
+
+function setStudioVisualTheme(theme) {
+  studioActiveTheme = theme;
+  const card = document.getElementById('androidSimCard');
+  if (card) {
+    card.className = `android-system-notif-card theme-${theme}`;
+  }
+  document.querySelectorAll('.btn-botanical-theme').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-theme') === theme);
+  });
+}
+
+function updateLiveSimCard() {
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+  const simTitle = document.getElementById('asnSimTitle');
+  const simDesc = document.getElementById('asnSimDesc');
+  const simBannerImg = document.getElementById('asnSimBannerImg');
+  const simBannerQuote = document.getElementById('asnSimBannerQuote');
+  const simBannerTag = document.getElementById('asnSimBannerTag');
+
+  const titleVal = (titleInput && titleInput.value.trim()) || 'Mind Focus Books 📖';
+  const msgVal = (msgInput && msgInput.value.trim()) || 'Time for your daily reading session!';
+
+  if (simTitle) simTitle.innerText = titleVal;
+  if (simDesc) simDesc.innerText = msgVal;
+
+  let coverUrl = 'hyperfocus_cover.jpg';
+  let tagText = '🌿 Mind Focus Reading';
+
+  if (studioActiveMode === 'book_note' && studioSelectedBook) {
+    coverUrl = getBookCoverUrl(studioSelectedBook);
+    tagText = `📖 ${studioSelectedBook.title || 'Book Note'}`;
+  } else if (studioActiveTheme === 'sakura') {
+    tagText = '🌸 Sakura Garden Wisdom';
+  } else if (studioActiveTheme === 'emerald') {
+    tagText = '🌿 Emerald Forest Zen';
+  } else if (studioActiveTheme === 'sunset') {
+    tagText = '🌅 Sunset Glow Reflection';
+  } else if (studioActiveTheme === 'cosmic') {
+    tagText = '🌌 Cosmic Focus';
+  }
+
+  if (simBannerImg) simBannerImg.src = coverUrl;
+  if (simBannerTag) simBannerTag.innerText = tagText;
+  if (simBannerQuote) simBannerQuote.innerText = `"${msgVal.substring(0, 60)}${msgVal.length > 60 ? '...' : ''}"`;
+}
+
+function sendCustomNotificationToDeviceNow() {
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+  const title = (titleInput && titleInput.value.trim()) || 'Mind Focus Books 📖';
+  const message = (msgInput && msgInput.value.trim()) || 'Time for reading and mindfulness!';
+  const bookTitle = studioSelectedBook ? studioSelectedBook.title : 'Mind Focus Books';
+  const coverUrl = studioSelectedBook ? getBookCoverUrl(studioSelectedBook) : 'icon-192.png';
+
+  // Play audio chime
+  playMindfulAudioChime();
+
+  // If in Native Android APK, post real system notification to phone drawer!
+  if (window.Android && typeof window.Android.postNativeNotification === 'function') {
+    window.Android.postNativeNotification(title, message, bookTitle, coverUrl);
+    showToast('Phone status bar me notification bhej diya gaya hai! 📱🔔', 'success');
+  } else if ('Notification' in window && Notification.permission === 'granted') {
+    try {
+      new Notification(title, {
+        body: message,
+        icon: 'icon-192.png'
+      });
+      showToast('Device notification bhej diya gaya! 🔔', 'success');
+    } catch (e) {
+      showToast('Notification display hua! 🔔', 'success');
+    }
+  } else {
+    // Show in-app alarm modal as fallback
+    showReminderAlarmModal({
+      title: title,
+      body: message,
+      book: studioSelectedBook || (state.books && state.books[0])
+    });
+    showToast('In-App Notification Alert Active! 🔔 (Allow permission for status bar)', 'info');
+  }
+}
+
+function saveAsDailyReminderSchedule() {
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+  const title = (titleInput && titleInput.value.trim()) || 'Daily Reading';
+  const message = (msgInput && msgInput.value.trim()) || '';
+
+  reminderScheduleConfig.customNote = message;
+  reminderScheduleConfig.customTitle = title;
+  if (studioSelectedBook) {
+    reminderScheduleConfig.bookId = studioSelectedBook.id;
+    reminderScheduleConfig.bookTitle = studioSelectedBook.title;
+  }
+  saveReminderScheduleConfig(false);
+  showToast('Is note aur book ko Daily Reminder Alarm me set kar diya gaya! ⏰', 'success');
+}
+
+function addCustomNotificationToFeed() {
+  const titleInput = document.getElementById('studioCustomTitle');
+  const msgInput = document.getElementById('studioCustomMessage');
+  const title = (titleInput && titleInput.value.trim()) || 'Mind Focus Note';
+  const message = (msgInput && msgInput.value.trim()) || 'Daily reminder note';
+
+  const newNotif = {
+    id: 'custom_alert_' + Date.now(),
+    type: 'custom_user_note',
+    category: studioActiveMode === 'book_note' ? 'notes' : 'reading',
+    title: title,
+    message: message,
+    bookTitle: studioSelectedBook ? studioSelectedBook.title : '',
+    bookCover: studioSelectedBook ? getBookCoverUrl(studioSelectedBook) : '',
+    actionType: studioActiveMode === 'book_note' ? 'open_note_3d' : 'open_book',
+    timestamp: new Date().toISOString(),
+    read: false
+  };
+
+  userNotificationsState.unshift(newNotif);
+  saveNotifications();
+  renderNotificationsHub();
+  showToast('Notification Alerts Feed me add ho gaya! ➕', 'success');
+}
+
+function handleSimNotifAction(action) {
+  if (action === 'read' && studioSelectedBook) {
+    openBookDetailView(studioSelectedBook);
+  } else {
+    navigateToSubView('notesHighlights');
+  }
+}
 </script>
 </body>
 </html>

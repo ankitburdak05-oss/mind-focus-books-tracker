@@ -2757,12 +2757,13 @@
           </div>
 
           <div class="notif-sched-body" id="notifSchedBody">
-            <!-- Time Picker Row with Hour, Min, and AM/PM Buttons -->
+            <!-- Time Picker Row with Typeable Hour, Min, and AM/PM Buttons -->
             <div class="notif-time-picker-row">
               <div class="notif-time-selector-group">
                 <div class="notif-select-wrap">
-                  <label class="notif-sub-label">Hour</label>
-                  <select id="notifHourSelect" class="notif-dropdown" onchange="handleAmPmTimeChange()">
+                  <label class="notif-sub-label">Hour (1-12)</label>
+                  <input type="number" id="notifHourInput" class="notif-type-input" min="1" max="12" value="9" placeholder="09" oninput="handleManualTimeType()">
+                  <select id="notifHourSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
                     <option value="1">01</option>
                     <option value="2">02</option>
                     <option value="3">03</option>
@@ -2781,8 +2782,9 @@
                 <span class="notif-colon">:</span>
 
                 <div class="notif-select-wrap">
-                  <label class="notif-sub-label">Minute</label>
-                  <select id="notifMinSelect" class="notif-dropdown" onchange="handleAmPmTimeChange()">
+                  <label class="notif-sub-label">Min (0-59)</label>
+                  <input type="number" id="notifMinInput" class="notif-type-input" min="0" max="59" value="30" placeholder="30" oninput="handleManualTimeType()">
+                  <select id="notifMinSelect" class="notif-dropdown" style="display:none;" onchange="handleAmPmTimeChange()">
                     <option value="00">00</option>
                     <option value="05">05</option>
                     <option value="10">10</option>
@@ -2871,6 +2873,161 @@
                   💾 Save Time
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 🌺 BOTANICAL CUSTOM NOTIFICATION STUDIO & NOTE PICKER (v0.0.31) -->
+        <div class="botanical-studio-card">
+          <div class="botanical-card-header">
+            <div class="botanical-title-wrap">
+              <span class="botanical-header-icon">🌸🌿</span>
+              <div>
+                <h3 class="botanical-card-title">Botanical Notification Studio &amp; Notes Picker</h3>
+                <p class="botanical-card-sub">Apna custom notification likhein ya kisi book ke notes &amp; cover ko notification banayein</p>
+              </div>
+            </div>
+            <span class="botanical-pill-badge">🌺 Custom Studio</span>
+          </div>
+
+          <!-- Mode Selector Tabs -->
+          <div class="botanical-mode-nav">
+            <button type="button" class="botanical-mode-btn active" id="btnModeBookNote" onclick="setNotifStudioMode('book_note')">
+              📖 Book Notes Alert
+            </button>
+            <button type="button" class="botanical-mode-btn" id="btnModeCustomNote" onclick="setNotifStudioMode('custom')">
+              ✍️ Write My Own Text
+            </button>
+            <button type="button" class="botanical-mode-btn" id="btnModeDailyQuote" onclick="setNotifStudioMode('daily_quote')">
+              ✨ Daily Wisdom Quote
+            </button>
+          </div>
+
+          <!-- Studio Body -->
+          <div class="botanical-studio-body">
+            <!-- Book & Note Selection Row (Active in 'book_note' mode) -->
+            <div id="studioBookPickerSection" class="studio-section">
+              <label class="studio-label">📚 Choose Book for Notification:</label>
+              <select id="studioBookSelect" class="studio-dropdown" onchange="onStudioBookSelectChanged()">
+                <!-- Populated with books from library -->
+              </select>
+
+              <!-- Book Preview Card with Cover Image & Details -->
+              <div class="studio-book-preview" id="studioBookPreviewBox">
+                <div class="studio-book-cover-frame">
+                  <img id="studioBookCoverImg" src="cover_placeholder.jpg" alt="Selected Book Cover" class="studio-book-cover">
+                  <div class="studio-cover-badge" id="studioBookStatusBadge">📖 In Progress</div>
+                </div>
+                <div class="studio-book-meta">
+                  <h4 class="studio-book-title" id="studioBookTitleTxt">Atomic Habits</h4>
+                  <p class="studio-book-author" id="studioBookAuthorTxt">by James Clear</p>
+                  <div class="studio-book-tags">
+                    <span class="studio-tag" id="studioBookPagesTxt">📄 320 pages</span>
+                    <span class="studio-tag" id="studioBookCategoryTxt">🌿 Mind Growth</span>
+                  </div>
+                  <p class="studio-book-hint">Is book ka cover phone ke notification me badi photo ke roop me aayega!</p>
+                </div>
+              </div>
+
+              <!-- Pick Specific Note from this Book -->
+              <div class="studio-field-group" style="margin-top: 14px;">
+                <label class="studio-label">📝 Select Which Note to Display in Notification:</label>
+                <select id="studioNoteSelect" class="studio-dropdown" onchange="onStudioNoteSelectChanged()">
+                  <!-- Populated with notes of selected book -->
+                </select>
+              </div>
+            </div>
+
+            <!-- Custom Notification Text Editor -->
+            <div class="studio-field-group">
+              <label class="studio-label">✏️ Notification Title:</label>
+              <input type="text" id="studioCustomTitle" class="studio-input" placeholder="e.g. Hyperfocus Note #1: Master Your Attention" oninput="updateLiveSimCard()">
+            </div>
+
+            <div class="studio-field-group">
+              <label class="studio-label">💬 Notification Message / Note Text:</label>
+              <textarea id="studioCustomMessage" class="studio-textarea" rows="3" placeholder="Apna note ya sandesh yahan likhein... (e.g. Focus on one high-impact task at a time for 25 minutes)." oninput="updateLiveSimCard()"></textarea>
+            </div>
+
+            <!-- Botanical Theme / Aura Palette -->
+            <div class="studio-theme-picker">
+              <label class="studio-label">🎨 Notification Visual Theme:</label>
+              <div class="botanical-themes-grid">
+                <button type="button" class="btn-botanical-theme active" data-theme="sakura" onclick="setStudioVisualTheme('sakura')">
+                  🌸 Sakura Bloom
+                </button>
+                <button type="button" class="btn-botanical-theme" data-theme="emerald" onclick="setStudioVisualTheme('emerald')">
+                  🌿 Emerald Forest
+                </button>
+                <button type="button" class="btn-botanical-theme" data-theme="sunset" onclick="setStudioVisualTheme('sunset')">
+                  🌅 Golden Twilight
+                </button>
+                <button type="button" class="btn-botanical-theme" data-theme="cosmic" onclick="setStudioVisualTheme('cosmic')">
+                  🌌 Cosmic Garden
+                </button>
+              </div>
+            </div>
+
+            <!-- 📱 ANDROID PHONE NOTIFICATION LIVE PREVIEW (1:1 Match with User's Uploaded Screenshot!) -->
+            <div class="android-shade-preview-wrap">
+              <div class="android-preview-header">
+                <span class="android-preview-label">📱 Live Phone Notification Preview (Status Bar):</span>
+                <span class="android-preview-sub">Phone ke notification drawer me bilkul aisa dikhega</span>
+              </div>
+
+              <div class="android-system-notif-card theme-sakura" id="androidSimCard">
+                <!-- App Header Row -->
+                <div class="asn-header">
+                  <div class="asn-header-left">
+                    <img src="icon-192.png" alt="App Icon" class="asn-app-icon">
+                    <span class="asn-app-name">Mind Focus Books</span>
+                    <span class="asn-dot">•</span>
+                    <span class="asn-time">now</span>
+                  </div>
+                  <div class="asn-header-right">
+                    <span class="asn-expand-icon">⌵</span>
+                  </div>
+                </div>
+
+                <!-- Content Row -->
+                <div class="asn-body">
+                  <div class="asn-text-col">
+                    <div class="asn-title" id="asnSimTitle">Hyperfocus - Deep Work Note</div>
+                    <div class="asn-desc" id="asnSimDesc">Focus on one high-impact task at a time for 25 minutes. Deep attention produces extraordinary results.</div>
+                  </div>
+                  <div class="asn-small-badge">
+                    <img src="icon-192.png" alt="Badge" class="asn-mini-badge">
+                  </div>
+                </div>
+
+                <!-- Big Picture Banner (Matching User's Perplexity Notification Screenshot) -->
+                <div class="asn-big-picture-banner" id="asnSimBanner">
+                  <img id="asnSimBannerImg" src="hyperfocus_cover.jpg" alt="Notification Banner Cover" class="asn-banner-img">
+                  <div class="asn-banner-overlay">
+                    <div class="asn-banner-tag" id="asnSimBannerTag">🌿 Mind Focus Reading</div>
+                    <div class="asn-banner-quote" id="asnSimBannerQuote">"Where knowledge begins..."</div>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="asn-actions">
+                  <button type="button" class="asn-btn primary" onclick="handleSimNotifAction('read')">📖 Open &amp; Read</button>
+                  <button type="button" class="asn-btn" onclick="handleSimNotifAction('notes')">📝 View All Notes</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Studio Action Buttons -->
+            <div class="studio-actions-footer">
+              <button type="button" class="btn-studio-action primary" onclick="sendCustomNotificationToDeviceNow()">
+                ⚡ Send To Phone Status Bar Now
+              </button>
+              <button type="button" class="btn-studio-action secondary" onclick="saveAsDailyReminderSchedule()">
+                ⏰ Set As Daily Alarm Notification
+              </button>
+              <button type="button" class="btn-studio-action tertiary" onclick="addCustomNotificationToFeed()">
+                ➕ Add to Alerts Hub List
+              </button>
             </div>
           </div>
         </div>

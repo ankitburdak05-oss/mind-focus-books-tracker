@@ -23,7 +23,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
+
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -31,6 +39,8 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 
 public class MainActivity extends AppCompatActivity {
+    private static final String CHANNEL_ID = "mind_focus_reading_reminders";
+    private static final int NOTIF_REQ_CODE = 102;
     private WebView webView;
     private ValueCallback<Uri[]> uploadMessage;
     private final static int FILE_CHOOSER_RESULT_CODE = 1001;
@@ -103,6 +113,14 @@ public class MainActivity extends AppCompatActivity {
         // Request camera permission at startup
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 101);
+        }
+
+        // Create notification channel & request notification permission for Android 13+
+        createNotificationChannel();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, NOTIF_REQ_CODE);
+            }
         }
 
         webView.setWebChromeClient(new WebChromeClient() {
@@ -352,6 +370,119 @@ public class MainActivity extends AppCompatActivity {
                     });
                 }
             }).start();
+        }
+
+        @JavascriptInterface
+        public void requestNotificationPermission() {
+            runOnUiThread(() -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(MainActivity.this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, NOTIF_REQ_CODE);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Device notifications are active! 🔔", Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "Notifications are active on this device! 🔔", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
+        @JavascriptInterface
+        public boolean isNotificationPermissionGranted() {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                return ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+            }
+            return true;
+        }
+
+        @JavascriptInterface
+        public void postNativeNotification(String title, String message, String bookTitle, String imageAssetOrUrl) {
+            new Thread(() -> {
+                try {
+                    Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                    intent.putExtra("from_notification", true);
+                    if (bookTitle != null) intent.putExtra("book_title", bookTitle);
+
+                    int flags = PendingIntent.FLAG_UPDATE_CURRENT;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        flags |= PendingIntent.FLAG_IMMUTABLE;
+                    }
+                    PendingIntent pendingIntent = PendingIntent.getActivity(MainActivity.this, (int) System.currentTimeMillis(), intent, flags);
+
+                    NotificationCompat.Builder builder = new NotificationCompat.Builder(MainActivity.this, CHANNEL_ID)
+                            .setSmallIcon(R.mipmap.ic_launcher)
+                            .setContentTitle(title != null && !title.isEmpty() ? title : "Mind Focus Books 📖")
+                            .setContentText(message != null && !message.isEmpty() ? message : "Time for your reading session!")
+                            .setSubText(bookTitle != null && !bookTitle.isEmpty() ? bookTitle : "Mind Focus Tracker")
+                            .setPriority(NotificationCompat.PRIORITY_HIGH)
+                            .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                            .setAutoCancel(true)
+                            .setContentIntent(pendingIntent)
+                            .setVibrate(new long[]{0, 350, 150, 350});
+
+                    Bitmap bigBitmap = null;
+                    if (imageAssetOrUrl != null && !imageAssetOrUrl.isEmpty()) {
+                        try {
+                            if (imageAssetOrUrl.startsWith("http://") || imageAssetOrUrl.startsWith("https://")) {
+                                java.net.URL url = new java.net.URL(imageAssetOrUrl);
+                                java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+                                conn.setConnectTimeout(8000);
+                                conn.setReadTimeout(12000);
+                                conn.connect();
+                                if (conn.getResponseCode() == 200) {
+                                    bigBitmap = BitmapFactory.decodeStream(conn.getInputStream());
+                                }
+                            } else {
+                                String assetPath = imageAssetOrUrl.startsWith("file:///android_asset/") 
+                                        ? imageAssetOrUrl.replace("file:///android_asset/", "") 
+                                        : imageAssetOrUrl;
+                                try (java.io.InputStream is = getAssets().open(assetPath)) {
+                                    bigBitmap = BitmapFactory.decodeStream(is);
+                                }
+                            }
+                        } catch (Exception ignored) {}
+                    }
+
+                    if (bigBitmap != null) {
+                        builder.setLargeIcon(bigBitmap);
+                        builder.setStyle(new NotificationCompat.BigPictureStyle()
+                                .bigPicture(bigBitmap)
+                                .setBigContentTitle(title)
+                                .setSummaryText(message));
+                    } else {
+                        builder.setStyle(new NotificationCompat.BigTextStyle()
+                                .setBigContentTitle(title)
+                                .bigText(message + (bookTitle != null && !bookTitle.isEmpty() ? "\n\n📖 Book: " + bookTitle : "")));
+                    }
+
+                    NotificationManagerCompat notificationManager = NotificationManagerCompat.from(MainActivity.this);
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || 
+                            ContextCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+                        notificationManager.notify((int) (System.currentTimeMillis() % 100000), builder.build());
+                    } else {
+                        requestNotificationPermission();
+                    }
+                } catch (Exception e) {
+                    runOnUiThread(() -> Toast.makeText(MainActivity.this, "Notification error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                }
+            }).start();
+        }
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Mind Focus Reading Reminders";
+            String description = "Daily reading reminders, book notes and motivation alerts";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            channel.enableVibration(true);
+            channel.setVibrationPattern(new long[]{0, 300, 200, 300});
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
         }
     }
 
