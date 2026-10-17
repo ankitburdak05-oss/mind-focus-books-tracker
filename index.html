@@ -1204,6 +1204,68 @@
       <button type="button" class="notes-fab-add" onclick="openAddNoteModal()" title="Add Note or Highlight">&#x2b;</button>
     </section>
 
+    <!-- ================= SCREEN 9B: DEDICATED BOOK NOTES DETAIL ================= -->
+    <section id="viewBookNotesDetail" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="closeBookNotesDetailView()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title" id="bndHeaderTitle">Book Notes</h2>
+          <p class="sub-screen-sub-title" id="bndHeaderSubtitle">Personal Reflections &amp; Quotes</p>
+        </div>
+        <button type="button" class="sub-screen-action-btn" onclick="focusBookNotesInput()" title="Add Note">&#x2b;</button>
+      </div>
+
+      <!-- Hero Book Banner -->
+      <div class="bnd-hero-card">
+        <div class="bnd-hero-backdrop"></div>
+        <div class="bnd-hero-content">
+          <img class="bnd-hero-cover" id="bndBookCover" src="cover_placeholder.jpg" alt="Cover" onerror="this.src='cover_placeholder.jpg'">
+          <div class="bnd-hero-details">
+            <span class="bnd-category-pill" id="bndBookCategory">General</span>
+            <h3 class="bnd-hero-title" id="bndBookTitle">Book Title</h3>
+            <div class="bnd-hero-author" id="bndBookAuthor">👤 Author Name</div>
+            <div class="bnd-hero-stats">
+              <span class="bnd-stat-pill" id="bndNotesCountBadge">📝 0 Notes</span>
+              <span class="bnd-stat-pill" id="bndPagesBadge">📄 250 Pages</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Add Note Card -->
+      <div class="bnd-add-card">
+        <div class="bnd-add-header">
+          <span class="bnd-add-title">✍️ Naya Note / Vichar Likhein</span>
+          <select id="bndNewNoteType" class="bnd-type-select">
+            <option value="Note">📝 Note</option>
+            <option value="Highlight">✨ Highlight</option>
+          </select>
+        </div>
+        <textarea id="bndNewNoteInput" placeholder="Is book ke baare me apna vichar, quote ya learning yahan likhein..."></textarea>
+        <div class="bnd-add-footer">
+          <div class="bnd-page-wrap">
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Page:</span>
+            <input type="number" id="bndNewNotePage" placeholder="Optional" min="1" class="bnd-page-input">
+          </div>
+          <button type="button" class="bnd-save-btn" onclick="saveBndNote()">
+            <span>💾 Save Note</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="notes-tabs-bar" style="margin-top: 10px; margin-bottom: 12px;">
+        <button type="button" class="notes-tab-chip active" id="bndTabAll" onclick="filterBndNotes('all')">All</button>
+        <button type="button" class="notes-tab-chip" id="bndTabNotes" onclick="filterBndNotes('notes')">Notes</button>
+        <button type="button" class="notes-tab-chip" id="bndTabHighlights" onclick="filterBndNotes('highlights')">Highlights</button>
+      </div>
+
+      <!-- Notes Feed -->
+      <div class="bnd-notes-feed" id="bndNotesFeed">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
     <!-- ================= SCREEN 10: READING THEMES & APPEARANCE ================= -->
     <section id="viewAppearance" class="app-view">
       <div class="sub-screen-header">
@@ -2362,7 +2424,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.26 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.27 (Up to date)</span>
               </div>
             </div>
           </div>

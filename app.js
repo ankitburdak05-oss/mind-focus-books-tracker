@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.26)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.27)
 // ==========================================================================
 
-const APP_VERSION = '0.0.26';
-const CURRENT_APP_VERSION = 'v0.0.26';
+const APP_VERSION = '0.0.27';
+const CURRENT_APP_VERSION = 'v0.0.27';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -2977,6 +2977,13 @@ window.handleAppBackButton = function() {
     return true;
   }
 
+  // 1f. If in Book Notes Detail view, back goes to Notes Highlights list
+  const bndView = document.getElementById('viewBookNotesDetail');
+  if (bndView && bndView.classList.contains('active')) {
+    closeBookNotesDetailView();
+    return true;
+  }
+
   // 2. If Book Detail view is active, close detail and return to originating screen
   const detailView = document.getElementById('viewBookDetail');
   if (detailView && detailView.classList.contains('active')) {
@@ -2985,7 +2992,7 @@ window.handleAppBackButton = function() {
   }
 
   // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, Not Interested, etc.), go back to Profile
-  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewBookNotesDetail', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
   for (const svId of subViews) {
     const sv = document.getElementById(svId);
     if (sv && sv.classList.contains('active')) {
@@ -5142,6 +5149,7 @@ function navigateToSubView(viewName) {
 
   // Lifecycle initializers for sub-screens (Features 6 to 20)
   if (viewName === 'notesHighlights') renderNotesList();
+  if (viewName === 'bookNotesDetail') renderBndNotesFeed();
   if (viewName === 'quotesInspiration') renderQuotesView();
   if (viewName === 'readingJournal') renderJournalView();
   if (viewName === 'readingStats') updateReadingStatistics();
@@ -5448,7 +5456,8 @@ let userNotesState = [
 ];
 
 let activeNotesFilter = 'all';
-let expandedBookNotesSet = new Set();
+let currentBndBookTitle = '';
+let activeBndFilter = 'all';
 
 function loadUserNotes() {
   try {
@@ -5457,20 +5466,6 @@ function loadUserNotes() {
       userNotesState = JSON.parse(saved);
     }
   } catch (e) {}
-}
-
-function toggleBookNotesExpand(groupKey, safeId) {
-  const container = document.getElementById('bookNotesAccordion_' + safeId);
-  const card = document.getElementById('bookNotesCard_' + safeId);
-  if (expandedBookNotesSet.has(groupKey)) {
-    expandedBookNotesSet.delete(groupKey);
-    if (container) container.style.display = 'none';
-    if (card) card.classList.remove('expanded');
-  } else {
-    expandedBookNotesSet.add(groupKey);
-    if (container) container.style.display = 'flex';
-    if (card) card.classList.add('expanded');
-  }
 }
 
 function renderNotesList() {
@@ -5505,45 +5500,247 @@ function renderNotesList() {
   });
 
   const groupKeys = Object.keys(groups);
-  container.innerHTML = groupKeys.map((bookTitle, idx) => {
+  container.innerHTML = groupKeys.map(bookTitle => {
     const groupNotes = groups[bookTitle];
-    const safeId = 'bng_' + idx + '_' + bookTitle.replace(/[^a-zA-Z0-9]/g, '_');
     const matchedBook = (state.books || []).find(b => b.title && b.title.trim().toLowerCase() === bookTitle.trim().toLowerCase());
     const coverUrl = matchedBook ? getBookCoverUrl(matchedBook) : 'cover_placeholder.jpg';
     const author = matchedBook ? (matchedBook.author || 'Author') : 'Personal Collection';
-    const isExpanded = expandedBookNotesSet.has(bookTitle);
     const count = groupNotes.length;
 
     return `
-      <div class="book-notes-group-card ${isExpanded ? 'expanded' : ''}" id="bookNotesCard_${safeId}" onclick="toggleBookNotesExpand('${escapeHtml(bookTitle)}', '${safeId}')">
+      <div class="book-notes-group-card" onclick="openBookNotesDetailView('${escapeHtml(bookTitle)}')">
         <img class="bng-cover" src="${coverUrl}" alt="${escapeHtml(bookTitle)}" onerror="this.src='cover_placeholder.jpg'">
         <div class="bng-info">
           <div class="bng-title">${escapeHtml(bookTitle)}</div>
           <div class="bng-author">👤 ${escapeHtml(author)}</div>
           <div class="bng-count-badge">📝 ${count} ${count === 1 ? 'Note' : 'Notes'}</div>
         </div>
-        <div class="bng-chevron">›</div>
-      </div>
-      <div class="book-notes-expansion-container" id="bookNotesAccordion_${safeId}" style="display: ${isExpanded ? 'flex' : 'none'};">
-        ${groupNotes.map(item => `
-          <div class="note-item-card" style="margin-bottom: 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <div class="note-card-badge" style="margin-bottom: 0;">${escapeHtml(item.type || 'Note')}</div>
-              <button type="button" onclick="event.stopPropagation(); deleteBookDetailNote('${escapeHtml(item.id)}')" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 2px 6px;" title="Delete Note">
-                🗑️
-              </button>
-            </div>
-            <div class="note-card-quote">"${escapeHtml(item.quote)}"</div>
-            <div class="note-card-meta">
-              <span>📄 Page ${escapeHtml(String(item.page || '1'))}</span>
-              <span>&bull;</span>
-              <span>${escapeHtml(item.timeAgo || 'Recently')}</span>
-            </div>
-          </div>
-        `).join('')}
+        <div class="bng-arrow-btn">
+          <span>Notes Kholein</span>
+          <span style="font-size: 1.15rem;">›</span>
+        </div>
       </div>
     `;
   }).join('');
+}
+
+// ================= DEDICATED BOOK NOTES DETAIL SCREEN =================
+function openBookNotesDetailView(bookTitle) {
+  currentBndBookTitle = bookTitle;
+  activeBndFilter = 'all';
+
+  const matchedBook = (state.books || []).find(b => b.title && b.title.trim().toLowerCase() === bookTitle.trim().toLowerCase());
+  const coverUrl = matchedBook ? getBookCoverUrl(matchedBook) : 'cover_placeholder.jpg';
+  const author = matchedBook ? (matchedBook.author || 'Author') : 'Personal Collection';
+  const category = matchedBook ? (matchedBook.category || 'Reading Notes') : 'Personal Notes';
+  const pages = matchedBook ? (matchedBook.pages || matchedBook.total_pages || 250) : null;
+
+  const headerTitle = document.getElementById('bndHeaderTitle');
+  if (headerTitle) headerTitle.innerText = bookTitle;
+
+  const coverEl = document.getElementById('bndBookCover');
+  if (coverEl) coverEl.src = coverUrl;
+
+  const titleEl = document.getElementById('bndBookTitle');
+  if (titleEl) titleEl.innerText = bookTitle;
+
+  const authorEl = document.getElementById('bndBookAuthor');
+  if (authorEl) authorEl.innerText = '👤 ' + author;
+
+  const catEl = document.getElementById('bndBookCategory');
+  if (catEl) catEl.innerText = category;
+
+  const pagesBadge = document.getElementById('bndPagesBadge');
+  if (pagesBadge) {
+    if (pages) {
+      pagesBadge.innerText = `📄 ${pages} Pages`;
+      pagesBadge.style.display = 'inline-flex';
+    } else {
+      pagesBadge.style.display = 'none';
+    }
+  }
+
+  // Reset tab chips
+  ['All', 'Notes', 'Highlights'].forEach(t => {
+    const el = document.getElementById('bndTab' + t);
+    if (el) el.classList.toggle('active', t.toLowerCase() === 'all');
+  });
+
+  // Clear note input form
+  const inputEl = document.getElementById('bndNewNoteInput');
+  if (inputEl) inputEl.value = '';
+  const pageEl = document.getElementById('bndNewNotePage');
+  if (pageEl) pageEl.value = matchedBook && matchedBook.current_page ? matchedBook.current_page : '';
+
+  renderBndNotesFeed();
+
+  // Switch to dedicated view
+  const views = document.querySelectorAll('.app-view');
+  views.forEach(v => v.classList.remove('active'));
+  const target = document.getElementById('viewBookNotesDetail');
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function closeBookNotesDetailView() {
+  navigateToSubView('notesHighlights');
+}
+
+function focusBookNotesInput() {
+  const input = document.getElementById('bndNewNoteInput');
+  if (input) {
+    input.focus();
+    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function filterBndNotes(cat) {
+  activeBndFilter = cat;
+  ['All', 'Notes', 'Highlights'].forEach(t => {
+    const el = document.getElementById('bndTab' + t);
+    if (el) el.classList.toggle('active', t.toLowerCase() === cat.toLowerCase());
+  });
+  renderBndNotesFeed();
+}
+
+function renderBndNotesFeed() {
+  if (!currentBndBookTitle) return;
+  loadUserNotes();
+  const feed = document.getElementById('bndNotesFeed');
+  const countBadge = document.getElementById('bndNotesCountBadge');
+
+  const allBookNotes = userNotesState.filter(n =>
+    n.book && n.book.trim().toLowerCase() === currentBndBookTitle.trim().toLowerCase()
+  );
+
+  if (countBadge) {
+    countBadge.innerText = `📝 ${allBookNotes.length} ${allBookNotes.length === 1 ? 'Note' : 'Notes'}`;
+  }
+
+  if (!feed) return;
+
+  const filtered = allBookNotes.filter(n => {
+    if (activeBndFilter === 'all') return true;
+    if (activeBndFilter === 'notes') return (n.type || '').toLowerCase() === 'note';
+    if (activeBndFilter === 'highlights') return (n.type || '').toLowerCase() === 'highlight';
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    feed.innerHTML = `
+      <div class="bnd-empty-state">
+        <div class="bnd-empty-icon">📖✨</div>
+        <h4 style="font-size: 1rem; color: #fff; margin-bottom: 6px;">Is book ka koi note nahi hai abhi</h4>
+        <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 280px; margin: 0 auto 14px;">Upar box me apna pehla vichar ya quotation likhein aur "Save Note" dabayein.</p>
+        <button type="button" class="btn-save-gold" onclick="focusBookNotesInput()" style="padding: 8px 18px; font-size: 0.85rem;">
+          ✍️ Pehla Note Likhein
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  feed.innerHTML = filtered.map(item => `
+    <div class="bnd-note-card">
+      <div class="bnd-note-watermark">“</div>
+      <div class="bnd-note-top-bar">
+        <div class="bnd-note-badges">
+          <span class="bnd-badge-type ${(item.type || '').toLowerCase() === 'highlight' ? 'highlight' : 'note'}">
+            ${(item.type || '').toLowerCase() === 'highlight' ? '✨ Highlight' : '📝 Note'}
+          </span>
+          <span class="bnd-badge-page">📄 Page ${escapeHtml(String(item.page || '1'))}</span>
+          <span class="bnd-badge-time">⏱️ ${escapeHtml(item.timeAgo || 'Saved')}</span>
+        </div>
+        <div class="bnd-note-actions">
+          <button type="button" class="bnd-act-btn" onclick="copyNoteQuote('${escapeHtml(encodeURIComponent(item.quote || ''))}')" title="Copy to clipboard">
+            📋 Copy
+          </button>
+          <button type="button" class="bnd-act-btn delete" onclick="deleteBndNote('${escapeHtml(item.id)}')" title="Delete Note">
+            🗑️
+          </button>
+        </div>
+      </div>
+      <div class="bnd-note-text">${escapeHtml(item.quote || '')}</div>
+    </div>
+  `).join('');
+}
+
+function saveBndNote() {
+  if (!currentBndBookTitle) {
+    showToast('Book select nahi hui');
+    return;
+  }
+  const input = document.getElementById('bndNewNoteInput');
+  const pageInput = document.getElementById('bndNewNotePage');
+  const typeSelect = document.getElementById('bndNewNoteType');
+  const content = input ? input.value.trim() : '';
+  const page = pageInput && pageInput.value ? pageInput.value.trim() : '1';
+  const type = typeSelect ? typeSelect.value : 'Note';
+
+  if (!content) {
+    showToast('Pehle note text likhiye!');
+    if (input) input.focus();
+    return;
+  }
+
+  loadUserNotes();
+  const newNote = {
+    id: Date.now().toString() + '_' + Math.random().toString(36).substring(2, 6),
+    book: currentBndBookTitle,
+    quote: content,
+    page: String(page),
+    type: type,
+    timeAgo: 'Just now',
+    createdAt: new Date().toISOString()
+  };
+
+  userNotesState.unshift(newNote);
+  try {
+    localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState));
+  } catch (e) {}
+
+  if (input) input.value = '';
+  if (pageInput) pageInput.value = '';
+
+  renderBndNotesFeed();
+  renderNotesList(); // keep profile list updated
+  renderCurrentBookDetailNotes(); // sync with book details
+  showToast(`Saved to ${currentBndBookTitle}! 📝✨`);
+}
+
+function deleteBndNote(noteId) {
+  if (!confirm('Kya aap is note ko delete karna chahte hain?')) return;
+  loadUserNotes();
+  userNotesState = userNotesState.filter(n => n.id !== noteId);
+  try {
+    localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState));
+  } catch (e) {}
+  renderBndNotesFeed();
+  renderNotesList();
+  renderCurrentBookDetailNotes();
+  showToast('Note delete ho gaya');
+}
+
+function copyNoteQuote(encodedQuote) {
+  try {
+    const text = decodeURIComponent(encodedQuote);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+      showToast('Note copied to clipboard! 📋');
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('Note copied to clipboard! 📋');
+    }
+  } catch (e) {
+    showToast('Could not copy note');
+  }
 }
 
 function filterNotesCategory(cat) {
@@ -5603,6 +5800,7 @@ function saveNewNoteModal() {
   closeAddNoteModal();
   renderNotesList();
   renderCurrentBookDetailNotes();
+  renderBndNotesFeed();
   showToast(`Added ${type} to ${book}! ✨`);
 
   // Clear inputs
@@ -5692,6 +5890,7 @@ function saveNewBookDetailNote() {
 
   renderCurrentBookDetailNotes();
   renderNotesList(); // Profile notes stay synchronized
+  renderBndNotesFeed();
   showToast('Note successfully saved to Book & Profile! 📝✨');
 }
 
@@ -5704,6 +5903,7 @@ function deleteBookDetailNote(noteId) {
   } catch (e) {}
   renderCurrentBookDetailNotes();
   renderNotesList();
+  renderBndNotesFeed();
   showToast('Note deleted');
 }
 

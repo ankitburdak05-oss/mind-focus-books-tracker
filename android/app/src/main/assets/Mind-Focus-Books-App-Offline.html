@@ -8804,6 +8804,321 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 .book-detail-notes-item:hover {
   border-color: rgba(245, 158, 11, 0.35);
 }
+
+/* ==========================================================================
+   DEDICATED BOOK NOTES DETAIL SCREEN (viewBookNotesDetail)
+   ========================================================================== */
+.bnd-hero-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.14) 0%, rgba(30, 41, 59, 0.88) 60%, rgba(15, 23, 42, 0.96) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-radius: 18px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4), 0 0 25px rgba(245, 158, 11, 0.08);
+  overflow: hidden;
+}
+.bnd-hero-backdrop {
+  position: absolute;
+  top: -30%;
+  right: -20%;
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, transparent 70%);
+  pointer-events: none;
+  filter: blur(20px);
+}
+.bnd-hero-content {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+.bnd-hero-cover {
+  width: 78px;
+  height: 112px;
+  object-fit: cover;
+  border-radius: 10px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.55), 0 0 10px rgba(245, 158, 11, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  flex-shrink: 0;
+  background: #1e293b;
+}
+.bnd-hero-details {
+  flex: 1;
+  min-width: 0;
+}
+.bnd-category-pill {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.16);
+  padding: 2px 8px;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+.bnd-hero-title {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  margin: 0 0 4px 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.bnd-hero-author {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+.bnd-hero-stats {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.bnd-stat-pill {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* Quick Add Note Card */
+.bnd-add-card {
+  background: var(--bg-card);
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  border-radius: 16px;
+  padding: 14px 16px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+.bnd-add-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.bnd-add-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #fff;
+}
+.bnd-type-select {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 0.78rem;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+.bnd-add-card textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.9rem;
+  resize: vertical;
+  box-sizing: border-box;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.bnd-add-card textarea:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.25);
+}
+.bnd-add-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 10px;
+}
+.bnd-page-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.bnd-page-input {
+  width: 90px;
+  padding: 7px 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  box-sizing: border-box;
+}
+.bnd-save-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #111827;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+.bnd-save-btn:active {
+  transform: scale(0.98);
+}
+
+/* Notes Feed Cards */
+.bnd-notes-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding-bottom: 80px;
+}
+.bnd-note-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--accent-gold);
+  border-radius: 14px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+  transition: transform 0.2s, border-color 0.2s;
+  overflow: hidden;
+}
+.bnd-note-card:hover {
+  border-color: rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+.bnd-note-watermark {
+  position: absolute;
+  top: -8px;
+  right: 12px;
+  font-size: 3.5rem;
+  font-family: Georgia, serif;
+  color: rgba(245, 158, 11, 0.08);
+  user-select: none;
+  pointer-events: none;
+  line-height: 1;
+}
+.bnd-note-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+}
+.bnd-note-badges {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.bnd-badge-type {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 6px;
+}
+.bnd-badge-type.note {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+}
+.bnd-badge-type.highlight {
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+}
+.bnd-badge-page {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.bnd-badge-time {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+.bnd-note-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+  z-index: 1;
+}
+.bnd-act-btn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.bnd-act-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+.bnd-act-btn.delete {
+  color: #f87171;
+  border-color: rgba(239, 68, 68, 0.2);
+}
+.bnd-act-btn.delete:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+.bnd-note-text {
+  position: relative;
+  z-index: 1;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  color: #f1f5f9;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.bnd-empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px dashed var(--border-color);
+  border-radius: 16px;
+  margin-top: 10px;
+}
+.bnd-empty-icon {
+  font-size: 2.4rem;
+  margin-bottom: 8px;
+}
+
+/* Book item in Profile Notes list */
+.bng-arrow-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  padding: 6px 12px;
+  border-radius: 10px;
+  flex-shrink: 0;
+  transition: all 0.18s ease;
+}
+.book-notes-group-card:hover .bng-arrow-btn,
+.book-notes-group-card:active .bng-arrow-btn {
+  background: var(--accent-gold);
+  color: #111827;
+  border-color: var(--accent-gold);
+}
 </style>
 </head>
 <body>
@@ -9997,6 +10312,68 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
       <button type="button" class="notes-fab-add" onclick="openAddNoteModal()" title="Add Note or Highlight">&#x2b;</button>
     </section>
 
+    <!-- ================= SCREEN 9B: DEDICATED BOOK NOTES DETAIL ================= -->
+    <section id="viewBookNotesDetail" class="app-view">
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="closeBookNotesDetailView()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title" id="bndHeaderTitle">Book Notes</h2>
+          <p class="sub-screen-sub-title" id="bndHeaderSubtitle">Personal Reflections &amp; Quotes</p>
+        </div>
+        <button type="button" class="sub-screen-action-btn" onclick="focusBookNotesInput()" title="Add Note">&#x2b;</button>
+      </div>
+
+      <!-- Hero Book Banner -->
+      <div class="bnd-hero-card">
+        <div class="bnd-hero-backdrop"></div>
+        <div class="bnd-hero-content">
+          <img class="bnd-hero-cover" id="bndBookCover" src="cover_placeholder.jpg" alt="Cover" onerror="this.src='cover_placeholder.jpg'">
+          <div class="bnd-hero-details">
+            <span class="bnd-category-pill" id="bndBookCategory">General</span>
+            <h3 class="bnd-hero-title" id="bndBookTitle">Book Title</h3>
+            <div class="bnd-hero-author" id="bndBookAuthor">👤 Author Name</div>
+            <div class="bnd-hero-stats">
+              <span class="bnd-stat-pill" id="bndNotesCountBadge">📝 0 Notes</span>
+              <span class="bnd-stat-pill" id="bndPagesBadge">📄 250 Pages</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Add Note Card -->
+      <div class="bnd-add-card">
+        <div class="bnd-add-header">
+          <span class="bnd-add-title">✍️ Naya Note / Vichar Likhein</span>
+          <select id="bndNewNoteType" class="bnd-type-select">
+            <option value="Note">📝 Note</option>
+            <option value="Highlight">✨ Highlight</option>
+          </select>
+        </div>
+        <textarea id="bndNewNoteInput" placeholder="Is book ke baare me apna vichar, quote ya learning yahan likhein..."></textarea>
+        <div class="bnd-add-footer">
+          <div class="bnd-page-wrap">
+            <span style="font-size: 0.82rem; color: var(--text-muted);">Page:</span>
+            <input type="number" id="bndNewNotePage" placeholder="Optional" min="1" class="bnd-page-input">
+          </div>
+          <button type="button" class="bnd-save-btn" onclick="saveBndNote()">
+            <span>💾 Save Note</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Filter Tabs -->
+      <div class="notes-tabs-bar" style="margin-top: 10px; margin-bottom: 12px;">
+        <button type="button" class="notes-tab-chip active" id="bndTabAll" onclick="filterBndNotes('all')">All</button>
+        <button type="button" class="notes-tab-chip" id="bndTabNotes" onclick="filterBndNotes('notes')">Notes</button>
+        <button type="button" class="notes-tab-chip" id="bndTabHighlights" onclick="filterBndNotes('highlights')">Highlights</button>
+      </div>
+
+      <!-- Notes Feed -->
+      <div class="bnd-notes-feed" id="bndNotesFeed">
+        <!-- Rendered dynamically -->
+      </div>
+    </section>
+
     <!-- ================= SCREEN 10: READING THEMES & APPEARANCE ================= -->
     <section id="viewAppearance" class="app-view">
       <div class="sub-screen-header">
@@ -11155,7 +11532,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.26 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.27 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -18647,18 +19024,18 @@ if (typeof module !== 'undefined' && module.exports) {
 </script>
   <script>
 window.BROADCAST_NOTICE = {
-  "id": "notice-v0.0.26",
-  "version": "v0.0.26",
+  "id": "notice-v0.0.27",
+  "version": "v0.0.27",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "📝",
-  "title": "Mind Focus Books v0.0.26 Ready!",
-  "message": "Naya v0.0.26 release update ready hai! Book details me naya 'Notes' tab add ho gaya hai aur Profile me sabhi notes book ke naam aur cover ke sath organize ho gaye hain. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
-  "btnText": "⚡ Update Now (v0.0.26)",
+  "icon": "📖",
+  "title": "Mind Focus Books v0.0.27 Ready!",
+  "message": "Naya v0.0.27 release update ready hai! Profile ke 'Notes & Highlights' me ab kisi bhi book par click karte hi us book ke sabhi notes ek dedicated naye premium page me open hote hain. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
+  "btnText": "⚡ Update Now (v0.0.27)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-17T11:30:00.000Z"
+  "timestamp": "2026-10-17T11:45:00.000Z"
 };
 
 </script>
@@ -18667,18 +19044,18 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.26",
-    "name": "Mind Focus Books v0.0.26 (Book Detail Notes & Profile Accordion)",
+    "version": "v0.0.27",
+    "name": "Mind Focus Books v0.0.27 (Dedicated Book Notes Detail Screen)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.26 Release: Book Detail Notes Tab & Profile Accordion.",
-      "📝 Dedicated Notes Tab in Book Details: Overview aur Takeaways ke beech naya Notes tab add hua.",
-      "📚 Book-Grouped Notes in Profile: Profile me sabhi notes book ke naam aur cover ke sath accordion me organize ho gaye.",
-      "🔄 1-Tap Toggle Accordion: Book card par tap karke sabhi notes dekhein aur delete ya view karein.",
-      "💾 Real-Time Synchronization: Book detail me add kiya gaya note seedha Profile me bi reflect hota hai.",
+      "⚡ Official v0.0.27 Release: Dedicated Book Notes Page & Premium Design.",
+      "📖 Dedicated Full-Screen Notes View: Book par click karte hi sirf us book ke notes ke liye naya premium designed page open hota hai.",
+      "🎨 Luxury Reading Journal Aesthetic: Book cover hero banner, dark gold gradient aura aur ambient glow design.",
+      "✍️ Quick Note Capture on Notes Page: Direct usi book ke page par note textarea, page number aur type select ke sath save karein.",
+      "📋 1-Tap Copy & Delete Actions: Kisi bhi quote/note ko clipboard me copy karein ya delete karein.",
       "🛡️ Safe In-Place Update: 100% reading streak aur user notes surakshit rahenge."
     ],
-    "stagedAt": "2026-10-17T11:30:00.000Z",
+    "stagedAt": "2026-10-17T11:45:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
@@ -18760,11 +19137,11 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
 </script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.26)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.27)
 // ==========================================================================
 
-const APP_VERSION = '0.0.26';
-const CURRENT_APP_VERSION = 'v0.0.26';
+const APP_VERSION = '0.0.27';
+const CURRENT_APP_VERSION = 'v0.0.27';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -21738,6 +22115,13 @@ window.handleAppBackButton = function() {
     return true;
   }
 
+  // 1f. If in Book Notes Detail view, back goes to Notes Highlights list
+  const bndView = document.getElementById('viewBookNotesDetail');
+  if (bndView && bndView.classList.contains('active')) {
+    closeBookNotesDetailView();
+    return true;
+  }
+
   // 2. If Book Detail view is active, close detail and return to originating screen
   const detailView = document.getElementById('viewBookDetail');
   if (detailView && detailView.classList.contains('active')) {
@@ -21746,7 +22130,7 @@ window.handleAppBackButton = function() {
   }
 
   // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, Not Interested, etc.), go back to Profile
-  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewBookNotesDetail', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
   for (const svId of subViews) {
     const sv = document.getElementById(svId);
     if (sv && sv.classList.contains('active')) {
@@ -23903,6 +24287,7 @@ function navigateToSubView(viewName) {
 
   // Lifecycle initializers for sub-screens (Features 6 to 20)
   if (viewName === 'notesHighlights') renderNotesList();
+  if (viewName === 'bookNotesDetail') renderBndNotesFeed();
   if (viewName === 'quotesInspiration') renderQuotesView();
   if (viewName === 'readingJournal') renderJournalView();
   if (viewName === 'readingStats') updateReadingStatistics();
@@ -24209,7 +24594,8 @@ let userNotesState = [
 ];
 
 let activeNotesFilter = 'all';
-let expandedBookNotesSet = new Set();
+let currentBndBookTitle = '';
+let activeBndFilter = 'all';
 
 function loadUserNotes() {
   try {
@@ -24218,20 +24604,6 @@ function loadUserNotes() {
       userNotesState = JSON.parse(saved);
     }
   } catch (e) {}
-}
-
-function toggleBookNotesExpand(groupKey, safeId) {
-  const container = document.getElementById('bookNotesAccordion_' + safeId);
-  const card = document.getElementById('bookNotesCard_' + safeId);
-  if (expandedBookNotesSet.has(groupKey)) {
-    expandedBookNotesSet.delete(groupKey);
-    if (container) container.style.display = 'none';
-    if (card) card.classList.remove('expanded');
-  } else {
-    expandedBookNotesSet.add(groupKey);
-    if (container) container.style.display = 'flex';
-    if (card) card.classList.add('expanded');
-  }
 }
 
 function renderNotesList() {
@@ -24266,45 +24638,247 @@ function renderNotesList() {
   });
 
   const groupKeys = Object.keys(groups);
-  container.innerHTML = groupKeys.map((bookTitle, idx) => {
+  container.innerHTML = groupKeys.map(bookTitle => {
     const groupNotes = groups[bookTitle];
-    const safeId = 'bng_' + idx + '_' + bookTitle.replace(/[^a-zA-Z0-9]/g, '_');
     const matchedBook = (state.books || []).find(b => b.title && b.title.trim().toLowerCase() === bookTitle.trim().toLowerCase());
     const coverUrl = matchedBook ? getBookCoverUrl(matchedBook) : 'cover_placeholder.jpg';
     const author = matchedBook ? (matchedBook.author || 'Author') : 'Personal Collection';
-    const isExpanded = expandedBookNotesSet.has(bookTitle);
     const count = groupNotes.length;
 
     return `
-      <div class="book-notes-group-card ${isExpanded ? 'expanded' : ''}" id="bookNotesCard_${safeId}" onclick="toggleBookNotesExpand('${escapeHtml(bookTitle)}', '${safeId}')">
+      <div class="book-notes-group-card" onclick="openBookNotesDetailView('${escapeHtml(bookTitle)}')">
         <img class="bng-cover" src="${coverUrl}" alt="${escapeHtml(bookTitle)}" onerror="this.src='cover_placeholder.jpg'">
         <div class="bng-info">
           <div class="bng-title">${escapeHtml(bookTitle)}</div>
           <div class="bng-author">👤 ${escapeHtml(author)}</div>
           <div class="bng-count-badge">📝 ${count} ${count === 1 ? 'Note' : 'Notes'}</div>
         </div>
-        <div class="bng-chevron">›</div>
-      </div>
-      <div class="book-notes-expansion-container" id="bookNotesAccordion_${safeId}" style="display: ${isExpanded ? 'flex' : 'none'};">
-        ${groupNotes.map(item => `
-          <div class="note-item-card" style="margin-bottom: 0;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-              <div class="note-card-badge" style="margin-bottom: 0;">${escapeHtml(item.type || 'Note')}</div>
-              <button type="button" onclick="event.stopPropagation(); deleteBookDetailNote('${escapeHtml(item.id)}')" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 2px 6px;" title="Delete Note">
-                🗑️
-              </button>
-            </div>
-            <div class="note-card-quote">"${escapeHtml(item.quote)}"</div>
-            <div class="note-card-meta">
-              <span>📄 Page ${escapeHtml(String(item.page || '1'))}</span>
-              <span>&bull;</span>
-              <span>${escapeHtml(item.timeAgo || 'Recently')}</span>
-            </div>
-          </div>
-        `).join('')}
+        <div class="bng-arrow-btn">
+          <span>Notes Kholein</span>
+          <span style="font-size: 1.15rem;">›</span>
+        </div>
       </div>
     `;
   }).join('');
+}
+
+// ================= DEDICATED BOOK NOTES DETAIL SCREEN =================
+function openBookNotesDetailView(bookTitle) {
+  currentBndBookTitle = bookTitle;
+  activeBndFilter = 'all';
+
+  const matchedBook = (state.books || []).find(b => b.title && b.title.trim().toLowerCase() === bookTitle.trim().toLowerCase());
+  const coverUrl = matchedBook ? getBookCoverUrl(matchedBook) : 'cover_placeholder.jpg';
+  const author = matchedBook ? (matchedBook.author || 'Author') : 'Personal Collection';
+  const category = matchedBook ? (matchedBook.category || 'Reading Notes') : 'Personal Notes';
+  const pages = matchedBook ? (matchedBook.pages || matchedBook.total_pages || 250) : null;
+
+  const headerTitle = document.getElementById('bndHeaderTitle');
+  if (headerTitle) headerTitle.innerText = bookTitle;
+
+  const coverEl = document.getElementById('bndBookCover');
+  if (coverEl) coverEl.src = coverUrl;
+
+  const titleEl = document.getElementById('bndBookTitle');
+  if (titleEl) titleEl.innerText = bookTitle;
+
+  const authorEl = document.getElementById('bndBookAuthor');
+  if (authorEl) authorEl.innerText = '👤 ' + author;
+
+  const catEl = document.getElementById('bndBookCategory');
+  if (catEl) catEl.innerText = category;
+
+  const pagesBadge = document.getElementById('bndPagesBadge');
+  if (pagesBadge) {
+    if (pages) {
+      pagesBadge.innerText = `📄 ${pages} Pages`;
+      pagesBadge.style.display = 'inline-flex';
+    } else {
+      pagesBadge.style.display = 'none';
+    }
+  }
+
+  // Reset tab chips
+  ['All', 'Notes', 'Highlights'].forEach(t => {
+    const el = document.getElementById('bndTab' + t);
+    if (el) el.classList.toggle('active', t.toLowerCase() === 'all');
+  });
+
+  // Clear note input form
+  const inputEl = document.getElementById('bndNewNoteInput');
+  if (inputEl) inputEl.value = '';
+  const pageEl = document.getElementById('bndNewNotePage');
+  if (pageEl) pageEl.value = matchedBook && matchedBook.current_page ? matchedBook.current_page : '';
+
+  renderBndNotesFeed();
+
+  // Switch to dedicated view
+  const views = document.querySelectorAll('.app-view');
+  views.forEach(v => v.classList.remove('active'));
+  const target = document.getElementById('viewBookNotesDetail');
+  if (target) {
+    target.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+}
+
+function closeBookNotesDetailView() {
+  navigateToSubView('notesHighlights');
+}
+
+function focusBookNotesInput() {
+  const input = document.getElementById('bndNewNoteInput');
+  if (input) {
+    input.focus();
+    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function filterBndNotes(cat) {
+  activeBndFilter = cat;
+  ['All', 'Notes', 'Highlights'].forEach(t => {
+    const el = document.getElementById('bndTab' + t);
+    if (el) el.classList.toggle('active', t.toLowerCase() === cat.toLowerCase());
+  });
+  renderBndNotesFeed();
+}
+
+function renderBndNotesFeed() {
+  if (!currentBndBookTitle) return;
+  loadUserNotes();
+  const feed = document.getElementById('bndNotesFeed');
+  const countBadge = document.getElementById('bndNotesCountBadge');
+
+  const allBookNotes = userNotesState.filter(n =>
+    n.book && n.book.trim().toLowerCase() === currentBndBookTitle.trim().toLowerCase()
+  );
+
+  if (countBadge) {
+    countBadge.innerText = `📝 ${allBookNotes.length} ${allBookNotes.length === 1 ? 'Note' : 'Notes'}`;
+  }
+
+  if (!feed) return;
+
+  const filtered = allBookNotes.filter(n => {
+    if (activeBndFilter === 'all') return true;
+    if (activeBndFilter === 'notes') return (n.type || '').toLowerCase() === 'note';
+    if (activeBndFilter === 'highlights') return (n.type || '').toLowerCase() === 'highlight';
+    return true;
+  });
+
+  if (filtered.length === 0) {
+    feed.innerHTML = `
+      <div class="bnd-empty-state">
+        <div class="bnd-empty-icon">📖✨</div>
+        <h4 style="font-size: 1rem; color: #fff; margin-bottom: 6px;">Is book ka koi note nahi hai abhi</h4>
+        <p style="font-size: 0.82rem; color: var(--text-muted); max-width: 280px; margin: 0 auto 14px;">Upar box me apna pehla vichar ya quotation likhein aur "Save Note" dabayein.</p>
+        <button type="button" class="btn-save-gold" onclick="focusBookNotesInput()" style="padding: 8px 18px; font-size: 0.85rem;">
+          ✍️ Pehla Note Likhein
+        </button>
+      </div>
+    `;
+    return;
+  }
+
+  feed.innerHTML = filtered.map(item => `
+    <div class="bnd-note-card">
+      <div class="bnd-note-watermark">“</div>
+      <div class="bnd-note-top-bar">
+        <div class="bnd-note-badges">
+          <span class="bnd-badge-type ${(item.type || '').toLowerCase() === 'highlight' ? 'highlight' : 'note'}">
+            ${(item.type || '').toLowerCase() === 'highlight' ? '✨ Highlight' : '📝 Note'}
+          </span>
+          <span class="bnd-badge-page">📄 Page ${escapeHtml(String(item.page || '1'))}</span>
+          <span class="bnd-badge-time">⏱️ ${escapeHtml(item.timeAgo || 'Saved')}</span>
+        </div>
+        <div class="bnd-note-actions">
+          <button type="button" class="bnd-act-btn" onclick="copyNoteQuote('${escapeHtml(encodeURIComponent(item.quote || ''))}')" title="Copy to clipboard">
+            📋 Copy
+          </button>
+          <button type="button" class="bnd-act-btn delete" onclick="deleteBndNote('${escapeHtml(item.id)}')" title="Delete Note">
+            🗑️
+          </button>
+        </div>
+      </div>
+      <div class="bnd-note-text">${escapeHtml(item.quote || '')}</div>
+    </div>
+  `).join('');
+}
+
+function saveBndNote() {
+  if (!currentBndBookTitle) {
+    showToast('Book select nahi hui');
+    return;
+  }
+  const input = document.getElementById('bndNewNoteInput');
+  const pageInput = document.getElementById('bndNewNotePage');
+  const typeSelect = document.getElementById('bndNewNoteType');
+  const content = input ? input.value.trim() : '';
+  const page = pageInput && pageInput.value ? pageInput.value.trim() : '1';
+  const type = typeSelect ? typeSelect.value : 'Note';
+
+  if (!content) {
+    showToast('Pehle note text likhiye!');
+    if (input) input.focus();
+    return;
+  }
+
+  loadUserNotes();
+  const newNote = {
+    id: Date.now().toString() + '_' + Math.random().toString(36).substring(2, 6),
+    book: currentBndBookTitle,
+    quote: content,
+    page: String(page),
+    type: type,
+    timeAgo: 'Just now',
+    createdAt: new Date().toISOString()
+  };
+
+  userNotesState.unshift(newNote);
+  try {
+    localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState));
+  } catch (e) {}
+
+  if (input) input.value = '';
+  if (pageInput) pageInput.value = '';
+
+  renderBndNotesFeed();
+  renderNotesList(); // keep profile list updated
+  renderCurrentBookDetailNotes(); // sync with book details
+  showToast(`Saved to ${currentBndBookTitle}! 📝✨`);
+}
+
+function deleteBndNote(noteId) {
+  if (!confirm('Kya aap is note ko delete karna chahte hain?')) return;
+  loadUserNotes();
+  userNotesState = userNotesState.filter(n => n.id !== noteId);
+  try {
+    localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState));
+  } catch (e) {}
+  renderBndNotesFeed();
+  renderNotesList();
+  renderCurrentBookDetailNotes();
+  showToast('Note delete ho gaya');
+}
+
+function copyNoteQuote(encodedQuote) {
+  try {
+    const text = decodeURIComponent(encodedQuote);
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+      showToast('Note copied to clipboard! 📋');
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('Note copied to clipboard! 📋');
+    }
+  } catch (e) {
+    showToast('Could not copy note');
+  }
 }
 
 function filterNotesCategory(cat) {
@@ -24364,6 +24938,7 @@ function saveNewNoteModal() {
   closeAddNoteModal();
   renderNotesList();
   renderCurrentBookDetailNotes();
+  renderBndNotesFeed();
   showToast(`Added ${type} to ${book}! ✨`);
 
   // Clear inputs
@@ -24453,6 +25028,7 @@ function saveNewBookDetailNote() {
 
   renderCurrentBookDetailNotes();
   renderNotesList(); // Profile notes stay synchronized
+  renderBndNotesFeed();
   showToast('Note successfully saved to Book & Profile! 📝✨');
 }
 
@@ -24465,6 +25041,7 @@ function deleteBookDetailNote(noteId) {
   } catch (e) {}
   renderCurrentBookDetailNotes();
   renderNotesList();
+  renderBndNotesFeed();
   showToast('Note deleted');
 }
 

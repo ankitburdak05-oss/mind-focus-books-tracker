@@ -2,18 +2,18 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.26",
-    "name": "Mind Focus Books v0.0.26 (Book Detail Notes & Profile Accordion)",
+    "version": "v0.0.27",
+    "name": "Mind Focus Books v0.0.27 (Dedicated Book Notes Detail Screen)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.26 Release: Book Detail Notes Tab & Profile Accordion.",
-      "📝 Dedicated Notes Tab in Book Details: Overview aur Takeaways ke beech naya Notes tab add hua.",
-      "📚 Book-Grouped Notes in Profile: Profile me sabhi notes book ke naam aur cover ke sath accordion me organize ho gaye.",
-      "🔄 1-Tap Toggle Accordion: Book card par tap karke sabhi notes dekhein aur delete ya view karein.",
-      "💾 Real-Time Synchronization: Book detail me add kiya gaya note seedha Profile me bi reflect hota hai.",
+      "⚡ Official v0.0.27 Release: Dedicated Book Notes Page & Premium Design.",
+      "📖 Dedicated Full-Screen Notes View: Book par click karte hi sirf us book ke notes ke liye naya premium designed page open hota hai.",
+      "🎨 Luxury Reading Journal Aesthetic: Book cover hero banner, dark gold gradient aura aur ambient glow design.",
+      "✍️ Quick Note Capture on Notes Page: Direct usi book ke page par note textarea, page number aur type select ke sath save karein.",
+      "📋 1-Tap Copy & Delete Actions: Kisi bhi quote/note ko clipboard me copy karein ya delete karein.",
       "🛡️ Safe In-Place Update: 100% reading streak aur user notes surakshit rahenge."
     ],
-    "stagedAt": "2026-10-17T11:30:00.000Z",
+    "stagedAt": "2026-10-17T11:45:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
