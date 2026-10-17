@@ -2,18 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.31",
-    "name": "Mind Focus Books v0.0.31 (Botanical Notification Studio, Custom Notes & Big Picture Alerts)",
+    "version": "v0.0.32",
+    "name": "Mind Focus Books v0.0.32 (Segmented Notification Hub, Full-Width Android Cards & Clutter-Free Layout)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
-      "🌸 Botanical Notification Studio & Note Picker: Apni pasand ki kisi bhi book ka note aur cover phone notification me set karein.",
-      "⌨️ Typeable Hour & Minute Inputs: Time set karte waqt direct custom number type karein (HH:MM AM/PM).",
-      "📱 Native Android Status Bar Notifications: BigPicture banner style notification status bar me book cover aur notes ke sath.",
-      "🌿 4 Botanical Nature Visual Themes: Sakura Bloom, Emerald Forest, Golden Twilight aur Cosmic Garden.",
-      "🔔 Automatic Runtime Notification Permissions: Android 13+ status bar alerts ke liye direct permission bridge.",
-      "✍️ Custom Self-Written Reminder Text: Apna custom notification title aur sandesh likhne ki poori aazadi."
+      "📑 3 Dedicated Segmented Tabs: Alerts Feed, Reading Alarm & Custom Studio — zero clutter, completely organized.",
+      "📱 Full-Screen Width Notification Cards: Mobile screen-spanning 100% edge-to-edge cards with rich book banners.",
+      "📖 Direct Book Cover Banners: Har notification card ke andar book ka cover image aur title banner.",
+      "🌸 Botanical Nature Aesthetics: Enhanced glassmorphic contrast, smooth hover states, and status badges.",
+      "⚡ Instant Status Shade Actions: One-tap action button to open 3D notes or continue reading directly."
     ],
-    "stagedAt": "2026-10-17T15:30:00.000Z",
+    "stagedAt": "2026-10-17T21:35:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
