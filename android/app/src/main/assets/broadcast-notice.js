@@ -1,14 +1,14 @@
-window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v0.0.25",
-  "version": "v0.0.25",
+window.BROADCAST_NOTICE = {
+  "id": "notice-v0.0.26",
+  "version": "v0.0.26",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "💾",
-  "title": "Mind Focus Books v0.0.25 Ready!",
-  "message": "Naya v0.0.25 release update ready hai! Profile me naya dedicated 'Backup & Export' option add ho gaya hai, jisme Data Backup, Restore, CSV/PDF/JSON Exports aur Security Vault options ko ek jagah organize kar diya gaya hai. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
-  "btnText": "⚡ Update Now (v0.0.25)",
+  "icon": "📝",
+  "title": "Mind Focus Books v0.0.26 Ready!",
+  "message": "Naya v0.0.26 release update ready hai! Book details me naya 'Notes' tab add ho gaya hai aur Profile me sabhi notes book ke naam aur cover ke sath organize ho gaye hain. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
+  "btnText": "⚡ Update Now (v0.0.26)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-17T11:00:00.000Z"
+  "timestamp": "2026-10-17T11:30:00.000Z"
 };

@@ -1016,7 +1016,8 @@
       <!-- Tabs Navigation -->
       <div class="detail-tabs-bar">
         <button type="button" class="detail-tab-btn active" id="tabBtnOverview" onclick="switchDetailTab('overview')">Overview</button>
-        <button type="button" class="detail-tab-btn" id="tabBtnNotes" onclick="switchDetailTab('notes')">Takeaways</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnNotes" onclick="switchDetailTab('notes')">Notes</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnTakeaways" onclick="switchDetailTab('takeaways')">Takeaways</button>
         <button type="button" class="detail-tab-btn" id="tabBtnChapters" onclick="switchDetailTab('chapters')">Chapters</button>
         <button type="button" class="detail-tab-btn" id="tabBtnReviews" onclick="switchDetailTab('reviews')">Rating & Price</button>
       </div>
@@ -1070,11 +1071,41 @@
         </div>
       </div>
 
-      <!-- Tab Content: Notes -->
+      <!-- Tab Content: Notes (User Notes) -->
       <div class="detail-tab-content" id="tabContentNotes">
         <div class="detail-card-box">
-          <h4 class="box-title">Personal Key Takeaways & Quotes</h4>
-          <textarea id="detailNotesInput" placeholder="Add your reflections, key thoughts, or favourite quotes..." oninput="saveCurrentBookNotes(this.value)"></textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h4 class="box-title" style="margin: 0;">📝 My Personal Notes</h4>
+            <span class="detail-tag" id="detailBookNotesCountBadge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);">0 Notes</span>
+          </div>
+
+          <!-- Note input form -->
+          <div class="book-detail-note-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+            <textarea id="bookDetailNewNoteInput" placeholder="Add your reflections, key thoughts, or notes for this book..." style="width: 100%; min-height: 85px; padding: 12px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); font-family: inherit; font-size: 0.9rem; resize: vertical; box-sizing: border-box;"></textarea>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <input type="number" id="bookDetailNewNotePage" placeholder="Page (optional)" style="width: 120px; padding: 9px 12px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 0.85rem; box-sizing: border-box;" min="1">
+              <button type="button" class="btn-save-gold" onclick="saveNewBookDetailNote()" style="flex: 1; padding: 10px 16px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <span>💾 Add Note</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Notes list for this book -->
+          <div id="bookDetailNotesContainer" style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Takeaways -->
+      <div class="detail-tab-content" id="tabContentTakeaways">
+        <div class="detail-card-box">
+          <h4 class="box-title">Personal Key Takeaways &amp; Quotes</h4>
+          <p class="box-text" id="detailTakeawaysText" style="margin-bottom: 14px;">Master the wisdom, discipline, and clarity detailed in this book.</p>
+          <div style="margin-top: 10px;">
+            <h5 style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">Edit Book Takeaways:</h5>
+            <textarea id="detailNotesInput" placeholder="Add your reflections, key thoughts, or favourite quotes..." oninput="saveCurrentBookNotes(this.value)"></textarea>
+          </div>
         </div>
       </div>
 
@@ -2331,7 +2362,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.25 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.26 (Up to date)</span>
               </div>
             </div>
           </div>

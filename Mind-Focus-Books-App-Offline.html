@@ -8706,6 +8706,104 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   opacity: 1 !important;
   pointer-events: auto !important;
 }
+
+/* ==========================================================================
+   BOOK-GROUPED NOTES & HIGHLIGHTS ACCORDION (Profile & Book Details)
+   ========================================================================== */
+.book-notes-group-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  user-select: none;
+}
+.book-notes-group-card:hover,
+.book-notes-group-card:active {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.4);
+  transform: translateY(-1px);
+}
+.book-notes-group-card.expanded {
+  border-color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.06);
+}
+.bng-cover {
+  width: 46px;
+  height: 64px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.28);
+  flex-shrink: 0;
+  background: #1e293b;
+}
+.bng-info {
+  flex: 1;
+  min-width: 0;
+}
+.bng-title {
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 2px;
+}
+.bng-author {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bng-count-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--accent-gold);
+  background: rgba(245, 158, 11, 0.14);
+  padding: 2px 8px;
+  border-radius: 8px;
+  margin-top: 5px;
+}
+.bng-chevron {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  transition: transform 0.25s ease;
+  flex-shrink: 0;
+}
+.book-notes-group-card.expanded .bng-chevron {
+  transform: rotate(90deg);
+  color: var(--accent-gold);
+}
+.book-notes-expansion-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 6px 0 12px 16px;
+  margin-left: 24px;
+  margin-bottom: 12px;
+  border-left: 2px dashed rgba(245, 158, 11, 0.35);
+  animation: fadeIn 0.2s ease-out;
+}
+.book-detail-notes-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 12px 14px;
+  transition: border-color 0.2s;
+}
+.book-detail-notes-item:hover {
+  border-color: rgba(245, 158, 11, 0.35);
+}
 </style>
 </head>
 <body>
@@ -9711,7 +9809,8 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
       <!-- Tabs Navigation -->
       <div class="detail-tabs-bar">
         <button type="button" class="detail-tab-btn active" id="tabBtnOverview" onclick="switchDetailTab('overview')">Overview</button>
-        <button type="button" class="detail-tab-btn" id="tabBtnNotes" onclick="switchDetailTab('notes')">Takeaways</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnNotes" onclick="switchDetailTab('notes')">Notes</button>
+        <button type="button" class="detail-tab-btn" id="tabBtnTakeaways" onclick="switchDetailTab('takeaways')">Takeaways</button>
         <button type="button" class="detail-tab-btn" id="tabBtnChapters" onclick="switchDetailTab('chapters')">Chapters</button>
         <button type="button" class="detail-tab-btn" id="tabBtnReviews" onclick="switchDetailTab('reviews')">Rating & Price</button>
       </div>
@@ -9765,11 +9864,41 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         </div>
       </div>
 
-      <!-- Tab Content: Notes -->
+      <!-- Tab Content: Notes (User Notes) -->
       <div class="detail-tab-content" id="tabContentNotes">
         <div class="detail-card-box">
-          <h4 class="box-title">Personal Key Takeaways & Quotes</h4>
-          <textarea id="detailNotesInput" placeholder="Add your reflections, key thoughts, or favourite quotes..." oninput="saveCurrentBookNotes(this.value)"></textarea>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+            <h4 class="box-title" style="margin: 0;">📝 My Personal Notes</h4>
+            <span class="detail-tag" id="detailBookNotesCountBadge" style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3);">0 Notes</span>
+          </div>
+
+          <!-- Note input form -->
+          <div class="book-detail-note-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+            <textarea id="bookDetailNewNoteInput" placeholder="Add your reflections, key thoughts, or notes for this book..." style="width: 100%; min-height: 85px; padding: 12px; border-radius: 12px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); font-family: inherit; font-size: 0.9rem; resize: vertical; box-sizing: border-box;"></textarea>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <input type="number" id="bookDetailNewNotePage" placeholder="Page (optional)" style="width: 120px; padding: 9px 12px; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 0.85rem; box-sizing: border-box;" min="1">
+              <button type="button" class="btn-save-gold" onclick="saveNewBookDetailNote()" style="flex: 1; padding: 10px 16px; border-radius: 10px; font-weight: 700; font-size: 0.88rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;">
+                <span>💾 Add Note</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Notes list for this book -->
+          <div id="bookDetailNotesContainer" style="display: flex; flex-direction: column; gap: 10px;">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab Content: Takeaways -->
+      <div class="detail-tab-content" id="tabContentTakeaways">
+        <div class="detail-card-box">
+          <h4 class="box-title">Personal Key Takeaways &amp; Quotes</h4>
+          <p class="box-text" id="detailTakeawaysText" style="margin-bottom: 14px;">Master the wisdom, discipline, and clarity detailed in this book.</p>
+          <div style="margin-top: 10px;">
+            <h5 style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 6px;">Edit Book Takeaways:</h5>
+            <textarea id="detailNotesInput" placeholder="Add your reflections, key thoughts, or favourite quotes..." oninput="saveCurrentBookNotes(this.value)"></textarea>
+          </div>
         </div>
       </div>
 
@@ -11026,7 +11155,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.25 (Up to date)</span>
+                <span class="ig-badge-val" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.26 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -18517,19 +18646,19 @@ if (typeof module !== 'undefined' && module.exports) {
 
 </script>
   <script>
-window.__REMOTE_BROADCAST_NOTICE__ = {
-  "id": "notice-v0.0.25",
-  "version": "v0.0.25",
+window.BROADCAST_NOTICE = {
+  "id": "notice-v0.0.26",
+  "version": "v0.0.26",
   "type": "card1",
   "card": "card1",
   "active": true,
-  "icon": "💾",
-  "title": "Mind Focus Books v0.0.25 Ready!",
-  "message": "Naya v0.0.25 release update ready hai! Profile me naya dedicated 'Backup & Export' option add ho gaya hai, jisme Data Backup, Restore, CSV/PDF/JSON Exports aur Security Vault options ko ek jagah organize kar diya gaya hai. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
-  "btnText": "⚡ Update Now (v0.0.25)",
+  "icon": "📝",
+  "title": "Mind Focus Books v0.0.26 Ready!",
+  "message": "Naya v0.0.26 release update ready hai! Book details me naya 'Notes' tab add ho gaya hai aur Profile me sabhi notes book ke naam aur cover ke sath organize ho gaye hain. Click karke turant update karein, aapka saara data 100% surakshit rahega.",
+  "btnText": "⚡ Update Now (v0.0.26)",
   "action": "update",
   "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-17T11:00:00.000Z"
+  "timestamp": "2026-10-17T11:30:00.000Z"
 };
 
 </script>
@@ -18538,18 +18667,18 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.25",
-    "name": "Mind Focus Books v0.0.25 (Dedicated Backup & Export Center)",
+    "version": "v0.0.26",
+    "name": "Mind Focus Books v0.0.26 (Book Detail Notes & Profile Accordion)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
     "features": [
-      "⚡ Official v0.0.25 Release: Profile Backup & Export Center Suite.",
-      "💾 Dedicated Backup & Export Sub-Screen: Profile me ek clean option banaya jisme Data Backup, Restore, aur Exports add kiye gaye.",
-      "📊 Multi-Format Exporting: 1-click me CSV, PDF aur full JSON backup files download karein.",
-      "🔄 1-Tap Quick Vault Banner: Live backup timestamp aur direct restore capability.",
-      "🔒 Integrated Security Cards: PIN Setup aur Privacy vault ek hi center me synced.",
+      "⚡ Official v0.0.26 Release: Book Detail Notes Tab & Profile Accordion.",
+      "📝 Dedicated Notes Tab in Book Details: Overview aur Takeaways ke beech naya Notes tab add hua.",
+      "📚 Book-Grouped Notes in Profile: Profile me sabhi notes book ke naam aur cover ke sath accordion me organize ho gaye.",
+      "🔄 1-Tap Toggle Accordion: Book card par tap karke sabhi notes dekhein aur delete ya view karein.",
+      "💾 Real-Time Synchronization: Book detail me add kiya gaya note seedha Profile me bi reflect hota hai.",
       "🛡️ Safe In-Place Update: 100% reading streak aur user notes surakshit rahenge."
     ],
-    "stagedAt": "2026-10-17T11:00:00.000Z",
+    "stagedAt": "2026-10-17T11:30:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
@@ -18631,11 +18760,11 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
 </script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.25)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.26)
 // ==========================================================================
 
-const APP_VERSION = '0.0.25';
-const CURRENT_APP_VERSION = 'v0.0.25';
+const APP_VERSION = '0.0.26';
+const CURRENT_APP_VERSION = 'v0.0.26';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -21228,9 +21357,17 @@ function openBookDetailView(book) {
     if (aboutText) {
       aboutText.innerText = book.takeaway || book.notes || `A world-renowned masterpiece in ${book.category || 'personal growth'}. Focus on mastering the profound wisdom, habits, and mindset detailed across each page.`;
     }
+
+    const takeawaysText = document.getElementById('detailTakeawaysText');
+    if (takeawaysText) {
+      takeawaysText.innerText = book.takeaway || book.notes || `Master the wisdom, discipline, and clarity detailed in ${book.title}.`;
+    }
     
     const notesInput = document.getElementById('detailNotesInput');
     if (notesInput) notesInput.value = book.takeaway || book.notes || '';
+
+    // Render personal notes for this book
+    renderCurrentBookDetailNotes();
     
     // Meta fields (Book No, Language, Status, Availability, Start, End, Days, Price)
     const elNo = document.getElementById('detailBookNoVal');
@@ -21641,6 +21778,10 @@ function switchDetailTab(tabName) {
   
   const activeContent = document.getElementById('tabContent' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
   if (activeContent) activeContent.classList.add('active');
+
+  if (tabName === 'notes') {
+    renderCurrentBookDetailNotes();
+  }
 }
 
 function saveCurrentBookNotes(notesVal) {
@@ -24068,6 +24209,7 @@ let userNotesState = [
 ];
 
 let activeNotesFilter = 'all';
+let expandedBookNotesSet = new Set();
 
 function loadUserNotes() {
   try {
@@ -24078,6 +24220,20 @@ function loadUserNotes() {
   } catch (e) {}
 }
 
+function toggleBookNotesExpand(groupKey, safeId) {
+  const container = document.getElementById('bookNotesAccordion_' + safeId);
+  const card = document.getElementById('bookNotesCard_' + safeId);
+  if (expandedBookNotesSet.has(groupKey)) {
+    expandedBookNotesSet.delete(groupKey);
+    if (container) container.style.display = 'none';
+    if (card) card.classList.remove('expanded');
+  } else {
+    expandedBookNotesSet.add(groupKey);
+    if (container) container.style.display = 'flex';
+    if (card) card.classList.add('expanded');
+  }
+}
+
 function renderNotesList() {
   loadUserNotes();
   const container = document.getElementById('notesCardsContainer');
@@ -24085,8 +24241,8 @@ function renderNotesList() {
 
   const filtered = userNotesState.filter(n => {
     if (activeNotesFilter === 'all') return true;
-    if (activeNotesFilter === 'notes') return n.type.toLowerCase() === 'note';
-    if (activeNotesFilter === 'highlights') return n.type.toLowerCase() === 'highlight';
+    if (activeNotesFilter === 'notes') return (n.type || '').toLowerCase() === 'note';
+    if (activeNotesFilter === 'highlights') return (n.type || '').toLowerCase() === 'highlight';
     return true;
   });
 
@@ -24101,17 +24257,54 @@ function renderNotesList() {
     return;
   }
 
-  container.innerHTML = filtered.map(item => `
-    <div class="note-item-card">
-      <div class="note-card-badge">${escapeHtml(item.book)} &bull; ${escapeHtml(item.type)}</div>
-      <div class="note-card-quote">"${escapeHtml(item.quote)}"</div>
-      <div class="note-card-meta">
-        <span>📄 Page ${item.page || '1'}</span>
-        <span>&bull;</span>
-        <span>${escapeHtml(item.timeAgo || 'Recently')}</span>
+  // Group notes by book
+  const groups = {};
+  filtered.forEach(note => {
+    const bookTitle = (note.book && note.book.trim()) || 'General Reflections';
+    if (!groups[bookTitle]) groups[bookTitle] = [];
+    groups[bookTitle].push(note);
+  });
+
+  const groupKeys = Object.keys(groups);
+  container.innerHTML = groupKeys.map((bookTitle, idx) => {
+    const groupNotes = groups[bookTitle];
+    const safeId = 'bng_' + idx + '_' + bookTitle.replace(/[^a-zA-Z0-9]/g, '_');
+    const matchedBook = (state.books || []).find(b => b.title && b.title.trim().toLowerCase() === bookTitle.trim().toLowerCase());
+    const coverUrl = matchedBook ? getBookCoverUrl(matchedBook) : 'cover_placeholder.jpg';
+    const author = matchedBook ? (matchedBook.author || 'Author') : 'Personal Collection';
+    const isExpanded = expandedBookNotesSet.has(bookTitle);
+    const count = groupNotes.length;
+
+    return `
+      <div class="book-notes-group-card ${isExpanded ? 'expanded' : ''}" id="bookNotesCard_${safeId}" onclick="toggleBookNotesExpand('${escapeHtml(bookTitle)}', '${safeId}')">
+        <img class="bng-cover" src="${coverUrl}" alt="${escapeHtml(bookTitle)}" onerror="this.src='cover_placeholder.jpg'">
+        <div class="bng-info">
+          <div class="bng-title">${escapeHtml(bookTitle)}</div>
+          <div class="bng-author">👤 ${escapeHtml(author)}</div>
+          <div class="bng-count-badge">📝 ${count} ${count === 1 ? 'Note' : 'Notes'}</div>
+        </div>
+        <div class="bng-chevron">›</div>
       </div>
-    </div>
-  `).join('');
+      <div class="book-notes-expansion-container" id="bookNotesAccordion_${safeId}" style="display: ${isExpanded ? 'flex' : 'none'};">
+        ${groupNotes.map(item => `
+          <div class="note-item-card" style="margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <div class="note-card-badge" style="margin-bottom: 0;">${escapeHtml(item.type || 'Note')}</div>
+              <button type="button" onclick="event.stopPropagation(); deleteBookDetailNote('${escapeHtml(item.id)}')" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 2px 6px;" title="Delete Note">
+                🗑️
+              </button>
+            </div>
+            <div class="note-card-quote">"${escapeHtml(item.quote)}"</div>
+            <div class="note-card-meta">
+              <span>📄 Page ${escapeHtml(String(item.page || '1'))}</span>
+              <span>&bull;</span>
+              <span>${escapeHtml(item.timeAgo || 'Recently')}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
 }
 
 function filterNotesCategory(cat) {
@@ -24127,6 +24320,10 @@ function filterNotesCategory(cat) {
 function openAddNoteModal() {
   const overlay = document.getElementById('addNoteModalOverlay');
   if (overlay) overlay.style.display = 'flex';
+  const bookInput = document.getElementById('addNoteBook');
+  if (bookInput && !bookInput.value && state.currentBook) {
+    bookInput.value = state.currentBook.title;
+  }
 }
 
 function closeAddNoteModal() {
@@ -24150,12 +24347,13 @@ function saveNewNoteModal() {
   }
 
   const newNote = {
-    id: Date.now().toString(),
+    id: Date.now().toString() + '_' + Math.random().toString(36).substring(2, 6),
     book: book,
     quote: content,
     page: page,
     type: type,
-    timeAgo: 'Just now'
+    timeAgo: 'Just now',
+    createdAt: new Date().toISOString()
   };
 
   userNotesState.unshift(newNote);
@@ -24165,10 +24363,109 @@ function saveNewNoteModal() {
 
   closeAddNoteModal();
   renderNotesList();
+  renderCurrentBookDetailNotes();
   showToast(`Added ${type} to ${book}! ✨`);
 
   // Clear inputs
   if (document.getElementById('addNoteContent')) document.getElementById('addNoteContent').value = '';
+}
+
+// ================= BOOK DETAIL NOTES TAB INTEGRATION =================
+function renderCurrentBookDetailNotes() {
+  if (!state.currentBook) return;
+  loadUserNotes();
+  const bookTitle = state.currentBook.title || '';
+  const container = document.getElementById('bookDetailNotesContainer');
+  const countBadge = document.getElementById('detailBookNotesCountBadge');
+  
+  const bookNotes = userNotesState.filter(n => 
+    n.book && n.book.trim().toLowerCase() === bookTitle.trim().toLowerCase()
+  );
+
+  if (countBadge) {
+    countBadge.innerText = `${bookNotes.length} Note${bookNotes.length === 1 ? '' : 's'}`;
+  }
+
+  if (!container) return;
+
+  if (bookNotes.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px 12px; color: var(--text-muted); background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px dashed var(--border-color);">
+        <p style="font-size: 1.6rem; margin-bottom: 6px;">📝</p>
+        <p style="font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">Koi personal note nahi likha abhi tak</p>
+        <p style="font-size: 0.78rem; color: var(--text-muted);">Upar box me apna note likhiye aur "Add Note" button dabayein.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = bookNotes.map(n => `
+    <div class="book-detail-notes-item">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-secondary);">
+          <span style="font-weight: 700; color: var(--accent-gold);">📄 Page ${escapeHtml(String(n.page || '1'))}</span>
+          <span>&bull;</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(n.timeAgo || 'Saved')}</span>
+        </div>
+        <button type="button" onclick="deleteBookDetailNote('${escapeHtml(n.id)}')" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 2px 6px; border-radius: 4px;" title="Delete Note">
+          🗑️
+        </button>
+      </div>
+      <div style="font-size: 0.88rem; color: var(--text-primary); line-height: 1.5; white-space: pre-wrap;">${escapeHtml(n.quote || '')}</div>
+    </div>
+  `).join('');
+}
+
+function saveNewBookDetailNote() {
+  if (!state.currentBook) {
+    showToast('No book selected');
+    return;
+  }
+  const input = document.getElementById('bookDetailNewNoteInput');
+  const pageInput = document.getElementById('bookDetailNewNotePage');
+  const content = input ? input.value.trim() : '';
+  const page = pageInput && pageInput.value ? pageInput.value.trim() : (state.currentBook.current_page || '1');
+
+  if (!content) {
+    showToast('Pehle note ya thought likhiye!');
+    if (input) input.focus();
+    return;
+  }
+
+  loadUserNotes();
+  const newNote = {
+    id: Date.now().toString() + '_' + Math.random().toString(36).substring(2, 6),
+    book: state.currentBook.title,
+    quote: content,
+    page: String(page),
+    type: 'Note',
+    timeAgo: 'Just now',
+    createdAt: new Date().toISOString()
+  };
+
+  userNotesState.unshift(newNote);
+  try {
+    localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState));
+  } catch (e) {}
+
+  if (input) input.value = '';
+  if (pageInput) pageInput.value = '';
+
+  renderCurrentBookDetailNotes();
+  renderNotesList(); // Profile notes stay synchronized
+  showToast('Note successfully saved to Book & Profile! 📝✨');
+}
+
+function deleteBookDetailNote(noteId) {
+  if (!confirm('Kya aap is note ko delete karna chahte hain?')) return;
+  loadUserNotes();
+  userNotesState = userNotesState.filter(n => n.id !== noteId);
+  try {
+    localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState));
+  } catch (e) {}
+  renderCurrentBookDetailNotes();
+  renderNotesList();
+  showToast('Note deleted');
 }
 
 // ================= SCREEN 10: APPEARANCE SLIDERS =================

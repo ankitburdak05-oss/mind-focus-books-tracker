@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.25)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.26)
 // ==========================================================================
 
-const APP_VERSION = '0.0.25';
-const CURRENT_APP_VERSION = 'v0.0.25';
+const APP_VERSION = '0.0.26';
+const CURRENT_APP_VERSION = 'v0.0.26';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -2596,9 +2596,17 @@ function openBookDetailView(book) {
     if (aboutText) {
       aboutText.innerText = book.takeaway || book.notes || `A world-renowned masterpiece in ${book.category || 'personal growth'}. Focus on mastering the profound wisdom, habits, and mindset detailed across each page.`;
     }
+
+    const takeawaysText = document.getElementById('detailTakeawaysText');
+    if (takeawaysText) {
+      takeawaysText.innerText = book.takeaway || book.notes || `Master the wisdom, discipline, and clarity detailed in ${book.title}.`;
+    }
     
     const notesInput = document.getElementById('detailNotesInput');
     if (notesInput) notesInput.value = book.takeaway || book.notes || '';
+
+    // Render personal notes for this book
+    renderCurrentBookDetailNotes();
     
     // Meta fields (Book No, Language, Status, Availability, Start, End, Days, Price)
     const elNo = document.getElementById('detailBookNoVal');
@@ -3009,6 +3017,10 @@ function switchDetailTab(tabName) {
   
   const activeContent = document.getElementById('tabContent' + tabName.charAt(0).toUpperCase() + tabName.slice(1));
   if (activeContent) activeContent.classList.add('active');
+
+  if (tabName === 'notes') {
+    renderCurrentBookDetailNotes();
+  }
 }
 
 function saveCurrentBookNotes(notesVal) {
@@ -5436,6 +5448,7 @@ let userNotesState = [
 ];
 
 let activeNotesFilter = 'all';
+let expandedBookNotesSet = new Set();
 
 function loadUserNotes() {
   try {
@@ -5446,6 +5459,20 @@ function loadUserNotes() {
   } catch (e) {}
 }
 
+function toggleBookNotesExpand(groupKey, safeId) {
+  const container = document.getElementById('bookNotesAccordion_' + safeId);
+  const card = document.getElementById('bookNotesCard_' + safeId);
+  if (expandedBookNotesSet.has(groupKey)) {
+    expandedBookNotesSet.delete(groupKey);
+    if (container) container.style.display = 'none';
+    if (card) card.classList.remove('expanded');
+  } else {
+    expandedBookNotesSet.add(groupKey);
+    if (container) container.style.display = 'flex';
+    if (card) card.classList.add('expanded');
+  }
+}
+
 function renderNotesList() {
   loadUserNotes();
   const container = document.getElementById('notesCardsContainer');
@@ -5453,8 +5480,8 @@ function renderNotesList() {
 
   const filtered = userNotesState.filter(n => {
     if (activeNotesFilter === 'all') return true;
-    if (activeNotesFilter === 'notes') return n.type.toLowerCase() === 'note';
-    if (activeNotesFilter === 'highlights') return n.type.toLowerCase() === 'highlight';
+    if (activeNotesFilter === 'notes') return (n.type || '').toLowerCase() === 'note';
+    if (activeNotesFilter === 'highlights') return (n.type || '').toLowerCase() === 'highlight';
     return true;
   });
 
@@ -5469,17 +5496,54 @@ function renderNotesList() {
     return;
   }
 
-  container.innerHTML = filtered.map(item => `
-    <div class="note-item-card">
-      <div class="note-card-badge">${escapeHtml(item.book)} &bull; ${escapeHtml(item.type)}</div>
-      <div class="note-card-quote">"${escapeHtml(item.quote)}"</div>
-      <div class="note-card-meta">
-        <span>📄 Page ${item.page || '1'}</span>
-        <span>&bull;</span>
-        <span>${escapeHtml(item.timeAgo || 'Recently')}</span>
+  // Group notes by book
+  const groups = {};
+  filtered.forEach(note => {
+    const bookTitle = (note.book && note.book.trim()) || 'General Reflections';
+    if (!groups[bookTitle]) groups[bookTitle] = [];
+    groups[bookTitle].push(note);
+  });
+
+  const groupKeys = Object.keys(groups);
+  container.innerHTML = groupKeys.map((bookTitle, idx) => {
+    const groupNotes = groups[bookTitle];
+    const safeId = 'bng_' + idx + '_' + bookTitle.replace(/[^a-zA-Z0-9]/g, '_');
+    const matchedBook = (state.books || []).find(b => b.title && b.title.trim().toLowerCase() === bookTitle.trim().toLowerCase());
+    const coverUrl = matchedBook ? getBookCoverUrl(matchedBook) : 'cover_placeholder.jpg';
+    const author = matchedBook ? (matchedBook.author || 'Author') : 'Personal Collection';
+    const isExpanded = expandedBookNotesSet.has(bookTitle);
+    const count = groupNotes.length;
+
+    return `
+      <div class="book-notes-group-card ${isExpanded ? 'expanded' : ''}" id="bookNotesCard_${safeId}" onclick="toggleBookNotesExpand('${escapeHtml(bookTitle)}', '${safeId}')">
+        <img class="bng-cover" src="${coverUrl}" alt="${escapeHtml(bookTitle)}" onerror="this.src='cover_placeholder.jpg'">
+        <div class="bng-info">
+          <div class="bng-title">${escapeHtml(bookTitle)}</div>
+          <div class="bng-author">👤 ${escapeHtml(author)}</div>
+          <div class="bng-count-badge">📝 ${count} ${count === 1 ? 'Note' : 'Notes'}</div>
+        </div>
+        <div class="bng-chevron">›</div>
       </div>
-    </div>
-  `).join('');
+      <div class="book-notes-expansion-container" id="bookNotesAccordion_${safeId}" style="display: ${isExpanded ? 'flex' : 'none'};">
+        ${groupNotes.map(item => `
+          <div class="note-item-card" style="margin-bottom: 0;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+              <div class="note-card-badge" style="margin-bottom: 0;">${escapeHtml(item.type || 'Note')}</div>
+              <button type="button" onclick="event.stopPropagation(); deleteBookDetailNote('${escapeHtml(item.id)}')" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 2px 6px;" title="Delete Note">
+                🗑️
+              </button>
+            </div>
+            <div class="note-card-quote">"${escapeHtml(item.quote)}"</div>
+            <div class="note-card-meta">
+              <span>📄 Page ${escapeHtml(String(item.page || '1'))}</span>
+              <span>&bull;</span>
+              <span>${escapeHtml(item.timeAgo || 'Recently')}</span>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
 }
 
 function filterNotesCategory(cat) {
@@ -5495,6 +5559,10 @@ function filterNotesCategory(cat) {
 function openAddNoteModal() {
   const overlay = document.getElementById('addNoteModalOverlay');
   if (overlay) overlay.style.display = 'flex';
+  const bookInput = document.getElementById('addNoteBook');
+  if (bookInput && !bookInput.value && state.currentBook) {
+    bookInput.value = state.currentBook.title;
+  }
 }
 
 function closeAddNoteModal() {
@@ -5518,12 +5586,13 @@ function saveNewNoteModal() {
   }
 
   const newNote = {
-    id: Date.now().toString(),
+    id: Date.now().toString() + '_' + Math.random().toString(36).substring(2, 6),
     book: book,
     quote: content,
     page: page,
     type: type,
-    timeAgo: 'Just now'
+    timeAgo: 'Just now',
+    createdAt: new Date().toISOString()
   };
 
   userNotesState.unshift(newNote);
@@ -5533,10 +5602,109 @@ function saveNewNoteModal() {
 
   closeAddNoteModal();
   renderNotesList();
+  renderCurrentBookDetailNotes();
   showToast(`Added ${type} to ${book}! ✨`);
 
   // Clear inputs
   if (document.getElementById('addNoteContent')) document.getElementById('addNoteContent').value = '';
+}
+
+// ================= BOOK DETAIL NOTES TAB INTEGRATION =================
+function renderCurrentBookDetailNotes() {
+  if (!state.currentBook) return;
+  loadUserNotes();
+  const bookTitle = state.currentBook.title || '';
+  const container = document.getElementById('bookDetailNotesContainer');
+  const countBadge = document.getElementById('detailBookNotesCountBadge');
+  
+  const bookNotes = userNotesState.filter(n => 
+    n.book && n.book.trim().toLowerCase() === bookTitle.trim().toLowerCase()
+  );
+
+  if (countBadge) {
+    countBadge.innerText = `${bookNotes.length} Note${bookNotes.length === 1 ? '' : 's'}`;
+  }
+
+  if (!container) return;
+
+  if (bookNotes.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px 12px; color: var(--text-muted); background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px dashed var(--border-color);">
+        <p style="font-size: 1.6rem; margin-bottom: 6px;">📝</p>
+        <p style="font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">Koi personal note nahi likha abhi tak</p>
+        <p style="font-size: 0.78rem; color: var(--text-muted);">Upar box me apna note likhiye aur "Add Note" button dabayein.</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = bookNotes.map(n => `
+    <div class="book-detail-notes-item">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
+        <div style="display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-secondary);">
+          <span style="font-weight: 700; color: var(--accent-gold);">📄 Page ${escapeHtml(String(n.page || '1'))}</span>
+          <span>&bull;</span>
+          <span style="font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(n.timeAgo || 'Saved')}</span>
+        </div>
+        <button type="button" onclick="deleteBookDetailNote('${escapeHtml(n.id)}')" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 2px 6px; border-radius: 4px;" title="Delete Note">
+          🗑️
+        </button>
+      </div>
+      <div style="font-size: 0.88rem; color: var(--text-primary); line-height: 1.5; white-space: pre-wrap;">${escapeHtml(n.quote || '')}</div>
+    </div>
+  `).join('');
+}
+
+function saveNewBookDetailNote() {
+  if (!state.currentBook) {
+    showToast('No book selected');
+    return;
+  }
+  const input = document.getElementById('bookDetailNewNoteInput');
+  const pageInput = document.getElementById('bookDetailNewNotePage');
+  const content = input ? input.value.trim() : '';
+  const page = pageInput && pageInput.value ? pageInput.value.trim() : (state.currentBook.current_page || '1');
+
+  if (!content) {
+    showToast('Pehle note ya thought likhiye!');
+    if (input) input.focus();
+    return;
+  }
+
+  loadUserNotes();
+  const newNote = {
+    id: Date.now().toString() + '_' + Math.random().toString(36).substring(2, 6),
+    book: state.currentBook.title,
+    quote: content,
+    page: String(page),
+    type: 'Note',
+    timeAgo: 'Just now',
+    createdAt: new Date().toISOString()
+  };
+
+  userNotesState.unshift(newNote);
+  try {
+    localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState));
+  } catch (e) {}
+
+  if (input) input.value = '';
+  if (pageInput) pageInput.value = '';
+
+  renderCurrentBookDetailNotes();
+  renderNotesList(); // Profile notes stay synchronized
+  showToast('Note successfully saved to Book & Profile! 📝✨');
+}
+
+function deleteBookDetailNote(noteId) {
+  if (!confirm('Kya aap is note ko delete karna chahte hain?')) return;
+  loadUserNotes();
+  userNotesState = userNotesState.filter(n => n.id !== noteId);
+  try {
+    localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState));
+  } catch (e) {}
+  renderCurrentBookDetailNotes();
+  renderNotesList();
+  showToast('Note deleted');
 }
 
 // ================= SCREEN 10: APPEARANCE SLIDERS =================
