@@ -9,6 +9,6 @@ window.BROADCAST_NOTICE = {
   "message": "Naya v0.0.30 release update ready hai! Ab aap Notification Center me Daily Reading Reminder Time & Alarm Schedule set kar sakte hain — custom time picker, quick presets (Subah, Dopahar, Shaam, Bedtime), repeat days, audio chime aur interactive alarm popup ke sath. Update karein, aapka data 100% surakshit rahega.",
   "btnText": "⚡ Update Now (v0.0.30)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
   "timestamp": "2026-10-17T14:30:00.000Z"
 };

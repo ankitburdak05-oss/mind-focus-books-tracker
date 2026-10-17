@@ -9991,30 +9991,83 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   border-radius: 14px;
   padding: 10px 14px;
   margin-bottom: 14px;
+  flex-wrap: wrap;
 }
-.notif-time-input-wrap {
+.notif-time-selector-group {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 6px;
+  flex-wrap: wrap;
 }
-.notif-time-label {
-  font-size: 0.8rem;
+.notif-select-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.notif-sub-label {
+  font-size: 0.62rem;
+  color: var(--text-muted);
   font-weight: 700;
-  color: #e2e8f0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
-.notif-time-input {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(245, 158, 11, 0.4);
+.notif-dropdown {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1.5px solid rgba(245, 158, 11, 0.45);
   color: #fff;
-  font-size: 0.95rem;
-  font-weight: 800;
   border-radius: 8px;
   padding: 6px 10px;
+  font-size: 0.95rem;
+  font-weight: 800;
   outline: none;
+  cursor: pointer;
   color-scheme: dark;
+  text-align: center;
+  transition: border-color 0.15s ease;
 }
+.notif-dropdown:focus {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+}
+.notif-colon {
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--accent-gold);
+  margin-top: 14px;
+}
+.notif-ampm-switcher {
+  display: flex;
+  background: rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  padding: 2px;
+  margin-top: 14px;
+  margin-left: 4px;
+}
+.btn-ampm {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.btn-ampm:hover {
+  color: #fff;
+}
+.btn-ampm.active {
+  background: var(--accent-gold);
+  color: #111827;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.45);
+}
+
 .notif-time-display-badge {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 800;
   color: #111827;
   background: var(--accent-gold);
@@ -10022,6 +10075,45 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
   white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .notif-hero-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .notif-hero-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .notif-pref-strip {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .notif-pref-strip .notif-perm-btn {
+    align-self: flex-end;
+  }
+  .notif-content {
+    padding-right: 0;
+  }
+  .notif-title, .notif-body, .notif-context-chip {
+    word-break: break-word;
+    overflow-wrap: break-word;
+  }
+  .notif-sched-header {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .notif-time-picker-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .notif-time-display-badge {
+    text-align: center;
+  }
 }
 
 .notif-presets-label {
@@ -10338,12 +10430,6 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
             <polyline points="23 4 23 10 17 10"></polyline>
             <polyline points="1 20 1 14 7 14"></polyline>
             <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-          </svg>
-        </button>
-        <button type="button" class="header-icon-btn" id="headerSettingsBtn" title="App Adjustments &amp; Settings" onclick="navigateToSubView('appSettings')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
           </svg>
         </button>
         <button type="button" class="header-icon-btn notif-bell-btn" id="headerNotificationBtn" title="Notification Center &amp; Alerts" onclick="navigateToSubView('notificationsHub')">
@@ -13060,15 +13146,58 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           </div>
 
           <div class="notif-sched-body" id="notifSchedBody">
-            <!-- Time Picker Row -->
+            <!-- Time Picker Row with Hour, Min, and AM/PM Buttons -->
             <div class="notif-time-picker-row">
-              <div class="notif-time-input-wrap">
-                <span class="notif-time-label">Set Custom Time:</span>
-                <input type="time" id="notifReminderTimeInput" class="notif-time-input" value="21:30" onchange="handleReminderTimeChange(this.value)">
+              <div class="notif-time-selector-group">
+                <div class="notif-select-wrap">
+                  <label class="notif-sub-label">Hour</label>
+                  <select id="notifHourSelect" class="notif-dropdown" onchange="handleAmPmTimeChange()">
+                    <option value="1">01</option>
+                    <option value="2">02</option>
+                    <option value="3">03</option>
+                    <option value="4">04</option>
+                    <option value="5">05</option>
+                    <option value="6">06</option>
+                    <option value="7">07</option>
+                    <option value="8">08</option>
+                    <option value="9" selected>09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                  </select>
+                </div>
+
+                <span class="notif-colon">:</span>
+
+                <div class="notif-select-wrap">
+                  <label class="notif-sub-label">Minute</label>
+                  <select id="notifMinSelect" class="notif-dropdown" onchange="handleAmPmTimeChange()">
+                    <option value="00">00</option>
+                    <option value="05">05</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30" selected>30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                    <option value="45">45</option>
+                    <option value="50">50</option>
+                    <option value="55">55</option>
+                  </select>
+                </div>
+
+                <!-- AM / PM Switcher -->
+                <div class="notif-ampm-switcher">
+                  <button type="button" class="btn-ampm" id="btnAmToggle" onclick="setAmPm('AM')">AM</button>
+                  <button type="button" class="btn-ampm active" id="btnPmToggle" onclick="setAmPm('PM')">PM</button>
+                </div>
               </div>
+
               <div class="notif-time-display-badge" id="notifFormattedTimeBadge">
                 🌙 09:30 PM (Daily)
               </div>
+              <input type="time" id="notifReminderTimeInput" style="display:none;" value="21:30">
             </div>
 
             <!-- Quick Preset Times -->
@@ -20544,7 +20673,7 @@ window.BROADCAST_NOTICE = {
   "message": "Naya v0.0.30 release update ready hai! Ab aap Notification Center me Daily Reading Reminder Time & Alarm Schedule set kar sakte hain — custom time picker, quick presets (Subah, Dopahar, Shaam, Bedtime), repeat days, audio chime aur interactive alarm popup ke sath. Update karein, aapka data 100% surakshit rahega.",
   "btnText": "⚡ Update Now (v0.0.30)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
   "timestamp": "2026-10-17T14:30:00.000Z"
 };
 
@@ -20556,7 +20685,7 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "activeRelease": {
     "version": "v0.0.30",
     "name": "Mind Focus Books v0.0.30 (Daily Reminder Time & Alarm Scheduler)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
       "⚡ Official v0.0.30 Release: Custom Reading Reminder Time & Daily Alarm Scheduler.",
       "⏰ Custom Reminder Time Picker: Apni pasand ka koi bhi waqt (HH:MM AM/PM) set karein.",
@@ -30587,8 +30716,32 @@ function updateScheduleUI() {
   if (timeInput) timeInput.value = reminderScheduleConfig.time || '21:30';
   if (soundToggle) soundToggle.checked = !!reminderScheduleConfig.sound;
 
+  const timeVal = reminderScheduleConfig.time || '21:30';
+  const parts = timeVal.split(':');
+  const h24 = parseInt(parts[0], 10) || 0;
+  const m = parts[1] || '00';
+  const isPm = h24 >= 12;
+  const h12 = h24 % 12 || 12;
+
+  const hourSelect = document.getElementById('notifHourSelect');
+  const minSelect = document.getElementById('notifMinSelect');
+  const btnAm = document.getElementById('btnAmToggle');
+  const btnPm = document.getElementById('btnPmToggle');
+
+  if (hourSelect) hourSelect.value = String(h12);
+  if (minSelect) {
+    const opts = Array.from(minSelect.options).map(o => o.value);
+    if (opts.includes(m)) {
+      minSelect.value = m;
+    } else {
+      minSelect.value = '00';
+    }
+  }
+  if (btnAm) btnAm.classList.toggle('active', !isPm);
+  if (btnPm) btnPm.classList.toggle('active', isPm);
+
   const formatted = formatTimeAmPm(reminderScheduleConfig.time);
-  const iconEmoji = (parseInt(reminderScheduleConfig.time.split(':')[0], 10) >= 19 || parseInt(reminderScheduleConfig.time.split(':')[0], 10) < 5) ? '🌙' : ((parseInt(reminderScheduleConfig.time.split(':')[0], 10) < 12) ? '🌅' : '☀️');
+  const iconEmoji = (h24 >= 19 || h24 < 5) ? '🌙' : (h24 < 12 ? '🌅' : '☀️');
   const fullLabel = `${iconEmoji} ${formatted}`;
 
   if (timeBadge) {
@@ -30628,6 +30781,38 @@ function updateScheduleUI() {
       schedBody.style.opacity = '0.55';
     }
   }
+}
+
+function handleAmPmTimeChange() {
+  const hourSelect = document.getElementById('notifHourSelect');
+  const minSelect = document.getElementById('notifMinSelect');
+  const btnPm = document.getElementById('btnPmToggle');
+
+  const h12 = parseInt(hourSelect ? hourSelect.value : '9', 10);
+  const m = minSelect ? minSelect.value : '30';
+  const isPm = btnPm ? btnPm.classList.contains('active') : true;
+
+  let h24 = h12;
+  if (isPm) {
+    h24 = (h12 === 12) ? 12 : h12 + 12;
+  } else {
+    h24 = (h12 === 12) ? 0 : h12;
+  }
+
+  const h24Str = (h24 < 10 ? '0' + h24 : String(h24)) + ':' + m;
+  reminderScheduleConfig.time = h24Str;
+  reminderScheduleConfig.label = `${(h12 < 10 ? '0' + h12 : h12)}:${m} ${isPm ? 'PM' : 'AM'}`;
+
+  saveReminderScheduleConfig(false);
+}
+
+function setAmPm(ampm) {
+  const btnAm = document.getElementById('btnAmToggle');
+  const btnPm = document.getElementById('btnPmToggle');
+  if (btnAm) btnAm.classList.toggle('active', ampm === 'AM');
+  if (btnPm) btnPm.classList.toggle('active', ampm === 'PM');
+  handleAmPmTimeChange();
+  showToast(`Reminder set to ${ampm} ⏰`, 'info');
 }
 
 function handleReminderTimeChange(newTime) {

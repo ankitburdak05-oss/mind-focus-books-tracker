@@ -43,12 +43,6 @@
             <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
           </svg>
         </button>
-        <button type="button" class="header-icon-btn" id="headerSettingsBtn" title="App Adjustments &amp; Settings" onclick="navigateToSubView('appSettings')">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
-            <circle cx="12" cy="12" r="3"></circle>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-          </svg>
-        </button>
         <button type="button" class="header-icon-btn notif-bell-btn" id="headerNotificationBtn" title="Notification Center &amp; Alerts" onclick="navigateToSubView('notificationsHub')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="18" height="18">
             <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -2763,15 +2757,58 @@
           </div>
 
           <div class="notif-sched-body" id="notifSchedBody">
-            <!-- Time Picker Row -->
+            <!-- Time Picker Row with Hour, Min, and AM/PM Buttons -->
             <div class="notif-time-picker-row">
-              <div class="notif-time-input-wrap">
-                <span class="notif-time-label">Set Custom Time:</span>
-                <input type="time" id="notifReminderTimeInput" class="notif-time-input" value="21:30" onchange="handleReminderTimeChange(this.value)">
+              <div class="notif-time-selector-group">
+                <div class="notif-select-wrap">
+                  <label class="notif-sub-label">Hour</label>
+                  <select id="notifHourSelect" class="notif-dropdown" onchange="handleAmPmTimeChange()">
+                    <option value="1">01</option>
+                    <option value="2">02</option>
+                    <option value="3">03</option>
+                    <option value="4">04</option>
+                    <option value="5">05</option>
+                    <option value="6">06</option>
+                    <option value="7">07</option>
+                    <option value="8">08</option>
+                    <option value="9" selected>09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                  </select>
+                </div>
+
+                <span class="notif-colon">:</span>
+
+                <div class="notif-select-wrap">
+                  <label class="notif-sub-label">Minute</label>
+                  <select id="notifMinSelect" class="notif-dropdown" onchange="handleAmPmTimeChange()">
+                    <option value="00">00</option>
+                    <option value="05">05</option>
+                    <option value="10">10</option>
+                    <option value="15">15</option>
+                    <option value="20">20</option>
+                    <option value="25">25</option>
+                    <option value="30" selected>30</option>
+                    <option value="35">35</option>
+                    <option value="40">40</option>
+                    <option value="45">45</option>
+                    <option value="50">50</option>
+                    <option value="55">55</option>
+                  </select>
+                </div>
+
+                <!-- AM / PM Switcher -->
+                <div class="notif-ampm-switcher">
+                  <button type="button" class="btn-ampm" id="btnAmToggle" onclick="setAmPm('AM')">AM</button>
+                  <button type="button" class="btn-ampm active" id="btnPmToggle" onclick="setAmPm('PM')">PM</button>
+                </div>
               </div>
+
               <div class="notif-time-display-badge" id="notifFormattedTimeBadge">
                 🌙 09:30 PM (Daily)
               </div>
+              <input type="time" id="notifReminderTimeInput" style="display:none;" value="21:30">
             </div>
 
             <!-- Quick Preset Times -->

@@ -9937,8 +9937,32 @@ function updateScheduleUI() {
   if (timeInput) timeInput.value = reminderScheduleConfig.time || '21:30';
   if (soundToggle) soundToggle.checked = !!reminderScheduleConfig.sound;
 
+  const timeVal = reminderScheduleConfig.time || '21:30';
+  const parts = timeVal.split(':');
+  const h24 = parseInt(parts[0], 10) || 0;
+  const m = parts[1] || '00';
+  const isPm = h24 >= 12;
+  const h12 = h24 % 12 || 12;
+
+  const hourSelect = document.getElementById('notifHourSelect');
+  const minSelect = document.getElementById('notifMinSelect');
+  const btnAm = document.getElementById('btnAmToggle');
+  const btnPm = document.getElementById('btnPmToggle');
+
+  if (hourSelect) hourSelect.value = String(h12);
+  if (minSelect) {
+    const opts = Array.from(minSelect.options).map(o => o.value);
+    if (opts.includes(m)) {
+      minSelect.value = m;
+    } else {
+      minSelect.value = '00';
+    }
+  }
+  if (btnAm) btnAm.classList.toggle('active', !isPm);
+  if (btnPm) btnPm.classList.toggle('active', isPm);
+
   const formatted = formatTimeAmPm(reminderScheduleConfig.time);
-  const iconEmoji = (parseInt(reminderScheduleConfig.time.split(':')[0], 10) >= 19 || parseInt(reminderScheduleConfig.time.split(':')[0], 10) < 5) ? '🌙' : ((parseInt(reminderScheduleConfig.time.split(':')[0], 10) < 12) ? '🌅' : '☀️');
+  const iconEmoji = (h24 >= 19 || h24 < 5) ? '🌙' : (h24 < 12 ? '🌅' : '☀️');
   const fullLabel = `${iconEmoji} ${formatted}`;
 
   if (timeBadge) {
@@ -9978,6 +10002,38 @@ function updateScheduleUI() {
       schedBody.style.opacity = '0.55';
     }
   }
+}
+
+function handleAmPmTimeChange() {
+  const hourSelect = document.getElementById('notifHourSelect');
+  const minSelect = document.getElementById('notifMinSelect');
+  const btnPm = document.getElementById('btnPmToggle');
+
+  const h12 = parseInt(hourSelect ? hourSelect.value : '9', 10);
+  const m = minSelect ? minSelect.value : '30';
+  const isPm = btnPm ? btnPm.classList.contains('active') : true;
+
+  let h24 = h12;
+  if (isPm) {
+    h24 = (h12 === 12) ? 12 : h12 + 12;
+  } else {
+    h24 = (h12 === 12) ? 0 : h12;
+  }
+
+  const h24Str = (h24 < 10 ? '0' + h24 : String(h24)) + ':' + m;
+  reminderScheduleConfig.time = h24Str;
+  reminderScheduleConfig.label = `${(h12 < 10 ? '0' + h12 : h12)}:${m} ${isPm ? 'PM' : 'AM'}`;
+
+  saveReminderScheduleConfig(false);
+}
+
+function setAmPm(ampm) {
+  const btnAm = document.getElementById('btnAmToggle');
+  const btnPm = document.getElementById('btnPmToggle');
+  if (btnAm) btnAm.classList.toggle('active', ampm === 'AM');
+  if (btnPm) btnPm.classList.toggle('active', ampm === 'PM');
+  handleAmPmTimeChange();
+  showToast(`Reminder set to ${ampm} ⏰`, 'info');
 }
 
 function handleReminderTimeChange(newTime) {

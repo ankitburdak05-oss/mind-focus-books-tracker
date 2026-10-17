@@ -4,7 +4,7 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "activeRelease": {
     "version": "v0.0.30",
     "name": "Mind Focus Books v0.0.30 (Daily Reminder Time & Alarm Scheduler)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/raw/main/MindFocusBooks-Native.apk",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
       "⚡ Official v0.0.30 Release: Custom Reading Reminder Time & Daily Alarm Scheduler.",
       "⏰ Custom Reminder Time Picker: Apni pasand ka koi bhi waqt (HH:MM AM/PM) set karein.",
