@@ -3,7 +3,7 @@ window.BROADCAST_NOTICE = {
   "version": "v0.0.31",
   "type": "card1",
   "card": "card1",
-  "active": true,
+  "active": false,
   "icon": "🌸",
   "title": "Mind Focus Books v0.0.31 Ready!",
   "message": "Naya v0.0.31 release update ready hai! Ab aap Botanical Notification Studio me kisi bhi book ke notes aur cover ko phone notification me set kar sakte hain, direct typeable time (HH:MM AM/PM), Android status bar BigPicture alerts aur permission bridge ke sath. Update karein, aapka data 100% surakshit rahega.",
