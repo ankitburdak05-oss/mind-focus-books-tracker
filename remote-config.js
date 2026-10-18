@@ -2,17 +2,18 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.35",
-    "name": "Mind Focus Books v0.0.35 (Pixel-Perfect Luxury Notification Suite matching Photo Mockups)",
+    "version": "v0.0.36",
+    "name": "Mind Focus Books v0.0.36 (Permanent Update Fix & Pixel-Perfect Luxury Notification Suite)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
+      "🛡️ Permanent Update Fix: Ab update karne ke baad bar-bar update dialog nahi aayega. Native Android package version verification active.",
       "✨ Exact Mockup Luxury Design: Teeno photo mockups ke sath 100% pixel-perfect match (Obsidian dark glassmorphism, cyan & amber neon glow).",
       "⏰ Reading Alarms (Photo 2): 08:30 huge digital time display, AM/PM vertical stack, Date mode pills, 3D book cover row, aur cyan active toggle switches.",
       "🎨 Custom Studio (Photo 3): Realistic Android 14 lockscreen banner with book cover, glowing cyan input fields, book cover carousel with '+' upload, aur 4 neon accent rings.",
       "🔔 Activity Feed (Photo 1): 3D book reading streak card with amber circular progress ring (65%), cyan glow note flashback card with Reflect/Snooze, aur goal streak.",
       "🛡️ Zero Text Overflow: 100% word-break aur full responsive armor har mobile screen par."
     ],
-    "stagedAt": "2026-10-18T08:15:00.000Z",
+    "stagedAt": "2026-10-18T08:35:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

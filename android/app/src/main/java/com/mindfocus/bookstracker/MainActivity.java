@@ -210,6 +210,16 @@ public class MainActivity extends AppCompatActivity {
 
     public class WebAppInterface {
         @JavascriptInterface
+        public String getInstalledAppVersion() {
+            try {
+                android.content.pm.PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+                return pInfo.versionName != null ? pInfo.versionName : "0.0.36";
+            } catch (Exception e) {
+                return "0.0.36";
+            }
+        }
+
+        @JavascriptInterface
         public void saveBackupFile(String jsonContent, String fileName) {
             try {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.33)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.36)
 // ==========================================================================
 
-const APP_VERSION = '0.0.33';
-const CURRENT_APP_VERSION = 'v0.0.33';
+const APP_VERSION = '0.0.36';
+const CURRENT_APP_VERSION = 'v0.0.36';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -4727,6 +4727,20 @@ function downloadAppUpdate() {
   triggerInAppUpdate();
 }
 
+function getInstalledVersionString() {
+  if (typeof window !== 'undefined' && window.Android && typeof window.Android.getInstalledAppVersion === 'function') {
+    try {
+      const v = window.Android.getInstalledAppVersion();
+      if (v) return v.startsWith('v') ? v : ('v' + v);
+    } catch (e) {}
+  }
+  try {
+    const stored = localStorage.getItem('mf_installed_version');
+    if (stored) return stored.startsWith('v') ? stored : ('v' + stored);
+  } catch (e) {}
+  return CURRENT_APP_VERSION;
+}
+
 function isNewerVersion(remote, current) {
   if (!remote || !current) return false;
   if (remote === current) return false;
@@ -4749,7 +4763,16 @@ async function checkForBackgroundUpdates() {
   
   // Persist that current running version is active & installed
   try {
-    localStorage.setItem('mf_installed_version', CURRENT_APP_VERSION);
+    const stored = localStorage.getItem('mf_installed_version');
+    if (!stored || isNewerVersion(CURRENT_APP_VERSION, stored)) {
+      localStorage.setItem('mf_installed_version', CURRENT_APP_VERSION);
+    }
+  } catch (e) {}
+
+  // Update settings version badge
+  try {
+    const settingsBadge = document.getElementById('appSettingsVersionBadge');
+    if (settingsBadge) settingsBadge.innerText = `${CURRENT_APP_VERSION} (Up to date)`;
   } catch (e) {}
 
   let activeRel = null;
@@ -4774,9 +4797,10 @@ async function checkForBackgroundUpdates() {
     activeRel = window.__DEFAULT_REMOTE_CONFIG__?.activeRelease || null;
   }
 
-  const remoteVer = activeRel?.version || CURRENT_APP_VERSION;
-  // A new update is ONLY available if remoteVer is strictly GREATER than CURRENT_APP_VERSION
-  const isNewAvailable = isNewerVersion(remoteVer, CURRENT_APP_VERSION);
+  const installedVer = getInstalledVersionString();
+  const remoteVer = activeRel?.version || installedVer;
+  // A new update is ONLY available if remoteVer is strictly GREATER than BOTH installedVer and CURRENT_APP_VERSION
+  const isNewAvailable = isNewerVersion(remoteVer, installedVer) && isNewerVersion(remoteVer, CURRENT_APP_VERSION);
 
   if (homeCard) {
     if (isNewAvailable) {
@@ -4919,8 +4943,9 @@ function openUpdateCheckerModal() {
 
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
   const rel = cfg?.activeRelease || null;
-  const targetVer = rel?.version || CURRENT_APP_VERSION;
-  const isNewAvailable = isNewerVersion(targetVer, CURRENT_APP_VERSION);
+  const installedVer = getInstalledVersionString();
+  const targetVer = rel?.version || installedVer;
+  const isNewAvailable = isNewerVersion(targetVer, installedVer) && isNewerVersion(targetVer, CURRENT_APP_VERSION);
 
   const titleEl = document.getElementById('updateModalTitle');
   const badge = document.getElementById('updateTargetVersionBadge');
@@ -4938,11 +4963,11 @@ function openUpdateCheckerModal() {
   } else {
     // Already on current or latest version!
     if (titleEl) titleEl.innerText = 'Mind Focus Books is Up to Date';
-    if (badge) badge.innerText = `${CURRENT_APP_VERSION} (Installed)`;
-    if (desc) desc.innerText = `Aapke phone me latest version ${CURRENT_APP_VERSION} already installed hai aur sab kuch up-to-date hai.`;
+    if (badge) badge.innerText = `${installedVer} (Installed)`;
+    if (desc) desc.innerText = `Aapke phone me latest version ${installedVer} already installed hai aur sab kuch up-to-date hai.`;
     if (btn) {
       btn.disabled = false;
-      btn.innerText = `✓ Up to Date (${CURRENT_APP_VERSION})`;
+      btn.innerText = `✓ Up to Date (${installedVer})`;
     }
   }
 
