@@ -11644,6 +11644,1004 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   box-sizing: border-box !important;
 }
 
+/* ==========================================================================
+   LUXURY NOTIFICATION CENTER SUITE (MATCHING PHOTO MOCKUPS 1, 2, 3)
+   ========================================================================== */
+.lux-segmented-capsule {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 30px;
+  padding: 5px;
+  margin: 10px 14px 16px;
+  position: sticky;
+  top: 58px;
+  z-index: 25;
+  box-sizing: border-box;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.lux-capsule-pill {
+  flex: 1 1 0;
+  min-width: 0;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 24px;
+  padding: 8px 6px;
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
+
+.lux-capsule-pill:hover {
+  color: #fff;
+}
+
+.lux-capsule-pill.active {
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  color: #38bdf8;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.35);
+}
+
+#segTabAlarm.active {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid #f59e0b;
+  color: #fbbf24;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.35);
+}
+
+#segTabStudio.active {
+  background: rgba(6, 182, 212, 0.15);
+  border: 1px solid #06b6d4;
+  color: #38bdf8;
+  box-shadow: 0 0 16px rgba(6, 182, 212, 0.35);
+}
+
+.lux-unread-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #ef4444;
+  box-shadow: 0 0 8px #ef4444;
+  display: inline-block;
+}
+
+/* Luxury Generic Card Base */
+.lux-card {
+  background: linear-gradient(145deg, rgba(20, 27, 45, 0.88), rgba(10, 14, 23, 0.96));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 22px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+  position: relative;
+  overflow: hidden;
+  box-sizing: border-box;
+  width: 100%;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+/* Card 1: Daily Reading Streak (Photo 1) */
+.streak-card .lcs-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.lcs-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+
+.streak-card .lcs-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.lcs-book-col {
+  flex-shrink: 0;
+  perspective: 400px;
+}
+
+.lcs-book-3d {
+  width: 54px;
+  height: 74px;
+  border-radius: 6px;
+  object-fit: cover;
+  box-shadow: 6px 8px 18px rgba(0, 0, 0, 0.65), 0 0 12px rgba(245, 158, 11, 0.15);
+  transform: rotateY(-10deg);
+  transition: transform 0.3s ease;
+}
+
+.lcs-info-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.lcs-reading-text {
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  line-height: 1.35;
+  margin-bottom: 8px;
+  word-break: break-word;
+}
+
+.lux-btn-amber-glow {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #0b0f19;
+  font-weight: 800;
+  font-size: 0.78rem;
+  border: none;
+  border-radius: 20px;
+  padding: 7px 16px;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(245, 158, 11, 0.45);
+  transition: all 0.2s ease;
+  display: inline-block;
+}
+
+.lux-btn-amber-glow:hover {
+  filter: brightness(1.1);
+  transform: translateY(-1px);
+}
+
+.lcs-ring-col {
+  flex-shrink: 0;
+}
+
+.lux-progress-ring {
+  width: 68px;
+  height: 68px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.lux-ring-svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.ring-bg {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.08);
+  stroke-width: 5.5;
+}
+
+.ring-fill-amber {
+  fill: none;
+  stroke: #f59e0b;
+  stroke-width: 5.5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(245, 158, 11, 0.8));
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.ring-center-txt {
+  position: absolute;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ring-pct {
+  font-size: 0.86rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1.1;
+}
+
+.ring-sub {
+  font-size: 0.58rem;
+  color: #94a3b8;
+  white-space: nowrap;
+}
+
+/* Card 2: Book Note Flashback (Photo 1) */
+.flashback-card-cyan {
+  border: 1.5px solid #06b6d4 !important;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.25), 0 10px 30px rgba(0,0,0,0.4) !important;
+}
+
+.lcf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.lcf-title {
+  font-size: 0.96rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.lcf-line-indicator {
+  width: 24px;
+  height: 3px;
+  background: #06b6d4;
+  border-radius: 2px;
+  box-shadow: 0 0 8px #06b6d4;
+}
+
+.lcf-quote {
+  font-size: 0.92rem;
+  font-style: italic;
+  color: #f1f5f9;
+  line-height: 1.45;
+  margin: 8px 0 6px;
+  word-break: break-word;
+}
+
+.lcf-source {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+
+.lcf-time {
+  font-size: 0.72rem;
+  color: #64748b;
+}
+
+.lcf-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.lux-btn-cyan-solid {
+  flex: 1;
+  background: #06b6d4;
+  color: #0b0f19;
+  font-size: 0.8rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 14px;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.45);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.lux-btn-amber-outline {
+  flex: 1;
+  background: transparent;
+  border: 1.5px solid #f59e0b;
+  color: #f59e0b;
+  font-size: 0.8rem;
+  font-weight: 800;
+  border-radius: 20px;
+  padding: 8px 14px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+/* Card 3: Weekly Goal Alert (Photo 1) */
+.goal-card .lcg-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.lcg-title {
+  font-size: 0.94rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.lcg-ratio {
+  font-size: 0.78rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.lux-progress-bar-wrap {
+  width: 100%;
+  height: 8px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.lux-pb-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #06b6d4, #38bdf8);
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+}
+
+.lcg-sub-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  color: #94a3b8;
+  margin-bottom: 6px;
+}
+
+.lcg-pct-txt {
+  font-weight: 800;
+  color: #38bdf8;
+}
+
+.lcg-streak-msg {
+  font-size: 0.76rem;
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+/* ================= PHOTO 2: READING ALARMS LUXURY DESIGN ================= */
+.new-alarm-card {
+  position: relative;
+}
+
+.lna-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.lna-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.lna-light-sheen {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.lna-field-label {
+  display: block;
+  font-size: 0.72rem;
+  color: #94a3b8;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lna-pill-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.lna-pill {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lna-pill.active {
+  border-color: #f59e0b;
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.12);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+.lux-huge-time-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 14px 0 18px;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border-radius: 18px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.lux-time-input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 3.2rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 2px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+  width: 170px;
+  text-align: center;
+}
+
+.lux-ampm-vertical-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.lux-ampm-pill {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #94a3b8;
+  border-radius: 12px;
+  padding: 4px 10px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lux-ampm-pill.active {
+  background: #f59e0b;
+  color: #0b0f19;
+  border-color: #f59e0b;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
+}
+
+.lna-type-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.lna-type-pill {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  border-radius: 20px;
+  padding: 8px 10px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.lna-type-pill.active {
+  border: 1.5px solid #f59e0b;
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.12);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+.lux-book-selector-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  padding: 8px 12px;
+  margin-bottom: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lux-book-selector-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.lbsc-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  flex: 1;
+}
+
+.lbsc-cover {
+  width: 32px;
+  height: 44px;
+  border-radius: 5px;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+}
+
+.lbsc-book-title {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lbsc-book-sub {
+  display: block;
+  font-size: 0.72rem;
+  color: #94a3b8;
+}
+
+.lbsc-chevron {
+  font-size: 1.2rem;
+  color: #64748b;
+}
+
+.lux-btn-gold-glow {
+  width: 100%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #0b0f19;
+  font-size: 0.92rem;
+  font-weight: 800;
+  border: none;
+  border-radius: 14px;
+  padding: 12px 18px;
+  cursor: pointer;
+  box-shadow: 0 6px 24px rgba(245, 158, 11, 0.45);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.lux-btn-gold-glow:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.1);
+}
+
+.lux-active-alarms-section {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.laas-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding: 0 2px;
+}
+
+.laas-title {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.laas-count {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.lux-active-alarms-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.lux-active-alarm-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  padding: 12px 14px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.laai-left {
+  flex: 1;
+  min-width: 0;
+}
+
+.laai-time-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.laai-time {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #fff;
+}
+
+.laai-freq {
+  font-size: 0.74rem;
+  color: #94a3b8;
+}
+
+.laai-title {
+  font-size: 0.8rem;
+  color: #cbd5e1;
+  margin-top: 2px;
+  word-break: break-word;
+}
+
+.laai-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.lux-cyan-pill-switch {
+  background: #06b6d4;
+  color: #0b0f19;
+  font-size: 0.72rem;
+  font-weight: 900;
+  border-radius: 16px;
+  padding: 4px 10px;
+  cursor: pointer;
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.45);
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.lux-cyan-pill-switch.off {
+  background: rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  box-shadow: none;
+}
+
+.laai-del-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  font-size: 0.86rem;
+  cursor: pointer;
+  transition: color 0.15s ease;
+}
+
+.laai-del-btn:hover {
+  color: #ef4444;
+}
+
+/* ================= PHOTO 3: CUSTOM NOTIFICATION STUDIO LUXURY DESIGN ================= */
+.lux-lockscreen-shade {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  padding: 12px 14px;
+  margin-bottom: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.lls-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.lls-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.lls-app-icon {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #06b6d4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.lls-app-name {
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.lls-dot {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.lls-time {
+  font-size: 0.7rem;
+  color: #94a3b8;
+}
+
+.lls-chevron-icon {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.lls-body {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.lls-text-col {
+  flex: 1;
+  min-width: 0;
+}
+
+.lls-title {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #fff;
+  margin-bottom: 2px;
+  word-break: break-word;
+}
+
+.lls-desc {
+  font-size: 0.78rem;
+  color: #cbd5e1;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+.lls-thumb-box {
+  width: 38px;
+  height: 52px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.lls-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Studio Controls Card */
+.studio-controls-card .lsc-heading {
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 12px 0;
+}
+
+.lsc-field {
+  margin-bottom: 10px;
+}
+
+.lux-cyan-input, .lux-cyan-textarea {
+  width: 100% !important;
+  box-sizing: border-box !important;
+  background: rgba(10, 14, 23, 0.8) !important;
+  border: 1.5px solid #06b6d4 !important;
+  border-radius: 14px !important;
+  padding: 10px 14px !important;
+  color: #fff !important;
+  font-size: 0.86rem !important;
+  font-weight: 600 !important;
+  outline: none !important;
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.25) !important;
+  transition: all 0.2s ease !important;
+  font-family: inherit;
+}
+
+.lux-cyan-input:focus, .lux-cyan-textarea:focus {
+  box-shadow: 0 0 18px rgba(6, 182, 212, 0.45) !important;
+  border-color: #38bdf8 !important;
+}
+
+.lsc-section-title {
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #fff;
+  margin: 12px 0 8px 0;
+}
+
+.lux-book-cover-carousel {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 4px 2px 10px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 12px;
+}
+
+.lux-book-cover-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.lux-cover-add-btn {
+  width: 48px;
+  height: 66px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  color: #fff;
+  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
+
+.lux-cover-add-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: #06b6d4;
+  color: #06b6d4;
+}
+
+.lux-cover-item {
+  width: 48px;
+  height: 66px;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+}
+
+.lux-cover-item.selected {
+  border-color: #06b6d4;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.5);
+  transform: scale(1.05);
+}
+
+.lux-cover-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.lux-theme-rings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 10px 0 16px;
+}
+
+.lux-ring-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.lux-neon-ring {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2.5px solid transparent;
+  transition: all 0.25s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.lux-neon-ring.amber {
+  border-color: #f59e0b;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.lux-neon-ring.cyan {
+  border-color: #06b6d4;
+  box-shadow: 0 0 12px rgba(6, 182, 212, 0.4);
+}
+
+.lux-neon-ring.violet {
+  border-color: #a855f7;
+  box-shadow: 0 0 12px rgba(168, 85, 247, 0.4);
+}
+
+.lux-neon-ring.red {
+  border-color: #ef4444;
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+.lux-neon-ring.active {
+  transform: scale(1.15);
+  box-shadow: 0 0 20px currentColor;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.lux-ring-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #94a3b8;
+}
+
+.lux-studio-actions-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+}
+
+.lux-btn-cyan-glow {
+  flex: 1;
+  background: rgba(6, 182, 212, 0.12);
+  border: 1.5px solid #06b6d4;
+  color: #06b6d4;
+  font-size: 0.82rem;
+  font-weight: 800;
+  border-radius: 20px;
+  padding: 10px 14px;
+  cursor: pointer;
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.3);
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.lux-btn-cyan-glow:hover {
+  background: #06b6d4;
+  color: #0b0f19;
+  box-shadow: 0 0 20px rgba(6, 182, 212, 0.6);
+}
+
+.lux-btn-subtle {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #fff;
+  font-size: 0.82rem;
+  font-weight: 700;
+  border-radius: 20px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.lux-btn-subtle:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+
 
 
 </style>
@@ -14339,37 +15337,94 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
       <div class="sub-screen-header">
         <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
         <div class="sub-screen-title-wrap">
-          <h2 class="sub-screen-main-title">Notification Center</h2>
-          <p class="sub-screen-sub-title">Reading reminders, notes &amp; alerts</p>
+          <h2 class="sub-screen-main-title" id="notifHubMainTitle">Notification Center</h2>
+          <p class="sub-screen-sub-title" id="notifHubSubTitle">Smart Reminders &amp; Flashbacks</p>
         </div>
         <div style="display:flex; align-items:center; gap:6px;">
           <button type="button" class="btn-save-gold" style="padding: 6px 10px; font-size: 0.74rem;" title="Mark All as Read" onclick="markAllNotificationsAsRead()">✓✓ Read All</button>
         </div>
       </div>
 
-      <!-- 🌟 TOP SEGMENTED NAVIGATION TABS: NO CLUTTER! -->
-      <div class="notif-segmented-nav">
-        <button type="button" class="notif-seg-btn active" id="segTabInbox" onclick="switchNotifHubSection('inbox')">
-          <span class="seg-icon">🔔</span>
-          <span class="seg-title">Alerts Feed</span>
-          <span class="seg-badge" id="segUnreadBadge" style="display:none;">0</span>
+      <!-- 🌟 TOP LUXURY SEGMENTED CAPSULE NAV (MATCHING PHOTO MOCKUPS) -->
+      <div class="lux-segmented-capsule">
+        <button type="button" class="lux-capsule-pill active" id="segTabInbox" onclick="switchNotifHubSection('inbox')">
+          <span>Activity Feed</span>
+          <span class="lux-unread-dot" id="segUnreadBadge" style="display:none;"></span>
         </button>
-        <button type="button" class="notif-seg-btn" id="segTabAlarm" onclick="switchNotifHubSection('alarm')">
-          <span class="seg-icon">⏰</span>
-          <span class="seg-title">Reading Alarms</span>
+        <button type="button" class="lux-capsule-pill" id="segTabAlarm" onclick="switchNotifHubSection('alarm')">
+          <span>Reading Alarms</span>
         </button>
-        <button type="button" class="notif-seg-btn" id="segTabStudio" onclick="switchNotifHubSection('studio')">
-          <span class="seg-icon">✨</span>
-          <span class="seg-title">Custom Studio</span>
+        <button type="button" class="lux-capsule-pill" id="segTabStudio" onclick="switchNotifHubSection('studio')">
+          <span>Custom Studio</span>
         </button>
       </div>
 
       <div class="notif-hub-container">
 
-        <!-- ================= OPTION 1: ALERTS INBOX (FULL-SCREEN NOTIFICATION CARDS) ================= -->
+        <!-- ================= OPTION 1: ACTIVITY FEED (MATCHING PHOTO 1 MOCKUP) ================= -->
         <div id="notifSectionInbox" class="notif-hub-section" style="display:block;">
-          <!-- Banner & Quick Tools Bar -->
-          <div class="notif-hero-card">
+          
+          <!-- Card 1: Daily Reading Streak with 3D Book & Amber Ring -->
+          <div class="lux-card streak-card">
+            <div class="lcs-top">
+              <span class="lcs-title">Daily Reading Streak</span>
+            </div>
+            <div class="lcs-body">
+              <div class="lcs-book-col">
+                <img src="hyperfocus_cover.jpg" id="streakBookCover" class="lcs-book-3d" alt="Book" onerror="this.src='icon-192.png'">
+              </div>
+              <div class="lcs-info-col">
+                <div class="lcs-reading-text" id="streakReadingPrompt">Time for 20 mins of Atomic Habits</div>
+                <button type="button" class="lux-btn-amber-glow" onclick="navigateToSubView('readingSession')">Start Reading</button>
+              </div>
+              <div class="lcs-ring-col">
+                <div class="lux-progress-ring">
+                  <svg class="lux-ring-svg" viewBox="0 0 72 72">
+                    <circle class="ring-bg" cx="36" cy="36" r="30"></circle>
+                    <circle class="ring-fill-amber" cx="36" cy="36" r="30" stroke-dasharray="188.4" stroke-dashoffset="66"></circle>
+                  </svg>
+                  <div class="ring-center-txt">
+                    <span class="ring-pct">65%</span>
+                    <span class="ring-sub">13/20 mins</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Book Note Flashback with Cyan Neon Border -->
+          <div class="lux-card flashback-card-cyan">
+            <div class="lcf-header">
+              <span class="lcf-title">Book Note Flashback</span>
+              <span class="lcf-line-indicator"></span>
+            </div>
+            <div class="lcf-quote" id="feedFlashbackQuote">“Clarity about what matters provides clarity about what does not.”</div>
+            <div class="lcf-source" id="feedFlashbackSource">- Deep Work by Cal Newport</div>
+            <div class="lcf-time" id="feedFlashbackTime">Scheduled: Today, 8:30 PM</div>
+            <div class="lcf-actions">
+              <button type="button" class="lux-btn-cyan-solid" onclick="showToast('Note reflected &amp; bookmarked! ✨', 'success')">Reflect</button>
+              <button type="button" class="lux-btn-amber-outline" onclick="showToast('Reminder snoozed for 30 minutes! ⏰', 'info')">Snooze</button>
+            </div>
+          </div>
+
+          <!-- Card 3: Weekly Goal Alert -->
+          <div class="lux-card goal-card">
+            <div class="lcg-top">
+              <span class="lcg-title">Weekly Goal Alert</span>
+              <span class="lcg-ratio">3/7 books</span>
+            </div>
+            <div class="lux-progress-bar-wrap">
+              <div class="lux-pb-fill" style="width: 42%;"></div>
+            </div>
+            <div class="lcg-sub-row">
+              <span>Goal: 7 books/mo</span>
+              <span class="lcg-pct-txt">42%</span>
+            </div>
+            <div class="lcg-streak-msg">Keep going! Your streak is 14 days!</div>
+          </div>
+
+          <!-- Quick Tools & Filter Bar -->
+          <div class="notif-hero-card" style="margin-top: 18px;">
             <div class="notif-hero-left">
               <div class="notif-hero-icon">🔔</div>
               <div>
@@ -14378,7 +15433,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
               </div>
             </div>
             <div class="notif-hero-actions">
-              <button type="button" class="notif-tool-btn" onclick="triggerTestNotification()" title="Generate Test Alert">⚡ Test Alert</button>
+              <button type="button" class="notif-tool-btn" onclick="triggerTestNotification()" title="Generate Test Alert">⚡ Test</button>
               <button type="button" class="notif-tool-btn danger" onclick="clearAllNotifications()" title="Clear All Alerts">🗑️ Clear</button>
             </div>
           </div>
@@ -14402,300 +15457,182 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
             </button>
           </div>
 
-          <!-- Full Screen Notifications Feed List -->
+          <!-- Dynamic Notifications Feed List -->
           <div id="notificationsFeedContainer" class="notif-feed-list full-width-feed">
             <!-- Populated by JS -->
           </div>
         </div>
 
-        <!-- ================= OPTION 2: MULTI-ALARM & SCHEDULES WITH DATE (TAARIKH) ================= -->
+        <!-- ================= OPTION 2: READING ALARMS (MATCHING PHOTO 2 MOCKUP) ================= -->
         <div id="notifSectionAlarm" class="notif-hub-section" style="display:none;">
-          <!-- Top Hero & Global Alarm Toggle -->
-          <div class="cyber-alarm-hero">
-            <div class="cah-left">
-              <span class="cah-icon">⏰</span>
-              <div>
-                <h3 class="cah-title">Multi-Schedule Reading Alarms</h3>
-                <p class="cah-sub" id="cahActiveSummary">Din me alag-alag time par notes aur reading alerts schedule karein</p>
-              </div>
-            </div>
-            <button type="button" class="btn-neo-gold" onclick="openNewAlarmForm()" style="padding: 7px 12px; font-size: 0.76rem;">
-              ➕ Naya Alarm
-            </button>
-          </div>
-
-          <!-- Schedule New / Edit Alarm Form Card -->
-          <div class="cyber-card" id="newAlarmFormCard" style="display:block;">
-            <div class="cyber-card-header">
-              <span class="cch-title" id="alarmFormTitle">➕ Schedule New Reminder Alarm</span>
-              <button type="button" class="cch-close-btn" onclick="toggleAlarmForm(false)">✕</button>
+          <!-- New Alarm Frosted Card -->
+          <div class="lux-card new-alarm-card" id="newAlarmFormCard">
+            <div class="lna-header">
+              <span class="lna-title">New Alarm</span>
+              <span class="lna-light-sheen"></span>
             </div>
 
-            <div class="cyber-card-body">
-              <!-- Date (Taarikh) Selection -->
-              <div class="neo-field-group">
-                <label class="neo-label">📅 Taarikh / Schedule Frequency:</label>
-                <div class="neo-pill-tabs">
-                  <button type="button" class="neo-tab-pill active" id="btnDateModeDaily" onclick="setAlarmDateMode('daily')">
-                    🔄 Rozana (Daily)
+            <div class="lna-body">
+              <!-- Date Mode -->
+              <div class="lna-field">
+                <span class="lna-field-label">Date mode</span>
+                <div class="lna-pill-row">
+                  <button type="button" class="lna-pill active" id="btnDateModeDaily" onclick="setAlarmDateMode('daily')">
+                    Daily
                   </button>
-                  <button type="button" class="neo-tab-pill" id="btnDateModeSpecific" onclick="setAlarmDateMode('specific')">
-                    📅 Khas Taarikh (Date)
+                  <button type="button" class="lna-pill" id="btnDateModeSpecific" onclick="setAlarmDateMode('specific')">
+                    Specific Date 📅 <span id="alarmDateBadgeTxt">24 Oct 2026</span>
                   </button>
                 </div>
-                
-                <!-- Specific Date Picker Input Box (Hidden when Daily) -->
-                <div id="alarmSpecificDateWrap" style="display:none; margin-top: 10px;">
-                  <div class="neo-date-row">
-                    <input type="date" id="alarmDateInput" class="neo-input" onchange="updateAlarmPreviewBadge()">
-                    <div class="neo-date-shortcuts">
-                      <button type="button" class="neo-chip" onclick="setQuickDate('today')">Aaj</button>
-                      <button type="button" class="neo-chip" onclick="setQuickDate('tomorrow')">Kal</button>
-                      <button type="button" class="neo-chip" onclick="setQuickDate('next_monday')">Agla Somwar</button>
-                    </div>
+                <!-- Hidden Real Date Input -->
+                <input type="date" id="alarmDateInput" style="display:none;" onchange="onAlarmDatePickerChanged(this.value)">
+              </div>
+
+              <!-- Huge Digital Time Display + AM/PM Stack -->
+              <div class="lux-huge-time-row">
+                <div class="lux-digital-clock">
+                  <input type="text" id="alarmTimeHugeInput" class="lux-time-input" value="08:30" maxlength="5" oninput="onHugeTimeInput(this.value)" placeholder="08:30">
+                </div>
+                <div class="lux-ampm-vertical-stack">
+                  <button type="button" class="lux-ampm-pill" id="btnAlarmAm" onclick="setAlarmAmPm('AM')">AM</button>
+                  <button type="button" class="lux-ampm-pill active" id="btnAlarmPm" onclick="setAlarmAmPm('PM')">PM</button>
+                </div>
+                <!-- Legacy hidden inputs for compatibility -->
+                <input type="hidden" id="alarmHourInput" value="8">
+                <input type="hidden" id="alarmMinInput" value="30">
+              </div>
+
+              <!-- Content Type Mode: Reading Goal vs Book Note Flashback -->
+              <div class="lna-type-row">
+                <button type="button" class="lna-type-pill" id="btnTypeReading" onclick="setAlarmContentType('reading')">
+                  Reading Goal
+                </button>
+                <button type="button" class="lna-type-pill active" id="btnTypeNotes" onclick="setAlarmContentType('notes')">
+                  Book Note Flashback
+                </button>
+                <button type="button" class="lna-type-pill" id="btnTypeCustom" onclick="setAlarmContentType('custom')" style="display:none;">
+                  Custom
+                </button>
+              </div>
+
+              <!-- Sleek Book Selector Row with 3D Thumbnail & Chevron -->
+              <div class="lux-book-selector-card" id="alarmBookSelectTrigger" onclick="openBookPickerModalForAlarm()">
+                <div class="lbsc-left">
+                  <img src="hyperfocus_cover.jpg" id="luxAlarmBookThumb" class="lbsc-cover" alt="Cover" onerror="this.src='icon-192.png'">
+                  <div class="lbsc-text">
+                    <span class="lbsc-book-title" id="luxAlarmBookTitleDisplay">Deep Work</span>
+                    <span class="lbsc-book-sub" id="luxAlarmBookSubDisplay">Cal Newport</span>
                   </div>
                 </div>
+                <span class="lbsc-chevron">&rsaquo;</span>
+              </div>
+              <!-- Hidden compatibility selects -->
+              <select id="alarmBookSelect" style="display:none;" onchange="onAlarmBookChanged()"></select>
+              <select id="alarmNoteSelect" style="display:none;" onchange="onAlarmNoteChanged()"></select>
+
+              <!-- Custom Inputs (if user edits text) -->
+              <div id="alarmCustomInputsWrap" style="display:none; margin-top: 10px;">
+                <input type="text" id="alarmCustomTitleInput" class="lux-cyan-input" placeholder="Alarm Title">
+                <textarea id="alarmCustomMsgInput" class="lux-cyan-textarea" rows="2" placeholder="Sandesh ya note text..." style="margin-top:6px;"></textarea>
               </div>
 
-              <!-- Time Picker Row -->
-              <div class="neo-field-group">
-                <label class="neo-label">⏰ Alarm Time (Type ya Select Karein):</label>
-                <div class="notif-time-selector-group">
-                  <div class="notif-select-wrap">
-                    <label class="notif-sub-label">Hour (1-12)</label>
-                    <input type="number" id="alarmHourInput" class="notif-type-input" min="1" max="12" value="9" placeholder="09" oninput="updateAlarmTimeFromInputs()">
-                  </div>
-
-                  <span class="notif-colon">:</span>
-
-                  <div class="notif-select-wrap">
-                    <label class="notif-sub-label">Min (0-59)</label>
-                    <input type="number" id="alarmMinInput" class="notif-type-input" min="0" max="59" value="30" placeholder="30" oninput="updateAlarmTimeFromInputs()">
-                  </div>
-
-                  <div class="notif-ampm-switcher">
-                    <button type="button" class="btn-ampm" id="btnAlarmAm" onclick="setAlarmAmPm('AM')">AM</button>
-                    <button type="button" class="btn-ampm active" id="btnAlarmPm" onclick="setAlarmAmPm('PM')">PM</button>
-                  </div>
-                </div>
-
-                <!-- Live Time Preview Badge -->
-                <div class="alarm-live-badge" id="alarmLiveBadge">
-                  ⏰ 09:30 PM • 🔄 Rozana (Daily)
-                </div>
-              </div>
-
-              <!-- Quick Time Presets -->
-              <div class="neo-presets-row">
-                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('08:00', 'AM')">🌅 08:00 AM</button>
-                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('02:00', 'PM')">☀️ 02:00 PM</button>
-                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('07:30', 'PM')">🌆 07:30 PM</button>
-                <button type="button" class="neo-preset-chip" onclick="setQuickAlarmTime('09:30', 'PM')">🌙 09:30 PM</button>
-              </div>
-
-              <!-- What to Alert: Type Selector -->
-              <div class="neo-field-group">
-                <label class="neo-label">🔔 Kya Notification Aana Chahiye?</label>
-                <div class="neo-pill-tabs">
-                  <button type="button" class="neo-tab-pill active" id="btnTypeReading" onclick="setAlarmContentType('reading')">
-                    📖 Reading Alert
-                  </button>
-                  <button type="button" class="neo-tab-pill" id="btnTypeNotes" onclick="setAlarmContentType('notes')">
-                    💡 Book Note Flashback
-                  </button>
-                  <button type="button" class="neo-tab-pill" id="btnTypeCustom" onclick="setAlarmContentType('custom')">
-                    ✍️ Custom Alert
-                  </button>
-                </div>
-              </div>
-
-              <!-- Book & Note Selection -->
-              <div id="alarmBookSelectSection" class="neo-field-group">
-                <label class="neo-label">📚 Book Chunein:</label>
-                <select id="alarmBookSelect" class="neo-dropdown" onchange="onAlarmBookChanged()">
-                  <!-- Populated by JS -->
-                </select>
-
-                <!-- Book Note Dropdown (When type === 'notes') -->
-                <div id="alarmNoteSelectWrap" style="display:none; margin-top: 10px;">
-                  <label class="neo-label">📝 Konsa Note Aana Chahiye?</label>
-                  <select id="alarmNoteSelect" class="neo-dropdown" onchange="onAlarmNoteChanged()">
-                    <!-- Populated by JS -->
-                  </select>
-                </div>
-              </div>
-
-              <!-- Custom Title & Message (for custom or editable notes) -->
-              <div class="neo-field-group">
-                <label class="neo-label">✏️ Notification Title:</label>
-                <input type="text" id="alarmCustomTitleInput" class="neo-input" placeholder="e.g. ⏰ Reading Time: Atomic Habits">
-              </div>
-
-              <div class="neo-field-group">
-                <label class="neo-label">💬 Custom Message / Note Text:</label>
-                <textarea id="alarmCustomMsgInput" class="neo-textarea" rows="2" placeholder="Notification me aane wala sandesh..."></textarea>
-              </div>
-
-              <!-- Sound Chime & Actions -->
-              <div class="alarm-form-footer">
-                <label class="neo-checkbox-label">
-                  <input type="checkbox" id="alarmSoundCheck" checked>
-                  <span>🔔 Audio Chime</span>
-                </label>
-                <div style="display:flex; gap: 8px;">
-                  <button type="button" class="btn-neo-secondary" onclick="testCurrentAlarmFromForm()">
-                    ⚡ Test (3s)
-                  </button>
-                  <button type="button" class="btn-neo-gold" onclick="saveNewScheduledAlarm()">
-                    💾 Alarm Schedule Karein
-                  </button>
-                </div>
-              </div>
+              <!-- Primary Glowing Amber CTA Button -->
+              <button type="button" class="lux-btn-gold-glow" onclick="saveNewScheduledAlarm()">
+                + Set Smart Alarm
+              </button>
             </div>
           </div>
 
-          <!-- Active Alarms Feed List -->
-          <div class="active-alarms-wrap">
-            <div class="aaw-header">
-              <span class="aaw-title">📋 Scheduled Alarms List</span>
-              <span class="aaw-count" id="activeAlarmsCountBadge">0 Alarms</span>
+          <!-- Active Alarms Section -->
+          <div class="lux-active-alarms-section">
+            <div class="laas-header">
+              <span class="laas-title">Active Alarms</span>
+              <span class="laas-count" id="activeAlarmsCountBadge">0 Alarms</span>
             </div>
-            <div id="activeAlarmsListContainer" class="active-alarms-list">
+            <div id="activeAlarmsListContainer" class="lux-active-alarms-list">
               <!-- Rendered by JS -->
             </div>
           </div>
         </div>
 
-        <!-- ================= OPTION 3: FUTURISTIC CUSTOM NOTIFICATION STUDIO ================= -->
+        <!-- ================= OPTION 3: CUSTOM NOTIFICATION STUDIO (MATCHING PHOTO 3 MOCKUP) ================= -->
         <div id="notifSectionStudio" class="notif-hub-section" style="display:none;">
-          <!-- Device Permission Strip -->
-          <div class="cyber-perm-strip">
-            <div class="cps-info">
-              <span style="font-size:1.15rem;">📲</span>
-              <div>
-                <span class="cps-title">Phone Status Bar Notifications</span>
-                <span class="cps-sub" id="notifPermissionStatusTxt">Android notification drawer alerts</span>
+          <!-- Floating Android 14 Lockscreen Notification Banner -->
+          <div class="lux-lockscreen-shade theme-sunset" id="androidSimCard">
+            <div class="lls-header">
+              <div class="lls-header-left">
+                <div class="lls-app-icon">
+                  <img src="icon-192.png" alt="App" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">
+                </div>
+                <span class="lls-app-name">MindFocus</span>
+                <span class="lls-dot">•</span>
+                <span class="lls-time">just now</span>
+              </div>
+              <span class="lls-chevron-icon">⌵</span>
+            </div>
+            <div class="lls-body">
+              <div class="lls-text-col">
+                <div class="lls-title" id="asnSimTitle">Atomic Habits • Daily Insight</div>
+                <div class="lls-desc" id="asnSimDesc">Small habits lead to remarkable results.</div>
+              </div>
+              <div class="lls-thumb-box">
+                <img id="asnSimBannerImg" src="hyperfocus_cover.jpg" alt="Cover" class="lls-thumb-img" onerror="this.src='icon-192.png'">
               </div>
             </div>
-            <button type="button" class="btn-neo-gold" id="notifPermissionToggleBtn" onclick="requestBrowserNotificationPermission()">Enable</button>
           </div>
 
-          <!-- Futuristic Studio Container -->
-          <div class="cyber-studio-card">
-            <div class="cyber-studio-header">
-              <div class="csh-left">
-                <span class="csh-icon">⚡</span>
-                <div>
-                  <h3 class="csh-title">Instant Notification Studio</h3>
-                  <p class="csh-sub">Phone status bar me turant custom alert bhejein</p>
-                </div>
-              </div>
-              <span class="csh-badge">Studio</span>
+          <!-- Studio Controls Luxury Card -->
+          <div class="lux-card studio-controls-card">
+            <h3 class="lsc-heading">Studio Controls</h3>
+
+            <div class="lsc-field">
+              <input type="text" id="studioCustomTitle" class="lux-cyan-input" placeholder="Atomic Habits" value="Atomic Habits" oninput="updateLiveSimCard()">
             </div>
 
-            <div class="cyber-studio-body">
-              <!-- Mode Tabs -->
-              <div class="neo-pill-tabs" style="margin-bottom: 12px;">
-                <button type="button" class="neo-tab-pill active" id="btnModeBookNote" onclick="setNotifStudioMode('book_note')">
-                  📖 Book Note Alert
-                </button>
-                <button type="button" class="neo-tab-pill" id="btnModeCustomNote" onclick="setNotifStudioMode('custom')">
-                  ✍️ Custom Text
-                </button>
-                <button type="button" class="neo-tab-pill" id="btnModeDailyQuote" onclick="setNotifStudioMode('daily_quote')">
-                  ✨ Daily Quote
-                </button>
+            <div class="lsc-field">
+              <textarea id="studioCustomMessage" class="lux-cyan-textarea" rows="2" placeholder="Small habits lead to remarkable results." oninput="updateLiveSimCard()">Small habits lead to remarkable results.</textarea>
+            </div>
+
+            <!-- Book Cover Carousel -->
+            <div class="lsc-section-title">Book Cover</div>
+            <div class="lux-book-cover-carousel" id="luxCoverCarousel">
+              <button type="button" class="lux-cover-add-btn" onclick="triggerCustomCoverUpload()" title="Add Custom Cover">+</button>
+              <!-- Carousels populated by JS -->
+            </div>
+            <!-- Hidden real selects and img for script compatibility -->
+            <select id="studioBookSelect" style="display:none;" onchange="onStudioBookSelectChanged()"></select>
+            <select id="studioNoteSelect" style="display:none;" onchange="onStudioNoteSelectChanged()"></select>
+            <img id="studioBookCoverImg" src="cover_placeholder.jpg" style="display:none;">
+
+            <!-- Theme Accent Neon Rings -->
+            <div class="lsc-section-title">Theme Accent</div>
+            <div class="lux-theme-rings-row">
+              <div class="lux-ring-item" onclick="setStudioVisualTheme('sunset')">
+                <div class="lux-neon-ring amber active" id="ringAmber"></div>
+                <span class="lux-ring-label">Amber</span>
               </div>
-
-              <!-- Book & Note Select with Compact Cover Thumbnail -->
-              <div id="studioBookPickerSection">
-                <div class="compact-book-picker-row">
-                  <div class="cbp-select-col">
-                    <label class="neo-label">📚 Book Chunein:</label>
-                    <select id="studioBookSelect" class="neo-dropdown" onchange="onStudioBookSelectChanged()">
-                      <!-- Populated by JS -->
-                    </select>
-                  </div>
-                  <div class="cbp-thumb-box">
-                    <img id="studioBookCoverImg" src="cover_placeholder.jpg" alt="Cover" class="cbp-thumb-img">
-                  </div>
-                </div>
-
-                <div class="neo-field-group" style="margin-top: 10px;">
-                  <label class="neo-label">📝 Select Note for Notification:</label>
-                  <select id="studioNoteSelect" class="neo-dropdown" onchange="onStudioNoteSelectChanged()">
-                    <!-- Populated by JS -->
-                  </select>
-                </div>
+              <div class="lux-ring-item" onclick="setStudioVisualTheme('emerald')">
+                <div class="lux-neon-ring cyan" id="ringCyan"></div>
+                <span class="lux-ring-label">Cyan</span>
               </div>
-
-              <!-- Custom Inputs -->
-              <div class="neo-field-group">
-                <label class="neo-label">✏️ Notification Title:</label>
-                <input type="text" id="studioCustomTitle" class="neo-input" placeholder="e.g. Master Your Attention" oninput="updateLiveSimCard()">
+              <div class="lux-ring-item" onclick="setStudioVisualTheme('cosmic')">
+                <div class="lux-neon-ring violet" id="ringViolet"></div>
+                <span class="lux-ring-label">Violet</span>
               </div>
-
-              <div class="neo-field-group">
-                <label class="neo-label">💬 Message / Note Text:</label>
-                <textarea id="studioCustomMessage" class="neo-textarea" rows="2" placeholder="Apna note ya sandesh yahan likhein..." oninput="updateLiveSimCard()"></textarea>
+              <div class="lux-ring-item" onclick="setStudioVisualTheme('sakura')">
+                <div class="lux-neon-ring red" id="ringRed"></div>
+                <span class="lux-ring-label">Red</span>
               </div>
+            </div>
 
-              <!-- Futuristic Theme Palette -->
-              <div class="neo-field-group">
-                <label class="neo-label">🎨 Notification Accent Glow:</label>
-                <div class="cyber-themes-grid">
-                  <button type="button" class="cyber-theme-btn active" data-theme="amber" onclick="setStudioVisualTheme('sunset')">⚡ Cyber Amber</button>
-                  <button type="button" class="cyber-theme-btn" data-theme="cyan" onclick="setStudioVisualTheme('emerald')">❄️ Hyper Cyan</button>
-                  <button type="button" class="cyber-theme-btn" data-theme="purple" onclick="setStudioVisualTheme('cosmic')">🌌 Neon Violet</button>
-                  <button type="button" class="cyber-theme-btn" data-theme="rose" onclick="setStudioVisualTheme('sakura')">🔴 Laser Red</button>
-                </div>
-              </div>
-
-              <!-- Android Status Bar Live Preview -->
-              <div class="android-shade-preview-wrap">
-                <div class="asp-label">📱 Phone Status Bar Preview:</div>
-                <div class="android-system-notif-card theme-sunset" id="androidSimCard">
-                  <div class="asn-header">
-                    <div class="asn-header-left">
-                      <img src="icon-192.png" alt="App" class="asn-app-icon">
-                      <span class="asn-app-name">Mind Focus Books</span>
-                      <span class="asn-dot">•</span>
-                      <span class="asn-time">now</span>
-                    </div>
-                    <span class="asn-expand-icon">⌵</span>
-                  </div>
-
-                  <div class="asn-body">
-                    <div class="asn-text-col">
-                      <div class="asn-title" id="asnSimTitle">Hyperfocus - Deep Work Note</div>
-                      <div class="asn-desc" id="asnSimDesc">Focus on one high-impact task at a time for 25 minutes.</div>
-                    </div>
-                  </div>
-
-                  <div class="asn-big-picture-banner" id="asnSimBanner">
-                    <img id="asnSimBannerImg" src="hyperfocus_cover.jpg" alt="Cover" class="asn-banner-img">
-                    <div class="asn-banner-overlay">
-                      <div class="asn-banner-tag" id="asnSimBannerTag">⚡ Mind Focus</div>
-                      <div class="asn-banner-quote" id="asnSimBannerQuote">"Where knowledge begins..."</div>
-                    </div>
-                  </div>
-
-                  <div class="asn-actions">
-                    <button type="button" class="asn-btn primary" onclick="handleSimNotifAction('read')">📖 Open Book</button>
-                    <button type="button" class="asn-btn" onclick="handleSimNotifAction('notes')">📝 Notes</button>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Action Buttons -->
-              <div class="studio-actions-footer">
-                <button type="button" class="btn-studio-action primary" onclick="sendCustomNotificationToDeviceNow()">
-                  🚀 Send To Phone Status Bar Now
-                </button>
-                <button type="button" class="btn-studio-action secondary" onclick="addCustomNotificationToFeed()">
-                  ➕ Add To Alerts Feed List
-                </button>
-              </div>
+            <!-- Action Buttons -->
+            <div class="lux-studio-actions-row">
+              <button type="button" class="lux-btn-cyan-glow" onclick="sendCustomNotificationToDeviceNow()">
+                ⚡ Test On Phone
+              </button>
+              <button type="button" class="lux-btn-subtle" onclick="addCustomNotificationToFeed()">
+                💾 Save Alert
+              </button>
             </div>
           </div>
         </div>
@@ -31808,11 +32745,20 @@ function switchNotifHubSection(section) {
   if (tabAlarm) tabAlarm.classList.toggle('active', section === 'alarm');
   if (tabStudio) tabStudio.classList.toggle('active', section === 'studio');
 
+  const mainTitleEl = document.getElementById('notifHubMainTitle');
+  const subTitleEl = document.getElementById('notifHubSubTitle');
+
   if (section === 'inbox') {
+    if (mainTitleEl) mainTitleEl.innerText = 'Notification Center';
+    if (subTitleEl) subTitleEl.innerText = 'Smart Reminders & Flashbacks';
     renderNotificationsHub();
   } else if (section === 'alarm') {
+    if (mainTitleEl) mainTitleEl.innerText = 'Reading Alarms';
+    if (subTitleEl) subTitleEl.innerText = 'Smart Routine & Notes Scheduler';
     updateScheduleUI();
   } else if (section === 'studio') {
+    if (mainTitleEl) mainTitleEl.innerText = 'Custom Studio';
+    if (subTitleEl) subTitleEl.innerText = 'Design & Test Your Alerts';
     initBotanicalStudio();
   }
 }
@@ -31864,6 +32810,31 @@ function renderNotificationsHub() {
   updateBrowserNotificationUI();
   updateScheduleUI();
   initBotanicalStudio();
+
+  // Populate Luxury Activity Feed Showcase Cards (Photo 1) with user book data
+  const booksForFeed = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const activeBookForFeed = booksForFeed.find(b => b.status === 'READING' || b.reading_status === 'currently_reading') || booksForFeed[0];
+  if (activeBookForFeed) {
+    const streakCover = document.getElementById('streakBookCover');
+    const streakPrompt = document.getElementById('streakReadingPrompt');
+    if (streakCover) streakCover.src = getBookCoverUrl(activeBookForFeed);
+    if (streakPrompt) streakPrompt.innerText = `Time for 20 mins of ${activeBookForFeed.title || 'Reading'}`;
+
+    const fbQuote = document.getElementById('feedFlashbackQuote');
+    const fbSource = document.getElementById('feedFlashbackSource');
+    if (fbQuote && fbSource) {
+      if (Array.isArray(activeBookForFeed.key_takeaways) && activeBookForFeed.key_takeaways.length > 0) {
+        fbQuote.innerText = `“${activeBookForFeed.key_takeaways[0]}”`;
+        fbSource.innerText = `- ${activeBookForFeed.title} by ${activeBookForFeed.author || 'Author'}`;
+      } else if (Array.isArray(activeBookForFeed.notes) && activeBookForFeed.notes.length > 0) {
+        const nText = typeof activeBookForFeed.notes[0] === 'string' ? activeBookForFeed.notes[0] : (activeBookForFeed.notes[0].text || '');
+        if (nText) {
+          fbQuote.innerText = `“${nText}”`;
+          fbSource.innerText = `- ${activeBookForFeed.title} by ${activeBookForFeed.author || 'Author'}`;
+        }
+      }
+    }
+  }
 
   // On native Android, prompt permission if not yet granted
   if (window.Android && typeof window.Android.isNotificationPermissionGranted === 'function') {
@@ -32270,22 +33241,19 @@ function updateScheduleUI() {
 function renderActiveAlarmsList() {
   const container = document.getElementById('activeAlarmsListContainer');
   const countBadge = document.getElementById('activeAlarmsCountBadge');
-  const summaryTxt = document.getElementById('cahActiveSummary');
   if (!container) return;
 
   const total = userScheduledAlarmsList.length;
   const activeCount = userScheduledAlarmsList.filter(a => a.enabled).length;
 
-  if (countBadge) countBadge.innerText = `${total} Schedule${total !== 1 ? 's' : ''}`;
-  if (summaryTxt) summaryTxt.innerText = `Din me ${activeCount} active alarms aapko timely alerts bhejenge`;
+  if (countBadge) countBadge.innerText = `${total} Alarm${total !== 1 ? 's' : ''}`;
 
   if (total === 0) {
     container.innerHTML = `
       <div class="neo-empty-box">
         <span style="font-size: 2.2rem; display:block; margin-bottom: 6px;">⏰</span>
         <h4 style="font-size: 0.95rem; font-weight:800; color:#fff; margin:0 0 4px 0;">Koi Alarm Schedule Nahi Hai</h4>
-        <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 12px 0;">Upar diye gaye form se naya reading ya note alert schedule karein!</p>
-        <button type="button" class="btn-neo-gold" onclick="openNewAlarmForm()" style="padding: 6px 14px; font-size: 0.78rem;">➕ Pehla Alarm Jodein</button>
+        <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 12px 0;">Upar diye gaye card se naya reading alarm ya note alert schedule karein!</p>
       </div>
     `;
     return;
@@ -32293,48 +33261,24 @@ function renderActiveAlarmsList() {
 
   container.innerHTML = userScheduledAlarmsList.map(alarm => {
     const isEn = !!alarm.enabled;
-    const catLabel = alarm.type === 'notes' ? '💡 Note Flashback' : (alarm.type === 'reading' ? '📖 Reading Alert' : '✍️ Custom Alert');
-    const dateLabel = alarm.dateMode === 'specific' ? `📅 ${alarm.specificDate || 'Specific Date'}` : '🔄 Rozana (Daily)';
-    const coverUrl = alarm.bookCover || 'cover_placeholder.jpg';
+    const timeFormatted = alarm.timeFormatted || formatTimeAmPm(alarm.time);
+    const dateLabel = alarm.dateMode === 'specific' ? (alarm.specificDate ? ` - ${alarm.specificDate}` : ' - Specific Date') : ' - Everyday';
+    const subline = alarm.bookTitle ? (alarm.type === 'notes' ? `Note Flashback: ${alarm.bookTitle}` : alarm.bookTitle) : (alarm.title || 'MindFocus Alarm');
 
     return `
-      <div class="alarm-item-card ${isEn ? 'active' : 'inactive'}" id="alarm_item_${escapeHtml(alarm.id)}">
-        <div class="aic-top-row">
-          <div class="aic-time-wrap">
-            <span class="aic-time-big">${escapeHtml(alarm.timeFormatted || formatTimeAmPm(alarm.time))}</span>
-            <span class="aic-date-chip">${escapeHtml(dateLabel)}</span>
-            <span class="aic-type-chip ${escapeHtml(alarm.type || 'reading')}">${catLabel}</span>
+      <div class="lux-active-alarm-item" id="alarm_item_${escapeHtml(alarm.id)}">
+        <div class="laai-left">
+          <div class="laai-time-line">
+            <span class="laai-time">${escapeHtml(timeFormatted)}</span>
+            <span class="laai-freq">${escapeHtml(dateLabel)}</span>
           </div>
-          <div class="aic-switch-wrap">
-            <label class="pref-switch" title="Toggle Alarm On/Off">
-              <input type="checkbox" ${isEn ? 'checked' : ''} onchange="toggleAlarmItem('${escapeHtml(alarm.id)}', this.checked)">
-              <span class="pref-slider"></span>
-            </label>
-          </div>
+          <div class="laai-title">${escapeHtml(subline)}</div>
         </div>
-
-        <div class="aic-content-box">
-          <div class="aic-title-txt">${escapeHtml(alarm.title || 'Reading Alarm')}</div>
-          <div class="aic-msg-txt">${escapeHtml(alarm.message || '')}</div>
-        </div>
-
-        ${alarm.bookTitle ? `
-          <div class="aic-book-banner">
-            <img src="${escapeHtml(coverUrl)}" alt="Cover" class="aic-book-thumb" onerror="this.src='icon-192.png'">
-            <div class="aic-book-info">
-              <span class="aic-book-tag">📖 Linked Book</span>
-              <span class="aic-book-name">${escapeHtml(alarm.bookTitle)}</span>
-            </div>
-          </div>
-        ` : ''}
-
-        <div class="aic-actions-row">
-          <button type="button" class="aic-btn-test" onclick="testAlarmItem('${escapeHtml(alarm.id)}')" title="Test this alarm now">
-            ⚡ Test Alert (3s)
+        <div class="laai-right">
+          <button type="button" class="lux-cyan-pill-switch ${isEn ? '' : 'off'}" onclick="toggleAlarmItem('${escapeHtml(alarm.id)}', ${!isEn})" title="Toggle Alarm">
+            ${isEn ? 'ON' : 'OFF'}
           </button>
-          <button type="button" class="aic-btn-del" onclick="deleteAlarmItem('${escapeHtml(alarm.id)}')" title="Delete this alarm">
-            🗑️ Delete
-          </button>
+          <button type="button" class="laai-del-btn" onclick="deleteAlarmItem('${escapeHtml(alarm.id)}')" title="Delete this alarm">🗑️</button>
         </div>
       </div>
     `;
@@ -32474,6 +33418,43 @@ function populateAlarmBooksDropdown() {
   onAlarmBookChanged();
 }
 
+function openBookPickerModalForAlarm() {
+  const sel = document.getElementById('alarmBookSelect');
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  if (!sel || !books || books.length === 0) return;
+  const nextIdx = (sel.selectedIndex + 1) % books.length;
+  sel.selectedIndex = nextIdx;
+  onAlarmBookChanged();
+  const chosen = books[nextIdx];
+  showToast(`Selected Book: ${chosen.title || 'Book'} 📖`, 'info');
+}
+
+function onHugeTimeInput(val) {
+  if (!val) return;
+  const parts = val.replace(/[^0-9:]/g, '').split(':');
+  const hInput = document.getElementById('alarmHourInput');
+  const mInput = document.getElementById('alarmMinInput');
+  if (parts[0] && hInput) {
+    const h = parseInt(parts[0], 10);
+    if (!isNaN(h)) hInput.value = Math.min(12, Math.max(1, h));
+  }
+  if (parts[1] && mInput) {
+    const m = parseInt(parts[1], 10);
+    if (!isNaN(m)) mInput.value = Math.min(59, Math.max(0, m));
+  }
+}
+
+function onAlarmDatePickerChanged(val) {
+  const badge = document.getElementById('alarmDateBadgeTxt');
+  if (!val || !badge) return;
+  try {
+    const d = new Date(val);
+    badge.innerText = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch (e) {
+    badge.innerText = val;
+  }
+}
+
 function onAlarmBookChanged() {
   const bookSelect = document.getElementById('alarmBookSelect');
   const noteSelect = document.getElementById('alarmNoteSelect');
@@ -32485,6 +33466,15 @@ function onAlarmBookChanged() {
   const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
   const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
   if (!book) return;
+
+  // Update Luxury Book Row Display
+  const thumb = document.getElementById('luxAlarmBookThumb');
+  const titleDisplay = document.getElementById('luxAlarmBookTitleDisplay');
+  const subDisplay = document.getElementById('luxAlarmBookSubDisplay');
+  const coverUrl = getBookCoverUrl(book);
+  if (thumb) thumb.src = coverUrl;
+  if (titleDisplay) titleDisplay.innerText = book.title || 'Deep Work';
+  if (subDisplay) subDisplay.innerText = book.author || 'Cal Newport';
 
   // Populate Notes dropdown for this book
   if (noteSelect) {
@@ -32561,6 +33551,13 @@ function saveNewScheduledAlarm() {
 
   let h12 = parseInt(hourInput ? hourInput.value : '9', 10);
   let mVal = parseInt(minInput ? minInput.value : '30', 10);
+
+  const hugeTimeInput = document.getElementById('alarmTimeHugeInput');
+  if (hugeTimeInput && hugeTimeInput.value) {
+    const parts = hugeTimeInput.value.replace(/[^0-9:]/g, '').split(':');
+    if (parts[0]) h12 = parseInt(parts[0], 10) || 8;
+    if (parts[1]) mVal = parseInt(parts[1], 10) || 30;
+  }
 
   if (isNaN(h12) || h12 < 1 || h12 > 12) h12 = 9;
   if (isNaN(mVal) || mVal < 0 || mVal > 59) mVal = 0;
@@ -32838,24 +33835,99 @@ function onStudioBookSelectChanged() {
 
   // Update book preview
   const coverImg = document.getElementById('studioBookCoverImg');
-  const titleTxt = document.getElementById('studioBookTitleTxt');
-  const authorTxt = document.getElementById('studioBookAuthorTxt');
-  const pagesTxt = document.getElementById('studioBookPagesTxt');
-  const categoryTxt = document.getElementById('studioBookCategoryTxt');
-  const statusBadge = document.getElementById('studioBookStatusBadge');
-
   const coverUrl = getBookCoverUrl(book);
   if (coverImg) coverImg.src = coverUrl;
-  if (titleTxt) titleTxt.innerText = book.title || 'Untitled Book';
-  if (authorTxt) authorTxt.innerText = 'by ' + (book.author || 'Unknown');
-  if (pagesTxt) pagesTxt.innerText = `📄 ${book.total_pages || book.totalPages || 250} pages`;
-  if (categoryTxt) categoryTxt.innerText = `🌿 ${book.category || 'Mind Growth'}`;
-  if (statusBadge) {
-    statusBadge.innerText = (book.status === 'COMPLETED' || book.reading_status === 'completed') ? '✓ Finished' : '📖 In Progress';
-  }
 
   // Populate Notes Dropdown for this book
   populateStudioNotesDropdown(book);
+  populateLuxCoverCarousel();
+}
+
+function populateLuxCoverCarousel() {
+  const carousel = document.getElementById('luxCoverCarousel');
+  if (!carousel) return;
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+
+  let html = `<button type="button" class="lux-cover-add-btn" onclick="triggerCustomCoverUpload()" title="Add Custom Cover">+</button>`;
+  books.forEach((b, idx) => {
+    const isSelected = studioSelectedBook && (studioSelectedBook.id === b.id || studioSelectedBook.title === b.title);
+    const coverUrl = getBookCoverUrl(b);
+    html += `
+      <div class="lux-cover-item ${isSelected ? 'selected' : ''}" onclick="selectStudioBookById('${escapeHtml(b.id || 'book_' + idx)}')" title="${escapeHtml(b.title || '')}">
+        <img src="${escapeHtml(coverUrl)}" alt="Cover" onerror="this.src='icon-192.png'">
+      </div>
+    `;
+  });
+  carousel.innerHTML = html;
+}
+
+function selectStudioBookById(bookId) {
+  const bookSelect = document.getElementById('studioBookSelect');
+  if (bookSelect) {
+    bookSelect.value = bookId;
+  }
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
+  if (book) {
+    studioSelectedBook = book;
+    const titleInput = document.getElementById('studioCustomTitle');
+    const msgInput = document.getElementById('studioCustomMessage');
+    if (titleInput) titleInput.value = `${book.title || 'Book'} • Daily Insight`;
+    let quote = 'Small habits lead to remarkable results.';
+    if (Array.isArray(book.key_takeaways) && book.key_takeaways.length > 0) {
+      quote = book.key_takeaways[0];
+    } else if (Array.isArray(book.notes) && book.notes.length > 0) {
+      quote = typeof book.notes[0] === 'string' ? book.notes[0] : (book.notes[0].text || quote);
+    }
+    if (msgInput) msgInput.value = quote;
+  }
+  populateLuxCoverCarousel();
+  updateLiveSimCard();
+}
+
+function triggerCustomCoverUpload() {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.onchange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (re) => {
+      const dataUrl = re.target.result;
+      if (studioSelectedBook) {
+        studioSelectedBook.cover_image = dataUrl;
+        studioSelectedBook.cover = dataUrl;
+      }
+      const simImg = document.getElementById('asnSimBannerImg');
+      if (simImg) simImg.src = dataUrl;
+      populateLuxCoverCarousel();
+      showToast('Custom book cover attached! 🖼️', 'success');
+    };
+    reader.readAsDataURL(file);
+  };
+  fileInput.click();
+}
+
+function setStudioVisualTheme(theme) {
+  studioActiveTheme = theme;
+  const card = document.getElementById('androidSimCard');
+  if (card) {
+    card.className = `lux-lockscreen-shade theme-${theme}`;
+  }
+
+  // Update Neon Rings active state
+  const ringAmber = document.getElementById('ringAmber');
+  const ringCyan = document.getElementById('ringCyan');
+  const ringViolet = document.getElementById('ringViolet');
+  const ringRed = document.getElementById('ringRed');
+
+  if (ringAmber) ringAmber.classList.toggle('active', theme === 'sunset');
+  if (ringCyan) ringCyan.classList.toggle('active', theme === 'emerald');
+  if (ringViolet) ringViolet.classList.toggle('active', theme === 'cosmic');
+  if (ringRed) ringRed.classList.toggle('active', theme === 'sakura');
+
+  updateLiveSimCard();
 }
 
 function populateStudioNotesDropdown(book) {

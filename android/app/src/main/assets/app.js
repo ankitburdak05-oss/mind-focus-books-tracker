@@ -9619,11 +9619,20 @@ function switchNotifHubSection(section) {
   if (tabAlarm) tabAlarm.classList.toggle('active', section === 'alarm');
   if (tabStudio) tabStudio.classList.toggle('active', section === 'studio');
 
+  const mainTitleEl = document.getElementById('notifHubMainTitle');
+  const subTitleEl = document.getElementById('notifHubSubTitle');
+
   if (section === 'inbox') {
+    if (mainTitleEl) mainTitleEl.innerText = 'Notification Center';
+    if (subTitleEl) subTitleEl.innerText = 'Smart Reminders & Flashbacks';
     renderNotificationsHub();
   } else if (section === 'alarm') {
+    if (mainTitleEl) mainTitleEl.innerText = 'Reading Alarms';
+    if (subTitleEl) subTitleEl.innerText = 'Smart Routine & Notes Scheduler';
     updateScheduleUI();
   } else if (section === 'studio') {
+    if (mainTitleEl) mainTitleEl.innerText = 'Custom Studio';
+    if (subTitleEl) subTitleEl.innerText = 'Design & Test Your Alerts';
     initBotanicalStudio();
   }
 }
@@ -9675,6 +9684,31 @@ function renderNotificationsHub() {
   updateBrowserNotificationUI();
   updateScheduleUI();
   initBotanicalStudio();
+
+  // Populate Luxury Activity Feed Showcase Cards (Photo 1) with user book data
+  const booksForFeed = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const activeBookForFeed = booksForFeed.find(b => b.status === 'READING' || b.reading_status === 'currently_reading') || booksForFeed[0];
+  if (activeBookForFeed) {
+    const streakCover = document.getElementById('streakBookCover');
+    const streakPrompt = document.getElementById('streakReadingPrompt');
+    if (streakCover) streakCover.src = getBookCoverUrl(activeBookForFeed);
+    if (streakPrompt) streakPrompt.innerText = `Time for 20 mins of ${activeBookForFeed.title || 'Reading'}`;
+
+    const fbQuote = document.getElementById('feedFlashbackQuote');
+    const fbSource = document.getElementById('feedFlashbackSource');
+    if (fbQuote && fbSource) {
+      if (Array.isArray(activeBookForFeed.key_takeaways) && activeBookForFeed.key_takeaways.length > 0) {
+        fbQuote.innerText = `“${activeBookForFeed.key_takeaways[0]}”`;
+        fbSource.innerText = `- ${activeBookForFeed.title} by ${activeBookForFeed.author || 'Author'}`;
+      } else if (Array.isArray(activeBookForFeed.notes) && activeBookForFeed.notes.length > 0) {
+        const nText = typeof activeBookForFeed.notes[0] === 'string' ? activeBookForFeed.notes[0] : (activeBookForFeed.notes[0].text || '');
+        if (nText) {
+          fbQuote.innerText = `“${nText}”`;
+          fbSource.innerText = `- ${activeBookForFeed.title} by ${activeBookForFeed.author || 'Author'}`;
+        }
+      }
+    }
+  }
 
   // On native Android, prompt permission if not yet granted
   if (window.Android && typeof window.Android.isNotificationPermissionGranted === 'function') {
@@ -10081,22 +10115,19 @@ function updateScheduleUI() {
 function renderActiveAlarmsList() {
   const container = document.getElementById('activeAlarmsListContainer');
   const countBadge = document.getElementById('activeAlarmsCountBadge');
-  const summaryTxt = document.getElementById('cahActiveSummary');
   if (!container) return;
 
   const total = userScheduledAlarmsList.length;
   const activeCount = userScheduledAlarmsList.filter(a => a.enabled).length;
 
-  if (countBadge) countBadge.innerText = `${total} Schedule${total !== 1 ? 's' : ''}`;
-  if (summaryTxt) summaryTxt.innerText = `Din me ${activeCount} active alarms aapko timely alerts bhejenge`;
+  if (countBadge) countBadge.innerText = `${total} Alarm${total !== 1 ? 's' : ''}`;
 
   if (total === 0) {
     container.innerHTML = `
       <div class="neo-empty-box">
         <span style="font-size: 2.2rem; display:block; margin-bottom: 6px;">⏰</span>
         <h4 style="font-size: 0.95rem; font-weight:800; color:#fff; margin:0 0 4px 0;">Koi Alarm Schedule Nahi Hai</h4>
-        <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 12px 0;">Upar diye gaye form se naya reading ya note alert schedule karein!</p>
-        <button type="button" class="btn-neo-gold" onclick="openNewAlarmForm()" style="padding: 6px 14px; font-size: 0.78rem;">➕ Pehla Alarm Jodein</button>
+        <p style="font-size: 0.78rem; color: #94a3b8; margin: 0 0 12px 0;">Upar diye gaye card se naya reading alarm ya note alert schedule karein!</p>
       </div>
     `;
     return;
@@ -10104,48 +10135,24 @@ function renderActiveAlarmsList() {
 
   container.innerHTML = userScheduledAlarmsList.map(alarm => {
     const isEn = !!alarm.enabled;
-    const catLabel = alarm.type === 'notes' ? '💡 Note Flashback' : (alarm.type === 'reading' ? '📖 Reading Alert' : '✍️ Custom Alert');
-    const dateLabel = alarm.dateMode === 'specific' ? `📅 ${alarm.specificDate || 'Specific Date'}` : '🔄 Rozana (Daily)';
-    const coverUrl = alarm.bookCover || 'cover_placeholder.jpg';
+    const timeFormatted = alarm.timeFormatted || formatTimeAmPm(alarm.time);
+    const dateLabel = alarm.dateMode === 'specific' ? (alarm.specificDate ? ` - ${alarm.specificDate}` : ' - Specific Date') : ' - Everyday';
+    const subline = alarm.bookTitle ? (alarm.type === 'notes' ? `Note Flashback: ${alarm.bookTitle}` : alarm.bookTitle) : (alarm.title || 'MindFocus Alarm');
 
     return `
-      <div class="alarm-item-card ${isEn ? 'active' : 'inactive'}" id="alarm_item_${escapeHtml(alarm.id)}">
-        <div class="aic-top-row">
-          <div class="aic-time-wrap">
-            <span class="aic-time-big">${escapeHtml(alarm.timeFormatted || formatTimeAmPm(alarm.time))}</span>
-            <span class="aic-date-chip">${escapeHtml(dateLabel)}</span>
-            <span class="aic-type-chip ${escapeHtml(alarm.type || 'reading')}">${catLabel}</span>
+      <div class="lux-active-alarm-item" id="alarm_item_${escapeHtml(alarm.id)}">
+        <div class="laai-left">
+          <div class="laai-time-line">
+            <span class="laai-time">${escapeHtml(timeFormatted)}</span>
+            <span class="laai-freq">${escapeHtml(dateLabel)}</span>
           </div>
-          <div class="aic-switch-wrap">
-            <label class="pref-switch" title="Toggle Alarm On/Off">
-              <input type="checkbox" ${isEn ? 'checked' : ''} onchange="toggleAlarmItem('${escapeHtml(alarm.id)}', this.checked)">
-              <span class="pref-slider"></span>
-            </label>
-          </div>
+          <div class="laai-title">${escapeHtml(subline)}</div>
         </div>
-
-        <div class="aic-content-box">
-          <div class="aic-title-txt">${escapeHtml(alarm.title || 'Reading Alarm')}</div>
-          <div class="aic-msg-txt">${escapeHtml(alarm.message || '')}</div>
-        </div>
-
-        ${alarm.bookTitle ? `
-          <div class="aic-book-banner">
-            <img src="${escapeHtml(coverUrl)}" alt="Cover" class="aic-book-thumb" onerror="this.src='icon-192.png'">
-            <div class="aic-book-info">
-              <span class="aic-book-tag">📖 Linked Book</span>
-              <span class="aic-book-name">${escapeHtml(alarm.bookTitle)}</span>
-            </div>
-          </div>
-        ` : ''}
-
-        <div class="aic-actions-row">
-          <button type="button" class="aic-btn-test" onclick="testAlarmItem('${escapeHtml(alarm.id)}')" title="Test this alarm now">
-            ⚡ Test Alert (3s)
+        <div class="laai-right">
+          <button type="button" class="lux-cyan-pill-switch ${isEn ? '' : 'off'}" onclick="toggleAlarmItem('${escapeHtml(alarm.id)}', ${!isEn})" title="Toggle Alarm">
+            ${isEn ? 'ON' : 'OFF'}
           </button>
-          <button type="button" class="aic-btn-del" onclick="deleteAlarmItem('${escapeHtml(alarm.id)}')" title="Delete this alarm">
-            🗑️ Delete
-          </button>
+          <button type="button" class="laai-del-btn" onclick="deleteAlarmItem('${escapeHtml(alarm.id)}')" title="Delete this alarm">🗑️</button>
         </div>
       </div>
     `;
@@ -10285,6 +10292,43 @@ function populateAlarmBooksDropdown() {
   onAlarmBookChanged();
 }
 
+function openBookPickerModalForAlarm() {
+  const sel = document.getElementById('alarmBookSelect');
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  if (!sel || !books || books.length === 0) return;
+  const nextIdx = (sel.selectedIndex + 1) % books.length;
+  sel.selectedIndex = nextIdx;
+  onAlarmBookChanged();
+  const chosen = books[nextIdx];
+  showToast(`Selected Book: ${chosen.title || 'Book'} 📖`, 'info');
+}
+
+function onHugeTimeInput(val) {
+  if (!val) return;
+  const parts = val.replace(/[^0-9:]/g, '').split(':');
+  const hInput = document.getElementById('alarmHourInput');
+  const mInput = document.getElementById('alarmMinInput');
+  if (parts[0] && hInput) {
+    const h = parseInt(parts[0], 10);
+    if (!isNaN(h)) hInput.value = Math.min(12, Math.max(1, h));
+  }
+  if (parts[1] && mInput) {
+    const m = parseInt(parts[1], 10);
+    if (!isNaN(m)) mInput.value = Math.min(59, Math.max(0, m));
+  }
+}
+
+function onAlarmDatePickerChanged(val) {
+  const badge = document.getElementById('alarmDateBadgeTxt');
+  if (!val || !badge) return;
+  try {
+    const d = new Date(val);
+    badge.innerText = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  } catch (e) {
+    badge.innerText = val;
+  }
+}
+
 function onAlarmBookChanged() {
   const bookSelect = document.getElementById('alarmBookSelect');
   const noteSelect = document.getElementById('alarmNoteSelect');
@@ -10296,6 +10340,15 @@ function onAlarmBookChanged() {
   const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
   const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
   if (!book) return;
+
+  // Update Luxury Book Row Display
+  const thumb = document.getElementById('luxAlarmBookThumb');
+  const titleDisplay = document.getElementById('luxAlarmBookTitleDisplay');
+  const subDisplay = document.getElementById('luxAlarmBookSubDisplay');
+  const coverUrl = getBookCoverUrl(book);
+  if (thumb) thumb.src = coverUrl;
+  if (titleDisplay) titleDisplay.innerText = book.title || 'Deep Work';
+  if (subDisplay) subDisplay.innerText = book.author || 'Cal Newport';
 
   // Populate Notes dropdown for this book
   if (noteSelect) {
@@ -10372,6 +10425,13 @@ function saveNewScheduledAlarm() {
 
   let h12 = parseInt(hourInput ? hourInput.value : '9', 10);
   let mVal = parseInt(minInput ? minInput.value : '30', 10);
+
+  const hugeTimeInput = document.getElementById('alarmTimeHugeInput');
+  if (hugeTimeInput && hugeTimeInput.value) {
+    const parts = hugeTimeInput.value.replace(/[^0-9:]/g, '').split(':');
+    if (parts[0]) h12 = parseInt(parts[0], 10) || 8;
+    if (parts[1]) mVal = parseInt(parts[1], 10) || 30;
+  }
 
   if (isNaN(h12) || h12 < 1 || h12 > 12) h12 = 9;
   if (isNaN(mVal) || mVal < 0 || mVal > 59) mVal = 0;
@@ -10649,24 +10709,99 @@ function onStudioBookSelectChanged() {
 
   // Update book preview
   const coverImg = document.getElementById('studioBookCoverImg');
-  const titleTxt = document.getElementById('studioBookTitleTxt');
-  const authorTxt = document.getElementById('studioBookAuthorTxt');
-  const pagesTxt = document.getElementById('studioBookPagesTxt');
-  const categoryTxt = document.getElementById('studioBookCategoryTxt');
-  const statusBadge = document.getElementById('studioBookStatusBadge');
-
   const coverUrl = getBookCoverUrl(book);
   if (coverImg) coverImg.src = coverUrl;
-  if (titleTxt) titleTxt.innerText = book.title || 'Untitled Book';
-  if (authorTxt) authorTxt.innerText = 'by ' + (book.author || 'Unknown');
-  if (pagesTxt) pagesTxt.innerText = `📄 ${book.total_pages || book.totalPages || 250} pages`;
-  if (categoryTxt) categoryTxt.innerText = `🌿 ${book.category || 'Mind Growth'}`;
-  if (statusBadge) {
-    statusBadge.innerText = (book.status === 'COMPLETED' || book.reading_status === 'completed') ? '✓ Finished' : '📖 In Progress';
-  }
 
   // Populate Notes Dropdown for this book
   populateStudioNotesDropdown(book);
+  populateLuxCoverCarousel();
+}
+
+function populateLuxCoverCarousel() {
+  const carousel = document.getElementById('luxCoverCarousel');
+  if (!carousel) return;
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+
+  let html = `<button type="button" class="lux-cover-add-btn" onclick="triggerCustomCoverUpload()" title="Add Custom Cover">+</button>`;
+  books.forEach((b, idx) => {
+    const isSelected = studioSelectedBook && (studioSelectedBook.id === b.id || studioSelectedBook.title === b.title);
+    const coverUrl = getBookCoverUrl(b);
+    html += `
+      <div class="lux-cover-item ${isSelected ? 'selected' : ''}" onclick="selectStudioBookById('${escapeHtml(b.id || 'book_' + idx)}')" title="${escapeHtml(b.title || '')}">
+        <img src="${escapeHtml(coverUrl)}" alt="Cover" onerror="this.src='icon-192.png'">
+      </div>
+    `;
+  });
+  carousel.innerHTML = html;
+}
+
+function selectStudioBookById(bookId) {
+  const bookSelect = document.getElementById('studioBookSelect');
+  if (bookSelect) {
+    bookSelect.value = bookId;
+  }
+  const books = (state.books && state.books.length > 0) ? state.books : (window.BOOKS_DATA || []);
+  const book = books.find((b, idx) => (b.id === bookId || ('book_' + idx) === bookId)) || books[0];
+  if (book) {
+    studioSelectedBook = book;
+    const titleInput = document.getElementById('studioCustomTitle');
+    const msgInput = document.getElementById('studioCustomMessage');
+    if (titleInput) titleInput.value = `${book.title || 'Book'} • Daily Insight`;
+    let quote = 'Small habits lead to remarkable results.';
+    if (Array.isArray(book.key_takeaways) && book.key_takeaways.length > 0) {
+      quote = book.key_takeaways[0];
+    } else if (Array.isArray(book.notes) && book.notes.length > 0) {
+      quote = typeof book.notes[0] === 'string' ? book.notes[0] : (book.notes[0].text || quote);
+    }
+    if (msgInput) msgInput.value = quote;
+  }
+  populateLuxCoverCarousel();
+  updateLiveSimCard();
+}
+
+function triggerCustomCoverUpload() {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = 'image/*';
+  fileInput.onchange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (re) => {
+      const dataUrl = re.target.result;
+      if (studioSelectedBook) {
+        studioSelectedBook.cover_image = dataUrl;
+        studioSelectedBook.cover = dataUrl;
+      }
+      const simImg = document.getElementById('asnSimBannerImg');
+      if (simImg) simImg.src = dataUrl;
+      populateLuxCoverCarousel();
+      showToast('Custom book cover attached! 🖼️', 'success');
+    };
+    reader.readAsDataURL(file);
+  };
+  fileInput.click();
+}
+
+function setStudioVisualTheme(theme) {
+  studioActiveTheme = theme;
+  const card = document.getElementById('androidSimCard');
+  if (card) {
+    card.className = `lux-lockscreen-shade theme-${theme}`;
+  }
+
+  // Update Neon Rings active state
+  const ringAmber = document.getElementById('ringAmber');
+  const ringCyan = document.getElementById('ringCyan');
+  const ringViolet = document.getElementById('ringViolet');
+  const ringRed = document.getElementById('ringRed');
+
+  if (ringAmber) ringAmber.classList.toggle('active', theme === 'sunset');
+  if (ringCyan) ringCyan.classList.toggle('active', theme === 'emerald');
+  if (ringViolet) ringViolet.classList.toggle('active', theme === 'cosmic');
+  if (ringRed) ringRed.classList.toggle('active', theme === 'sakura');
+
+  updateLiveSimCard();
 }
 
 function populateStudioNotesDropdown(book) {
