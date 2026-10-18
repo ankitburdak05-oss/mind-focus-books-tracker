@@ -2,17 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.33",
-    "name": "Mind Focus Books v0.0.33 (Multi-Alarm Scheduler with Date Support, Book Cover Push & Futuristic Studio)",
+    "version": "v0.0.34",
+    "name": "Mind Focus Books v0.0.34 (3-Part Futuristic Notification Suite & Zero Text Overflow Armor)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
-      "⏰ Multi-Alarm & Reminders Scheduler: Din me alag-alag time par jitne chahe reading ya note alerts schedule karein.",
-      "📅 Taarikh (Date) Selection: Rozana (Daily) ya kisi khas taarikh (calendar date) par notification set karein.",
-      "🖼️ Phone Notification Book Covers: Native Android base64 bitmap decoding se phone drawer me book cover badi photo me aayega.",
-      "⚡ Sleek Futuristic Studio: Zero horizontal overflow, compact book thumbnail preview, no wall of text.",
-      "🎨 Cyber Neon Accent Themes: Cyber Amber, Hyper Cyan, Neon Violet aur Laser Red."
+      "🔔 3-Part Notification Suite: Alerts Feed, Multi-Alarm Scheduler with Taarikh/AM-PM, aur Custom Studio.",
+      "🛡️ Zero Text Overflow Armor: Koi text screen ya card se bahar nahi jayega, 100% word-break aur responsive fit.",
+      "⏰ Reading Alarms: Rozana ya kisi khas taarikh par book notes aur reading reminders set karein.",
+      "✨ Custom Studio: Android 14 live lockscreen preview ke sath apna custom notification banayein.",
+      "🖼️ Book Cover Push: Native Android notification me book ka cover photo automatically aayega."
     ],
-    "stagedAt": "2026-10-17T22:00:00.000Z",
+    "stagedAt": "2026-10-18T07:35:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {

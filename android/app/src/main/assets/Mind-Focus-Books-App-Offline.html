@@ -9595,38 +9595,44 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 }
 
 .notif-seg-btn {
-  flex: 1;
+  flex: 1 1 0;
+  min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   background: transparent;
   border: none;
   border-radius: 12px;
-  padding: 10px 6px;
+  padding: 8px 4px;
   color: var(--text-secondary, #94a3b8);
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
-  white-space: nowrap;
+  overflow: hidden;
 }
 
 .notif-seg-btn .seg-icon {
-  font-size: 1.05rem;
+  font-size: 1rem;
+  flex-shrink: 0;
 }
 
 .notif-seg-btn .seg-title {
-  font-size: 0.78rem;
-  letter-spacing: 0.2px;
+  font-size: 0.74rem;
+  letter-spacing: 0.1px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
 }
 
 .notif-seg-btn.active {
-  background: linear-gradient(135deg, rgba(245, 158, 11, 0.18), rgba(217, 119, 6, 0.28));
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(217, 119, 6, 0.32));
   color: #fff;
-  border: 1px solid rgba(245, 158, 11, 0.45);
-  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
+  border: 1px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.25);
 }
 
 .notif-seg-btn.active .seg-title {
@@ -9637,11 +9643,12 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 .seg-badge {
   background: #ef4444;
   color: #ffffff;
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   font-weight: 800;
-  padding: 1px 6px;
+  padding: 1px 5px;
   border-radius: 10px;
   line-height: 1.2;
+  flex-shrink: 0;
 }
 
 .notif-hub-container {
@@ -9968,6 +9975,8 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   flex-direction: column;
   gap: 6px;
   width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .notif-title {
@@ -9977,6 +9986,8 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   margin: 0;
   line-height: 1.35;
   letter-spacing: 0.2px;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .notif-body {
@@ -9984,6 +9995,8 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   color: #cbd5e1;
   line-height: 1.5;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .notif-full-book-banner {
@@ -10629,9 +10642,9 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   font-weight: 800;
   color: #fff;
   margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.25;
 }
 
 .cah-sub {
@@ -10639,6 +10652,8 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   color: #94a3b8;
   margin: 2px 0 0 0;
   line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .cyber-card {
@@ -11032,18 +11047,25 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   flex-direction: column;
   gap: 4px;
   width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 }
 
 .aic-title-txt {
   font-size: 0.92rem;
   font-weight: 800;
   color: #f1f5f9;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.3;
 }
 
 .aic-msg-txt {
   font-size: 0.8rem;
   color: #94a3b8;
   line-height: 1.4;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .aic-book-banner {
@@ -11166,6 +11188,8 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
+  flex: 1;
 }
 
 .cps-title {
@@ -11173,12 +11197,16 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   font-size: 0.82rem;
   font-weight: 700;
   color: #fff;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .cps-sub {
   display: block;
   font-size: 0.7rem;
   color: #94a3b8;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .cyber-studio-card {
@@ -11206,6 +11234,8 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
+  flex: 1;
 }
 
 .csh-icon {
@@ -11226,12 +11256,17 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   font-weight: 800;
   color: #fbbf24;
   margin: 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.25;
 }
 
 .csh-sub {
   font-size: 0.7rem;
   color: #94a3b8;
   margin: 2px 0 0 0;
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .csh-badge {
@@ -11549,6 +11584,66 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   background: rgba(255, 255, 255, 0.15);
   color: #fff;
 }
+
+/* ==========================================================================
+   NOTIFICATION CENTER: BULLETPROOF ZERO-OVERFLOW RESPONSIVE SHIELD
+   ========================================================================== */
+#viewNotificationsHub {
+  width: 100% !important;
+  max-width: 100vw !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+#viewNotificationsHub * {
+  box-sizing: border-box !important;
+}
+
+#viewNotificationsHub .notif-hub-container,
+#viewNotificationsHub .notif-hub-section,
+#viewNotificationsHub .notif-feed-list,
+#viewNotificationsHub .notif-card,
+#viewNotificationsHub .cyber-card,
+#viewNotificationsHub .cyber-studio-card,
+#viewNotificationsHub .cyber-alarm-hero,
+#viewNotificationsHub .cyber-perm-strip,
+#viewNotificationsHub .alarm-item-card,
+#viewNotificationsHub .android-system-notif-card,
+#viewNotificationsHub .notif-hero-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+
+#viewNotificationsHub .notif-title,
+#viewNotificationsHub .notif-body,
+#viewNotificationsHub .cah-title,
+#viewNotificationsHub .cah-sub,
+#viewNotificationsHub .cch-title,
+#viewNotificationsHub .csh-title,
+#viewNotificationsHub .csh-sub,
+#viewNotificationsHub .aic-title-txt,
+#viewNotificationsHub .aic-msg-txt,
+#viewNotificationsHub .asn-title,
+#viewNotificationsHub .asn-desc,
+#viewNotificationsHub .notif-hero-title,
+#viewNotificationsHub .notif-hero-sub,
+#viewNotificationsHub .cps-title,
+#viewNotificationsHub .cps-sub {
+  word-break: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  max-width: 100% !important;
+}
+
+#viewNotificationsHub input,
+#viewNotificationsHub textarea,
+#viewNotificationsHub select {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
 
 
 </style>
@@ -14257,14 +14352,14 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         <button type="button" class="notif-seg-btn active" id="segTabInbox" onclick="switchNotifHubSection('inbox')">
           <span class="seg-icon">🔔</span>
           <span class="seg-title">Alerts Feed</span>
-          <span class="seg-badge" id="segUnreadBadge">0</span>
+          <span class="seg-badge" id="segUnreadBadge" style="display:none;">0</span>
         </button>
         <button type="button" class="notif-seg-btn" id="segTabAlarm" onclick="switchNotifHubSection('alarm')">
           <span class="seg-icon">⏰</span>
-          <span class="seg-title">Reading Alarm</span>
+          <span class="seg-title">Reading Alarms</span>
         </button>
         <button type="button" class="notif-seg-btn" id="segTabStudio" onclick="switchNotifHubSection('studio')">
-          <span class="seg-icon">🌸</span>
+          <span class="seg-icon">✨</span>
           <span class="seg-title">Custom Studio</span>
         </button>
       </div>
@@ -22001,17 +22096,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.33",
-    "name": "Mind Focus Books v0.0.33 (Multi-Alarm Scheduler with Date Support, Book Cover Push & Futuristic Studio)",
+    "version": "v0.0.34",
+    "name": "Mind Focus Books v0.0.34 (3-Part Futuristic Notification Suite & Zero Text Overflow Armor)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
-      "⏰ Multi-Alarm & Reminders Scheduler: Din me alag-alag time par jitne chahe reading ya note alerts schedule karein.",
-      "📅 Taarikh (Date) Selection: Rozana (Daily) ya kisi khas taarikh (calendar date) par notification set karein.",
-      "🖼️ Phone Notification Book Covers: Native Android base64 bitmap decoding se phone drawer me book cover badi photo me aayega.",
-      "⚡ Sleek Futuristic Studio: Zero horizontal overflow, compact book thumbnail preview, no wall of text.",
-      "🎨 Cyber Neon Accent Themes: Cyber Amber, Hyper Cyan, Neon Violet aur Laser Red."
+      "🔔 3-Part Notification Suite: Alerts Feed, Multi-Alarm Scheduler with Taarikh/AM-PM, aur Custom Studio.",
+      "🛡️ Zero Text Overflow Armor: Koi text screen ya card se bahar nahi jayega, 100% word-break aur responsive fit.",
+      "⏰ Reading Alarms: Rozana ya kisi khas taarikh par book notes aur reading reminders set karein.",
+      "✨ Custom Studio: Android 14 live lockscreen preview ke sath apna custom notification banayein.",
+      "🖼️ Book Cover Push: Native Android notification me book ka cover photo automatically aayega."
     ],
-    "stagedAt": "2026-10-17T22:00:00.000Z",
+    "stagedAt": "2026-10-18T07:35:00.000Z",
     "isDeployed": true
   },
   "stagedRelease": {
