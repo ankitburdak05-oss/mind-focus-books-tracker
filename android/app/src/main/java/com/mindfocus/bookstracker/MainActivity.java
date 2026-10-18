@@ -115,13 +115,7 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.CAMERA}, 101);
         }
 
-        // Create notification channel & request notification permission for Android 13+
-        createNotificationChannel();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.POST_NOTIFICATIONS}, NOTIF_REQ_CODE);
-            }
-        }
+
 
         webView.setWebChromeClient(new WebChromeClient() {
             @Override
@@ -213,9 +207,9 @@ public class MainActivity extends AppCompatActivity {
         public String getInstalledAppVersion() {
             try {
                 android.content.pm.PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                return pInfo.versionName != null ? pInfo.versionName : "0.0.36";
+                return pInfo.versionName != null ? pInfo.versionName : "0.0.37";
             } catch (Exception e) {
-                return "0.0.36";
+                return "0.0.37";
             }
         }
 
