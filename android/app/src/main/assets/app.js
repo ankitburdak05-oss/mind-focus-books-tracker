@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.38)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.38';
-const CURRENT_APP_VERSION = 'v0.0.38';
+const APP_VERSION = '0.0.39';
+const CURRENT_APP_VERSION = 'v0.0.39';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -4356,33 +4356,45 @@ function handlePinComplete() {
 }
 
 // ================= BACKUP & EXPORT / IMPORT MASTER SYSTEM =================
+function getMasterExportBundle() {
+  return {
+    app: 'Mind & Focus Books Tracker',
+    version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '0.0.39',
+    exportedAt: new Date().toISOString(),
+    profile: state.profile || {},
+    stats: state.stats || {},
+    books: state.books || [],
+    shelves: (() => { try { return JSON.parse(localStorage.getItem(SHELVES_KEY) || '[]'); } catch(e) { return []; } })(),
+    bookOrder: (() => { try { return JSON.parse(localStorage.getItem(BOOK_ORDER_KEY) || '[]'); } catch(e) { return []; } })(),
+    homeSections: (() => { try { return JSON.parse(localStorage.getItem(HOME_SECS_KEY) || '[]'); } catch(e) { return []; } })(),
+    layoutMode: localStorage.getItem(LAYOUT_KEY) || 'grid',
+    libraryCols: localStorage.getItem(COLS_KEY) || '3',
+    readingGoals: (() => { try { return JSON.parse(localStorage.getItem('mf_reading_goal_2026') || '{}'); } catch(e) { return {}; } })(),
+    readingBudget: (() => { try { return JSON.parse(localStorage.getItem('mf_reading_budget_2026') || '{}'); } catch(e) { return {}; } })(),
+    lendingRecords: (() => { try { return JSON.parse(localStorage.getItem('mf_lending_records') || '[]'); } catch(e) { return []; } })(),
+    focusSessions: (() => { try { return JSON.parse(localStorage.getItem('mf_focus_sessions') || '[]'); } catch(e) { return []; } })(),
+    userNotes: (() => { try { return JSON.parse(localStorage.getItem('mf_user_notes') || '[]'); } catch(e) { return []; } })(),
+    savedQuotes: (() => { try { return JSON.parse(localStorage.getItem('mf_saved_quotes') || '[]'); } catch(e) { return []; } })(),
+    journalEntries: (() => { try { return JSON.parse(localStorage.getItem('mf_journal_entries') || '[]'); } catch(e) { return []; } })(),
+    userPreferences: (() => { try { return JSON.parse(localStorage.getItem(typeof PREFS_KEY !== 'undefined' ? PREFS_KEY : 'mf_user_preferences_v1') || '{}'); } catch(e) { return {}; } })(),
+    theme: localStorage.getItem('mf_theme') || 'dark',
+    readerTheme: localStorage.getItem('mf_reader_theme') || 'dark',
+    customPages: (() => { try { return JSON.parse(localStorage.getItem('mf_custom_book_pages_v1') || '{}'); } catch(e) { return {}; } })()
+  };
+}
+
+function recordBackupTimestamp() {
+  const nowStr = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  localStorage.setItem('mf_last_backup_time', nowStr);
+  localStorage.setItem('mf_last_backup_ts', String(Date.now()));
+  if (typeof updateLastBackupDisplay === 'function') {
+    updateLastBackupDisplay();
+  }
+}
+
 function exportDataJSON() {
   try {
-    const exportBundle = {
-      app: 'Mind & Focus Books Tracker',
-      version: APP_VERSION,
-      exportedAt: new Date().toISOString(),
-      profile: state.profile || {},
-      stats: state.stats || {},
-      books: state.books || [],
-      shelves: (() => { try { return JSON.parse(localStorage.getItem(SHELVES_KEY) || '[]'); } catch(e) { return []; } })(),
-      bookOrder: (() => { try { return JSON.parse(localStorage.getItem(BOOK_ORDER_KEY) || '[]'); } catch(e) { return []; } })(),
-      homeSections: (() => { try { return JSON.parse(localStorage.getItem(HOME_SECS_KEY) || '[]'); } catch(e) { return []; } })(),
-      layoutMode: localStorage.getItem(LAYOUT_KEY) || 'grid',
-      libraryCols: localStorage.getItem(COLS_KEY) || '3',
-      readingGoals: (() => { try { return JSON.parse(localStorage.getItem('mf_reading_goal_2026') || '{}'); } catch(e) { return {}; } })(),
-      readingBudget: (() => { try { return JSON.parse(localStorage.getItem('mf_reading_budget_2026') || '{}'); } catch(e) { return {}; } })(),
-      lendingRecords: (() => { try { return JSON.parse(localStorage.getItem('mf_lending_records') || '[]'); } catch(e) { return []; } })(),
-      focusSessions: (() => { try { return JSON.parse(localStorage.getItem('mf_focus_sessions') || '[]'); } catch(e) { return []; } })(),
-      userNotes: (() => { try { return JSON.parse(localStorage.getItem('mf_user_notes') || '[]'); } catch(e) { return []; } })(),
-      savedQuotes: (() => { try { return JSON.parse(localStorage.getItem('mf_saved_quotes') || '[]'); } catch(e) { return []; } })(),
-      journalEntries: (() => { try { return JSON.parse(localStorage.getItem('mf_journal_entries') || '[]'); } catch(e) { return []; } })(),
-      userPreferences: (() => { try { return JSON.parse(localStorage.getItem(typeof PREFS_KEY !== 'undefined' ? PREFS_KEY : 'mf_user_preferences_v1') || '{}'); } catch(e) { return {}; } })(),
-      theme: localStorage.getItem('mf_theme') || 'dark',
-      readerTheme: localStorage.getItem('mf_reader_theme') || 'dark',
-      customPages: (() => { try { return JSON.parse(localStorage.getItem('mf_custom_book_pages_v1') || '{}'); } catch(e) { return {}; } })()
-    };
-
+    const exportBundle = getMasterExportBundle();
     const fileName = 'MindFocusBooks_Backup_' + getTodayLocalDate() + '.json';
     const jsonStr = JSON.stringify(exportBundle, null, 2);
 
@@ -4412,14 +4424,155 @@ function exportDataJSON() {
       }, 500);
     } catch (e) {}
 
-    const nowStr = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    localStorage.setItem('mf_last_backup_time', nowStr);
-    localStorage.setItem('mf_last_backup_ts', String(Date.now()));
-    updateLastBackupDisplay();
+    recordBackupTimestamp();
     showToast('Master Backup Saved! 💾 (' + (state.books || []).length + ' Books, Shelves & Notes)');
   } catch (e) {
     console.error('Export error:', e);
     showToast('Error exporting JSON backup');
+  }
+}
+
+// Direct WhatsApp Backup Sharing (File Attachment + Caption)
+function exportDataToWhatsApp() {
+  try {
+    const bundle = getMasterExportBundle();
+    const fileName = 'MindFocusBooks_Backup_' + getTodayLocalDate() + '.json';
+    const jsonStr = JSON.stringify(bundle, null, 2);
+    const bookCount = (bundle.books || []).length;
+    const shelfCount = (bundle.shelves || []).length;
+    const todayFormatted = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+    const captionText = 
+      `📚 *Mind & Focus Books Tracker - Master Backup File*\n` +
+      `📅 *Date:* ${todayFormatted}\n` +
+      `📖 *Total Books:* ${bookCount}\n` +
+      `📂 *Custom Shelves:* ${shelfCount}\n` +
+      `💡 *How to Restore:* Ye aapki backup file hai. MindFocus app me jaakar 'Import & Restore' par tap karein aur is file ko select karke 1-second me sabhi kitabein aur progress wapas layein.`;
+
+    // 1. Native Android direct WhatsApp file share via FileProvider
+    if (window.Android && typeof window.Android.shareToWhatsApp === 'function') {
+      try {
+        window.Android.shareToWhatsApp(jsonStr, fileName, 'application/json', captionText);
+        recordBackupTimestamp();
+        showToast('WhatsApp khul raha hai... Backup file attach ho rahi hai 💬');
+        return;
+      } catch (e) {
+        console.warn('Native shareToWhatsApp failed, falling back:', e);
+      }
+    }
+
+    // Fallback to Android general share
+    if (window.Android && typeof window.Android.shareBackup === 'function') {
+      try {
+        window.Android.shareBackup(jsonStr, fileName);
+        recordBackupTimestamp();
+        showToast('Backup sharing... 💬');
+        return;
+      } catch (e) {
+        console.warn('Native shareBackup failed:', e);
+      }
+    }
+
+    // 2. Web Browser: Web Share API with File
+    if (navigator.canShare) {
+      try {
+        const file = new File([jsonStr], fileName, { type: 'application/json' });
+        if (navigator.canShare({ files: [file] })) {
+          navigator.share({
+            title: 'MindFocus Books Backup',
+            text: captionText,
+            files: [file]
+          }).then(() => {
+            showToast('Backup shared via WhatsApp! 💬');
+            recordBackupTimestamp();
+          }).catch((err) => {
+            if (err.name !== 'AbortError') {
+              downloadBackupAndPromptWhatsApp(jsonStr, fileName, captionText);
+            }
+          });
+          return;
+        }
+      } catch (e) {
+        console.warn('Web Share API error:', e);
+      }
+    }
+
+    // 3. Fallback: Download file & open WhatsApp Web/App
+    downloadBackupAndPromptWhatsApp(jsonStr, fileName, captionText);
+
+  } catch (err) {
+    console.error('exportDataToWhatsApp error:', err);
+    showToast('WhatsApp share error: ' + err.message);
+  }
+}
+
+function downloadBackupAndPromptWhatsApp(jsonStr, fileName, captionText) {
+  try {
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 500);
+  } catch (e) {}
+
+  const waText = captionText + '\n\n📁 *Note:* Backup file (' + fileName + ') aapke Downloads folder me save ho gayi hai. Is chat me file attach kar dein.';
+  const waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(waText);
+  window.open(waUrl, '_blank');
+  recordBackupTimestamp();
+  showToast('Backup save hua! WhatsApp khul raha hai... 💬');
+}
+
+// Formatted Reading Summary to WhatsApp
+function shareReadingSummaryWhatsApp() {
+  try {
+    const books = state.books || [];
+    const currentlyReading = books.filter(b => b.status === 'reading');
+    const completed = books.filter(b => b.status === 'completed');
+    const wantToRead = books.filter(b => b.status === 'want-to-read');
+    const profile = state.profile || {};
+    const userName = profile.name || 'Book Lover';
+
+    let msg = `📚 *Mind & Focus - ${userName}'s Reading Journey*\n\n`;
+    msg += `📖 *Total Books:* ${books.length}\n`;
+    msg += `✅ *Completed:* ${completed.length}\n`;
+    msg += `⏳ *Currently Reading:* ${currentlyReading.length}\n`;
+    msg += `📌 *Plan to Read:* ${wantToRead.length}\n\n`;
+
+    if (currentlyReading.length > 0) {
+      msg += `🔥 *Now Reading:*\n`;
+      currentlyReading.slice(0, 3).forEach((b, idx) => {
+        const prog = (b.pages && b.currentPage) ? ` (${Math.round((b.currentPage / b.pages) * 100)}%)` : '';
+        msg += `  ${idx + 1}. *${b.title}*${b.author ? ' - ' + b.author : ''}${prog}\n`;
+      });
+      msg += `\n`;
+    }
+
+    if (completed.length > 0) {
+      msg += `🏆 *Recently Completed:*\n`;
+      completed.slice(-3).reverse().forEach((b) => {
+        msg += `  • *${b.title}*${b.author ? ' (' + b.author + ')' : ''}\n`;
+      });
+      msg += `\n`;
+    }
+
+    msg += `✨ Shared from *Mind & Focus Books Tracker*`;
+
+    if (window.Android && typeof window.Android.shareTextToWhatsApp === 'function') {
+      window.Android.shareTextToWhatsApp(msg);
+      return;
+    }
+
+    const waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(msg);
+    window.open(waUrl, '_blank');
+  } catch (e) {
+    console.error('shareReadingSummaryWhatsApp error:', e);
+    showToast('Error sharing reading summary');
   }
 }
 

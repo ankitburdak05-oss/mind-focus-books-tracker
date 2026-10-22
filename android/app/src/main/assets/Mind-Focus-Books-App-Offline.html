@@ -1578,9 +1578,30 @@ body {
   gap: 6px;
 }
 
-.btn-backup-now svg, .btn-restore svg {
+.btn-backup-now svg, .btn-restore svg, .btn-backup-whatsapp svg {
   width: 16px;
   height: 16px;
+}
+
+.btn-backup-whatsapp {
+  flex: 1;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-backup-whatsapp:active {
+  transform: scale(0.97);
 }
 
 .btn-restore {
@@ -1643,6 +1664,16 @@ body {
 .export-card.card-amber {
   background: rgba(245, 158, 11, 0.15);
   border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.export-card.card-whatsapp {
+  background: rgba(37, 211, 102, 0.14);
+  border: 1px solid rgba(37, 211, 102, 0.45);
+}
+
+.export-card.card-whatsapp-summary {
+  background: rgba(18, 140, 126, 0.14);
+  border: 1px solid rgba(18, 140, 126, 0.4);
 }
 
 .export-icon {
@@ -10177,8 +10208,9 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
             </div>
           </div>
           <div style="display:flex; gap:6px;">
-            <button type="button" class="btn-backup-mini" onclick="event.stopPropagation(); exportDataJSON();">Backup</button>
-            <button type="button" class="btn-backup-mini" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border-color: rgba(168, 85, 247, 0.4);" onclick="event.stopPropagation(); triggerImportBackupFile();">Restore</button>
+            <button type="button" class="btn-backup-mini" onclick="event.stopPropagation(); exportDataJSON();" title="Download Backup">Backup</button>
+            <button type="button" class="btn-backup-mini" style="background: rgba(37, 211, 102, 0.18); color: #25D366; border-color: rgba(37, 211, 102, 0.4);" onclick="event.stopPropagation(); exportDataToWhatsApp();" title="Send Backup to WhatsApp">WhatsApp</button>
+            <button type="button" class="btn-backup-mini" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border-color: rgba(168, 85, 247, 0.4);" onclick="event.stopPropagation(); triggerImportBackupFile();" title="Restore Backup">Restore</button>
           </div>
         </div>
 
@@ -11327,8 +11359,9 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           </div>
         </div>
         <div style="display:flex; gap:6px;">
-          <button type="button" class="btn-backup-mini" onclick="event.stopPropagation(); exportDataJSON();">Backup</button>
-          <button type="button" class="btn-backup-mini" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border-color: rgba(168, 85, 247, 0.4);" onclick="event.stopPropagation(); triggerImportBackupFile();">Restore</button>
+          <button type="button" class="btn-backup-mini" onclick="event.stopPropagation(); exportDataJSON();" title="Download Backup">Backup</button>
+          <button type="button" class="btn-backup-mini" style="background: rgba(37, 211, 102, 0.18); color: #25D366; border-color: rgba(37, 211, 102, 0.4);" onclick="event.stopPropagation(); exportDataToWhatsApp();" title="Send Backup to WhatsApp">WhatsApp</button>
+          <button type="button" class="btn-backup-mini" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border-color: rgba(168, 85, 247, 0.4);" onclick="event.stopPropagation(); triggerImportBackupFile();" title="Restore Backup">Restore</button>
         </div>
       </div>
 
@@ -11339,7 +11372,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           <div class="backup-sub" id="lastBackupText">No manual backup yet • Tap 'Backup Now'</div>
         </div>
         <div class="backup-actions">
-          <button type="button" class="btn-backup-now" onclick="exportDataJSON()">
+          <button type="button" class="btn-backup-now" onclick="exportDataJSON()" title="Download Backup File to Phone">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="7 10 12 15 17 10"></polyline>
@@ -11347,7 +11380,13 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
             </svg>
             Backup Now
           </button>
-          <button type="button" class="btn-restore" onclick="triggerImportBackupFile()">
+          <button type="button" class="btn-backup-whatsapp" onclick="exportDataToWhatsApp()" title="Send Master Backup directly via WhatsApp">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2M12.05 3.67C14.25 3.67 16.31 4.53 17.87 6.09C19.42 7.65 20.28 9.72 20.28 11.92C20.28 16.46 16.58 20.15 12.04 20.15C10.56 20.15 9.11 19.76 7.85 19.01L7.55 18.83L4.43 19.65L5.26 16.61L5.06 16.29C4.24 14.99 3.8 13.47 3.8 11.91C3.81 7.37 7.5 3.67 12.05 3.67M9.11 7.44C8.94 7.44 8.68 7.5 8.45 7.74C8.23 7.98 7.6 8.57 7.6 9.77C7.6 10.98 8.48 12.14 8.6 12.3C8.73 12.46 10.33 14.94 12.79 16C13.37 16.25 13.82 16.4 14.18 16.51C14.77 16.7 15.31 16.67 15.73 16.61C16.2 16.54 17.18 16.01 17.38 15.44C17.59 14.87 17.59 14.38 17.53 14.28C17.47 14.18 17.31 14.12 17.07 14C16.84 13.88 15.68 13.31 15.47 13.23C15.26 13.15 15.1 13.11 14.94 13.35C14.78 13.59 14.32 14.12 14.18 14.28C14.04 14.44 13.9 14.46 13.66 14.34C13.43 14.22 12.67 13.98 11.78 13.18C11.08 12.56 10.61 11.79 10.47 11.55C10.34 11.31 10.45 11.19 10.57 11.07C10.68 10.96 10.81 10.78 10.93 10.64C11.05 10.5 11.09 10.39 11.17 10.23C11.25 10.07 11.21 9.93 11.15 9.81C11.09 9.69 10.62 8.53 10.42 8.05C10.23 7.59 10.04 7.65 9.89 7.64C9.75 7.64 9.59 7.64 9.42 7.64C9.26 7.64 9.11 7.44 9.11 7.44Z"/>
+            </svg>
+            Send WhatsApp
+          </button>
+          <button type="button" class="btn-restore" onclick="triggerImportBackupFile()" title="Restore Data from Backup File">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="17 8 12 3 7 8"></polyline>
@@ -11361,6 +11400,33 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
       <!-- Export Data Cards -->
       <div class="profile-group-header" style="margin-top: 24px;">📄 Export Formats</div>
       <div class="export-options-list">
+        <div class="export-card card-whatsapp" onclick="exportDataToWhatsApp()">
+          <div class="export-icon">💬</div>
+          <div class="export-info">
+            <div class="export-title" style="display: flex; align-items: center; gap: 6px;">
+              Send Backup to WhatsApp
+              <span style="font-size: 0.65rem; background: #25D366; color: #0b0f19; padding: 1px 6px; border-radius: 999px; font-weight: 800;">DIRECT</span>
+            </div>
+            <div class="export-desc">Poori backup file (.json) sidha WhatsApp chat par bhejkar safe karein</div>
+          </div>
+        </div>
+
+        <div class="export-card card-whatsapp-summary" onclick="shareReadingSummaryWhatsApp()">
+          <div class="export-icon">📱</div>
+          <div class="export-info">
+            <div class="export-title">Share Reading Summary to WhatsApp</div>
+            <div class="export-desc">Currently reading books, streak &amp; library stats ka sundar message bhejein</div>
+          </div>
+        </div>
+
+        <div class="export-card card-blue" onclick="exportDataJSON()">
+          <div class="export-icon">💾</div>
+          <div class="export-info">
+            <div class="export-title">Export as JSON</div>
+            <div class="export-desc">Full backup file, offline archive</div>
+          </div>
+        </div>
+
         <div class="export-card card-green" onclick="exportDataCSV()">
           <div class="export-icon">📊</div>
           <div class="export-info">
@@ -11374,14 +11440,6 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           <div class="export-info">
             <div class="export-title">Export as PDF</div>
             <div class="export-desc">Reading report, summary sheets &amp; book vault</div>
-          </div>
-        </div>
-
-        <div class="export-card card-blue" onclick="exportDataJSON()">
-          <div class="export-icon">💾</div>
-          <div class="export-info">
-            <div class="export-title">Export as JSON</div>
-            <div class="export-desc">Full backup file, offline archive</div>
           </div>
         </div>
       </div>
@@ -12000,6 +12058,18 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
                 <span class="ig-badge-val">Download</span>
               </div>
             </div>
+            <div class="ig-row" onclick="exportDataToWhatsApp()" style="cursor: pointer;">
+              <div class="ig-row-left">
+                <div class="ig-icon-box" style="background: rgba(37, 211, 102, 0.15); color: #25D366; font-size: 1.1rem;">💬</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Send Backup to WhatsApp</div>
+                  <div class="ig-sub">Backup file sidha WhatsApp chat par bhejkar safe rakhein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" style="background: rgba(37, 211, 102, 0.18); color: #25D366; font-weight: 700;">WhatsApp</span>
+              </div>
+            </div>
             <div class="ig-row" onclick="triggerImportBackupFile()" style="cursor: pointer;">
               <div class="ig-row-left">
                 <div class="ig-icon-box ig-icon-purple">📥</div>
@@ -12033,7 +12103,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.38 (Up to date)</span>
+                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.39 (Up to date)</span>
               </div>
             </div>
           </div>
@@ -19635,16 +19705,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.38",
-    "name": "Mind Focus Books v0.0.38 (Full Master Import & Restore Suite)",
+    "version": "v0.0.39",
+    "name": "Mind Focus Books v0.0.39 (Direct WhatsApp Backup & Master Restore Suite)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
+      "💬 Direct WhatsApp Backup Sharing: Poora master backup JSON file sidha WhatsApp chat, family ya personal chat par 1-tap me bhejein.",
+      "📱 WhatsApp Reading Summary: Apni current books, streak aur yearly progress ka sundar WhatsApp message share karein.",
       "📥 Master Backup & Restore: 1-click me sabhi kitabein, custom shelves, notes, reading progress, quotes aur journal entries restore karein.",
       "📊 CSV Books Importer: Goodreads ya custom CSV spreadsheet se bulk me kitabein import karein.",
-      "💾 Native Android File Bridge: Downloads folder me safe backup save aur share options ke sath.",
       "⚡ Ultra Clean & Fast: Zero clutter, zero notification bloat, maximum performance."
     ],
-    "stagedAt": "2026-10-22T08:15:00.000Z",
+    "stagedAt": "2026-10-22T08:38:01.868Z",
     "isDeployed": true
   },
   "stagedRelease": {
@@ -19726,11 +19797,11 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
 </script>
   <script>
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.38)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.38';
-const CURRENT_APP_VERSION = 'v0.0.38';
+const APP_VERSION = '0.0.39';
+const CURRENT_APP_VERSION = 'v0.0.39';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -24083,33 +24154,45 @@ function handlePinComplete() {
 }
 
 // ================= BACKUP & EXPORT / IMPORT MASTER SYSTEM =================
+function getMasterExportBundle() {
+  return {
+    app: 'Mind & Focus Books Tracker',
+    version: typeof APP_VERSION !== 'undefined' ? APP_VERSION : '0.0.39',
+    exportedAt: new Date().toISOString(),
+    profile: state.profile || {},
+    stats: state.stats || {},
+    books: state.books || [],
+    shelves: (() => { try { return JSON.parse(localStorage.getItem(SHELVES_KEY) || '[]'); } catch(e) { return []; } })(),
+    bookOrder: (() => { try { return JSON.parse(localStorage.getItem(BOOK_ORDER_KEY) || '[]'); } catch(e) { return []; } })(),
+    homeSections: (() => { try { return JSON.parse(localStorage.getItem(HOME_SECS_KEY) || '[]'); } catch(e) { return []; } })(),
+    layoutMode: localStorage.getItem(LAYOUT_KEY) || 'grid',
+    libraryCols: localStorage.getItem(COLS_KEY) || '3',
+    readingGoals: (() => { try { return JSON.parse(localStorage.getItem('mf_reading_goal_2026') || '{}'); } catch(e) { return {}; } })(),
+    readingBudget: (() => { try { return JSON.parse(localStorage.getItem('mf_reading_budget_2026') || '{}'); } catch(e) { return {}; } })(),
+    lendingRecords: (() => { try { return JSON.parse(localStorage.getItem('mf_lending_records') || '[]'); } catch(e) { return []; } })(),
+    focusSessions: (() => { try { return JSON.parse(localStorage.getItem('mf_focus_sessions') || '[]'); } catch(e) { return []; } })(),
+    userNotes: (() => { try { return JSON.parse(localStorage.getItem('mf_user_notes') || '[]'); } catch(e) { return []; } })(),
+    savedQuotes: (() => { try { return JSON.parse(localStorage.getItem('mf_saved_quotes') || '[]'); } catch(e) { return []; } })(),
+    journalEntries: (() => { try { return JSON.parse(localStorage.getItem('mf_journal_entries') || '[]'); } catch(e) { return []; } })(),
+    userPreferences: (() => { try { return JSON.parse(localStorage.getItem(typeof PREFS_KEY !== 'undefined' ? PREFS_KEY : 'mf_user_preferences_v1') || '{}'); } catch(e) { return {}; } })(),
+    theme: localStorage.getItem('mf_theme') || 'dark',
+    readerTheme: localStorage.getItem('mf_reader_theme') || 'dark',
+    customPages: (() => { try { return JSON.parse(localStorage.getItem('mf_custom_book_pages_v1') || '{}'); } catch(e) { return {}; } })()
+  };
+}
+
+function recordBackupTimestamp() {
+  const nowStr = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+  localStorage.setItem('mf_last_backup_time', nowStr);
+  localStorage.setItem('mf_last_backup_ts', String(Date.now()));
+  if (typeof updateLastBackupDisplay === 'function') {
+    updateLastBackupDisplay();
+  }
+}
+
 function exportDataJSON() {
   try {
-    const exportBundle = {
-      app: 'Mind & Focus Books Tracker',
-      version: APP_VERSION,
-      exportedAt: new Date().toISOString(),
-      profile: state.profile || {},
-      stats: state.stats || {},
-      books: state.books || [],
-      shelves: (() => { try { return JSON.parse(localStorage.getItem(SHELVES_KEY) || '[]'); } catch(e) { return []; } })(),
-      bookOrder: (() => { try { return JSON.parse(localStorage.getItem(BOOK_ORDER_KEY) || '[]'); } catch(e) { return []; } })(),
-      homeSections: (() => { try { return JSON.parse(localStorage.getItem(HOME_SECS_KEY) || '[]'); } catch(e) { return []; } })(),
-      layoutMode: localStorage.getItem(LAYOUT_KEY) || 'grid',
-      libraryCols: localStorage.getItem(COLS_KEY) || '3',
-      readingGoals: (() => { try { return JSON.parse(localStorage.getItem('mf_reading_goal_2026') || '{}'); } catch(e) { return {}; } })(),
-      readingBudget: (() => { try { return JSON.parse(localStorage.getItem('mf_reading_budget_2026') || '{}'); } catch(e) { return {}; } })(),
-      lendingRecords: (() => { try { return JSON.parse(localStorage.getItem('mf_lending_records') || '[]'); } catch(e) { return []; } })(),
-      focusSessions: (() => { try { return JSON.parse(localStorage.getItem('mf_focus_sessions') || '[]'); } catch(e) { return []; } })(),
-      userNotes: (() => { try { return JSON.parse(localStorage.getItem('mf_user_notes') || '[]'); } catch(e) { return []; } })(),
-      savedQuotes: (() => { try { return JSON.parse(localStorage.getItem('mf_saved_quotes') || '[]'); } catch(e) { return []; } })(),
-      journalEntries: (() => { try { return JSON.parse(localStorage.getItem('mf_journal_entries') || '[]'); } catch(e) { return []; } })(),
-      userPreferences: (() => { try { return JSON.parse(localStorage.getItem(typeof PREFS_KEY !== 'undefined' ? PREFS_KEY : 'mf_user_preferences_v1') || '{}'); } catch(e) { return {}; } })(),
-      theme: localStorage.getItem('mf_theme') || 'dark',
-      readerTheme: localStorage.getItem('mf_reader_theme') || 'dark',
-      customPages: (() => { try { return JSON.parse(localStorage.getItem('mf_custom_book_pages_v1') || '{}'); } catch(e) { return {}; } })()
-    };
-
+    const exportBundle = getMasterExportBundle();
     const fileName = 'MindFocusBooks_Backup_' + getTodayLocalDate() + '.json';
     const jsonStr = JSON.stringify(exportBundle, null, 2);
 
@@ -24139,14 +24222,155 @@ function exportDataJSON() {
       }, 500);
     } catch (e) {}
 
-    const nowStr = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    localStorage.setItem('mf_last_backup_time', nowStr);
-    localStorage.setItem('mf_last_backup_ts', String(Date.now()));
-    updateLastBackupDisplay();
+    recordBackupTimestamp();
     showToast('Master Backup Saved! 💾 (' + (state.books || []).length + ' Books, Shelves & Notes)');
   } catch (e) {
     console.error('Export error:', e);
     showToast('Error exporting JSON backup');
+  }
+}
+
+// Direct WhatsApp Backup Sharing (File Attachment + Caption)
+function exportDataToWhatsApp() {
+  try {
+    const bundle = getMasterExportBundle();
+    const fileName = 'MindFocusBooks_Backup_' + getTodayLocalDate() + '.json';
+    const jsonStr = JSON.stringify(bundle, null, 2);
+    const bookCount = (bundle.books || []).length;
+    const shelfCount = (bundle.shelves || []).length;
+    const todayFormatted = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' });
+
+    const captionText = 
+      `📚 *Mind & Focus Books Tracker - Master Backup File*\n` +
+      `📅 *Date:* ${todayFormatted}\n` +
+      `📖 *Total Books:* ${bookCount}\n` +
+      `📂 *Custom Shelves:* ${shelfCount}\n` +
+      `💡 *How to Restore:* Ye aapki backup file hai. MindFocus app me jaakar 'Import & Restore' par tap karein aur is file ko select karke 1-second me sabhi kitabein aur progress wapas layein.`;
+
+    // 1. Native Android direct WhatsApp file share via FileProvider
+    if (window.Android && typeof window.Android.shareToWhatsApp === 'function') {
+      try {
+        window.Android.shareToWhatsApp(jsonStr, fileName, 'application/json', captionText);
+        recordBackupTimestamp();
+        showToast('WhatsApp khul raha hai... Backup file attach ho rahi hai 💬');
+        return;
+      } catch (e) {
+        console.warn('Native shareToWhatsApp failed, falling back:', e);
+      }
+    }
+
+    // Fallback to Android general share
+    if (window.Android && typeof window.Android.shareBackup === 'function') {
+      try {
+        window.Android.shareBackup(jsonStr, fileName);
+        recordBackupTimestamp();
+        showToast('Backup sharing... 💬');
+        return;
+      } catch (e) {
+        console.warn('Native shareBackup failed:', e);
+      }
+    }
+
+    // 2. Web Browser: Web Share API with File
+    if (navigator.canShare) {
+      try {
+        const file = new File([jsonStr], fileName, { type: 'application/json' });
+        if (navigator.canShare({ files: [file] })) {
+          navigator.share({
+            title: 'MindFocus Books Backup',
+            text: captionText,
+            files: [file]
+          }).then(() => {
+            showToast('Backup shared via WhatsApp! 💬');
+            recordBackupTimestamp();
+          }).catch((err) => {
+            if (err.name !== 'AbortError') {
+              downloadBackupAndPromptWhatsApp(jsonStr, fileName, captionText);
+            }
+          });
+          return;
+        }
+      } catch (e) {
+        console.warn('Web Share API error:', e);
+      }
+    }
+
+    // 3. Fallback: Download file & open WhatsApp Web/App
+    downloadBackupAndPromptWhatsApp(jsonStr, fileName, captionText);
+
+  } catch (err) {
+    console.error('exportDataToWhatsApp error:', err);
+    showToast('WhatsApp share error: ' + err.message);
+  }
+}
+
+function downloadBackupAndPromptWhatsApp(jsonStr, fileName, captionText) {
+  try {
+    const blob = new Blob([jsonStr], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 500);
+  } catch (e) {}
+
+  const waText = captionText + '\n\n📁 *Note:* Backup file (' + fileName + ') aapke Downloads folder me save ho gayi hai. Is chat me file attach kar dein.';
+  const waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(waText);
+  window.open(waUrl, '_blank');
+  recordBackupTimestamp();
+  showToast('Backup save hua! WhatsApp khul raha hai... 💬');
+}
+
+// Formatted Reading Summary to WhatsApp
+function shareReadingSummaryWhatsApp() {
+  try {
+    const books = state.books || [];
+    const currentlyReading = books.filter(b => b.status === 'reading');
+    const completed = books.filter(b => b.status === 'completed');
+    const wantToRead = books.filter(b => b.status === 'want-to-read');
+    const profile = state.profile || {};
+    const userName = profile.name || 'Book Lover';
+
+    let msg = `📚 *Mind & Focus - ${userName}'s Reading Journey*\n\n`;
+    msg += `📖 *Total Books:* ${books.length}\n`;
+    msg += `✅ *Completed:* ${completed.length}\n`;
+    msg += `⏳ *Currently Reading:* ${currentlyReading.length}\n`;
+    msg += `📌 *Plan to Read:* ${wantToRead.length}\n\n`;
+
+    if (currentlyReading.length > 0) {
+      msg += `🔥 *Now Reading:*\n`;
+      currentlyReading.slice(0, 3).forEach((b, idx) => {
+        const prog = (b.pages && b.currentPage) ? ` (${Math.round((b.currentPage / b.pages) * 100)}%)` : '';
+        msg += `  ${idx + 1}. *${b.title}*${b.author ? ' - ' + b.author : ''}${prog}\n`;
+      });
+      msg += `\n`;
+    }
+
+    if (completed.length > 0) {
+      msg += `🏆 *Recently Completed:*\n`;
+      completed.slice(-3).reverse().forEach((b) => {
+        msg += `  • *${b.title}*${b.author ? ' (' + b.author + ')' : ''}\n`;
+      });
+      msg += `\n`;
+    }
+
+    msg += `✨ Shared from *Mind & Focus Books Tracker*`;
+
+    if (window.Android && typeof window.Android.shareTextToWhatsApp === 'function') {
+      window.Android.shareTextToWhatsApp(msg);
+      return;
+    }
+
+    const waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(msg);
+    window.open(waUrl, '_blank');
+  } catch (e) {
+    console.error('shareReadingSummaryWhatsApp error:', e);
+    showToast('Error sharing reading summary');
   }
 }
 

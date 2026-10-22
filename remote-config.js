@@ -2,16 +2,17 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.38",
-    "name": "Mind Focus Books v0.0.38 (Full Master Import & Restore Suite)",
+    "version": "v0.0.39",
+    "name": "Mind Focus Books v0.0.39 (Direct WhatsApp Backup & Master Restore Suite)",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
     "features": [
+      "💬 Direct WhatsApp Backup Sharing: Poora master backup JSON file sidha WhatsApp chat, family ya personal chat par 1-tap me bhejein.",
+      "📱 WhatsApp Reading Summary: Apni current books, streak aur yearly progress ka sundar WhatsApp message share karein.",
       "📥 Master Backup & Restore: 1-click me sabhi kitabein, custom shelves, notes, reading progress, quotes aur journal entries restore karein.",
       "📊 CSV Books Importer: Goodreads ya custom CSV spreadsheet se bulk me kitabein import karein.",
-      "💾 Native Android File Bridge: Downloads folder me safe backup save aur share options ke sath.",
       "⚡ Ultra Clean & Fast: Zero clutter, zero notification bloat, maximum performance."
     ],
-    "stagedAt": "2026-10-22T08:15:00.000Z",
+    "stagedAt": "2026-10-22T08:38:01.868Z",
     "isDeployed": true
   },
   "stagedRelease": {

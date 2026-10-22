@@ -207,9 +207,9 @@ public class MainActivity extends AppCompatActivity {
         public String getInstalledAppVersion() {
             try {
                 android.content.pm.PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                return pInfo.versionName != null ? pInfo.versionName : "0.0.38";
+                return pInfo.versionName != null ? pInfo.versionName : "0.0.39";
             } catch (Exception e) {
-                return "0.0.37";
+                return "0.0.39";
             }
         }
 
@@ -251,12 +251,89 @@ public class MainActivity extends AppCompatActivity {
 
         @JavascriptInterface
         public void shareBackup(String jsonContent, String fileName) {
+            shareFileViaIntent(jsonContent, fileName, "application/json", null, null);
+        }
+
+        @JavascriptInterface
+        public void shareToWhatsApp(String content, String fileName, String mimeType, String caption) {
+            shareFileViaIntent(content, fileName, mimeType, caption, "com.whatsapp");
+        }
+
+        @JavascriptInterface
+        public void shareTextToWhatsApp(String messageText) {
             try {
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, fileName);
-                shareIntent.putExtra(Intent.EXTRA_TEXT, jsonContent);
-                startActivity(Intent.createChooser(shareIntent, "Share Backup to Google Drive / WhatsApp"));
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, messageText);
+
+                boolean launched = false;
+                String[] waPackages = new String[]{"com.whatsapp", "com.whatsapp.w4b"};
+                for (String pkg : waPackages) {
+                    try {
+                        getPackageManager().getPackageInfo(pkg, 0);
+                        Intent waIntent = new Intent(intent);
+                        waIntent.setPackage(pkg);
+                        startActivity(waIntent);
+                        launched = true;
+                        break;
+                    } catch (android.content.pm.PackageManager.NameNotFoundException ignored) {}
+                }
+
+                if (!launched) {
+                    startActivity(Intent.createChooser(intent, "Share via WhatsApp"));
+                }
+            } catch (Exception e) {
+                runOnUiThread(() -> Toast.makeText(MainActivity.this, "WhatsApp error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        }
+
+        private void shareFileViaIntent(String content, String fileName, String mimeType, String caption, String preferredPackage) {
+            try {
+                if (fileName == null || fileName.trim().isEmpty()) {
+                    fileName = "MindFocus_Backup.json";
+                }
+
+                File shareDir = new File(getCacheDir(), "shared_export");
+                if (!shareDir.exists()) shareDir.mkdirs();
+                File targetFile = new File(shareDir, fileName);
+                try (FileOutputStream fos = new FileOutputStream(targetFile)) {
+                    fos.write(content.getBytes(StandardCharsets.UTF_8));
+                }
+
+                Uri contentUri = androidx.core.content.FileProvider.getUriForFile(
+                        MainActivity.this,
+                        getPackageName() + ".fileprovider",
+                        targetFile
+                );
+
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                String type = (mimeType != null && !mimeType.trim().isEmpty()) ? mimeType : "application/json";
+                intent.setType(type);
+                intent.putExtra(Intent.EXTRA_STREAM, contentUri);
+                intent.putExtra(Intent.EXTRA_SUBJECT, fileName);
+                if (caption != null && !caption.trim().isEmpty()) {
+                    intent.putExtra(Intent.EXTRA_TEXT, caption);
+                }
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                boolean launched = false;
+                if ("com.whatsapp".equals(preferredPackage)) {
+                    String[] waPackages = new String[]{"com.whatsapp", "com.whatsapp.w4b"};
+                    for (String pkg : waPackages) {
+                        try {
+                            getPackageManager().getPackageInfo(pkg, 0);
+                            Intent waIntent = new Intent(intent);
+                            waIntent.setPackage(pkg);
+                            startActivity(waIntent);
+                            launched = true;
+                            break;
+                        } catch (android.content.pm.PackageManager.NameNotFoundException ignored) {}
+                    }
+                }
+
+                if (!launched) {
+                    startActivity(Intent.createChooser(intent, "Share Backup to WhatsApp / Drive / Files"));
+                }
             } catch (Exception e) {
                 runOnUiThread(() -> {
                     Toast.makeText(MainActivity.this, "Share error: " + e.getMessage(), Toast.LENGTH_SHORT).show();

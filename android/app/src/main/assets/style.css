@@ -1564,9 +1564,30 @@ body {
   gap: 6px;
 }
 
-.btn-backup-now svg, .btn-restore svg {
+.btn-backup-now svg, .btn-restore svg, .btn-backup-whatsapp svg {
   width: 16px;
   height: 16px;
+}
+
+.btn-backup-whatsapp {
+  flex: 1;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-pill);
+  padding: 8px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-backup-whatsapp:active {
+  transform: scale(0.97);
 }
 
 .btn-restore {
@@ -1629,6 +1650,16 @@ body {
 .export-card.card-amber {
   background: rgba(245, 158, 11, 0.15);
   border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.export-card.card-whatsapp {
+  background: rgba(37, 211, 102, 0.14);
+  border: 1px solid rgba(37, 211, 102, 0.45);
+}
+
+.export-card.card-whatsapp-summary {
+  background: rgba(18, 140, 126, 0.14);
+  border: 1px solid rgba(18, 140, 126, 0.4);
 }
 
 .export-icon {

@@ -61,7 +61,27 @@ try {
     console.warn('⚠️ Warning: books-data.js script tag not matched.');
   }
 
-  // 4. Inline app.js
+  // 5. Inline broadcast-notice.js
+  const BROADCAST_JS_PATH = path.join(ROOT_DIR, 'broadcast-notice.js');
+  if (fs.existsSync(BROADCAST_JS_PATH)) {
+    const broadcastJs = fs.readFileSync(BROADCAST_JS_PATH, 'utf-8');
+    const broadcastRegex = /<script\s+src=["']broadcast-notice\.js(?:\?[^"']*)?["']\s*><\/script>/i;
+    if (broadcastRegex.test(indexHtml)) {
+      indexHtml = indexHtml.replace(broadcastRegex, `<script>\n${broadcastJs}\n</script>`);
+    }
+  }
+
+  // 6. Inline remote-config.js
+  const REMOTE_CONFIG_JS_PATH = path.join(ROOT_DIR, 'remote-config.js');
+  if (fs.existsSync(REMOTE_CONFIG_JS_PATH)) {
+    const remoteConfigJs = fs.readFileSync(REMOTE_CONFIG_JS_PATH, 'utf-8');
+    const remoteConfigRegex = /<script\s+src=["']remote-config\.js(?:\?[^"']*)?["']\s*><\/script>/i;
+    if (remoteConfigRegex.test(indexHtml)) {
+      indexHtml = indexHtml.replace(remoteConfigRegex, `<script>\n${remoteConfigJs}\n</script>`);
+    }
+  }
+
+  // 7. Inline app.js
   const appScriptRegex = /<script\s+src=["']app\.js(?:\?[^"']*)?["']\s*><\/script>/i;
   if (appScriptRegex.test(indexHtml)) {
     indexHtml = indexHtml.replace(appScriptRegex, `<script>\n${appJs}\n</script>`);
