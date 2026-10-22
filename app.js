@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.37)
+// MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.38)
 // ==========================================================================
 
-const APP_VERSION = '0.0.37';
-const CURRENT_APP_VERSION = 'v0.0.37';
+const APP_VERSION = '0.0.38';
+const CURRENT_APP_VERSION = 'v0.0.38';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -4355,56 +4355,329 @@ function handlePinComplete() {
   }
 }
 
-// ================= BACKUP & EXPORT SYSTEM =================
+// ================= BACKUP & EXPORT / IMPORT MASTER SYSTEM =================
 function exportDataJSON() {
   try {
     const exportBundle = {
       app: 'Mind & Focus Books Tracker',
       version: APP_VERSION,
       exportedAt: new Date().toISOString(),
-      profile: state.profile,
-      stats: state.stats,
-      books: state.books
+      profile: state.profile || {},
+      stats: state.stats || {},
+      books: state.books || [],
+      shelves: (() => { try { return JSON.parse(localStorage.getItem(SHELVES_KEY) || '[]'); } catch(e) { return []; } })(),
+      bookOrder: (() => { try { return JSON.parse(localStorage.getItem(BOOK_ORDER_KEY) || '[]'); } catch(e) { return []; } })(),
+      homeSections: (() => { try { return JSON.parse(localStorage.getItem(HOME_SECS_KEY) || '[]'); } catch(e) { return []; } })(),
+      layoutMode: localStorage.getItem(LAYOUT_KEY) || 'grid',
+      libraryCols: localStorage.getItem(COLS_KEY) || '3',
+      readingGoals: (() => { try { return JSON.parse(localStorage.getItem('mf_reading_goal_2026') || '{}'); } catch(e) { return {}; } })(),
+      readingBudget: (() => { try { return JSON.parse(localStorage.getItem('mf_reading_budget_2026') || '{}'); } catch(e) { return {}; } })(),
+      lendingRecords: (() => { try { return JSON.parse(localStorage.getItem('mf_lending_records') || '[]'); } catch(e) { return []; } })(),
+      focusSessions: (() => { try { return JSON.parse(localStorage.getItem('mf_focus_sessions') || '[]'); } catch(e) { return []; } })(),
+      userNotes: (() => { try { return JSON.parse(localStorage.getItem('mf_user_notes') || '[]'); } catch(e) { return []; } })(),
+      savedQuotes: (() => { try { return JSON.parse(localStorage.getItem('mf_saved_quotes') || '[]'); } catch(e) { return []; } })(),
+      journalEntries: (() => { try { return JSON.parse(localStorage.getItem('mf_journal_entries') || '[]'); } catch(e) { return []; } })(),
+      userPreferences: (() => { try { return JSON.parse(localStorage.getItem(typeof PREFS_KEY !== 'undefined' ? PREFS_KEY : 'mf_user_preferences_v1') || '{}'); } catch(e) { return {}; } })(),
+      theme: localStorage.getItem('mf_theme') || 'dark',
+      readerTheme: localStorage.getItem('mf_reader_theme') || 'dark',
+      customPages: (() => { try { return JSON.parse(localStorage.getItem('mf_custom_book_pages_v1') || '{}'); } catch(e) { return {}; } })()
     };
-    
-    const blob = new Blob([JSON.stringify(exportBundle, null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `MindFocusBooks_Backup_${getTodayLocalDate()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
+
+    const fileName = 'MindFocusBooks_Backup_' + getTodayLocalDate() + '.json';
+    const jsonStr = JSON.stringify(exportBundle, null, 2);
+
+    // 1. Native Android save to phone Downloads
+    let savedNatively = false;
+    if (window.Android && typeof window.Android.saveBackupFile === 'function') {
+      try {
+        window.Android.saveBackupFile(jsonStr, fileName);
+        savedNatively = true;
+      } catch (e) {
+        console.warn('Native backup save error:', e);
+      }
+    }
+
+    // 2. Standard Blob download for browsers / fallback
+    try {
+      const blob = new Blob([jsonStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }, 500);
+    } catch (e) {}
+
     const nowStr = new Date().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
     localStorage.setItem('mf_last_backup_time', nowStr);
+    localStorage.setItem('mf_last_backup_ts', String(Date.now()));
     updateLastBackupDisplay();
-    showToast('JSON Backup downloaded! 💾');
+    showToast('Master Backup Saved! 💾 (' + (state.books || []).length + ' Books, Shelves & Notes)');
   } catch (e) {
+    console.error('Export error:', e);
     showToast('Error exporting JSON backup');
   }
+}
+
+function triggerImportBackupFile() {
+  const input = document.getElementById('masterRestoreFileInput');
+  if (input) {
+    input.value = '';
+    input.click();
+  } else {
+    const temp = document.createElement('input');
+    temp.type = 'file';
+    temp.accept = '.json,application/json';
+    temp.onchange = importDataJSON;
+    temp.click();
+  }
+}
+
+function triggerImportDataJSON() {
+  triggerImportBackupFile();
 }
 
 function importDataJSON(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
-  
+
   const reader = new FileReader();
   reader.onload = e => {
     try {
       const data = JSON.parse(e.target.result);
-      if (data && Array.isArray(data.books)) {
+      if (!data) throw new Error('Empty backup file');
+
+      let booksCount = 0;
+      let shelvesCount = 0;
+
+      // 1. Restore Books (supports full bundle, {books:[...]}, or direct array [...])
+      if (Array.isArray(data)) {
+        state.books = data;
+        booksCount = data.length;
+      } else if (data.books && Array.isArray(data.books)) {
         state.books = data.books;
-        if (data.profile) state.profile = data.profile;
-        if (data.stats) state.stats = data.stats;
-        saveBooks();
-        saveProfile();
-        saveStats();
-        renderApp();
-        showToast('Library successfully restored! 🚀');
+        booksCount = data.books.length;
       } else {
-        showToast('Invalid backup file format.');
+        showToast('Invalid backup: Kitabon ka data nahi mila.');
+        return;
       }
+
+      // 2. Profile & Stats
+      if (data.profile && typeof data.profile === 'object') {
+        state.profile = Object.assign({}, state.profile, data.profile);
+      }
+      if (data.stats && typeof data.stats === 'object') {
+        state.stats = Object.assign({}, state.stats, data.stats);
+      }
+
+      // 3. Shelves
+      if (data.shelves && Array.isArray(data.shelves)) {
+        localStorage.setItem(SHELVES_KEY, JSON.stringify(data.shelves));
+        shelvesCount = data.shelves.length;
+      }
+
+      // 4. Custom Book Order
+      if (data.bookOrder && Array.isArray(data.bookOrder)) {
+        localStorage.setItem(BOOK_ORDER_KEY, JSON.stringify(data.bookOrder));
+      }
+
+      // 5. Home Sections Config
+      if (data.homeSections && Array.isArray(data.homeSections)) {
+        localStorage.setItem(HOME_SECS_KEY, JSON.stringify(data.homeSections));
+        if (typeof applyHomeSectionsConfig === 'function') applyHomeSectionsConfig();
+      }
+
+      // 6. Layout & Columns
+      if (data.layoutMode) localStorage.setItem(LAYOUT_KEY, data.layoutMode);
+      if (data.libraryCols) localStorage.setItem(COLS_KEY, String(data.libraryCols));
+
+      // 7. Reading Goals & Budget
+      if (data.readingGoals) localStorage.setItem('mf_reading_goal_2026', JSON.stringify(data.readingGoals));
+      if (data.readingBudget) localStorage.setItem('mf_reading_budget_2026', JSON.stringify(data.readingBudget));
+
+      // 8. Lending Records
+      if (data.lendingRecords && Array.isArray(data.lendingRecords)) {
+        localStorage.setItem('mf_lending_records', JSON.stringify(data.lendingRecords));
+      }
+
+      // 9. Focus Sessions
+      if (data.focusSessions && Array.isArray(data.focusSessions)) {
+        localStorage.setItem('mf_focus_sessions', JSON.stringify(data.focusSessions));
+      }
+
+      // 10. Notes & Highlights
+      if (data.userNotes && Array.isArray(data.userNotes)) {
+        localStorage.setItem('mf_user_notes', JSON.stringify(data.userNotes));
+      }
+
+      // 11. Saved Quotes
+      if (data.savedQuotes && Array.isArray(data.savedQuotes)) {
+        localStorage.setItem('mf_saved_quotes', JSON.stringify(data.savedQuotes));
+      }
+
+      // 12. Journal Entries
+      if (data.journalEntries && Array.isArray(data.journalEntries)) {
+        localStorage.setItem('mf_journal_entries', JSON.stringify(data.journalEntries));
+      }
+
+      // 13. Preferences
+      if (data.userPreferences && typeof data.userPreferences === 'object') {
+        localStorage.setItem(typeof PREFS_KEY !== 'undefined' ? PREFS_KEY : 'mf_user_preferences_v1', JSON.stringify(data.userPreferences));
+      }
+
+      // 14. Theme
+      if (data.theme) {
+        if (typeof setAppTheme === 'function') setAppTheme(data.theme);
+      }
+      if (data.readerTheme) {
+        localStorage.setItem('mf_reader_theme', data.readerTheme);
+      }
+
+      // 15. Custom Pages Store
+      if (data.customPages && typeof data.customPages === 'object') {
+        localStorage.setItem('mf_custom_book_pages_v1', JSON.stringify(data.customPages));
+      }
+
+      // Save to disk
+      saveBooks();
+      saveProfile();
+      saveStats();
+      if (typeof applyPrefs === 'function') applyPrefs();
+
+      // Complete App Refresh
+      renderApp();
+      updateLastBackupDisplay();
+
+      showToast('🎉 Data Restored! ' + booksCount + ' Books, Shelves & Progress loaded!', 'success');
     } catch (err) {
+      console.error('Import error:', err);
       showToast('Error reading backup file.');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function triggerImportCSVFile() {
+  const input = document.getElementById('masterCsvImportInput');
+  if (input) {
+    input.value = '';
+    input.click();
+  } else {
+    const temp = document.createElement('input');
+    temp.type = 'file';
+    temp.accept = '.csv,text/csv';
+    temp.onchange = importDataCSV;
+    temp.click();
+  }
+}
+
+function importDataCSV(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const text = e.target.result;
+      const lines = text.split(/\r?\n/).filter(line => line.trim().length > 0);
+      if (lines.length <= 1) {
+        showToast('CSV file is empty or invalid.');
+        return;
+      }
+
+      const parseCsvLine = (line) => {
+        const result = [];
+        let cur = '';
+        let inQuotes = false;
+        for (let i = 0; i < line.length; i++) {
+          const char = line[i];
+          if (char === '"' && (i === 0 || line[i - 1] !== '\\')) {
+            inQuotes = !inQuotes;
+          } else if (char === ',' && !inQuotes) {
+            result.push(cur.trim().replace(/^"|"$/g, '').replace(/""/g, '"'));
+            cur = '';
+          } else {
+            cur += char;
+          }
+        }
+        result.push(cur.trim().replace(/^"|"$/g, '').replace(/""/g, '"'));
+        return result;
+      };
+
+      const headers = parseCsvLine(lines[0]).map(h => h.toLowerCase().trim());
+      const titleIdx = headers.findIndex(h => h.includes('title'));
+      const authorIdx = headers.findIndex(h => h.includes('author'));
+      const catIdx = headers.findIndex(h => h.includes('cat') || h.includes('genre'));
+      const statusIdx = headers.findIndex(h => h.includes('status'));
+      const pagesIdx = headers.findIndex(h => h.includes('total page') || h === 'pages');
+      const curPageIdx = headers.findIndex(h => h.includes('current page') || h.includes('progress page'));
+      const ratingIdx = headers.findIndex(h => h.includes('rating'));
+      const priceIdx = headers.findIndex(h => h.includes('price') || h.includes('cost'));
+      const langIdx = headers.findIndex(h => h.includes('lang'));
+
+      if (titleIdx === -1) {
+        showToast('Invalid CSV: Title column not found.');
+        return;
+      }
+
+      let added = 0;
+      let updated = 0;
+
+      for (let i = 1; i < lines.length; i++) {
+        const cols = parseCsvLine(lines[i]);
+        const title = (cols[titleIdx] || '').trim();
+        if (!title) continue;
+
+        const author = authorIdx !== -1 && cols[authorIdx] ? cols[authorIdx].trim() : 'Unknown Author';
+        const category = catIdx !== -1 && cols[catIdx] ? cols[catIdx].trim() : 'General';
+        const status = statusIdx !== -1 && cols[statusIdx] ? cols[statusIdx].trim().toUpperCase() : 'PENDING';
+        const pages = pagesIdx !== -1 ? (parseInt(cols[pagesIdx], 10) || 250) : 250;
+        const curPage = curPageIdx !== -1 ? (parseInt(cols[curPageIdx], 10) || 0) : 0;
+        const rating = ratingIdx !== -1 ? (parseFloat(cols[ratingIdx]) || 0) : 0;
+        const price = priceIdx !== -1 ? (parseFloat(cols[priceIdx]) || 0) : 0;
+        const language = langIdx !== -1 && cols[langIdx] ? cols[langIdx].trim() : 'ENGLISH';
+
+        const existing = state.books.find(b => b.title.toLowerCase().trim() === title.toLowerCase().trim());
+        if (existing) {
+          existing.status = status;
+          existing.current_page = curPage;
+          existing.pages = pages;
+          if (rating > 0) existing.rating = rating;
+          if (price > 0) existing.price = price;
+          updated++;
+        } else {
+          state.books.push({
+            id: Date.now() + i,
+            no: state.books.length + 1,
+            title: title,
+            author: author,
+            category: category,
+            language: language,
+            status: status,
+            availability: 'AVAILABLE',
+            current_page: curPage,
+            pages: pages,
+            rating: rating,
+            price: price,
+            cover_image: '',
+            cover_url: '',
+            takeaways: '',
+            added_at: new Date().toISOString()
+          });
+          added++;
+        }
+      }
+
+      saveBooks();
+      renderApp();
+      showToast('📊 CSV Imported: ' + added + ' new books added, ' + updated + ' updated!');
+    } catch (err) {
+      console.error('CSV error:', err);
+      showToast('Error parsing CSV file.');
     }
   };
   reader.readAsText(file);

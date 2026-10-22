@@ -633,7 +633,10 @@
               <div class="pbc-status" id="profileBackupStatusText">🟢 Backed up: Tap to download backup</div>
             </div>
           </div>
-          <button type="button" class="btn-backup-mini" onclick="event.stopPropagation(); exportDataJSON();">Backup Now</button>
+          <div style="display:flex; gap:6px;">
+            <button type="button" class="btn-backup-mini" onclick="event.stopPropagation(); exportDataJSON();">Backup</button>
+            <button type="button" class="btn-backup-mini" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border-color: rgba(168, 85, 247, 0.4);" onclick="event.stopPropagation(); triggerImportBackupFile();">Restore</button>
+          </div>
         </div>
 
         <button type="button" class="btn-edit-profile" onclick="openEditProfileModal()" style="margin-top: 8px;">Edit Profile</button>
@@ -1780,7 +1783,10 @@
             <div class="pbc-status" id="backupSubScreenStatusText">🟢 Backed up: Tap to download backup</div>
           </div>
         </div>
-        <button type="button" class="btn-backup-mini">Backup Now</button>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-backup-mini" onclick="event.stopPropagation(); exportDataJSON();">Backup</button>
+          <button type="button" class="btn-backup-mini" style="background: rgba(168, 85, 247, 0.2); color: #c084fc; border-color: rgba(168, 85, 247, 0.4);" onclick="event.stopPropagation(); triggerImportBackupFile();">Restore</button>
+        </div>
       </div>
 
       <!-- Data Backup & Restore Card -->
@@ -1798,15 +1804,14 @@
             </svg>
             Backup Now
           </button>
-          <label class="btn-restore">
+          <button type="button" class="btn-restore" onclick="triggerImportBackupFile()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
               <polyline points="17 8 12 3 7 8"></polyline>
               <line x1="12" y1="3" x2="12" y2="15"></line>
             </svg>
             Restore
-            <input type="file" id="restoreFileInput" accept=".json" onchange="importDataJSON(event)" style="display:none;">
-          </label>
+          </button>
         </div>
       </div>
 
@@ -1837,6 +1842,28 @@
           </div>
         </div>
       </div>
+
+      <!-- Import & Restore Formats -->
+      <div class="profile-group-header" style="margin-top: 24px;">📥 Import &amp; Restore Vault</div>
+      <div class="export-options-list">
+        <div class="export-card card-purple" onclick="triggerImportBackupFile()">
+          <div class="export-icon">📥</div>
+          <div class="export-info">
+            <div class="export-title">Import &amp; Restore JSON Backup</div>
+            <div class="export-desc">Sabhi kitabein, notes, shelves, progress &amp; stats 1-click me wapas layein</div>
+          </div>
+        </div>
+
+        <div class="export-card card-amber" onclick="triggerImportCSVFile()">
+          <div class="export-icon">📊</div>
+          <div class="export-info">
+            <div class="export-title">Import Books from CSV</div>
+            <div class="export-desc">Goodreads ya CSV spreadsheet se kitabein add karein</div>
+          </div>
+        </div>
+      </div>
+      <input type="file" id="masterRestoreFileInput" accept=".json,application/json" onchange="importDataJSON(event)" style="display:none;">
+      <input type="file" id="masterCsvImportInput" accept=".csv,text/csv" onchange="importDataCSV(event)" style="display:none;">
 
       <!-- Privacy & Security Cards -->
       <div class="profile-group-header" style="margin-top: 24px;">🔒 Privacy &amp; Security</div>
@@ -2430,6 +2457,30 @@
                 <span class="ig-badge-val">Download</span>
               </div>
             </div>
+            <div class="ig-row" onclick="triggerImportBackupFile()" style="cursor: pointer;">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-purple">📥</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Quick Data Restore / Import (JSON)</div>
+                  <div class="ig-sub">Backup file se sabhi kitabein, notes aur data wapas layein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" style="background: rgba(168, 85, 247, 0.18); color: #c084fc;">Restore</span>
+              </div>
+            </div>
+            <div class="ig-row" onclick="triggerImportCSVFile()" style="cursor: pointer;">
+              <div class="ig-row-left">
+                <div class="ig-icon-box ig-icon-gold">📊</div>
+                <div class="ig-text-box">
+                  <div class="ig-title">Import Books Spreadsheet (CSV)</div>
+                  <div class="ig-sub">CSV file se kitabein library me import karein</div>
+                </div>
+              </div>
+              <div class="ig-row-right">
+                <span class="ig-badge-val" style="background: rgba(245, 158, 11, 0.18); color: #f59e0b;">Import CSV</span>
+              </div>
+            </div>
             <div class="ig-row" style="cursor: default;">
               <div class="ig-row-left">
                 <div class="ig-icon-box ig-icon-blue">✨</div>
@@ -2439,7 +2490,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.37 (Up to date)</span>
+                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.38 (Up to date)</span>
               </div>
             </div>
           </div>
