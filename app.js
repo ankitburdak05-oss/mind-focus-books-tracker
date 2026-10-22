@@ -792,6 +792,148 @@ function handleExploreSearch(val) {
   renderExploreBooksGrid();
 }
 
+// ---- OPEN LIBRARY API SEARCH ----
+let _exploreSearchDebounce = null;
+
+function handleExploreSearchLive(val) {
+  const clearBtn = document.getElementById('exploreSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = val.length > 0 ? 'block' : 'none';
+  clearTimeout(_exploreSearchDebounce);
+  if (val.trim().length === 0) { clearExploreSearch(); return; }
+}
+
+function triggerExploreAPISearch() {
+  const input = document.getElementById('exploreSearchInput');
+  const query = (input ? input.value : '').trim();
+  if (!query) { showToast('Kuch to likho search karne ke liye!'); return; }
+  searchOpenLibrary(query);
+}
+
+async function searchOpenLibrary(query) {
+  const statusEl = document.getElementById('exploreAPIStatus');
+  const resultsSection = document.getElementById('exploreAPIResultsSection');
+  const resultsGrid = document.getElementById('exploreAPIResultsGrid');
+  const resultsTitle = document.getElementById('exploreAPIResultsTitle');
+
+  if (statusEl) { statusEl.style.display = 'block'; statusEl.innerHTML = '&#x23F3; Searching world library...'; }
+  if (resultsSection) resultsSection.style.display = 'none';
+
+  try {
+    const encoded = encodeURIComponent(query);
+    const url = `https://openlibrary.org/search.json?q=${encoded}&limit=20&fields=key,title,author_name,cover_i,number_of_pages_median,subject,first_publish_year`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('API error');
+    const data = await response.json();
+
+    if (statusEl) statusEl.style.display = 'none';
+
+    if (!data.docs || data.docs.length === 0) {
+      if (resultsSection) {
+        resultsSection.style.display = 'block';
+        if (resultsTitle) resultsTitle.innerText = `"${query}" ke liye koi result nahi mila`;
+        if (resultsGrid) resultsGrid.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-secondary);">Koi book nahi mili. Dusra naam try karo.</div>';
+      }
+      return;
+    }
+
+    const total = data.num_found || data.docs.length;
+    if (resultsTitle) resultsTitle.innerText = `"${query}" - ${total.toLocaleString()} books mili`;
+
+    if (resultsGrid) {
+      resultsGrid.innerHTML = data.docs.map((doc, idx) => {
+        const title = doc.title || 'Unknown Title';
+        const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+        const coverId = doc.cover_i;
+        const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : 'cover_placeholder.jpg';
+        const pages = doc.number_of_pages_median || '';
+        const year = doc.first_publish_year || '';
+        const alreadyAdded = state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase());
+
+        return `
+          <div class="grid-book-card" style="position:relative;">
+            <div class="grid-cover-wrap" style="height:140px;overflow:hidden;border-radius:10px 10px 0 0;">
+              <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'" style="width:100%;height:140px;object-fit:cover;">
+            </div>
+            <div class="grid-book-meta" style="padding:8px;">
+              <div class="grid-book-title" style="font-size:0.82rem;font-weight:600;line-height:1.3;margin-bottom:3px;">${escapeHtml(title)}</div>
+              <div class="grid-book-author" style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:6px;">${escapeHtml(author)}${year ? ' &middot; ' + year : ''}</div>
+              ${pages ? `<div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:6px;">&#x1F4C4; ${pages} pages</div>` : ''}
+              ${alreadyAdded
+                ? `<div style="text-align:center;font-size:0.72rem;color:#10b981;font-weight:600;padding:6px 0;">&#x2705; Already in Library</div>`
+                : `<button type="button" onclick="addExploreBookToLibrary(${idx})" data-explore-idx="${idx}" style="width:100%;padding:7px;background:var(--gold-primary);color:#000;border:none;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;">+ Add to Library</button>`
+              }
+            </div>
+          </div>
+        `;
+      }).join('');
+      window._exploreAPIResults = data.docs;
+    }
+
+    if (resultsSection) resultsSection.style.display = 'block';
+    if (resultsSection) resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  } catch (err) {
+    if (statusEl) {
+      statusEl.style.display = 'block';
+      statusEl.innerHTML = '&#x274C; Search fail hui. Internet check karo aur dobara try karo.';
+    }
+    console.error('OpenLibrary search error:', err);
+  }
+}
+
+function addExploreBookToLibrary(idx) {
+  const docs = window._exploreAPIResults;
+  if (!docs || !docs[idx]) return;
+  const doc = docs[idx];
+  const title = doc.title || 'Unknown Title';
+  const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+  const coverId = doc.cover_i;
+  const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : '';
+  const pages = doc.number_of_pages_median || 200;
+
+  if (state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase())) {
+    showToast('Ye book already library me hai!');
+    return;
+  }
+
+  const newBook = {
+    id: Date.now(),
+    title: title,
+    author: author,
+    cover: coverUrl,
+    pages: pages,
+    current_page: 0,
+    status: 'want_to_read',
+    category: (doc.subject && doc.subject[0]) || 'General',
+    rating: 0,
+    notes: '',
+    dateAdded: new Date().toISOString(),
+    notInterested: false,
+    fromExplore: true
+  };
+
+  state.books.push(newBook);
+  saveState();
+
+  const btn = document.querySelector(`[data-explore-idx="${idx}"]`);
+  if (btn) {
+    btn.outerHTML = `<div style="text-align:center;font-size:0.72rem;color:#10b981;font-weight:600;padding:6px 0;">&#x2705; Added!</div>`;
+  }
+  showToast(`"${title}" library me add ho gayi! &#x1F4DA;`);
+}
+
+function clearExploreSearch() {
+  const input = document.getElementById('exploreSearchInput');
+  if (input) input.value = '';
+  const clearBtn = document.getElementById('exploreSearchClearBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+  const statusEl = document.getElementById('exploreAPIStatus');
+  if (statusEl) { statusEl.style.display = 'none'; statusEl.innerHTML = ''; }
+  const resultsSection = document.getElementById('exploreAPIResultsSection');
+  if (resultsSection) resultsSection.style.display = 'none';
+  window._exploreAPIResults = null;
+}
+
 function renderExploreBooksGrid() {
   const grid = document.getElementById('exploreBooksGrid');
   if (!grid) return;
