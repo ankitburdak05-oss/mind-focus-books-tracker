@@ -5699,23 +5699,17 @@ async function checkForBackgroundUpdates() {
   const homeTitle = document.getElementById('homeUpdateTitle');
   const homeSub = document.getElementById('homeUpdateSub');
   
-  // Persist that current running version is active & installed
-  try {
-    const stored = localStorage.getItem('mf_installed_version');
-    if (!stored || isNewerVersion(CURRENT_APP_VERSION, stored)) {
-      localStorage.setItem('mf_installed_version', CURRENT_APP_VERSION);
-    }
-  } catch (e) {}
+  const installedVer = getInstalledVersionString();
 
-  // Update settings version badge
+  // Update settings version badge immediately
   try {
     const settingsBadge = document.getElementById('appSettingsVersionBadge');
-    if (settingsBadge) settingsBadge.innerText = `${CURRENT_APP_VERSION} (Up to date)`;
+    if (settingsBadge) settingsBadge.innerText = `${installedVer}`;
   } catch (e) {}
 
   let activeRel = null;
 
-  // 1. Live Remote Check via GitHub Raw Config
+  // 1. Live Remote Check via GitHub Releases API & Raw Config
   try {
     const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?t=' + Date.now();
     const res = await fetch(rawUrl, { cache: 'no-store' });
@@ -5727,18 +5721,29 @@ async function checkForBackgroundUpdates() {
       }
     }
   } catch (err) {
-    console.warn('Live remote config fetch failed, checking fallback:', err);
+    console.warn('Live remote config fetch failed, checking GitHub releases fallback:', err);
   }
 
-  // 2. Fallback to bundled config if offline
-  if (!activeRel && typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') {
-    activeRel = window.__DEFAULT_REMOTE_CONFIG__?.activeRelease || null;
+  // Fallback: check latest GitHub release directly
+  if (!activeRel) {
+    try {
+      const ghRes = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
+      if (ghRes.ok) {
+        const ghData = await ghRes.json();
+        if (ghData && ghData.tag_name) {
+          activeRel = {
+            version: ghData.tag_name,
+            name: ghData.name || `Mind Focus Books ${ghData.tag_name}`,
+            apkDownloadUrl: `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${ghData.tag_name}/MindFocusBooks-Native.apk`
+          };
+        }
+      }
+    } catch (e) {}
   }
 
-  const installedVer = getInstalledVersionString();
   const remoteVer = activeRel?.version || installedVer;
-  // A new update is ONLY available if remoteVer is strictly GREATER than BOTH installedVer and CURRENT_APP_VERSION
-  const isNewAvailable = isNewerVersion(remoteVer, installedVer) && isNewerVersion(remoteVer, CURRENT_APP_VERSION);
+  // An update is available if remoteVer is newer than what phone is running (installedVer)
+  const isNewAvailable = isNewerVersion(remoteVer, installedVer);
 
   if (homeCard) {
     if (isNewAvailable) {

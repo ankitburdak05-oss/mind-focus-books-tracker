@@ -123,5 +123,6 @@ jobs:
         name: ${{ steps.get_tag.outputs.name }}
         body: "Mind Focus Books Native Android Release. Includes 3D Dictionary, Mystery Golden Gift Box, and In-App Update Engine."
         files: MindFocusBooks-Native.apk
+        make_latest: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
