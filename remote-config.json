@@ -2,18 +2,16 @@
     "version":  "1.0.0",
     "updatedAt":  "2026-10-17T11:00:00.000Z",
     "activeRelease":  {
-                          "version":  "v0.0.42",
-                          "name":  "Mind Focus Books v0.0.42 (3D Holographic Update Card + World Explore Engine)",
-                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.42/MindFocusBooks-Native.apk",
+                          "version":  "v0.0.43",
+                          "name":  "Mind Focus Books v0.0.43 (Smooth Book Detail \u0026 Instant Sheet Launch)",
+                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.43/MindFocusBooks-Native.apk",
                           "features":  [
-                                           "🚀 3D Holographic System Update Card: Phone screen par glowing 3D beacon card ke saath in-app 1-tap update",
-                                           "🌟 Dynamic World Spotlight: Explore me har refresh par real HD rotating book spotlight with direct 1-tap Library add",
-                                           "🔄 Auto Explore Feed \u0026 Refresh: Har baar Explore kholne par nayi trending, bestsellers aur classics kitabein",
-                                           "📖 3D Book Dossier Popup: Kisi bhi book par tap karein - cover, author, rating, pages aur genre ki 3D sheet",
-                                           "🎲 Surprise Me Generator: Ek tap me random inspiring world masterpiece",
-                                           "🔍 World Book Search: Millions of books with real covers, instant status and offline fallbacks"
+                                           "⚡ Zero Lag Book Click: Explore me kisi bhi book par tap karne par instantly smooth dossier sheet khulegi bina kisi freeze/atak ke",
+                                           "📖 Safe In-Memory Detail State: URI encoding aur scroll locks hata kar butter-smooth response",
+                                           "🚀 3D Holographic Update Card: Home screen par floating beacon update card",
+                                           "🌟 Dynamic World Spotlight: Daily rotating world masterpieces with 1-tap Library add"
                                        ],
-                          "stagedAt":  "2026-10-23T01:57:19.090Z",
+                          "stagedAt":  "2026-10-23T02:05:07.514Z",
                           "isDeployed":  true
                       },
     "stagedRelease":  {

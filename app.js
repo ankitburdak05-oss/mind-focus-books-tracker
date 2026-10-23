@@ -3,7 +3,7 @@
 // ==========================================================================
 
 const APP_VERSION = '0.0.39';
-const CURRENT_APP_VERSION = 'v0.0.42';
+const CURRENT_APP_VERSION = 'v0.0.43';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -737,7 +737,7 @@ function renderLibraryGrid() {
   }).join('');
 }
 
-// ================= VIEW 3: EXPLORE (WORLD DISCOVERY ENGINE) =================
+// ================= VIEW 3: EXPLORE (SAFE & ULTRA-FAST WORLD DISCOVERY) =================
 window._exploreDefaultBooks = [];
 window._exploreAPIResults = null;
 window._currentSpotlightBook = null;
@@ -879,16 +879,15 @@ function updateExploreSpotlightUI(book) {
 
 function openCurrentSpotlightDetail() {
   if (!window._currentSpotlightBook) return;
-  const spot = window._currentSpotlightBook;
-  const doc = {
-    title: spot.title,
-    author_name: [spot.author],
-    cover_i: spot.cover_i,
-    first_publish_year: spot.year,
-    number_of_pages_median: spot.pages || 300,
-    subject: spot.subject || ['Featured']
+  window._currentActiveDocForModal = {
+    title: window._currentSpotlightBook.title,
+    author_name: [window._currentSpotlightBook.author],
+    cover_i: window._currentSpotlightBook.cover_i,
+    first_publish_year: window._currentSpotlightBook.year,
+    number_of_pages_median: window._currentSpotlightBook.pages || 300,
+    subject: window._currentSpotlightBook.subject || ['Featured']
   };
-  openBookDetailFromDoc(doc);
+  renderActiveBookDetailSheet();
 }
 
 function addCurrentSpotlightToLibrary() {
@@ -922,7 +921,6 @@ function setExploreMode(mode) {
     }
   });
 
-  // Pick keyword based on mode
   let keyword = 'trending';
   if (mode === 'bestseller') keyword = 'bestseller';
   else if (mode === 'classics') keyword = 'classic_literature';
@@ -940,7 +938,7 @@ function refreshExploreFeed() {
 function triggerSurpriseBook() {
   const pool = EXPLORE_CURATED_SPOTLIGHTS;
   const pick = pool[Math.floor(Math.random() * pool.length)];
-  const doc = {
+  window._currentActiveDocForModal = {
     title: pick.title,
     author_name: [pick.author],
     cover_i: pick.cover_i,
@@ -948,7 +946,7 @@ function triggerSurpriseBook() {
     number_of_pages_median: pick.pages,
     subject: pick.subject
   };
-  openBookDetailFromDoc(doc);
+  renderActiveBookDetailSheet();
   showToast(`Surprise Pick: ${pick.title}! ??`);
 }
 
@@ -969,14 +967,14 @@ async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffs
 
   grid.innerHTML = `
     <div style="grid-column:1/-1;text-align:center;padding:36px 16px;color:var(--text-secondary);">
-      <div style="font-size:2rem;margin-bottom:10px;animation:floatRocket 1.2s infinite alternate;">?</div>
+      <div style="font-size:2rem;margin-bottom:10px;">?</div>
       <div style="font-size:0.92rem;font-weight:600;color:var(--gold-primary);">World Library Explore Ho Rahi Hai...</div>
       <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">Crores kitabon se best recommendations fetch ho rahi hain</div>
     </div>`;
 
   const subjects = EXPLORE_SUBJECT_MAP[genre] || EXPLORE_SUBJECT_MAP['ALL'];
   const subject = customSubject || subjects[Math.floor(Math.random() * subjects.length)];
-  const offset = Math.floor(Math.random() * 90);
+  const offset = Math.floor(Math.random() * 80);
 
   try {
     const url = `https://openlibrary.org/search.json?subject=${encodeURIComponent(subject)}&limit=18&offset=${offset}&fields=key,title,author_name,cover_i,number_of_pages_median,subject,first_publish_year,ratings_average&language=eng`;
@@ -995,15 +993,14 @@ async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffs
     if (titleEl) {
       const modeLabel = window._currentExploreMode === 'bestseller' ? '?? Bestsellers' : (window._currentExploreMode === 'classics' ? '??? Legendary Classics' : '?? Trending Reads');
       titleEl.innerHTML = genre === 'ALL'
-        ? `${modeLabel} <span style="font-size:0.72rem;font-weight:400;color:var(--text-muted);">&bull; tap for 3D detail</span>`
-        : `${genre} Books <span style="font-size:0.72rem;font-weight:400;color:var(--text-muted);">&bull; tap for 3D detail</span>`;
+        ? `${modeLabel} <span style="font-size:0.72rem;font-weight:400;color:var(--text-muted);">&bull; tap for detail</span>`
+        : `${genre} Books <span style="font-size:0.72rem;font-weight:400;color:var(--text-muted);">&bull; tap for detail</span>`;
     }
 
     grid.innerHTML = docs.map((doc, idx) => renderExploreBookCard(doc, idx)).join('');
 
   } catch (err) {
     console.error('Explore load error:', err);
-    // Offline / Network Fallback with Instant Curated Grid
     window._exploreDefaultBooks = EXPLORE_CURATED_SPOTLIGHTS.map(s => ({
       title: s.title,
       author_name: [s.author],
@@ -1032,9 +1029,9 @@ function renderExploreBookCard(doc, idx) {
       <div class="grid-cover-wrap explore-cover-3d-wrap" style="height:148px;overflow:hidden;border-radius:10px 10px 0 0;position:relative;">
         <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy"
           onerror="this.src='cover_placeholder.jpg'"
-          style="width:100%;height:148px;object-fit:cover;transition:transform 0.3s ease;">
+          style="width:100%;height:148px;object-fit:cover;">
         ${alreadyAdded ? `<div style="position:absolute;top:6px;right:6px;background:linear-gradient(135deg, #10b981, #059669);color:#fff;font-size:0.62rem;font-weight:800;padding:3px 7px;border-radius:12px;box-shadow:0 2px 8px rgba(0,0,0,0.5);">? Added</div>` : ''}
-        ${pages ? `<div style="position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,0.65);color:#e2e8f0;font-size:0.6rem;padding:2px 6px;border-radius:6px;backdrop-filter:blur(4px);">?? ${pages}p</div>` : ''}
+        ${pages ? `<div style="position:absolute;bottom:6px;left:6px;background:rgba(0,0,0,0.65);color:#e2e8f0;font-size:0.6rem;padding:2px 6px;border-radius:6px;">?? ${pages}p</div>` : ''}
       </div>
       <div class="grid-book-meta" style="padding:8px 9px 10px;">
         <div class="grid-book-title" style="font-size:0.82rem;font-weight:700;line-height:1.25;margin-bottom:3px;color:var(--text-primary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(title)}</div>
@@ -1046,16 +1043,21 @@ function renderExploreBookCard(doc, idx) {
 function openExploreBookDetail(idx) {
   const docs = window._exploreDefaultBooks;
   if (!docs || !docs[idx]) return;
-  openBookDetailFromDoc(docs[idx], idx);
+  window._currentActiveDocForModal = docs[idx];
+  renderActiveBookDetailSheet();
 }
 
 function openExploreSearchBookDetail(idx) {
   const docs = window._exploreAPIResults;
   if (!docs || !docs[idx]) return;
-  openBookDetailFromDoc(docs[idx]);
+  window._currentActiveDocForModal = docs[idx];
+  renderActiveBookDetailSheet();
 }
 
-function openBookDetailFromDoc(doc, gridIdx = null) {
+function renderActiveBookDetailSheet() {
+  const doc = window._currentActiveDocForModal;
+  if (!doc) return;
+
   const title = doc.title || 'Unknown Title';
   const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
   const coverId = doc.cover_i;
@@ -1069,10 +1071,12 @@ function openBookDetailFromDoc(doc, gridIdx = null) {
   if (!modal) {
     modal = document.createElement('div');
     modal.id = 'exploreBookDetailModal';
-    modal.style.cssText = 'display:none;position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.85);align-items:flex-end;justify-content:center;backdrop-filter:blur(10px);';
     modal.onclick = (e) => { if (e.target === modal) closeExploreBookDetail(); };
     document.body.appendChild(modal);
   }
+
+  modal.className = 'explore-detail-modal-container';
+  modal.style.cssText = 'display:flex !important;position:fixed;inset:0;z-index:999999;background:rgba(0,0,0,0.85);align-items:flex-end;justify-content:center;';
 
   modal.innerHTML = `
     <div class="explore-detail-sheet">
@@ -1083,20 +1087,20 @@ function openBookDetailFromDoc(doc, gridIdx = null) {
 
       <!-- Close row -->
       <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 20px 10px;">
-        <span style="font-size:0.68rem;letter-spacing:1px;font-weight:800;color:var(--gold-primary);text-transform:uppercase;">3D Book Dossier &bull; Open Library</span>
+        <span style="font-size:0.68rem;letter-spacing:1px;font-weight:800;color:var(--gold-primary);text-transform:uppercase;">Book Dossier &bull; Open Library</span>
         <button onclick="closeExploreBookDetail()" style="background:rgba(255,255,255,0.08);border:none;color:#94a3b8;width:32px;height:32px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">?</button>
       </div>
 
       <!-- Cover + Hero Meta -->
       <div style="display:flex;gap:18px;padding:8px 20px 16px;">
-        <div class="explore-cover-3d-wrap" style="flex-shrink:0;">
-          <img src="${escapeHtml(coverLarge)}" onerror="this.src='cover_placeholder.jpg'" class="explore-cover-3d-img">
+        <div style="flex-shrink:0;">
+          <img src="${escapeHtml(coverLarge)}" onerror="this.src='cover_placeholder.jpg'" style="width:115px;height:165px;object-fit:cover;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
         </div>
         <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;">
-          <h2 style="font-size:1.15rem;font-weight:800;line-height:1.3;margin:0 0 6px 0;color:#ffffff;">${escapeHtml(title)}</h2>
-          <div style="font-size:0.88rem;color:var(--gold-primary);font-weight:700;margin-bottom:10px;">by ${escapeHtml(author)}</div>
+          <h2 style="font-size:1.1rem;font-weight:800;line-height:1.3;margin:0 0 6px 0;color:#ffffff;">${escapeHtml(title)}</h2>
+          <div style="font-size:0.86rem;color:var(--gold-primary);font-weight:700;margin-bottom:10px;">by ${escapeHtml(author)}</div>
           
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;">
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
             <span style="font-size:0.72rem;padding:3px 9px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#cbd5e1;">?? ${year}</span>
             <span style="font-size:0.72rem;padding:3px 9px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#cbd5e1;">?? ~${pages} Pages</span>
             <span style="font-size:0.72rem;padding:3px 9px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.35);border-radius:12px;color:#fbbf24;">? 4.8 Rating</span>
@@ -1112,7 +1116,7 @@ function openBookDetailFromDoc(doc, gridIdx = null) {
       <div style="padding:10px 20px 14px;display:flex;gap:10px;">
         ${alreadyAdded
           ? `<div style="flex:1;text-align:center;padding:14px;background:rgba(16,185,129,0.18);border:1.5px solid #10b981;border-radius:14px;color:#10b981;font-weight:800;font-size:0.9rem;">? Already in Your Library</div>`
-          : `<button onclick="addDocToLibraryFromModal('${escapeHtml(encodeURIComponent(JSON.stringify(doc)))}')" id="exploreModalAddBtn"
+          : `<button onclick="addCurrentActiveDocToLibrary()" id="exploreModalAddBtn"
               style="flex:1;padding:14px;background:linear-gradient(135deg, #f59e0b, #d97706);color:#000;border:none;border-radius:14px;font-size:0.92rem;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(245,158,11,0.45);letter-spacing:0.3px;">
               + Add to My Library
             </button>`
@@ -1131,28 +1135,20 @@ function openBookDetailFromDoc(doc, gridIdx = null) {
         </a>
       </div>
     </div>`;
-
-  modal.style.display = 'flex';
-  document.body.style.overflow = 'hidden';
 }
 
-function addDocToLibraryFromModal(encodedDoc) {
-  try {
-    const doc = JSON.parse(decodeURIComponent(encodedDoc));
-    addDocToLibrary(doc);
-    const btn = document.getElementById('exploreModalAddBtn');
-    if (btn) {
-      btn.outerHTML = `<div style="flex:1;text-align:center;padding:14px;background:rgba(16,185,129,0.18);border:1.5px solid #10b981;border-radius:14px;color:#10b981;font-weight:800;font-size:0.9rem;">? Added to Library!</div>`;
-    }
-  } catch (e) {
-    console.error('Error adding from modal:', e);
+function addCurrentActiveDocToLibrary() {
+  if (!window._currentActiveDocForModal) return;
+  addDocToLibrary(window._currentActiveDocForModal);
+  const btn = document.getElementById('exploreModalAddBtn');
+  if (btn) {
+    btn.outerHTML = `<div style="flex:1;text-align:center;padding:14px;background:rgba(16,185,129,0.18);border:1.5px solid #10b981;border-radius:14px;color:#10b981;font-weight:800;font-size:0.9rem;">? Added to Library!</div>`;
   }
 }
 
 function startQuickNoteForExploreBook(title, author) {
   closeExploreBookDetail();
-  // If notes view exists, navigate or trigger prompt
-  showToast(`"${title}" ke liye note save karne ke liye Library me add karein ??`);
+  showToast(`"${title}" ke liye note likhne ke liye pehle Library me add karein ??`);
 }
 
 function addDocToLibrary(doc) {
@@ -1187,7 +1183,6 @@ function addDocToLibrary(doc) {
   state.books.push(newBook);
   saveState();
 
-  // Re-render explore grid and library counts
   if (window._exploreDefaultBooks && window._exploreDefaultBooks.length > 0) {
     const grid = document.getElementById('exploreBooksGrid');
     if (grid) {
@@ -1200,8 +1195,10 @@ function addDocToLibrary(doc) {
 
 function closeExploreBookDetail() {
   const modal = document.getElementById('exploreBookDetailModal');
-  if (modal) modal.style.display = 'none';
-  document.body.style.overflow = '';
+  if (modal) {
+    modal.style.display = 'none';
+    modal.innerHTML = '';
+  }
 }
 
 function filterExploreGenre(genre) {
