@@ -207,9 +207,9 @@ public class MainActivity extends AppCompatActivity {
         public String getInstalledAppVersion() {
             try {
                 android.content.pm.PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
-                return pInfo.versionName != null ? pInfo.versionName : "0.0.39";
+                return pInfo.versionName != null ? pInfo.versionName : "0.0.44";
             } catch (Exception e) {
-                return "0.0.39";
+                return "0.0.44";
             }
         }
 

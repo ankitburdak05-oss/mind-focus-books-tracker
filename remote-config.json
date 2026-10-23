@@ -2,16 +2,16 @@
     "version":  "1.0.0",
     "updatedAt":  "2026-10-17T11:00:00.000Z",
     "activeRelease":  {
-                          "version":  "v0.0.43",
-                          "name":  "Mind Focus Books v0.0.43 (Smooth Book Detail \u0026 Instant Sheet Launch)",
-                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.43/MindFocusBooks-Native.apk",
+                          "version":  "v0.0.44",
+                          "name":  "Mind Focus Books v0.0.44 (Explore 3D Book Dossier \u0026 Full Version Sync)",
+                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.44/MindFocusBooks-Native.apk",
                           "features":  [
-                                           "⚡ Zero Lag Book Click: Explore me kisi bhi book par tap karne par instantly smooth dossier sheet khulegi bina kisi freeze/atak ke",
-                                           "📖 Safe In-Memory Detail State: URI encoding aur scroll locks hata kar butter-smooth response",
-                                           "🚀 3D Holographic Update Card: Home screen par floating beacon update card",
-                                           "🌟 Dynamic World Spotlight: Daily rotating world masterpieces with 1-tap Library add"
+                                           "📖 Explore 3D Book Detail Dossier: Explore ki kisi bhi book par tap karein - full high-res cover, author, pages, rating \u0026 1-tap Library add",
+                                           "🚀 3D Holographic System Update Card: Home screen par floating beacon update card",
+                                           "🔄 Live World Book Discovery: Trending, Bestsellers, Classics \u0026 Surprise Me Book Engine",
+                                           "✨ Perfect Version Sync: Profile me v0.0.44 real installed version badge"
                                        ],
-                          "stagedAt":  "2026-10-23T02:05:07.514Z",
+                          "stagedAt":  "2026-10-23T02:16:46.715Z",
                           "isDeployed":  true
                       },
     "stagedRelease":  {

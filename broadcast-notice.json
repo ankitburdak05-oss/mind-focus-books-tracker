@@ -1,14 +1,14 @@
 ﻿{
-    "id":  "notice-v0.0.43",
-    "version":  "v0.0.43",
+    "id":  "notice-v0.0.44",
+    "version":  "v0.0.44",
     "type":  "card1",
     "card":  "card1",
     "active":  true,
     "icon":  "🚀",
-    "title":  "Mind Focus Books v0.0.43 Ready!",
-    "message":  "Super smooth Explore Book Dossier sheet update! Ab kisi bhi book par click karne par app bina ruke turant detail card open karega.",
-    "btnText":  "⚡ Update Now (v0.0.43)",
+    "title":  "Mind Focus Books v0.0.44 Ready!",
+    "message":  "Super smooth 3D Book Dossier Sheet \u0026 World Explore Engine! Update karein aur Explore ki sabhi kitabon ke full details aur naye features dekhein.",
+    "btnText":  "⚡ Update Now (v0.0.44)",
     "action":  "update",
-    "apkUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.43/MindFocusBooks-Native.apk",
-    "timestamp":  "2026-10-23T02:05:07.758Z"
+    "apkUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.44/MindFocusBooks-Native.apk",
+    "timestamp":  "2026-10-23T02:16:46.979Z"
 }
