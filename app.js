@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER â€” MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.47';
-const CURRENT_APP_VERSION = 'v0.0.47';
+const APP_VERSION = '0.0.48';
+const CURRENT_APP_VERSION = 'v0.0.48';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -5761,7 +5761,15 @@ async function checkForBackgroundUpdates() {
     }
   }
 
-  // Auto-popup removed: No unexpected modals on app startup
+  if (isNewAvailable) {
+    // If not dismissed in this session, show the high-visibility holographic update modal
+    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + remoteVer);
+    if (!dismissed) {
+      setTimeout(() => {
+        openUpdateCheckerModal();
+      }, 1500);
+    }
+  }
 }
 
 // ================= 4 APP THEMES ENGINE =================

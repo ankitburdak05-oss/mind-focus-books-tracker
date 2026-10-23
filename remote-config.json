@@ -2,16 +2,15 @@
     "version":  "1.0.0",
     "updatedAt":  "2026-10-17T11:00:00.000Z",
     "activeRelease":  {
-                          "version":  "v0.0.47",
-                          "name":  "Mind Focus Books v0.0.47 (3D Book Dossier Sheet \u0026 Open Library)",
-                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.47/MindFocusBooks-Native.apk",
+                          "version":  "v0.0.48",
+                          "name":  "Mind Focus Books v0.0.48 (Auto-Update Pop \u0026 3D Book Dossier Sheet)",
+                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.48/MindFocusBooks-Native.apk",
                           "features":  [
-                                           "📖 3D Book Dossier Sheet: Kisi bhi book par tap karne par 3D perspective rotated cover khulega",
-                                           "⭐ Full Details on Tap: Title, Author, Year, Estimated Page Count, Ratings \u0026 Genres",
-                                           "➕ Add to My Library: Duplicate detection ke sath direct addition",
-                                           "📝 Save Note Shortcut \u0026 🌐 Open Library ↗ Deep-Link"
+                                           "📖 3D Book Dossier Sheet: Kisi bhi book par tap karte hi 3D perspective rotated cover, ratings, pages, Save Note \u0026 Open Library link khulega",
+                                           "🚀 Auto In-App Update Modal: Update detect hote hi screen par 3D Holographic modal pop-up hoga",
+                                           "⚡ Ultra Stable \u0026 Verified: Full Node.js syntax \u0026 DOM verified"
                                        ],
-                          "stagedAt":  "2026-10-23T02:56:55.000Z",
+                          "stagedAt":  "2026-10-23T03:09:11.815Z",
                           "isDeployed":  true
                       },
     "stagedRelease":  {
