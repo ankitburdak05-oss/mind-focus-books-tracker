@@ -2,16 +2,16 @@
     "version":  "1.0.0",
     "updatedAt":  "2026-10-17T11:00:00.000Z",
     "activeRelease":  {
-                          "version":  "v0.0.44",
-                          "name":  "Mind Focus Books v0.0.44 (Explore 3D Book Dossier \u0026 Full Version Sync)",
-                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.44/MindFocusBooks-Native.apk",
+                          "version":  "v0.0.45",
+                          "name":  "Mind Focus Books v0.0.45 (Stable Crash-Free Engine)",
+                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.45/MindFocusBooks-Native.apk",
                           "features":  [
-                                           "📖 Explore 3D Book Detail Dossier: Explore ki kisi bhi book par tap karein - full high-res cover, author, pages, rating \u0026 1-tap Library add",
-                                           "🚀 3D Holographic System Update Card: Home screen par floating beacon update card",
-                                           "🔄 Live World Book Discovery: Trending, Bestsellers, Classics \u0026 Surprise Me Book Engine",
-                                           "✨ Perfect Version Sync: Profile me v0.0.44 real installed version badge"
+                                           "⚡ Stable Crash-Free Engine: Syntax error fixed - app ekdum smoothly open hogi",
+                                           "📖 Explore World Discovery: Real books, covers and 1-tap Library add",
+                                           "🚀 3D Holographic In-App Update Engine",
+                                           "✨ Profile Version Sync: Exact installed version indicator"
                                        ],
-                          "stagedAt":  "2026-10-23T02:16:46.715Z",
+                          "stagedAt":  "2026-10-23T02:29:02.140Z",
                           "isDeployed":  true
                       },
     "stagedRelease":  {
