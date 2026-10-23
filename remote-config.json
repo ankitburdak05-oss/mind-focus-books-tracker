@@ -2,16 +2,15 @@
     "version":  "1.0.0",
     "updatedAt":  "2026-10-17T11:00:00.000Z",
     "activeRelease":  {
-                          "version":  "v0.0.45",
-                          "name":  "Mind Focus Books v0.0.45 (Stable Crash-Free Engine)",
-                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.45/MindFocusBooks-Native.apk",
+                          "version":  "v0.0.46",
+                          "name":  "Mind Focus Books v0.0.46 (Direct Native Detail View \u0026 Auto Updater)",
+                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.46/MindFocusBooks-Native.apk",
                           "features":  [
-                                           "⚡ Stable Crash-Free Engine: Syntax error fixed - app ekdum smoothly open hogi",
-                                           "📖 Explore World Discovery: Real books, covers and 1-tap Library add",
-                                           "🚀 3D Holographic In-App Update Engine",
-                                           "✨ Profile Version Sync: Exact installed version indicator"
+                                           "📖 Explore Book Tap: Kisi bhi book par click karte hi seedha full Native Book Detail view open hoga",
+                                           "⚡ Crash-Free \u0026 Zero-Lag: No modal freeze, real cover, authors and milestones loaded",
+                                           "🚀 Auto In-App Update Engine: Direct release sync"
                                        ],
-                          "stagedAt":  "2026-10-23T02:29:02.140Z",
+                          "stagedAt":  "2026-10-23T02:48:40.248Z",
                           "isDeployed":  true
                       },
     "stagedRelease":  {

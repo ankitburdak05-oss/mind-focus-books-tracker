@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.45';
-const CURRENT_APP_VERSION = 'v0.0.45';
+const APP_VERSION = '0.0.46';
+const CURRENT_APP_VERSION = 'v0.0.46';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -1043,8 +1043,52 @@ function renderExploreBookCard(doc, idx) {
 function openExploreBookDetail(idx) {
   const docs = window._exploreDefaultBooks;
   if (!docs || !docs[idx]) return;
-  window._currentActiveDocForModal = docs[idx];
-  renderActiveBookDetailSheet();
+  openExploreDocInFullDetail(docs[idx]);
+}
+
+function openExploreSearchBookDetail(idx) {
+  const docs = window._exploreAPIResults;
+  if (!docs || !docs[idx]) return;
+  openExploreDocInFullDetail(docs[idx]);
+}
+
+function openExploreDocInFullDetail(doc) {
+  if (!doc) return;
+  const title = doc.title || 'Unknown Title';
+  const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+  const coverId = doc.cover_i;
+  const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : '';
+  const pages = doc.number_of_pages_median || 280;
+
+  // Check if book already exists in library
+  let existingBook = state.books.find(b => b.title && b.title.toLowerCase() === title.toLowerCase());
+  if (!existingBook) {
+    // Construct temporary/preview book object compatible with openBookDetailView
+    existingBook = {
+      id: Date.now(),
+      title: title,
+      author: author,
+      cover: coverUrl,
+      cover_image: coverUrl,
+      pages: pages,
+      total_pages: pages,
+      current_page: 0,
+      status: 'WANT_TO_READ',
+      category: (doc.subject && doc.subject[0]) || 'World Literature',
+      rating: 4.8,
+      notes: `Discovered in Explore World Library. First published in ${doc.first_publish_year || 'Classic'}.`,
+      dateAdded: new Date().toISOString(),
+      notInterested: false,
+      fromExplore: true
+    };
+    // Temporarily add so openBookDetailView and actions operate safely
+    state.books.push(existingBook);
+    saveState();
+  }
+
+  // Open the primary high-resolution native book detail screen
+  openBookDetailView(existingBook);
+  showToast(`?? Opening "${title}" details...`);
 }
 
 function openExploreSearchBookDetail(idx) {
