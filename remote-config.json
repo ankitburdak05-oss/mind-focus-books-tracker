@@ -2,18 +2,18 @@
     "version":  "1.0.0",
     "updatedAt":  "2026-10-17T11:00:00.000Z",
     "activeRelease":  {
-                          "version":  "v0.0.40",
-                          "name":  "Mind Focus Books v0.0.40 (World Book Search - Explore Tab)",
+                          "version":  "v0.0.41",
+                          "name":  "Mind Focus Books v0.0.41 (Explore: Auto Books + Book Detail)",
                           "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
                           "features":  [
-                                           "🔍 World Book Search: Explore tab me crores books search karo - koi bhi book, koi bhi author",
-                                           "🖼️ Real Book Covers: Har book ki asli cover image Open Library se",
-                                           "➕ Add to Library: Seedha Explore se apni Library me add karo",
-                                           "✅ Duplicate Check: Already added books pe \u0027Already in Library\u0027 dikhega",
-                                           "📚 Millions of Books: Fiction, Self Help, Business, Science - sab categories",
-                                           "⚡ Fast Search: Enter dabao ya Search button - turant results"
+                                           "📚 Auto Books in Explore: Bina search ke hi trending books load hoti hain",
+                                           "🔄 Refresh = Nayi Books: Har baar Explore kholo to naye books aate hain",
+                                           "🎯 Genre Chips: Productivity, Fiction etc. click karo - real books fetch hoti hain",
+                                           "📖 Book Detail Popup: Kisi bhi book pe tap karo - full detail, cover, info",
+                                           "➕ Add to Library: Detail popup se seedha library me add karo",
+                                           "🔍 Search: Koi bhi book search karo - real covers ke saath"
                                        ],
-                          "stagedAt":  "2026-10-22T17:06:31.174Z",
+                          "stagedAt":  "2026-10-23T01:45:10.480Z",
                           "isDeployed":  true
                       },
     "stagedRelease":  {

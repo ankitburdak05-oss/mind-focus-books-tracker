@@ -738,38 +738,227 @@ function renderLibraryGrid() {
 }
 
 // ================= VIEW 3: EXPLORE =================
+window._exploreDefaultBooks = [];
+window._exploreAPIResults = null;
+let _exploreSearchDebounce = null;
+
 function renderExploreView() {
   renderPopularCategoryCounts();
-  renderExploreBooksGrid();
+  loadExploreDefaultBooks(state.exploreGenre || 'ALL');
 }
 
 function renderPopularCategoryCounts() {
   const countCat = (catPattern) => {
     return state.books.filter(b => !b.notInterested && b.category && b.category.toLowerCase().includes(catPattern.toLowerCase())).length;
   };
-  
   const elMindset = document.getElementById('catCountMindset');
   if (elMindset) elMindset.innerText = `${countCat('Mindset')} books`;
-  
   const elBrain = document.getElementById('catCountBrain');
   if (elBrain) elBrain.innerText = `${countCat('Brain Science')} books`;
-  
   const elMemory = document.getElementById('catCountMemory');
   if (elMemory) elMemory.innerText = `${countCat('Memory')} books`;
-  
   const elFocus = document.getElementById('catCountFocus');
   if (elFocus) elFocus.innerText = `${countCat('Focus')} books`;
-  
   const elPsych = document.getElementById('catCountPsychology');
   if (elPsych) elPsych.innerText = `${countCat('Dark Psychology')} books`;
-  
   const elWealth = document.getElementById('catCountWealth');
   if (elWealth) elWealth.innerText = `${countCat('Wealth')} books`;
 }
 
+// Subject mapping for genre chips -> API
+const EXPLORE_SUBJECT_MAP = {
+  'ALL':            ['self_help','productivity','psychology','philosophy','science','history','fiction','biography'],
+  'Productivity':   ['productivity','time_management','habit'],
+  'Self Help':      ['self_help','personal_development','motivation'],
+  'Fiction':        ['fiction','thriller','mystery','novel','fantasy'],
+  'Business':       ['business','economics','entrepreneurship','marketing'],
+  'Technology':     ['technology','computers','artificial_intelligence','programming'],
+  'Dark Psychology':['psychology','persuasion','influence','manipulation','behavior'],
+  'Philosophy':     ['philosophy','stoicism','ethics','wisdom']
+};
+
+async function loadExploreDefaultBooks(genre) {
+  const grid = document.getElementById('exploreBooksGrid');
+  const titleEl = document.getElementById('exploreGridHeaderTitle');
+  if (!grid) return;
+
+  // Loading skeleton
+  grid.innerHTML = `
+    <div style="grid-column:1/-1;text-align:center;padding:32px 16px;color:var(--text-secondary);">
+      <div style="font-size:1.8rem;margin-bottom:8px;">??</div>
+      <div style="font-size:0.9rem;">Loading books...</div>
+    </div>`;
+
+  const subjects = EXPLORE_SUBJECT_MAP[genre] || EXPLORE_SUBJECT_MAP['ALL'];
+  const subject = subjects[Math.floor(Math.random() * subjects.length)];
+  const offset = Math.floor(Math.random() * 80);
+
+  try {
+    const url = `https://openlibrary.org/search.json?subject=${encodeURIComponent(subject)}&limit=16&offset=${offset}&fields=key,title,author_name,cover_i,number_of_pages_median,subject,first_publish_year&language=eng`;
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('API fail');
+    const data = await resp.json();
+
+    const docs = (data.docs || []).filter(d => d.cover_i && d.title);
+    if (docs.length === 0) {
+      grid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-secondary);">Koi book nahi mili. Dobara try karo.</div>`;
+      return;
+    }
+
+    window._exploreDefaultBooks = docs;
+
+    if (titleEl) {
+      titleEl.innerHTML = genre === 'ALL'
+        ? `Trending Books ?? <span style="font-size:0.72rem;font-weight:400;color:var(--text-muted);">tap to see details</span>`
+        : `${genre} Books <span style="font-size:0.72rem;font-weight:400;color:var(--text-muted);">tap to see details</span>`;
+    }
+
+    grid.innerHTML = docs.map((doc, idx) => renderExploreBookCard(doc, idx)).join('');
+
+  } catch(err) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:32px;color:var(--text-secondary);">
+        <div style="font-size:1.5rem;margin-bottom:8px;">??</div>
+        <div>Internet check karo aur Explore tab dobara kholo.</div>
+        <button onclick="loadExploreDefaultBooks('${genre}')" style="margin-top:12px;padding:8px 20px;background:var(--gold-primary);color:#000;border:none;border-radius:8px;font-weight:700;cursor:pointer;">Retry</button>
+      </div>`;
+    console.error('Explore load error:', err);
+  }
+}
+
+function renderExploreBookCard(doc, idx) {
+  const title = doc.title || 'Unknown Title';
+  const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+  const coverId = doc.cover_i;
+  const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : 'cover_placeholder.jpg';
+  const year = doc.first_publish_year || '';
+  const alreadyAdded = state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase());
+
+  return `
+    <div class="grid-book-card" style="cursor:pointer;" onclick="openExploreBookDetail(${idx})">
+      <div class="grid-cover-wrap" style="height:145px;overflow:hidden;border-radius:10px 10px 0 0;position:relative;">
+        <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy"
+          onerror="this.src='cover_placeholder.jpg'"
+          style="width:100%;height:145px;object-fit:cover;transition:transform 0.3s;"
+          onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">
+        ${alreadyAdded ? `<div style="position:absolute;top:6px;right:6px;background:#10b981;color:#fff;font-size:0.6rem;font-weight:700;padding:2px 6px;border-radius:20px;">? Added</div>` : ''}
+      </div>
+      <div class="grid-book-meta" style="padding:8px;">
+        <div class="grid-book-title" style="font-size:0.8rem;font-weight:600;line-height:1.3;margin-bottom:2px;">${escapeHtml(title)}</div>
+        <div class="grid-book-author" style="font-size:0.7rem;color:var(--text-secondary);">${escapeHtml(author)}${year ? ' · ' + year : ''}</div>
+      </div>
+    </div>`;
+}
+
+function openExploreBookDetail(idx) {
+  const docs = window._exploreDefaultBooks;
+  if (!docs || !docs[idx]) return;
+  const doc = docs[idx];
+
+  const title = doc.title || 'Unknown Title';
+  const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+  const coverId = doc.cover_i;
+  const coverLarge = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : 'cover_placeholder.jpg';
+  const pages = doc.number_of_pages_median || '';
+  const year = doc.first_publish_year || '';
+  const subjects = (doc.subject || []).slice(0, 5).join(' · ') || 'General';
+  const alreadyAdded = state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase());
+
+  const modal = document.getElementById('exploreBookDetailModal');
+  if (!modal) return;
+
+  modal.innerHTML = `
+    <div style="background:var(--card-bg);border-radius:20px 20px 0 0;max-height:90vh;overflow-y:auto;padding:0 0 40px 0;">
+      <!-- Handle bar -->
+      <div style="display:flex;justify-content:center;padding:12px 0 0;">
+        <div style="width:36px;height:4px;background:var(--border-color);border-radius:2px;"></div>
+      </div>
+      <!-- Close button -->
+      <div style="display:flex;justify-content:flex-end;padding:8px 16px 0;">
+        <button onclick="closeExploreBookDetail()" style="background:none;border:none;color:var(--text-secondary);font-size:1.4rem;cursor:pointer;line-height:1;">&#x2715;</button>
+      </div>
+      <!-- Cover + Info -->
+      <div style="display:flex;gap:16px;padding:8px 20px 16px;">
+        <img src="${escapeHtml(coverLarge)}" onerror="this.src='cover_placeholder.jpg'"
+          style="width:110px;height:160px;object-fit:cover;border-radius:12px;flex-shrink:0;box-shadow:0 8px 24px rgba(0,0,0,0.4);">
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:1rem;font-weight:700;line-height:1.3;margin-bottom:6px;color:var(--text-primary);">${escapeHtml(title)}</div>
+          <div style="font-size:0.85rem;color:var(--gold-primary);font-weight:600;margin-bottom:10px;">by ${escapeHtml(author)}</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+            ${year ? `<span style="font-size:0.7rem;padding:3px 10px;background:rgba(255,255,255,0.08);border-radius:20px;color:var(--text-secondary);">?? ${year}</span>` : ''}
+            ${pages ? `<span style="font-size:0.7rem;padding:3px 10px;background:rgba(255,255,255,0.08);border-radius:20px;color:var(--text-secondary);">?? ${pages} pages</span>` : ''}
+          </div>
+          <div style="font-size:0.72rem;color:var(--text-muted);line-height:1.5;margin-bottom:4px;">
+            <strong style="color:var(--text-secondary);">Genres:</strong> ${escapeHtml(subjects)}
+          </div>
+        </div>
+      </div>
+      <!-- Actions -->
+      <div style="padding:0 20px 8px;display:flex;gap:10px;">
+        ${alreadyAdded
+          ? `<div style="flex:1;text-align:center;padding:12px;background:rgba(16,185,129,0.15);border-radius:12px;color:#10b981;font-weight:700;font-size:0.85rem;">? Already in Your Library</div>`
+          : `<button onclick="addExploreBookToLibraryFromDetail(${idx})" id="exploreDetailAddBtn"
+              style="flex:1;padding:13px;background:var(--gold-primary);color:#000;border:none;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;letter-spacing:0.3px;">
+              + Add to Library
+            </button>`
+        }
+        <button onclick="closeExploreBookDetail()"
+          style="padding:13px 18px;background:rgba(255,255,255,0.08);color:var(--text-secondary);border:none;border-radius:12px;font-size:0.85rem;cursor:pointer;">
+          Cancel
+        </button>
+      </div>
+      <!-- Open Library Link -->
+      <div style="text-align:center;padding:8px;">
+        <a href="https://openlibrary.org${doc.key || ''}" target="_blank"
+          style="font-size:0.72rem;color:var(--text-muted);text-decoration:none;">
+          View on Open Library ?
+        </a>
+      </div>
+    </div>`;
+
+  modal.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function addExploreBookToLibraryFromDetail(idx) {
+  const docs = window._exploreDefaultBooks;
+  if (!docs || !docs[idx]) return;
+  const doc = docs[idx];
+  const title = doc.title || 'Unknown Title';
+  const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+  const coverId = doc.cover_i;
+  const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : '';
+  const pages = doc.number_of_pages_median || 200;
+
+  if (state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase())) {
+    showToast('Ye book already library me hai!'); return;
+  }
+
+  state.books.push({
+    id: Date.now(), title, author, cover: coverUrl, pages,
+    current_page: 0, status: 'want_to_read',
+    category: (doc.subject && doc.subject[0]) || 'General',
+    rating: 0, notes: '', dateAdded: new Date().toISOString(),
+    notInterested: false, fromExplore: true
+  });
+  saveState();
+
+  const btn = document.getElementById('exploreDetailAddBtn');
+  if (btn) btn.outerHTML = `<div style="flex:1;text-align:center;padding:12px;background:rgba(16,185,129,0.15);border-radius:12px;color:#10b981;font-weight:700;font-size:0.85rem;">? Added to Library!</div>`;
+
+  // Also update the card in grid
+  if (window._exploreDefaultBooks) renderExploreBookCard(doc, idx);
+  showToast(`"${title}" library me add ho gayi! ??`);
+}
+
+function closeExploreBookDetail() {
+  const modal = document.getElementById('exploreBookDetailModal');
+  if (modal) modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
 function filterExploreGenre(genre) {
   state.exploreGenre = genre;
-  
   const chips = document.querySelectorAll('#exploreGenreChips .filter-chip');
   chips.forEach(c => {
     if (c.innerText.trim() === genre || (genre === 'ALL' && c.innerText.trim() === 'All')) {
@@ -778,28 +967,17 @@ function filterExploreGenre(genre) {
       c.classList.remove('active');
     }
   });
-  
-  const title = document.getElementById('exploreGridHeaderTitle');
-  if (title) {
-    title.innerText = genre === 'ALL' ? 'Explore Recommendations' : `${genre} Books`;
-  }
-  
-  renderExploreBooksGrid();
+  loadExploreDefaultBooks(genre);
 }
 
 function handleExploreSearch(val) {
   state.exploreSearchQuery = val.trim().toLowerCase();
-  renderExploreBooksGrid();
 }
-
-// ---- OPEN LIBRARY API SEARCH ----
-let _exploreSearchDebounce = null;
 
 function handleExploreSearchLive(val) {
   const clearBtn = document.getElementById('exploreSearchClearBtn');
   if (clearBtn) clearBtn.style.display = val.length > 0 ? 'block' : 'none';
-  clearTimeout(_exploreSearchDebounce);
-  if (val.trim().length === 0) { clearExploreSearch(); return; }
+  if (val.trim().length === 0) { clearExploreSearch(); }
 }
 
 function triggerExploreAPISearch() {
@@ -824,20 +1002,18 @@ async function searchOpenLibrary(query) {
     const response = await fetch(url);
     if (!response.ok) throw new Error('API error');
     const data = await response.json();
-
     if (statusEl) statusEl.style.display = 'none';
 
     if (!data.docs || data.docs.length === 0) {
-      if (resultsSection) {
-        resultsSection.style.display = 'block';
-        if (resultsTitle) resultsTitle.innerText = `"${query}" ke liye koi result nahi mila`;
-        if (resultsGrid) resultsGrid.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-secondary);">Koi book nahi mili. Dusra naam try karo.</div>';
-      }
+      if (resultsSection) { resultsSection.style.display = 'block'; }
+      if (resultsTitle) resultsTitle.innerText = `"${query}" ke liye koi result nahi mila`;
+      if (resultsGrid) resultsGrid.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-secondary);">Koi book nahi mili. Dusra naam try karo.</div>';
       return;
     }
 
+    window._exploreAPIResults = data.docs;
     const total = data.num_found || data.docs.length;
-    if (resultsTitle) resultsTitle.innerText = `"${query}" - ${total.toLocaleString()} books mili`;
+    if (resultsTitle) resultsTitle.innerText = `"${query}" — ${total.toLocaleString()} books mili`;
 
     if (resultsGrid) {
       resultsGrid.innerHTML = data.docs.map((doc, idx) => {
@@ -848,40 +1024,41 @@ async function searchOpenLibrary(query) {
         const pages = doc.number_of_pages_median || '';
         const year = doc.first_publish_year || '';
         const alreadyAdded = state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase());
-
         return `
-          <div class="grid-book-card" style="position:relative;">
-            <div class="grid-cover-wrap" style="height:140px;overflow:hidden;border-radius:10px 10px 0 0;">
-              <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'" style="width:100%;height:140px;object-fit:cover;">
+          <div class="grid-book-card" style="cursor:pointer;" onclick="openExploreSearchBookDetail(${idx})">
+            <div class="grid-cover-wrap" style="height:145px;overflow:hidden;border-radius:10px 10px 0 0;">
+              <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'" style="width:100%;height:145px;object-fit:cover;">
             </div>
             <div class="grid-book-meta" style="padding:8px;">
-              <div class="grid-book-title" style="font-size:0.82rem;font-weight:600;line-height:1.3;margin-bottom:3px;">${escapeHtml(title)}</div>
-              <div class="grid-book-author" style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:6px;">${escapeHtml(author)}${year ? ' &middot; ' + year : ''}</div>
-              ${pages ? `<div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:6px;">&#x1F4C4; ${pages} pages</div>` : ''}
+              <div class="grid-book-title" style="font-size:0.8rem;font-weight:600;line-height:1.3;margin-bottom:2px;">${escapeHtml(title)}</div>
+              <div class="grid-book-author" style="font-size:0.7rem;color:var(--text-secondary);margin-bottom:6px;">${escapeHtml(author)}${year ? ' · ' + year : ''}</div>
+              ${pages ? `<div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:5px;">?? ${pages} pages</div>` : ''}
               ${alreadyAdded
-                ? `<div style="text-align:center;font-size:0.72rem;color:#10b981;font-weight:600;padding:6px 0;">&#x2705; Already in Library</div>`
-                : `<button type="button" onclick="addExploreBookToLibrary(${idx})" data-explore-idx="${idx}" style="width:100%;padding:7px;background:var(--gold-primary);color:#000;border:none;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;">+ Add to Library</button>`
+                ? `<div style="text-align:center;font-size:0.72rem;color:#10b981;font-weight:600;padding:5px 0;">&#x2705; Already in Library</div>`
+                : `<button type="button" onclick="event.stopPropagation();addExploreSearchBookToLibrary(${idx})" data-search-idx="${idx}" style="width:100%;padding:7px;background:var(--gold-primary);color:#000;border:none;border-radius:8px;font-size:0.75rem;font-weight:700;cursor:pointer;">+ Add to Library</button>`
               }
             </div>
-          </div>
-        `;
+          </div>`;
       }).join('');
-      window._exploreAPIResults = data.docs;
     }
-
-    if (resultsSection) resultsSection.style.display = 'block';
-    if (resultsSection) resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
+    if (resultsSection) { resultsSection.style.display = 'block'; resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
   } catch (err) {
-    if (statusEl) {
-      statusEl.style.display = 'block';
-      statusEl.innerHTML = '&#x274C; Search fail hui. Internet check karo aur dobara try karo.';
-    }
+    if (statusEl) { statusEl.style.display = 'block'; statusEl.innerHTML = '&#x274C; Search fail hui. Internet check karo.'; }
     console.error('OpenLibrary search error:', err);
   }
 }
 
-function addExploreBookToLibrary(idx) {
+function openExploreSearchBookDetail(idx) {
+  const doc = (window._exploreAPIResults || [])[idx];
+  if (!doc) return;
+  // Temporarily set in default books for detail modal reuse
+  const tempIdx = (window._exploreDefaultBooks || []).length;
+  if (!window._exploreDefaultBooks) window._exploreDefaultBooks = [];
+  window._exploreDefaultBooks[tempIdx] = doc;
+  openExploreBookDetail(tempIdx);
+}
+
+function addExploreSearchBookToLibrary(idx) {
   const docs = window._exploreAPIResults;
   if (!docs || !docs[idx]) return;
   const doc = docs[idx];
@@ -890,36 +1067,18 @@ function addExploreBookToLibrary(idx) {
   const coverId = doc.cover_i;
   const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : '';
   const pages = doc.number_of_pages_median || 200;
-
   if (state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase())) {
-    showToast('Ye book already library me hai!');
-    return;
+    showToast('Ye book already library me hai!'); return;
   }
-
-  const newBook = {
-    id: Date.now(),
-    title: title,
-    author: author,
-    cover: coverUrl,
-    pages: pages,
-    current_page: 0,
-    status: 'want_to_read',
-    category: (doc.subject && doc.subject[0]) || 'General',
-    rating: 0,
-    notes: '',
-    dateAdded: new Date().toISOString(),
-    notInterested: false,
-    fromExplore: true
-  };
-
-  state.books.push(newBook);
+  state.books.push({ id: Date.now(), title, author, cover: coverUrl, pages, current_page: 0, status: 'want_to_read', category: (doc.subject && doc.subject[0]) || 'General', rating: 0, notes: '', dateAdded: new Date().toISOString(), notInterested: false, fromExplore: true });
   saveState();
+  const btn = document.querySelector(`[data-search-idx="${idx}"]`);
+  if (btn) btn.outerHTML = `<div style="text-align:center;font-size:0.72rem;color:#10b981;font-weight:600;padding:5px 0;">&#x2705; Added!</div>`;
+  showToast(`"${title}" library me add ho gayi! ??`);
+}
 
-  const btn = document.querySelector(`[data-explore-idx="${idx}"]`);
-  if (btn) {
-    btn.outerHTML = `<div style="text-align:center;font-size:0.72rem;color:#10b981;font-weight:600;padding:6px 0;">&#x2705; Added!</div>`;
-  }
-  showToast(`"${title}" library me add ho gayi! &#x1F4DA;`);
+function addExploreBookToLibrary(idx) {
+  addExploreSearchBookToLibrary(idx);
 }
 
 function clearExploreSearch() {
@@ -935,47 +1094,7 @@ function clearExploreSearch() {
 }
 
 function renderExploreBooksGrid() {
-  const grid = document.getElementById('exploreBooksGrid');
-  if (!grid) return;
-  
-  let list = state.books.filter(b => !b.notInterested);
-  
-  if (state.exploreGenre !== 'ALL') {
-    list = list.filter(b => (b.category || '').toLowerCase().includes(state.exploreGenre.toLowerCase()));
-  }
-  
-  if (state.exploreSearchQuery) {
-    list = list.filter(b => 
-      (b.title && b.title.toLowerCase().includes(state.exploreSearchQuery)) ||
-      (b.author && b.author.toLowerCase().includes(state.exploreSearchQuery)) ||
-      (b.category && b.category.toLowerCase().includes(state.exploreSearchQuery))
-    );
-  }
-  
-  grid.innerHTML = list.slice(0, 24).map(book => {
-    const originalIndex = state.books.indexOf(book);
-    const total = book.pages || book.total_pages || 200;
-    const current = book.current_page || 0;
-    const pct = Math.min(100, Math.round((current / total) * 100));
-    
-    return `
-      <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
-        <div class="grid-cover-wrap">
-          <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
-        </div>
-        <div class="grid-book-meta">
-          <div class="grid-book-title">${escapeHtml(book.title)}</div>
-          <div class="grid-book-author">${escapeHtml(book.author || 'Unknown')}</div>
-          <div class="grid-progress-wrap">
-            <div class="grid-progress-bar">
-              <div class="grid-progress-fill" style="width: ${pct}%"></div>
-            </div>
-            <span class="grid-progress-text">${pct}%</span>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
+  loadExploreDefaultBooks(state.exploreGenre || 'ALL');
 }
 
 // ================= VIEW 4: PROGRESS & ANALYTICS =================
