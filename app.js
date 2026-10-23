@@ -1,9 +1,9 @@
 // ==========================================================================
-// MIND & FOCUS BOOKS TRACKER â€” MODERN NATIVE APP ENGINE (v0.0.39)
+// MIND & FOCUS BOOKS TRACKER Ã¢â‚¬â€ MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.48';
-const CURRENT_APP_VERSION = 'v0.0.48';
+const APP_VERSION = '0.0.49';
+const CURRENT_APP_VERSION = 'v0.0.49';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -299,7 +299,7 @@ function loadBooks() {
 }
 
 function resetAllBookPricesToZero() {
-  if (confirm('Reset prices of all books to â‚¹0?\n\n(Only books where you explicitly add a price will show a cost in your budget).')) {
+  if (confirm('Reset prices of all books to Ã¢â€šÂ¹0?\n\n(Only books where you explicitly add a price will show a cost in your budget).')) {
     state.books.forEach(b => {
       b.price = 0;
       b.price_user_set = false;
@@ -307,7 +307,7 @@ function resetAllBookPricesToZero() {
     saveBooks();
     renderReadingBudget();
     renderLibrary();
-    showToast('All book prices reset to â‚¹0! ðŸ’°');
+    showToast('All book prices reset to Ã¢â€šÂ¹0! Ã°Å¸â€™Â°');
   }
 }
 
@@ -380,16 +380,16 @@ function updateDynamicGreeting() {
   if (pre && emoji) {
     if (hour >= 5 && hour < 12) {
       pre.innerText = 'Good Morning,';
-      emoji.innerText = 'ðŸŒ…';
+      emoji.innerText = 'Ã°Å¸Å’â€¦';
     } else if (hour >= 12 && hour < 17) {
       pre.innerText = 'Good Afternoon,';
-      emoji.innerText = 'â˜€ï¸';
+      emoji.innerText = 'Ã¢Ëœâ‚¬Ã¯Â¸Â';
     } else if (hour >= 17 && hour < 21) {
       pre.innerText = 'Good Evening,';
-      emoji.innerText = 'ðŸŒ‡';
+      emoji.innerText = 'Ã°Å¸Å’â€¡';
     } else {
       pre.innerText = 'Good Night,';
-      emoji.innerText = 'ðŸŒ™';
+      emoji.innerText = 'Ã°Å¸Å’â„¢';
     }
   }
 }
@@ -416,10 +416,10 @@ function renderHomeCurrentlyReading() {
     subtitleEl.innerHTML = `
       <span>${pct}% completed (${current}/${total} pages)</span>
       <span style="display:inline-block; margin-left:6px; padding:2px 8px; border-radius:10px; background:rgba(245,158,11,0.18); color:var(--accent-gold); font-weight:700; font-size:11px;">
-        â³ ${daysSpent} Day${daysSpent === 1 ? '' : 's'} Spent
+        Ã¢ÂÂ³ ${daysSpent} Day${daysSpent === 1 ? '' : 's'} Spent
       </span>
       <span style="display:inline-block; margin-left:4px; padding:2px 8px; border-radius:10px; background:rgba(16,185,129,0.18); color:var(--accent-emerald); font-weight:700; font-size:11px;">
-        ðŸ“… ${formatDateDisplay(today)}
+        Ã°Å¸â€œâ€¦ ${formatDateDisplay(today)}
       </span>
     `;
   }
@@ -613,10 +613,10 @@ function renderLibraryGrid() {
   if (shelfChip) {
     if (state.activeShelfFilter) {
       const activeShelfObj = (state.customShelves || []).find(s => s.id === state.activeShelfFilter);
-      shelfChip.innerHTML = `${activeShelfObj ? activeShelfObj.icon + ' ' + activeShelfObj.name : 'ðŸ“ Shelf'} (Filtered)`;
+      shelfChip.innerHTML = `${activeShelfObj ? activeShelfObj.icon + ' ' + activeShelfObj.name : 'Ã°Å¸â€œÂ Shelf'} (Filtered)`;
       shelfChip.classList.add('active');
     } else {
-      shelfChip.innerHTML = `ðŸ“ Shelves (<span id="countShelves">${(state.customShelves || []).length}</span>)`;
+      shelfChip.innerHTML = `Ã°Å¸â€œÂ Shelves (<span id="countShelves">${(state.customShelves || []).length}</span>)`;
       shelfChip.classList.remove('active');
     }
   }
@@ -682,7 +682,7 @@ function renderLibraryGrid() {
   
   if (filtered.length === 0) {
     grid.innerHTML = `<div style="grid-column: 1 / -1; text-align: center; padding: 40px 10px; color: var(--text-secondary);">
-      <div style="font-size: 32px; margin-bottom: 8px;">ðŸ“š</div>
+      <div style="font-size: 32px; margin-bottom: 8px;">Ã°Å¸â€œÅ¡</div>
       <p style="font-weight: 600;">No books match your criteria.</p>
       ${state.activeShelfFilter ? '<button type="button" class="btn-gold-pill" style="margin-top:10px;" onclick="clearShelfFilter()">Clear Shelf Filter</button>' : ''}
     </div>`;
@@ -782,7 +782,7 @@ const EXPLORE_CURATED_SPOTLIGHTS = [
     year: '2011',
     cover_i: 7268800,
     rating: '4.6 (Nobel Prize Science)',
-    desc: 'A groundbreaking tour of the mind explaining the two systems that drive the way we think — fast, intuitive, and slow, deliberate logic.',
+    desc: 'A groundbreaking tour of the mind explaining the two systems that drive the way we think â€” fast, intuitive, and slow, deliberate logic.',
     pages: 499,
     subject: ['Brain Science', 'Psychology', 'Economics', 'Decision Making']
   },
@@ -1035,15 +1035,24 @@ function renderExploreBookCard(doc, idx) {
       </div>
       <div class="grid-book-meta" style="padding:8px 9px 10px;">
         <div class="grid-book-title" style="font-size:0.82rem;font-weight:700;line-height:1.25;margin-bottom:3px;color:var(--text-primary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(title)}</div>
-        <div class="grid-book-author" style="font-size:0.72rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(author)}${year ? ' · ' + year : ''}</div>
+        <div class="grid-book-author" style="font-size:0.72rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(author)}${year ? ' Â· ' + year : ''}</div>
       </div>
     </div>`;
 }
 
 function openExploreBookDetail(idx) {
-  const docs = window._exploreDefaultBooks;
-  if (!docs || !docs[idx]) return;
-  open3dBookDossierSheet(docs[idx]);
+  console.log('openExploreBookDetail called with idx:', idx);
+  try {
+    const docs = window._exploreDefaultBooks;
+    if (!docs || !docs[idx]) {
+      console.warn('Doc not found at index:', idx);
+      return;
+    }
+    open3dBookDossierSheet(docs[idx]);
+  } catch(e) {
+    console.error('Error in openExploreBookDetail:', e);
+    alert('Error opening book: ' + e.message);
+  }
 }
 
 function openExploreSearchBookDetail(idx) {
@@ -1062,7 +1071,7 @@ function open3dBookDossierSheet(doc) {
   const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : 'cover_placeholder.jpg';
   const pages = doc.number_of_pages_median || 280;
   const year = doc.first_publish_year || 'Classic';
-  const subjects = (doc.subject || []).slice(0, 5).join(' • ') || 'Personal Growth • Literature';
+  const subjects = (doc.subject || []).slice(0, 5).join(' â€¢ ') || 'Personal Growth â€¢ Literature';
   const alreadyAdded = state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase());
 
   let modal = document.getElementById('exploreBookDetailModal');
@@ -1276,7 +1285,7 @@ async function searchOpenLibrary(query) {
 
     window._exploreAPIResults = data.docs;
     const total = data.num_found || data.docs.length;
-    if (resultsTitle) resultsTitle.innerText = `"${query}" — ${total.toLocaleString()} kitabein mili`;
+    if (resultsTitle) resultsTitle.innerText = `"${query}" â€” ${total.toLocaleString()} kitabein mili`;
 
     if (resultsGrid) {
       resultsGrid.innerHTML = data.docs.map((doc, idx) => {
@@ -1295,7 +1304,7 @@ async function searchOpenLibrary(query) {
             </div>
             <div class="grid-book-meta" style="padding:8px 9px 10px;">
               <div class="grid-book-title" style="font-size:0.82rem;font-weight:700;line-height:1.25;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(title)}</div>
-              <div class="grid-book-author" style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(author)}${year ? ' · ' + year : ''}</div>
+              <div class="grid-book-author" style="font-size:0.72rem;color:var(--text-secondary);margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(author)}${year ? ' Â· ' + year : ''}</div>
               ${pages ? `<div style="font-size:0.68rem;color:var(--text-muted);margin-bottom:6px;">?? ${pages} pages</div>` : ''}
               ${alreadyAdded
                 ? `<div style="text-align:center;font-size:0.72rem;color:#10b981;font-weight:700;padding:6px 0;">? In Library</div>`
@@ -1381,7 +1390,7 @@ function renderStreakTracker() {
     return `
       <div class="streak-day-badge ${isActive ? 'active' : ''}">
         <span class="streak-day-name">${name}</span>
-        <span class="streak-day-icon">${isActive ? 'ðŸ”¥' : 'âšª'}</span>
+        <span class="streak-day-icon">${isActive ? 'Ã°Å¸â€Â¥' : 'Ã¢Å¡Âª'}</span>
       </div>
     `;
   }).join('');
@@ -1405,7 +1414,7 @@ function openSetGoalPrompt() {
   if (val && !isNaN(val) && parseInt(val, 10) > 0) {
     localStorage.setItem('mf_reading_goal_2026', parseInt(val, 10));
     renderReadingGoal();
-    showToast(`2026 Reading Goal set to ${val} books! ðŸŽ¯`);
+    showToast(`2026 Reading Goal set to ${val} books! Ã°Å¸Å½Â¯`);
   }
 }
 
@@ -1432,7 +1441,7 @@ function renderReadingBudget() {
   const avgPrice = pricedBooks.length ? Math.round(totalSpent / pricedBooks.length) : 0;
   
   // Format with Indian Rupee symbol & commas
-  const formatINR = (num) => 'â‚¹' + Math.round(Number(num) || 0).toLocaleString('en-IN');
+  const formatINR = (num) => 'Ã¢â€šÂ¹' + Math.round(Number(num) || 0).toLocaleString('en-IN');
   
   // Update metric card in stats row
   const elProgPrice = document.getElementById('progTotalPrice');
@@ -1486,7 +1495,7 @@ function renderReadingBudget() {
   // Update profile menu item subtitle
   const profileSub = document.getElementById('profileTotalSpentSubText');
   if (profileSub) {
-    profileSub.innerText = `${formatINR(totalSpent)} Total Spent â€¢ ${pricedBooks.length} Books`;
+    profileSub.innerText = `${formatINR(totalSpent)} Total Spent Ã¢â‚¬Â¢ ${pricedBooks.length} Books`;
   }
 
   // If currently viewing the Total Spent screen, re-render it
@@ -1509,7 +1518,7 @@ function renderTotalSpentView() {
   const pricedBooks = (state.books || []).filter(b => b && b.price && Number(b.price) > 0);
   const totalSpent = pricedBooks.reduce((acc, b) => acc + Number(b.price), 0);
   const avgPrice = pricedBooks.length ? Math.round(totalSpent / pricedBooks.length) : 0;
-  const formatINR = (num) => 'â‚¹' + Math.round(Number(num) || 0).toLocaleString('en-IN');
+  const formatINR = (num) => 'Ã¢â€šÂ¹' + Math.round(Number(num) || 0).toLocaleString('en-IN');
 
   if (countEl) countEl.innerText = `${pricedBooks.length} Book${pricedBooks.length === 1 ? '' : 's'} with Price`;
   if (sumEl) sumEl.innerText = formatINR(totalSpent);
@@ -1518,7 +1527,7 @@ function renderTotalSpentView() {
   if (pricedBooks.length === 0) {
     container.innerHTML = `
       <div class="total-spent-empty-state">
-        <div class="total-spent-empty-icon">ðŸ·ï¸</div>
+        <div class="total-spent-empty-icon">Ã°Å¸ÂÂ·Ã¯Â¸Â</div>
         <div class="total-spent-empty-title">Koi Kitab Price ke Sath Nahi Hai</div>
         <div class="total-spent-empty-desc">Jab aap kisi kitab ko Edit karke uski price add karenge, to vo yahan automatically show hone lagegi.</div>
       </div>
@@ -1590,7 +1599,7 @@ function renderBookStatusView() {
   // Update profile menu item subtitle
   const profileStatusSub = document.getElementById('profileBookStatusSubText');
   if (profileStatusSub) {
-    profileStatusSub.innerText = `âœ… ${doneBooks.length} Done â€¢ ðŸ“– ${readingBooks.length} Reading â€¢ â³ ${pendingBooks.length} Pending`;
+    profileStatusSub.innerText = `Ã¢Å“â€¦ ${doneBooks.length} Done Ã¢â‚¬Â¢ Ã°Å¸â€œâ€“ ${readingBooks.length} Reading Ã¢â‚¬Â¢ Ã¢ÂÂ³ ${pendingBooks.length} Pending`;
   }
 
   if (!container) return;
@@ -1629,7 +1638,7 @@ function renderBookStatusView() {
     };
     container.innerHTML = `
       <div class="total-spent-empty-state">
-        <div class="total-spent-empty-icon">${currentBookStatusTab === 'DONE' ? 'ðŸ†' : currentBookStatusTab === 'READING' ? 'ðŸ“–' : 'â³'}</div>
+        <div class="total-spent-empty-icon">${currentBookStatusTab === 'DONE' ? 'Ã°Å¸Ââ€ ' : currentBookStatusTab === 'READING' ? 'Ã°Å¸â€œâ€“' : 'Ã¢ÂÂ³'}</div>
         <div class="total-spent-empty-title">${emptyTitles[currentBookStatusTab] || 'No Books'}</div>
         <div class="total-spent-empty-desc">${emptyDescs[currentBookStatusTab] || ''}</div>
       </div>
@@ -1658,7 +1667,7 @@ function renderBookStatusView() {
           <div class="bstat-book-author">${bookAuthor}</div>
           <div class="bstat-meta-row">
             <span class="bstat-category-tag">${bookCategory}</span>
-            ${currentBookStatusTab !== 'PENDING' ? `<span class="bstat-days-tag">â±ï¸ ${daysText}</span>` : ''}
+            ${currentBookStatusTab !== 'PENDING' ? `<span class="bstat-days-tag">Ã¢ÂÂ±Ã¯Â¸Â ${daysText}</span>` : ''}
           </div>
         </div>
         <div class="bstat-right-col">
@@ -1709,7 +1718,7 @@ function renderBookAvailabilityView() {
   // Update profile menu item subtitle
   const profileAvailSub = document.getElementById('profileBookAvailabilitySubText');
   if (profileAvailSub) {
-    profileAvailSub.innerText = `ðŸŸ¢ ${availBooks.length} Available â€¢ ðŸ”´ ${unavailBooks.length} Unavailable`;
+    profileAvailSub.innerText = `Ã°Å¸Å¸Â¢ ${availBooks.length} Available Ã¢â‚¬Â¢ Ã°Å¸â€Â´ ${unavailBooks.length} Unavailable`;
   }
 
   if (!container) return;
@@ -1724,7 +1733,7 @@ function renderBookAvailabilityView() {
   if (activeList.length === 0) {
     container.innerHTML = `
       <div class="total-spent-empty-state">
-        <div class="total-spent-empty-icon">${isAvailableTab ? 'ðŸ“¦' : 'âœ¨'}</div>
+        <div class="total-spent-empty-icon">${isAvailableTab ? 'Ã°Å¸â€œÂ¦' : 'Ã¢Å“Â¨'}</div>
         <div class="total-spent-empty-title">${isAvailableTab ? 'Koi Available Book Nahi Hai' : 'Koi Unavailable Book Nahi Hai'}</div>
         <div class="total-spent-empty-desc">${isAvailableTab ? 'Sabhi available books yahan dikhengi.' : 'Sabhi unavailable books yahan dikhengi.'}</div>
       </div>
@@ -1767,7 +1776,7 @@ function renderBookAvailabilityView() {
 }
 
 // ==========================================================================
-// ðŸ¤ BOOK LENDING / BORROW TRACKER ENGINE
+// Ã°Å¸Â¤Â BOOK LENDING / BORROW TRACKER ENGINE
 // ==========================================================================
 let lendingRecords = [];
 let currentBookLendingTab = 'ACTIVE'; // 'ACTIVE', 'RETURNED'
@@ -1840,7 +1849,7 @@ function renderBookLendingView() {
   // Update profile menu item subtitle
   const profileLendSub = document.getElementById('profileBookLendingSubText');
   if (profileLendSub) {
-    profileLendSub.innerText = `${activeRecords.length} Lent Out â€¢ ${returnedRecords.length} Returned`;
+    profileLendSub.innerText = `${activeRecords.length} Lent Out Ã¢â‚¬Â¢ ${returnedRecords.length} Returned`;
   }
 
   if (!container) return;
@@ -1857,7 +1866,7 @@ function renderBookLendingView() {
   if (recordsToRender.length === 0) {
     container.innerHTML = `
       <div class="total-spent-empty-state">
-        <div class="total-spent-empty-icon">${isActiveTab ? 'ðŸ¤' : 'ðŸ“š'}</div>
+        <div class="total-spent-empty-icon">${isActiveTab ? 'Ã°Å¸Â¤Â' : 'Ã°Å¸â€œÅ¡'}</div>
         <div class="total-spent-empty-title">${isActiveTab ? 'Koi Book Lent Nahi Hai' : 'Koi Returned History Nahi Hai'}</div>
         <div class="total-spent-empty-desc">${isActiveTab ? 'Jab aap kisi dost ko kitab denge to "+ Lend Book" par tap karein ya Book Details se lent mark karein.' : 'Wapas mili kitabein yahan history me save rahengi.'}</div>
       </div>
@@ -1892,8 +1901,8 @@ function renderBookLendingView() {
             <div class="bstat-book-title">${bookTitle}</div>
             <div class="bstat-book-author">${bookAuthor}</div>
             <div class="bstat-meta-row">
-              <span class="bstat-category-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">ðŸ‘¤ With ${borrower}</span>
-              <span class="bstat-days-tag">${isActiveTab ? `â³ Since ${daysText}` : `âœ… Kept ${daysText}`}</span>
+              <span class="bstat-category-tag" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">Ã°Å¸â€˜Â¤ With ${borrower}</span>
+              <span class="bstat-days-tag">${isActiveTab ? `Ã¢ÂÂ³ Since ${daysText}` : `Ã¢Å“â€¦ Kept ${daysText}`}</span>
             </div>
           </div>
           <div class="bstat-right-col">
@@ -1903,13 +1912,13 @@ function renderBookLendingView() {
 
         <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 8px; margin-top: 2px;">
           <div style="font-size: 0.72rem; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
-            <span>ðŸ“… Given: ${formatDateDisplay(r.lendDate)}</span>
-            ${r.phone ? `<span>ðŸ“ž <a href="tel:${escapeHtml(r.phone)}" style="color:var(--accent-gold); text-decoration:none;" onclick="event.stopPropagation()">${escapeHtml(r.phone)}</a></span>` : ''}
-            ${r.notes ? `<span>ðŸ’¬ ${escapeHtml(r.notes)}</span>` : ''}
+            <span>Ã°Å¸â€œâ€¦ Given: ${formatDateDisplay(r.lendDate)}</span>
+            ${r.phone ? `<span>Ã°Å¸â€œÅ¾ <a href="tel:${escapeHtml(r.phone)}" style="color:var(--accent-gold); text-decoration:none;" onclick="event.stopPropagation()">${escapeHtml(r.phone)}</a></span>` : ''}
+            ${r.notes ? `<span>Ã°Å¸â€™Â¬ ${escapeHtml(r.notes)}</span>` : ''}
           </div>
           ${isActiveTab ? `
             <button type="button" class="btn-save-gold" style="padding: 4px 10px; font-size: 0.72rem; white-space: nowrap;" onclick="event.stopPropagation(); markBookReturned('${r.id}')">
-              Mark Returned âœ…
+              Mark Returned Ã¢Å“â€¦
             </button>
           ` : `
             <span style="font-size: 0.72rem; color: #10b981; font-weight: 700;">Returned on ${formatDateDisplay(r.returnDate)}</span>
@@ -2005,7 +2014,7 @@ function confirmLendBook() {
   if (state.currentBook && state.currentBook.id === book.id) {
     openBookDetailView(book);
   }
-  showToast(`ðŸ¤ "${book.title}" marked as lent to ${borrower}!`);
+  showToast(`Ã°Å¸Â¤Â "${book.title}" marked as lent to ${borrower}!`);
 }
 
 function markBookReturned(recordId) {
@@ -2032,7 +2041,7 @@ function markBookReturned(recordId) {
   if (state.currentBook && (state.currentBook.id === record.bookId || state.currentBook.title === record.bookTitle)) {
     openBookDetailView(state.currentBook);
   }
-  showToast(`âœ… "${record.bookTitle}" marked as returned! Welcome back!`);
+  showToast(`Ã¢Å“â€¦ "${record.bookTitle}" marked as returned! Welcome back!`);
 }
 
 function markCurrentBookReturned() {
@@ -2048,7 +2057,7 @@ function markCurrentBookReturned() {
     delete state.currentBook.lent_notes;
     saveBooks();
     openBookDetailView(state.currentBook);
-    showToast(`âœ… "${state.currentBook.title}" marked as returned!`);
+    showToast(`Ã¢Å“â€¦ "${state.currentBook.title}" marked as returned!`);
   }
 }
 
@@ -2071,7 +2080,7 @@ function onEditBookStatusChange(status) {
 }
 
 // ================= NOT INTERESTED BOOKS MODULE =================
-let niSelectedReason = 'ðŸ˜´ Abhi Mood Nahi Hai';
+let niSelectedReason = 'Ã°Å¸ËœÂ´ Abhi Mood Nahi Hai';
 let currentNiBookToMark = null;
 
 function openNotInterestedModal(book) {
@@ -2083,7 +2092,7 @@ function openNotInterestedModal(book) {
   if (titleEl) titleEl.innerText = target.title || 'Untitled Book';
 
   // Reset reason pills
-  niSelectedReason = 'ðŸ˜´ Abhi Mood Nahi Hai';
+  niSelectedReason = 'Ã°Å¸ËœÂ´ Abhi Mood Nahi Hai';
   const pills = document.querySelectorAll('.ni-reason-pill');
   pills.forEach((p, idx) => {
     p.classList.toggle('active', idx === 0);
@@ -2128,7 +2137,7 @@ function confirmNotInterestedAction() {
     logActivity('BOOK_NOT_INTERESTED', `Moved "${book.title}" to Not Interested Books`);
   }
 
-  showToast(`ðŸš« "${book.title}" moved to Not Interested Books`);
+  showToast(`Ã°Å¸Å¡Â« "${book.title}" moved to Not Interested Books`);
 
   // Refresh lists
   renderLibraryFilters();
@@ -2178,7 +2187,7 @@ function restoreBookToLibrary(book) {
     logActivity('BOOK_RESTORED', `Restored "${book.title}" to Library & Explore`);
   }
 
-  showToast(`âœ… "${book.title}" restored to Library & Explore!`);
+  showToast(`Ã¢Å“â€¦ "${book.title}" restored to Library & Explore!`);
 
   // Refresh views
   renderLibraryFilters();
@@ -2200,7 +2209,7 @@ function deleteBookFromNotInterested(idx) {
   if (confirm(`Are you sure you want to permanently delete "${book.title}"?`)) {
     state.books.splice(idx, 1);
     saveBooks();
-    showToast(`ðŸ—‘ï¸ "${book.title}" deleted.`);
+    showToast(`Ã°Å¸â€”â€˜Ã¯Â¸Â "${book.title}" deleted.`);
     renderNotInterestedView();
     renderProfileView();
   }
@@ -2216,11 +2225,11 @@ function renderNotInterestedView() {
   // Update profile menu item subtitle
   const profileSub = document.getElementById('profileNotInterestedSubText');
   if (profileSub) {
-    profileSub.innerText = `${hiddenBooks.length} Hidden Book${hiddenBooks.length === 1 ? '' : 's'} â€¢ Restore anytime`;
+    profileSub.innerText = `${hiddenBooks.length} Hidden Book${hiddenBooks.length === 1 ? '' : 's'} Ã¢â‚¬Â¢ Restore anytime`;
   }
 
   if (subtitleEl) {
-    subtitleEl.innerText = `${hiddenBooks.length} Hidden Book${hiddenBooks.length === 1 ? '' : 's'} â€¢ Padhne ka man ho to wapas laayein`;
+    subtitleEl.innerText = `${hiddenBooks.length} Hidden Book${hiddenBooks.length === 1 ? '' : 's'} Ã¢â‚¬Â¢ Padhne ka man ho to wapas laayein`;
   }
 
   if (!container) return;
@@ -2228,11 +2237,11 @@ function renderNotInterestedView() {
   if (hiddenBooks.length === 0) {
     container.innerHTML = `
       <div class="total-spent-empty-state">
-        <div class="total-spent-empty-icon">ðŸš«</div>
+        <div class="total-spent-empty-icon">Ã°Å¸Å¡Â«</div>
         <div class="total-spent-empty-title">Koi Book Not Interested Nahi Hai</div>
-        <div class="total-spent-empty-desc">Jab kisi kitab me abhi interest na ho, to Book Details me "ðŸš« Not Interested" mark karein ya Category-wise ek sath hide karein.</div>
+        <div class="total-spent-empty-desc">Jab kisi kitab me abhi interest na ho, to Book Details me "Ã°Å¸Å¡Â« Not Interested" mark karein ya Category-wise ek sath hide karein.</div>
         <button type="button" class="btn-save-gold" style="margin-top:16px; padding: 10px 18px; font-size: 0.85rem; background: linear-gradient(135deg, #ef4444, #dc2626); border:none; border-radius:10px; cursor:pointer;" onclick="openNiCategorySelectorView()">
-          ðŸ“ Choose Category to Hide Books
+          Ã°Å¸â€œÂ Choose Category to Hide Books
         </button>
       </div>
     `;
@@ -2244,7 +2253,7 @@ function renderNotInterestedView() {
       <span style="font-size:0.82rem; color:var(--text-muted); font-weight:600;">${hiddenBooks.length} Hidden Book${hiddenBooks.length === 1 ? '' : 's'}</span>
       <div style="display:flex; gap:8px;">
         <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.75rem; background: rgba(16,185,129,0.15); color:#10b981; border:1px solid rgba(16,185,129,0.3); border-radius:8px; cursor:pointer;" onclick="restoreAllNotInterestedBooks()">
-          ðŸ”„ Restore All
+          Ã°Å¸â€â€ž Restore All
         </button>
         <button type="button" class="btn-save-gold" style="padding: 6px 12px; font-size: 0.75rem; background: linear-gradient(135deg, #ef4444, #dc2626); border:none; border-radius:8px; cursor:pointer;" onclick="openNiCategorySelectorView()">
           + Add by Category
@@ -2272,14 +2281,14 @@ function renderNotInterestedView() {
           <div class="bstat-meta-row" style="flex-wrap: wrap; gap: 6px; margin-top: 3px;">
             <span class="bstat-category-tag">${bookCategory}</span>
             <span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 6px; background: rgba(239, 68, 68, 0.14); color: #f87171; font-weight: 600;">
-              ðŸ·ï¸ ${reason}
+              Ã°Å¸ÂÂ·Ã¯Â¸Â ${reason}
             </span>
             <span style="font-size: 0.7rem; color: var(--text-muted);">Hidden ${hiddenDate}</span>
           </div>
         </div>
         <div class="bstat-right-col" style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
           <button type="button" class="btn-restore-ni" onclick="event.stopPropagation(); restoreBookToLibraryByIndex(${originalIndex})">
-            ðŸ”„ Restore
+            Ã°Å¸â€â€ž Restore
           </button>
         </div>
       </div>
@@ -2299,7 +2308,7 @@ function restoreAllNotInterestedBooks() {
       delete b.notInterestedDate;
     });
     saveBooks();
-    showToast(`âœ… All ${hiddenBooks.length} books restored to Library!`);
+    showToast(`Ã¢Å“â€¦ All ${hiddenBooks.length} books restored to Library!`);
     renderNotInterestedView();
     renderLibraryFilters();
     renderLibraryGrid();
@@ -2349,17 +2358,17 @@ function openNiCategorySelectorView() {
 
 function getCategoryEmoji(catName) {
   const c = (catName || '').toLowerCase();
-  if (c.includes('mindset') || c.includes('habit')) return 'ðŸ§ ';
-  if (c.includes('psych') || c.includes('dark')) return 'ðŸ•µï¸';
-  if (c.includes('wealth') || c.includes('money') || c.includes('finance')) return 'ðŸ’°';
-  if (c.includes('focus') || c.includes('productiv')) return 'ðŸŽ¯';
-  if (c.includes('memory') || c.includes('brain')) return 'ðŸ’¡';
-  if (c.includes('fiction') || c.includes('novel') || c.includes('story')) return 'ðŸ“–';
-  if (c.includes('philosophy') || c.includes('wisdom')) return 'ðŸ›ï¸';
-  if (c.includes('biograph') || c.includes('leader')) return 'ðŸ‘¤';
-  if (c.includes('science') || c.includes('tech')) return 'ðŸ”¬';
-  if (c.includes('health') || c.includes('fit')) return 'ðŸŒ¿';
-  return 'ðŸ“š';
+  if (c.includes('mindset') || c.includes('habit')) return 'Ã°Å¸Â§Â ';
+  if (c.includes('psych') || c.includes('dark')) return 'Ã°Å¸â€¢ÂµÃ¯Â¸Â';
+  if (c.includes('wealth') || c.includes('money') || c.includes('finance')) return 'Ã°Å¸â€™Â°';
+  if (c.includes('focus') || c.includes('productiv')) return 'Ã°Å¸Å½Â¯';
+  if (c.includes('memory') || c.includes('brain')) return 'Ã°Å¸â€™Â¡';
+  if (c.includes('fiction') || c.includes('novel') || c.includes('story')) return 'Ã°Å¸â€œâ€“';
+  if (c.includes('philosophy') || c.includes('wisdom')) return 'Ã°Å¸Ââ€ºÃ¯Â¸Â';
+  if (c.includes('biograph') || c.includes('leader')) return 'Ã°Å¸â€˜Â¤';
+  if (c.includes('science') || c.includes('tech')) return 'Ã°Å¸â€Â¬';
+  if (c.includes('health') || c.includes('fit')) return 'Ã°Å¸Å’Â¿';
+  return 'Ã°Å¸â€œÅ¡';
 }
 
 function renderNiCategoriesList(query) {
@@ -2377,7 +2386,7 @@ function renderNiCategoriesList(query) {
   if (filtered.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
-        <p style="font-size: 2.2rem; margin-bottom: 8px;">ðŸ”</p>
+        <p style="font-size: 2.2rem; margin-bottom: 8px;">Ã°Å¸â€Â</p>
         <p style="font-weight: 700; color: #fff;">Koi Category Nahi Mili</p>
         <p style="font-size: 0.8rem; margin-top: 4px;">Search term badal kar dekhein.</p>
       </div>
@@ -2446,7 +2455,7 @@ function renderNiCategoryBooksList() {
   if (catBooks.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
-        <p style="font-size: 2.2rem; margin-bottom: 8px;">ðŸ“š</p>
+        <p style="font-size: 2.2rem; margin-bottom: 8px;">Ã°Å¸â€œÅ¡</p>
         <p style="font-weight: 700; color: #fff;">Is category me koi book nahi hai</p>
       </div>
     `;
@@ -2465,7 +2474,7 @@ function renderNiCategoryBooksList() {
     return `
       <div class="ni-book-select-item ${isSelected ? 'selected' : ''} ${isAlreadyHidden ? 'already-hidden' : ''}" onclick="toggleNiBookSelect('${escapeHtml(bId)}')">
         <div class="ni-custom-checkbox">
-          ${isSelected ? 'âœ“' : ''}
+          ${isSelected ? 'Ã¢Å“â€œ' : ''}
         </div>
         <img class="ni-book-cover-mini" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='cover_placeholder.jpg'">
         <div style="flex: 1; min-width: 0;">
@@ -2479,11 +2488,11 @@ function renderNiCategoryBooksList() {
         <div style="margin-left: 8px;">
           ${isAlreadyHidden ? `
             <button type="button" class="btn-ni-direct btn-ni-restore" onclick="event.stopPropagation(); directRestoreFromCategory('${escapeHtml(b.title)}')" title="Restore to Library">
-              â†© Restore
+              Ã¢â€ Â© Restore
             </button>
           ` : `
             <button type="button" class="btn-ni-direct btn-ni-hide" onclick="event.stopPropagation(); directHideFromCategory('${escapeHtml(b.title)}')" title="Hide from Library">
-              ðŸš« Hide
+              Ã°Å¸Å¡Â« Hide
             </button>
           `}
         </div>
@@ -2506,7 +2515,7 @@ function directHideFromCategory(bookTitle) {
   renderHomeRecentBooks();
   renderNotInterestedView();
   renderProfileView();
-  showToast(`ðŸš« "${book.title}" hidden from Library`);
+  showToast(`Ã°Å¸Å¡Â« "${book.title}" hidden from Library`);
 }
 
 function directRestoreFromCategory(bookTitle) {
@@ -2523,7 +2532,7 @@ function directRestoreFromCategory(bookTitle) {
   renderHomeRecentBooks();
   renderNotInterestedView();
   renderProfileView();
-  showToast(`âœ… "${book.title}" restored to Library!`);
+  showToast(`Ã¢Å“â€¦ "${book.title}" restored to Library!`);
 }
 
 function toggleNiBookSelect(bId) {
@@ -2593,11 +2602,11 @@ function updateNiSelectionUI() {
       if (isRestoreAction) {
         floatingBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
         floatingBtn.style.boxShadow = '0 4px 14px rgba(16, 185, 129, 0.4)';
-        floatingBtn.innerHTML = `â†© Restore (${count})`;
+        floatingBtn.innerHTML = `Ã¢â€ Â© Restore (${count})`;
       } else {
         floatingBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
         floatingBtn.style.boxShadow = '0 4px 14px rgba(239, 68, 68, 0.4)';
-        floatingBtn.innerHTML = `ðŸš« Move (${count})`;
+        floatingBtn.innerHTML = `Ã°Å¸Å¡Â« Move (${count})`;
       }
     }
 
@@ -2605,10 +2614,10 @@ function updateNiSelectionUI() {
       actionBtn.style.display = 'block';
       if (isRestoreAction) {
         actionBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-        actionBtn.innerText = `â†© Restore (${count})`;
+        actionBtn.innerText = `Ã¢â€ Â© Restore (${count})`;
       } else {
         actionBtn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-        actionBtn.innerText = `ðŸš« Move (${count})`;
+        actionBtn.innerText = `Ã°Å¸Å¡Â« Move (${count})`;
       }
     }
   } else {
@@ -2668,8 +2677,8 @@ function confirmNiBulkMove() {
 
   showToast(
     isRestoreMode 
-      ? `âœ… ${processedCount} book${processedCount === 1 ? '' : 's'} restored to Library!` 
-      : `ðŸš« ${processedCount} book${processedCount === 1 ? '' : 's'} moved to Not Interested!`
+      ? `Ã¢Å“â€¦ ${processedCount} book${processedCount === 1 ? '' : 's'} restored to Library!` 
+      : `Ã°Å¸Å¡Â« ${processedCount} book${processedCount === 1 ? '' : 's'} moved to Not Interested!`
   );
 
   // Reset selection
@@ -2708,11 +2717,11 @@ function handleNiCategoryBack() {
 
 function openSetBudgetPrompt() {
   const currentBudget = localStorage.getItem('mf_reading_budget_2026') || '5000';
-  const val = prompt('Set your 2026 Reading Budget (in â‚¹ Rupees):', currentBudget);
+  const val = prompt('Set your 2026 Reading Budget (in Ã¢â€šÂ¹ Rupees):', currentBudget);
   if (val && !isNaN(val) && parseFloat(val) > 0) {
     localStorage.setItem('mf_reading_budget_2026', parseFloat(val));
     renderReadingBudget();
-    showToast(`2026 Reading Budget set to â‚¹${Number(val).toLocaleString('en-IN')}! ðŸ’°`);
+    showToast(`2026 Reading Budget set to Ã¢â€šÂ¹${Number(val).toLocaleString('en-IN')}! Ã°Å¸â€™Â°`);
   }
 }
 
@@ -2894,7 +2903,7 @@ function refreshDailyQuote(shuffle = false) {
       nextIdx = Math.floor(Math.random() * DAILY_READING_QUOTES.length);
     } while (nextIdx === currentProfileDailyQuoteIndex && DAILY_READING_QUOTES.length > 1);
     currentProfileDailyQuoteIndex = nextIdx;
-    showToast('âœ¨ Daily quote shuffled!');
+    showToast('Ã¢Å“Â¨ Daily quote shuffled!');
   } else {
     // Deterministic daily rotation based on day of the year
     const now = new Date();
@@ -2960,13 +2969,13 @@ function renderProfileView() {
   
   const pinStatusText = document.getElementById('pinStatusSubText');
   if (pinStatusText) {
-    pinStatusText.innerText = state.pin ? 'PIN Lock Active â€¢ Protected' : 'PIN Lock disabled â€¢ Set PIN';
+    pinStatusText.innerText = state.pin ? 'PIN Lock Active Ã¢â‚¬Â¢ Protected' : 'PIN Lock disabled Ã¢â‚¬Â¢ Set PIN';
   }
 
   const aboutSub = document.getElementById('aboutAppSubText');
   if (aboutSub) {
     const installed = getInstalledVersionString();
-    aboutSub.innerText = 'Version ' + installed + ' (Installed) • Tap to check updates';
+    aboutSub.innerText = 'Version ' + installed + ' (Installed) â€¢ Tap to check updates';
   }
   const settingsBadge = document.getElementById('appSettingsVersionBadge');
   if (settingsBadge) {
@@ -2988,9 +2997,9 @@ function updateLastBackupDisplay() {
   const lastTime = localStorage.getItem('mf_last_backup_time');
   if (el) {
     if (lastTime) {
-      el.innerText = `Last backup: ${lastTime} â€¢ Exported`;
+      el.innerText = `Last backup: ${lastTime} Ã¢â‚¬Â¢ Exported`;
     } else {
-      el.innerText = `No manual backup yet â€¢ Tap 'Backup Now'`;
+      el.innerText = `No manual backup yet Ã¢â‚¬Â¢ Tap 'Backup Now'`;
     }
   }
   updateBackupStatusUI();
@@ -3001,17 +3010,17 @@ function updateBackupStatusUI() {
   const lastTime = localStorage.getItem('mf_last_backup_time');
   if (badge) {
     if (lastTime) {
-      badge.innerText = `ðŸŸ¢ Backed up: ${lastTime} â€¢ Tap to view options`;
+      badge.innerText = `Ã°Å¸Å¸Â¢ Backed up: ${lastTime} Ã¢â‚¬Â¢ Tap to view options`;
     } else {
-      badge.innerText = `ðŸŸ¡ No backup yet â€¢ Tap to backup library`;
+      badge.innerText = `Ã°Å¸Å¸Â¡ No backup yet Ã¢â‚¬Â¢ Tap to backup library`;
     }
   }
   const subStatus = document.getElementById('backupSubScreenStatusText');
   if (subStatus) {
     if (lastTime) {
-      subStatus.innerText = `ðŸŸ¢ Backed up: ${lastTime} â€¢ Tap to re-backup`;
+      subStatus.innerText = `Ã°Å¸Å¸Â¢ Backed up: ${lastTime} Ã¢â‚¬Â¢ Tap to re-backup`;
     } else {
-      subStatus.innerText = `ðŸŸ¡ No backup yet â€¢ Tap to backup library`;
+      subStatus.innerText = `Ã°Å¸Å¸Â¡ No backup yet Ã¢â‚¬Â¢ Tap to backup library`;
     }
   }
 }
@@ -3027,9 +3036,9 @@ function cycleReaderThemeFromProfile() {
   setReaderTheme(nextTheme);
   updateProfileReaderToneDisplay();
   const names = {
-    'sepia': 'ðŸ“œ Sepia Paper (#fbf5e6)',
-    'dark': 'ðŸŒ™ Dark Night (#121824)',
-    'light': 'â˜€ï¸ Crisp Light (#ffffff)'
+    'sepia': 'Ã°Å¸â€œÅ“ Sepia Paper (#fbf5e6)',
+    'dark': 'Ã°Å¸Å’â„¢ Dark Night (#121824)',
+    'light': 'Ã¢Ëœâ‚¬Ã¯Â¸Â Crisp Light (#ffffff)'
   };
   showToast(`Default Reader Mode: ${names[nextTheme] || nextTheme}`);
 }
@@ -3038,9 +3047,9 @@ function updateProfileReaderToneDisplay() {
   const el = document.getElementById('profileReaderToneSubText');
   if (!el) return;
   const names = {
-    'sepia': 'Default: ðŸ“œ Sepia Paper (#fbf5e6)',
-    'dark': 'Default: ðŸŒ™ Dark Night (#121824)',
-    'light': 'Default: â˜€ï¸ Crisp Light (#ffffff)'
+    'sepia': 'Default: Ã°Å¸â€œÅ“ Sepia Paper (#fbf5e6)',
+    'dark': 'Default: Ã°Å¸Å’â„¢ Dark Night (#121824)',
+    'light': 'Default: Ã¢Ëœâ‚¬Ã¯Â¸Â Crisp Light (#ffffff)'
   };
   el.innerText = names[readerState.theme || 'sepia'] || `Default: ${readerState.theme}`;
 }
@@ -3094,7 +3103,7 @@ function openBookDetailView(book) {
     const ratingVal = document.getElementById('detailRatingVal');
     if (ratingVal) {
       const r = Number(book.rating) || 0;
-      ratingVal.innerText = r > 0 ? `â˜… ${r.toFixed(1)} Stars` : '0.0 (Unrated)';
+      ratingVal.innerText = r > 0 ? `Ã¢Ëœâ€¦ ${r.toFixed(1)} Stars` : '0.0 (Unrated)';
     }
     
     const total = book.pages || book.total_pages || 200;
@@ -3160,13 +3169,13 @@ function openBookDetailView(book) {
           book.completed_date = frozenDate;
           saveBooks();
         }
-        elTarget.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">ðŸ”’ ${formatDateDisplay(frozenDate)} (Completed â€¢ Frozen)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">âœï¸ Edit</span>`;
+        elTarget.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">Ã°Å¸â€â€™ ${formatDateDisplay(frozenDate)} (Completed Ã¢â‚¬Â¢ Frozen)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">Ã¢Å“ÂÃ¯Â¸Â Edit</span>`;
       } else if (book.status === 'READING') {
         // While reading: Live ongoing date ALWAYS tracks today's system clock!
         if (book.target_date && book.target_date !== today) {
-          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">ðŸŽ¯ Target: ${formatDateDisplay(book.target_date)}</span> <span style="font-size:11px; color:var(--text-secondary); margin-left:4px;">(Live: ${formatDateDisplay(today)})</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">âœï¸</span>`;
+          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">Ã°Å¸Å½Â¯ Target: ${formatDateDisplay(book.target_date)}</span> <span style="font-size:11px; color:var(--text-secondary); margin-left:4px;">(Live: ${formatDateDisplay(today)})</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">Ã¢Å“ÂÃ¯Â¸Â</span>`;
         } else {
-          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">ðŸ“… ${formatDateDisplay(today)} (Live â€¢ Ongoing)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">âœï¸ Set Target</span>`;
+          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">Ã°Å¸â€œâ€¦ ${formatDateDisplay(today)} (Live Ã¢â‚¬Â¢ Ongoing)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">Ã¢Å“ÂÃ¯Â¸Â Set Target</span>`;
         }
       } else {
         elTarget.innerText = book.end_date ? formatDateDisplay(book.end_date) : 'Not Set';
@@ -3182,18 +3191,18 @@ function openBookDetailView(book) {
           book.count_days = frozenDays;
           saveBooks();
         }
-        elDays.innerText = `âœ… ${frozenDays} Day${frozenDays === 1 ? '' : 's'} (Finished â€¢ Frozen)`;
+        elDays.innerText = `Ã¢Å“â€¦ ${frozenDays} Day${frozenDays === 1 ? '' : 's'} (Finished Ã¢â‚¬Â¢ Frozen)`;
       } else if (book.status === 'READING') {
         const startDateStr = book.start_date || today;
         const daysSpent = calculateDaysElapsed(startDateStr, today);
-        elDays.innerText = `â³ ${daysSpent} Day${daysSpent === 1 ? '' : 's'} (Reading now)`;
+        elDays.innerText = `Ã¢ÂÂ³ ${daysSpent} Day${daysSpent === 1 ? '' : 's'} (Reading now)`;
       } else {
         elDays.innerText = book.count_days != null ? `${book.count_days} Day${book.count_days === 1 ? '' : 's'}` : '-';
       }
     }
     
     const elPrice = document.getElementById('detailPriceVal');
-    if (elPrice) elPrice.innerText = book.price ? `â‚¹${book.price}` : 'Not Added';
+    if (elPrice) elPrice.innerText = book.price ? `Ã¢â€šÂ¹${book.price}` : 'Not Added';
     
     // Chapters breakdown
     const chaptersList = document.getElementById('detailChaptersList');
@@ -3234,7 +3243,7 @@ function openBookDetailView(book) {
         const statusText = document.getElementById('detailLentStatusText');
         const subText = document.getElementById('detailLentSubText');
         if (statusText) statusText.innerText = `With ${borrower} since ${daysText}`;
-        if (subText) subText.innerText = `${phone ? 'Phone: ' + phone + ' â€¢ ' : ''}Given on ${formatDateDisplay(lendDate)}`;
+        if (subText) subText.innerText = `${phone ? 'Phone: ' + phone + ' Ã¢â‚¬Â¢ ' : ''}Given on ${formatDateDisplay(lendDate)}`;
         lentBanner.style.display = 'block';
       } else {
         lentBanner.style.display = 'none';
@@ -3248,10 +3257,10 @@ function openBookDetailView(book) {
       if (isNotInterested) {
         const niStatusText = document.getElementById('detailNotInterestedStatusText');
         const niSubText = document.getElementById('detailNotInterestedSubText');
-        if (niStatusText) niStatusText.innerText = `Marked as Not Interested ðŸš«`;
+        if (niStatusText) niStatusText.innerText = `Marked as Not Interested Ã°Å¸Å¡Â«`;
         if (niSubText) {
           const reason = book.notInterestedReason || 'Not in mood right now';
-          const dateStr = book.notInterestedDate ? ` â€¢ Hidden on ${formatDateDisplay(book.notInterestedDate)}` : '';
+          const dateStr = book.notInterestedDate ? ` Ã¢â‚¬Â¢ Hidden on ${formatDateDisplay(book.notInterestedDate)}` : '';
           niSubText.innerText = `Reason: ${reason}${dateStr}`;
         }
         niBanner.style.display = 'block';
@@ -3307,8 +3316,8 @@ function promptSetTargetDate() {
   const currentVal = state.currentBook.end_date || state.currentBook.completed_date || today;
   const newDate = prompt(
     state.currentBook.status === 'DONE' 
-      ? 'ðŸ”’ Enter Completion Date (YYYY-MM-DD):' 
-      : 'ðŸŽ¯ Enter Target Date (YYYY-MM-DD):', 
+      ? 'Ã°Å¸â€â€™ Enter Completion Date (YYYY-MM-DD):' 
+      : 'Ã°Å¸Å½Â¯ Enter Target Date (YYYY-MM-DD):', 
     currentVal
   );
   if (newDate && newDate.trim()) {
@@ -3322,7 +3331,7 @@ function promptSetTargetDate() {
     }
     saveBooks();
     openBookDetailView(state.currentBook);
-    showToast(`ðŸŽ¯ Date updated to ${formatDateDisplay(cleanDate)}! âœ¨`);
+    showToast(`Ã°Å¸Å½Â¯ Date updated to ${formatDateDisplay(cleanDate)}! Ã¢Å“Â¨`);
   }
 }
 
@@ -3379,9 +3388,9 @@ function quickSetBookStatus(newStatus) {
   renderLibraryFilters();
   
   const statusLabels = {
-    'DONE': 'âœ… Finished & Completed! Completion date is frozen ðŸ”’',
-    'READING': 'ðŸ“– Now Currently Reading!',
-    'PENDING': 'ðŸ”– Added to Wishlist!'
+    'DONE': 'Ã¢Å“â€¦ Finished & Completed! Completion date is frozen Ã°Å¸â€â€™',
+    'READING': 'Ã°Å¸â€œâ€“ Now Currently Reading!',
+    'PENDING': 'Ã°Å¸â€â€“ Added to Wishlist!'
   };
   showToast(statusLabels[newStatus] || `Status updated to ${newStatus}`);
 }
@@ -3566,9 +3575,9 @@ function setBookRating(stars) {
   if (state.currentBook) {
     state.currentBook.rating = stars;
     saveBooks();
-    showToast(stars > 0 ? `Rated ${stars} Stars! â­` : 'Rating reset to 0');
+    showToast(stars > 0 ? `Rated ${stars} Stars! Ã¢Â­Â` : 'Rating reset to 0');
     const ratingVal = document.getElementById('detailRatingVal');
-    if (ratingVal) ratingVal.innerText = stars > 0 ? `â˜… ${stars.toFixed(1)} Stars` : '0.0 (Unrated)';
+    if (ratingVal) ratingVal.innerText = stars > 0 ? `Ã¢Ëœâ€¦ ${stars.toFixed(1)} Stars` : '0.0 (Unrated)';
   }
 }
 
@@ -3581,7 +3590,7 @@ function toggleReadingTimer() {
     state.isTimerRunning = true;
     state.timerSeconds = 0;
     if (btnText) btnText.innerText = '00:00 (Tap to Stop)';
-    if (icon) icon.innerText = 'â¸ï¸';
+    if (icon) icon.innerText = 'Ã¢ÂÂ¸Ã¯Â¸Â';
     
     state.timerInterval = setInterval(() => {
       state.timerSeconds++;
@@ -3590,16 +3599,16 @@ function toggleReadingTimer() {
       if (btnText) btnText.innerText = `${mins}:${secs} (Tap to Stop)`;
     }, 1000);
     
-    showToast('Focus Reading Session Started! ðŸŽ§');
+    showToast('Focus Reading Session Started! Ã°Å¸Å½Â§');
   } else {
     clearInterval(state.timerInterval);
     state.isTimerRunning = false;
     if (btnText) btnText.innerText = 'Focus Timer';
-    if (icon) icon.innerText = 'â±ï¸';
+    if (icon) icon.innerText = 'Ã¢ÂÂ±Ã¯Â¸Â';
     
     const minutesAdded = Math.max(1, Math.round(state.timerSeconds / 60));
     recordReadingSession(minutesAdded);
-    showToast(`Session logged! +${minutesAdded} min added! ðŸ”¥`);
+    showToast(`Session logged! +${minutesAdded} min added! Ã°Å¸â€Â¥`);
   }
 }
 
@@ -3689,7 +3698,7 @@ function updateQuickLogPrediction(current, total) {
   if (!predText) return;
   const remaining = Math.max(0, total - current);
   if (remaining === 0) {
-    predText.innerText = `Mubarak ho! Yeh kitaab poori ho chuki hai! ðŸŽ‰`;
+    predText.innerText = `Mubarak ho! Yeh kitaab poori ho chuki hai! Ã°Å¸Å½â€°`;
     return;
   }
   // Standard comfortable pace estimation (15 pages/day)
@@ -3726,13 +3735,13 @@ function saveQuickLogPages() {
       state.currentBook.start_date = today;
       state.currentBook.count_days = 1;
     }
-    showToast('ðŸŽ‰ Congratulations! You completed this book! Date is frozen ðŸ”’');
+    showToast('Ã°Å¸Å½â€° Congratulations! You completed this book! Date is frozen Ã°Å¸â€â€™');
   } else if (newPage > 0) {
     state.currentBook.status = 'READING';
     if (!state.currentBook.start_date) {
       state.currentBook.start_date = today;
     }
-    showToast(`Progress logged: Page ${newPage} âœ¨`);
+    showToast(`Progress logged: Page ${newPage} Ã¢Å“Â¨`);
   }
   
   saveBooks();
@@ -4011,7 +4020,7 @@ function generateDictionaryBookPages(lang) {
         pageNo: 1,
         content: `
           <div class="reader-title-page">
-            <div style="font-size: 2.2rem; margin-bottom: 8px;">ðŸ“–</div>
+            <div style="font-size: 2.2rem; margin-bottom: 8px;">Ã°Å¸â€œâ€“</div>
             <h1 class="reader-book-main-title">A-Z English-Hindi Focus Vocabulary Lexicon</h1>
             <div class="reader-book-subtitle">Vocabulary & Language Edition</div>
             <p style="margin-top: 16px; opacity: 0.8;">Loading 101 Vocabulary Power Words...</p>
@@ -4027,7 +4036,7 @@ function generateDictionaryBookPages(lang) {
 
   // Title / Preface Page
   let titleSub = '101 Essential Power Words for Mind, Focus & Daily Mastery';
-  let titleDesc = 'à¤¯à¤¹ à¤¦à¥à¤µà¤¿à¤­à¤¾à¤·à¥€ à¤¶à¤¬à¥à¤¦à¤•à¥‹à¤¶ à¤µà¤¿à¤¶à¥‡à¤· à¤°à¥‚à¤ª à¤¸à¥‡ à¤—à¤¹à¤°à¥€ à¤à¤•à¤¾à¤—à¥à¤°à¤¤à¤¾, à¤‰à¤¤à¥à¤ªà¤¾à¤¦à¤•à¤¤à¤¾ à¤”à¤° à¤®à¤¾à¤¨à¤¸à¤¿à¤• à¤¶à¤•à¥à¤¤à¤¿ à¤•à¥‡ à¤²à¤¿à¤ 101 à¤®à¤¹à¤¤à¥à¤µà¤ªà¥‚à¤°à¥à¤£ à¤…à¤‚à¤—à¥à¤°à¥‡à¤œà¥€ à¤¶à¤¬à¥à¤¦à¥‹à¤‚, à¤‰à¤¨à¤•à¥‡ à¤¹à¤¿à¤‚à¤¦à¥€ à¤…à¤°à¥à¤¥, à¤‰à¤šà¥à¤šà¤¾à¤°à¤£, à¤ªà¤°à¤¿à¤­à¤¾à¤·à¤¾ à¤à¤µà¤‚ à¤‰à¤¦à¤¾à¤¹à¤°à¤£à¥‹à¤‚ à¤•à¤¾ à¤¸à¤‚à¤ªà¥‚à¤°à¥à¤£ à¤¸à¤‚à¤—à¥à¤°à¤¹ à¤ªà¥à¤°à¤¸à¥à¤¤à¥à¤¤ à¤•à¤°à¤¤à¤¾ à¤¹à¥ˆà¥¤';
+  let titleDesc = 'Ã Â¤Â¯Ã Â¤Â¹ Ã Â¤Â¦Ã Â¥ÂÃ Â¤ÂµÃ Â¤Â¿Ã Â¤Â­Ã Â¤Â¾Ã Â¤Â·Ã Â¥â‚¬ Ã Â¤Â¶Ã Â¤Â¬Ã Â¥ÂÃ Â¤Â¦Ã Â¤â€¢Ã Â¥â€¹Ã Â¤Â¶ Ã Â¤ÂµÃ Â¤Â¿Ã Â¤Â¶Ã Â¥â€¡Ã Â¤Â· Ã Â¤Â°Ã Â¥â€šÃ Â¤Âª Ã Â¤Â¸Ã Â¥â€¡ Ã Â¤â€”Ã Â¤Â¹Ã Â¤Â°Ã Â¥â‚¬ Ã Â¤ÂÃ Â¤â€¢Ã Â¤Â¾Ã Â¤â€”Ã Â¥ÂÃ Â¤Â°Ã Â¤Â¤Ã Â¤Â¾, Ã Â¤â€°Ã Â¤Â¤Ã Â¥ÂÃ Â¤ÂªÃ Â¤Â¾Ã Â¤Â¦Ã Â¤â€¢Ã Â¤Â¤Ã Â¤Â¾ Ã Â¤â€Ã Â¤Â° Ã Â¤Â®Ã Â¤Â¾Ã Â¤Â¨Ã Â¤Â¸Ã Â¤Â¿Ã Â¤â€¢ Ã Â¤Â¶Ã Â¤â€¢Ã Â¥ÂÃ Â¤Â¤Ã Â¤Â¿ Ã Â¤â€¢Ã Â¥â€¡ Ã Â¤Â²Ã Â¤Â¿Ã Â¤Â 101 Ã Â¤Â®Ã Â¤Â¹Ã Â¤Â¤Ã Â¥ÂÃ Â¤ÂµÃ Â¤ÂªÃ Â¥â€šÃ Â¤Â°Ã Â¥ÂÃ Â¤Â£ Ã Â¤â€¦Ã Â¤â€šÃ Â¤â€”Ã Â¥ÂÃ Â¤Â°Ã Â¥â€¡Ã Â¤Å“Ã Â¥â‚¬ Ã Â¤Â¶Ã Â¤Â¬Ã Â¥ÂÃ Â¤Â¦Ã Â¥â€¹Ã Â¤â€š, Ã Â¤â€°Ã Â¤Â¨Ã Â¤â€¢Ã Â¥â€¡ Ã Â¤Â¹Ã Â¤Â¿Ã Â¤â€šÃ Â¤Â¦Ã Â¥â‚¬ Ã Â¤â€¦Ã Â¤Â°Ã Â¥ÂÃ Â¤Â¥, Ã Â¤â€°Ã Â¤Å¡Ã Â¥ÂÃ Â¤Å¡Ã Â¤Â¾Ã Â¤Â°Ã Â¤Â£, Ã Â¤ÂªÃ Â¤Â°Ã Â¤Â¿Ã Â¤Â­Ã Â¤Â¾Ã Â¤Â·Ã Â¤Â¾ Ã Â¤ÂÃ Â¤ÂµÃ Â¤â€š Ã Â¤â€°Ã Â¤Â¦Ã Â¤Â¾Ã Â¤Â¹Ã Â¤Â°Ã Â¤Â£Ã Â¥â€¹Ã Â¤â€š Ã Â¤â€¢Ã Â¤Â¾ Ã Â¤Â¸Ã Â¤â€šÃ Â¤ÂªÃ Â¥â€šÃ Â¤Â°Ã Â¥ÂÃ Â¤Â£ Ã Â¤Â¸Ã Â¤â€šÃ Â¤â€”Ã Â¥ÂÃ Â¤Â°Ã Â¤Â¹ Ã Â¤ÂªÃ Â¥ÂÃ Â¤Â°Ã Â¤Â¸Ã Â¥ÂÃ Â¤Â¤Ã Â¥ÂÃ Â¤Â¤ Ã Â¤â€¢Ã Â¤Â°Ã Â¤Â¤Ã Â¤Â¾ Ã Â¤Â¹Ã Â¥Ë†Ã Â¥Â¤';
   if (lang === 'english') {
     titleSub = '101 Essential Power Words for Mind, Focus & Productivity';
     titleDesc = 'A comprehensive A-Z bilingual vocabulary guide featuring curated power words with accurate phonetics, Hindi translations, clear definitions, audio pronunciations, and contextual examples.';
@@ -4040,28 +4049,28 @@ function generateDictionaryBookPages(lang) {
     pageNo: 1,
     content: `
       <div class="reader-title-page">
-        <div style="font-size: 2.4rem; margin-bottom: 8px;">ðŸ“– ðŸ”¤</div>
+        <div style="font-size: 2.4rem; margin-bottom: 8px;">Ã°Å¸â€œâ€“ Ã°Å¸â€Â¤</div>
         <h1 class="reader-book-main-title">A-Z English-Hindi Focus Vocabulary Lexicon</h1>
         <div class="reader-book-subtitle">${titleSub}</div>
-        <div class="reader-divider">âœ¦ âœ¦ âœ¦</div>
-        <div class="reader-book-author-text">Oxford Focus Lexicon â€¢ Master Edition</div>
-        <div class="reader-book-translator-text">à¤…à¤‚à¤—à¥à¤°à¥‡à¤œà¥€-à¤¹à¤¿à¤‚à¤¦à¥€ à¤¶à¤¬à¥à¤¦à¤•à¥‹à¤¶ â€¢ 101 à¤ªà¤¾à¤µà¤° à¤µà¥‹à¤•à¥ˆà¤¬à¥à¤²à¤°à¥€ à¤¶à¤¬à¥à¤¦</div>
+        <div class="reader-divider">Ã¢Å“Â¦ Ã¢Å“Â¦ Ã¢Å“Â¦</div>
+        <div class="reader-book-author-text">Oxford Focus Lexicon Ã¢â‚¬Â¢ Master Edition</div>
+        <div class="reader-book-translator-text">Ã Â¤â€¦Ã Â¤â€šÃ Â¤â€”Ã Â¥ÂÃ Â¤Â°Ã Â¥â€¡Ã Â¤Å“Ã Â¥â‚¬-Ã Â¤Â¹Ã Â¤Â¿Ã Â¤â€šÃ Â¤Â¦Ã Â¥â‚¬ Ã Â¤Â¶Ã Â¤Â¬Ã Â¥ÂÃ Â¤Â¦Ã Â¤â€¢Ã Â¥â€¹Ã Â¤Â¶ Ã¢â‚¬Â¢ 101 Ã Â¤ÂªÃ Â¤Â¾Ã Â¤ÂµÃ Â¤Â° Ã Â¤ÂµÃ Â¥â€¹Ã Â¤â€¢Ã Â¥Ë†Ã Â¤Â¬Ã Â¥ÂÃ Â¤Â²Ã Â¤Â°Ã Â¥â‚¬ Ã Â¤Â¶Ã Â¤Â¬Ã Â¥ÂÃ Â¤Â¦</div>
         
         <div style="margin: 16px auto; max-width: 420px; font-size: 0.88rem; line-height: 1.6; opacity: 0.9;">
           ${titleDesc}
         </div>
 
         <div style="margin: 14px auto; padding: 10px 14px; background: rgba(125,125,125,0.08); border-radius: 8px; font-size: 0.8rem; line-height: 1.5; max-width: 420px; text-align: left;">
-          <strong>ðŸ’¡ How to Read / à¤•à¥ˆà¤¸à¥‡ à¤ªà¤¢à¤¼à¥‡à¤‚:</strong><br>
-          â€¢ <strong>Word & Phonetics:</strong> à¤…à¤‚à¤—à¥à¤°à¥‡à¤œà¥€ à¤¶à¤¬à¥à¤¦ à¤”à¤° à¤‰à¤¸à¤•à¤¾ à¤¹à¤¿à¤‚à¤¦à¥€ à¤‰à¤šà¥à¤šà¤¾à¤°à¤£ [à¤•à¥‹à¤·à¥à¤ à¤• à¤®à¥‡à¤‚]à¥¤<br>
-          â€¢ <strong>ðŸ”Š Listen:</strong> à¤¸à¤¹à¥€ à¤‰à¤šà¥à¤šà¤¾à¤°à¤£ à¤¸à¥à¤¨à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤¬à¤Ÿà¤¨ à¤¦à¤¬à¤¾à¤à¤‚à¥¤<br>
-          â€¢ <strong>ðŸ‡®ðŸ‡³ Hindi Meaning:</strong> à¤¶à¤¬à¥à¤¦ à¤•à¤¾ à¤¸à¤Ÿà¥€à¤• à¤¹à¤¿à¤‚à¤¦à¥€ à¤…à¤°à¥à¤¥à¥¤<br>
-          â€¢ <strong>ðŸ’¬ Example:</strong> à¤¦à¥ˆà¤¨à¤¿à¤• à¤œà¥€à¤µà¤¨ à¤”à¤° à¤ªà¥à¤¸à¥à¤¤à¤•à¥‹à¤‚ à¤®à¥‡à¤‚ à¤µà¥à¤¯à¤¾à¤µà¤¹à¤¾à¤°à¤¿à¤• à¤‰à¤ªà¤¯à¥‹à¤—à¥¤
+          <strong>Ã°Å¸â€™Â¡ How to Read / Ã Â¤â€¢Ã Â¥Ë†Ã Â¤Â¸Ã Â¥â€¡ Ã Â¤ÂªÃ Â¤Â¢Ã Â¤Â¼Ã Â¥â€¡Ã Â¤â€š:</strong><br>
+          Ã¢â‚¬Â¢ <strong>Word & Phonetics:</strong> Ã Â¤â€¦Ã Â¤â€šÃ Â¤â€”Ã Â¥ÂÃ Â¤Â°Ã Â¥â€¡Ã Â¤Å“Ã Â¥â‚¬ Ã Â¤Â¶Ã Â¤Â¬Ã Â¥ÂÃ Â¤Â¦ Ã Â¤â€Ã Â¤Â° Ã Â¤â€°Ã Â¤Â¸Ã Â¤â€¢Ã Â¤Â¾ Ã Â¤Â¹Ã Â¤Â¿Ã Â¤â€šÃ Â¤Â¦Ã Â¥â‚¬ Ã Â¤â€°Ã Â¤Å¡Ã Â¥ÂÃ Â¤Å¡Ã Â¤Â¾Ã Â¤Â°Ã Â¤Â£ [Ã Â¤â€¢Ã Â¥â€¹Ã Â¤Â·Ã Â¥ÂÃ Â¤Â Ã Â¤â€¢ Ã Â¤Â®Ã Â¥â€¡Ã Â¤â€š]Ã Â¥Â¤<br>
+          Ã¢â‚¬Â¢ <strong>Ã°Å¸â€Å  Listen:</strong> Ã Â¤Â¸Ã Â¤Â¹Ã Â¥â‚¬ Ã Â¤â€°Ã Â¤Å¡Ã Â¥ÂÃ Â¤Å¡Ã Â¤Â¾Ã Â¤Â°Ã Â¤Â£ Ã Â¤Â¸Ã Â¥ÂÃ Â¤Â¨Ã Â¤Â¨Ã Â¥â€¡ Ã Â¤â€¢Ã Â¥â€¡ Ã Â¤Â²Ã Â¤Â¿Ã Â¤Â Ã Â¤Â¬Ã Â¤Å¸Ã Â¤Â¨ Ã Â¤Â¦Ã Â¤Â¬Ã Â¤Â¾Ã Â¤ÂÃ Â¤â€šÃ Â¥Â¤<br>
+          Ã¢â‚¬Â¢ <strong>Ã°Å¸â€¡Â®Ã°Å¸â€¡Â³ Hindi Meaning:</strong> Ã Â¤Â¶Ã Â¤Â¬Ã Â¥ÂÃ Â¤Â¦ Ã Â¤â€¢Ã Â¤Â¾ Ã Â¤Â¸Ã Â¤Å¸Ã Â¥â‚¬Ã Â¤â€¢ Ã Â¤Â¹Ã Â¤Â¿Ã Â¤â€šÃ Â¤Â¦Ã Â¥â‚¬ Ã Â¤â€¦Ã Â¤Â°Ã Â¥ÂÃ Â¤Â¥Ã Â¥Â¤<br>
+          Ã¢â‚¬Â¢ <strong>Ã°Å¸â€™Â¬ Example:</strong> Ã Â¤Â¦Ã Â¥Ë†Ã Â¤Â¨Ã Â¤Â¿Ã Â¤â€¢ Ã Â¤Å“Ã Â¥â‚¬Ã Â¤ÂµÃ Â¤Â¨ Ã Â¤â€Ã Â¤Â° Ã Â¤ÂªÃ Â¥ÂÃ Â¤Â¸Ã Â¥ÂÃ Â¤Â¤Ã Â¤â€¢Ã Â¥â€¹Ã Â¤â€š Ã Â¤Â®Ã Â¥â€¡Ã Â¤â€š Ã Â¤ÂµÃ Â¥ÂÃ Â¤Â¯Ã Â¤Â¾Ã Â¤ÂµÃ Â¤Â¹Ã Â¤Â¾Ã Â¤Â°Ã Â¤Â¿Ã Â¤â€¢ Ã Â¤â€°Ã Â¤ÂªÃ Â¤Â¯Ã Â¥â€¹Ã Â¤â€”Ã Â¥Â¤
         </div>
 
         <div class="reader-publisher-badge">
           <span class="pub-name">MIND FOCUS LEXICON EDITIONS</span>
-          <span class="pub-sub">COMPLETE 101 ENTRIES â€¢ A TO Z MASTER COLLECTION</span>
+          <span class="pub-sub">COMPLETE 101 ENTRIES Ã¢â‚¬Â¢ A TO Z MASTER COLLECTION</span>
         </div>
       </div>
     `
@@ -4075,7 +4084,7 @@ function generateDictionaryBookPages(lang) {
     
     const firstLetter = chunk[0].word.charAt(0).toUpperCase();
     const lastLetter = chunk[chunk.length - 1].word.charAt(0).toUpperCase();
-    const letterSpan = (firstLetter === lastLetter) ? `Section [ ${firstLetter} ]` : `Section [ ${firstLetter} â€“ ${lastLetter} ]`;
+    const letterSpan = (firstLetter === lastLetter) ? `Section [ ${firstLetter} ]` : `Section [ ${firstLetter} Ã¢â‚¬â€œ ${lastLetter} ]`;
 
     let entriesHtml = chunk.map(w => {
       const escapedWord = (w.word || '').replace(/'/g, "\\'").replace(/"/g, '&quot;');
@@ -4097,17 +4106,17 @@ function generateDictionaryBookPages(lang) {
               ${safeType ? `<span class="reader-dict-type">${safeType}</span>` : ''}
             </div>
             <button type="button" class="reader-dict-audio-btn" onclick="speakDictionaryWord('${escapedWord}')" title="Listen Pronunciation">
-              <span>ðŸ”Š</span> Listen
+              <span>Ã°Å¸â€Å </span> Listen
             </button>
           </div>
           <div class="reader-dict-hindi">
-            <span>ðŸ‡®ðŸ‡³</span> ${safeHindi}
+            <span>Ã°Å¸â€¡Â®Ã°Å¸â€¡Â³</span> ${safeHindi}
           </div>
           ${safeDef ? `<div class="reader-dict-def">${safeDef}</div>` : ''}
           ${safeEx ? `
             <div class="reader-dict-example">
-              <div class="reader-dict-example-en">ðŸ’¬ â€œ${safeEx}â€</div>
-              ${safeExHi ? `<div class="reader-dict-example-hi">ðŸ‘‰ ${safeExHi}</div>` : ''}
+              <div class="reader-dict-example-en">Ã°Å¸â€™Â¬ Ã¢â‚¬Å“${safeEx}Ã¢â‚¬Â</div>
+              ${safeExHi ? `<div class="reader-dict-example-hi">Ã°Å¸â€˜â€° ${safeExHi}</div>` : ''}
             </div>
           ` : ''}
           ${safeSyn ? `
@@ -4122,7 +4131,7 @@ function generateDictionaryBookPages(lang) {
     if (endIdx === totalWords) {
       entriesHtml += `
         <div style="margin-top:10px; text-align:center; padding:8px 12px; border-radius:8px; background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.25); font-size:0.82rem; font-weight:700; color:#10b981;">
-          ðŸŽ‰ Congratulations! You have mastered all 101 Vocabulary Power Words!
+          Ã°Å¸Å½â€° Congratulations! You have mastered all 101 Vocabulary Power Words!
         </div>
       `;
     }
@@ -4132,8 +4141,8 @@ function generateDictionaryBookPages(lang) {
       content: `
         <div class="reader-dict-page">
           <div class="reader-dict-header">
-            <span>ðŸ“– A-Z VOCABULARY LEXICON</span>
-            <span>${letterSpan} â€¢ ${startIdx}â€“${endIdx} OF ${totalWords}</span>
+            <span>Ã°Å¸â€œâ€“ A-Z VOCABULARY LEXICON</span>
+            <span>${letterSpan} Ã¢â‚¬Â¢ ${startIdx}Ã¢â‚¬â€œ${endIdx} OF ${totalWords}</span>
           </div>
           <div class="reader-dict-container">
             ${entriesHtml}
@@ -4184,10 +4193,10 @@ function getBookPagesArray(book, lang) {
       pageNo: 1,
       content: `
         <div class="reader-title-page">
-          <div style="font-size: 2.2rem; margin-bottom: 8px;">ðŸ“–</div>
+          <div style="font-size: 2.2rem; margin-bottom: 8px;">Ã°Å¸â€œâ€“</div>
           <h1 class="reader-book-main-title">${escapeHtml(book.title)}</h1>
           <div class="reader-book-subtitle">${escapeHtml(cat)} Edition</div>
-          <div class="reader-divider">âœ¦ âœ¦ âœ¦</div>
+          <div class="reader-divider">Ã¢Å“Â¦ Ã¢Å“Â¦ Ã¢Å“Â¦</div>
           <div class="reader-book-author-text">By ${escapeHtml(author)}</div>
           <div class="reader-book-translator-text">Mind & Focus Master Library</div>
           <div class="reader-publisher-badge">
@@ -4200,15 +4209,15 @@ function getBookPagesArray(book, lang) {
     {
       pageNo: 2,
       content: `
-        <div class="reader-page-header">à¤…à¤§à¥à¤¯à¤¾à¤¯ 1 : à¤®à¥à¤–à¥à¤¯ à¤¦à¤°à¥à¤¶à¤¨ à¤à¤µà¤‚ à¤¸à¤¾à¤° (Core Principles)</div>
+        <div class="reader-page-header">Ã Â¤â€¦Ã Â¤Â§Ã Â¥ÂÃ Â¤Â¯Ã Â¤Â¾Ã Â¤Â¯ 1 : Ã Â¤Â®Ã Â¥ÂÃ Â¤â€“Ã Â¥ÂÃ Â¤Â¯ Ã Â¤Â¦Ã Â¤Â°Ã Â¥ÂÃ Â¤Â¶Ã Â¤Â¨ Ã Â¤ÂÃ Â¤ÂµÃ Â¤â€š Ã Â¤Â¸Ã Â¤Â¾Ã Â¤Â° (Core Principles)</div>
         <div class="reader-praise-block">
-          <p class="reader-quote-text">â€œ${escapeHtml(takeaway)}â€</p>
-          <p class="reader-quote-author">â€” <strong>${escapeHtml(author)}</strong></p>
+          <p class="reader-quote-text">Ã¢â‚¬Å“${escapeHtml(takeaway)}Ã¢â‚¬Â</p>
+          <p class="reader-quote-author">Ã¢â‚¬â€ <strong>${escapeHtml(author)}</strong></p>
         </div>
         <div class="reader-callout-box">
-          <div class="reader-callout-title">ðŸ”‘ à¤µà¥à¤¯à¤¾à¤µà¤¹à¤¾à¤°à¤¿à¤• à¤¸à¥€à¤– (Actionable Takeaway)</div>
+          <div class="reader-callout-title">Ã°Å¸â€â€˜ Ã Â¤ÂµÃ Â¥ÂÃ Â¤Â¯Ã Â¤Â¾Ã Â¤ÂµÃ Â¤Â¹Ã Â¤Â¾Ã Â¤Â°Ã Â¤Â¿Ã Â¤â€¢ Ã Â¤Â¸Ã Â¥â‚¬Ã Â¤â€“ (Actionable Takeaway)</div>
           <p style="font-size:0.9rem; line-height:1.6; margin:0;">
-            à¤‡à¤¸ à¤ªà¥à¤¸à¥à¤¤à¤• à¤•à¥‡ à¤¸à¤¿à¤¦à¥à¤§à¤¾à¤‚à¤¤à¥‹à¤‚ à¤•à¥‹ à¤…à¤ªà¤¨à¥‡ à¤¦à¥ˆà¤¨à¤¿à¤• à¤œà¥€à¤µà¤¨ à¤®à¥‡à¤‚ à¤²à¤¾à¤—à¥‚ à¤•à¤°à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤°à¥‹à¤œà¤¼à¤¾à¤¨à¤¾ 20-30 à¤®à¤¿à¤¨à¤Ÿ à¤¬à¤¿à¤¨à¤¾ à¤•à¤¿à¤¸à¥€ à¤­à¤Ÿà¤•à¤¾à¤µ à¤•à¥‡ à¤—à¤¹à¤°à¤¾ à¤…à¤§à¥à¤¯à¤¯à¤¨ à¤•à¤°à¥‡à¤‚à¥¤
+            Ã Â¤â€¡Ã Â¤Â¸ Ã Â¤ÂªÃ Â¥ÂÃ Â¤Â¸Ã Â¥ÂÃ Â¤Â¤Ã Â¤â€¢ Ã Â¤â€¢Ã Â¥â€¡ Ã Â¤Â¸Ã Â¤Â¿Ã Â¤Â¦Ã Â¥ÂÃ Â¤Â§Ã Â¤Â¾Ã Â¤â€šÃ Â¤Â¤Ã Â¥â€¹Ã Â¤â€š Ã Â¤â€¢Ã Â¥â€¹ Ã Â¤â€¦Ã Â¤ÂªÃ Â¤Â¨Ã Â¥â€¡ Ã Â¤Â¦Ã Â¥Ë†Ã Â¤Â¨Ã Â¤Â¿Ã Â¤â€¢ Ã Â¤Å“Ã Â¥â‚¬Ã Â¤ÂµÃ Â¤Â¨ Ã Â¤Â®Ã Â¥â€¡Ã Â¤â€š Ã Â¤Â²Ã Â¤Â¾Ã Â¤â€”Ã Â¥â€š Ã Â¤â€¢Ã Â¤Â°Ã Â¤Â¨Ã Â¥â€¡ Ã Â¤â€¢Ã Â¥â€¡ Ã Â¤Â²Ã Â¤Â¿Ã Â¤Â Ã Â¤Â°Ã Â¥â€¹Ã Â¤Å“Ã Â¤Â¼Ã Â¤Â¾Ã Â¤Â¨Ã Â¤Â¾ 20-30 Ã Â¤Â®Ã Â¤Â¿Ã Â¤Â¨Ã Â¤Å¸ Ã Â¤Â¬Ã Â¤Â¿Ã Â¤Â¨Ã Â¤Â¾ Ã Â¤â€¢Ã Â¤Â¿Ã Â¤Â¸Ã Â¥â‚¬ Ã Â¤Â­Ã Â¤Å¸Ã Â¤â€¢Ã Â¤Â¾Ã Â¤Âµ Ã Â¤â€¢Ã Â¥â€¡ Ã Â¤â€”Ã Â¤Â¹Ã Â¤Â°Ã Â¤Â¾ Ã Â¤â€¦Ã Â¤Â§Ã Â¥ÂÃ Â¤Â¯Ã Â¤Â¯Ã Â¤Â¨ Ã Â¤â€¢Ã Â¤Â°Ã Â¥â€¡Ã Â¤â€šÃ Â¥Â¤
           </p>
         </div>
       `
@@ -4216,14 +4225,14 @@ function getBookPagesArray(book, lang) {
     {
       pageNo: 3,
       content: `
-        <div class="reader-page-header">à¤…à¤§à¥à¤¯à¤¾à¤¯ 2 : à¤‰à¤¤à¥à¤ªà¤¾à¤¦à¤•à¤¤à¤¾ à¤à¤µà¤‚ à¤—à¤¹à¤°à¤¾ à¤«à¤¼à¥‹à¤•à¤¸ (Deep Strategy)</div>
+        <div class="reader-page-header">Ã Â¤â€¦Ã Â¤Â§Ã Â¥ÂÃ Â¤Â¯Ã Â¤Â¾Ã Â¤Â¯ 2 : Ã Â¤â€°Ã Â¤Â¤Ã Â¥ÂÃ Â¤ÂªÃ Â¤Â¾Ã Â¤Â¦Ã Â¤â€¢Ã Â¤Â¤Ã Â¤Â¾ Ã Â¤ÂÃ Â¤ÂµÃ Â¤â€š Ã Â¤â€”Ã Â¤Â¹Ã Â¤Â°Ã Â¤Â¾ Ã Â¤Â«Ã Â¤Â¼Ã Â¥â€¹Ã Â¤â€¢Ã Â¤Â¸ (Deep Strategy)</div>
         <p style="font-size:0.95rem; line-height:1.7;">
-          à¤®à¤¨à¥à¤·à¥à¤¯ à¤•à¤¾ à¤§à¥à¤¯à¤¾à¤¨ à¤‰à¤¸à¤•à¥€ à¤¸à¤¬à¤¸à¥‡ à¤®à¥‚à¤²à¥à¤¯à¤µà¤¾à¤¨ à¤¸à¤‚à¤ªà¤¤à¥à¤¤à¤¿ à¤¹à¥ˆà¥¤ à¤œà¤¬ à¤†à¤ª à¤…à¤ªà¤¨à¥‡ à¤‡à¤°à¤¾à¤¦à¥‹à¤‚ à¤•à¥‹ à¤¸à¥à¤ªà¤·à¥à¤Ÿ à¤°à¤–à¤¤à¥‡ à¤¹à¥ˆà¤‚ à¤”à¤° à¤¸à¥‹à¤¶à¤² à¤®à¥€à¤¡à¤¿à¤¯à¤¾ à¤¤à¤¥à¤¾ à¤…à¤¨à¤¾à¤µà¤¶à¥à¤¯à¤• à¤µà¤¿à¤•à¤°à¥à¤·à¤£à¥‹à¤‚ à¤•à¥‹ à¤¦à¥‚à¤° à¤•à¤°à¤¤à¥‡ à¤¹à¥ˆà¤‚, à¤¤à¥‹ à¤†à¤ªà¤•à¥€ à¤¸à¥€à¤–à¤¨à¥‡ à¤”à¤° à¤•à¤¾à¤® à¤•à¤°à¤¨à¥‡ à¤•à¥€ à¤•à¥à¤·à¤®à¤¤à¤¾ à¤•à¤ˆ à¤—à¥à¤¨à¤¾ à¤¬à¤¢à¤¼ à¤œà¤¾à¤¤à¥€ à¤¹à¥ˆà¥¤
+          Ã Â¤Â®Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â·Ã Â¥ÂÃ Â¤Â¯ Ã Â¤â€¢Ã Â¤Â¾ Ã Â¤Â§Ã Â¥ÂÃ Â¤Â¯Ã Â¤Â¾Ã Â¤Â¨ Ã Â¤â€°Ã Â¤Â¸Ã Â¤â€¢Ã Â¥â‚¬ Ã Â¤Â¸Ã Â¤Â¬Ã Â¤Â¸Ã Â¥â€¡ Ã Â¤Â®Ã Â¥â€šÃ Â¤Â²Ã Â¥ÂÃ Â¤Â¯Ã Â¤ÂµÃ Â¤Â¾Ã Â¤Â¨ Ã Â¤Â¸Ã Â¤â€šÃ Â¤ÂªÃ Â¤Â¤Ã Â¥ÂÃ Â¤Â¤Ã Â¤Â¿ Ã Â¤Â¹Ã Â¥Ë†Ã Â¥Â¤ Ã Â¤Å“Ã Â¤Â¬ Ã Â¤â€ Ã Â¤Âª Ã Â¤â€¦Ã Â¤ÂªÃ Â¤Â¨Ã Â¥â€¡ Ã Â¤â€¡Ã Â¤Â°Ã Â¤Â¾Ã Â¤Â¦Ã Â¥â€¹Ã Â¤â€š Ã Â¤â€¢Ã Â¥â€¹ Ã Â¤Â¸Ã Â¥ÂÃ Â¤ÂªÃ Â¤Â·Ã Â¥ÂÃ Â¤Å¸ Ã Â¤Â°Ã Â¤â€“Ã Â¤Â¤Ã Â¥â€¡ Ã Â¤Â¹Ã Â¥Ë†Ã Â¤â€š Ã Â¤â€Ã Â¤Â° Ã Â¤Â¸Ã Â¥â€¹Ã Â¤Â¶Ã Â¤Â² Ã Â¤Â®Ã Â¥â‚¬Ã Â¤Â¡Ã Â¤Â¿Ã Â¤Â¯Ã Â¤Â¾ Ã Â¤Â¤Ã Â¤Â¥Ã Â¤Â¾ Ã Â¤â€¦Ã Â¤Â¨Ã Â¤Â¾Ã Â¤ÂµÃ Â¤Â¶Ã Â¥ÂÃ Â¤Â¯Ã Â¤â€¢ Ã Â¤ÂµÃ Â¤Â¿Ã Â¤â€¢Ã Â¤Â°Ã Â¥ÂÃ Â¤Â·Ã Â¤Â£Ã Â¥â€¹Ã Â¤â€š Ã Â¤â€¢Ã Â¥â€¹ Ã Â¤Â¦Ã Â¥â€šÃ Â¤Â° Ã Â¤â€¢Ã Â¤Â°Ã Â¤Â¤Ã Â¥â€¡ Ã Â¤Â¹Ã Â¥Ë†Ã Â¤â€š, Ã Â¤Â¤Ã Â¥â€¹ Ã Â¤â€ Ã Â¤ÂªÃ Â¤â€¢Ã Â¥â‚¬ Ã Â¤Â¸Ã Â¥â‚¬Ã Â¤â€“Ã Â¤Â¨Ã Â¥â€¡ Ã Â¤â€Ã Â¤Â° Ã Â¤â€¢Ã Â¤Â¾Ã Â¤Â® Ã Â¤â€¢Ã Â¤Â°Ã Â¤Â¨Ã Â¥â€¡ Ã Â¤â€¢Ã Â¥â‚¬ Ã Â¤â€¢Ã Â¥ÂÃ Â¤Â·Ã Â¤Â®Ã Â¤Â¤Ã Â¤Â¾ Ã Â¤â€¢Ã Â¤Ë† Ã Â¤â€”Ã Â¥ÂÃ Â¤Â¨Ã Â¤Â¾ Ã Â¤Â¬Ã Â¤Â¢Ã Â¤Â¼ Ã Â¤Å“Ã Â¤Â¾Ã Â¤Â¤Ã Â¥â‚¬ Ã Â¤Â¹Ã Â¥Ë†Ã Â¥Â¤
         </p>
         <div class="reader-highlight-card">
           <span class="mode-badge mode-hyper">HYPERFOCUS MODE</span>
           <p style="font-size:0.88rem; margin:4px 0 0; line-height:1.5;">
-            à¤à¤• à¤¸à¤®à¤¯ à¤®à¥‡à¤‚ à¤•à¥‡à¤µà¤² à¤à¤• à¤²à¤•à¥à¤·à¥à¤¯ à¤ªà¤° 100% à¤à¤•à¤¾à¤—à¥à¤°à¤¤à¤¾à¥¤ à¤•à¤¾à¤°à¥à¤¯ à¤ªà¥‚à¤°à¤¾ à¤¹à¥‹à¤¨à¥‡ à¤¤à¤• à¤…à¤¨à¥à¤¯ à¤¸à¤­à¥€ à¤°à¥à¤•à¤¾à¤µà¤Ÿà¥‹à¤‚ à¤•à¥‹ à¤°à¥‹à¤•à¥‡à¤‚à¥¤
+            Ã Â¤ÂÃ Â¤â€¢ Ã Â¤Â¸Ã Â¤Â®Ã Â¤Â¯ Ã Â¤Â®Ã Â¥â€¡Ã Â¤â€š Ã Â¤â€¢Ã Â¥â€¡Ã Â¤ÂµÃ Â¤Â² Ã Â¤ÂÃ Â¤â€¢ Ã Â¤Â²Ã Â¤â€¢Ã Â¥ÂÃ Â¤Â·Ã Â¥ÂÃ Â¤Â¯ Ã Â¤ÂªÃ Â¤Â° 100% Ã Â¤ÂÃ Â¤â€¢Ã Â¤Â¾Ã Â¤â€”Ã Â¥ÂÃ Â¤Â°Ã Â¤Â¤Ã Â¤Â¾Ã Â¥Â¤ Ã Â¤â€¢Ã Â¤Â¾Ã Â¤Â°Ã Â¥ÂÃ Â¤Â¯ Ã Â¤ÂªÃ Â¥â€šÃ Â¤Â°Ã Â¤Â¾ Ã Â¤Â¹Ã Â¥â€¹Ã Â¤Â¨Ã Â¥â€¡ Ã Â¤Â¤Ã Â¤â€¢ Ã Â¤â€¦Ã Â¤Â¨Ã Â¥ÂÃ Â¤Â¯ Ã Â¤Â¸Ã Â¤Â­Ã Â¥â‚¬ Ã Â¤Â°Ã Â¥ÂÃ Â¤â€¢Ã Â¤Â¾Ã Â¤ÂµÃ Â¤Å¸Ã Â¥â€¹Ã Â¤â€š Ã Â¤â€¢Ã Â¥â€¹ Ã Â¤Â°Ã Â¥â€¹Ã Â¤â€¢Ã Â¥â€¡Ã Â¤â€šÃ Â¥Â¤
           </p>
         </div>
       `
@@ -4231,12 +4240,12 @@ function getBookPagesArray(book, lang) {
     {
       pageNo: 4,
       content: `
-        <div class="reader-page-header">à¤µà¥à¤¯à¤•à¥à¤¤à¤¿à¤—à¤¤ à¤¨à¥‹à¤Ÿà¥à¤¸ à¤à¤µà¤‚ à¤¨à¤¿à¤·à¥à¤•à¤°à¥à¤· (My Reflections)</div>
+        <div class="reader-page-header">Ã Â¤ÂµÃ Â¥ÂÃ Â¤Â¯Ã Â¤â€¢Ã Â¥ÂÃ Â¤Â¤Ã Â¤Â¿Ã Â¤â€”Ã Â¤Â¤ Ã Â¤Â¨Ã Â¥â€¹Ã Â¤Å¸Ã Â¥ÂÃ Â¤Â¸ Ã Â¤ÂÃ Â¤ÂµÃ Â¤â€š Ã Â¤Â¨Ã Â¤Â¿Ã Â¤Â·Ã Â¥ÂÃ Â¤â€¢Ã Â¤Â°Ã Â¥ÂÃ Â¤Â· (My Reflections)</div>
         <div style="background: rgba(0,0,0,0.04); border:1px solid rgba(0,0,0,0.08); border-radius:8px; padding:12px; min-height:160px; font-family:inherit;">
-          ${escapeHtml(book.takeaway || book.notes || 'à¤‡à¤¸ à¤ªà¥à¤¸à¥à¤¤à¤• à¤¸à¥‡ à¤†à¤ªà¤¨à¥‡ à¤•à¥à¤¯à¤¾ à¤¸à¥€à¤–à¤¾? à¤¨à¥€à¤šà¥‡ à¤…à¤ªà¤¨à¥‡ à¤¨à¥‹à¤Ÿà¥à¤¸ à¤²à¤¿à¤–à¥‡à¤‚ à¤¯à¤¾ Edit Book à¤®à¥‡à¤‚ à¤œà¤¾à¤•à¤° à¤…à¤ªà¤¡à¥‡à¤Ÿ à¤•à¤°à¥‡à¤‚à¥¤')}
+          ${escapeHtml(book.takeaway || book.notes || 'Ã Â¤â€¡Ã Â¤Â¸ Ã Â¤ÂªÃ Â¥ÂÃ Â¤Â¸Ã Â¥ÂÃ Â¤Â¤Ã Â¤â€¢ Ã Â¤Â¸Ã Â¥â€¡ Ã Â¤â€ Ã Â¤ÂªÃ Â¤Â¨Ã Â¥â€¡ Ã Â¤â€¢Ã Â¥ÂÃ Â¤Â¯Ã Â¤Â¾ Ã Â¤Â¸Ã Â¥â‚¬Ã Â¤â€“Ã Â¤Â¾? Ã Â¤Â¨Ã Â¥â‚¬Ã Â¤Å¡Ã Â¥â€¡ Ã Â¤â€¦Ã Â¤ÂªÃ Â¤Â¨Ã Â¥â€¡ Ã Â¤Â¨Ã Â¥â€¹Ã Â¤Å¸Ã Â¥ÂÃ Â¤Â¸ Ã Â¤Â²Ã Â¤Â¿Ã Â¤â€“Ã Â¥â€¡Ã Â¤â€š Ã Â¤Â¯Ã Â¤Â¾ Edit Book Ã Â¤Â®Ã Â¥â€¡Ã Â¤â€š Ã Â¤Å“Ã Â¤Â¾Ã Â¤â€¢Ã Â¤Â° Ã Â¤â€¦Ã Â¤ÂªÃ Â¤Â¡Ã Â¥â€¡Ã Â¤Å¸ Ã Â¤â€¢Ã Â¤Â°Ã Â¥â€¡Ã Â¤â€šÃ Â¥Â¤')}
         </div>
         <div style="margin-top:16px; text-align:center; font-size:0.85rem; color:var(--text-muted);">
-          â˜… Total Pages in this edition: ${book.pages || book.total_pages || 250}
+          Ã¢Ëœâ€¦ Total Pages in this edition: ${book.pages || book.total_pages || 250}
         </div>
       `
     }
@@ -4257,7 +4266,7 @@ function renderRealBookPages() {
   if (titleDisplay) titleDisplay.innerText = book.title;
   
   const badge = document.getElementById('readerBookBadge');
-  if (badge) badge.innerText = `ðŸ“– ${readerState.lang.toUpperCase()} EDITION`;
+  if (badge) badge.innerText = `Ã°Å¸â€œâ€“ ${readerState.lang.toUpperCase()} EDITION`;
   
   const slider = document.getElementById('readerPageSlider');
   if (slider) {
@@ -4336,7 +4345,7 @@ function renderRealBookPages() {
       } else {
         innerRight.innerHTML = `
           <div style="display:flex; flex-direction:column; height:100%; align-items:center; justify-content:center; opacity:0.35; text-align:center;">
-            <div style="font-size:2rem; margin-bottom:8px;">âœ¦</div>
+            <div style="font-size:2rem; margin-bottom:8px;">Ã¢Å“Â¦</div>
             <div style="font-size:0.95rem; font-weight:700;">End of Volume</div>
             <div style="font-size:0.8rem; margin-top:4px;">Mind & Focus Master Library</div>
           </div>`;
@@ -4484,14 +4493,14 @@ function handleCoverImageUpload(input) {
       const elCover = document.getElementById('editBookCover');
       if (elCover) elCover.value = compressedDataUrl;
       updateCoverPreviewBox(compressedDataUrl);
-      showToast('Cover photo ready & optimized! ðŸ“¸');
+      showToast('Cover photo ready & optimized! Ã°Å¸â€œÂ¸');
     };
     img.onerror = () => {
       state.currentEditingCoverUrl = rawData;
       const elCover = document.getElementById('editBookCover');
       if (elCover) elCover.value = rawData;
       updateCoverPreviewBox(rawData);
-      showToast('Photo selected! âœ¨');
+      showToast('Photo selected! Ã¢Å“Â¨');
     };
     img.src = rawData;
   };
@@ -4548,7 +4557,7 @@ function onQuickCatalogSearch(val) {
       <img src="${getBookCoverUrl(b)}" class="quick-autofill-thumb" onerror="this.src='cover_placeholder.jpg'">
       <div class="quick-autofill-meta">
         <div class="quick-autofill-title">${escapeHtml(b.title)}</div>
-        <div class="quick-autofill-author">${escapeHtml(b.author || 'Unknown Author')} â€¢ ${escapeHtml(b.category || 'General')}</div>
+        <div class="quick-autofill-author">${escapeHtml(b.author || 'Unknown Author')} Ã¢â‚¬Â¢ ${escapeHtml(b.category || 'General')}</div>
       </div>
     </div>
   `).join('');
@@ -4588,7 +4597,7 @@ function selectQuickCatalogBook(bookTitle) {
   
   const dropdown = document.getElementById('quickCatalogDropdown');
   if (dropdown) dropdown.style.display = 'none';
-  showToast(`Auto-filled: ${found.title}! âš¡`);
+  showToast(`Auto-filled: ${found.title}! Ã¢Å¡Â¡`);
 }
 
 function calculateCountDays() {
@@ -4735,12 +4744,12 @@ function saveBookModal() {
       state.currentBook = state.books[state.editingBookIndex];
       openBookDetailView(state.currentBook);
     }
-    showToast('Book updated successfully! ðŸ“š');
+    showToast('Book updated successfully! Ã°Å¸â€œÅ¡');
   } else {
     state.books.unshift(bookData);
     state.currentBook = bookData;
     state.currentBookIndex = 0;
-    showToast('New book added to library! âœ¨');
+    showToast('New book added to library! Ã¢Å“Â¨');
   }
   
   saveBooks();
@@ -4786,7 +4795,7 @@ function saveProfileChanges() {
   
   saveProfile();
   closeEditProfileModal();
-  showToast('Profile updated! ðŸŒŸ');
+  showToast('Profile updated! Ã°Å¸Å’Å¸');
 }
 
 // ================= SECURITY PIN SYSTEM =================
@@ -4803,7 +4812,7 @@ function unlockApp() {
   state.pinBuffer = '';
   const pinScreen = document.getElementById('pinLockOverlay');
   if (pinScreen) pinScreen.style.display = 'none';
-  showToast('Library unlocked! ðŸ”“');
+  showToast('Library unlocked! Ã°Å¸â€â€œ');
 }
 
 function openPinSetupModal() {
@@ -4860,7 +4869,7 @@ function handlePinComplete() {
     localStorage.setItem(PIN_KEY, state.pin);
     state.isSettingNewPin = false;
     document.getElementById('pinLockOverlay').style.display = 'none';
-    showToast('PIN Protection Enabled! ðŸ”’');
+    showToast('PIN Protection Enabled! Ã°Å¸â€â€™');
     renderProfileView();
   } else {
     if (state.pinBuffer === state.pin) {
@@ -4942,7 +4951,7 @@ function exportDataJSON() {
     } catch (e) {}
 
     recordBackupTimestamp();
-    showToast('Master Backup Saved! ðŸ’¾ (' + (state.books || []).length + ' Books, Shelves & Notes)');
+    showToast('Master Backup Saved! Ã°Å¸â€™Â¾ (' + (state.books || []).length + ' Books, Shelves & Notes)');
   } catch (e) {
     console.error('Export error:', e);
     showToast('Error exporting JSON backup');
@@ -4960,18 +4969,18 @@ function exportDataToWhatsApp() {
     const todayFormatted = new Date().toLocaleDateString('hi-IN', { day: 'numeric', month: 'short', year: 'numeric' });
 
     const captionText = 
-      `ðŸ“š *Mind & Focus Books Tracker - Master Backup File*\n` +
-      `ðŸ“… *Date:* ${todayFormatted}\n` +
-      `ðŸ“– *Total Books:* ${bookCount}\n` +
-      `ðŸ“‚ *Custom Shelves:* ${shelfCount}\n` +
-      `ðŸ’¡ *How to Restore:* Ye aapki backup file hai. MindFocus app me jaakar 'Import & Restore' par tap karein aur is file ko select karke 1-second me sabhi kitabein aur progress wapas layein.`;
+      `Ã°Å¸â€œÅ¡ *Mind & Focus Books Tracker - Master Backup File*\n` +
+      `Ã°Å¸â€œâ€¦ *Date:* ${todayFormatted}\n` +
+      `Ã°Å¸â€œâ€“ *Total Books:* ${bookCount}\n` +
+      `Ã°Å¸â€œâ€š *Custom Shelves:* ${shelfCount}\n` +
+      `Ã°Å¸â€™Â¡ *How to Restore:* Ye aapki backup file hai. MindFocus app me jaakar 'Import & Restore' par tap karein aur is file ko select karke 1-second me sabhi kitabein aur progress wapas layein.`;
 
     // 1. Native Android direct WhatsApp file share via FileProvider
     if (window.Android && typeof window.Android.shareToWhatsApp === 'function') {
       try {
         window.Android.shareToWhatsApp(jsonStr, fileName, 'application/json', captionText);
         recordBackupTimestamp();
-        showToast('WhatsApp khul raha hai... Backup file attach ho rahi hai ðŸ’¬');
+        showToast('WhatsApp khul raha hai... Backup file attach ho rahi hai Ã°Å¸â€™Â¬');
         return;
       } catch (e) {
         console.warn('Native shareToWhatsApp failed, falling back:', e);
@@ -4983,7 +4992,7 @@ function exportDataToWhatsApp() {
       try {
         window.Android.shareBackup(jsonStr, fileName);
         recordBackupTimestamp();
-        showToast('Backup sharing... ðŸ’¬');
+        showToast('Backup sharing... Ã°Å¸â€™Â¬');
         return;
       } catch (e) {
         console.warn('Native shareBackup failed:', e);
@@ -5000,7 +5009,7 @@ function exportDataToWhatsApp() {
             text: captionText,
             files: [file]
           }).then(() => {
-            showToast('Backup shared via WhatsApp! ðŸ’¬');
+            showToast('Backup shared via WhatsApp! Ã°Å¸â€™Â¬');
             recordBackupTimestamp();
           }).catch((err) => {
             if (err.name !== 'AbortError') {
@@ -5038,11 +5047,11 @@ function downloadBackupAndPromptWhatsApp(jsonStr, fileName, captionText) {
     }, 500);
   } catch (e) {}
 
-  const waText = captionText + '\n\nðŸ“ *Note:* Backup file (' + fileName + ') aapke Downloads folder me save ho gayi hai. Is chat me file attach kar dein.';
+  const waText = captionText + '\n\nÃ°Å¸â€œÂ *Note:* Backup file (' + fileName + ') aapke Downloads folder me save ho gayi hai. Is chat me file attach kar dein.';
   const waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(waText);
   window.open(waUrl, '_blank');
   recordBackupTimestamp();
-  showToast('Backup save hua! WhatsApp khul raha hai... ðŸ’¬');
+  showToast('Backup save hua! WhatsApp khul raha hai... Ã°Å¸â€™Â¬');
 }
 
 // Formatted Reading Summary to WhatsApp
@@ -5055,14 +5064,14 @@ function shareReadingSummaryWhatsApp() {
     const profile = state.profile || {};
     const userName = profile.name || 'Book Lover';
 
-    let msg = `ðŸ“š *Mind & Focus - ${userName}'s Reading Journey*\n\n`;
-    msg += `ðŸ“– *Total Books:* ${books.length}\n`;
-    msg += `âœ… *Completed:* ${completed.length}\n`;
-    msg += `â³ *Currently Reading:* ${currentlyReading.length}\n`;
-    msg += `ðŸ“Œ *Plan to Read:* ${wantToRead.length}\n\n`;
+    let msg = `Ã°Å¸â€œÅ¡ *Mind & Focus - ${userName}'s Reading Journey*\n\n`;
+    msg += `Ã°Å¸â€œâ€“ *Total Books:* ${books.length}\n`;
+    msg += `Ã¢Å“â€¦ *Completed:* ${completed.length}\n`;
+    msg += `Ã¢ÂÂ³ *Currently Reading:* ${currentlyReading.length}\n`;
+    msg += `Ã°Å¸â€œÅ’ *Plan to Read:* ${wantToRead.length}\n\n`;
 
     if (currentlyReading.length > 0) {
-      msg += `ðŸ”¥ *Now Reading:*\n`;
+      msg += `Ã°Å¸â€Â¥ *Now Reading:*\n`;
       currentlyReading.slice(0, 3).forEach((b, idx) => {
         const prog = (b.pages && b.currentPage) ? ` (${Math.round((b.currentPage / b.pages) * 100)}%)` : '';
         msg += `  ${idx + 1}. *${b.title}*${b.author ? ' - ' + b.author : ''}${prog}\n`;
@@ -5071,14 +5080,14 @@ function shareReadingSummaryWhatsApp() {
     }
 
     if (completed.length > 0) {
-      msg += `ðŸ† *Recently Completed:*\n`;
+      msg += `Ã°Å¸Ââ€  *Recently Completed:*\n`;
       completed.slice(-3).reverse().forEach((b) => {
-        msg += `  â€¢ *${b.title}*${b.author ? ' (' + b.author + ')' : ''}\n`;
+        msg += `  Ã¢â‚¬Â¢ *${b.title}*${b.author ? ' (' + b.author + ')' : ''}\n`;
       });
       msg += `\n`;
     }
 
-    msg += `âœ¨ Shared from *Mind & Focus Books Tracker*`;
+    msg += `Ã¢Å“Â¨ Shared from *Mind & Focus Books Tracker*`;
 
     if (window.Android && typeof window.Android.shareTextToWhatsApp === 'function') {
       window.Android.shareTextToWhatsApp(msg);
@@ -5222,7 +5231,7 @@ function importDataJSON(event) {
       renderApp();
       updateLastBackupDisplay();
 
-      showToast('ðŸŽ‰ Data Restored! ' + booksCount + ' Books, Shelves & Progress loaded!', 'success');
+      showToast('Ã°Å¸Å½â€° Data Restored! ' + booksCount + ' Books, Shelves & Progress loaded!', 'success');
     } catch (err) {
       console.error('Import error:', err);
       showToast('Error reading backup file.');
@@ -5344,7 +5353,7 @@ function importDataCSV(event) {
 
       saveBooks();
       renderApp();
-      showToast('ðŸ“Š CSV Imported: ' + added + ' new books added, ' + updated + ' updated!');
+      showToast('Ã°Å¸â€œÅ  CSV Imported: ' + added + ' new books added, ' + updated + ' updated!');
     } catch (err) {
       console.error('CSV error:', err);
       showToast('Error parsing CSV file.');
@@ -5383,7 +5392,7 @@ function exportDataCSV() {
     a.download = `MindFocusBooks_${getTodayLocalDate()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
-    showToast('CSV exported successfully! ðŸ“Š');
+    showToast('CSV exported successfully! Ã°Å¸â€œÅ ');
   } catch (e) {
     showToast('Error exporting CSV');
   }
@@ -5410,7 +5419,7 @@ function exportDataPDF() {
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(15);
     doc.setTextColor(255, 255, 255);
-    doc.text('Mind & Focus Books Tracker â€” Reading Report', 14, 18);
+    doc.text('Mind & Focus Books Tracker Ã¢â‚¬â€ Reading Report', 14, 18);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(9);
@@ -5434,7 +5443,7 @@ function exportDataPDF() {
     doc.text(`Total Books: ${totalBooks}`, 20, 53);
     doc.text(`Completed: ${completed}`, 65, 53);
     doc.text(`Pages Read: ${totalPages.toLocaleString()}`, 110, 53);
-    doc.text(`Streak: ${streak} Days ðŸ”¥`, 160, 53);
+    doc.text(`Streak: ${streak} Days Ã°Å¸â€Â¥`, 160, 53);
 
     const tableData = (state.books || []).map((b, i) => [
       b.no || i + 1,
@@ -5443,7 +5452,7 @@ function exportDataPDF() {
       b.category || 'General',
       b.status || 'PENDING',
       `${b.current_page || 0}/${b.pages || 250}`,
-      b.rating ? `${b.rating} â˜…` : '-'
+      b.rating ? `${b.rating} Ã¢Ëœâ€¦` : '-'
     ]);
     
     if (doc.autoTable) {
@@ -5474,7 +5483,7 @@ function exportDataPDF() {
     localStorage.setItem('mf_last_backup_time', nowStr);
     updateLastBackupDisplay();
     
-    showToast('Prettier PDF Report generated & backed up! ðŸ“‘âœ¨');
+    showToast('Prettier PDF Report generated & backed up! Ã°Å¸â€œâ€˜Ã¢Å“Â¨');
   } catch (e) {
     console.error(e);
     showToast('Error generating PDF report');
@@ -5581,7 +5590,7 @@ function speakDictionaryWord(word) {
       utterance.rate = 0.9;
       utterance.lang = 'en-US';
       window.speechSynthesis.speak(utterance);
-      showToast(`ðŸ”Š Pronouncing: "${word}"`);
+      showToast(`Ã°Å¸â€Å  Pronouncing: "${word}"`);
     } else {
       showToast(`Audio: "${word}"`);
     }
@@ -5604,7 +5613,7 @@ function renderDictionaryWords(words, highlightQuery = '') {
   if (!words || words.length === 0) {
     container.innerHTML = `
       <div style="text-align:center; padding: 40px 20px; color: var(--text-muted);">
-        <div style="font-size: 2.2rem; margin-bottom: 8px;">ðŸ”</div>
+        <div style="font-size: 2.2rem; margin-bottom: 8px;">Ã°Å¸â€Â</div>
         <div style="font-weight:700; font-size:1rem; color:var(--text-secondary);">No matching words found</div>
         <div style="font-size:0.8rem; margin-top:4px;">Try searching with different spelling or reset filters.</div>
         <button type="button" class="btn-save-gold" style="margin-top:14px; padding:6px 14px; font-size:0.8rem;" onclick="clearDictionarySearch()">View All Words</button>
@@ -5631,19 +5640,19 @@ function renderDictionaryWords(words, highlightQuery = '') {
             ${w.type ? `<span class="dict-type-badge">${w.type}</span>` : ''}
           </div>
           <button type="button" class="dict-audio-btn" onclick="speakDictionaryWord('${escapedWord}')" title="Listen Pronunciation">
-            <span>ðŸ”Š</span> Listen
+            <span>Ã°Å¸â€Å </span> Listen
           </button>
         </div>
         <div class="dict-hindi-text">
-          <span>ðŸ‡®ðŸ‡³</span> ${highlight(w.hindi)}
+          <span>Ã°Å¸â€¡Â®Ã°Å¸â€¡Â³</span> ${highlight(w.hindi)}
         </div>
         <div class="dict-def-text">
           ${w.definition || ''}
         </div>
         ${w.example ? `
           <div class="dict-example-box">
-            <div>ðŸ’¬ "${w.example}"</div>
-            ${w.exampleHindi ? `<div class="dict-example-hindi">ðŸ‘‰ ${w.exampleHindi}</div>` : ''}
+            <div>Ã°Å¸â€™Â¬ "${w.example}"</div>
+            ${w.exampleHindi ? `<div class="dict-example-hindi">Ã°Å¸â€˜â€° ${w.exampleHindi}</div>` : ''}
           </div>
         ` : ''}
         ${w.syn ? `
@@ -5787,12 +5796,12 @@ function setAppTheme(theme) {
   }
 
   const themeNames = {
-    'wood': 'ðŸŒ² Classic Wood Theme',
-    'dark': 'ðŸŒ™ Dark Luxury Mode',
-    'sepia': 'ðŸ“œ Kindle Sepia Paper Mode',
-    'light': 'â˜€ï¸ Crisp Light Mode'
+    'wood': 'Ã°Å¸Å’Â² Classic Wood Theme',
+    'dark': 'Ã°Å¸Å’â„¢ Dark Luxury Mode',
+    'sepia': 'Ã°Å¸â€œÅ“ Kindle Sepia Paper Mode',
+    'light': 'Ã¢Ëœâ‚¬Ã¯Â¸Â Crisp Light Mode'
   };
-  showToast(`Switched to ${themeNames[theme] || theme}! âœ¨`);
+  showToast(`Switched to ${themeNames[theme] || theme}! Ã¢Å“Â¨`);
 }
 
 function toggleAppTheme() {
@@ -5815,10 +5824,10 @@ function applyTheme(theme) {
   
   const text = document.getElementById('appearanceSubText');
   const themeLabels = {
-    'wood': 'Theme: ðŸŒ² Classic Wood Theme',
-    'dark': 'Theme: ðŸŒ™ Dark Modern Luxury',
-    'sepia': 'Theme: ðŸ“œ Kindle Sepia Paper Mode',
-    'light': 'Theme: â˜€ï¸ Crisp Light Mode'
+    'wood': 'Theme: Ã°Å¸Å’Â² Classic Wood Theme',
+    'dark': 'Theme: Ã°Å¸Å’â„¢ Dark Modern Luxury',
+    'sepia': 'Theme: Ã°Å¸â€œÅ“ Kindle Sepia Paper Mode',
+    'light': 'Theme: Ã¢Ëœâ‚¬Ã¯Â¸Â Crisp Light Mode'
   };
   if (text) text.innerText = themeLabels[theme] || `Theme: ${theme}`;
 
@@ -5835,7 +5844,7 @@ function applyTheme(theme) {
 }
 
 function showNotificationSettings() {
-  showToast('Daily reading streak reminders enabled at 8:00 PM ðŸ””');
+  showToast('Daily reading streak reminders enabled at 8:00 PM Ã°Å¸â€â€');
 }
 
 // ================= CARD 1 (QUANTUM HOLOGRAPHIC BEACON) & VISION-OS UPDATE CENTER =================
@@ -5853,10 +5862,10 @@ function showInAppNoticePopup(data) {
   const msgEl = document.getElementById('inAppNoticeMessage');
   const btnTextEl = document.getElementById('inAppNoticeBtnText');
 
-  if (iconEl) iconEl.innerText = data.icon || 'ðŸš€';
+  if (iconEl) iconEl.innerText = data.icon || 'Ã°Å¸Å¡â‚¬';
   if (titleEl) titleEl.innerText = data.title || 'Mind Focus Books Update Ready!';
   if (msgEl) msgEl.innerText = data.message || 'A new update is ready to install.';
-  if (btnTextEl) btnTextEl.innerText = data.btnText || 'âš¡ Update Now';
+  if (btnTextEl) btnTextEl.innerText = data.btnText || 'Ã¢Å¡Â¡ Update Now';
 
   overlay.style.display = 'flex';
 }
@@ -5904,7 +5913,7 @@ function openUpdateCheckerModal() {
     if (desc) desc.innerText = rel?.name || `Mind Focus Books ${targetVer} is ready to install!`;
     if (btn) {
       btn.disabled = false;
-      btn.innerText = `âš¡ Download & Install ${targetVer} Now`;
+      btn.innerText = `Ã¢Å¡Â¡ Download & Install ${targetVer} Now`;
     }
   } else {
     // Already on current or latest version!
@@ -5913,7 +5922,7 @@ function openUpdateCheckerModal() {
     if (desc) desc.innerText = `Aapke phone me latest version ${installedVer} already installed hai aur sab kuch up-to-date hai.`;
     if (btn) {
       btn.disabled = false;
-      btn.innerText = `âœ“ Up to Date (${installedVer})`;
+      btn.innerText = `Ã¢Å“â€œ Up to Date (${installedVer})`;
     }
   }
 
@@ -5922,15 +5931,15 @@ function openUpdateCheckerModal() {
     const featuresToShow = (rel?.features && Array.isArray(rel.features) && rel.features.length > 0)
       ? rel.features
       : [
-          'âš¡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices',
-          'ðŸ’° Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)',
-          'ðŸ”¥ Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days',
-          'â­ Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them',
-          'ðŸ“± Direct In-App APK Reinstall & 1-Click Update Installer'
+          'Ã¢Å¡Â¡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices',
+          'Ã°Å¸â€™Â° Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)',
+          'Ã°Å¸â€Â¥ Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days',
+          'Ã¢Â­Â Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them',
+          'Ã°Å¸â€œÂ± Direct In-App APK Reinstall & 1-Click Update Installer'
         ];
     listEl.innerHTML = featuresToShow.map(f => `
       <div class="update-glass-item">
-        <span class="update-glass-check">âœ“</span>
+        <span class="update-glass-check">Ã¢Å“â€œ</span>
         <span>${escapeHtml(f)}</span>
       </div>
     `).join('');
@@ -5989,7 +5998,7 @@ function triggerInAppUpdate() {
   if (progressWrap) progressWrap.style.display = 'block';
   if (actionBtn) {
     actionBtn.disabled = true;
-    actionBtn.innerText = 'â³ Downloading Signed APK...';
+    actionBtn.innerText = 'Ã¢ÂÂ³ Downloading Signed APK...';
   }
 
   let pct = 0;
@@ -6010,7 +6019,7 @@ function triggerInAppUpdate() {
       if (progressText) progressText.innerText = 'Package Ready! Opening Installer...';
       if (actionBtn) {
         actionBtn.disabled = false;
-        actionBtn.innerText = `âœ“ Installed â€” Re-download APK (${targetVer})`;
+        actionBtn.innerText = `Ã¢Å“â€œ Installed Ã¢â‚¬â€ Re-download APK (${targetVer})`;
       }
     }, 1500);
   } else {
@@ -6032,7 +6041,7 @@ function triggerInAppUpdate() {
       }
       if (actionBtn) {
         actionBtn.disabled = false;
-        actionBtn.innerText = `âœ“ Download Started â€” Re-download (${targetVer})`;
+        actionBtn.innerText = `Ã¢Å“â€œ Download Started Ã¢â‚¬â€ Re-download (${targetVer})`;
       }
     }, 1200);
   }
@@ -6171,30 +6180,30 @@ let activeGuideCategory = 'ALL';
 let currentGuideSearchQuery = '';
 
 const appFeaturesGuideData = [
-  { id: 1, title: 'Classic Wooden Bookshelf & 4 Themes', category: 'Reading', icon: 'ðŸªµ', screenNum: 'Screen 1', location: 'Top Bar / Profile -> Themes Menu', purpose: 'App ka visual appearance (Mahogany, Walnut, Dark Gold, Sepia) badalne ke liye.', benefit: 'Eye comfort aur aesthetic satisfaction ke liye.', actionText: 'Switch Themes', route: 'profile' },
-  { id: 2, title: 'Compact KPI Bar & Real Metrics', category: 'Analytics', icon: 'ðŸ“Š', screenNum: 'Screen 2', location: 'Home & Profile Header Top Bar', purpose: 'Finished books, reading progress, wishlist, time & streak track karne ke liye.', benefit: '1-second me apni daily reading stats dekhne ke liye.', actionText: 'View Dashboard', route: 'home' },
-  { id: 3, title: 'Quantum Holographic Beacon', category: 'Security', icon: 'ðŸš€', screenNum: 'Screen 3', location: 'Progress Screen Top Banner', purpose: 'Shockwave reactor orb & live broadcast updates ke liye.', benefit: 'Milestone reach hone par visual motivation ke liye.', actionText: 'Check Updates', route: 'modal_update' },
-  { id: 4, title: 'AI Book Coach & Assistant', category: 'Reading', icon: 'ðŸ¤–', screenNum: 'Screen 4', location: 'Profile -> Options -> AI Book Coach', purpose: 'Chapter summaries, à¤•à¤ à¤¿à¤¨ à¤¸à¤µà¤¾à¤² aur quiz answers ke liye.', benefit: 'Mushkil kitabon ko bina kisi ki help ke 3x fast samajhne ke liye.', actionText: 'Open Coach', route: 'sub_aiBookCoach' },
-  { id: 5, title: 'OCR Book Cover & Text Scanner', category: 'Reading', icon: 'ðŸ“·', screenNum: 'Screen 5', location: 'Add Book Form / Reader Camera Icon', purpose: 'Physical book page/cover photo se text auto-extract karne ke liye.', benefit: 'Manual typing bachane aur instant entry ke liye.', actionText: 'Open Scanner', route: 'sub_ocrScanner' },
-  { id: 6, title: '3D Interactive Flip Book Reader', category: 'Reading', icon: 'ðŸ“–', screenNum: 'Screen 6', location: 'Book Detail -> Start Reading Button', purpose: 'Physical paper page-flip animation se kitabein padhne ke liye.', benefit: 'Realistic digital reading experience aur page progress auto-save ke liye.', actionText: 'Open 3D Reader', route: 'modal_reader' },
-  { id: 7, title: 'Audio Book Speed & Ambient Player', category: 'Reading', icon: 'ðŸŽ§', screenNum: 'Screen 7', location: 'Reader Toolbar -> Audio Icon', purpose: 'TTS voice audio aur background sounds (Rain, Fireplace) sunne ke liye.', benefit: 'Reading concentration aur focus badhane ke liye.', actionText: 'Open Audio Player', route: 'sub_audioBookPlayer' },
-  { id: 8, title: 'Mind Map & Concept Node Generator', category: 'Analytics', icon: 'ðŸ§ ', screenNum: 'Screen 8', location: 'Profile -> Options -> Knowledge Map', purpose: 'Kitabon ke main ideas ka mind map node diagram dekhne ke liye.', benefit: 'Deep learning aur concepts ko visual connect karne ke liye.', actionText: 'Open Mind Map', route: 'sub_mindMapGenerator' },
-  { id: 9, title: 'Gamified Reading Streak & Heatmap', category: 'Analytics', icon: 'ðŸ”¥', screenNum: 'Screen 9', location: 'Home / Progress -> Streak Card', purpose: '365-day reading activity contribution grid dekhne ke liye.', benefit: 'Daily reading habit ko continuous game ki tarah maintain karne ke liye.', actionText: 'View Streak Grid', route: 'progress' },
-  { id: 10, title: 'Book Cost & Expenditure Analytics', category: 'Analytics', icon: 'ðŸ’°', screenNum: 'Screen 10', location: 'Progress -> Expense & Budget Section', purpose: 'Physical books par kharch huye real budget ko calculate karne ke liye.', benefit: 'Personal book buying budget control me rakhne ke liye.', actionText: 'View Budget', route: 'progress_budget' },
-  { id: 11, title: 'Community Quote & Highlight Sharing', category: 'Library', icon: 'ðŸ’¬', screenNum: 'Screen 11', location: 'Book Details -> Quotes & Notes Tab', purpose: 'Favorite lines aur highlights ko image cards me share/save karne ke liye.', benefit: 'Important thoughts ko hamesha ke liye save rakhne ke liye.', actionText: 'View Quotes', route: 'sub_quotesInspiration' },
-  { id: 12, title: 'Smart Library Search & Tag Filtering', category: 'Library', icon: 'ðŸ”', screenNum: 'Screen 12', location: 'Library Screen Top Search Bar', purpose: 'Title, Author, Category ya Custom Tags se search karne ke liye.', benefit: 'Badi library me se 1-second me book dhoondhne ke liye.', actionText: 'Open Library', route: 'library' },
-  { id: 13, title: 'Reading Goals & Annual Challenge', category: 'Analytics', icon: 'ðŸŽ¯', screenNum: 'Screen 13', location: 'Profile -> Options -> Reading Goals', purpose: 'Daily page target aur yearly book goal ring track karne ke liye.', benefit: 'Reading milestone bina kisi fail ke complete karne ke liye.', actionText: 'Open Goals', route: 'sub_readingGoals' },
-  { id: 14, title: 'Personal Reading Journal & Daily Log', category: 'Library', icon: 'ðŸ““', screenNum: 'Screen 14', location: 'Profile -> Options -> Reading Journal', purpose: 'Daily personal thoughts, chapter rating aur diary likhne ke liye.', benefit: 'Personal reflection aur self-growth journal maintain karne ke liye.', actionText: 'Open Journal', route: 'sub_readingJournal' },
-  { id: 15, title: 'Offline Data Backup & Encrypted Export', category: 'Security', icon: 'ðŸ›¡ï¸', screenNum: 'Screen 15', location: 'Profile -> Settings -> Data & Backup', purpose: '1-click JSON/CSV backup download aur data restore ke liye.', benefit: 'Phone badalne ya reinstall karne par bhi reading data loss hone se bachane ke liye.', actionText: 'Open Security', route: 'sub_securityBackup' },
-  { id: 16, title: 'Custom Bookshelf & Category Organizer', category: 'Library', icon: 'ðŸ“š', screenNum: 'Screen 16', location: 'Library -> Shelves Tab', purpose: 'Virtual bookshelves (Favorites, Philosophy, Fiction) banane ke liye.', benefit: 'Kitabon ko neat and clean categories me organize rakhne ke liye.', actionText: 'Manage Shelves', route: 'library' },
-  { id: 17, title: 'Dark / Light / Vision-OS Glass UI Themes', category: 'Security', icon: 'âœ¨', screenNum: 'Screen 17', location: 'Profile -> Customization View', purpose: 'Vision-OS glassmorphism blur effects aur colors customize karne ke liye.', benefit: 'App ko sleek aur ultra-modern premium feel dene ke liye.', actionText: 'Change Theme', route: 'toggle_theme' },
-  { id: 18, title: 'Security Lock (PIN & Biometrics)', category: 'Security', icon: 'ðŸ”’', screenNum: 'Screen 18', location: 'Profile -> Privacy & Security', purpose: 'App aur notes ko 4-digit PIN lock se secure karne ke liye.', benefit: 'Personal notes ko private aur safe rakhne ke liye.', actionText: 'Manage PIN', route: 'prompt_pin' },
-  { id: 19, title: 'App Features Directory & Sitemap', category: 'Security', icon: 'ðŸ—ºï¸', screenNum: 'Screen 19', location: 'Profile -> App Features Directory Button', purpose: 'Sabi 20+ features ki detailed list aur direct 1-tap launcher cards ke liye.', benefit: 'Kisi bhi feature ko bina dhoondhe 1-tap me launch karne ke liye.', actionText: 'Currently Active', route: 'self' },
-  { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: 'ðŸ“‹', screenNum: 'Screen 20', location: 'Profile -> Options -> Activity Audit Log', purpose: 'App me kiye gaye har action ki history audit log me dekhne ke liye.', benefit: 'System security aur app actions transparent rakhne ke liye.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' },
-  { id: 21, title: 'Book Lending & Borrow Tracker', category: 'Library', icon: 'ðŸ¤', screenNum: 'Screen 21', location: 'Profile -> Options -> Book Lending Tracker', purpose: 'Dosto ya rishtedaaro ko di hui kitabein track karne ke liye.', benefit: 'Physical kitabein kabhi gum hone se bachane aur timely return paane ke liye.', actionText: 'Open Lending Hub', route: 'sub_bookLending' },
-  { id: 22, title: 'Not Interested Books Vault', category: 'Library', icon: 'ðŸš«', screenNum: 'Screen 22', location: 'Profile -> Options -> Not Interested Books', purpose: 'Jo kitabein abhi padhne ka man na ho unhe Library & Explore se hide karne ke liye.', benefit: 'Library ko clean aur uncluttered rakhne ke liye, aur jab man kare 1-tap me wapas lane ke liye.', actionText: 'Open Not Interested', route: 'sub_notInterested' },
-  { id: 23, title: 'Category Bulk Hide to Not Interested', category: 'Library', icon: 'ðŸ“', screenNum: 'Screen 23', location: 'Profile -> Not Interested -> Add by Category', purpose: 'Poori category ya multiple kitabon ko ek sath select karke No Interest me daalne ke liye.', benefit: 'Ek-ek book alag kholne ki mehnat bachane aur 1-click multi-hide ke liye.', actionText: 'Open Category Picker', route: 'sub_niCategorySelect' },
-  { id: 24, title: 'Interactive 3D Note Cards & Audio Narration', category: 'Reading', icon: 'âœ¨', screenNum: 'Screen 24', location: 'Book Detail -> Notes -> Note Card Click', purpose: 'Notes ko interactive 3D perspective physics, TTS audio narration, 5 theme colors aur in-place edit ke sath explore karne ke liye.', benefit: 'Book takeaways aur insights ko memorable banane ke liye.', actionText: 'Open Notes Vault', route: 'sub_notesHighlights' }
+  { id: 1, title: 'Classic Wooden Bookshelf & 4 Themes', category: 'Reading', icon: 'Ã°Å¸ÂªÂµ', screenNum: 'Screen 1', location: 'Top Bar / Profile -> Themes Menu', purpose: 'App ka visual appearance (Mahogany, Walnut, Dark Gold, Sepia) badalne ke liye.', benefit: 'Eye comfort aur aesthetic satisfaction ke liye.', actionText: 'Switch Themes', route: 'profile' },
+  { id: 2, title: 'Compact KPI Bar & Real Metrics', category: 'Analytics', icon: 'Ã°Å¸â€œÅ ', screenNum: 'Screen 2', location: 'Home & Profile Header Top Bar', purpose: 'Finished books, reading progress, wishlist, time & streak track karne ke liye.', benefit: '1-second me apni daily reading stats dekhne ke liye.', actionText: 'View Dashboard', route: 'home' },
+  { id: 3, title: 'Quantum Holographic Beacon', category: 'Security', icon: 'Ã°Å¸Å¡â‚¬', screenNum: 'Screen 3', location: 'Progress Screen Top Banner', purpose: 'Shockwave reactor orb & live broadcast updates ke liye.', benefit: 'Milestone reach hone par visual motivation ke liye.', actionText: 'Check Updates', route: 'modal_update' },
+  { id: 4, title: 'AI Book Coach & Assistant', category: 'Reading', icon: 'Ã°Å¸Â¤â€“', screenNum: 'Screen 4', location: 'Profile -> Options -> AI Book Coach', purpose: 'Chapter summaries, Ã Â¤â€¢Ã Â¤Â Ã Â¤Â¿Ã Â¤Â¨ Ã Â¤Â¸Ã Â¤ÂµÃ Â¤Â¾Ã Â¤Â² aur quiz answers ke liye.', benefit: 'Mushkil kitabon ko bina kisi ki help ke 3x fast samajhne ke liye.', actionText: 'Open Coach', route: 'sub_aiBookCoach' },
+  { id: 5, title: 'OCR Book Cover & Text Scanner', category: 'Reading', icon: 'Ã°Å¸â€œÂ·', screenNum: 'Screen 5', location: 'Add Book Form / Reader Camera Icon', purpose: 'Physical book page/cover photo se text auto-extract karne ke liye.', benefit: 'Manual typing bachane aur instant entry ke liye.', actionText: 'Open Scanner', route: 'sub_ocrScanner' },
+  { id: 6, title: '3D Interactive Flip Book Reader', category: 'Reading', icon: 'Ã°Å¸â€œâ€“', screenNum: 'Screen 6', location: 'Book Detail -> Start Reading Button', purpose: 'Physical paper page-flip animation se kitabein padhne ke liye.', benefit: 'Realistic digital reading experience aur page progress auto-save ke liye.', actionText: 'Open 3D Reader', route: 'modal_reader' },
+  { id: 7, title: 'Audio Book Speed & Ambient Player', category: 'Reading', icon: 'Ã°Å¸Å½Â§', screenNum: 'Screen 7', location: 'Reader Toolbar -> Audio Icon', purpose: 'TTS voice audio aur background sounds (Rain, Fireplace) sunne ke liye.', benefit: 'Reading concentration aur focus badhane ke liye.', actionText: 'Open Audio Player', route: 'sub_audioBookPlayer' },
+  { id: 8, title: 'Mind Map & Concept Node Generator', category: 'Analytics', icon: 'Ã°Å¸Â§Â ', screenNum: 'Screen 8', location: 'Profile -> Options -> Knowledge Map', purpose: 'Kitabon ke main ideas ka mind map node diagram dekhne ke liye.', benefit: 'Deep learning aur concepts ko visual connect karne ke liye.', actionText: 'Open Mind Map', route: 'sub_mindMapGenerator' },
+  { id: 9, title: 'Gamified Reading Streak & Heatmap', category: 'Analytics', icon: 'Ã°Å¸â€Â¥', screenNum: 'Screen 9', location: 'Home / Progress -> Streak Card', purpose: '365-day reading activity contribution grid dekhne ke liye.', benefit: 'Daily reading habit ko continuous game ki tarah maintain karne ke liye.', actionText: 'View Streak Grid', route: 'progress' },
+  { id: 10, title: 'Book Cost & Expenditure Analytics', category: 'Analytics', icon: 'Ã°Å¸â€™Â°', screenNum: 'Screen 10', location: 'Progress -> Expense & Budget Section', purpose: 'Physical books par kharch huye real budget ko calculate karne ke liye.', benefit: 'Personal book buying budget control me rakhne ke liye.', actionText: 'View Budget', route: 'progress_budget' },
+  { id: 11, title: 'Community Quote & Highlight Sharing', category: 'Library', icon: 'Ã°Å¸â€™Â¬', screenNum: 'Screen 11', location: 'Book Details -> Quotes & Notes Tab', purpose: 'Favorite lines aur highlights ko image cards me share/save karne ke liye.', benefit: 'Important thoughts ko hamesha ke liye save rakhne ke liye.', actionText: 'View Quotes', route: 'sub_quotesInspiration' },
+  { id: 12, title: 'Smart Library Search & Tag Filtering', category: 'Library', icon: 'Ã°Å¸â€Â', screenNum: 'Screen 12', location: 'Library Screen Top Search Bar', purpose: 'Title, Author, Category ya Custom Tags se search karne ke liye.', benefit: 'Badi library me se 1-second me book dhoondhne ke liye.', actionText: 'Open Library', route: 'library' },
+  { id: 13, title: 'Reading Goals & Annual Challenge', category: 'Analytics', icon: 'Ã°Å¸Å½Â¯', screenNum: 'Screen 13', location: 'Profile -> Options -> Reading Goals', purpose: 'Daily page target aur yearly book goal ring track karne ke liye.', benefit: 'Reading milestone bina kisi fail ke complete karne ke liye.', actionText: 'Open Goals', route: 'sub_readingGoals' },
+  { id: 14, title: 'Personal Reading Journal & Daily Log', category: 'Library', icon: 'Ã°Å¸â€œâ€œ', screenNum: 'Screen 14', location: 'Profile -> Options -> Reading Journal', purpose: 'Daily personal thoughts, chapter rating aur diary likhne ke liye.', benefit: 'Personal reflection aur self-growth journal maintain karne ke liye.', actionText: 'Open Journal', route: 'sub_readingJournal' },
+  { id: 15, title: 'Offline Data Backup & Encrypted Export', category: 'Security', icon: 'Ã°Å¸â€ºÂ¡Ã¯Â¸Â', screenNum: 'Screen 15', location: 'Profile -> Settings -> Data & Backup', purpose: '1-click JSON/CSV backup download aur data restore ke liye.', benefit: 'Phone badalne ya reinstall karne par bhi reading data loss hone se bachane ke liye.', actionText: 'Open Security', route: 'sub_securityBackup' },
+  { id: 16, title: 'Custom Bookshelf & Category Organizer', category: 'Library', icon: 'Ã°Å¸â€œÅ¡', screenNum: 'Screen 16', location: 'Library -> Shelves Tab', purpose: 'Virtual bookshelves (Favorites, Philosophy, Fiction) banane ke liye.', benefit: 'Kitabon ko neat and clean categories me organize rakhne ke liye.', actionText: 'Manage Shelves', route: 'library' },
+  { id: 17, title: 'Dark / Light / Vision-OS Glass UI Themes', category: 'Security', icon: 'Ã¢Å“Â¨', screenNum: 'Screen 17', location: 'Profile -> Customization View', purpose: 'Vision-OS glassmorphism blur effects aur colors customize karne ke liye.', benefit: 'App ko sleek aur ultra-modern premium feel dene ke liye.', actionText: 'Change Theme', route: 'toggle_theme' },
+  { id: 18, title: 'Security Lock (PIN & Biometrics)', category: 'Security', icon: 'Ã°Å¸â€â€™', screenNum: 'Screen 18', location: 'Profile -> Privacy & Security', purpose: 'App aur notes ko 4-digit PIN lock se secure karne ke liye.', benefit: 'Personal notes ko private aur safe rakhne ke liye.', actionText: 'Manage PIN', route: 'prompt_pin' },
+  { id: 19, title: 'App Features Directory & Sitemap', category: 'Security', icon: 'Ã°Å¸â€”ÂºÃ¯Â¸Â', screenNum: 'Screen 19', location: 'Profile -> App Features Directory Button', purpose: 'Sabi 20+ features ki detailed list aur direct 1-tap launcher cards ke liye.', benefit: 'Kisi bhi feature ko bina dhoondhe 1-tap me launch karne ke liye.', actionText: 'Currently Active', route: 'self' },
+  { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: 'Ã°Å¸â€œâ€¹', screenNum: 'Screen 20', location: 'Profile -> Options -> Activity Audit Log', purpose: 'App me kiye gaye har action ki history audit log me dekhne ke liye.', benefit: 'System security aur app actions transparent rakhne ke liye.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' },
+  { id: 21, title: 'Book Lending & Borrow Tracker', category: 'Library', icon: 'Ã°Å¸Â¤Â', screenNum: 'Screen 21', location: 'Profile -> Options -> Book Lending Tracker', purpose: 'Dosto ya rishtedaaro ko di hui kitabein track karne ke liye.', benefit: 'Physical kitabein kabhi gum hone se bachane aur timely return paane ke liye.', actionText: 'Open Lending Hub', route: 'sub_bookLending' },
+  { id: 22, title: 'Not Interested Books Vault', category: 'Library', icon: 'Ã°Å¸Å¡Â«', screenNum: 'Screen 22', location: 'Profile -> Options -> Not Interested Books', purpose: 'Jo kitabein abhi padhne ka man na ho unhe Library & Explore se hide karne ke liye.', benefit: 'Library ko clean aur uncluttered rakhne ke liye, aur jab man kare 1-tap me wapas lane ke liye.', actionText: 'Open Not Interested', route: 'sub_notInterested' },
+  { id: 23, title: 'Category Bulk Hide to Not Interested', category: 'Library', icon: 'Ã°Å¸â€œÂ', screenNum: 'Screen 23', location: 'Profile -> Not Interested -> Add by Category', purpose: 'Poori category ya multiple kitabon ko ek sath select karke No Interest me daalne ke liye.', benefit: 'Ek-ek book alag kholne ki mehnat bachane aur 1-click multi-hide ke liye.', actionText: 'Open Category Picker', route: 'sub_niCategorySelect' },
+  { id: 24, title: 'Interactive 3D Note Cards & Audio Narration', category: 'Reading', icon: 'Ã¢Å“Â¨', screenNum: 'Screen 24', location: 'Book Detail -> Notes -> Note Card Click', purpose: 'Notes ko interactive 3D perspective physics, TTS audio narration, 5 theme colors aur in-place edit ke sath explore karne ke liye.', benefit: 'Book takeaways aur insights ko memorable banane ke liye.', actionText: 'Open Notes Vault', route: 'sub_notesHighlights' }
 ];
 
 function renderAppFeaturesDirectoryView() {
@@ -6211,7 +6220,7 @@ function renderAppFeaturesDirectoryView() {
   if (filtered.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
-        <p style="font-size: 2.5rem; margin-bottom: 8px;">ðŸ”</p>
+        <p style="font-size: 2.5rem; margin-bottom: 8px;">Ã°Å¸â€Â</p>
         <p style="font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">No features found</p>
         <p style="font-size: 0.8rem;">Try searching with a different keyword or select "All Features".</p>
       </div>`;
@@ -6232,9 +6241,9 @@ function renderAppFeaturesDirectoryView() {
       </div>
 
       <div style="background: rgba(0, 0, 0, 0.25); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem;">
-        <div style="color: #60a5fa; font-weight: 600;">ðŸ“ <strong>Kahan hai:</strong> ${item.location}</div>
-        <div style="color: #cbd5e1;">ðŸ‘¤ <strong>Kiske liye:</strong> ${item.purpose}</div>
-        <div style="color: #34d399;">ðŸŽ¯ <strong>Kyu use karein:</strong> ${item.benefit}</div>
+        <div style="color: #60a5fa; font-weight: 600;">Ã°Å¸â€œÂ <strong>Kahan hai:</strong> ${item.location}</div>
+        <div style="color: #cbd5e1;">Ã°Å¸â€˜Â¤ <strong>Kiske liye:</strong> ${item.purpose}</div>
+        <div style="color: #34d399;">Ã°Å¸Å½Â¯ <strong>Kyu use karein:</strong> ${item.benefit}</div>
       </div>
 
       <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
@@ -6284,11 +6293,11 @@ function renderActivityAuditLog() {
   if (!container) return;
 
   const logs = [
-    { time: 'Just now', event: 'App Features Directory & Sitemap initialized (All 20 Screens)', tag: 'System', icon: 'ðŸ—ºï¸' },
-    { time: 'Today', event: 'App Version updated to v3.20.1 (100% Real Data & Honest Metrics)', tag: 'System', icon: 'ðŸš€' },
-    { time: 'Today', event: 'Reading streak updated cleanly from active sessions', tag: 'Reading', icon: 'ðŸ”¥' },
-    { time: 'Yesterday', event: 'User prices sanitized â€” zero dummy prices auto-injected', tag: 'Books', icon: 'ðŸ’°' },
-    { time: '2 days ago', event: 'Library synchronized with local offline storage', tag: 'System', icon: 'âš¡' }
+    { time: 'Just now', event: 'App Features Directory & Sitemap initialized (All 20 Screens)', tag: 'System', icon: 'Ã°Å¸â€”ÂºÃ¯Â¸Â' },
+    { time: 'Today', event: 'App Version updated to v3.20.1 (100% Real Data & Honest Metrics)', tag: 'System', icon: 'Ã°Å¸Å¡â‚¬' },
+    { time: 'Today', event: 'Reading streak updated cleanly from active sessions', tag: 'Reading', icon: 'Ã°Å¸â€Â¥' },
+    { time: 'Yesterday', event: 'User prices sanitized Ã¢â‚¬â€ zero dummy prices auto-injected', tag: 'Books', icon: 'Ã°Å¸â€™Â°' },
+    { time: '2 days ago', event: 'Library synchronized with local offline storage', tag: 'System', icon: 'Ã¢Å¡Â¡' }
   ];
 
   container.innerHTML = logs.map(l => `
@@ -6370,11 +6379,11 @@ function toggleFocusTimer() {
     focusTimerInterval = null;
     isFocusRunning = false;
     if (playBtn) playBtn.innerHTML = '&#x25b6;';
-    showToast('Focus session paused â¸ï¸');
+    showToast('Focus session paused Ã¢ÂÂ¸Ã¯Â¸Â');
   } else {
     isFocusRunning = true;
     if (playBtn) playBtn.innerHTML = '&#x23f8;';
-    showToast('Focus session started! Stay in the zone âœ¨');
+    showToast('Focus session started! Stay in the zone Ã¢Å“Â¨');
 
     focusTimerInterval = setInterval(() => {
       focusSecondsLeft--;
@@ -6385,7 +6394,7 @@ function toggleFocusTimer() {
         if (playBtn) playBtn.innerHTML = '&#x25b6;';
         focusSecondsLeft = 0;
         updateFocusTimerDisplay();
-        showToast('ðŸ† Focus Session Completed! Amazing work Ankit!');
+        showToast('Ã°Å¸Ââ€  Focus Session Completed! Amazing work Ankit!');
         try {
           const sessions = parseInt(localStorage.getItem('mf_focus_sessions') || '0', 10) + 1;
           localStorage.setItem('mf_focus_sessions', sessions.toString());
@@ -6407,7 +6416,7 @@ function resetFocusTimer() {
   const playBtn = document.getElementById('focusPlayBtn');
   if (playBtn) playBtn.innerHTML = '&#x25b6;';
   updateFocusTimerDisplay();
-  showToast('Timer reset â±ï¸');
+  showToast('Timer reset Ã¢ÂÂ±Ã¯Â¸Â');
 }
 
 function updateFocusTimerDisplay() {
@@ -6463,7 +6472,7 @@ function renderNotesList() {
   if (filtered.length === 0) {
     container.innerHTML = `
       <div style="text-align:center; padding: 40px 20px; color: var(--text-muted);">
-        <p style="font-size: 2rem; margin-bottom: 8px;">ðŸ“</p>
+        <p style="font-size: 2rem; margin-bottom: 8px;">Ã°Å¸â€œÂ</p>
         <p style="font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">No notes recorded yet</p>
         <p style="font-size: 0.8rem;">Tap the + button to save your first reflection or highlight!</p>
       </div>
@@ -6492,12 +6501,12 @@ function renderNotesList() {
         <img class="bng-cover" src="${coverUrl}" alt="${escapeHtml(bookTitle)}" onerror="this.src='cover_placeholder.jpg'">
         <div class="bng-info">
           <div class="bng-title">${escapeHtml(bookTitle)}</div>
-          <div class="bng-author">ðŸ‘¤ ${escapeHtml(author)}</div>
-          <div class="bng-count-badge">ðŸ“ ${count} ${count === 1 ? 'Note' : 'Notes'}</div>
+          <div class="bng-author">Ã°Å¸â€˜Â¤ ${escapeHtml(author)}</div>
+          <div class="bng-count-badge">Ã°Å¸â€œÂ ${count} ${count === 1 ? 'Note' : 'Notes'}</div>
         </div>
         <div class="bng-arrow-btn">
           <span>Notes Kholein</span>
-          <span style="font-size: 1.15rem;">â€º</span>
+          <span style="font-size: 1.15rem;">Ã¢â‚¬Âº</span>
         </div>
       </div>
     `;
@@ -6525,7 +6534,7 @@ function openBookNotesDetailView(bookTitle) {
   if (titleEl) titleEl.innerText = bookTitle;
 
   const authorEl = document.getElementById('bndBookAuthor');
-  if (authorEl) authorEl.innerText = 'ðŸ‘¤ ' + author;
+  if (authorEl) authorEl.innerText = 'Ã°Å¸â€˜Â¤ ' + author;
 
   const catEl = document.getElementById('bndBookCategory');
   if (catEl) catEl.innerText = category;
@@ -6533,7 +6542,7 @@ function openBookNotesDetailView(bookTitle) {
   const pagesBadge = document.getElementById('bndPagesBadge');
   if (pagesBadge) {
     if (pages) {
-      pagesBadge.innerText = `ðŸ“„ ${pages} Pages`;
+      pagesBadge.innerText = `Ã°Å¸â€œâ€ž ${pages} Pages`;
       pagesBadge.style.display = 'inline-flex';
     } else {
       pagesBadge.style.display = 'none';
@@ -6618,7 +6627,7 @@ function renderBndNotesFeed() {
   );
 
   if (countBadge) {
-    countBadge.innerText = `ðŸ“ ${allBookNotes.length} ${allBookNotes.length === 1 ? 'Note' : 'Notes'}`;
+    countBadge.innerText = `Ã°Å¸â€œÂ ${allBookNotes.length} ${allBookNotes.length === 1 ? 'Note' : 'Notes'}`;
   }
 
   if (!feed) return;
@@ -6653,7 +6662,7 @@ function renderBndNotesFeed() {
   if (filtered.length === 0) {
     feed.innerHTML = `
       <div class="bnd-empty-state">
-        <div class="bnd-empty-icon">ðŸ“–âœ¨</div>
+        <div class="bnd-empty-icon">Ã°Å¸â€œâ€“Ã¢Å“Â¨</div>
         <h4 style="font-size: 1rem; color: #fff; margin-bottom: 6px;">
           ${bndSearchQuery ? 'Koi matching note nahi mila' : 'Is book ka koi note nahi hai abhi'}
         </h4>
@@ -6661,7 +6670,7 @@ function renderBndNotesFeed() {
           ${bndSearchQuery ? 'Alag keyword search karein ya filter reset karein.' : 'Upar box me apna pehla vichar ya quotation likhein aur "Save Note" dabayein.'}
         </p>
         <button type="button" class="btn-save-gold" onclick="focusBookNotesInput()" style="padding: 8px 18px; font-size: 0.85rem;">
-          âœï¸ Pehla Note Likhein
+          Ã¢Å“ÂÃ¯Â¸Â Pehla Note Likhein
         </button>
       </div>
     `;
@@ -6670,30 +6679,30 @@ function renderBndNotesFeed() {
 
   feed.innerHTML = filtered.map(item => `
     <div class="bnd-note-card" onclick="openNote3dCardModal('${escapeHtml(item.id)}')">
-      <div class="bnd-note-watermark">â€œ</div>
+      <div class="bnd-note-watermark">Ã¢â‚¬Å“</div>
       <div class="bnd-note-top-bar">
         <div class="bnd-note-badges">
           <span class="bnd-fav-star" onclick="event.stopPropagation(); toggleNoteFavoriteInline('${escapeHtml(item.id)}')" title="Star Favorite">
-            ${item.isFavorite ? 'â­' : 'â˜†'}
+            ${item.isFavorite ? 'Ã¢Â­Â' : 'Ã¢Ëœâ€ '}
           </span>
           <span class="bnd-badge-type ${(item.type || '').toLowerCase() === 'highlight' ? 'highlight' : 'note'}">
-            ${(item.type || '').toLowerCase() === 'highlight' ? 'âœ¨ Highlight' : 'ðŸ“ Note'}
+            ${(item.type || '').toLowerCase() === 'highlight' ? 'Ã¢Å“Â¨ Highlight' : 'Ã°Å¸â€œÂ Note'}
           </span>
-          <span class="bnd-badge-page">ðŸ“„ Page ${escapeHtml(String(item.page || '1'))}</span>
-          <span class="bnd-badge-time">â±ï¸ ${escapeHtml(item.timeAgo || 'Saved')}</span>
+          <span class="bnd-badge-page">Ã°Å¸â€œâ€ž Page ${escapeHtml(String(item.page || '1'))}</span>
+          <span class="bnd-badge-time">Ã¢ÂÂ±Ã¯Â¸Â ${escapeHtml(item.timeAgo || 'Saved')}</span>
         </div>
         <div class="bnd-note-actions">
           <button type="button" class="bnd-act-btn" onclick="event.stopPropagation(); copyNoteQuote('${escapeHtml(encodeURIComponent(item.quote || ''))}')" title="Copy to clipboard">
-            ðŸ“‹ Copy
+            Ã°Å¸â€œâ€¹ Copy
           </button>
           <button type="button" class="bnd-act-btn delete" onclick="event.stopPropagation(); deleteBndNote('${escapeHtml(item.id)}')" title="Delete Note">
-            ðŸ—‘ï¸
+            Ã°Å¸â€”â€˜Ã¯Â¸Â
           </button>
         </div>
       </div>
       <div class="bnd-note-text">${escapeHtml(item.quote || '')}</div>
       <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
-        <span style="font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; opacity: 0.85;">Tap to view in 3D âž”</span>
+        <span style="font-size: 0.72rem; color: var(--accent-gold); font-weight: 700; opacity: 0.85;">Tap to view in 3D Ã¢Å¾â€</span>
       </div>
     </div>
   `).join('');
@@ -6741,7 +6750,7 @@ function saveBndNote() {
   renderBndNotesFeed();
   renderNotesList(); // keep profile list updated
   renderCurrentBookDetailNotes(); // sync with book details
-  showToast(`Saved to ${currentBndBookTitle}! ðŸ“âœ¨`);
+  showToast(`Saved to ${currentBndBookTitle}! Ã°Å¸â€œÂÃ¢Å“Â¨`);
 }
 
 function deleteBndNote(noteId) {
@@ -6762,7 +6771,7 @@ function copyNoteQuote(encodedQuote) {
     const text = decodeURIComponent(encodedQuote);
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(text);
-      showToast('Note copied to clipboard! ðŸ“‹');
+      showToast('Note copied to clipboard! Ã°Å¸â€œâ€¹');
     } else {
       const ta = document.createElement('textarea');
       ta.value = text;
@@ -6770,7 +6779,7 @@ function copyNoteQuote(encodedQuote) {
       ta.select();
       document.execCommand('copy');
       document.body.removeChild(ta);
-      showToast('Note copied to clipboard! ðŸ“‹');
+      showToast('Note copied to clipboard! Ã°Å¸â€œâ€¹');
     }
   } catch (e) {
     showToast('Could not copy note');
@@ -6798,13 +6807,13 @@ function openNote3dCardModal(noteId) {
   if (authorEl) authorEl.innerText = author;
 
   const typeChip = document.getElementById('n3dTypeChip');
-  if (typeChip) typeChip.innerText = (note.type || '').toLowerCase() === 'highlight' ? 'âœ¨ Highlight' : 'ðŸ“ Personal Note';
+  if (typeChip) typeChip.innerText = (note.type || '').toLowerCase() === 'highlight' ? 'Ã¢Å“Â¨ Highlight' : 'Ã°Å¸â€œÂ Personal Note';
 
   const pageChip = document.getElementById('n3dPageChip');
-  if (pageChip) pageChip.innerText = `ðŸ“„ Page ${note.page || '1'}`;
+  if (pageChip) pageChip.innerText = `Ã°Å¸â€œâ€ž Page ${note.page || '1'}`;
 
   const dateChip = document.getElementById('n3dDateChip');
-  if (dateChip) dateChip.innerText = `â±ï¸ ${note.timeAgo || 'Saved'}`;
+  if (dateChip) dateChip.innerText = `Ã¢ÂÂ±Ã¯Â¸Â ${note.timeAgo || 'Saved'}`;
 
   const textEl = document.getElementById('n3dNoteText');
   if (textEl) textEl.innerText = note.quote || '';
@@ -6816,7 +6825,7 @@ function openNote3dCardModal(noteId) {
   const audioLabel = document.getElementById('n3dAudioLabel');
   if (audioLabel) audioLabel.innerText = 'Listen';
   const audioIcon = document.getElementById('n3dAudioIcon');
-  if (audioIcon) audioIcon.innerText = 'ðŸ”Š';
+  if (audioIcon) audioIcon.innerText = 'Ã°Å¸â€Å ';
 
   // Apply theme
   const theme = note.theme || 'gold';
@@ -6918,7 +6927,7 @@ function toggleNoteFavoriteInline(noteId) {
   note.isFavorite = !note.isFavorite;
   try { localStorage.setItem('mf_user_notes', JSON.stringify(userNotesState)); } catch (e) {}
   renderBndNotesFeed();
-  showToast(note.isFavorite ? 'Note starred as Favorite! â­' : 'Removed from Favorites');
+  showToast(note.isFavorite ? 'Note starred as Favorite! Ã¢Â­Â' : 'Removed from Favorites');
 }
 
 function toggleReadNoteAloud() {
@@ -6937,7 +6946,7 @@ function toggleReadNoteAloud() {
   if (window.speechSynthesis.speaking) {
     window.speechSynthesis.cancel();
     if (audioLabel) audioLabel.innerText = 'Listen';
-    if (audioIcon) audioIcon.innerText = 'ðŸ”Š';
+    if (audioIcon) audioIcon.innerText = 'Ã°Å¸â€Å ';
     showToast('Audio narration stopped');
     return;
   }
@@ -6947,17 +6956,17 @@ function toggleReadNoteAloud() {
   utterance.pitch = 1.0;
   utterance.onend = () => {
     if (audioLabel) audioLabel.innerText = 'Listen';
-    if (audioIcon) audioIcon.innerText = 'ðŸ”Š';
+    if (audioIcon) audioIcon.innerText = 'Ã°Å¸â€Å ';
   };
   utterance.onerror = () => {
     if (audioLabel) audioLabel.innerText = 'Listen';
-    if (audioIcon) audioIcon.innerText = 'ðŸ”Š';
+    if (audioIcon) audioIcon.innerText = 'Ã°Å¸â€Å ';
   };
 
   if (audioLabel) audioLabel.innerText = 'Stop';
-  if (audioIcon) audioIcon.innerText = 'â¹ï¸';
+  if (audioIcon) audioIcon.innerText = 'Ã¢ÂÂ¹Ã¯Â¸Â';
   window.speechSynthesis.speak(utterance);
-  showToast('Reading note aloud... ðŸ—£ï¸ðŸŽ§');
+  showToast('Reading note aloud... Ã°Å¸â€”Â£Ã¯Â¸ÂÃ°Å¸Å½Â§');
 }
 
 function toggleCurrentNote3dEdit() {
@@ -7004,12 +7013,12 @@ function saveCurrentNote3dEdit() {
   const textEl = document.getElementById('n3dNoteText');
   if (textEl) textEl.innerText = newContent;
   const pageChip = document.getElementById('n3dPageChip');
-  if (pageChip) pageChip.innerText = `ðŸ“„ Page ${newPage}`;
+  if (pageChip) pageChip.innerText = `Ã°Å¸â€œâ€ž Page ${newPage}`;
 
   cancelCurrentNote3dEdit();
   renderBndNotesFeed();
   renderCurrentBookDetailNotes();
-  showToast('Note updated successfully! âœï¸âœ¨');
+  showToast('Note updated successfully! Ã¢Å“ÂÃ¯Â¸ÂÃ¢Å“Â¨');
 }
 
 function cancelCurrentNote3dEdit() {
@@ -7032,7 +7041,7 @@ function shareOrExportCurrentNote() {
   const note = userNotesState.find(n => n.id === current3dNoteId);
   if (!note) return;
 
-  const shareText = `"${note.quote}"\n\nâ€” From "${note.book}", Page ${note.page}\nSaved with Mind & Focus Books Tracker`;
+  const shareText = `"${note.quote}"\n\nÃ¢â‚¬â€ From "${note.book}", Page ${note.page}\nSaved with Mind & Focus Books Tracker`;
 
   if (navigator.share) {
     navigator.share({
@@ -7041,7 +7050,7 @@ function shareOrExportCurrentNote() {
     }).catch(() => {});
   } else {
     copyNoteQuote(encodeURIComponent(shareText));
-    showToast('Quote copied for sharing! ðŸ“¤âœ¨');
+    showToast('Quote copied for sharing! Ã°Å¸â€œÂ¤Ã¢Å“Â¨');
   }
 }
 
@@ -7071,7 +7080,7 @@ function exportCurrentBookNotes() {
   const author = matchedBook ? (matchedBook.author || 'Author') : 'Unknown';
 
   let exportContent = `=======================================================\n`;
-  exportContent += `MIND & FOCUS BOOKS TRACKER â€” READING JOURNAL NOTES\n`;
+  exportContent += `MIND & FOCUS BOOKS TRACKER Ã¢â‚¬â€ READING JOURNAL NOTES\n`;
   exportContent += `Book: ${currentBndBookTitle}\n`;
   exportContent += `Author: ${author}\n`;
   exportContent += `Total Notes: ${bookNotes.length}\n`;
@@ -7079,7 +7088,7 @@ function exportCurrentBookNotes() {
   exportContent += `=======================================================\n\n`;
 
   bookNotes.forEach((n, idx) => {
-    exportContent += `[Entry #${idx + 1}] â€¢ ${n.type || 'Note'} â€¢ Page ${n.page || '1'}\n`;
+    exportContent += `[Entry #${idx + 1}] Ã¢â‚¬Â¢ ${n.type || 'Note'} Ã¢â‚¬Â¢ Page ${n.page || '1'}\n`;
     exportContent += `Saved: ${n.timeAgo || 'Recently'}\n`;
     exportContent += `"${n.quote}"\n`;
     exportContent += `-------------------------------------------------------\n\n`;
@@ -7095,7 +7104,7 @@ function exportCurrentBookNotes() {
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 
-  showToast(`Notes exported for ${currentBndBookTitle}! ðŸ“¥ðŸ“„`);
+  showToast(`Notes exported for ${currentBndBookTitle}! Ã°Å¸â€œÂ¥Ã°Å¸â€œâ€ž`);
 }
 
 function filterNotesCategory(cat) {
@@ -7156,7 +7165,7 @@ function saveNewNoteModal() {
   renderNotesList();
   renderCurrentBookDetailNotes();
   renderBndNotesFeed();
-  showToast(`Added ${type} to ${book}! âœ¨`);
+  showToast(`Added ${type} to ${book}! Ã¢Å“Â¨`);
 
   // Clear inputs
   if (document.getElementById('addNoteContent')) document.getElementById('addNoteContent').value = '';
@@ -7183,7 +7192,7 @@ function renderCurrentBookDetailNotes() {
   if (bookNotes.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 24px 12px; color: var(--text-muted); background: rgba(255,255,255,0.02); border-radius: 10px; border: 1px dashed var(--border-color);">
-        <p style="font-size: 1.6rem; margin-bottom: 6px;">ðŸ“</p>
+        <p style="font-size: 1.6rem; margin-bottom: 6px;">Ã°Å¸â€œÂ</p>
         <p style="font-size: 0.88rem; font-weight: 600; color: var(--text-secondary); margin-bottom: 4px;">Koi personal note nahi likha abhi tak</p>
         <p style="font-size: 0.78rem; color: var(--text-muted);">Upar box me apna note likhiye aur "Add Note" button dabayein.</p>
       </div>
@@ -7195,12 +7204,12 @@ function renderCurrentBookDetailNotes() {
     <div class="book-detail-notes-item">
       <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; margin-bottom: 6px;">
         <div style="display: flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--text-secondary);">
-          <span style="font-weight: 700; color: var(--accent-gold);">ðŸ“„ Page ${escapeHtml(String(n.page || '1'))}</span>
+          <span style="font-weight: 700; color: var(--accent-gold);">Ã°Å¸â€œâ€ž Page ${escapeHtml(String(n.page || '1'))}</span>
           <span>&bull;</span>
           <span style="font-size: 0.72rem; color: var(--text-muted);">${escapeHtml(n.timeAgo || 'Saved')}</span>
         </div>
         <button type="button" onclick="deleteBookDetailNote('${escapeHtml(n.id)}')" style="background: none; border: none; color: #ef4444; font-size: 0.85rem; cursor: pointer; padding: 2px 6px; border-radius: 4px;" title="Delete Note">
-          ðŸ—‘ï¸
+          Ã°Å¸â€”â€˜Ã¯Â¸Â
         </button>
       </div>
       <div style="font-size: 0.88rem; color: var(--text-primary); line-height: 1.5; white-space: pre-wrap;">${escapeHtml(n.quote || '')}</div>
@@ -7246,7 +7255,7 @@ function saveNewBookDetailNote() {
   renderCurrentBookDetailNotes();
   renderNotesList(); // Profile notes stay synchronized
   renderBndNotesFeed();
-  showToast('Note successfully saved to Book & Profile! ðŸ“âœ¨');
+  showToast('Note successfully saved to Book & Profile! Ã°Å¸â€œÂÃ¢Å“Â¨');
 }
 
 function deleteBookDetailNote(noteId) {
@@ -7298,15 +7307,15 @@ function setGoalPeriod(period) {
   const fill = document.getElementById('goalDonutFill');
 
   if (period === 'daily') {
-    if (title) title.innerText = 'Daily Goal: â±ï¸ 30 minutes';
+    if (title) title.innerText = 'Daily Goal: Ã¢ÂÂ±Ã¯Â¸Â 30 minutes';
     if (ratio) ratio.innerText = '15/30';
     if (fill) fill.style.strokeDashoffset = '125';
   } else if (period === 'weekly') {
-    if (title) title.innerText = 'Weekly Goal: â±ï¸ 3.5 hours';
+    if (title) title.innerText = 'Weekly Goal: Ã¢ÂÂ±Ã¯Â¸Â 3.5 hours';
     if (ratio) ratio.innerText = '2.1/3.5';
     if (fill) fill.style.strokeDashoffset = '90';
   } else {
-    if (title) title.innerText = 'Monthly Goal: ðŸ“š 3 books';
+    if (title) title.innerText = 'Monthly Goal: Ã°Å¸â€œÅ¡ 3 books';
     if (ratio) ratio.innerText = '2/3';
     if (fill) fill.style.strokeDashoffset = '80';
   }
@@ -7331,7 +7340,7 @@ function renderQuotesView() {
   const textEl = document.getElementById('dailyInspirationQuoteText');
   const authEl = document.getElementById('dailyInspirationQuoteAuthor');
   if (textEl) textEl.innerText = `"${quote.text}"`;
-  if (authEl) authEl.innerText = `â€” ${quote.author}`;
+  if (authEl) authEl.innerText = `Ã¢â‚¬â€ ${quote.author}`;
   renderSavedQuotesList();
 }
 
@@ -7355,7 +7364,7 @@ function saveCurrentQuote() {
     try {
       localStorage.setItem('mf_saved_quotes', JSON.stringify(savedQuotesCollection));
     } catch (e) {}
-    showToast('Quote saved to your collection! ðŸŒŸ');
+    showToast('Quote saved to your collection! Ã°Å¸Å’Å¸');
     renderSavedQuotesList();
   } else {
     showToast('Quote already in your collection!');
@@ -7364,11 +7373,11 @@ function saveCurrentQuote() {
 
 function shareCurrentQuote() {
   const q = dailyQuotesBank[currentQuoteIndex % dailyQuotesBank.length];
-  const shareText = `"${q.text}" â€” ${q.author}\n\nShared via Mind Focus Books Tracker ðŸ“š`;
+  const shareText = `"${q.text}" Ã¢â‚¬â€ ${q.author}\n\nShared via Mind Focus Books Tracker Ã°Å¸â€œÅ¡`;
   if (navigator.share) {
     navigator.share({ title: 'Mind Focus Daily Quote', text: shareText }).catch(() => {});
   } else {
-    navigator.clipboard.writeText(shareText).then(() => showToast('Quote copied to clipboard! ðŸ“‹'));
+    navigator.clipboard.writeText(shareText).then(() => showToast('Quote copied to clipboard! Ã°Å¸â€œâ€¹'));
   }
 }
 
@@ -7389,27 +7398,27 @@ function renderSavedQuotesList() {
 
 // ================= SCREEN 14: OFFLINE MODE =================
 function cacheAllOfflineAssets() {
-  showToast('Pre-caching 313 book covers and dictionary... âš¡');
+  showToast('Pre-caching 313 book covers and dictionary... Ã¢Å¡Â¡');
   setTimeout(() => {
-    showToast('âœ… All assets downloaded! 100% Offline Ready.');
+    showToast('Ã¢Å“â€¦ All assets downloaded! 100% Offline Ready.');
     const el = document.getElementById('offlineStorageStat');
-    if (el) el.innerText = '313 Books â€¢ 100% Cached (142 MB)';
+    if (el) el.innerText = '313 Books Ã¢â‚¬Â¢ 100% Cached (142 MB)';
   }, 1200);
 }
 
 function clearOfflineCache() {
-  showToast('Storage Optimized â€¢ Offline assets healthy! ðŸ“¦');
+  showToast('Storage Optimized Ã¢â‚¬Â¢ Offline assets healthy! Ã°Å¸â€œÂ¦');
 }
 
 // ================= SCREEN 15: SYNC ACROSS DEVICES =================
 function triggerDeviceSync() {
   const btn = document.getElementById('btnSyncNow');
-  if (btn) btn.innerText = 'â³ Syncing...';
+  if (btn) btn.innerText = 'Ã¢ÂÂ³ Syncing...';
   setTimeout(() => {
-    if (btn) btn.innerText = 'ðŸ”„ Sync Now';
+    if (btn) btn.innerText = 'Ã°Å¸â€â€ž Sync Now';
     const txt = document.getElementById('lastSyncTimeText');
-    if (txt) txt.innerText = 'Last synced Just now (Synced âœ“)';
-    showToast('All devices in sync! Progress updated â˜ï¸');
+    if (txt) txt.innerText = 'Last synced Just now (Synced Ã¢Å“â€œ)';
+    showToast('All devices in sync! Progress updated Ã¢ËœÂÃ¯Â¸Â');
   }, 1200);
 }
 
@@ -7429,7 +7438,7 @@ function setCustomAccentColor(colorHex, el) {
   try {
     localStorage.setItem('mf_accent_color', colorHex);
   } catch (e) {}
-  showToast('Accent color updated! âœ¨');
+  showToast('Accent color updated! Ã¢Å“Â¨');
 }
 
 function setAppWallpaper(type) {
@@ -7444,11 +7453,11 @@ function setAppWallpaper(type) {
     document.body.style.backgroundImage = 'none';
     applyTheme(state.theme || 'dark');
   }
-  showToast(`Wallpaper switched to ${type}! ðŸ–¼ï¸`);
+  showToast(`Wallpaper switched to ${type}! Ã°Å¸â€“Â¼Ã¯Â¸Â`);
 }
 
 function saveCustomizations() {
-  showToast('Customizations saved successfully! ðŸŽ¨');
+  showToast('Customizations saved successfully! Ã°Å¸Å½Â¨');
   navigateBack();
 }
 
@@ -7519,7 +7528,7 @@ function saveJournalEntry() {
   }
 
   renderJournalView();
-  showToast('Reflection logged in your Reading Journal! ðŸ“–');
+  showToast('Reflection logged in your Reading Journal! Ã°Å¸â€œâ€“');
 }
 
 // ================= SCREEN 20: PRIVACY & SECURITY =================
@@ -7527,7 +7536,7 @@ function toggleBiometricSetting(checked) {
   try {
     localStorage.setItem('mf_biometric_enabled', checked ? '1' : '0');
   } catch (e) {}
-  showToast(checked ? 'Biometric fingerprint login enabled ðŸ‘¤' : 'Biometric login disabled');
+  showToast(checked ? 'Biometric fingerprint login enabled Ã°Å¸â€˜Â¤' : 'Biometric login disabled');
 }
 
 function togglePinSetting(checked) {
@@ -7572,7 +7581,7 @@ function fetchIsbnMetadata() {
     showToast('Please enter an ISBN code to scan!');
     return;
   }
-  showToast('Searching Google Books API for ISBN: ' + isbn + '... ðŸ”');
+  showToast('Searching Google Books API for ISBN: ' + isbn + '... Ã°Å¸â€Â');
   fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`)
     .then(res => res.json())
     .then(data => {
@@ -7593,7 +7602,7 @@ function fetchIsbnMetadata() {
         saveState();
         closeBookScannerModal();
         renderHomeView();
-        showToast(`Added "${newBook.title}" to your library! ðŸ“š`);
+        showToast(`Added "${newBook.title}" to your library! Ã°Å¸â€œÅ¡`);
       } else {
         showToast('ISBN not found on Google Books. Try manual search.');
       }
@@ -7633,7 +7642,7 @@ function processOcrText() {
   state.userNotes.unshift(newNote);
   saveState();
   closeOcrScannerModal();
-  showToast('Saved quote from physical book OCR! ðŸ“¸');
+  showToast('Saved quote from physical book OCR! Ã°Å¸â€œÂ¸');
 }
 
 // Feature 4: Duplicate Detector
@@ -7655,7 +7664,7 @@ function openDuplicateDetectorModal() {
   if (duplicates.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 24px; color: #10b981;">
-        <div style="font-size: 2.5rem; margin-bottom: 8px;">âœ¨</div>
+        <div style="font-size: 2.5rem; margin-bottom: 8px;">Ã¢Å“Â¨</div>
         <div style="font-weight: 800; font-size: 1rem;">No Duplicate Books Found!</div>
         <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Your library of ${state.books.length} books is clean and unique.</p>
       </div>`;
@@ -7708,7 +7717,7 @@ function openReadingSpeedModal() {
         "Reading is to the mind what exercise is to the body. As by the one, health and strength are preserved and increased, so by the other, wisdom and knowledge are acquired. Continuous reading expands your vocabulary, sharpens critical thinking, and elevates emotional intelligence."
       </div>
       <button type="button" class="btn-save-gold" style="margin-top: 14px; width: 100%; font-size: 0.9rem;" onclick="startSpeedTestTimer(this)">
-        â±ï¸ Start Reading Test
+        Ã¢ÂÂ±Ã¯Â¸Â Start Reading Test
       </button>
     </div>`;
 }
@@ -7718,7 +7727,7 @@ function closeReadingSpeedModal() {
 }
 function startSpeedTestTimer(btn) {
   speedTestStartTime = Date.now();
-  btn.innerText = 'âœ… Finished Reading (Calculate WPM)';
+  btn.innerText = 'Ã¢Å“â€¦ Finished Reading (Calculate WPM)';
   btn.onclick = finishSpeedTest;
 }
 function finishSpeedTest() {
@@ -7732,12 +7741,12 @@ function finishSpeedTest() {
   if (container) {
     container.innerHTML = `
       <div style="text-align: center; padding: 20px;">
-        <div style="font-size: 3rem; margin-bottom: 8px;">ðŸš€</div>
+        <div style="font-size: 3rem; margin-bottom: 8px;">Ã°Å¸Å¡â‚¬</div>
         <div style="font-size: 1.5rem; font-weight: 900; color: var(--accent-gold);">${wpm} WPM</div>
         <div style="font-size: 0.85rem; color: #fff; font-weight: 700; margin-top: 4px;">Reading Speed Benchmark Result</div>
         <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 8px;">
           Time taken: ${elapsedSec.toFixed(1)} seconds.<br>
-          ${wpm > 250 ? 'ðŸŒŸ Above Average Reader!' : 'ðŸ“– Steady & Thoughtful Reading Pace!'}
+          ${wpm > 250 ? 'Ã°Å¸Å’Å¸ Above Average Reader!' : 'Ã°Å¸â€œâ€“ Steady & Thoughtful Reading Pace!'}
         </p>
       </div>`;
   }
@@ -7755,7 +7764,7 @@ function openTrashCenterModal() {
   if (trash.length === 0) {
     container.innerHTML = `
       <div style="text-align: center; padding: 24px; color: var(--text-muted);">
-        <div style="font-size: 2.5rem; margin-bottom: 8px;">ðŸ—‘ï¸</div>
+        <div style="font-size: 2.5rem; margin-bottom: 8px;">Ã°Å¸â€”â€˜Ã¯Â¸Â</div>
         <div style="font-weight: 700; font-size: 0.9rem;">Trash Bin is Empty</div>
         <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 4px;">Deleted books will stay in Trash for 30 days before permanent deletion.</p>
       </div>`;
@@ -7768,7 +7777,7 @@ function openTrashCenterModal() {
         <div style="font-size: 0.72rem; color: var(--text-secondary);">${book.author} &bull; Deleted recently</div>
       </div>
       <div style="display: flex; gap: 6px;">
-        <button type="button" class="btn-save-gold" style="padding: 4px 10px; font-size: 0.72rem;" onclick="restoreBookFromTrash(${idx})">Restore ðŸ”„</button>
+        <button type="button" class="btn-save-gold" style="padding: 4px 10px; font-size: 0.72rem;" onclick="restoreBookFromTrash(${idx})">Restore Ã°Å¸â€â€ž</button>
       </div>
     </div>`).join('');
 }
@@ -7783,7 +7792,7 @@ function restoreBookFromTrash(index) {
     saveState();
     openTrashCenterModal();
     renderHomeView();
-    showToast(`Restored "${book.title}" to library! ðŸ“š`);
+    showToast(`Restored "${book.title}" to library! Ã°Å¸â€œÅ¡`);
   }
 }
 function emptyTrashPermanently() {
@@ -7791,7 +7800,7 @@ function emptyTrashPermanently() {
   state.trashBin = [];
   saveState();
   openTrashCenterModal();
-  showToast('Trash emptied permanently. ðŸ—‘ï¸');
+  showToast('Trash emptied permanently. Ã°Å¸â€”â€˜Ã¯Â¸Â');
 }
 
 // ==========================================================================
@@ -7820,7 +7829,7 @@ function triggerImportDataJSON() {
         }
         saveState();
         renderApp();
-        showToast('Library imported successfully! ðŸ“š');
+        showToast('Library imported successfully! Ã°Å¸â€œÅ¡');
       } catch (err) {
         showToast('Error parsing JSON file!');
       }
@@ -7872,11 +7881,11 @@ function toggleRainAudio() {
     if (window.__RAIN_AUDIO__.playing) {
       window.__RAIN_AUDIO__.audioCtx.suspend();
       window.__RAIN_AUDIO__.playing = false;
-      showToast('Rain audio paused ðŸ”‡');
+      showToast('Rain audio paused Ã°Å¸â€â€¡');
     } else {
       window.__RAIN_AUDIO__.audioCtx.resume();
       window.__RAIN_AUDIO__.playing = true;
-      showToast('Rain audio playing ðŸŒ§ï¸');
+      showToast('Rain audio playing Ã°Å¸Å’Â§Ã¯Â¸Â');
     }
   }
 }
@@ -7917,7 +7926,7 @@ async function toggleIsbnCameraScan() {
     }
     if (placeholder) placeholder.style.display = 'none';
     if (laser) laser.style.display = 'block';
-    if (btn) btn.innerText = 'â¹ï¸ Stop Camera Scan';
+    if (btn) btn.innerText = 'Ã¢ÂÂ¹Ã¯Â¸Â Stop Camera Scan';
 
     showToast('Camera active! Point at book barcode...');
 
@@ -7958,7 +7967,7 @@ function stopIsbnCameraScan() {
   if (video) video.style.display = 'none';
   if (placeholder) placeholder.style.display = 'block';
   if (laser) laser.style.display = 'none';
-  if (btn) btn.innerText = 'ðŸ“· Start Camera Scan';
+  if (btn) btn.innerText = 'Ã°Å¸â€œÂ· Start Camera Scan';
 }
 
 async function lookupIsbnBook(givenIsbn) {
@@ -7969,7 +7978,7 @@ async function lookupIsbnBook(givenIsbn) {
   }
 
   const cleanIsbn = isbnInput.replace(/[^0-9X]/gi, '');
-  showToast(`Searching OpenLibrary for ISBN: ${cleanIsbn}... ðŸ”`);
+  showToast(`Searching OpenLibrary for ISBN: ${cleanIsbn}... Ã°Å¸â€Â`);
 
   try {
     const response = await fetch(`https://openlibrary.org/api/books?bibkeys=ISBN:${cleanIsbn}&format=json&jscmd=data`);
@@ -8020,7 +8029,7 @@ function renderScannedIsbnResult() {
 
   if (titleEl) titleEl.innerText = isbnScannedData.title;
   if (authorEl) authorEl.innerText = isbnScannedData.author;
-  if (metaEl) metaEl.innerText = `${isbnScannedData.pages} pages â€¢ ${isbnScannedData.category}`;
+  if (metaEl) metaEl.innerText = `${isbnScannedData.pages} pages Ã¢â‚¬Â¢ ${isbnScannedData.category}`;
   if (coverEl) coverEl.src = isbnScannedData.cover;
   if (card) card.style.display = 'block';
 }
@@ -8032,7 +8041,7 @@ function importIsbnScannedBook() {
   saveState();
   closeIsbnBarcodeScannerModal();
   renderApp();
-  showToast(`Added "${isbnScannedData.title}" to library! ðŸ“š`);
+  showToast(`Added "${isbnScannedData.title}" to library! Ã°Å¸â€œÅ¡`);
   isbnScannedData = null;
 }
 
@@ -8058,15 +8067,15 @@ function renderAchievements() {
   const focusSessions = Math.floor(totalMins / 25);
 
   const badges = [
-    { title: 'First Book', sub: 'Finished first book', icon: 'ðŸ“–', unlocked: finishedCount >= 1, progress: `${finishedCount}/1 book` },
-    { title: '7 Day Streak', sub: '7 days continuous reading', icon: 'ðŸ”¥', unlocked: streakDays >= 7, progress: `${streakDays}/7 days` },
-    { title: '10 Books Reader', sub: 'Completed 10 books', icon: 'ðŸ“š', unlocked: finishedCount >= 10, progress: `${finishedCount}/10 books` },
-    { title: 'Focus Master', sub: '10 Focus Sessions (25m+)', icon: 'ðŸŽ¯', unlocked: focusSessions >= 10, progress: `${focusSessions}/10 sessions` },
-    { title: 'Knowledge Seeker', sub: '50 Notes & Highlights saved', icon: 'ðŸ“', unlocked: notesCount >= 50, progress: `${notesCount}/50 notes` },
-    { title: 'Book Collector', sub: '20 Books in Library', icon: 'ðŸ‘‘', unlocked: books.length >= 20, progress: `${books.length}/20 books` },
-    { title: '100 Hours Reading', sub: '100 Hours focused reading', icon: 'â³', unlocked: totalHours >= 100, progress: `${totalHours}/100 hrs` },
-    { title: '1000 Pages Read', sub: '1,000 Pages finished', icon: 'ðŸ“„', unlocked: totalPages >= 1000, progress: `${totalPages.toLocaleString()}/1000 pgs` },
-    { title: '1 Year Reader', sub: '365 Day Reading Streak', icon: 'ðŸ†', unlocked: streakDays >= 365, progress: `${streakDays}/365 days` }
+    { title: 'First Book', sub: 'Finished first book', icon: 'Ã°Å¸â€œâ€“', unlocked: finishedCount >= 1, progress: `${finishedCount}/1 book` },
+    { title: '7 Day Streak', sub: '7 days continuous reading', icon: 'Ã°Å¸â€Â¥', unlocked: streakDays >= 7, progress: `${streakDays}/7 days` },
+    { title: '10 Books Reader', sub: 'Completed 10 books', icon: 'Ã°Å¸â€œÅ¡', unlocked: finishedCount >= 10, progress: `${finishedCount}/10 books` },
+    { title: 'Focus Master', sub: '10 Focus Sessions (25m+)', icon: 'Ã°Å¸Å½Â¯', unlocked: focusSessions >= 10, progress: `${focusSessions}/10 sessions` },
+    { title: 'Knowledge Seeker', sub: '50 Notes & Highlights saved', icon: 'Ã°Å¸â€œÂ', unlocked: notesCount >= 50, progress: `${notesCount}/50 notes` },
+    { title: 'Book Collector', sub: '20 Books in Library', icon: 'Ã°Å¸â€˜â€˜', unlocked: books.length >= 20, progress: `${books.length}/20 books` },
+    { title: '100 Hours Reading', sub: '100 Hours focused reading', icon: 'Ã¢ÂÂ³', unlocked: totalHours >= 100, progress: `${totalHours}/100 hrs` },
+    { title: '1000 Pages Read', sub: '1,000 Pages finished', icon: 'Ã°Å¸â€œâ€ž', unlocked: totalPages >= 1000, progress: `${totalPages.toLocaleString()}/1000 pgs` },
+    { title: '1 Year Reader', sub: '365 Day Reading Streak', icon: 'Ã°Å¸Ââ€ ', unlocked: streakDays >= 365, progress: `${streakDays}/365 days` }
   ];
 
   const grid = container.querySelector('.achievements-grid');
@@ -8077,7 +8086,7 @@ function renderAchievements() {
         <div style="font-weight: 800; font-size: 0.92rem; color: ${b.unlocked ? '#ffffff' : 'var(--text-muted)'};">${b.title}</div>
         <div style="font-size: 0.72rem; color: var(--text-secondary);">${b.sub}</div>
         <div style="margin-top: 6px; font-size: 0.7rem; font-weight: 800; padding: 3px 10px; border-radius: 999px; background: ${b.unlocked ? 'rgba(16, 185, 129, 0.2)' : 'rgba(255,255,255,0.06)'}; color: ${b.unlocked ? '#34d399' : 'var(--text-muted)'};">
-          ${b.unlocked ? 'Unlocked âœ“' : b.progress}
+          ${b.unlocked ? 'Unlocked Ã¢Å“â€œ' : b.progress}
         </div>
       </div>
     `).join('');
@@ -8110,7 +8119,7 @@ function renderRecommendations() {
     if (recommended.length === 0) {
       listContainer.innerHTML = `
         <div style="text-align: center; padding: 40px 20px; color: var(--text-secondary);">
-          <p style="font-size: 2rem; margin-bottom: 8px;">ðŸ“š</p>
+          <p style="font-size: 2rem; margin-bottom: 8px;">Ã°Å¸â€œÅ¡</p>
           <p style="font-size: 0.95rem; font-weight: 700;">You have added all top recommendations to your library!</p>
           <p style="font-size: 0.8rem; color: var(--text-muted);">Explore categories in the Explore tab to discover more books.</p>
         </div>`;
@@ -8122,7 +8131,7 @@ function renderRecommendations() {
         <img src="${book.cover}" onerror="this.src='cover_placeholder.jpg'" style="width: 65px; height: 95px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);" alt="Cover">
         <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
           <div style="font-weight: 800; font-size: 0.95rem; color: #ffffff;">${book.title}</div>
-          <div style="font-size: 0.78rem; color: var(--accent-gold);">${book.author} &bull; â­ ${book.rating}</div>
+          <div style="font-size: 0.78rem; color: var(--accent-gold);">${book.author} &bull; Ã¢Â­Â ${book.rating}</div>
           <div style="font-size: 0.74rem; color: var(--text-muted);">${book.desc}</div>
           <div style="display: flex; gap: 8px; align-items: center; margin-top: 6px;">
             <span style="font-size: 0.68rem; font-weight: 700; background: rgba(16,185,129,0.15); color: #34d399; padding: 2px 8px; border-radius: 999px;">
@@ -8161,7 +8170,7 @@ function addRecommendedBookToLibrary(title, author, category, pages) {
   saveBooks();
   renderApp();
   renderRecommendations();
-  showToast(`Added "${title}" to your Wishlist! ðŸ“š`);
+  showToast(`Added "${title}" to your Wishlist! Ã°Å¸â€œÅ¡`);
 }
 
 // --- FEATURE 11: READING GOALS ENGINE ---
@@ -8234,19 +8243,19 @@ function renderPrivacySecurityView() {
 // ==========================================================================
 
 const DEFAULT_HOME_SECTIONS = [
-  { id: 'greeting', name: 'Greeting & Quote Banner', icon: 'ðŸŒ…', desc: 'Good morning/evening banner & quote', visible: true },
-  { id: 'currentlyReading', name: 'Currently Reading Hero', icon: 'ðŸ“–', desc: 'Current active book & progress dial', visible: true },
-  { id: 'kpiBar', name: 'Compact KPI Metrics Bar', icon: 'âš¡', desc: 'Finished, Reading, Wishlist & Streak', visible: true },
-  { id: 'statsGrid', name: 'Reading Stats Cards (4x)', icon: 'ðŸ“Š', desc: 'Total books, streak & reading time', visible: true },
-  { id: 'featured', name: 'Featured Masterpieces', icon: 'âœ¨', desc: 'Curated gems from your library', visible: true }
+  { id: 'greeting', name: 'Greeting & Quote Banner', icon: 'Ã°Å¸Å’â€¦', desc: 'Good morning/evening banner & quote', visible: true },
+  { id: 'currentlyReading', name: 'Currently Reading Hero', icon: 'Ã°Å¸â€œâ€“', desc: 'Current active book & progress dial', visible: true },
+  { id: 'kpiBar', name: 'Compact KPI Metrics Bar', icon: 'Ã¢Å¡Â¡', desc: 'Finished, Reading, Wishlist & Streak', visible: true },
+  { id: 'statsGrid', name: 'Reading Stats Cards (4x)', icon: 'Ã°Å¸â€œÅ ', desc: 'Total books, streak & reading time', visible: true },
+  { id: 'featured', name: 'Featured Masterpieces', icon: 'Ã¢Å“Â¨', desc: 'Curated gems from your library', visible: true }
 ];
 
 const DEFAULT_CUSTOM_SHELVES = [
-  { id: 'shelf-friends', name: 'Mere Dosto ki Kitabein', icon: 'ðŸ¤', color: '#10b981', bookTitles: [] },
-  { id: 'shelf-diwali', name: 'Agli Diwali tak Padhni Hai', icon: 'ðŸª”', color: '#f59e0b', bookTitles: [] }
+  { id: 'shelf-friends', name: 'Mere Dosto ki Kitabein', icon: 'Ã°Å¸Â¤Â', color: '#10b981', bookTitles: [] },
+  { id: 'shelf-diwali', name: 'Agli Diwali tak Padhni Hai', icon: 'Ã°Å¸Âªâ€', color: '#f59e0b', bookTitles: [] }
 ];
 
-let selectedShelfEmoji = 'ðŸ“';
+let selectedShelfEmoji = 'Ã°Å¸â€œÂ';
 
 function loadAdjustmentConfigs() {
   try {
@@ -8362,7 +8371,7 @@ function renderHomeSectionsAdjustView() {
     return `
       <div class="ig-row" style="cursor:default; padding:12px 16px;">
         <div class="ig-row-left">
-          <div class="ig-icon-box ig-icon-gold">${sec.icon || 'ðŸ“±'}</div>
+          <div class="ig-icon-box ig-icon-gold">${sec.icon || 'Ã°Å¸â€œÂ±'}</div>
           <div class="ig-text-box">
             <div class="ig-title" style="font-weight:700;">${escapeHtml(sec.name)}</div>
             <div class="ig-sub">${escapeHtml(sec.desc)}</div>
@@ -8370,8 +8379,8 @@ function renderHomeSectionsAdjustView() {
         </div>
         <div class="home-sec-controls" style="display:flex; align-items:center; gap:12px;">
           <div class="home-sec-reorder-btns" style="display:flex; flex-direction:column; gap:3px;">
-            <button type="button" class="btn-sec-reorder" onclick="moveHomeSection('${sec.id}', -1)" title="Move Up" ${index === 0 ? 'disabled style="opacity:0.25; cursor:not-allowed;"' : ''}>â–²</button>
-            <button type="button" class="btn-sec-reorder" onclick="moveHomeSection('${sec.id}', 1)" title="Move Down" ${index === state.homeSections.length - 1 ? 'disabled style="opacity:0.25; cursor:not-allowed;"' : ''}>â–¼</button>
+            <button type="button" class="btn-sec-reorder" onclick="moveHomeSection('${sec.id}', -1)" title="Move Up" ${index === 0 ? 'disabled style="opacity:0.25; cursor:not-allowed;"' : ''}>Ã¢â€“Â²</button>
+            <button type="button" class="btn-sec-reorder" onclick="moveHomeSection('${sec.id}', 1)" title="Move Down" ${index === state.homeSections.length - 1 ? 'disabled style="opacity:0.25; cursor:not-allowed;"' : ''}>Ã¢â€“Â¼</button>
           </div>
           <label class="ig-switch" title="Toggle Show/Hide">
             <input type="checkbox" ${sec.visible ? 'checked' : ''} onchange="toggleHomeSectionVisibility('${sec.id}', this.checked)">
@@ -8470,15 +8479,15 @@ function renderBookOrderStudioView(filterQuery) {
     if (displayRank === 1) {
       cardRankClass = 'top-rank-1';
       rankBadgeClass = 'gold';
-      rankLabel = `ðŸ‘‘ #1`;
+      rankLabel = `Ã°Å¸â€˜â€˜ #1`;
     } else if (displayRank === 2) {
       cardRankClass = 'top-rank-2';
       rankBadgeClass = 'gold';
-      rankLabel = `â­ #2`;
+      rankLabel = `Ã¢Â­Â #2`;
     } else if (displayRank === 3) {
       cardRankClass = 'top-rank-3';
       rankBadgeClass = 'gold';
-      rankLabel = `â­ #3`;
+      rankLabel = `Ã¢Â­Â #3`;
     }
 
     return `
@@ -8491,12 +8500,12 @@ function renderBookOrderStudioView(filterQuery) {
         </div>
         <div class="rank-actions" style="display:flex; align-items:center; gap:6px;">
           ${displayRank !== 1 ? `
-            <button type="button" class="btn-make-top" onclick="pinBookToTop('${escapeHtml(book.title)}')" title="Make #1 in Library">ðŸ” #1</button>
+            <button type="button" class="btn-make-top" onclick="pinBookToTop('${escapeHtml(book.title)}')" title="Make #1 in Library">Ã°Å¸â€Â #1</button>
           ` : `
             <span style="font-size:0.72rem; color:var(--accent-gold); font-weight:800; padding:4px 8px; background:rgba(245,158,11,0.15); border-radius:6px;">TOP</span>
           `}
-          <button type="button" class="btn-rank-move" onclick="moveBookInCustomOrder('${escapeHtml(book.title)}', -1)" title="Move Up" ${displayRank === 1 ? 'disabled style="opacity:0.25; cursor:not-allowed;"' : ''}>â–²</button>
-          <button type="button" class="btn-rank-move" onclick="moveBookInCustomOrder('${escapeHtml(book.title)}', 1)" title="Move Down">â–¼</button>
+          <button type="button" class="btn-rank-move" onclick="moveBookInCustomOrder('${escapeHtml(book.title)}', -1)" title="Move Up" ${displayRank === 1 ? 'disabled style="opacity:0.25; cursor:not-allowed;"' : ''}>Ã¢â€“Â²</button>
+          <button type="button" class="btn-rank-move" onclick="moveBookInCustomOrder('${escapeHtml(book.title)}', 1)" title="Move Down">Ã¢â€“Â¼</button>
         </div>
       </div>
     `;
@@ -8547,7 +8556,7 @@ function pinBookToTop(bookTitle) {
   localStorage.setItem(BOOK_ORDER_KEY, JSON.stringify(list));
   renderBookOrderStudioView();
   renderLibraryGrid();
-  showToast(`â­ Pinned "${bookTitle.slice(0, 20)}" to #1!`);
+  showToast(`Ã¢Â­Â Pinned "${bookTitle.slice(0, 20)}" to #1!`);
 }
 
 function promptSetBookRank(bookTitle) {
@@ -8612,13 +8621,13 @@ function toggleLibraryCardSizeStrip() {
 }
 
 function getCardSizeDescription(cols) {
-  if (cols === 1) return 'Level 1: 1 Card per Row (Giant Hero Card â€” Sabse Bada Cover)';
-  if (cols === 2) return 'Level 2: 2 Cards per Row (Bada Grid â€” High Detail)';
+  if (cols === 1) return 'Level 1: 1 Card per Row (Giant Hero Card Ã¢â‚¬â€ Sabse Bada Cover)';
+  if (cols === 2) return 'Level 2: 2 Cards per Row (Bada Grid Ã¢â‚¬â€ High Detail)';
   if (cols === 3) return 'Level 3: 3 Cards per Row (Standard Classic Grid)';
   if (cols === 4) return 'Level 4: 4 Cards per Row (Medium Grid)';
   if (cols === 5) return 'Level 5: 5 Cards per Row (Compact Grid)';
   if (cols <= 9) return `Level ${cols}: ${cols} Cards per Row (Mini Gallery Tiles)`;
-  return 'Level 10: 10 Cards per Row (Micro Tiles â€” Ek Screen Par Dher Saari Kitabein!)';
+  return 'Level 10: 10 Cards per Row (Micro Tiles Ã¢â‚¬â€ Ek Screen Par Dher Saari Kitabein!)';
 }
 
 function updateLibraryColumnsUI() {
@@ -8666,7 +8675,7 @@ function updateLibraryColumnsUI() {
   }
 
   const radioList = document.getElementById('radioIndicatorCompactList');
-  if (radioList) radioList.innerText = isCompactList ? 'ðŸŸ¢' : 'âšª';
+  if (radioList) radioList.innerText = isCompactList ? 'Ã°Å¸Å¸Â¢' : 'Ã¢Å¡Âª';
 
   const cardList = document.getElementById('layoutChoiceCompactList');
   if (cardList) cardList.style.borderColor = isCompactList ? 'var(--accent-gold)' : 'var(--border-card)';
@@ -8777,8 +8786,8 @@ function renderCustomShelvesView() {
     return `
       <div class="custom-shelf-card" onclick="openShelfDetail('${shelf.id}')">
         <div class="shelf-card-top">
-          <div class="shelf-icon-badge">${shelf.icon || 'ðŸ“'}</div>
-          <button type="button" class="shelf-delete-btn" onclick="event.stopPropagation(); deleteCustomShelf('${shelf.id}')" title="Delete Shelf">ðŸ—‘ï¸</button>
+          <div class="shelf-icon-badge">${shelf.icon || 'Ã°Å¸â€œÂ'}</div>
+          <button type="button" class="shelf-delete-btn" onclick="event.stopPropagation(); deleteCustomShelf('${shelf.id}')" title="Delete Shelf">Ã°Å¸â€”â€˜Ã¯Â¸Â</button>
         </div>
         <div>
           <div class="shelf-card-title">${escapeHtml(shelf.name)}</div>
@@ -8809,7 +8818,7 @@ function openShelfDetail(shelfId) {
   const countEl = document.getElementById('activeShelfBookCount');
   const listEl = document.getElementById('activeShelfBooksList');
 
-  if (iconEl) iconEl.innerText = shelf.icon || 'ðŸ“';
+  if (iconEl) iconEl.innerText = shelf.icon || 'Ã°Å¸â€œÂ';
   if (titleEl) titleEl.innerText = shelf.name;
   if (countEl) countEl.innerText = `${(shelf.bookTitles || []).length} Books`;
 
@@ -8828,7 +8837,7 @@ function openShelfDetail(shelfId) {
                 <div style="font-size:0.75rem; color:var(--text-secondary);">${escapeHtml(book.author || 'Unknown')}</div>
               </div>
             </div>
-            <button type="button" class="btn-cancel" style="padding:4px 8px; font-size:0.72rem; color:#ef4444;" onclick="removeBookFromShelf('${shelf.id}', '${escapeHtml(book.title)}')">âŒ Remove</button>
+            <button type="button" class="btn-cancel" style="padding:4px 8px; font-size:0.72rem; color:#ef4444;" onclick="removeBookFromShelf('${shelf.id}', '${escapeHtml(book.title)}')">Ã¢ÂÅ’ Remove</button>
           </div>
         `;
       }).join('');
@@ -8840,7 +8849,7 @@ function openCreateShelfModal() {
   const modal = document.getElementById('createShelfModal');
   const input = document.getElementById('newShelfNameInput');
   if (input) input.value = '';
-  selectedShelfEmoji = 'ðŸ“';
+  selectedShelfEmoji = 'Ã°Å¸â€œÂ';
   if (modal) modal.style.display = 'flex';
 }
 
@@ -8869,7 +8878,7 @@ function saveNewCustomShelf() {
   const newShelf = {
     id: 'shelf-' + Date.now(),
     name,
-    icon: selectedShelfEmoji || 'ðŸ“',
+    icon: selectedShelfEmoji || 'Ã°Å¸â€œÂ',
     color: '#f59e0b',
     bookTitles: []
   };
@@ -9003,23 +9012,23 @@ function openShelfSelectorDropdown() {
   container.innerHTML = `
     <div style="padding:10px 14px; background:${!state.activeShelfFilter ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.04)'}; border:1px solid ${!state.activeShelfFilter ? 'var(--accent-gold)' : 'var(--border-subtle)'}; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:space-between;" onclick="filterLibraryByShelf(null)">
       <div style="display:flex; align-items:center; gap:10px;">
-        <span style="font-size:1.2rem;">ðŸ“š</span>
+        <span style="font-size:1.2rem;">Ã°Å¸â€œÅ¡</span>
         <span style="font-weight:700; color:#fff; font-size:0.92rem;">Show All Books (No Shelf Filter)</span>
       </div>
-      ${!state.activeShelfFilter ? '<span>âœ“</span>' : ''}
+      ${!state.activeShelfFilter ? '<span>Ã¢Å“â€œ</span>' : ''}
     </div>
     ${shelves.map(shelf => {
       const isSelected = state.activeShelfFilter === shelf.id;
       return `
         <div style="padding:10px 14px; background:${isSelected ? 'rgba(245,158,11,0.15)' : 'rgba(255,255,255,0.04)'}; border:1px solid ${isSelected ? 'var(--accent-gold)' : 'var(--border-subtle)'}; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:space-between;" onclick="filterLibraryByShelf('${shelf.id}')">
           <div style="display:flex; align-items:center; gap:10px;">
-            <span style="font-size:1.2rem;">${shelf.icon || 'ðŸ“'}</span>
+            <span style="font-size:1.2rem;">${shelf.icon || 'Ã°Å¸â€œÂ'}</span>
             <div>
               <div style="font-weight:700; color:#fff; font-size:0.92rem;">${escapeHtml(shelf.name)}</div>
               <div style="font-size:0.75rem; color:var(--text-secondary);">${(shelf.bookTitles || []).length} Books</div>
             </div>
           </div>
-          ${isSelected ? '<span>âœ“</span>' : ''}
+          ${isSelected ? '<span>Ã¢Å“â€œ</span>' : ''}
         </div>
       `;
     }).join('')}
@@ -9213,7 +9222,7 @@ function runStartupPrefs() {
     const today = new Date().toDateString();
     if (Date.now() - last > limit && localStorage.getItem('mf_backup_toast_day') !== today) {
       try { localStorage.setItem('mf_backup_toast_day', today); } catch (e) { /* ignore */ }
-      setTimeout(() => showToast('ðŸ’¾ Backup due: Settings > Quick Data Backup', 4200), 1200);
+      setTimeout(() => showToast('Ã°Å¸â€™Â¾ Backup due: Settings > Quick Data Backup', 4200), 1200);
     }
   }
 }
@@ -9233,7 +9242,7 @@ document.addEventListener('DOMContentLoaded', () => { applyPrefs(); setTimeout(r
 // HEADER RESPONSIVENESS: FULLSCREEN ON DESKTOP, REFRESH ON PHONE
 // =========================================================================
 function refreshAppPage() {
-  showToast('ðŸ”„ Refreshing app...');
+  showToast('Ã°Å¸â€â€ž Refreshing app...');
   setTimeout(() => {
     window.location.reload();
   }, 200);
@@ -9265,16 +9274,16 @@ function openLanguageSelectModal(origIdx) {
 
   const titleEl = document.getElementById('langSelectBookTitle');
   if (titleEl) {
-    if (isDict) titleEl.innerText = 'à¤¶à¤¬à¥à¤¦à¤¾à¤µà¤²à¥€ à¤¶à¤¬à¥à¤¦à¤•à¥‹à¤¶ (101 Words)';
-    else if (isHyper) titleEl.innerText = 'à¤¹à¤¾à¤¯à¤ªà¤°à¤«à¤¼à¥‹à¤•à¤¸ (à¤•à¤¿à¤¤à¤¾à¤¬ à¤ªà¤¢à¤¼à¥‡à¤‚)';
-    else titleEl.innerText = (b.title || 'Book') + ' (à¤•à¤¿à¤¤à¤¾à¤¬ à¤ªà¤¢à¤¼à¥‡à¤‚)';
+    if (isDict) titleEl.innerText = 'Ã Â¤Â¶Ã Â¤Â¬Ã Â¥ÂÃ Â¤Â¦Ã Â¤Â¾Ã Â¤ÂµÃ Â¤Â²Ã Â¥â‚¬ Ã Â¤Â¶Ã Â¤Â¬Ã Â¥ÂÃ Â¤Â¦Ã Â¤â€¢Ã Â¥â€¹Ã Â¤Â¶ (101 Words)';
+    else if (isHyper) titleEl.innerText = 'Ã Â¤Â¹Ã Â¤Â¾Ã Â¤Â¯Ã Â¤ÂªÃ Â¤Â°Ã Â¤Â«Ã Â¤Â¼Ã Â¥â€¹Ã Â¤â€¢Ã Â¤Â¸ (Ã Â¤â€¢Ã Â¤Â¿Ã Â¤Â¤Ã Â¤Â¾Ã Â¤Â¬ Ã Â¤ÂªÃ Â¤Â¢Ã Â¤Â¼Ã Â¥â€¡Ã Â¤â€š)';
+    else titleEl.innerText = (b.title || 'Book') + ' (Ã Â¤â€¢Ã Â¤Â¿Ã Â¤Â¤Ã Â¤Â¾Ã Â¤Â¬ Ã Â¤ÂªÃ Â¤Â¢Ã Â¤Â¼Ã Â¥â€¡Ã Â¤â€š)';
   }
 
   const authorEl = document.getElementById('langSelectBookAuthor');
   if (authorEl) {
-    if (isDict) authorEl.innerText = 'Oxford Focus Lexicon â€¢ 3 Languages Available';
-    else if (isHyper) authorEl.innerText = 'Chris Bailey (à¤•à¥à¤°à¤¿à¤¸ à¤¬à¥‡à¤²à¥€) â€¢ 3 Languages Available';
-    else authorEl.innerText = 'by ' + (b.author || 'Author') + ' â€¢ Select Reading Language';
+    if (isDict) authorEl.innerText = 'Oxford Focus Lexicon Ã¢â‚¬Â¢ 3 Languages Available';
+    else if (isHyper) authorEl.innerText = 'Chris Bailey (Ã Â¤â€¢Ã Â¥ÂÃ Â¤Â°Ã Â¤Â¿Ã Â¤Â¸ Ã Â¤Â¬Ã Â¥â€¡Ã Â¤Â²Ã Â¥â‚¬) Ã¢â‚¬Â¢ 3 Languages Available';
+    else authorEl.innerText = 'by ' + (b.author || 'Author') + ' Ã¢â‚¬Â¢ Select Reading Language';
   }
 
   const coverEl = document.getElementById('langSelectCoverImg');
@@ -9293,7 +9302,7 @@ function openLanguageSelectModal(origIdx) {
   if (isbnRowEl) {
     const isbn = b.isbn || (isHyper ? '978-93-5543-300-8' : 'N/A');
     const price = b.price || (isHyper ? 350 : 0);
-    isbnRowEl.innerHTML = '<span>ISBN: <strong style="color:var(--text-primary);">' + escapeHtml(isbn) + '</strong></span><span>â€¢ Price: <strong style="color:#10b981;">â‚¹' + price + '</strong></span>';
+    isbnRowEl.innerHTML = '<span>ISBN: <strong style="color:var(--text-primary);">' + escapeHtml(isbn) + '</strong></span><span>Ã¢â‚¬Â¢ Price: <strong style="color:#10b981;">Ã¢â€šÂ¹' + price + '</strong></span>';
   }
 
   // Reset Auto-OCR dropzone in language select modal
@@ -9312,7 +9321,7 @@ function openLanguageSelectModal(origIdx) {
   const engPages = getBookPagesArray(b, 'english');
 
   const hiBadge = document.getElementById('langHindiCountBadge');
-  if (hiBadge) hiBadge.innerText = (hiPages ? hiPages.length : 0) + ' à¤ªà¥ƒà¤·à¥à¤ ';
+  if (hiBadge) hiBadge.innerText = (hiPages ? hiPages.length : 0) + ' Ã Â¤ÂªÃ Â¥Æ’Ã Â¤Â·Ã Â¥ÂÃ Â¤Â ';
 
   const hingBadge = document.getElementById('langHinglishCountBadge');
   if (hingBadge) hingBadge.innerText = (hingPages ? hingPages.length : 0) + ' Pages';
@@ -9356,7 +9365,7 @@ function openAddCustomPageModal() {
     let opts = '';
     state.books.forEach((b, idx) => {
       const sel = idx === readerState.activeBookIdx ? ' selected' : '';
-      opts += '<option value="' + idx + '"' + sel + '>' + escapeHtml(b.no + ' â€¢ ' + b.title) + '</option>';
+      opts += '<option value="' + idx + '"' + sel + '>' + escapeHtml(b.no + ' Ã¢â‚¬Â¢ ' + b.title) + '</option>';
     });
     select.innerHTML = opts;
   }
@@ -9638,7 +9647,7 @@ async function runAutoPageOcr(imageSrc) {
       if (laserEl) laserEl.style.display = 'none';
       if (previewEl) previewEl.style.display = 'flex';
 
-      showToast('Photo se text safaltapoorvak convert ho gaya! âš¡ðŸ“', 'success');
+      showToast('Photo se text safaltapoorvak convert ho gaya! Ã¢Å¡Â¡Ã°Å¸â€œÂ', 'success');
     } catch (err) {
       console.error('Auto-OCR recognition error:', err);
       if (scanEl) scanEl.style.display = 'none';
@@ -9714,7 +9723,7 @@ function saveCustomBookPage() {
   }
 
   closeAddCustomPageModal();
-  showToast('Page ' + pageNo + ' added to "' + b.title + '" successfully! ðŸ“–', 'success');
+  showToast('Page ' + pageNo + ' added to "' + b.title + '" successfully! Ã°Å¸â€œâ€“', 'success');
 
   // If reader is currently open for this book, refresh view
   const readerModal = document.getElementById('realBookReaderModal');
@@ -9776,7 +9785,7 @@ function openEditPageModal(pageNo) {
 
   const modalTitle = document.getElementById('editPageModalTitle');
   if (modalTitle) {
-    modalTitle.innerText = `à¤ªà¥‡à¤œ ${pageNo} à¤à¤¡à¤¿à¤Ÿ à¤•à¤°à¥‡à¤‚ (${readerState.lang.toUpperCase()})`;
+    modalTitle.innerText = `Ã Â¤ÂªÃ Â¥â€¡Ã Â¤Å“ ${pageNo} Ã Â¤ÂÃ Â¤Â¡Ã Â¤Â¿Ã Â¤Å¸ Ã Â¤â€¢Ã Â¤Â°Ã Â¥â€¡Ã Â¤â€š (${readerState.lang.toUpperCase()})`;
   }
 
   const noInput = document.getElementById('editPageNoInput');
@@ -9896,7 +9905,7 @@ function saveEditedBookPage() {
   }
 
   closeEditBookPageModal();
-  showToast('Page ' + pageNo + ' safaltapoorvak update ho gaya! ðŸ’¾', 'success');
+  showToast('Page ' + pageNo + ' safaltapoorvak update ho gaya! Ã°Å¸â€™Â¾', 'success');
   renderRealBookPages();
 }
 
@@ -9936,7 +9945,7 @@ function deleteBookPage(pageNo) {
   }
 
   closeEditBookPageModal();
-  showToast('Page ' + pageNo + ' delete kar diya gaya! ðŸ—‘ï¸', 'info');
+  showToast('Page ' + pageNo + ' delete kar diya gaya! Ã°Å¸â€”â€˜Ã¯Â¸Â', 'info');
 
   if (readerState.currentPage > 1) {
     readerState.currentPage = Math.max(1, readerState.currentPage - 1);
@@ -10025,7 +10034,7 @@ async function runEditPageOcr(imageSrc) {
       if (scanEl) scanEl.style.display = 'none';
       if (laserEl) laserEl.style.display = 'none';
       if (promptEl) promptEl.style.display = 'block';
-      showToast('Photo se naya text replace ho gaya! âš¡ðŸ“', 'success');
+      showToast('Photo se naya text replace ho gaya! Ã¢Å¡Â¡Ã°Å¸â€œÂ', 'success');
     } catch (err) {
       console.error('Edit page OCR error:', err);
       if (scanEl) scanEl.style.display = 'none';
@@ -10042,22 +10051,22 @@ async function runEditPageOcr(imageSrc) {
 function convertHindiToHinglish(hindiText) {
   if (!hindiText || typeof hindiText !== 'string') return '';
   const vowels = {
-    'à¤…': 'a', 'à¤†': 'aa', 'à¤‡': 'i', 'à¤ˆ': 'ee', 'à¤‰': 'u', 'à¤Š': 'oo',
-    'à¤‹': 'ri', 'à¤': 'e', 'à¤': 'ai', 'à¤“': 'o', 'à¤”': 'au', 'à¤…à¤‚': 'an', 'à¤…à¤ƒ': 'ah'
+    'Ã Â¤â€¦': 'a', 'Ã Â¤â€ ': 'aa', 'Ã Â¤â€¡': 'i', 'Ã Â¤Ë†': 'ee', 'Ã Â¤â€°': 'u', 'Ã Â¤Å ': 'oo',
+    'Ã Â¤â€¹': 'ri', 'Ã Â¤Â': 'e', 'Ã Â¤Â': 'ai', 'Ã Â¤â€œ': 'o', 'Ã Â¤â€': 'au', 'Ã Â¤â€¦Ã Â¤â€š': 'an', 'Ã Â¤â€¦Ã Â¤Æ’': 'ah'
   };
   const matras = {
-    'à¤¾': 'aa', 'à¤¿': 'i', 'à¥€': 'ee', 'à¥': 'u', 'à¥‚': 'oo', 'à¥ƒ': 'ri',
-    'à¥‡': 'e', 'à¥ˆ': 'ai', 'à¥‹': 'o', 'à¥Œ': 'au', 'à¤‚': 'n', 'à¤': 'n', 'à¤ƒ': 'h', 'à¥': ''
+    'Ã Â¤Â¾': 'aa', 'Ã Â¤Â¿': 'i', 'Ã Â¥â‚¬': 'ee', 'Ã Â¥Â': 'u', 'Ã Â¥â€š': 'oo', 'Ã Â¥Æ’': 'ri',
+    'Ã Â¥â€¡': 'e', 'Ã Â¥Ë†': 'ai', 'Ã Â¥â€¹': 'o', 'Ã Â¥Å’': 'au', 'Ã Â¤â€š': 'n', 'Ã Â¤Â': 'n', 'Ã Â¤Æ’': 'h', 'Ã Â¥Â': ''
   };
   const consonants = {
-    'à¤•': 'k', 'à¤–': 'kh', 'à¤—': 'g', 'à¤˜': 'gh', 'à¤™': 'ng',
-    'à¤š': 'ch', 'à¤›': 'chh', 'à¤œ': 'j', 'à¤': 'jh', 'à¤ž': 'ny',
-    'à¤Ÿ': 't', 'à¤ ': 'th', 'à¤¡': 'd', 'à¤¢': 'dh', 'à¤£': 'n',
-    'à¤¤': 't', 'à¤¥': 'th', 'à¤¦': 'd', 'à¤§': 'dh', 'à¤¨': 'n',
-    'à¤ª': 'p', 'à¤«': 'f', 'à¤¬': 'b', 'à¤­': 'bh', 'à¤®': 'm',
-    'à¤¯': 'y', 'à¤°': 'r', 'à¤²': 'l', 'à¤µ': 'v', 'à¤¶': 'sh',
-    'à¤·': 'sh', 'à¤¸': 's', 'à¤¹': 'h', 'à¤•à¤¼': 'q', 'à¤–à¤¼': 'kh',
-    'à¤—à¤¼': 'gh', 'à¤œà¤¼': 'z', 'à¤¡à¤¼': 'd', 'à¤¢à¤¼': 'dh', 'à¤«à¤¼': 'f'
+    'Ã Â¤â€¢': 'k', 'Ã Â¤â€“': 'kh', 'Ã Â¤â€”': 'g', 'Ã Â¤Ëœ': 'gh', 'Ã Â¤â„¢': 'ng',
+    'Ã Â¤Å¡': 'ch', 'Ã Â¤â€º': 'chh', 'Ã Â¤Å“': 'j', 'Ã Â¤Â': 'jh', 'Ã Â¤Å¾': 'ny',
+    'Ã Â¤Å¸': 't', 'Ã Â¤Â ': 'th', 'Ã Â¤Â¡': 'd', 'Ã Â¤Â¢': 'dh', 'Ã Â¤Â£': 'n',
+    'Ã Â¤Â¤': 't', 'Ã Â¤Â¥': 'th', 'Ã Â¤Â¦': 'd', 'Ã Â¤Â§': 'dh', 'Ã Â¤Â¨': 'n',
+    'Ã Â¤Âª': 'p', 'Ã Â¤Â«': 'f', 'Ã Â¤Â¬': 'b', 'Ã Â¤Â­': 'bh', 'Ã Â¤Â®': 'm',
+    'Ã Â¤Â¯': 'y', 'Ã Â¤Â°': 'r', 'Ã Â¤Â²': 'l', 'Ã Â¤Âµ': 'v', 'Ã Â¤Â¶': 'sh',
+    'Ã Â¤Â·': 'sh', 'Ã Â¤Â¸': 's', 'Ã Â¤Â¹': 'h', 'Ã Â¤â€¢Ã Â¤Â¼': 'q', 'Ã Â¤â€“Ã Â¤Â¼': 'kh',
+    'Ã Â¤â€”Ã Â¤Â¼': 'gh', 'Ã Â¤Å“Ã Â¤Â¼': 'z', 'Ã Â¤Â¡Ã Â¤Â¼': 'd', 'Ã Â¤Â¢Ã Â¤Â¼': 'dh', 'Ã Â¤Â«Ã Â¤Â¼': 'f'
   };
 
   let out = '';
@@ -10070,7 +10079,7 @@ function convertHindiToHinglish(hindiText) {
       out += vowels[ch];
     } else if (consonants[ch]) {
       const c = consonants[ch];
-      if (next === 'à¥') {
+      if (next === 'Ã Â¥Â') {
         out += c;
         i++;
       } else if (next && matras[next] !== undefined) {
@@ -10158,7 +10167,7 @@ async function runAutoOcrForAllLanguages(imageSrc) {
       }
 
       if (progressBar) progressBar.style.width = '80%';
-      if (statusEl) statusEl.innerText = 'Teeno bhashaon (à¤¹à¤¿à¤‚à¤¦à¥€ + Hinglish + English) mein convert ho raha hai...';
+      if (statusEl) statusEl.innerText = 'Teeno bhashaon (Ã Â¤Â¹Ã Â¤Â¿Ã Â¤â€šÃ Â¤Â¦Ã Â¥â‚¬ + Hinglish + English) mein convert ho raha hai...';
 
       const hasDevanagari = /[\u0900-\u097F]/.test(rawText);
       const lines = rawText.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
@@ -10177,7 +10186,7 @@ async function runAutoOcrForAllLanguages(imageSrc) {
         }
         hinglishHeading = convertHindiToHinglish(hindiHeading);
         hinglishBody = convertHindiToHinglish(hindiBody);
-        englishHeading = 'Hyperfocus â€¢ Chapter Excerpt';
+        englishHeading = 'Hyperfocus Ã¢â‚¬Â¢ Chapter Excerpt';
         englishBody = 'Transcribed Page (Hindi/Hinglish Original):\n\n' + hinglishBody;
       } else {
         if (lines.length > 1 && lines[0].length <= 60) {
@@ -10258,7 +10267,7 @@ async function runAutoOcrForAllLanguages(imageSrc) {
         const engD = getBookPagesData(b, 'english');
 
         const hiBadge = document.getElementById('langHindiCountBadge');
-        if (hiBadge) hiBadge.innerText = (hiD && hiD.pages ? hiD.pages.length : 0) + ' à¤ªà¥ƒà¤·à¥à¤ ';
+        if (hiBadge) hiBadge.innerText = (hiD && hiD.pages ? hiD.pages.length : 0) + ' Ã Â¤ÂªÃ Â¥Æ’Ã Â¤Â·Ã Â¥ÂÃ Â¤Â ';
         const hingBadge = document.getElementById('langHinglishCountBadge');
         if (hingBadge) hingBadge.innerText = (hingD && hingD.pages ? hingD.pages.length : 0) + ' Pages';
         const engBadge = document.getElementById('langEnglishCountBadge');
@@ -10268,9 +10277,9 @@ async function runAutoOcrForAllLanguages(imageSrc) {
       if (progressBar) progressBar.style.width = '100%';
       if (scanEl) scanEl.style.display = 'none';
       if (successEl) successEl.style.display = 'flex';
-      if (successTxt) successTxt.innerText = 'Page ' + newPageNo + ' teeno bhashaon (à¤¹à¤¿à¤‚à¤¦à¥€ + Hinglish + English) mein add ho gaya!';
+      if (successTxt) successTxt.innerText = 'Page ' + newPageNo + ' teeno bhashaon (Ã Â¤Â¹Ã Â¤Â¿Ã Â¤â€šÃ Â¤Â¦Ã Â¥â‚¬ + Hinglish + English) mein add ho gaya!';
 
-      showToast('Page ' + newPageNo + ' teeno bhashaon mein safaltapoorvak save ho gaya! âš¡ðŸŽ‰', 'success');
+      showToast('Page ' + newPageNo + ' teeno bhashaon mein safaltapoorvak save ho gaya! Ã¢Å¡Â¡Ã°Å¸Å½â€°', 'success');
     } catch (err) {
       console.error('Auto OCR all languages error:', err);
       if (scanEl) scanEl.style.display = 'none';
