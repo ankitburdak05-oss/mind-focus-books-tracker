@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.51';
-const CURRENT_APP_VERSION = 'v0.0.51';
+const APP_VERSION = '0.0.52';
+const CURRENT_APP_VERSION = 'v0.0.52';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -3643,6 +3643,25 @@ function closeBookDetailView() {
 
 // Global Android hardware/system back button handler
 window.handleAppBackButton = function() {
+  // 0a. Close Explore 3D Book Dossier Sheet if open
+  const expModal = document.getElementById('exploreBookDetailModal');
+  if (expModal && (expModal.classList.contains('active') || expModal.style.display === 'flex')) {
+    closeExploreBookDetail();
+    return true;
+  }
+  // 0b. Close Update Checker Modal if open
+  const updModal = document.getElementById('updateCheckerModalOverlay');
+  if (updModal && (updModal.classList.contains('active') || updModal.style.display === 'flex')) {
+    closeUpdateCheckerModal();
+    return true;
+  }
+  // 0c. Close Broadcast Notice Modal if open
+  const notModal = document.getElementById('inAppNoticeModalOverlay');
+  if (notModal && notModal.style.display === 'flex') {
+    dismissInAppNotice();
+    return true;
+  }
+
   // 1. If not interested modal is open, close modal
   const niModal = document.getElementById('notInterestedModalOverlay');
   if (niModal && niModal.style.display !== 'none') {
@@ -5878,6 +5897,33 @@ function downloadAppUpdate() {
   triggerInAppUpdate();
 }
 
+
+async function fetchRemoteTextWithFallbacks(urls) {
+  for (const url of urls) {
+    const fullUrl = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
+    // 1. Try native Android bridge first (bypasses all WebView sandbox/CORS limits)
+    if (typeof window !== 'undefined' && window.Android && typeof window.Android.fetchRemoteText === 'function') {
+      try {
+        const text = window.Android.fetchRemoteText(fullUrl);
+        if (text && text.trim().length > 0) {
+          const clean = text.replace(/^\uFEFF/, '').trim();
+          if (clean.startsWith('{') || clean.startsWith('[')) return clean;
+        }
+      } catch (e) {}
+    }
+    // 2. Standard browser fetch
+    try {
+      const res = await fetch(fullUrl, { cache: 'no-store' });
+      if (res.ok) {
+        const text = await res.text();
+        const clean = text.replace(/^\uFEFF/, '').trim();
+        if (clean.startsWith('{') || clean.startsWith('[')) return clean;
+      }
+    } catch (e) {}
+  }
+  return null;
+}
+
 function getInstalledVersionString() {
   if (typeof window !== 'undefined' && window.Android && typeof window.Android.getInstalledAppVersion === 'function') {
     try {
@@ -6097,7 +6143,7 @@ function openUpdateCheckerModal() {
   const rel = cfg?.activeRelease || null;
   const installedVer = getInstalledVersionString();
   const targetVer = rel?.version || installedVer;
-  const isNewAvailable = isNewerVersion(targetVer, installedVer) && isNewerVersion(targetVer, CURRENT_APP_VERSION);
+  const isNewAvailable = isNewerVersion(targetVer, installedVer);
 
   const titleEl = document.getElementById('updateModalTitle');
   const badge = document.getElementById('updateTargetVersionBadge');
@@ -6113,13 +6159,13 @@ function openUpdateCheckerModal() {
       btn.innerText = `⚡ Download & Install ${targetVer} Now`;
     }
   } else {
-    // Already on current or latest version!
+    // Already on current or latest version - allow reinstall / re-download!
     if (titleEl) titleEl.innerText = 'Mind Focus Books is Up to Date';
     if (badge) badge.innerText = `${installedVer} (Installed)`;
     if (desc) desc.innerText = `Aapke phone me latest version ${installedVer} already installed hai aur sab kuch up-to-date hai.`;
     if (btn) {
       btn.disabled = false;
-      btn.innerText = `✓ Up to Date (${installedVer})`;
+      btn.innerText = `⚡ Re-download APK (${installedVer})`;
     }
   }
 
