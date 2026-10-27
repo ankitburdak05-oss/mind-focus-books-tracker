@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="stylesheet" href="style.css?v=3.17.1">
+  <link rel="stylesheet" href="style.css?v=0.0.50.1">
 </head>
 <body>
 
@@ -80,7 +80,7 @@
         <div class="hub-left">
           <div class="hub-icon-wrap h3d-icon-portal">
             <span class="h3d-pulse-beacon"></span>
-            ??
+            🚀
           </div>
           <div class="hub-info">
             <div class="h3d-badge-row">
@@ -332,14 +332,14 @@
       <!-- Action Strip: Refresh, Surprise Me, Curated Feed Mode -->
       <div class="explore-controls-bar">
         <div class="explore-sub-tabs">
-          <button type="button" class="explore-sub-pill active" id="exploreModeTrending" onclick="setExploreMode('trending')">?? Trending</button>
-          <button type="button" class="explore-sub-pill" id="exploreModeBestsellers" onclick="setExploreMode('bestseller')">?? Bestsellers</button>
-          <button type="button" class="explore-sub-pill" id="exploreModeClassics" onclick="setExploreMode('classics')">??? Classics</button>
-          <button type="button" class="explore-sub-pill" id="exploreModeMindset" onclick="setExploreMode('mindset')">?? Mind & Focus</button>
+          <button type="button" class="explore-sub-pill active" id="exploreModeTrending" onclick="setExploreMode('trending')">🔥 Trending</button>
+          <button type="button" class="explore-sub-pill" id="exploreModeBestsellers" onclick="setExploreMode('bestseller')">⭐ Bestsellers</button>
+          <button type="button" class="explore-sub-pill" id="exploreModeClassics" onclick="setExploreMode('classics')">👑 Classics</button>
+          <button type="button" class="explore-sub-pill" id="exploreModeMindset" onclick="setExploreMode('mindset')">🧠 Mind & Focus</button>
         </div>
         <div class="explore-quick-actions">
-          <button type="button" class="btn-explore-surprise" onclick="triggerSurpriseBook()" title="Random recommended book">?? Surprise</button>
-          <button type="button" class="btn-explore-refresh" onclick="refreshExploreFeed()" title="Nayi kitabein load karein">?? Naya</button>
+          <button type="button" class="btn-explore-surprise" onclick="triggerSurpriseBook()" title="Random recommended book">🎲 Surprise</button>
+          <button type="button" class="btn-explore-refresh" onclick="refreshExploreFeed()" title="Nayi kitabein load karein">✨ Naya</button>
         </div>
       </div>
 
@@ -372,8 +372,8 @@
             <!-- Dynamic Featured Spotlight Book (Rotates with Explore Feed) -->
       <div class="section-container">
         <div class="section-header">
-          <h2 class="section-title">?? World Spotlight Book</h2>
-          <button type="button" class="section-link-btn" onclick="rotateExploreSpotlight()">Next Pick ?</button>
+          <h2 class="section-title">🌍 World Spotlight Book</h2>
+          <button type="button" class="section-link-btn" onclick="rotateExploreSpotlight()">Next Pick ↗</button>
         </div>
         <div class="featured-book-hero" id="exploreFeaturedCard" style="cursor:pointer;" onclick="openCurrentSpotlightDetail()">
           <div class="featured-cover-wrap explore-cover-3d-wrap">
@@ -387,12 +387,12 @@
             <h3 class="featured-title" id="featuredTitle">Atomic Habits</h3>
             <div class="featured-author" id="featuredAuthor">James Clear</div>
             <div class="featured-rating" style="margin:4px 0 6px;">
-              <span class="star-icon" style="color:#fbbf24;">?????</span>
+              <span class="star-icon" style="color:#fbbf24;">⭐⭐⭐⭐⭐</span>
               <span id="featuredRatingVal" style="font-weight:700; color:#fbbf24;">4.8 (Global Reader Choice)</span>
             </div>
             <p class="featured-desc" id="featuredDesc">Tiny changes, remarkable results. Build good habits, break bad ones and master the tiny behaviors that lead to remarkable results.</p>
             <div style="display:flex; gap:8px; margin-top:8px;" onclick="event.stopPropagation();">
-              <button type="button" class="btn-gold-pill" id="featuredDetailActionBtn" onclick="openCurrentSpotlightDetail()">?? View Details</button>
+              <button type="button" class="btn-gold-pill" id="featuredDetailActionBtn" onclick="openCurrentSpotlightDetail()">📖 View Details</button>
               <button type="button" class="btn-read-now-sm" id="featuredAddActionBtn" onclick="addCurrentSpotlightToLibrary()">+ Add to Library</button>
             </div>
           </div>
@@ -406,42 +406,42 @@
         </div>
         <div class="popular-categories-grid">
           <div class="category-tile cat-productivity" onclick="filterExploreCategoryTile('Mindset & Logic', 'psychology')">
-            <div class="cat-icon-badge purple">??</div>
+            <div class="cat-icon-badge purple">💡</div>
             <div class="cat-info">
               <div class="cat-name">Mindset & Logic</div>
-              <div class="cat-count">World Bestsellers ?</div>
+              <div class="cat-count">World Bestsellers ✨</div>
             </div>
           </div>
 
           <div class="category-tile cat-selfhelp" onclick="filterExploreCategoryTile('Brain Science', 'neuroscience')">
-            <div class="cat-icon-badge gold">??</div>
+            <div class="cat-icon-badge gold">🧠</div>
             <div class="cat-info">
               <div class="cat-name">Brain Science</div>
-              <div class="cat-count">Deep Focus Picks ?</div>
+              <div class="cat-count">Deep Focus Picks 🎯</div>
             </div>
           </div>
 
           <div class="category-tile cat-fiction" onclick="filterExploreCategoryTile('Classic Fiction', 'fiction')">
-            <div class="cat-icon-badge blue">??</div>
+            <div class="cat-icon-badge blue">🔍</div>
             <div class="cat-info">
               <div class="cat-name">Fiction & Mystery</div>
-              <div class="cat-count">Top Rated Novels ?</div>
+              <div class="cat-count">Top Rated Novels 📚</div>
             </div>
           </div>
 
           <div class="category-tile cat-business" onclick="filterExploreCategoryTile('Focus & Habits', 'habits')">
-            <div class="cat-icon-badge rose">??</div>
+            <div class="cat-icon-badge rose">🎯</div>
             <div class="cat-info">
               <div class="cat-name">Focus & Habits</div>
-              <div class="cat-count">High Performance ?</div>
+              <div class="cat-count">High Performance 🔥</div>
             </div>
           </div>
 
           <div class="category-tile cat-strategy" onclick="filterExploreCategoryTile('Dark Psychology', 'manipulation')">
-            <div class="cat-icon-badge teal">??</div>
+            <div class="cat-icon-badge teal">🕶️</div>
             <div class="cat-info">
               <div class="cat-name">Dark Psychology</div>
-              <div class="cat-count">Power & Strategy ?</div>
+              <div class="cat-count">Power & Strategy ♟️</div>
             </div>
           </div>
 
@@ -449,7 +449,7 @@
             <div class="cat-icon-badge gold">??</div>
             <div class="cat-info">
               <div class="cat-name">Wealth & Finance</div>
-              <div class="cat-count">Money Masters ?</div>
+              <div class="cat-count">Money Masters 💰</div>
             </div>
           </div>
         </div>
@@ -4189,7 +4189,7 @@
       </div>
   </div>
 
-  <!-- Hidden Placeholder Block for Missing Element IDs Referenced in app.js -->
+  <!-- Hidden Placeholder Block for Missing Element IDs Referenced in app.js?v=0.0.50.1 -->
   <div style="display:none;" id="missingIdsAuditPlaceholderBlock">
     <div id="genreDonutLegend"></div>
     <div id="genreDonutSvgWrap"></div>
@@ -4223,7 +4223,7 @@
   <script src="dictionary-data.js"></script>
   <script src="broadcast-notice.js"></script>
   <script src="remote-config.js"></script>
-  <script src="app.js?v=0.0.50"></script>
+  <script src="app.js?v=0.0.50.1"></script>
 
     <!-- ====== EXPLORE BOOK DETAIL MODAL ====== -->
     <div id="exploreBookDetailModal"

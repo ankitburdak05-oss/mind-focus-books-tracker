@@ -9820,11 +9820,16 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   background: rgba(4, 7, 18, 0.88) !important;
   backdrop-filter: blur(12px) !important;
   -webkit-backdrop-filter: blur(12px) !important;
-  display: flex !important;
+  display: none;
   align-items: flex-end !important;
   justify-content: center !important;
   pointer-events: auto !important;
   animation: fadeInDossierOverlay 0.25s ease-out forwards;
+}
+
+#exploreBookDetailModal.active,
+#exploreBookDetailModal[style*="display: flex"] {
+  display: flex !important;
 }
 
 @keyframes fadeInDossierOverlay {
