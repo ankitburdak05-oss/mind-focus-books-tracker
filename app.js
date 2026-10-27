@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER Ã¢â‚¬â€ MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.49';
-const CURRENT_APP_VERSION = 'v0.0.49';
+const APP_VERSION = '0.0.50';
+const CURRENT_APP_VERSION = 'v0.0.50';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -5900,7 +5900,7 @@ function openUpdateCheckerModal() {
   const rel = cfg?.activeRelease || null;
   const installedVer = getInstalledVersionString();
   const targetVer = rel?.version || installedVer;
-  const isNewAvailable = isNewerVersion(targetVer, installedVer) && isNewerVersion(targetVer, CURRENT_APP_VERSION);
+  const isNewAvailable = isNewerVersion(targetVer, installedVer);
 
   const titleEl = document.getElementById('updateModalTitle');
   const badge = document.getElementById('updateTargetVersionBadge');
@@ -5984,7 +5984,7 @@ function triggerInAppUpdate() {
 
   // Mark version as installed in local storage
   try {
-    localStorage.setItem('mf_installed_version', targetVer);
+    // localStorage.setItem('mf_installed_version', targetVer); // Real version is read from Android.getInstalledAppVersion()
     const homeCard = document.getElementById('homeUpdateCard');
     if (homeCard) homeCard.style.display = 'none';
   } catch (e) {}

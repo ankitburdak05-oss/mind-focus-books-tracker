@@ -2,15 +2,15 @@
     "version":  "1.0.0",
     "updatedAt":  "2026-10-17T11:00:00.000Z",
     "activeRelease":  {
-                          "version":  "v0.0.49",
-                          "name":  "Mind Focus Books v0.0.49 (Cache Buster \u0026 Verified 3D Dossier)",
-                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.49/MindFocusBooks-Native.apk",
+                          "version":  "v0.0.50",
+                          "name":  "Mind Focus Books v0.0.50 (Guaranteed Auto-Update \u0026 3D Dossier)",
+                          "apkDownloadUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.50/MindFocusBooks-Native.apk",
                           "features":  [
-                                           "📖 3D Book Dossier Sheet: Verified click handling with instant 3D tilted cover \u0026 metadata",
-                                           "⚡ Cache-Busting: Browser and webview automatically load the freshest version without caching",
-                                           "🚀 Auto In-App Update Engine: Direct release sync"
+                                           "📖 3D Book Dossier Sheet: Tilted cover, pages, rating, Add to Library, Save Note \u0026 Open Library",
+                                           "🚀 Guaranteed In-App Update Engine: Auto-detects on open and pops up directly on phone",
+                                           "⚡ True Dynamic Version Sync: Real Android Package version tracking"
                                        ],
-                          "stagedAt":  "2026-10-23T03:18:57.720Z",
+                          "stagedAt":  "2026-10-27T13:59:20.871Z",
                           "isDeployed":  true
                       },
     "stagedRelease":  {

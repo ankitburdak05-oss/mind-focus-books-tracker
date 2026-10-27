@@ -1,14 +1,14 @@
 ﻿{
-    "id":  "notice-v0.0.49",
-    "version":  "v0.0.49",
+    "id":  "notice-v0.0.50",
+    "version":  "v0.0.50",
     "type":  "card1",
     "card":  "card1",
     "active":  true,
     "icon":  "🚀",
-    "title":  "Mind Focus Books v0.0.49 Ready!",
-    "message":  "Official verified 3D Book Dossier Sheet update with cache-busting! Update karein taaki fresh code load ho sake.",
-    "btnText":  "⚡ Update Now (v0.0.49)",
+    "title":  "Mind Focus Books v0.0.50 Ready!",
+    "message":  "Official v0.0.50 Release! 3D Book Dossier Sheet with rotated 3D cover, instant Add to Library, and auto update engine.",
+    "btnText":  "⚡ Update Now (v0.0.50)",
     "action":  "update",
-    "apkUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.49/MindFocusBooks-Native.apk",
-    "timestamp":  "2026-10-23T03:18:57.858Z"
+    "apkUrl":  "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.50/MindFocusBooks-Native.apk",
+    "timestamp":  "2026-10-27T13:59:21.616Z"
 }
