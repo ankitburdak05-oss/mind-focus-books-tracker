@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.50';
-const CURRENT_APP_VERSION = 'v0.0.50';
+const APP_VERSION = '0.0.51';
+const CURRENT_APP_VERSION = 'v0.0.51';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -494,7 +494,7 @@ function renderHomeRecentBooks() {
     return `
     <div class="recent-book-card" onclick="openBookDetailViewByIndex(${originalIndex >= 0 ? originalIndex : 0})">
       <div class="recent-cover-box">
-        <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.src='cover_placeholder.jpg'">
+        <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
       </div>
       <div class="recent-book-title">${escapeHtml(book.title)}</div>
       <div class="recent-book-cat">${escapeHtml(book.category || 'General')}</div>
@@ -699,7 +699,7 @@ function renderLibraryGrid() {
     if (isCompactList) {
       return `
         <div class="compact-book-row" onclick="openBookDetailViewByIndex(${originalIndex})">
-          <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
+          <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
           <div class="compact-book-info">
             <div class="compact-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
             <div class="compact-book-author">${escapeHtml(book.author || 'Unknown')}</div>
@@ -719,7 +719,7 @@ function renderLibraryGrid() {
     return `
       <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
         <div class="grid-cover-wrap">
-          <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
+          <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
         </div>
         <div class="grid-book-meta">
           <div class="grid-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
@@ -819,6 +819,20 @@ const EXPLORE_SUBJECT_MAP = {
   'Dark Psychology': ['psychology', 'persuasion', 'influence', 'manipulation', 'human_behavior', 'power'],
   'Philosophy':      ['philosophy', 'stoicism', 'ethics', 'wisdom', 'mind', 'meditations']
 };
+
+
+function saveState() {
+  try { if (typeof saveBooks === 'function') saveBooks(); } catch (e) {}
+  try { if (typeof saveProfile === 'function') saveProfile(); } catch (e) {}
+  try { if (typeof saveStats === 'function') saveStats(); } catch (e) {}
+}
+
+function renderPopularCategoryCounts() {
+  try {
+    const tiles = document.querySelectorAll('.category-tile');
+    if (!tiles || tiles.length === 0) return;
+  } catch(e) {}
+}
 
 function renderExploreView() {
   renderPopularCategoryCounts();
@@ -1026,7 +1040,7 @@ function renderExploreBookCard(doc, idx) {
   return `
     <div class="grid-book-card" style="cursor:pointer;position:relative;" onclick="openExploreBookDetail(${idx})">
       <div class="grid-book-cover-wrap">
-        <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" class="grid-book-cover" onerror="this.src='cover_placeholder.jpg'">
+        <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" class="grid-book-cover" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
         ${alreadyAdded ? '<span style="position:absolute;top:6px;right:6px;background:rgba(16,185,129,0.9);color:#fff;font-size:0.6rem;padding:2px 6px;border-radius:6px;font-weight:700;">✓ In Library</span>' : ''}
       </div>
       <div class="grid-book-title" style="margin-top:6px;font-size:0.85rem;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(title)}</div>
@@ -1035,15 +1049,176 @@ function renderExploreBookCard(doc, idx) {
 }
 
 function openExploreBookDetail(idx) {
-  const docs = window._exploreDefaultBooks;
-  if (!docs || !docs[idx]) return;
-  openExploreDocInFullDetail(docs[idx]);
+  try {
+    const docs = window._exploreDefaultBooks;
+    if (!docs || !docs[idx]) return;
+    open3dBookDossierSheet(docs[idx]);
+  } catch(e) {
+    console.error('Error opening 3D Book Dossier:', e);
+  }
 }
 
 function openExploreSearchBookDetail(idx) {
-  const docs = window._exploreAPIResults;
-  if (!docs || !docs[idx]) return;
-  openExploreDocInFullDetail(docs[idx]);
+  try {
+    const docs = window._exploreAPIResults;
+    if (!docs || !docs[idx]) return;
+    open3dBookDossierSheet(docs[idx]);
+  } catch(e) {
+    console.error('Error opening 3D search Book Dossier:', e);
+  }
+}
+
+function open3dBookDossierSheet(doc) {
+  if (!doc) return;
+  window._currentDossierDoc = doc;
+
+  const title = doc.title || 'Unknown Title';
+  const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+  const coverId = doc.cover_i;
+  const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : 'cover_placeholder.jpg';
+  const pages = doc.number_of_pages_median || 280;
+  const year = doc.first_publish_year || 'Classic';
+  const subjects = (doc.subject || []).slice(0, 5).join(' • ') || 'Personal Growth • Literature';
+  const alreadyAdded = (state.books || []).some(b => b.title && b.title.toLowerCase() === title.toLowerCase());
+
+  let modal = document.getElementById('exploreBookDetailModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.id = 'exploreBookDetailModal';
+    document.body.appendChild(modal);
+  }
+
+  modal.onclick = function(e) {
+    if (e.target.id === 'exploreBookDetailModal') {
+      closeExploreBookDetail();
+    }
+  };
+
+  modal.innerHTML = `
+    <div class="explore-dossier-card" onclick="event.stopPropagation()">
+      <div class="dossier-drag-handle"></div>
+
+      <div class="dossier-top-bar">
+        <span class="dossier-badge-pill">📖 3D Book Dossier</span>
+        <button type="button" class="dossier-close-circle" onclick="closeExploreBookDetail()">✕</button>
+      </div>
+
+      <div class="dossier-hero-row">
+        <div class="dossier-3d-stage">
+          <img src="${escapeHtml(coverUrl)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';" class="dossier-3d-cover" alt="Book Cover">
+        </div>
+        <div class="dossier-meta-col">
+          <h2 class="dossier-title">${escapeHtml(title)}</h2>
+          <div class="dossier-author">by ${escapeHtml(author)}</div>
+
+          <div class="dossier-tags-wrap">
+            <span class="dossier-tag">📅 ${escapeHtml(String(year))}</span>
+            <span class="dossier-tag">📖 ~${pages} Pages</span>
+            <span class="dossier-tag dossier-tag-gold">⭐ 4.8 Rating</span>
+          </div>
+
+          <div style="font-size:0.72rem; color:#94a3b8; line-height:1.4;">
+            <strong style="color:#cbd5e1;">Genres:</strong> ${escapeHtml(subjects)}
+          </div>
+        </div>
+      </div>
+
+      <div class="dossier-desc-box">
+        World-renowned reading discovery from Open Library. Add to your personal library to log daily reading pages, track habit streaks and take notes.
+      </div>
+
+      ${alreadyAdded
+        ? `<div class="dossier-btn-added">✓ Already in Your Library</div>`
+        : `<button type="button" class="dossier-btn-add" id="dossierAddBtn" onclick="addDossierBookToLibrary()">+ Add to My Library</button>`
+      }
+
+      <div class="dossier-actions-row">
+        <button type="button" class="dossier-btn-sub" onclick="saveQuickNoteFromDossier()">
+          <span>📝 Save Note</span>
+        </button>
+        <a href="https://openlibrary.org${doc.key || ''}" target="_blank" class="dossier-btn-sub" style="color:#a78bfa;">
+          <span>🌐 Open Library ↗</span>
+        </a>
+      </div>
+    </div>
+  `;
+
+  modal.classList.add('active');
+  modal.style.display = 'flex';
+}
+
+function addDossierBookToLibrary() {
+  const doc = window._currentDossierDoc;
+  if (!doc) return;
+
+  const title = doc.title || 'Unknown Title';
+  const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+  const coverId = doc.cover_i;
+  const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : '';
+  const pages = doc.number_of_pages_median || 280;
+
+  if (state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase())) {
+    showToast('Ye kitab pehle se hi library me hai! 📚');
+    return;
+  }
+
+  const newBook = {
+    id: Date.now(),
+    title: title,
+    author: author,
+    cover: coverUrl,
+    cover_image: coverUrl,
+    pages: pages,
+    total_pages: pages,
+    current_page: 0,
+    status: 'WANT_TO_READ',
+    category: (doc.subject && doc.subject[0]) || 'General',
+    rating: 0,
+    notes: '',
+    dateAdded: new Date().toISOString(),
+    notInterested: false,
+    fromExplore: true
+  };
+
+  state.books.push(newBook);
+  saveBooks();
+
+  const addBtn = document.getElementById('dossierAddBtn');
+  if (addBtn) {
+    addBtn.outerHTML = `<div class="dossier-btn-added">✓ Added to Library!</div>`;
+  }
+
+  if (window._exploreDefaultBooks && window._exploreDefaultBooks.length > 0) {
+    const grid = document.getElementById('exploreBooksGrid');
+    if (grid) {
+      grid.innerHTML = window._exploreDefaultBooks.map((d, i) => renderExploreBookCard(d, i)).join('');
+    }
+  }
+
+  showToast(`"${title}" aapki Library me add ho gayi! 📖✨`);
+}
+
+function saveQuickNoteFromDossier() {
+  const doc = window._currentDossierDoc;
+  if (!doc) return;
+  closeExploreBookDetail();
+  let b = state.books.find(x => x.title && x.title.toLowerCase() === (doc.title || '').toLowerCase());
+  if (!b) {
+    addDossierBookToLibrary();
+    b = state.books.find(x => x.title && x.title.toLowerCase() === (doc.title || '').toLowerCase());
+  }
+  if (b) {
+    openBookDetailView(b);
+  }
+}
+
+function closeExploreBookDetail() {
+  const modal = document.getElementById('exploreBookDetailModal');
+  if (modal) {
+    modal.classList.remove('active');
+    modal.style.display = 'none';
+    modal.innerHTML = '';
+  }
 }
 
 function openExploreDocInFullDetail(doc) {
@@ -1132,7 +1307,7 @@ function renderActiveBookDetailSheet() {
       <!-- Cover + Hero Meta -->
       <div style="display:flex;gap:18px;padding:8px 20px 16px;">
         <div style="flex-shrink:0;">
-          <img src="${escapeHtml(coverLarge)}" onerror="this.src='cover_placeholder.jpg'" style="width:115px;height:165px;object-fit:cover;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+          <img src="${escapeHtml(coverLarge)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';" style="width:115px;height:165px;object-fit:cover;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
         </div>
         <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;">
           <h2 style="font-size:1.1rem;font-weight:800;line-height:1.3;margin:0 0 6px 0;color:#ffffff;">${escapeHtml(title)}</h2>
@@ -1325,7 +1500,7 @@ async function searchOpenLibrary(query) {
         return `
           <div class="grid-book-card" style="cursor:pointer;position:relative;" onclick="openExploreSearchBookDetail(${idx})">
             <div class="grid-cover-wrap explore-cover-3d-wrap" style="height:148px;overflow:hidden;border-radius:10px 10px 0 0;">
-              <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'" style="width:100%;height:148px;object-fit:cover;">
+              <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.onerror=null;this.src='cover_placeholder.jpg';" style="width:100%;height:148px;object-fit:cover;">
             </div>
             <div class="grid-book-meta" style="padding:8px 9px 10px;">
               <div class="grid-book-title" style="font-size:0.82rem;font-weight:700;line-height:1.25;margin-bottom:3px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(title)}</div>
@@ -2298,7 +2473,7 @@ function renderNotInterestedView() {
     html += `
       <div class="book-status-item-card" style="border-left: 3px solid #ef4444;">
         <div class="bstat-cover-wrap" onclick="openBookDetailViewByIndex(${originalIndex})">
-          <img class="bstat-cover-img" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='cover_placeholder.jpg'">
+          <img class="bstat-cover-img" src="${coverSrc}" alt="${bookTitle}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
         </div>
         <div class="bstat-info-wrap" onclick="openBookDetailViewByIndex(${originalIndex})">
           <div class="bstat-book-title">${bookTitle}</div>
@@ -2501,7 +2676,7 @@ function renderNiCategoryBooksList() {
         <div class="ni-custom-checkbox">
           ${isSelected ? '✓' : ''}
         </div>
-        <img class="ni-book-cover-mini" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='cover_placeholder.jpg'">
+        <img class="ni-book-cover-mini" src="${coverSrc}" alt="${bookTitle}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
         <div style="flex: 1; min-width: 0;">
           <div style="font-weight: 700; font-size: 0.92rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${bookTitle}</div>
           <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">${bookAuthor}</div>
@@ -4579,7 +4754,7 @@ function onQuickCatalogSearch(val) {
   
   dropdown.innerHTML = matches.map(b => `
     <div class="quick-autofill-item" onclick="selectQuickCatalogBook('${escapeHtml(b.title).replace(/'/g, "\\'")}')">
-      <img src="${getBookCoverUrl(b)}" class="quick-autofill-thumb" onerror="this.src='cover_placeholder.jpg'">
+      <img src="${getBookCoverUrl(b)}" class="quick-autofill-thumb" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
       <div class="quick-autofill-meta">
         <div class="quick-autofill-title">${escapeHtml(b.title)}</div>
         <div class="quick-autofill-author">${escapeHtml(b.author || 'Unknown Author')} • ${escapeHtml(b.category || 'General')}</div>
@@ -6523,7 +6698,7 @@ function renderNotesList() {
 
     return `
       <div class="book-notes-group-card" onclick="openBookNotesDetailView('${escapeHtml(bookTitle)}')">
-        <img class="bng-cover" src="${coverUrl}" alt="${escapeHtml(bookTitle)}" onerror="this.src='cover_placeholder.jpg'">
+        <img class="bng-cover" src="${coverUrl}" alt="${escapeHtml(bookTitle)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
         <div class="bng-info">
           <div class="bng-title">${escapeHtml(bookTitle)}</div>
           <div class="bng-author">👤 ${escapeHtml(author)}</div>
@@ -8153,7 +8328,7 @@ function renderRecommendations() {
 
     listContainer.innerHTML = recommended.map(book => `
       <div class="rec-book-card" style="background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; display: flex; gap: 14px; align-items: center;">
-        <img src="${book.cover}" onerror="this.src='cover_placeholder.jpg'" style="width: 65px; height: 95px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);" alt="Cover">
+        <img src="${book.cover}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';" style="width: 65px; height: 95px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);" alt="Cover">
         <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
           <div style="font-weight: 800; font-size: 0.95rem; color: #ffffff;">${book.title}</div>
           <div style="font-size: 0.78rem; color: var(--accent-gold);">${book.author} &bull; ⭐ ${book.rating}</div>
@@ -8518,7 +8693,7 @@ function renderBookOrderStudioView(filterQuery) {
     return `
       <div class="book-rank-card ${cardRankClass}">
         <div class="rank-badge ${rankBadgeClass}" onclick="promptSetBookRank('${escapeHtml(book.title)}')" title="Tap to enter custom rank">${rankLabel}</div>
-        <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.src='cover_placeholder.jpg'" style="width:40px; height:56px; border-radius:8px; object-fit:cover; box-shadow:0 3px 10px rgba(0,0,0,0.4);">
+        <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';" style="width:40px; height:56px; border-radius:8px; object-fit:cover; box-shadow:0 3px 10px rgba(0,0,0,0.4);">
         <div class="compact-book-info" style="flex:1; min-width:0;">
           <div class="compact-book-title" style="font-size:0.9rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(book.title)}</div>
           <div class="compact-book-author" style="font-size:0.75rem; color:var(--text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(book.author || 'Unknown')}</div>
@@ -8856,7 +9031,7 @@ function openShelfDetail(shelfId) {
         return `
           <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid var(--border-subtle); border-radius:12px; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
-              <img src="${getBookCoverUrl(book)}" style="width:36px; height:50px; border-radius:6px; object-fit:cover;" onerror="this.src='cover_placeholder.jpg'">
+              <img src="${getBookCoverUrl(book)}" style="width:36px; height:50px; border-radius:6px; object-fit:cover;" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
               <div style="min-width:0; flex:1;">
                 <div style="font-size:0.88rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(book.title)}</div>
                 <div style="font-size:0.75rem; color:var(--text-secondary);">${escapeHtml(book.author || 'Unknown')}</div>
@@ -8999,7 +9174,7 @@ function renderManageShelfBooksList() {
     return `
       <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:rgba(255,255,255,0.04); border:1px solid ${isChecked ? 'var(--accent-gold)' : 'var(--border-subtle)'}; border-radius:12px; padding:8px 12px; cursor:pointer;" onclick="toggleBookInShelf('${shelf.id}', '${escapeHtml(book.title)}')">
         <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
-          <img src="${getBookCoverUrl(book)}" style="width:36px; height:50px; border-radius:6px; object-fit:cover;" onerror="this.src='cover_placeholder.jpg'">
+          <img src="${getBookCoverUrl(book)}" style="width:36px; height:50px; border-radius:6px; object-fit:cover;" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
           <div style="min-width:0; flex:1;">
             <div style="font-size:0.88rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(book.title)}</div>
             <div style="font-size:0.75rem; color:var(--text-secondary);">${escapeHtml(book.author || 'Unknown')}</div>
