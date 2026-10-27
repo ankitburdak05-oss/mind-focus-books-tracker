@@ -214,7 +214,6 @@ public class MainActivity extends AppCompatActivity {
                 return "0.0.50";
             }
         }
-        }
 
         @JavascriptInterface
         public void saveBackupFile(String jsonContent, String fileName) {
