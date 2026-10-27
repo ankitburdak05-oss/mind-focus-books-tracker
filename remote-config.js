@@ -2,41 +2,27 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   "version": "1.0.0",
   "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.39",
-    "name": "Mind Focus Books v0.0.39 (Direct WhatsApp Backup & Master Restore Suite)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
+    "version": "v0.0.50",
+    "name": "Mind Focus Books v0.0.50 (Guaranteed Auto-Update & 3D Dossier)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.50/MindFocusBooks-Native.apk",
     "features": [
-      "💬 Direct WhatsApp Backup Sharing: Poora master backup JSON file sidha WhatsApp chat, family ya personal chat par 1-tap me bhejein.",
-      "📱 WhatsApp Reading Summary: Apni current books, streak aur yearly progress ka sundar WhatsApp message share karein.",
-      "📥 Master Backup & Restore: 1-click me sabhi kitabein, custom shelves, notes, reading progress, quotes aur journal entries restore karein.",
-      "📊 CSV Books Importer: Goodreads ya custom CSV spreadsheet se bulk me kitabein import karein.",
-      "⚡ Ultra Clean & Fast: Zero clutter, zero notification bloat, maximum performance."
+      "📖 3D Book Dossier Sheet: Tilted cover, pages, rating, Add to Library, Save Note & Open Library",
+      "🚀 Guaranteed In-App Update Engine: Auto-detects on open and pops up directly on phone",
+      "⚡ True Dynamic Version Sync: Real Android Package version tracking"
     ],
-    "stagedAt": "2026-10-22T08:38:01.868Z",
+    "stagedAt": "2026-10-27T14:49:13.665Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v3.19.0",
-    "name": "Mind Focus Books v3.19.0 - Screens 4 to 20 Master Suite Upgrade",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.19.0/MindFocusBooks-Native.apk",
+    "version": "v0.0.50",
+    "name": "Mind Focus Books v0.0.50 (Guaranteed Auto-Update & 3D Dossier)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.50/MindFocusBooks-Native.apk",
     "features": [
-      "📊 Screen 4: Reading Progress Donut, Weekly Streak Days (M-S) & 12-Month Bar Chart",
-      "👤 Screen 5: Profile Identity with Glowing Aura, 3 Stat Pills & Charles Eliot Quote",
-      "⏱️ Screen 8: Scenic Focus Timer with Pomodoro, Deep Work & Circular Dial",
-      "📝 Screen 9: Notes & Highlights Manager with Filters and Floating Action Add (+)",
-      "🎨 Screen 10: Reading Themes & Typography Sliders (Font Size, Spacing, Brightness)",
-      "🎯 Screen 11: Reading Goals with Donut Progress & Daily Habit Streaks",
-      "🏆 Screen 12: Achievements & Badges Showcase with Dynamic Progress Unlocks",
-      "💡 Screen 13: Scenic Daily Motivation Quotes with Save & Share Collection",
-      "✈️ Screen 14: Offline Mode & Asset Caching Manager",
-      "☁️ Screen 15: Cross-Device Cloud Sync with Multi-Device Indicators",
-      "📈 Screen 16: Deep Reading Analytics & Velocity Patterns",
-      "✨ Screen 17: Curated Book Recommendations",
-      "🛠️ Screen 18: App Customization with Accent Color Palettes & Wallpapers",
-      "📖 Screen 19: Reading Reflection Journal with Daily Logged Entries",
-      "🛡️ Screen 20: Privacy & Security with Biometric & PIN Protection"
+      "📖 3D Book Dossier Sheet: Tilted cover, pages, rating, Add to Library, Save Note & Open Library",
+      "🚀 Guaranteed In-App Update Engine: Auto-detects on open and pops up directly on phone",
+      "⚡ True Dynamic Version Sync: Real Android Package version tracking"
     ],
-    "stagedAt": "2026-10-01T09:15:00.000Z",
+    "stagedAt": "2026-10-27T14:49:13.665Z",
     "isDeployed": true
   },
   "previousRelease": {
@@ -44,13 +30,13 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
     "name": "Mind Focus Books v3.17.0 - Ultra-Clean Mobile Redesign & Legacy Purge",
     "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.0/MindFocusBooks-Native.apk",
     "features": [
-      "✨ Brand-New Ultra-Clean Mobile Design across all 5 Navigation Tabs (Home, Library, Explore, Progress, Profile)",
-      "🗑️ 100% Legacy Code Cleanup: Removed all obsolete bloat for ultra-fast, smooth, crash-free mobile performance",
-      "📖 Dedicated Reading Detail Screen with tabs, daily goals, page logger & focus timer",
-      "📊 Interactive Native Analytics: Monthly Reading Progress Bar Chart & Reading by Genre Donut Chart",
-      "🛡️ Safe-Save Book Editor with live HD cover preview (preserves 313 real covers)",
-      "💾 One-Tap Backup & Export System (JSON, CSV, PDF)",
-      "🏷️ Official v3.17.0 Release"
+      "âœ¨ Brand-New Ultra-Clean Mobile Design across all 5 Navigation Tabs (Home, Library, Explore, Progress, Profile)",
+      "ðŸ—‘ï¸ 100% Legacy Code Cleanup: Removed all obsolete bloat for ultra-fast, smooth, crash-free mobile performance",
+      "ðŸ“– Dedicated Reading Detail Screen with tabs, daily goals, page logger & focus timer",
+      "ðŸ“Š Interactive Native Analytics: Monthly Reading Progress Bar Chart & Reading by Genre Donut Chart",
+      "ðŸ›¡ï¸ Safe-Save Book Editor with live HD cover preview (preserves 313 real covers)",
+      "ðŸ’¾ One-Tap Backup & Export System (JSON, CSV, PDF)",
+      "ðŸ·ï¸ Official v3.17.0 Release"
     ],
     "stagedAt": "2026-09-29T18:45:00.000Z",
     "isDeployed": true
@@ -59,7 +45,7 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
     "appEmergencyLockdown": false,
     "lockdownMessage": "",
     "maintenanceMode": false,
-    "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
+    "maintenanceMessage": "ðŸš¨ App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
     "chatHelpDeskEnabled": true,
     "telemetryEnabled": true,
     "mobileDevToolsEnabled": true,
@@ -78,7 +64,7 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
   },
   "globalBanner": {
     "active": false,
-    "text": "✨ Welcome to Mind Focus Books Tracker! Read distraction-free.",
+    "text": "âœ¨ Welcome to Mind Focus Books Tracker! Read distraction-free.",
     "type": "info",
     "link": ""
   },

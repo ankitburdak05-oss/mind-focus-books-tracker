@@ -5727,7 +5727,9 @@ async function checkForBackgroundUpdates() {
     const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?t=' + Date.now();
     const res = await fetch(rawUrl, { cache: 'no-store' });
     if (res.ok) {
-      const data = await res.json();
+      const rawText = await res.text();
+      const cleanText = rawText.replace(/^\uFEFF/, '').trim();
+      const data = JSON.parse(cleanText);
       if (data && data.activeRelease && data.activeRelease.version) {
         window.__LIVE_REMOTE_CONFIG__ = data;
         activeRel = data.activeRelease;
@@ -6053,11 +6055,14 @@ async function checkRemoteBroadcastNotice() {
     const cb = Date.now();
     const res = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?t=' + cb, { cache: 'no-store' });
     if (res.ok) {
-      const data = await res.json();
+      const rawText = await res.text();
+      const cleanText = rawText.replace(/^\uFEFF/, '').trim();
+      const data = JSON.parse(cleanText);
       if (data && data.active) {
         // If notice is an update for CURRENT_APP_VERSION or older, NEVER POP UP!
         const noticeVer = data.version || (data.id && data.id.replace('notice-', ''));
-        if (noticeVer && !isNewerVersion(noticeVer, CURRENT_APP_VERSION)) {
+        const installedVer = getInstalledVersionString();
+        if (noticeVer && !isNewerVersion(noticeVer, installedVer)) {
           return;
         }
         // If already dismissed, DO NOT POP UP!
