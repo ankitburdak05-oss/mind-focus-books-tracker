@@ -57,6 +57,8 @@ let state = {
   activeShelfFilter: null,
   activeShelfForDetail: null
 };
+if (typeof window !== "undefined") window.state = state;
+if (typeof globalThis !== "undefined") globalThis.state = state;
 
 // Book Reader State
 let readerState = {
@@ -2629,11 +2631,11 @@ function openBookDetailView(book) {
     updateStatusChipsUI(book.status);
 
     // Update Book Lending Banner
-    const isLent = book.status === 'LENT' || lendingRecords.some(r => (r.bookId === book.id || r.bookTitle === book.title) && !r.returned);
+    const isLent = book.status === 'LENT' || (Array.isArray(lendingRecords) && lendingRecords.some(r => r && (r.bookId === book.id || (book.title && r.bookTitle && r.bookTitle.toLowerCase() === book.title.toLowerCase())) && !r.returned));
     const lentBanner = document.getElementById('detailLentBanner');
     if (lentBanner) {
       if (isLent) {
-        const rec = lendingRecords.find(r => (r.bookId === book.id || r.bookTitle === book.title) && !r.returned);
+        const rec = Array.isArray(lendingRecords) ? lendingRecords.find(r => r && (r.bookId === book.id || (book.title && r.bookTitle && r.bookTitle.toLowerCase() === book.title.toLowerCase())) && !r.returned) : null;
         const borrower = rec ? rec.borrower : (book.lent_to || 'Friend');
         const lendDate = rec ? rec.lendDate : (book.lent_date || getTodayLocalDate());
         const phone = rec ? rec.phone : (book.lent_phone || '');
@@ -9689,3 +9691,21 @@ function cleanupCorruptedCustomPages() {
   }
 }
 cleanupCorruptedCustomPages();
+
+// ==========================================================================
+// 🌐 GLOBAL WINDOW EXPORTS FOR MODULAR ARCHITECTURE (EXPLORE & PLUGINS)
+// ==========================================================================
+if (typeof window !== 'undefined') {
+  window.openBookDetailView = openBookDetailView;
+  window.openBookDetailViewByIndex = openBookDetailViewByIndex;
+  window.closeBookDetailView = closeBookDetailView;
+  window.switchTab = switchTab;
+  window.showToast = showToast;
+  window.saveBooks = saveBooks;
+  window.getBookCoverUrl = getBookCoverUrl;
+  window.renderExploreBooksGrid = function() {
+    if (typeof loadExploreDefaultBooks === 'function') {
+      loadExploreDefaultBooks((typeof state !== 'undefined' && state.exploreGenre) || 'ALL');
+    }
+  };
+}
