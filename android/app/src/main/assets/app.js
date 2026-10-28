@@ -5237,9 +5237,13 @@ async function checkForBackgroundUpdates() {
         const text = await res.text();
         const clean = text.replace(/^\uFEFF/, '').trim();
         const data = JSON.parse(clean);
-        if (data && data.activeRelease && data.activeRelease.version) {
+        if (data && ((data.activeRelease && data.activeRelease.version) || (data.latest && data.latest.version) || data.latest_version)) {
           window.__LIVE_REMOTE_CONFIG__ = data;
-          activeRel = data.activeRelease;
+          activeRel = data.activeRelease || data.latest || {
+            version: 'v' + data.latest_version,
+            name: 'Mind Focus Books v' + data.latest_version,
+            apkDownloadUrl: data.download_url
+          };
           break;
         }
       }
@@ -5404,9 +5408,9 @@ function openUpdateCheckerModal() {
   if (!overlay) return;
 
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-  const rel = cfg?.activeRelease || null;
+  const rel = cfg?.activeRelease || cfg?.latest || null;
   const installedVer = getInstalledVersionString();
-  const targetVer = rel?.version || installedVer;
+  const targetVer = rel?.version || (cfg?.latest_version ? ('v' + cfg.latest_version) : null) || installedVer;
   const isNewAvailable = isNewerVersion(targetVer, installedVer);
 
   const titleEl = document.getElementById('updateModalTitle');
@@ -5485,8 +5489,9 @@ function handleUpdateOverlayClick(e) {
 
 function triggerInAppUpdate() {
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-  const targetVer = cfg?.activeRelease?.version || CURRENT_APP_VERSION;
-  const downloadUrl = (cfg?.activeRelease?.apkDownloadUrl) ||
+  const rel = cfg?.activeRelease || cfg?.latest || null;
+  const targetVer = rel?.version || (cfg?.latest_version ? ('v' + cfg.latest_version) : null) || CURRENT_APP_VERSION;
+  const downloadUrl = (rel?.apkDownloadUrl) || (cfg?.download_url) ||
     `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Native.apk`;
 
   // Mark version as installed in local storage

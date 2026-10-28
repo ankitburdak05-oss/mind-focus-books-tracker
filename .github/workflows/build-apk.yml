@@ -95,8 +95,8 @@ jobs:
     - name: Determine Release Tag and Title
       id: get_tag
       run: |
-        TAG=$(node -e "const c = require('./remote-config.json'); console.log((c.activeRelease && c.activeRelease.version) || (c.stagedRelease && c.stagedRelease.version) || 'v3.4.0');")
-        NAME=$(node -e "const c = require('./remote-config.json'); console.log((c.activeRelease && c.activeRelease.name) || (c.stagedRelease && c.stagedRelease.name) || ('Mind Focus Books ' + '$TAG'));")
+        TAG=$(node -e "const c = require('./remote-config.json'); console.log((c.activeRelease && c.activeRelease.version) || (c.latest && c.latest.version) || (c.latest_version ? 'v'+c.latest_version : 'v0.0.68'));")
+        NAME=$(node -e "const c = require('./remote-config.json'); console.log((c.activeRelease && c.activeRelease.name) || (c.latest && c.latest.name) || ('Mind Focus Books ' + '$TAG'));")
         echo "tag=$TAG" >> $GITHUB_OUTPUT
         echo "name=$NAME" >> $GITHUB_OUTPUT
 

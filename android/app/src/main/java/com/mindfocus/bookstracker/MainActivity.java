@@ -695,11 +695,15 @@ public class MainActivity extends AppCompatActivity {
 
                 for (String urlStr : configUrls) {
                     String jsonText = fetchRemoteUrlDirect(urlStr);
-                    if (jsonText != null && jsonText.contains("activeRelease")) {
+                    if (jsonText != null && (jsonText.contains("activeRelease") || jsonText.contains("latest"))) {
                         org.json.JSONObject obj = new org.json.JSONObject(jsonText);
                         org.json.JSONObject active = obj.optJSONObject("activeRelease");
+                        if (active == null) active = obj.optJSONObject("latest");
                         if (active != null) {
                             String remoteVer = active.optString("version", "");
+                            if (remoteVer == null || remoteVer.isEmpty()) {
+                                remoteVer = obj.optString("latest_version", "");
+                            }
                             String currentVer = getInstalledAppVersionDirect();
                             if (isNewerVersionJava(remoteVer, currentVer)) {
                                 runOnUiThread(() -> {
