@@ -9814,24 +9814,23 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
 /* ================= 3D BOOK DOSSIER SHEET MODAL ================= */
 #exploreBookDetailModal {
-  position: fixed !important;
-  inset: 0 !important;
-  z-index: 2000000 !important;
-  background: rgba(4, 7, 18, 0.88) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  display: none;
-  align-items: flex-end !important;
-  justify-content: center !important;
-  pointer-events: auto !important;
-  animation: fadeInDossierOverlay 0.25s ease-out forwards;
+  position: fixed;
+  inset: 0;
+  z-index: 2000000;
+  background: rgba(4, 7, 18, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: none !important;
+  align-items: flex-end;
+  justify-content: center;
+  pointer-events: none;
 }
 
 #exploreBookDetailModal.active,
-#exploreBookDetailModal.show,
-#exploreBookDetailModal[style*="flex"],
-#exploreBookDetailModal[style*="display: flex"] {
+#exploreBookDetailModal.show {
   display: flex !important;
+  pointer-events: auto !important;
+  animation: fadeInDossierOverlay 0.25s ease-out forwards;
 }
 
 @keyframes fadeInDossierOverlay {

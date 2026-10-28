@@ -683,7 +683,8 @@ function closeExploreBookDetail() {
   if (modal) {
     modal.classList.remove('active');
     modal.classList.remove('show');
-    modal.style.display = 'none';
+    modal.removeAttribute('style');
+    modal.style.cssText = 'display: none !important; pointer-events: none !important;';
     modal.innerHTML = '';
   }
 }
