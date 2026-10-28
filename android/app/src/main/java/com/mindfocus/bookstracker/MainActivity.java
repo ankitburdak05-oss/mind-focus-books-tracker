@@ -697,13 +697,13 @@ public class MainActivity extends AppCompatActivity {
                     String jsonText = fetchRemoteUrlDirect(urlStr);
                     if (jsonText != null && (jsonText.contains("activeRelease") || jsonText.contains("latest"))) {
                         org.json.JSONObject obj = new org.json.JSONObject(jsonText);
-                        org.json.JSONObject active = obj.optJSONObject("activeRelease");
-                        if (active == null) active = obj.optJSONObject("latest");
+                        org.json.JSONObject foundActive = obj.optJSONObject("activeRelease");
+                        if (foundActive == null) foundActive = obj.optJSONObject("latest");
+                        final org.json.JSONObject active = foundActive;
                         if (active != null) {
-                            String remoteVer = active.optString("version", "");
-                            if (remoteVer == null || remoteVer.isEmpty()) {
-                                remoteVer = obj.optString("latest_version", "");
-                            }
+                            String v = active.optString("version", "");
+                            if (v.isEmpty()) v = obj.optString("latest_version", "");
+                            final String remoteVer = v;
                             String currentVer = getInstalledAppVersionDirect();
                             if (isNewerVersionJava(remoteVer, currentVer)) {
                                 runOnUiThread(() -> {
