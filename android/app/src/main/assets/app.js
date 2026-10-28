@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.66';
-const CURRENT_APP_VERSION = 'v0.0.66';
+const APP_VERSION = '0.0.67';
+const CURRENT_APP_VERSION = 'v0.0.67';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -292,6 +292,28 @@ function loadBooks() {
       localStorage.setItem('mf_price_sanitized_v3_20_final', 'true');
     }
     
+    
+    // Auto-inject 3 user requested masterpiece books if not present
+    const mustHaveBooks = [
+      {"no":"book 321","title":"Main Jo Hoon Jon Elia Hoon (मैं जो हूँ जॉन एलिया हूँ)","author":"Jaun Elia (जॉन एलिया)","language":"HINDI / URDU","status":"WISHLIST","start_date":"","end_date":"","count_days":0,"rating":4.9,"category":"Poetry & Philosophy","takeaway":"जॉन एलिया की प्रसिद्ध शायरी, गजलें और रूमानी दर्शन का अद्भुत संकलन। जीवन, अकेलेपन और गहरे आत्म-चिंतन की क्लासिक कृति।","availability":"AVAILABLE","pages":320,"total_pages":320,"price":0,"isbn":"978-93-5072-883-3","cover_i":13215068,"cover_url":"https://covers.openlibrary.org/b/id/13215068-L.jpg","cover":"https://covers.openlibrary.org/b/id/13215068-L.jpg","cover_image":"https://covers.openlibrary.org/b/id/13215068-L.jpg"},
+      {"no":"book 322","title":"The Courage to Be Disliked","author":"Ichiro Kishimi & Fumitake Koga","language":"ENGLISH / HINDI","status":"WISHLIST","start_date":"","end_date":"","count_days":0,"rating":4.8,"category":"Psychology & Self-Help","takeaway":"Adlerian psychology explained through a dialogue between a philosopher and a youth. Learn how to free yourself from past traumas, stop living to satisfy others, and discover genuine courage to be happy.","availability":"AVAILABLE","pages":288,"total_pages":288,"price":0,"isbn":"978-1-5011-9727-7","cover_i":15129220,"cover_url":"https://covers.openlibrary.org/b/id/15129220-L.jpg","cover":"https://covers.openlibrary.org/b/id/15129220-L.jpg","cover_image":"https://covers.openlibrary.org/b/id/15129220-L.jpg"},
+      {"no":"book 323","title":"Dark Psychology and Secret Manipulation","author":"William Cooper","language":"ENGLISH","status":"WISHLIST","start_date":"","end_date":"","count_days":0,"rating":4.7,"category":"Psychology & Influence","takeaway":"How to analyze people, read body language, detect deceptive emotional manipulation, and master subtle persuasion and NLP defense mechanisms.","availability":"AVAILABLE","pages":236,"total_pages":236,"price":0,"isbn":"979-8-5554-8307-2","cover_i":15131420,"cover_url":"https://covers.openlibrary.org/b/id/15131420-L.jpg","cover":"https://covers.openlibrary.org/b/id/15131420-L.jpg","cover_image":"https://covers.openlibrary.org/b/id/15131420-L.jpg"}
+    ];
+    mustHaveBooks.forEach(m => {
+      const exists = books.some(b => b.title && b.title.toLowerCase().includes(m.title.toLowerCase().slice(0, 15)));
+      if (!exists) {
+        books.push(Object.assign({}, m));
+      } else {
+        // Ensure real HD cover
+        const found = books.find(b => b.title && b.title.toLowerCase().includes(m.title.toLowerCase().slice(0, 15)));
+        if (found && (!found.cover_image || found.cover_image.includes('placeholder'))) {
+          found.cover_image = m.cover_image;
+          found.cover_url = m.cover_url;
+          found.cover = m.cover;
+        }
+      }
+    });
+
     state.books = books;
     saveBooks();
   } catch (e) {

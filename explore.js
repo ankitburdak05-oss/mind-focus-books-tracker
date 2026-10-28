@@ -1,3 +1,28 @@
+
+function getExploreDocCoverUrl(doc) {
+  if (doc.cover_url && !doc.cover_url.includes('placeholder')) return doc.cover_url;
+  if (doc.cover_i) return `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`;
+  if (Array.isArray(doc.isbn) && doc.isbn[0]) return `https://covers.openlibrary.org/b/isbn/${doc.isbn[0]}-L.jpg`;
+  if (doc.cover_edition_key) return `https://covers.openlibrary.org/b/olid/${doc.cover_edition_key}-L.jpg`;
+  if (Array.isArray(doc.id_amazon) && doc.id_amazon[0]) return `https://images-na.ssl-images-amazon.com/images/P/${doc.id_amazon[0]}.01.LZZZZZZZ.jpg`;
+  
+  // Local catalog match
+  const t = (doc.title || '').toLowerCase().trim();
+  const allLocal = [
+    ...(typeof state !== 'undefined' && Array.isArray(state.books) ? state.books : []),
+    ...(typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS) ? DEFAULT_BOOKS : []),
+    ...EXPLORE_CURATED_SPOTLIGHTS
+  ];
+  for (const b of allLocal) {
+    if (b.title && (b.title.toLowerCase().trim() === t || b.title.toLowerCase().includes(t) || t.includes(b.title.toLowerCase()))) {
+      const c = b.cover_url || b.cover_image || b.cover;
+      if (c && !c.includes('placeholder')) return c;
+      if (b.cover_i) return `https://covers.openlibrary.org/b/id/${b.cover_i}-L.jpg`;
+    }
+  }
+  return 'cover_placeholder.jpg';
+}
+
 // ============================================================
 // 📚 MINDFOCUS EXPLORE & 3D BOOK DOSSIER ENGINE (v0.0.63 BULLETPROOF)
 // Zero-Failure Click Flow • Event Delegation • Dual Fallback Guard
@@ -23,6 +48,57 @@ function escapeHtml(str) {
 
 // Curated Masterpiece Books with Full Metadata
 const EXPLORE_CURATED_SPOTLIGHTS = [
+  {
+    key: 'curated_jon_elia',
+    title: "Main Jo Hoon Jon Elia Hoon (मैं जो हूँ जॉन एलिया हूँ)",
+    author: 'Jaun Elia (जॉन एलिया)',
+    author_name: ['Jaun Elia', 'जॉन एलिया'],
+    year: '2014',
+    first_publish_year: '2014',
+    cover_i: 13215068,
+    cover_url: 'https://covers.openlibrary.org/b/id/13215068-L.jpg',
+    rating: '4.9 (Urdu/Hindi Classic)',
+    desc: 'जॉन एलिया की अमर शायरी, गजलें और रूमानी फलसफा। अकेलेपन और जीवन के गहरे सत्यों को छूने वाला काव्य संग्रह।',
+    pages: 320,
+    number_of_pages_median: 320,
+    publisher: 'Vani Prakashan',
+    language: 'Hindi / Urdu',
+    subject: ['Poetry', 'Philosophy', 'Hindi Literature', 'Shayari']
+  },
+  {
+    key: 'curated_courage_disliked',
+    title: 'The Courage to Be Disliked',
+    author: 'Ichiro Kishimi & Fumitake Koga',
+    author_name: ['Ichiro Kishimi', 'Fumitake Koga'],
+    year: '2013',
+    first_publish_year: '2013',
+    cover_i: 15129220,
+    cover_url: 'https://covers.openlibrary.org/b/id/15129220-L.jpg',
+    rating: '4.8 (Global Sensation)',
+    desc: 'The Japanese phenomenon showing how to free yourself, change your life and achieve real happiness using Adlerian psychology.',
+    pages: 288,
+    number_of_pages_median: 288,
+    publisher: 'Atria Books / Simon & Schuster',
+    language: 'English',
+    subject: ['Psychology', 'Self-Help', 'Mindset', 'Personal Growth']
+  },
+  {
+    key: 'curated_dark_psychology',
+    title: 'Dark Psychology and Secret Manipulation',
+    author: 'William Cooper',
+    author_name: ['William Cooper'],
+    year: '2020',
+    first_publish_year: '2020',
+    cover_i: 15131420,
+    cover_url: 'https://covers.openlibrary.org/b/id/15131420-L.jpg',
+    rating: '4.7 (Mind Control & Defense)',
+    desc: 'The definitive guide to psychological manipulation, body language decoding, NLP techniques, and emotional defense.',
+    pages: 236,
+    number_of_pages_median: 236,
+    publisher: 'Independently Published',
+    language: 'English',
+    subject: ['Psychology', 'Manipulation', 'Influence', 'NLP']
+  },
   {
     key: 'curated_atomic_habits',
     title: 'Atomic Habits',
@@ -334,7 +410,7 @@ async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffs
 function renderExploreBookCard(doc, idx) {
   const title = doc.title || 'Unknown Title';
   const author = (doc.author_name && doc.author_name[0]) || doc.author || 'Unknown Author';
-  const coverUrl = doc.cover_url || (doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : 'cover_placeholder.jpg');
+  const coverUrl = getExploreDocCoverUrl(doc);
   const year = doc.first_publish_year || '';
   const pages = doc.number_of_pages_median || '';
   const alreadyAdded = (typeof state !== 'undefined' && Array.isArray(state.books)) ? state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase()) : false;
@@ -727,33 +803,47 @@ async function searchOpenLibrary(query) {
   const qLower = query.toLowerCase().trim();
   if (qLower.length < 2) return;
 
-  // 1. Instant local search across DEFAULT_BOOKS & EXPLORE_CURATED_SPOTLIGHTS
+  // 1. Instant local search across state.books, DEFAULT_BOOKS, and EXPLORE_CURATED_SPOTLIGHTS
   let localMatches = [];
-  const pool = (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) ? DEFAULT_BOOKS : [];
-  pool.forEach(b => {
-    if ((b.title && b.title.toLowerCase().includes(qLower)) || (b.author && b.author.toLowerCase().includes(qLower))) {
-      localMatches.push({
-        title: b.title,
-        author_name: [b.author || 'Unknown'],
-        cover_url: b.cover || b.cover_image || 'cover_placeholder.jpg',
-        number_of_pages_median: b.pages || 250,
-        first_publish_year: b.published_year || 'Classic',
-        subject: [b.category || 'General']
-      });
-    }
-  });
+  const searchPool = [
+    ...EXPLORE_CURATED_SPOTLIGHTS,
+    ...(typeof state !== 'undefined' && Array.isArray(state.books) ? state.books : []),
+    ...(typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS) ? DEFAULT_BOOKS : [])
+  ];
 
-  EXPLORE_CURATED_SPOTLIGHTS.forEach(s => {
-    if ((s.title.toLowerCase().includes(qLower) || s.author.toLowerCase().includes(qLower)) && !localMatches.some(m => m.title.toLowerCase() === s.title.toLowerCase())) {
-      localMatches.push({
-        title: s.title,
-        author_name: [s.author],
-        cover_i: s.cover_i,
-        cover_url: s.cover_i ? `https://covers.openlibrary.org/b/id/${s.cover_i}-M.jpg` : 'cover_placeholder.jpg',
-        number_of_pages_median: s.pages,
-        first_publish_year: s.year,
-        subject: s.subject
-      });
+  const seenTitles = new Set();
+  
+  // Support aliases (e.g. jo aliya -> jaun elia)
+  const isJonElia = qLower.includes('aliya') || qLower.includes('aaliya') || qLower.includes('elia') || qLower.includes('eliyah');
+  const isCourage = qLower.includes('courage') || qLower.includes('disliked');
+  const isDarkPsych = qLower.includes('dark') || qLower.includes('manipulation') || qLower.includes('psychology');
+
+  searchPool.forEach(b => {
+    if (!b || !b.title) return;
+    const t = b.title.toLowerCase();
+    const a = (b.author || (b.author_name && b.author_name[0]) || '').toLowerCase();
+    
+    let matched = t.includes(qLower) || a.includes(qLower);
+    if (!matched && isJonElia && (t.includes('elia') || a.includes('elia') || t.includes('hūm̐'))) matched = true;
+    if (!matched && isCourage && (t.includes('courage') || t.includes('disliked'))) matched = true;
+    if (!matched && isDarkPsych && (t.includes('dark psychology') || t.includes('manipulation'))) matched = true;
+
+    if (matched) {
+      const cleanKey = t.replace(/[^a-z0-9]/g, '');
+      if (!seenTitles.has(cleanKey)) {
+        seenTitles.add(cleanKey);
+        const cover = b.cover_url || b.cover_image || b.cover || (b.cover_i ? `https://covers.openlibrary.org/b/id/${b.cover_i}-L.jpg` : 'cover_placeholder.jpg');
+        localMatches.push({
+          title: b.title,
+          author: b.author || (b.author_name && b.author_name[0]) || 'Unknown',
+          author_name: [b.author || (b.author_name && b.author_name[0]) || 'Unknown'],
+          cover_url: cover,
+          cover_i: b.cover_i,
+          number_of_pages_median: b.pages || b.total_pages || 250,
+          first_publish_year: b.year || b.published_year || 'Classic',
+          subject: Array.isArray(b.subject) ? b.subject : [b.category || 'General']
+        });
+      }
     }
   });
 
@@ -766,17 +856,17 @@ async function searchOpenLibrary(query) {
     }
   }
 
-  // 2. Online search
+  // 2. Online search via OpenLibrary general 'q=' query (searches title, author & topics)
   if (statusEl) {
     statusEl.style.display = 'block';
-    statusEl.innerHTML = '🔍 <em>World Books Search Engine se dhundh rahe hain...</em>';
+    statusEl.innerHTML = '🔍 <em>World Books Database se real covers aur kitabein search ho rahi hain...</em>';
   }
 
   try {
     const encoded = encodeURIComponent(query);
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 4500);
-    const url = `https://openlibrary.org/search.json?title=${encoded}&limit=15`;
+    const timer = setTimeout(() => controller.abort(), 5000);
+    const url = `https://openlibrary.org/search.json?q=${encoded}&limit=25`;
     const response = await fetch(url, { signal: controller.signal });
     clearTimeout(timer);
 
@@ -784,7 +874,11 @@ async function searchOpenLibrary(query) {
       const data = await response.json();
       const onlineDocs = data.docs || [];
       onlineDocs.forEach(d => {
-        if (!localMatches.some(m => m.title && m.title.toLowerCase() === (d.title || '').toLowerCase())) {
+        if (!d || !d.title) return;
+        const cleanKey = d.title.toLowerCase().replace(/[^a-z0-9]/g, '');
+        if (!seenTitles.has(cleanKey)) {
+          seenTitles.add(cleanKey);
+          d.cover_url = getExploreDocCoverUrl(d);
           localMatches.push(d);
         }
       });
