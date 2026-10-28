@@ -235,9 +235,9 @@ public class MainActivity extends AppCompatActivity {
                 android.content.pm.PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                 return (pInfo != null && pInfo.versionName != null && !pInfo.versionName.isEmpty()) 
                         ? pInfo.versionName 
-                        : "0.0.52";
+                        : "0.0.53";
             } catch (Exception e) {
-                return "0.0.52";
+                return "0.0.53";
             }
         }
 

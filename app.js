@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.52';
-const CURRENT_APP_VERSION = 'v0.0.52';
+const APP_VERSION = '0.0.53';
+const CURRENT_APP_VERSION = 'v0.0.53';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -6397,11 +6397,6 @@ function navigateToSubView(viewName) {
   if (viewName === 'syncDevices') renderSyncDevicesView();
   if (viewName === 'privacySecurity') renderPrivacySecurityView();
   if (viewName === 'backupExport') renderBackupExportView();
-  if (viewName === 'appFeaturesGuide') {
-    renderAppFeaturesDirectoryView();
-    const modal = document.getElementById('appFeaturesGuideModalOverlay');
-    if (modal) modal.style.display = 'flex';
-  }
   if (viewName === 'activityAuditLog') renderActivityAuditLog();
   if (viewName === 'totalSpent') renderTotalSpentView();
   if (viewName === 'bookStatus') renderBookStatusView();
@@ -6419,119 +6414,6 @@ function navigateToSubView(viewName) {
 function navigateBack() {
   const prev = state.previousSubView || 'profile';
   switchTab(prev);
-}
-
-// ================= APP FEATURES DIRECTORY & SITEMAP (SCREEN 19) =================
-let activeGuideCategory = 'ALL';
-let currentGuideSearchQuery = '';
-
-const appFeaturesGuideData = [
-  { id: 1, title: 'Classic Wooden Bookshelf & 4 Themes', category: 'Reading', icon: '🪵', screenNum: 'Screen 1', location: 'Top Bar / Profile -> Themes Menu', purpose: 'App ka visual appearance (Mahogany, Walnut, Dark Gold, Sepia) badalne ke liye.', benefit: 'Eye comfort aur aesthetic satisfaction ke liye.', actionText: 'Switch Themes', route: 'profile' },
-  { id: 2, title: 'Compact KPI Bar & Real Metrics', category: 'Analytics', icon: '📊', screenNum: 'Screen 2', location: 'Home & Profile Header Top Bar', purpose: 'Finished books, reading progress, wishlist, time & streak track karne ke liye.', benefit: '1-second me apni daily reading stats dekhne ke liye.', actionText: 'View Dashboard', route: 'home' },
-  { id: 3, title: 'Quantum Holographic Beacon', category: 'Security', icon: '🚀', screenNum: 'Screen 3', location: 'Progress Screen Top Banner', purpose: 'Shockwave reactor orb & live broadcast updates ke liye.', benefit: 'Milestone reach hone par visual motivation ke liye.', actionText: 'Check Updates', route: 'modal_update' },
-  { id: 4, title: 'AI Book Coach & Assistant', category: 'Reading', icon: '🤖', screenNum: 'Screen 4', location: 'Profile -> Options -> AI Book Coach', purpose: 'Chapter summaries, कठिन सवाल aur quiz answers ke liye.', benefit: 'Mushkil kitabon ko bina kisi ki help ke 3x fast samajhne ke liye.', actionText: 'Open Coach', route: 'sub_aiBookCoach' },
-  { id: 5, title: 'OCR Book Cover & Text Scanner', category: 'Reading', icon: '📷', screenNum: 'Screen 5', location: 'Add Book Form / Reader Camera Icon', purpose: 'Physical book page/cover photo se text auto-extract karne ke liye.', benefit: 'Manual typing bachane aur instant entry ke liye.', actionText: 'Open Scanner', route: 'sub_ocrScanner' },
-  { id: 6, title: '3D Interactive Flip Book Reader', category: 'Reading', icon: '📖', screenNum: 'Screen 6', location: 'Book Detail -> Start Reading Button', purpose: 'Physical paper page-flip animation se kitabein padhne ke liye.', benefit: 'Realistic digital reading experience aur page progress auto-save ke liye.', actionText: 'Open 3D Reader', route: 'modal_reader' },
-  { id: 7, title: 'Audio Book Speed & Ambient Player', category: 'Reading', icon: '🎧', screenNum: 'Screen 7', location: 'Reader Toolbar -> Audio Icon', purpose: 'TTS voice audio aur background sounds (Rain, Fireplace) sunne ke liye.', benefit: 'Reading concentration aur focus badhane ke liye.', actionText: 'Open Audio Player', route: 'sub_audioBookPlayer' },
-  { id: 8, title: 'Mind Map & Concept Node Generator', category: 'Analytics', icon: '🧠', screenNum: 'Screen 8', location: 'Profile -> Options -> Knowledge Map', purpose: 'Kitabon ke main ideas ka mind map node diagram dekhne ke liye.', benefit: 'Deep learning aur concepts ko visual connect karne ke liye.', actionText: 'Open Mind Map', route: 'sub_mindMapGenerator' },
-  { id: 9, title: 'Gamified Reading Streak & Heatmap', category: 'Analytics', icon: '🔥', screenNum: 'Screen 9', location: 'Home / Progress -> Streak Card', purpose: '365-day reading activity contribution grid dekhne ke liye.', benefit: 'Daily reading habit ko continuous game ki tarah maintain karne ke liye.', actionText: 'View Streak Grid', route: 'progress' },
-  { id: 10, title: 'Book Cost & Expenditure Analytics', category: 'Analytics', icon: '💰', screenNum: 'Screen 10', location: 'Progress -> Expense & Budget Section', purpose: 'Physical books par kharch huye real budget ko calculate karne ke liye.', benefit: 'Personal book buying budget control me rakhne ke liye.', actionText: 'View Budget', route: 'progress_budget' },
-  { id: 11, title: 'Community Quote & Highlight Sharing', category: 'Library', icon: '💬', screenNum: 'Screen 11', location: 'Book Details -> Quotes & Notes Tab', purpose: 'Favorite lines aur highlights ko image cards me share/save karne ke liye.', benefit: 'Important thoughts ko hamesha ke liye save rakhne ke liye.', actionText: 'View Quotes', route: 'sub_quotesInspiration' },
-  { id: 12, title: 'Smart Library Search & Tag Filtering', category: 'Library', icon: '🔍', screenNum: 'Screen 12', location: 'Library Screen Top Search Bar', purpose: 'Title, Author, Category ya Custom Tags se search karne ke liye.', benefit: 'Badi library me se 1-second me book dhoondhne ke liye.', actionText: 'Open Library', route: 'library' },
-  { id: 13, title: 'Reading Goals & Annual Challenge', category: 'Analytics', icon: '🎯', screenNum: 'Screen 13', location: 'Profile -> Options -> Reading Goals', purpose: 'Daily page target aur yearly book goal ring track karne ke liye.', benefit: 'Reading milestone bina kisi fail ke complete karne ke liye.', actionText: 'Open Goals', route: 'sub_readingGoals' },
-  { id: 14, title: 'Personal Reading Journal & Daily Log', category: 'Library', icon: '📓', screenNum: 'Screen 14', location: 'Profile -> Options -> Reading Journal', purpose: 'Daily personal thoughts, chapter rating aur diary likhne ke liye.', benefit: 'Personal reflection aur self-growth journal maintain karne ke liye.', actionText: 'Open Journal', route: 'sub_readingJournal' },
-  { id: 15, title: 'Offline Data Backup & Encrypted Export', category: 'Security', icon: '🛡️', screenNum: 'Screen 15', location: 'Profile -> Settings -> Data & Backup', purpose: '1-click JSON/CSV backup download aur data restore ke liye.', benefit: 'Phone badalne ya reinstall karne par bhi reading data loss hone se bachane ke liye.', actionText: 'Open Security', route: 'sub_securityBackup' },
-  { id: 16, title: 'Custom Bookshelf & Category Organizer', category: 'Library', icon: '📚', screenNum: 'Screen 16', location: 'Library -> Shelves Tab', purpose: 'Virtual bookshelves (Favorites, Philosophy, Fiction) banane ke liye.', benefit: 'Kitabon ko neat and clean categories me organize rakhne ke liye.', actionText: 'Manage Shelves', route: 'library' },
-  { id: 17, title: 'Dark / Light / Vision-OS Glass UI Themes', category: 'Security', icon: '✨', screenNum: 'Screen 17', location: 'Profile -> Customization View', purpose: 'Vision-OS glassmorphism blur effects aur colors customize karne ke liye.', benefit: 'App ko sleek aur ultra-modern premium feel dene ke liye.', actionText: 'Change Theme', route: 'toggle_theme' },
-  { id: 18, title: 'Security Lock (PIN & Biometrics)', category: 'Security', icon: '🔒', screenNum: 'Screen 18', location: 'Profile -> Privacy & Security', purpose: 'App aur notes ko 4-digit PIN lock se secure karne ke liye.', benefit: 'Personal notes ko private aur safe rakhne ke liye.', actionText: 'Manage PIN', route: 'prompt_pin' },
-  { id: 19, title: 'App Features Directory & Sitemap', category: 'Security', icon: '🗺️', screenNum: 'Screen 19', location: 'Profile -> App Features Directory Button', purpose: 'Sabi 20+ features ki detailed list aur direct 1-tap launcher cards ke liye.', benefit: 'Kisi bhi feature ko bina dhoondhe 1-tap me launch karne ke liye.', actionText: 'Currently Active', route: 'self' },
-  { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: '📋', screenNum: 'Screen 20', location: 'Profile -> Options -> Activity Audit Log', purpose: 'App me kiye gaye har action ki history audit log me dekhne ke liye.', benefit: 'System security aur app actions transparent rakhne ke liye.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' },
-  { id: 21, title: 'Book Lending & Borrow Tracker', category: 'Library', icon: '🤝', screenNum: 'Screen 21', location: 'Profile -> Options -> Book Lending Tracker', purpose: 'Dosto ya rishtedaaro ko di hui kitabein track karne ke liye.', benefit: 'Physical kitabein kabhi gum hone se bachane aur timely return paane ke liye.', actionText: 'Open Lending Hub', route: 'sub_bookLending' },
-  { id: 22, title: 'Not Interested Books Vault', category: 'Library', icon: '🚫', screenNum: 'Screen 22', location: 'Profile -> Options -> Not Interested Books', purpose: 'Jo kitabein abhi padhne ka man na ho unhe Library & Explore se hide karne ke liye.', benefit: 'Library ko clean aur uncluttered rakhne ke liye, aur jab man kare 1-tap me wapas lane ke liye.', actionText: 'Open Not Interested', route: 'sub_notInterested' },
-  { id: 23, title: 'Category Bulk Hide to Not Interested', category: 'Library', icon: '📁', screenNum: 'Screen 23', location: 'Profile -> Not Interested -> Add by Category', purpose: 'Poori category ya multiple kitabon ko ek sath select karke No Interest me daalne ke liye.', benefit: 'Ek-ek book alag kholne ki mehnat bachane aur 1-click multi-hide ke liye.', actionText: 'Open Category Picker', route: 'sub_niCategorySelect' },
-  { id: 24, title: 'Interactive 3D Note Cards & Audio Narration', category: 'Reading', icon: '✨', screenNum: 'Screen 24', location: 'Book Detail -> Notes -> Note Card Click', purpose: 'Notes ko interactive 3D perspective physics, TTS audio narration, 5 theme colors aur in-place edit ke sath explore karne ke liye.', benefit: 'Book takeaways aur insights ko memorable banane ke liye.', actionText: 'Open Notes Vault', route: 'sub_notesHighlights' }
-];
-
-function renderAppFeaturesDirectoryView() {
-  const container = document.getElementById('guideFeaturesList');
-  if (!container) return;
-
-  const query = (currentGuideSearchQuery || '').toLowerCase().trim();
-  const filtered = appFeaturesGuideData.filter(item => {
-    const matchesCategory = (activeGuideCategory === 'ALL' || item.category.toLowerCase() === activeGuideCategory.toLowerCase());
-    const matchesQuery = !query || item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query) || item.category.toLowerCase().includes(query);
-    return matchesCategory && matchesQuery;
-  });
-
-  if (filtered.length === 0) {
-    container.innerHTML = `
-      <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
-        <p style="font-size: 2.5rem; margin-bottom: 8px;">🔍</p>
-        <p style="font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">No features found</p>
-        <p style="font-size: 0.8rem;">Try searching with a different keyword or select "All Features".</p>
-      </div>`;
-    return;
-  }
-
-  container.innerHTML = filtered.map(item => `
-    <div class="feature-guide-card" style="background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; transition: all 0.2s ease;">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <div style="font-size: 1.6rem; background: rgba(245, 158, 11, 0.12); border-radius: 12px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(245, 158, 11, 0.2);">${item.icon}</div>
-        <div style="flex: 1;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-weight: 800; font-size: 0.95rem; color: #ffffff;">${item.title}</span>
-            <span style="font-size: 0.68rem; font-weight: 700; color: var(--accent-gold); background: rgba(245, 158, 11, 0.15); padding: 2px 8px; border-radius: 999px;">${item.screenNum}</span>
-          </div>
-          <span style="font-size: 0.7rem; color: #94a3b8;">Category: ${item.category}</span>
-        </div>
-      </div>
-
-      <div style="background: rgba(0, 0, 0, 0.25); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem;">
-        <div style="color: #60a5fa; font-weight: 600;">📍 <strong>Kahan hai:</strong> ${item.location}</div>
-        <div style="color: #cbd5e1;">👤 <strong>Kiske liye:</strong> ${item.purpose}</div>
-        <div style="color: #34d399;">🎯 <strong>Kyu use karein:</strong> ${item.benefit}</div>
-      </div>
-
-      <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
-        <button type="button" class="btn-save-gold" style="padding: 6px 14px; font-size: 0.75rem; border-radius: 8px; cursor: pointer;" onclick="launchGuideFeatureRoute('${item.route}')">${item.actionText} &rarr;</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function filterGuideCategory(cat) {
-  activeGuideCategory = cat;
-  const categories = ['ALL', 'Reading', 'Library', 'Analytics', 'Security'];
-  categories.forEach(c => {
-    const chip = document.getElementById(c === 'ALL' ? 'guideChipAll' : 'guideChip' + c);
-    if (chip) chip.classList.toggle('active', c.toLowerCase() === cat.toLowerCase());
-  });
-  renderAppFeaturesDirectoryView();
-}
-
-function filterGuideFeatures(query) {
-  currentGuideSearchQuery = query;
-  renderAppFeaturesDirectoryView();
-}
-
-function launchGuideFeatureRoute(route) {
-  if (!route || route === 'self') return;
-  if (route.startsWith('sub_')) {
-    const subName = route.replace('sub_', '');
-    navigateToSubView(subName);
-  } else if (route === 'home' || route === 'library' || route === 'explore' || route === 'progress' || route === 'profile') {
-    switchTab(route);
-  } else if (route === 'progress_budget') {
-    switchTab('progress');
-  } else if (route === 'modal_update') {
-    openUpdateCheckerModal();
-  } else if (route === 'modal_reader') {
-    openRealBookReaderForCurrent();
-  } else if (route === 'toggle_theme') {
-    toggleTheme();
-  } else if (route === 'prompt_pin') {
-    promptSetNewPin();
-  }
 }
 
 function renderActivityAuditLog() {

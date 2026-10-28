@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="stylesheet" href="style.css?v=0.0.52">
+  <link rel="stylesheet" href="style.css?v=0.0.53">
 </head>
 <body>
 
@@ -85,7 +85,7 @@
           <div class="hub-info">
             <div class="h3d-badge-row">
               <span class="h3d-glow-tag">3D SYSTEM UPDATE</span>
-              <span class="h3d-version-pill" id="homeUpdateBadgePill">v0.0.52</span>
+              <span class="h3d-version-pill" id="homeUpdateBadgePill">v0.0.53</span>
             </div>
             <div class="hub-title" id="homeUpdateTitle">New Version Update Available!</div>
             <div class="hub-sub" id="homeUpdateSub">Mind Focus Books update is ready to install</div>
@@ -725,13 +725,7 @@
         </div>
 
         <!-- 📖 APP FEATURES GUIDE & SITEMAP DIRECTORY -->
-        <div class="profile-menu-item" style="border-left: 3px solid var(--accent-gold);" onclick="navigateToSubView('appFeaturesGuide')">
-          <div class="pmi-icon grad-gold">📖</div>
-          <div class="pmi-text">
-            <div class="pmi-title" style="font-weight: 800; color: var(--accent-gold);">App Features Directory &amp; Sitemap</div>
-            <div class="pmi-sub">Complete guide of all features, locations &amp; 1-tap launcher</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
+        
         </div>
 
         <div class="profile-menu-item" onclick="navigateToSubView('appearance')">
@@ -1957,42 +1951,7 @@
       </div>
     </section>
 
-    <!-- ================= APP FEATURES DIRECTORY & SITEMAP ================= -->
-    <section id="viewAppFeaturesGuide" class="app-view">
-      <div class="sub-screen-header">
-        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
-        <div class="sub-screen-title-wrap">
-          <h2 class="sub-screen-main-title">App Features Directory</h2>
-          <p class="sub-screen-sub-title">Complete Guide &amp; Sitemap of All Features</p>
-        </div>
-        <div style="width:36px;"></div>
-      </div>
-
-      <!-- Search Bar -->
-      <div class="search-bar-wrap">
-        <div class="search-input-box">
-          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" id="guideSearchInput" placeholder="Search any feature, name or keyword..." oninput="filterGuideFeatures(this.value)">
-        </div>
-      </div>
-
-      <!-- Category Filter Pills -->
-      <div class="filter-chips-scroll" id="guideCategoryChips">
-        <button type="button" class="filter-chip active" id="guideChipAll" onclick="filterGuideCategory('ALL')">All Features</button>
-        <button type="button" class="filter-chip" id="guideChipReading" onclick="filterGuideCategory('Reading')">Reading Tools</button>
-        <button type="button" class="filter-chip" id="guideChipLibrary" onclick="filterGuideCategory('Library')">Library &amp; Books</button>
-        <button type="button" class="filter-chip" id="guideChipAnalytics" onclick="filterGuideCategory('Analytics')">Analytics &amp; Goals</button>
-        <button type="button" class="filter-chip" id="guideChipSecurity" onclick="filterGuideCategory('Security')">Security &amp; Backup</button>
-      </div>
-
-      <!-- Features Cards Directory List -->
-      <div id="guideFeaturesList" style="display: flex; flex-direction: column; gap: 12px; margin-top: 14px;">
-        <!-- Injected dynamically by JS -->
-      </div>
-    </section>
+    
 
     <!-- ================= APP ACTIVITY AUDIT LOG ================= -->
     <section id="viewActivityAuditLog" class="app-view">
@@ -2573,7 +2532,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.52</span>
+                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.53</span>
               </div>
             </div>
           </div>
@@ -4189,7 +4148,7 @@
       </div>
   </div>
 
-  <!-- Hidden Placeholder Block for Missing Element IDs Referenced in app.js?v=0.0.52"display:none;" id="missingIdsAuditPlaceholderBlock">
+  <!-- Hidden Placeholder Block for Missing Element IDs Referenced in app.js?v=0.0.53"display:none;" id="missingIdsAuditPlaceholderBlock">
     <div id="genreDonutLegend"></div>
     <div id="genreDonutSvgWrap"></div>
     <div id="monthlyBarChartWrap"></div>
@@ -4203,7 +4162,6 @@
     <select id="queueAddBookSelect"></select>
     <div id="rgGoalSubtitle"></div>
     <div id="rgProgressBar"></div>
-    <div id="appFeaturesGuideModalOverlay"></div>
     <button type="button" id="themeBtnDark"></button>
     <button type="button" id="themeBtnLight"></button>
     <button type="button" id="themeBtnSepia"></button>
@@ -4222,7 +4180,7 @@
   <script src="dictionary-data.js"></script>
   <script src="broadcast-notice.js"></script>
   <script src="remote-config.js"></script>
-  <script src="app.js?v=0.0.52"></script>
+  <script src="app.js?v=0.0.53"></script>
 
     <!-- ====== EXPLORE BOOK DETAIL MODAL ====== -->
     <div id="exploreBookDetailModal"
