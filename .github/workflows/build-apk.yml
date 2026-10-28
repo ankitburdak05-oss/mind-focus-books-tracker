@@ -28,32 +28,16 @@ jobs:
         echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
         mkdir -p android
         echo "sdk.dir=/usr/local/lib/android/sdk" > android/local.properties
-
     - name: Prepare Android Assets
       run: |
         mkdir -p android/app/src/main/assets
-        cp index.html android/app/src/main/assets/
-        cp style.css android/app/src/main/assets/
-        cp app.js android/app/src/main/assets/
-        cp books-data.js android/app/src/main/assets/
-        cp dictionary-data.js android/app/src/main/assets/ || true
-        cp remote-config.json android/app/src/main/assets/ || true
-        cp remote-config.js android/app/src/main/assets/ || true
-        cp broadcast-notice.json android/app/src/main/assets/ || true
-        cp broadcast-notice.js android/app/src/main/assets/ || true
-        cp chat-messages.json android/app/src/main/assets/ || true
-        cp icon-192.png android/app/src/main/assets/
-        cp icon-512.png android/app/src/main/assets/
-        cp jspdf.umd.min.js android/app/src/main/assets/
-        cp jspdf.plugin.autotable.min.js android/app/src/main/assets/
-        cp html2canvas.min.js android/app/src/main/assets/
-        cp tesseract.min.js android/app/src/main/assets/
-        cp book-pages-data.js android/app/src/main/assets/ || true
-        cp hyperfocus_cover.jpg android/app/src/main/assets/ || true
-        cp hyperfocus_back.jpg android/app/src/main/assets/ || true
-        cp ankit_avatar.png android/app/src/main/assets/ || true
-        cp cozy_banner_bg.jpg android/app/src/main/assets/ || true
-        cp Mind-Focus-Books-App-Offline.html android/app/src/main/assets/ || true
+        cp -a ./*.html android/app/src/main/assets/ || true
+        cp -a ./*.css android/app/src/main/assets/ || true
+        cp -a ./*.js android/app/src/main/assets/ || true
+        cp -a ./*.json android/app/src/main/assets/ || true
+        cp -a ./*.png android/app/src/main/assets/ || true
+        cp -a ./*.jpg android/app/src/main/assets/ || true
+        cp explore.js android/app/src/main/assets/
 
     - name: Ensure Permanent Keystore Exists
       working-directory: ./android/app

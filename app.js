@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.55';
-const CURRENT_APP_VERSION = 'v0.0.55';
+const APP_VERSION = '0.0.56';
+const CURRENT_APP_VERSION = 'v0.0.56';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -5148,14 +5148,44 @@ function isNewerVersion(remote, current) {
   return false;
 }
 
+window.triggerUpdateFromNative = function(activeRel) {
+  if (!activeRel || !activeRel.version) return;
+  window.__LIVE_REMOTE_CONFIG__ = { activeRelease: activeRel };
+  const installedVer = getInstalledVersionString();
+  const remoteVer = activeRel.version;
+  const isNewAvailable = isNewerVersion(remoteVer, installedVer);
+  const homeCard = document.getElementById('homeUpdateCard');
+  const homeTitle = document.getElementById('homeUpdateTitle');
+  const homeSub = document.getElementById('homeUpdateSub');
+  const badgePill = document.getElementById('homeUpdateBadgePill');
+
+  if (homeCard) {
+    if (isNewAvailable) {
+      homeCard.style.display = 'flex';
+      if (homeTitle) homeTitle.innerText = `System Update ${remoteVer} Ready!`;
+      if (badgePill) badgePill.innerText = remoteVer;
+      if (homeSub) homeSub.innerText = activeRel.name || `${remoteVer} is ready to download & install now`;
+    } else {
+      homeCard.style.display = 'none';
+    }
+  }
+
+  if (isNewAvailable) {
+    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + remoteVer);
+    if (!dismissed) {
+      setTimeout(() => {
+        if (typeof openUpdateCheckerModal === 'function') openUpdateCheckerModal();
+      }, 1000);
+    }
+  }
+};
+
 async function checkForBackgroundUpdates() {
   const homeCard = document.getElementById('homeUpdateCard');
   const homeTitle = document.getElementById('homeUpdateTitle');
   const homeSub = document.getElementById('homeUpdateSub');
-  
   const installedVer = getInstalledVersionString();
 
-  // Update settings version badge immediately
   try {
     const settingsBadge = document.getElementById('appSettingsVersionBadge');
     if (settingsBadge) settingsBadge.innerText = `${installedVer}`;
@@ -5163,24 +5193,33 @@ async function checkForBackgroundUpdates() {
 
   let activeRel = null;
 
-  // 1. Live Remote Check via GitHub Releases API & Raw Config
-  try {
-    const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?t=' + Date.now();
-    const res = await fetch(rawUrl, { cache: 'no-store' });
-    if (res.ok) {
-      const rawText = await res.text();
-      const cleanText = rawText.replace(/^\uFEFF/, '').trim();
-      const data = JSON.parse(cleanText);
-      if (data && data.activeRelease && data.activeRelease.version) {
-        window.__LIVE_REMOTE_CONFIG__ = data;
-        activeRel = data.activeRelease;
+  // Multi-CDN Fallback array
+  const cdnEndpoints = [
+    'https://ankitburdak05-oss.github.io/mind-focus-books-tracker/remote-config.json?t=' + Date.now(),
+    'https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/remote-config.json?t=' + Date.now(),
+    'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?t=' + Date.now()
+  ];
+
+  for (const endpoint of cdnEndpoints) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 4000);
+      const res = await fetch(endpoint, { cache: 'no-store', signal: controller.signal });
+      clearTimeout(timer);
+      if (res.ok) {
+        const text = await res.text();
+        const clean = text.replace(/^\uFEFF/, '').trim();
+        const data = JSON.parse(clean);
+        if (data && data.activeRelease && data.activeRelease.version) {
+          window.__LIVE_REMOTE_CONFIG__ = data;
+          activeRel = data.activeRelease;
+          break;
+        }
       }
-    }
-  } catch (err) {
-    console.warn('Live remote config fetch failed, checking GitHub releases fallback:', err);
+    } catch(err) {}
   }
 
-  // Fallback: check latest GitHub release directly
+  // GitHub Releases fallback
   if (!activeRel) {
     try {
       const ghRes = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
@@ -5198,7 +5237,6 @@ async function checkForBackgroundUpdates() {
   }
 
   const remoteVer = activeRel?.version || installedVer;
-  // An update is available if remoteVer is newer than what phone is running (installedVer)
   const isNewAvailable = isNewerVersion(remoteVer, installedVer);
 
   if (homeCard) {
@@ -5217,7 +5255,7 @@ async function checkForBackgroundUpdates() {
     const dismissed = sessionStorage.getItem('mf_update_dismissed_' + remoteVer);
     if (!dismissed) {
       setTimeout(() => {
-        openUpdateCheckerModal();
+        if (typeof openUpdateCheckerModal === 'function') openUpdateCheckerModal();
       }, 1500);
     }
   }

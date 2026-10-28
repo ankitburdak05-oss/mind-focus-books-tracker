@@ -11,7 +11,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="stylesheet" href="style.css?v=3.17.1">
+  <link rel="stylesheet" href="style.css?v=0.0.55">
 </head>
 <body>
 
@@ -74,16 +74,26 @@
         </div>
       </div>
 
-      <!-- In-App Version Update Alert Card (shows ONLY when a new update is detected) -->
-      <div class="home-update-banner" id="homeUpdateCard" style="display:none;" onclick="openUpdateModal()">
+      <!-- In-App Version Update Alert 3D Floating Holographic Banner Card -->
+      <div class="home-update-banner home-3d-update-card" id="homeUpdateCard" style="display:none;" onclick="openUpdateModal()">
+        <div class="h3d-shimmer-edge"></div>
         <div class="hub-left">
-          <div class="hub-icon-wrap">🚀</div>
+          <div class="hub-icon-wrap h3d-icon-portal">
+            <span class="h3d-pulse-beacon"></span>
+            🚀
+          </div>
           <div class="hub-info">
+            <div class="h3d-badge-row">
+              <span class="h3d-glow-tag">3D SYSTEM UPDATE</span>
+              <span class="h3d-version-pill" id="homeUpdateBadgePill">v0.0.55</span>
+            </div>
             <div class="hub-title" id="homeUpdateTitle">New Version Update Available!</div>
             <div class="hub-sub" id="homeUpdateSub">Mind Focus Books update is ready to install</div>
           </div>
         </div>
-        <button type="button" class="hub-action-btn" onclick="event.stopPropagation(); downloadAppUpdate();">⚡ Update</button>
+        <button type="button" class="hub-action-btn h3d-action-glow-btn" onclick="event.stopPropagation(); downloadAppUpdate();">
+          <span>? Update Now</span>
+        </button>
       </div>
 
       <!-- Currently Reading Hero Card -->
@@ -306,14 +316,44 @@
         <p class="view-sub-title">Discover new books, authors and ideas</p>
       </div>
 
-      <!-- Search Bar -->
-      <div class="search-bar-wrap">
-        <div class="search-input-box">
+      <!-- Search Bar with Live Filter & Action Controls -->
+      <div class="search-bar-wrap" style="display:flex;gap:8px;align-items:center;">
+        <div class="search-input-box" style="position:relative;flex:1;">
           <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
-          <input type="text" id="exploreSearchInput" placeholder="Search books, authors, genres..." oninput="handleExploreSearch(this.value)">
+          <input type="text" id="exploreSearchInput" placeholder="Duniya ki koi bhi book ya author dhundho..." oninput="handleExploreSearchLive(this.value)" autocomplete="off" onkeydown="if(event.key==='Enter')triggerExploreAPISearch()">
+          <button type="button" id="exploreSearchClearBtn" onclick="clearExploreSearch()" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-secondary);font-size:1.1rem;cursor:pointer;padding:4px;">&#x2715;</button>
+        </div>
+        <button type="button" class="btn-gold-pill" onclick="triggerExploreAPISearch()" style="white-space:nowrap;flex-shrink:0;padding:10px 16px;">?? Search</button>
+      </div>
+
+      <!-- Action Strip: Refresh, Surprise Me, Curated Feed Mode -->
+      <div class="explore-controls-bar">
+        <div class="explore-sub-tabs">
+          <button type="button" class="explore-sub-pill active" id="exploreModeTrending" onclick="setExploreMode('trending')">🔥 Trending</button>
+          <button type="button" class="explore-sub-pill" id="exploreModeBestsellers" onclick="setExploreMode('bestseller')">⭐ Bestsellers</button>
+          <button type="button" class="explore-sub-pill" id="exploreModeClassics" onclick="setExploreMode('classics')">👑 Classics</button>
+          <button type="button" class="explore-sub-pill" id="exploreModeMindset" onclick="setExploreMode('mindset')">🧠 Mind & Focus</button>
+        </div>
+        <div class="explore-quick-actions">
+          <button type="button" class="btn-explore-surprise" onclick="triggerSurpriseBook()" title="Random recommended book">🎲 Surprise</button>
+          <button type="button" class="btn-explore-refresh" onclick="refreshExploreFeed()" title="Nayi kitabein load karein">✨ Naya</button>
+        </div>
+      </div>
+
+      <!-- API Search Status -->
+      <div id="exploreAPIStatus" style="display:none;text-align:center;padding:10px 16px;color:var(--text-secondary);font-size:0.85rem;"></div>
+
+      <!-- API Search Results -->
+      <div id="exploreAPIResultsSection" style="display:none;">
+        <div class="section-container">
+          <div class="section-header">
+            <h2 class="section-title" id="exploreAPIResultsTitle">Search Results</h2>
+            <button type="button" class="section-link-btn" onclick="clearExploreSearch()">&#x2715; Clear</button>
+          </div>
+          <div class="library-books-grid" id="exploreAPIResultsGrid"></div>
         </div>
       </div>
 
@@ -329,27 +369,31 @@
         <button type="button" class="filter-chip" onclick="filterExploreGenre('Philosophy')">Philosophy</button>
       </div>
 
-      <!-- Featured Book Hero Card -->
+            <!-- Dynamic Featured Spotlight Book (Rotates with Explore Feed) -->
       <div class="section-container">
         <div class="section-header">
-          <h2 class="section-title">Featured Books</h2>
-          <button type="button" class="section-link-btn" onclick="switchTab('library')">View all &rarr;</button>
+          <h2 class="section-title">🌍 World Spotlight Book</h2>
+          <button type="button" class="section-link-btn" onclick="rotateExploreSpotlight()">Next Pick ↗</button>
         </div>
-        <div class="featured-book-hero" id="exploreFeaturedCard">
-          <div class="featured-cover-wrap">
-            <img id="featuredCoverImg" src="https://covers.openlibrary.org/b/id/10239359-L.jpg" alt="Featured Book" onerror="this.src='cover_placeholder.jpg'">
+        <div class="featured-book-hero" id="exploreFeaturedCard" style="cursor:pointer;" onclick="openCurrentSpotlightDetail()">
+          <div class="featured-cover-wrap explore-cover-3d-wrap">
+            <img id="featuredCoverImg" class="explore-cover-3d-img" src="https://covers.openlibrary.org/b/id/12539702-L.jpg" alt="Featured Book" onerror="this.src='cover_placeholder.jpg'">
           </div>
           <div class="featured-details">
-            <h3 class="featured-title" id="featuredTitle">Hyperfocus</h3>
-            <div class="featured-author" id="featuredAuthor">Chris Bailey</div>
-            <div class="featured-rating">
-              <span class="star-icon">☆</span>
-              <span id="featuredRatingVal">0.0 (Unrated)</span>
+            <div style="display:flex; gap:6px; align-items:center; margin-bottom:4px;">
+              <span style="background:rgba(245,158,11,0.2); color:#fbbf24; font-size:0.65rem; font-weight:800; padding:2px 8px; border-radius:10px; border:1px solid rgba(245,158,11,0.4);">GLOBAL PICK</span>
+              <span id="featuredYearVal" style="color:var(--text-secondary); font-size:0.7rem;">2018</span>
             </div>
-            <p class="featured-desc" id="featuredDesc">How to Work Less to Achieve More. Practical framework for mastering deep focus and scatterfocus creative recharge.</p>
-            <div style="display:flex; gap:8px;">
-              <button type="button" class="btn-gold-pill" onclick="openCurrentReadingDetail()">View Details</button>
-              <button type="button" class="btn-read-now-sm" onclick="openRealBookReaderForCurrent()">📖 Read Pages</button>
+            <h3 class="featured-title" id="featuredTitle">Atomic Habits</h3>
+            <div class="featured-author" id="featuredAuthor">James Clear</div>
+            <div class="featured-rating" style="margin:4px 0 6px;">
+              <span class="star-icon" style="color:#fbbf24;">⭐⭐⭐⭐⭐</span>
+              <span id="featuredRatingVal" style="font-weight:700; color:#fbbf24;">4.8 (Global Reader Choice)</span>
+            </div>
+            <p class="featured-desc" id="featuredDesc">Tiny changes, remarkable results. Build good habits, break bad ones and master the tiny behaviors that lead to remarkable results.</p>
+            <div style="display:flex; gap:8px; margin-top:8px;" onclick="event.stopPropagation();">
+              <button type="button" class="btn-gold-pill" id="featuredDetailActionBtn" onclick="openCurrentSpotlightDetail()">📖 View Details</button>
+              <button type="button" class="btn-read-now-sm" id="featuredAddActionBtn" onclick="addCurrentSpotlightToLibrary()">+ Add to Library</button>
             </div>
           </div>
         </div>
@@ -361,51 +405,51 @@
           <h2 class="section-title">Popular Categories</h2>
         </div>
         <div class="popular-categories-grid">
-          <div class="category-tile cat-productivity" onclick="filterExploreGenre('Mindset & Logic')">
-            <div class="cat-icon-badge purple">🧠</div>
+          <div class="category-tile cat-productivity" onclick="filterExploreCategoryTile('Mindset & Logic', 'psychology')">
+            <div class="cat-icon-badge purple">💡</div>
             <div class="cat-info">
               <div class="cat-name">Mindset & Logic</div>
-              <div class="cat-count" id="catCountMindset">66 books</div>
+              <div class="cat-count">World Bestsellers ✨</div>
             </div>
           </div>
 
-          <div class="category-tile cat-selfhelp" onclick="filterExploreGenre('Brain Science')">
-            <div class="cat-icon-badge gold">🔬</div>
+          <div class="category-tile cat-selfhelp" onclick="filterExploreCategoryTile('Brain Science', 'neuroscience')">
+            <div class="cat-icon-badge gold">🧠</div>
             <div class="cat-info">
               <div class="cat-name">Brain Science</div>
-              <div class="cat-count" id="catCountBrain">30 books</div>
+              <div class="cat-count">Deep Focus Picks 🎯</div>
             </div>
           </div>
 
-          <div class="category-tile cat-fiction" onclick="filterExploreGenre('Memory & Learning')">
-            <div class="cat-icon-badge blue">💡</div>
+          <div class="category-tile cat-fiction" onclick="filterExploreCategoryTile('Classic Fiction', 'fiction')">
+            <div class="cat-icon-badge blue">🔍</div>
             <div class="cat-info">
-              <div class="cat-name">Memory & Learning</div>
-              <div class="cat-count" id="catCountMemory">23 books</div>
+              <div class="cat-name">Fiction & Mystery</div>
+              <div class="cat-count">Top Rated Novels 📚</div>
             </div>
           </div>
 
-          <div class="category-tile cat-business" onclick="filterExploreGenre('Focus & Concentration')">
+          <div class="category-tile cat-business" onclick="filterExploreCategoryTile('Focus & Habits', 'habits')">
             <div class="cat-icon-badge rose">🎯</div>
             <div class="cat-info">
-              <div class="cat-name">Focus & Concentration</div>
-              <div class="cat-count" id="catCountFocus">20 books</div>
+              <div class="cat-name">Focus & Habits</div>
+              <div class="cat-count">High Performance 🔥</div>
             </div>
           </div>
 
-          <div class="category-tile cat-strategy" onclick="filterExploreGenre('Dark Psychology & Strategy')">
-            <div class="cat-icon-badge teal">♟️</div>
+          <div class="category-tile cat-strategy" onclick="filterExploreCategoryTile('Dark Psychology', 'manipulation')">
+            <div class="cat-icon-badge teal">🕶️</div>
             <div class="cat-info">
               <div class="cat-name">Dark Psychology</div>
-              <div class="cat-count" id="catCountPsychology">15 books</div>
+              <div class="cat-count">Power & Strategy ♟️</div>
             </div>
           </div>
 
-          <div class="category-tile cat-wealth" onclick="filterExploreGenre('Wealth & Finance')">
-            <div class="cat-icon-badge gold">💰</div>
+          <div class="category-tile cat-wealth" onclick="filterExploreCategoryTile('Wealth & Finance', 'wealth')">
+            <div class="cat-icon-badge gold">??</div>
             <div class="cat-info">
               <div class="cat-name">Wealth & Finance</div>
-              <div class="cat-count" id="catCountWealth">12 books</div>
+              <div class="cat-count">Money Masters 💰</div>
             </div>
           </div>
         </div>
@@ -681,13 +725,7 @@
         </div>
 
         <!-- 📖 APP FEATURES GUIDE & SITEMAP DIRECTORY -->
-        <div class="profile-menu-item" style="border-left: 3px solid var(--accent-gold);" onclick="navigateToSubView('appFeaturesGuide')">
-          <div class="pmi-icon grad-gold">📖</div>
-          <div class="pmi-text">
-            <div class="pmi-title" style="font-weight: 800; color: var(--accent-gold);">App Features Directory &amp; Sitemap</div>
-            <div class="pmi-sub">Complete guide of all features, locations &amp; 1-tap launcher</div>
-          </div>
-          <div class="pmi-arrow">&rsaquo;</div>
+        
         </div>
 
         <div class="profile-menu-item" onclick="navigateToSubView('appearance')">
@@ -1913,42 +1951,7 @@
       </div>
     </section>
 
-    <!-- ================= APP FEATURES DIRECTORY & SITEMAP ================= -->
-    <section id="viewAppFeaturesGuide" class="app-view">
-      <div class="sub-screen-header">
-        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
-        <div class="sub-screen-title-wrap">
-          <h2 class="sub-screen-main-title">App Features Directory</h2>
-          <p class="sub-screen-sub-title">Complete Guide &amp; Sitemap of All Features</p>
-        </div>
-        <div style="width:36px;"></div>
-      </div>
-
-      <!-- Search Bar -->
-      <div class="search-bar-wrap">
-        <div class="search-input-box">
-          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-          <input type="text" id="guideSearchInput" placeholder="Search any feature, name or keyword..." oninput="filterGuideFeatures(this.value)">
-        </div>
-      </div>
-
-      <!-- Category Filter Pills -->
-      <div class="filter-chips-scroll" id="guideCategoryChips">
-        <button type="button" class="filter-chip active" id="guideChipAll" onclick="filterGuideCategory('ALL')">All Features</button>
-        <button type="button" class="filter-chip" id="guideChipReading" onclick="filterGuideCategory('Reading')">Reading Tools</button>
-        <button type="button" class="filter-chip" id="guideChipLibrary" onclick="filterGuideCategory('Library')">Library &amp; Books</button>
-        <button type="button" class="filter-chip" id="guideChipAnalytics" onclick="filterGuideCategory('Analytics')">Analytics &amp; Goals</button>
-        <button type="button" class="filter-chip" id="guideChipSecurity" onclick="filterGuideCategory('Security')">Security &amp; Backup</button>
-      </div>
-
-      <!-- Features Cards Directory List -->
-      <div id="guideFeaturesList" style="display: flex; flex-direction: column; gap: 12px; margin-top: 14px;">
-        <!-- Injected dynamically by JS -->
-      </div>
-    </section>
+    
 
     <!-- ================= APP ACTIVITY AUDIT LOG ================= -->
     <section id="viewActivityAuditLog" class="app-view">
@@ -2529,7 +2532,7 @@
                 </div>
               </div>
               <div class="ig-row-right">
-                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.39 (Up to date)</span>
+                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.55</span>
               </div>
             </div>
           </div>
@@ -4145,8 +4148,7 @@
       </div>
   </div>
 
-  <!-- Hidden Placeholder Block for Missing Element IDs Referenced in app.js -->
-  <div style="display:none;" id="missingIdsAuditPlaceholderBlock">
+  <!-- Hidden Placeholder Block for Missing Element IDs Referenced in app.js?v=0.0.56"display:none;" id="missingIdsAuditPlaceholderBlock">
     <div id="genreDonutLegend"></div>
     <div id="genreDonutSvgWrap"></div>
     <div id="monthlyBarChartWrap"></div>
@@ -4160,7 +4162,6 @@
     <select id="queueAddBookSelect"></select>
     <div id="rgGoalSubtitle"></div>
     <div id="rgProgressBar"></div>
-    <div id="appFeaturesGuideModalOverlay"></div>
     <button type="button" id="themeBtnDark"></button>
     <button type="button" id="themeBtnLight"></button>
     <button type="button" id="themeBtnSepia"></button>
@@ -4179,6 +4180,11 @@
   <script src="dictionary-data.js"></script>
   <script src="broadcast-notice.js"></script>
   <script src="remote-config.js"></script>
-  <script src="app.js"></script>
+  <script src="explore.js?v=0.0.56"></script>
+  <script src="app.js?v=0.0.56"></script>
+
+    <!-- ====== EXPLORE 3D BOOK DOSSIER MODAL ====== -->
+    <div id="exploreBookDetailModal" style="display:none;" onclick="if(event.target===this)closeExploreBookDetail()"></div>
+
 </body>
 </html>

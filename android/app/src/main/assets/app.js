@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.39';
-const CURRENT_APP_VERSION = 'v0.0.39';
+const APP_VERSION = '0.0.56';
+const CURRENT_APP_VERSION = 'v0.0.56';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -494,7 +494,7 @@ function renderHomeRecentBooks() {
     return `
     <div class="recent-book-card" onclick="openBookDetailViewByIndex(${originalIndex >= 0 ? originalIndex : 0})">
       <div class="recent-cover-box">
-        <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.src='cover_placeholder.jpg'">
+        <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
       </div>
       <div class="recent-book-title">${escapeHtml(book.title)}</div>
       <div class="recent-book-cat">${escapeHtml(book.category || 'General')}</div>
@@ -699,7 +699,7 @@ function renderLibraryGrid() {
     if (isCompactList) {
       return `
         <div class="compact-book-row" onclick="openBookDetailViewByIndex(${originalIndex})">
-          <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
+          <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
           <div class="compact-book-info">
             <div class="compact-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
             <div class="compact-book-author">${escapeHtml(book.author || 'Unknown')}</div>
@@ -719,7 +719,7 @@ function renderLibraryGrid() {
     return `
       <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
         <div class="grid-cover-wrap">
-          <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
+          <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
         </div>
         <div class="grid-book-meta">
           <div class="grid-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
@@ -737,103 +737,22 @@ function renderLibraryGrid() {
   }).join('');
 }
 
-// ================= VIEW 3: EXPLORE =================
-function renderExploreView() {
-  renderPopularCategoryCounts();
-  renderExploreBooksGrid();
+// ================= VIEW 3: EXPLORE (MODULAR ARCHITECTURE) =================
+// Explore engine, OpenLibrary feeds, 3D Book Dossier & search are maintained in explore.js
+function saveState() {
+  if (typeof saveBooks === 'function') saveBooks();
+  if (typeof saveProfile === 'function') saveProfile();
+  if (typeof saveStats === 'function') saveStats();
 }
 
 function renderPopularCategoryCounts() {
-  const countCat = (catPattern) => {
-    return state.books.filter(b => !b.notInterested && b.category && b.category.toLowerCase().includes(catPattern.toLowerCase())).length;
-  };
-  
-  const elMindset = document.getElementById('catCountMindset');
-  if (elMindset) elMindset.innerText = `${countCat('Mindset')} books`;
-  
-  const elBrain = document.getElementById('catCountBrain');
-  if (elBrain) elBrain.innerText = `${countCat('Brain Science')} books`;
-  
-  const elMemory = document.getElementById('catCountMemory');
-  if (elMemory) elMemory.innerText = `${countCat('Memory')} books`;
-  
-  const elFocus = document.getElementById('catCountFocus');
-  if (elFocus) elFocus.innerText = `${countCat('Focus')} books`;
-  
-  const elPsych = document.getElementById('catCountPsychology');
-  if (elPsych) elPsych.innerText = `${countCat('Dark Psychology')} books`;
-  
-  const elWealth = document.getElementById('catCountWealth');
-  if (elWealth) elWealth.innerText = `${countCat('Wealth')} books`;
+  // Category counts handled in explore.js
 }
 
-function filterExploreGenre(genre) {
-  state.exploreGenre = genre;
-  
-  const chips = document.querySelectorAll('#exploreGenreChips .filter-chip');
-  chips.forEach(c => {
-    if (c.innerText.trim() === genre || (genre === 'ALL' && c.innerText.trim() === 'All')) {
-      c.classList.add('active');
-    } else {
-      c.classList.remove('active');
-    }
-  });
-  
-  const title = document.getElementById('exploreGridHeaderTitle');
-  if (title) {
-    title.innerText = genre === 'ALL' ? 'Explore Recommendations' : `${genre} Books`;
+function renderExploreView() {
+  if (typeof initExploreView === 'function') {
+    initExploreView();
   }
-  
-  renderExploreBooksGrid();
-}
-
-function handleExploreSearch(val) {
-  state.exploreSearchQuery = val.trim().toLowerCase();
-  renderExploreBooksGrid();
-}
-
-function renderExploreBooksGrid() {
-  const grid = document.getElementById('exploreBooksGrid');
-  if (!grid) return;
-  
-  let list = state.books.filter(b => !b.notInterested);
-  
-  if (state.exploreGenre !== 'ALL') {
-    list = list.filter(b => (b.category || '').toLowerCase().includes(state.exploreGenre.toLowerCase()));
-  }
-  
-  if (state.exploreSearchQuery) {
-    list = list.filter(b => 
-      (b.title && b.title.toLowerCase().includes(state.exploreSearchQuery)) ||
-      (b.author && b.author.toLowerCase().includes(state.exploreSearchQuery)) ||
-      (b.category && b.category.toLowerCase().includes(state.exploreSearchQuery))
-    );
-  }
-  
-  grid.innerHTML = list.slice(0, 24).map(book => {
-    const originalIndex = state.books.indexOf(book);
-    const total = book.pages || book.total_pages || 200;
-    const current = book.current_page || 0;
-    const pct = Math.min(100, Math.round((current / total) * 100));
-    
-    return `
-      <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
-        <div class="grid-cover-wrap">
-          <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg'">
-        </div>
-        <div class="grid-book-meta">
-          <div class="grid-book-title">${escapeHtml(book.title)}</div>
-          <div class="grid-book-author">${escapeHtml(book.author || 'Unknown')}</div>
-          <div class="grid-progress-wrap">
-            <div class="grid-progress-bar">
-              <div class="grid-progress-fill" style="width: ${pct}%"></div>
-            </div>
-            <span class="grid-progress-text">${pct}%</span>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
 }
 
 // ================= VIEW 4: PROGRESS & ANALYTICS =================
@@ -1753,7 +1672,7 @@ function renderNotInterestedView() {
     html += `
       <div class="book-status-item-card" style="border-left: 3px solid #ef4444;">
         <div class="bstat-cover-wrap" onclick="openBookDetailViewByIndex(${originalIndex})">
-          <img class="bstat-cover-img" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='cover_placeholder.jpg'">
+          <img class="bstat-cover-img" src="${coverSrc}" alt="${bookTitle}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
         </div>
         <div class="bstat-info-wrap" onclick="openBookDetailViewByIndex(${originalIndex})">
           <div class="bstat-book-title">${bookTitle}</div>
@@ -1956,7 +1875,7 @@ function renderNiCategoryBooksList() {
         <div class="ni-custom-checkbox">
           ${isSelected ? '✓' : ''}
         </div>
-        <img class="ni-book-cover-mini" src="${coverSrc}" alt="${bookTitle}" onerror="this.src='cover_placeholder.jpg'">
+        <img class="ni-book-cover-mini" src="${coverSrc}" alt="${bookTitle}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
         <div style="flex: 1; min-width: 0;">
           <div style="font-weight: 700; font-size: 0.92rem; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${bookTitle}</div>
           <div style="font-size: 0.76rem; color: var(--text-muted); margin-top: 2px;">${bookAuthor}</div>
@@ -2454,7 +2373,13 @@ function renderProfileView() {
 
   const aboutSub = document.getElementById('aboutAppSubText');
   if (aboutSub) {
-    aboutSub.innerText = `Version ${APP_VERSION} (Latest) • Tap to check updates`;
+    const installed = getInstalledVersionString();
+    aboutSub.innerText = 'Version ' + installed + ' (Installed) � Tap to check updates';
+  }
+  const settingsBadge = document.getElementById('appSettingsVersionBadge');
+  if (settingsBadge) {
+    const installed = getInstalledVersionString();
+    settingsBadge.innerText = installed;
   }
   
   updateLastBackupDisplay();
@@ -2917,6 +2842,25 @@ function closeBookDetailView() {
 
 // Global Android hardware/system back button handler
 window.handleAppBackButton = function() {
+  // 0a. Close Explore 3D Book Dossier Sheet if open
+  const expModal = document.getElementById('exploreBookDetailModal');
+  if (expModal && (expModal.classList.contains('active') || expModal.style.display === 'flex')) {
+    closeExploreBookDetail();
+    return true;
+  }
+  // 0b. Close Update Checker Modal if open
+  const updModal = document.getElementById('updateCheckerModalOverlay');
+  if (updModal && (updModal.classList.contains('active') || updModal.style.display === 'flex')) {
+    closeUpdateCheckerModal();
+    return true;
+  }
+  // 0c. Close Broadcast Notice Modal if open
+  const notModal = document.getElementById('inAppNoticeModalOverlay');
+  if (notModal && notModal.style.display === 'flex') {
+    dismissInAppNotice();
+    return true;
+  }
+
   // 1. If not interested modal is open, close modal
   const niModal = document.getElementById('notInterestedModalOverlay');
   if (niModal && niModal.style.display !== 'none') {
@@ -4028,7 +3972,7 @@ function onQuickCatalogSearch(val) {
   
   dropdown.innerHTML = matches.map(b => `
     <div class="quick-autofill-item" onclick="selectQuickCatalogBook('${escapeHtml(b.title).replace(/'/g, "\\'")}')">
-      <img src="${getBookCoverUrl(b)}" class="quick-autofill-thumb" onerror="this.src='cover_placeholder.jpg'">
+      <img src="${getBookCoverUrl(b)}" class="quick-autofill-thumb" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
       <div class="quick-autofill-meta">
         <div class="quick-autofill-title">${escapeHtml(b.title)}</div>
         <div class="quick-autofill-author">${escapeHtml(b.author || 'Unknown Author')} • ${escapeHtml(b.category || 'General')}</div>
@@ -5152,6 +5096,33 @@ function downloadAppUpdate() {
   triggerInAppUpdate();
 }
 
+
+async function fetchRemoteTextWithFallbacks(urls) {
+  for (const url of urls) {
+    const fullUrl = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
+    // 1. Try native Android bridge first (bypasses all WebView sandbox/CORS limits)
+    if (typeof window !== 'undefined' && window.Android && typeof window.Android.fetchRemoteText === 'function') {
+      try {
+        const text = window.Android.fetchRemoteText(fullUrl);
+        if (text && text.trim().length > 0) {
+          const clean = text.replace(/^\uFEFF/, '').trim();
+          if (clean.startsWith('{') || clean.startsWith('[')) return clean;
+        }
+      } catch (e) {}
+    }
+    // 2. Standard browser fetch
+    try {
+      const res = await fetch(fullUrl, { cache: 'no-store' });
+      if (res.ok) {
+        const text = await res.text();
+        const clean = text.replace(/^\uFEFF/, '').trim();
+        if (clean.startsWith('{') || clean.startsWith('[')) return clean;
+      }
+    } catch (e) {}
+  }
+  return null;
+}
+
 function getInstalledVersionString() {
   if (typeof window !== 'undefined' && window.Android && typeof window.Android.getInstalledAppVersion === 'function') {
     try {
@@ -5159,10 +5130,6 @@ function getInstalledVersionString() {
       if (v) return v.startsWith('v') ? v : ('v' + v);
     } catch (e) {}
   }
-  try {
-    const stored = localStorage.getItem('mf_installed_version');
-    if (stored) return stored.startsWith('v') ? stored : ('v' + stored);
-  } catch (e) {}
   return CURRENT_APP_VERSION;
 }
 
@@ -5181,63 +5148,117 @@ function isNewerVersion(remote, current) {
   return false;
 }
 
-async function checkForBackgroundUpdates() {
+window.triggerUpdateFromNative = function(activeRel) {
+  if (!activeRel || !activeRel.version) return;
+  window.__LIVE_REMOTE_CONFIG__ = { activeRelease: activeRel };
+  const installedVer = getInstalledVersionString();
+  const remoteVer = activeRel.version;
+  const isNewAvailable = isNewerVersion(remoteVer, installedVer);
   const homeCard = document.getElementById('homeUpdateCard');
   const homeTitle = document.getElementById('homeUpdateTitle');
   const homeSub = document.getElementById('homeUpdateSub');
-  
-  // Persist that current running version is active & installed
-  try {
-    const stored = localStorage.getItem('mf_installed_version');
-    if (!stored || isNewerVersion(CURRENT_APP_VERSION, stored)) {
-      localStorage.setItem('mf_installed_version', CURRENT_APP_VERSION);
-    }
-  } catch (e) {}
-
-  // Update settings version badge
-  try {
-    const settingsBadge = document.getElementById('appSettingsVersionBadge');
-    if (settingsBadge) settingsBadge.innerText = `${CURRENT_APP_VERSION} (Up to date)`;
-  } catch (e) {}
-
-  let activeRel = null;
-
-  // 1. Live Remote Check via GitHub Raw Config
-  try {
-    const rawUrl = 'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?t=' + Date.now();
-    const res = await fetch(rawUrl, { cache: 'no-store' });
-    if (res.ok) {
-      const data = await res.json();
-      if (data && data.activeRelease && data.activeRelease.version) {
-        window.__LIVE_REMOTE_CONFIG__ = data;
-        activeRel = data.activeRelease;
-      }
-    }
-  } catch (err) {
-    console.warn('Live remote config fetch failed, checking fallback:', err);
-  }
-
-  // 2. Fallback to bundled config if offline
-  if (!activeRel && typeof window.__DEFAULT_REMOTE_CONFIG__ !== 'undefined') {
-    activeRel = window.__DEFAULT_REMOTE_CONFIG__?.activeRelease || null;
-  }
-
-  const installedVer = getInstalledVersionString();
-  const remoteVer = activeRel?.version || installedVer;
-  // A new update is ONLY available if remoteVer is strictly GREATER than BOTH installedVer and CURRENT_APP_VERSION
-  const isNewAvailable = isNewerVersion(remoteVer, installedVer) && isNewerVersion(remoteVer, CURRENT_APP_VERSION);
+  const badgePill = document.getElementById('homeUpdateBadgePill');
 
   if (homeCard) {
     if (isNewAvailable) {
       homeCard.style.display = 'flex';
-      if (homeTitle) homeTitle.innerText = `🚀 Update ${remoteVer} Ready!`;
+      if (homeTitle) homeTitle.innerText = `System Update ${remoteVer} Ready!`;
+      if (badgePill) badgePill.innerText = remoteVer;
+      if (homeSub) homeSub.innerText = activeRel.name || `${remoteVer} is ready to download & install now`;
+    } else {
+      homeCard.style.display = 'none';
+    }
+  }
+
+  if (isNewAvailable) {
+    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + remoteVer);
+    if (!dismissed) {
+      setTimeout(() => {
+        if (typeof openUpdateCheckerModal === 'function') openUpdateCheckerModal();
+      }, 1000);
+    }
+  }
+};
+
+async function checkForBackgroundUpdates() {
+  const homeCard = document.getElementById('homeUpdateCard');
+  const homeTitle = document.getElementById('homeUpdateTitle');
+  const homeSub = document.getElementById('homeUpdateSub');
+  const installedVer = getInstalledVersionString();
+
+  try {
+    const settingsBadge = document.getElementById('appSettingsVersionBadge');
+    if (settingsBadge) settingsBadge.innerText = `${installedVer}`;
+  } catch (e) {}
+
+  let activeRel = null;
+
+  // Multi-CDN Fallback array
+  const cdnEndpoints = [
+    'https://ankitburdak05-oss.github.io/mind-focus-books-tracker/remote-config.json?t=' + Date.now(),
+    'https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/remote-config.json?t=' + Date.now(),
+    'https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?t=' + Date.now()
+  ];
+
+  for (const endpoint of cdnEndpoints) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 4000);
+      const res = await fetch(endpoint, { cache: 'no-store', signal: controller.signal });
+      clearTimeout(timer);
+      if (res.ok) {
+        const text = await res.text();
+        const clean = text.replace(/^\uFEFF/, '').trim();
+        const data = JSON.parse(clean);
+        if (data && data.activeRelease && data.activeRelease.version) {
+          window.__LIVE_REMOTE_CONFIG__ = data;
+          activeRel = data.activeRelease;
+          break;
+        }
+      }
+    } catch(err) {}
+  }
+
+  // GitHub Releases fallback
+  if (!activeRel) {
+    try {
+      const ghRes = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest');
+      if (ghRes.ok) {
+        const ghData = await ghRes.json();
+        if (ghData && ghData.tag_name) {
+          activeRel = {
+            version: ghData.tag_name,
+            name: ghData.name || `Mind Focus Books ${ghData.tag_name}`,
+            apkDownloadUrl: `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${ghData.tag_name}/MindFocusBooks-Native.apk`
+          };
+        }
+      }
+    } catch (e) {}
+  }
+
+  const remoteVer = activeRel?.version || installedVer;
+  const isNewAvailable = isNewerVersion(remoteVer, installedVer);
+
+  if (homeCard) {
+    if (isNewAvailable) {
+      homeCard.style.display = 'flex';
+      if (homeTitle) homeTitle.innerText = `System Update ${remoteVer} Ready!`;
+      const badgePill = document.getElementById('homeUpdateBadgePill');
+      if (badgePill) badgePill.innerText = remoteVer;
       if (homeSub) homeSub.innerText = activeRel?.name || `${remoteVer} is ready to download & install now`;
     } else {
       homeCard.style.display = 'none';
     }
   }
 
-  // Auto-popup removed: No unexpected modals on app startup
+  if (isNewAvailable) {
+    const dismissed = sessionStorage.getItem('mf_update_dismissed_' + remoteVer);
+    if (!dismissed) {
+      setTimeout(() => {
+        if (typeof openUpdateCheckerModal === 'function') openUpdateCheckerModal();
+      }, 1500);
+    }
+  }
 }
 
 // ================= 4 APP THEMES ENGINE =================
@@ -5359,7 +5380,7 @@ function openUpdateCheckerModal() {
   const rel = cfg?.activeRelease || null;
   const installedVer = getInstalledVersionString();
   const targetVer = rel?.version || installedVer;
-  const isNewAvailable = isNewerVersion(targetVer, installedVer) && isNewerVersion(targetVer, CURRENT_APP_VERSION);
+  const isNewAvailable = isNewerVersion(targetVer, installedVer);
 
   const titleEl = document.getElementById('updateModalTitle');
   const badge = document.getElementById('updateTargetVersionBadge');
@@ -5375,13 +5396,13 @@ function openUpdateCheckerModal() {
       btn.innerText = `⚡ Download & Install ${targetVer} Now`;
     }
   } else {
-    // Already on current or latest version!
+    // Already on current or latest version - allow reinstall / re-download!
     if (titleEl) titleEl.innerText = 'Mind Focus Books is Up to Date';
     if (badge) badge.innerText = `${installedVer} (Installed)`;
     if (desc) desc.innerText = `Aapke phone me latest version ${installedVer} already installed hai aur sab kuch up-to-date hai.`;
     if (btn) {
       btn.disabled = false;
-      btn.innerText = `✓ Up to Date (${installedVer})`;
+      btn.innerText = `⚡ Re-download APK (${installedVer})`;
     }
   }
 
@@ -5512,11 +5533,14 @@ async function checkRemoteBroadcastNotice() {
     const cb = Date.now();
     const res = await fetch('https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/broadcast-notice.json?t=' + cb, { cache: 'no-store' });
     if (res.ok) {
-      const data = await res.json();
+      const rawText = await res.text();
+      const cleanText = rawText.replace(/^\uFEFF/, '').trim();
+      const data = JSON.parse(cleanText);
       if (data && data.active) {
         // If notice is an update for CURRENT_APP_VERSION or older, NEVER POP UP!
         const noticeVer = data.version || (data.id && data.id.replace('notice-', ''));
-        if (noticeVer && !isNewerVersion(noticeVer, CURRENT_APP_VERSION)) {
+        const installedVer = getInstalledVersionString();
+        if (noticeVer && !isNewerVersion(noticeVer, installedVer)) {
           return;
         }
         // If already dismissed, DO NOT POP UP!
@@ -5610,11 +5634,6 @@ function navigateToSubView(viewName) {
   if (viewName === 'syncDevices') renderSyncDevicesView();
   if (viewName === 'privacySecurity') renderPrivacySecurityView();
   if (viewName === 'backupExport') renderBackupExportView();
-  if (viewName === 'appFeaturesGuide') {
-    renderAppFeaturesDirectoryView();
-    const modal = document.getElementById('appFeaturesGuideModalOverlay');
-    if (modal) modal.style.display = 'flex';
-  }
   if (viewName === 'activityAuditLog') renderActivityAuditLog();
   if (viewName === 'totalSpent') renderTotalSpentView();
   if (viewName === 'bookStatus') renderBookStatusView();
@@ -5632,119 +5651,6 @@ function navigateToSubView(viewName) {
 function navigateBack() {
   const prev = state.previousSubView || 'profile';
   switchTab(prev);
-}
-
-// ================= APP FEATURES DIRECTORY & SITEMAP (SCREEN 19) =================
-let activeGuideCategory = 'ALL';
-let currentGuideSearchQuery = '';
-
-const appFeaturesGuideData = [
-  { id: 1, title: 'Classic Wooden Bookshelf & 4 Themes', category: 'Reading', icon: '🪵', screenNum: 'Screen 1', location: 'Top Bar / Profile -> Themes Menu', purpose: 'App ka visual appearance (Mahogany, Walnut, Dark Gold, Sepia) badalne ke liye.', benefit: 'Eye comfort aur aesthetic satisfaction ke liye.', actionText: 'Switch Themes', route: 'profile' },
-  { id: 2, title: 'Compact KPI Bar & Real Metrics', category: 'Analytics', icon: '📊', screenNum: 'Screen 2', location: 'Home & Profile Header Top Bar', purpose: 'Finished books, reading progress, wishlist, time & streak track karne ke liye.', benefit: '1-second me apni daily reading stats dekhne ke liye.', actionText: 'View Dashboard', route: 'home' },
-  { id: 3, title: 'Quantum Holographic Beacon', category: 'Security', icon: '🚀', screenNum: 'Screen 3', location: 'Progress Screen Top Banner', purpose: 'Shockwave reactor orb & live broadcast updates ke liye.', benefit: 'Milestone reach hone par visual motivation ke liye.', actionText: 'Check Updates', route: 'modal_update' },
-  { id: 4, title: 'AI Book Coach & Assistant', category: 'Reading', icon: '🤖', screenNum: 'Screen 4', location: 'Profile -> Options -> AI Book Coach', purpose: 'Chapter summaries, कठिन सवाल aur quiz answers ke liye.', benefit: 'Mushkil kitabon ko bina kisi ki help ke 3x fast samajhne ke liye.', actionText: 'Open Coach', route: 'sub_aiBookCoach' },
-  { id: 5, title: 'OCR Book Cover & Text Scanner', category: 'Reading', icon: '📷', screenNum: 'Screen 5', location: 'Add Book Form / Reader Camera Icon', purpose: 'Physical book page/cover photo se text auto-extract karne ke liye.', benefit: 'Manual typing bachane aur instant entry ke liye.', actionText: 'Open Scanner', route: 'sub_ocrScanner' },
-  { id: 6, title: '3D Interactive Flip Book Reader', category: 'Reading', icon: '📖', screenNum: 'Screen 6', location: 'Book Detail -> Start Reading Button', purpose: 'Physical paper page-flip animation se kitabein padhne ke liye.', benefit: 'Realistic digital reading experience aur page progress auto-save ke liye.', actionText: 'Open 3D Reader', route: 'modal_reader' },
-  { id: 7, title: 'Audio Book Speed & Ambient Player', category: 'Reading', icon: '🎧', screenNum: 'Screen 7', location: 'Reader Toolbar -> Audio Icon', purpose: 'TTS voice audio aur background sounds (Rain, Fireplace) sunne ke liye.', benefit: 'Reading concentration aur focus badhane ke liye.', actionText: 'Open Audio Player', route: 'sub_audioBookPlayer' },
-  { id: 8, title: 'Mind Map & Concept Node Generator', category: 'Analytics', icon: '🧠', screenNum: 'Screen 8', location: 'Profile -> Options -> Knowledge Map', purpose: 'Kitabon ke main ideas ka mind map node diagram dekhne ke liye.', benefit: 'Deep learning aur concepts ko visual connect karne ke liye.', actionText: 'Open Mind Map', route: 'sub_mindMapGenerator' },
-  { id: 9, title: 'Gamified Reading Streak & Heatmap', category: 'Analytics', icon: '🔥', screenNum: 'Screen 9', location: 'Home / Progress -> Streak Card', purpose: '365-day reading activity contribution grid dekhne ke liye.', benefit: 'Daily reading habit ko continuous game ki tarah maintain karne ke liye.', actionText: 'View Streak Grid', route: 'progress' },
-  { id: 10, title: 'Book Cost & Expenditure Analytics', category: 'Analytics', icon: '💰', screenNum: 'Screen 10', location: 'Progress -> Expense & Budget Section', purpose: 'Physical books par kharch huye real budget ko calculate karne ke liye.', benefit: 'Personal book buying budget control me rakhne ke liye.', actionText: 'View Budget', route: 'progress_budget' },
-  { id: 11, title: 'Community Quote & Highlight Sharing', category: 'Library', icon: '💬', screenNum: 'Screen 11', location: 'Book Details -> Quotes & Notes Tab', purpose: 'Favorite lines aur highlights ko image cards me share/save karne ke liye.', benefit: 'Important thoughts ko hamesha ke liye save rakhne ke liye.', actionText: 'View Quotes', route: 'sub_quotesInspiration' },
-  { id: 12, title: 'Smart Library Search & Tag Filtering', category: 'Library', icon: '🔍', screenNum: 'Screen 12', location: 'Library Screen Top Search Bar', purpose: 'Title, Author, Category ya Custom Tags se search karne ke liye.', benefit: 'Badi library me se 1-second me book dhoondhne ke liye.', actionText: 'Open Library', route: 'library' },
-  { id: 13, title: 'Reading Goals & Annual Challenge', category: 'Analytics', icon: '🎯', screenNum: 'Screen 13', location: 'Profile -> Options -> Reading Goals', purpose: 'Daily page target aur yearly book goal ring track karne ke liye.', benefit: 'Reading milestone bina kisi fail ke complete karne ke liye.', actionText: 'Open Goals', route: 'sub_readingGoals' },
-  { id: 14, title: 'Personal Reading Journal & Daily Log', category: 'Library', icon: '📓', screenNum: 'Screen 14', location: 'Profile -> Options -> Reading Journal', purpose: 'Daily personal thoughts, chapter rating aur diary likhne ke liye.', benefit: 'Personal reflection aur self-growth journal maintain karne ke liye.', actionText: 'Open Journal', route: 'sub_readingJournal' },
-  { id: 15, title: 'Offline Data Backup & Encrypted Export', category: 'Security', icon: '🛡️', screenNum: 'Screen 15', location: 'Profile -> Settings -> Data & Backup', purpose: '1-click JSON/CSV backup download aur data restore ke liye.', benefit: 'Phone badalne ya reinstall karne par bhi reading data loss hone se bachane ke liye.', actionText: 'Open Security', route: 'sub_securityBackup' },
-  { id: 16, title: 'Custom Bookshelf & Category Organizer', category: 'Library', icon: '📚', screenNum: 'Screen 16', location: 'Library -> Shelves Tab', purpose: 'Virtual bookshelves (Favorites, Philosophy, Fiction) banane ke liye.', benefit: 'Kitabon ko neat and clean categories me organize rakhne ke liye.', actionText: 'Manage Shelves', route: 'library' },
-  { id: 17, title: 'Dark / Light / Vision-OS Glass UI Themes', category: 'Security', icon: '✨', screenNum: 'Screen 17', location: 'Profile -> Customization View', purpose: 'Vision-OS glassmorphism blur effects aur colors customize karne ke liye.', benefit: 'App ko sleek aur ultra-modern premium feel dene ke liye.', actionText: 'Change Theme', route: 'toggle_theme' },
-  { id: 18, title: 'Security Lock (PIN & Biometrics)', category: 'Security', icon: '🔒', screenNum: 'Screen 18', location: 'Profile -> Privacy & Security', purpose: 'App aur notes ko 4-digit PIN lock se secure karne ke liye.', benefit: 'Personal notes ko private aur safe rakhne ke liye.', actionText: 'Manage PIN', route: 'prompt_pin' },
-  { id: 19, title: 'App Features Directory & Sitemap', category: 'Security', icon: '🗺️', screenNum: 'Screen 19', location: 'Profile -> App Features Directory Button', purpose: 'Sabi 20+ features ki detailed list aur direct 1-tap launcher cards ke liye.', benefit: 'Kisi bhi feature ko bina dhoondhe 1-tap me launch karne ke liye.', actionText: 'Currently Active', route: 'self' },
-  { id: 20, title: 'Activity Audit Log & System History', category: 'Security', icon: '📋', screenNum: 'Screen 20', location: 'Profile -> Options -> Activity Audit Log', purpose: 'App me kiye gaye har action ki history audit log me dekhne ke liye.', benefit: 'System security aur app actions transparent rakhne ke liye.', actionText: 'Open Audit Log', route: 'sub_activityAuditLog' },
-  { id: 21, title: 'Book Lending & Borrow Tracker', category: 'Library', icon: '🤝', screenNum: 'Screen 21', location: 'Profile -> Options -> Book Lending Tracker', purpose: 'Dosto ya rishtedaaro ko di hui kitabein track karne ke liye.', benefit: 'Physical kitabein kabhi gum hone se bachane aur timely return paane ke liye.', actionText: 'Open Lending Hub', route: 'sub_bookLending' },
-  { id: 22, title: 'Not Interested Books Vault', category: 'Library', icon: '🚫', screenNum: 'Screen 22', location: 'Profile -> Options -> Not Interested Books', purpose: 'Jo kitabein abhi padhne ka man na ho unhe Library & Explore se hide karne ke liye.', benefit: 'Library ko clean aur uncluttered rakhne ke liye, aur jab man kare 1-tap me wapas lane ke liye.', actionText: 'Open Not Interested', route: 'sub_notInterested' },
-  { id: 23, title: 'Category Bulk Hide to Not Interested', category: 'Library', icon: '📁', screenNum: 'Screen 23', location: 'Profile -> Not Interested -> Add by Category', purpose: 'Poori category ya multiple kitabon ko ek sath select karke No Interest me daalne ke liye.', benefit: 'Ek-ek book alag kholne ki mehnat bachane aur 1-click multi-hide ke liye.', actionText: 'Open Category Picker', route: 'sub_niCategorySelect' },
-  { id: 24, title: 'Interactive 3D Note Cards & Audio Narration', category: 'Reading', icon: '✨', screenNum: 'Screen 24', location: 'Book Detail -> Notes -> Note Card Click', purpose: 'Notes ko interactive 3D perspective physics, TTS audio narration, 5 theme colors aur in-place edit ke sath explore karne ke liye.', benefit: 'Book takeaways aur insights ko memorable banane ke liye.', actionText: 'Open Notes Vault', route: 'sub_notesHighlights' }
-];
-
-function renderAppFeaturesDirectoryView() {
-  const container = document.getElementById('guideFeaturesList');
-  if (!container) return;
-
-  const query = (currentGuideSearchQuery || '').toLowerCase().trim();
-  const filtered = appFeaturesGuideData.filter(item => {
-    const matchesCategory = (activeGuideCategory === 'ALL' || item.category.toLowerCase() === activeGuideCategory.toLowerCase());
-    const matchesQuery = !query || item.title.toLowerCase().includes(query) || item.description.toLowerCase().includes(query) || item.category.toLowerCase().includes(query);
-    return matchesCategory && matchesQuery;
-  });
-
-  if (filtered.length === 0) {
-    container.innerHTML = `
-      <div style="text-align: center; padding: 40px 20px; color: var(--text-muted);">
-        <p style="font-size: 2.5rem; margin-bottom: 8px;">🔍</p>
-        <p style="font-size: 0.95rem; font-weight: 700; color: var(--text-secondary);">No features found</p>
-        <p style="font-size: 0.8rem;">Try searching with a different keyword or select "All Features".</p>
-      </div>`;
-    return;
-  }
-
-  container.innerHTML = filtered.map(item => `
-    <div class="feature-guide-card" style="background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 8px; transition: all 0.2s ease;">
-      <div style="display: flex; align-items: center; gap: 12px;">
-        <div style="font-size: 1.6rem; background: rgba(245, 158, 11, 0.12); border-radius: 12px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; border: 1px solid rgba(245, 158, 11, 0.2);">${item.icon}</div>
-        <div style="flex: 1;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-weight: 800; font-size: 0.95rem; color: #ffffff;">${item.title}</span>
-            <span style="font-size: 0.68rem; font-weight: 700; color: var(--accent-gold); background: rgba(245, 158, 11, 0.15); padding: 2px 8px; border-radius: 999px;">${item.screenNum}</span>
-          </div>
-          <span style="font-size: 0.7rem; color: #94a3b8;">Category: ${item.category}</span>
-        </div>
-      </div>
-
-      <div style="background: rgba(0, 0, 0, 0.25); border-radius: 10px; padding: 10px; display: flex; flex-direction: column; gap: 4px; font-size: 0.78rem;">
-        <div style="color: #60a5fa; font-weight: 600;">📍 <strong>Kahan hai:</strong> ${item.location}</div>
-        <div style="color: #cbd5e1;">👤 <strong>Kiske liye:</strong> ${item.purpose}</div>
-        <div style="color: #34d399;">🎯 <strong>Kyu use karein:</strong> ${item.benefit}</div>
-      </div>
-
-      <div style="display: flex; justify-content: flex-end; margin-top: 4px;">
-        <button type="button" class="btn-save-gold" style="padding: 6px 14px; font-size: 0.75rem; border-radius: 8px; cursor: pointer;" onclick="launchGuideFeatureRoute('${item.route}')">${item.actionText} &rarr;</button>
-      </div>
-    </div>
-  `).join('');
-}
-
-function filterGuideCategory(cat) {
-  activeGuideCategory = cat;
-  const categories = ['ALL', 'Reading', 'Library', 'Analytics', 'Security'];
-  categories.forEach(c => {
-    const chip = document.getElementById(c === 'ALL' ? 'guideChipAll' : 'guideChip' + c);
-    if (chip) chip.classList.toggle('active', c.toLowerCase() === cat.toLowerCase());
-  });
-  renderAppFeaturesDirectoryView();
-}
-
-function filterGuideFeatures(query) {
-  currentGuideSearchQuery = query;
-  renderAppFeaturesDirectoryView();
-}
-
-function launchGuideFeatureRoute(route) {
-  if (!route || route === 'self') return;
-  if (route.startsWith('sub_')) {
-    const subName = route.replace('sub_', '');
-    navigateToSubView(subName);
-  } else if (route === 'home' || route === 'library' || route === 'explore' || route === 'progress' || route === 'profile') {
-    switchTab(route);
-  } else if (route === 'progress_budget') {
-    switchTab('progress');
-  } else if (route === 'modal_update') {
-    openUpdateCheckerModal();
-  } else if (route === 'modal_reader') {
-    openRealBookReaderForCurrent();
-  } else if (route === 'toggle_theme') {
-    toggleTheme();
-  } else if (route === 'prompt_pin') {
-    promptSetNewPin();
-  }
 }
 
 function renderActivityAuditLog() {
@@ -5957,7 +5863,7 @@ function renderNotesList() {
 
     return `
       <div class="book-notes-group-card" onclick="openBookNotesDetailView('${escapeHtml(bookTitle)}')">
-        <img class="bng-cover" src="${coverUrl}" alt="${escapeHtml(bookTitle)}" onerror="this.src='cover_placeholder.jpg'">
+        <img class="bng-cover" src="${coverUrl}" alt="${escapeHtml(bookTitle)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
         <div class="bng-info">
           <div class="bng-title">${escapeHtml(bookTitle)}</div>
           <div class="bng-author">👤 ${escapeHtml(author)}</div>
@@ -7587,7 +7493,7 @@ function renderRecommendations() {
 
     listContainer.innerHTML = recommended.map(book => `
       <div class="rec-book-card" style="background: rgba(255, 255, 255, 0.04); border: 1px solid var(--border-subtle); border-radius: 14px; padding: 12px; display: flex; gap: 14px; align-items: center;">
-        <img src="${book.cover}" onerror="this.src='cover_placeholder.jpg'" style="width: 65px; height: 95px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);" alt="Cover">
+        <img src="${book.cover}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';" style="width: 65px; height: 95px; object-fit: cover; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.4);" alt="Cover">
         <div style="flex: 1; display: flex; flex-direction: column; gap: 4px;">
           <div style="font-weight: 800; font-size: 0.95rem; color: #ffffff;">${book.title}</div>
           <div style="font-size: 0.78rem; color: var(--accent-gold);">${book.author} &bull; ⭐ ${book.rating}</div>
@@ -7952,7 +7858,7 @@ function renderBookOrderStudioView(filterQuery) {
     return `
       <div class="book-rank-card ${cardRankClass}">
         <div class="rank-badge ${rankBadgeClass}" onclick="promptSetBookRank('${escapeHtml(book.title)}')" title="Tap to enter custom rank">${rankLabel}</div>
-        <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.src='cover_placeholder.jpg'" style="width:40px; height:56px; border-radius:8px; object-fit:cover; box-shadow:0 3px 10px rgba(0,0,0,0.4);">
+        <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';" style="width:40px; height:56px; border-radius:8px; object-fit:cover; box-shadow:0 3px 10px rgba(0,0,0,0.4);">
         <div class="compact-book-info" style="flex:1; min-width:0;">
           <div class="compact-book-title" style="font-size:0.9rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(book.title)}</div>
           <div class="compact-book-author" style="font-size:0.75rem; color:var(--text-secondary); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(book.author || 'Unknown')}</div>
@@ -8290,7 +8196,7 @@ function openShelfDetail(shelfId) {
         return `
           <div style="display:flex; align-items:center; justify-content:space-between; background:rgba(255,255,255,0.04); border:1px solid var(--border-subtle); border-radius:12px; padding:8px 12px;">
             <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
-              <img src="${getBookCoverUrl(book)}" style="width:36px; height:50px; border-radius:6px; object-fit:cover;" onerror="this.src='cover_placeholder.jpg'">
+              <img src="${getBookCoverUrl(book)}" style="width:36px; height:50px; border-radius:6px; object-fit:cover;" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
               <div style="min-width:0; flex:1;">
                 <div style="font-size:0.88rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(book.title)}</div>
                 <div style="font-size:0.75rem; color:var(--text-secondary);">${escapeHtml(book.author || 'Unknown')}</div>
@@ -8433,7 +8339,7 @@ function renderManageShelfBooksList() {
     return `
       <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; background:rgba(255,255,255,0.04); border:1px solid ${isChecked ? 'var(--accent-gold)' : 'var(--border-subtle)'}; border-radius:12px; padding:8px 12px; cursor:pointer;" onclick="toggleBookInShelf('${shelf.id}', '${escapeHtml(book.title)}')">
         <div style="display:flex; align-items:center; gap:10px; min-width:0; flex:1;">
-          <img src="${getBookCoverUrl(book)}" style="width:36px; height:50px; border-radius:6px; object-fit:cover;" onerror="this.src='cover_placeholder.jpg'">
+          <img src="${getBookCoverUrl(book)}" style="width:36px; height:50px; border-radius:6px; object-fit:cover;" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
           <div style="min-width:0; flex:1;">
             <div style="font-size:0.88rem; font-weight:700; color:#fff; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${escapeHtml(book.title)}</div>
             <div style="font-size:0.75rem; color:var(--text-secondary);">${escapeHtml(book.author || 'Unknown')}</div>

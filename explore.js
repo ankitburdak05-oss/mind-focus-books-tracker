@@ -14,6 +14,7 @@ function escapeHtml(str) {
   }[tag] || tag));
 }
 
+window.escapeHtml = escapeHtml;
 window._exploreDefaultBooks = [];
 window._exploreAPIResults = null;
 window._currentSpotlightBook = null;
@@ -21,17 +22,19 @@ window._currentExploreMode = 'trending';
 window._currentDossierDoc = null;
 let _exploreSearchDebounce = null;
 
-// Curated high-resolution spotlights with verified covers & rich metadata
-const EXPLORE_CURATED_SPOTLIGHTS = [
+// Comprehensive Curated World Books with verified offline metadata across 8 Categories
+const EXPLORE_CURATED_BOOKS = [
+  // Productivity
   {
     title: 'Atomic Habits',
     author: 'James Clear',
     year: '2018',
     cover_i: 12539702,
     rating: '4.8 (Global Bestseller)',
-    desc: 'An easy & proven way to build good habits and break bad ones. Transform your tiny daily actions into remarkable long-term power.',
+    desc: 'An easy & proven way to build good habits and break bad ones. Transform tiny daily actions into remarkable long-term power.',
     pages: 320,
-    subject: ['Self-Help', 'Productivity', 'Psychology', 'Personal Growth']
+    category: 'Productivity',
+    subject: ['Productivity', 'Habits', 'Self Help', 'Psychology']
   },
   {
     title: 'Deep Work',
@@ -39,29 +42,45 @@ const EXPLORE_CURATED_SPOTLIGHTS = [
     year: '2016',
     cover_i: 8314125,
     rating: '4.7 (Cognitive Focus)',
-    desc: 'Rules for focused success in a distracted world. Master difficult things quickly and produce elite work without multitasking.',
+    desc: 'Rules for focused success in a distracted world. Master hard things quickly and produce elite work without multitasking.',
     pages: 304,
-    subject: ['Productivity', 'Business', 'Focus', 'Technology']
+    category: 'Productivity',
+    subject: ['Productivity', 'Focus', 'Time Management', 'Business']
   },
+  {
+    title: 'Essentialism',
+    author: 'Greg McKeown',
+    year: '2014',
+    cover_i: 7412966,
+    rating: '4.6 (Disciplined Pursuit)',
+    desc: 'The disciplined pursuit of less. Do only what is essential and cut out everything that drains your energy and focus.',
+    pages: 272,
+    category: 'Productivity',
+    subject: ['Productivity', 'Leadership', 'Decision Making']
+  },
+  {
+    title: 'Make It Stick',
+    author: 'Peter C. Brown',
+    year: '2014',
+    cover_i: 8064205,
+    rating: '4.7 (Learning Science)',
+    desc: 'The science of successful learning. Discover how retrieval practice and spaced repetition supercharge long-term memory.',
+    pages: 336,
+    category: 'Productivity',
+    subject: ['Productivity', 'Learning', 'Neuroscience']
+  },
+
+  // Self Help & Mindset
   {
     title: 'The Psychology of Money',
     author: 'Morgan Housel',
     year: '2020',
     cover_i: 10423192,
     rating: '4.9 (Financial Wisdom)',
-    desc: 'Timeless lessons on wealth, greed, and happiness. Doing well with money isn’t necessarily about what you know. It’s about how you behave.',
+    desc: 'Timeless lessons on wealth, greed, and happiness. Doing well with money is about behavior, patience, and emotions.',
     pages: 256,
+    category: 'Self Help',
     subject: ['Finance', 'Psychology', 'Wealth', 'Mindset']
-  },
-  {
-    title: 'Thinking, Fast and Slow',
-    author: 'Daniel Kahneman',
-    year: '2011',
-    cover_i: 7279515,
-    rating: '4.6 (Nobel Prize Insight)',
-    desc: 'Explore the two systems that drive the way we think: System 1 is fast, intuitive, and emotional; System 2 is slower, more deliberative, and more logical.',
-    pages: 499,
-    subject: ['Psychology', 'Science', 'Decision Making', 'Cognition']
   },
   {
     title: 'Can’t Hurt Me',
@@ -69,30 +88,105 @@ const EXPLORE_CURATED_SPOTLIGHTS = [
     year: '2018',
     cover_i: 8765912,
     rating: '4.8 (Mental Toughness)',
-    desc: 'Master your mind and defy the odds. Uncover your true potential through relentless discipline, accountability, and mental grit.',
+    desc: 'Master your mind and defy the odds. Uncover your true potential through relentless discipline and mental grit.',
     pages: 364,
-    subject: ['Memoir', 'Motivation', 'Discipline', 'Mindset']
+    category: 'Self Help',
+    subject: ['Motivation', 'Discipline', 'Mindset', 'Biography']
   },
+  {
+    title: 'Mindset: The New Psychology of Success',
+    author: 'Carol S. Dweck',
+    year: '2006',
+    cover_i: 8231988,
+    rating: '4.7 (Growth Mindset)',
+    desc: 'How we can learn to fulfill our potential. Discover how the growth mindset unlocks achievement in arts, sports, and business.',
+    pages: 288,
+    category: 'Self Help',
+    subject: ['Self Help', 'Psychology', 'Personal Growth']
+  },
+  {
+    title: 'The Power of Now',
+    author: 'Eckhart Tolle',
+    year: '1997',
+    cover_i: 8246311,
+    rating: '4.7 (Spiritual Awareness)',
+    desc: 'A guide to spiritual enlightenment. Learn to live in the present moment free from past regrets and future anxiety.',
+    pages: 236,
+    category: 'Self Help',
+    subject: ['Mindfulness', 'Spirituality', 'Philosophy']
+  },
+
+  // Philosophy
   {
     title: 'Meditations',
     author: 'Marcus Aurelius',
     year: '180 AD',
     cover_i: 8231990,
     rating: '4.8 (Stoic Classic)',
-    desc: 'Private reflections and philosophical exercises of the Roman Emperor on resilience, duty, character, and inner peace.',
+    desc: 'Private reflections of the Roman Emperor on resilience, duty, character, and inner peace in the face of chaos.',
     pages: 254,
+    category: 'Philosophy',
     subject: ['Philosophy', 'Stoicism', 'Classics', 'History']
   },
+  {
+    title: 'Daily Stoic',
+    author: 'Ryan Holiday',
+    year: '2016',
+    cover_i: 8245356,
+    rating: '4.8 (Daily Wisdom)',
+    desc: '366 meditations on wisdom, perseverance, and the art of living from Seneca, Epictetus, and Marcus Aurelius.',
+    pages: 416,
+    category: 'Philosophy',
+    subject: ['Philosophy', 'Stoicism', 'Self Help']
+  },
+  {
+    title: 'Ego is the Enemy',
+    author: 'Ryan Holiday',
+    year: '2016',
+    cover_i: 8232034,
+    rating: '4.6 (Humility & Mastery)',
+    desc: 'The fight to master our greatest internal opponent. Learn how to stay humble in success and resilient in failure.',
+    pages: 256,
+    category: 'Philosophy',
+    subject: ['Philosophy', 'Leadership', 'Psychology']
+  },
+
+  // Dark Psychology & Strategy
   {
     title: 'The 48 Laws of Power',
     author: 'Robert Greene',
     year: '1998',
     cover_i: 8231933,
     rating: '4.6 (Strategy Classic)',
-    desc: 'Amoral, cunning, ruthless, and instructive. A distillation of 3,000 years of the history of power drawing from Machiavelli and Sun Tzu.',
+    desc: 'Amoral, cunning, ruthless, and instructive. A distillation of 3,000 years of the history of power drawing from Machiavelli.',
     pages: 452,
-    subject: ['Psychology', 'Strategy', 'History', 'Leadership']
+    category: 'Dark Psychology',
+    subject: ['Psychology', 'Strategy', 'History', 'Influence']
   },
+  {
+    title: 'Influence: The Psychology of Persuasion',
+    author: 'Robert B. Cialdini',
+    year: '1984',
+    cover_i: 8087691,
+    rating: '4.8 (Persuasion Master)',
+    desc: 'The foundational book on why people say yes. Discover the 6 universal principles of persuasion and how to defend against manipulation.',
+    pages: 320,
+    category: 'Dark Psychology',
+    subject: ['Psychology', 'Persuasion', 'Marketing', 'Behavior']
+  },
+  {
+    title: 'The Art of Seduction',
+    author: 'Robert Greene',
+    year: '2001',
+    cover_i: 8028304,
+    rating: '4.5 (Charm & Psychology)',
+    desc: 'An indispensable primer on persuasion and human nature. Master the subtle psychology of allure and attraction.',
+    pages: 468,
+    category: 'Dark Psychology',
+    subject: ['Dark Psychology', 'Strategy', 'Human Nature']
+  },
+
+  // Business & Wealth
   {
     title: 'Zero to One',
     author: 'Peter Thiel',
@@ -101,39 +195,100 @@ const EXPLORE_CURATED_SPOTLIGHTS = [
     rating: '4.7 (Startup Blueprint)',
     desc: 'Notes on startups, or how to build the future. The great secret of our time is that there are still uncharted frontiers to explore.',
     pages: 224,
+    category: 'Business',
     subject: ['Business', 'Startups', 'Technology', 'Innovation']
+  },
+  {
+    title: 'Principles',
+    author: 'Ray Dalio',
+    year: '2017',
+    cover_i: 8314178,
+    rating: '4.8 (Life & Work Wisdom)',
+    desc: 'Unconventional principles that Ray Dalio developed, refined, and used over 40 years to create unique results in life and business.',
+    pages: 592,
+    category: 'Business',
+    subject: ['Business', 'Leadership', 'Decision Making']
+  },
+  {
+    title: 'Think and Grow Rich',
+    author: 'Napoleon Hill',
+    year: '1937',
+    cover_i: 8281189,
+    rating: '4.7 (Timeless Wealth)',
+    desc: 'The landmark bestseller on wealth creation and the philosophy of individual achievement based on 500 successful tycoons.',
+    pages: 238,
+    category: 'Business',
+    subject: ['Wealth', 'Finance', 'Success', 'Mindset']
+  },
+
+  // Fiction
+  {
+    title: '1984',
+    author: 'George Orwell',
+    year: '1949',
+    cover_i: 7272162,
+    rating: '4.7 (Dystopian Classic)',
+    desc: 'The chilling prophecy about the future where Big Brother is always watching. A masterpiece on totalitarianism and freedom of thought.',
+    pages: 328,
+    category: 'Fiction',
+    subject: ['Fiction', 'Classics', 'Dystopia', 'Literature']
+  },
+  {
+    title: 'The Alchemist',
+    author: 'Paulo Coelho',
+    year: '1988',
+    cover_i: 8039542,
+    rating: '4.7 (Philosophical Tale)',
+    desc: 'A magical story about Santiago, an Andalusian shepherd boy who yearns to travel in search of worldly treasure.',
+    pages: 208,
+    category: 'Fiction',
+    subject: ['Fiction', 'Philosophy', 'Adventure', 'Classics']
+  },
+
+  // Technology
+  {
+    title: 'Algorithms to Live By',
+    author: 'Brian Christian & Tom Griffiths',
+    year: '2016',
+    cover_i: 8305903,
+    rating: '4.7 (Computer Science Logic)',
+    desc: 'The computer science of human decisions. Simple ways computer algorithms solve everyday problems from sorting socks to time management.',
+    pages: 368,
+    category: 'Technology',
+    subject: ['Technology', 'Computer Science', 'Psychology']
+  },
+  {
+    title: 'Thinking, Fast and Slow',
+    author: 'Daniel Kahneman',
+    year: '2011',
+    cover_i: 7279515,
+    rating: '4.6 (Nobel Prize Insight)',
+    desc: 'Explore the two systems that drive our mind: System 1 is fast and intuitive; System 2 is slow and deliberative.',
+    pages: 499,
+    category: 'Self Help',
+    subject: ['Psychology', 'Science', 'Cognition']
   }
 ];
 
-const EXPLORE_SUBJECT_MAP = {
-  'ALL':             ['self_help', 'psychology', 'productivity', 'habits', 'finance', 'philosophy'],
-  'Productivity':    ['productivity', 'time_management', 'habits', 'focus'],
-  'Self Help':       ['self_help', 'personal_development', 'mindfulness', 'motivation'],
-  'Fiction':         ['fiction', 'novel', 'literature', 'classic_literature'],
-  'Business':        ['business', 'economics', 'entrepreneurship', 'leadership'],
-  'Technology':      ['technology', 'computer_science', 'artificial_intelligence', 'programming'],
-  'Dark Psychology': ['psychology', 'influence', 'persuasion', 'human_behavior'],
-  'Philosophy':      ['philosophy', 'stoicism', 'ethics', 'ancient_philosophy']
-};
+window.EXPLORE_CURATED_BOOKS = EXPLORE_CURATED_BOOKS;
 
-// ================= SPOTLIGHT & HERO ENGINE =================
+// ================= SPOTLIGHT HERO ENGINE =================
 
 function initExploreSpotlight() {
   if (!window._currentSpotlightBook) {
-    const randomPick = EXPLORE_CURATED_SPOTLIGHTS[Math.floor(Math.random() * EXPLORE_CURATED_SPOTLIGHTS.length)];
-    window._currentSpotlightBook = randomPick;
+    window._currentSpotlightBook = EXPLORE_CURATED_BOOKS[0];
   }
   updateExploreSpotlightUI(window._currentSpotlightBook);
 }
 
 function rotateExploreSpotlight() {
   const current = window._currentSpotlightBook;
-  const pool = EXPLORE_CURATED_SPOTLIGHTS.filter(b => !current || b.title !== current.title);
-  const next = pool[Math.floor(Math.random() * pool.length)] || EXPLORE_CURATED_SPOTLIGHTS[0];
+  const pool = EXPLORE_CURATED_BOOKS.filter(b => !current || b.title !== current.title);
+  const next = pool[Math.floor(Math.random() * pool.length)] || EXPLORE_CURATED_BOOKS[0];
   window._currentSpotlightBook = next;
   updateExploreSpotlightUI(next);
   if (typeof showToast === 'function') {
-    showToast(`Spotlight: ${next.title} 🌟`);
+    showToast(`Spotlight: ${next.title} ✨`);
   }
 }
 
@@ -149,22 +304,24 @@ function updateExploreSpotlightUI(book) {
 
   if (coverImg) {
     coverImg.src = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg` : 'cover_placeholder.jpg';
+    coverImg.alt = book.title;
     coverImg.onerror = function() {
       this.onerror = null;
       this.src = 'cover_placeholder.jpg';
     };
   }
+
   if (titleEl) titleEl.innerText = book.title;
   if (authorEl) authorEl.innerText = book.author;
-  if (yearEl) yearEl.innerText = book.year || 'Classic';
-  if (descEl) descEl.innerText = book.desc || 'World-renowned discovery from Open Library.';
+  if (descEl) descEl.innerText = book.desc || 'Explore timeless wisdom and deep reading focus.';
   if (badgeEl) badgeEl.innerText = book.rating || '4.8 (Global Reader Choice)';
+  if (yearEl) yearEl.innerText = book.year || 'Classic';
 
   if (addBtn && typeof window.state !== 'undefined' && Array.isArray(window.state.books)) {
     const already = window.state.books.some(b => b && b.title && b.title.toLowerCase() === book.title.toLowerCase());
     if (already) {
       addBtn.innerText = '✓ In Library';
-      addBtn.style.opacity = '0.85';
+      addBtn.style.opacity = '0.7';
     } else {
       addBtn.innerText = '+ Add to Library';
       addBtn.style.opacity = '1';
@@ -195,82 +352,73 @@ function addCurrentSpotlightToLibrary() {
     cover_i: spot.cover_i,
     first_publish_year: spot.year,
     number_of_pages_median: spot.pages || 300,
-    subject: spot.subject || ['Featured']
+    subject: spot.subject || ['Featured', 'World Discovery']
   };
   window._currentDossierDoc = doc;
   addDossierBookToLibrary();
   updateExploreSpotlightUI(spot);
 }
 
-// ================= CONTROLS & SUB-TABS =================
+// ================= EXPLORE MODES & FILTERING =================
 
 function setExploreMode(mode) {
   window._currentExploreMode = mode;
-
-  const modePills = ['exploreModeTrending', 'exploreModeBestsellers', 'exploreModeClassics', 'exploreModeMindset'];
-  modePills.forEach(id => {
+  const pills = ['exploreModeTrending', 'exploreModeBestsellers', 'exploreModeClassics', 'exploreModeMindset'];
+  pills.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.classList.remove('active');
   });
 
-  const activeIdMap = {
-    trending: 'exploreModeTrending',
-    bestseller: 'exploreModeBestsellers',
-    classics: 'exploreModeClassics',
-    mindset: 'exploreModeMindset'
-  };
+  const activeId = mode === 'bestseller' ? 'exploreModeBestsellers' :
+                   mode === 'classics' ? 'exploreModeClassics' :
+                   mode === 'mindset' ? 'exploreModeMindset' : 'exploreModeTrending';
+  const activeEl = document.getElementById(activeId);
+  if (activeEl) activeEl.classList.add('active');
 
-  const activeBtn = document.getElementById(activeIdMap[mode]);
-  if (activeBtn) activeBtn.classList.add('active');
-
-  const modeSubjectMap = {
-    trending: 'bestseller',
-    bestseller: 'leadership',
-    classics: 'classic_literature',
-    mindset: 'habits'
-  };
-
-  loadExploreDefaultBooks((typeof window.state !== 'undefined' && window.state.exploreGenre) || 'ALL', modeSubjectMap[mode] || null, true);
+  loadExploreDefaultBooks((typeof window.state !== 'undefined' && window.state.exploreGenre) || 'ALL', null, true);
 }
 
 function refreshExploreFeed() {
   const currentGenre = (typeof window.state !== 'undefined' && window.state.exploreGenre) || 'ALL';
   loadExploreDefaultBooks(currentGenre, null, true);
   if (typeof showToast === 'function') {
-    showToast('✨ Nayi kitabein khoji jaa rahi hain...');
+    showToast('✨ Nayi kitabein load ho gayi!');
   }
 }
 
 function triggerSurpriseBook() {
-  const pool = EXPLORE_CURATED_SPOTLIGHTS;
+  const pool = EXPLORE_CURATED_BOOKS;
   const pick = pool[Math.floor(Math.random() * pool.length)];
   const doc = {
     title: pick.title,
     author_name: [pick.author],
     cover_i: pick.cover_i,
     first_publish_year: pick.year,
-    number_of_pages_median: pick.pages || 300,
-    subject: pick.subject || ['Surprise Pick']
+    number_of_pages_median: pick.pages,
+    subject: pick.subject
   };
   open3dBookDossierSheet(doc);
   if (typeof showToast === 'function') {
-    showToast(`🎲 Surprise: "${pick.title}"!`);
+    showToast(`Surprise Pick: "${pick.title}" 🎲✨`);
   }
 }
 
-function filterExploreCategoryTile(categoryName, query) {
-  const input = document.getElementById('exploreSearchInput');
-  if (input) input.value = categoryName;
+function filterExploreCategoryTile(categoryTitle, subjectKey) {
+  const chips = document.querySelectorAll('#exploreGenreChips .filter-chip');
+  chips.forEach(c => {
+    if (c.innerText.toLowerCase() === categoryTitle.toLowerCase()) {
+      c.classList.add('active');
+    } else {
+      c.classList.remove('active');
+    }
+  });
 
-  const clearBtn = document.getElementById('exploreSearchClearBtn');
-  if (clearBtn) clearBtn.style.display = 'block';
-
-  searchOpenLibrary(query || categoryName);
-
-  const resultsSection = document.getElementById('exploreAPIResultsSection');
-  if (resultsSection) {
-    resultsSection.scrollIntoView({ behavior: 'smooth' });
+  if (typeof window.state !== 'undefined') {
+    window.state.exploreGenre = categoryTitle;
   }
+  loadExploreDefaultBooks(categoryTitle, null, true);
+  const gridEl = document.getElementById('exploreBooksGrid');
+  if (gridEl) gridEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function filterExploreGenre(genre) {
@@ -279,7 +427,8 @@ function filterExploreGenre(genre) {
   }
   const chips = document.querySelectorAll('#exploreGenreChips .filter-chip');
   chips.forEach(c => {
-    if (c.innerText.trim() === genre || (genre === 'ALL' && c.innerText.trim() === 'All')) {
+    if (c.innerText.trim().toUpperCase() === genre.trim().toUpperCase() ||
+       (genre === 'ALL' && c.innerText.trim().toUpperCase() === 'ALL')) {
       c.classList.add('active');
     } else {
       c.classList.remove('active');
@@ -288,74 +437,49 @@ function filterExploreGenre(genre) {
   loadExploreDefaultBooks(genre, null, true);
 }
 
-// ================= LIVE FEED LOADING & FALLBACK =================
+// ================= LIVE FEED LOADING & INSTANT RENDERING =================
 
-async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffset = false) {
+function loadExploreDefaultBooks(genre = 'ALL', customSubject = null, forceShuffle = false) {
   const grid = document.getElementById('exploreBooksGrid');
   const titleEl = document.getElementById('exploreGridHeaderTitle');
   if (!grid) return;
 
-  grid.innerHTML = `
-    <div style="grid-column:1/-1;text-align:center;padding:36px 16px;color:var(--text-secondary);">
-      <div style="font-size:1.8rem;margin-bottom:8px;">⏳</div>
-      <div style="font-weight:700;color:var(--text-primary);font-size:0.92rem;">Open Library se kitabein load ho rahi hain...</div>
-      <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">World-renowned reading feed</div>
-    </div>
-  `;
-
-  const subjects = EXPLORE_SUBJECT_MAP[genre] || EXPLORE_SUBJECT_MAP['ALL'];
-  const subject = customSubject || subjects[Math.floor(Math.random() * subjects.length)];
-  const offset = forceNewOffset ? Math.floor(Math.random() * 25) : 0;
-  const url = `https://openlibrary.org/subjects/${subject}.json?limit=15&offset=${offset}`;
-
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 6500);
-
-    const res = await fetch(url, { signal: controller.signal });
-    clearTimeout(timer);
-
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-
-    if (!data.works || data.works.length === 0) throw new Error('No works returned');
-
-    window._exploreDefaultBooks = data.works.map(w => ({
-      key: w.key,
-      title: w.title,
-      author_name: w.authors ? w.authors.map(a => a.name) : ['Unknown Author'],
-      cover_i: w.cover_id || null,
-      first_publish_year: w.first_publish_year || 'Classic',
-      number_of_pages_median: 280,
-      subject: w.subject || [genre || 'General']
-    }));
-
-    if (titleEl) {
-      titleEl.innerHTML = `${genre === 'ALL' ? 'Explore Recommendations' : genre} <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">(${window._exploreDefaultBooks.length} books)</span>`;
-    }
-
-    grid.innerHTML = window._exploreDefaultBooks.map((doc, idx) => renderExploreBookCard(doc, idx)).join('');
-
-  } catch (err) {
-    console.warn('Explore live feed fallback:', err);
-    window._exploreDefaultBooks = EXPLORE_CURATED_SPOTLIGHTS.map(s => ({
-      title: s.title,
-      author_name: [s.author],
-      cover_i: s.cover_i,
-      first_publish_year: s.year,
-      number_of_pages_median: s.pages,
-      subject: s.subject
-    }));
-
-    if (titleEl) {
-      titleEl.innerHTML = `Curated Masterpieces <span style="font-size:0.72rem;color:var(--text-muted);">&bull; Offline Ready</span>`;
-    }
-
-    grid.innerHTML = window._exploreDefaultBooks.map((doc, idx) => renderExploreBookCard(doc, idx)).join('');
+  // Filter curated pool by genre
+  let pool = EXPLORE_CURATED_BOOKS;
+  if (genre && genre !== 'ALL') {
+    const gLower = genre.toLowerCase();
+    pool = EXPLORE_CURATED_BOOKS.filter(b => {
+      if (b.category && b.category.toLowerCase().includes(gLower)) return true;
+      if (b.subject && b.subject.some(s => s.toLowerCase().includes(gLower))) return true;
+      return false;
+    });
+    if (pool.length === 0) pool = EXPLORE_CURATED_BOOKS;
   }
+
+  // Shuffle if requested
+  let docs = [...pool];
+  if (forceShuffle) {
+    docs.sort(() => Math.random() - 0.5);
+  }
+
+  window._exploreDefaultBooks = docs.map(b => ({
+    title: b.title,
+    author_name: [b.author],
+    cover_i: b.cover_i,
+    first_publish_year: b.year,
+    number_of_pages_median: b.pages,
+    subject: b.subject
+  }));
+
+  if (titleEl) {
+    titleEl.innerHTML = `${genre === 'ALL' ? 'Explore Recommendations' : genre} <span style="font-size:0.75rem;color:var(--text-muted);font-weight:400;">(${window._exploreDefaultBooks.length} books)</span>`;
+  }
+
+  // INSTANT RENDER — ZERO DELAY, NO SPINNER BLOCKING
+  grid.innerHTML = window._exploreDefaultBooks.map((doc, idx) => renderExploreBookCard(doc, idx)).join('');
 }
 
-// ================= PIXEL-PERFECT BOOK CARD =================
+// ================= PIXEL-PERFECT BOOK CARD WITH FALLBACK ART =================
 
 function renderExploreBookCard(doc, idx) {
   const title = doc.title || 'Unknown Title';
@@ -369,9 +493,14 @@ function renderExploreBookCard(doc, idx) {
 
   return `
     <div class="grid-book-card" data-explore-index="${idx}" data-is-search="false" style="cursor:pointer;position:relative;" onclick="openExploreBookDetail(${idx})">
-      <div class="grid-cover-wrap">
-        <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
-        ${alreadyAdded ? '<span style="position:absolute;top:6px;right:6px;background:rgba(16,185,129,0.92);color:#ffffff;font-size:0.58rem;padding:2px 6px;border-radius:6px;font-weight:800;letter-spacing:0.5px;box-shadow:0 2px 6px rgba(0,0,0,0.5);">✓ IN LIBRARY</span>' : ''}
+      <div class="grid-cover-wrap" style="position:relative;background:linear-gradient(135deg,#1e293b,#0f172a);display:flex;align-items:center;justify-content:center;overflow:hidden;border-radius:12px;aspect-ratio:1/1.45;">
+        <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';" style="width:100%;height:100%;object-fit:cover;">
+        <div class="fallback-cover-art" style="display:none;position:absolute;inset:0;background:linear-gradient(145deg, #1e1b4b, #0f172a);flex-direction:column;align-items:center;justify-content:center;padding:10px;text-align:center;">
+          <span style="font-size:1.8rem;margin-bottom:6px;">📖</span>
+          <span style="font-size:0.75rem;font-weight:800;color:#f8fafc;line-height:1.2;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(title)}</span>
+          <span style="font-size:0.62rem;color:#94a3b8;margin-top:4px;">${escapeHtml(author)}</span>
+        </div>
+        ${alreadyAdded ? '<span style="position:absolute;top:6px;right:6px;background:rgba(16,185,129,0.92);color:#ffffff;font-size:0.58rem;padding:2px 6px;border-radius:6px;font-weight:800;letter-spacing:0.5px;box-shadow:0 2px 6px rgba(0,0,0,0.5);z-index:2;">✓ IN LIBRARY</span>' : ''}
       </div>
       <div class="grid-book-meta">
         <div class="grid-book-title">${escapeHtml(title)}</div>
@@ -460,7 +589,7 @@ function open3dBookDossierSheet(doc) {
       </div>
 
       <div class="dossier-desc-box">
-        World-renowned reading discovery from Open Library. Add to your personal library to log daily reading pages, track habit streaks and take notes.
+        World-renowned reading discovery. Add to your personal library to log daily reading pages, track habit streaks and take notes.
       </div>
 
       ${alreadyAdded
@@ -472,9 +601,9 @@ function open3dBookDossierSheet(doc) {
         <button type="button" class="dossier-btn-sub" onclick="saveQuickNoteFromDossier()" style="flex:1;padding:11px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#e2e8f0;font-size:0.82rem;font-weight:700;cursor:pointer;">
           <span>📝 Save Note</span>
         </button>
-        <a href="https://openlibrary.org${doc.key || ''}" target="_blank" class="dossier-btn-sub" style="flex:1;padding:11px;text-align:center;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#a78bfa;font-size:0.82rem;font-weight:700;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:4px;">
-          <span>🌐 Open Library ↗</span>
-        </a>
+        <button type="button" class="dossier-btn-sub" onclick="closeExploreBookDetail()" style="flex:1;padding:11px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#cbd5e1;font-size:0.82rem;font-weight:700;cursor:pointer;">
+          <span>✕ Close</span>
+        </button>
       </div>
     </div>
   `;
@@ -512,6 +641,8 @@ function addDossierBookToLibrary() {
       category: (doc.subject && doc.subject[0]) || 'General',
       rating: 0,
       notes: '',
+      quotes: [],
+      vocabulary: [],
       dateAdded: new Date().toISOString(),
       notInterested: false,
       fromExplore: true
@@ -558,7 +689,7 @@ function closeExploreBookDetail() {
   }
 }
 
-// ================= LIVE & API SEARCH =================
+// ================= LIVE SEARCH =================
 
 function handleExploreSearchLive(val) {
   clearTimeout(_exploreSearchDebounce);
@@ -573,133 +704,82 @@ function handleExploreSearchLive(val) {
   }
 
   _exploreSearchDebounce = setTimeout(() => {
-    if (val.trim().length >= 2) {
-      searchOpenLibrary(val.trim());
-    }
-  }, 400);
+    executeExploreSearch(val.trim());
+  }, 350);
 }
 
 function triggerExploreAPISearch() {
   const input = document.getElementById('exploreSearchInput');
   const query = input ? input.value.trim() : '';
   if (query.length > 0) {
-    searchOpenLibrary(query);
+    executeExploreSearch(query);
   }
 }
 
-async function searchOpenLibrary(query) {
+function executeExploreSearch(query) {
   const statusEl = document.getElementById('exploreAPIStatus');
-  const resultsSection = document.getElementById('exploreAPIResultsSection');
+  const resultsSec = document.getElementById('exploreAPIResultsSection');
   const resultsGrid = document.getElementById('exploreAPIResultsGrid');
   const resultsTitle = document.getElementById('exploreAPIResultsTitle');
 
-  if (!resultsSection || !resultsGrid) return;
+  if (!resultsSec || !resultsGrid) return;
+  const qLower = query.toLowerCase();
 
-  resultsSection.style.display = 'block';
-  if (statusEl) {
-    statusEl.style.display = 'block';
-    statusEl.innerHTML = `🔍 <strong>"${escapeHtml(query)}"</strong> khoja jaa raha hai...`;
+  // Search local curated pool + DEFAULT_BOOKS
+  let matches = EXPLORE_CURATED_BOOKS.filter(b => 
+    b.title.toLowerCase().includes(qLower) || b.author.toLowerCase().includes(qLower) || (b.category && b.category.toLowerCase().includes(qLower))
+  );
+
+  if (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) {
+    DEFAULT_BOOKS.forEach(db => {
+      if (!matches.some(m => m.title.toLowerCase() === db.title.toLowerCase())) {
+        if (db.title.toLowerCase().includes(qLower) || (db.author && db.author.toLowerCase().includes(qLower))) {
+          matches.push({
+            title: db.title,
+            author: db.author || 'Unknown',
+            year: db.published_year || 'Classic',
+            pages: db.total_pages || 250,
+            subject: [db.category || 'General']
+          });
+        }
+      }
+    });
   }
+
+  window._exploreAPIResults = matches.map(m => ({
+    title: m.title,
+    author_name: [m.author],
+    cover_i: m.cover_i || null,
+    first_publish_year: m.year,
+    number_of_pages_median: m.pages || 260,
+    subject: m.subject || ['General']
+  }));
+
+  if (statusEl) statusEl.style.display = 'none';
+  resultsSec.style.display = 'block';
   if (resultsTitle) {
-    resultsTitle.innerText = `Search: "${query}"`;
+    resultsTitle.innerText = `Results for "${query}" (${window._exploreAPIResults.length})`;
   }
 
-  resultsGrid.innerHTML = `
-    <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-secondary);">
-      <div style="font-size:1.6rem;margin-bottom:6px;">🔎</div>
-      <div>Kitabein dhoondi jaa rahi hain...</div>
-    </div>
-  `;
-
-  try {
-    const encoded = encodeURIComponent(query);
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 7500);
-
-    const res = await fetch(`https://openlibrary.org/search.json?q=${encoded}&limit=12`, { signal: controller.signal });
-    clearTimeout(timer);
-
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-
-    if (!data.docs || data.docs.length === 0) {
-      if (statusEl) statusEl.innerHTML = `⚠️ "${escapeHtml(query)}" ke liye koi kitab nahi mili. Kripya doosra naam try karein.`;
-      resultsGrid.innerHTML = `
-        <div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-muted);font-size:0.85rem;">
-          Koi result nahi mila. Kripya author ya book ka sahi naam likhein.
-        </div>
-      `;
-      return;
-    }
-
-    window._exploreAPIResults = data.docs.map(d => ({
-      key: d.key,
-      title: d.title,
-      author_name: d.author_name || ['Unknown Author'],
-      cover_i: d.cover_i,
-      first_publish_year: d.first_publish_year || 'Classic',
-      number_of_pages_median: d.number_of_pages_median || 280,
-      subject: d.subject || ['Literature']
-    }));
-
-    if (statusEl) {
-      statusEl.innerHTML = `✅ "${escapeHtml(query)}" ke liye <strong>${data.docs.length}</strong> kitabein mili!`;
-    }
-
-    resultsGrid.innerHTML = window._exploreAPIResults.map((doc, idx) => `
-      <div class="grid-book-card" data-explore-index="${idx}" data-is-search="true" style="cursor:pointer;position:relative;" onclick="openExploreSearchBookDetail(${idx})">
-        <div class="grid-cover-wrap">
-          <img src="${doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : 'cover_placeholder.jpg'}" alt="${escapeHtml(doc.title)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
-          ${(typeof window.state !== 'undefined' && Array.isArray(window.state.books) && window.state.books.some(b => b && b.title && b.title.toLowerCase() === (doc.title || '').toLowerCase()))
-            ? '<span style="position:absolute;top:6px;right:6px;background:rgba(16,185,129,0.92);color:#ffffff;font-size:0.58rem;padding:2px 6px;border-radius:6px;font-weight:800;letter-spacing:0.5px;box-shadow:0 2px 6px rgba(0,0,0,0.5);">✓ IN LIBRARY</span>'
-            : ''}
-        </div>
-        <div class="grid-book-meta">
-          <div class="grid-book-title">${escapeHtml(doc.title || 'Unknown Title')}</div>
-          <div class="grid-book-author">${escapeHtml((doc.author_name && doc.author_name[0]) || 'Unknown')}${doc.first_publish_year ? ' · ' + doc.first_publish_year : ''}</div>
-        </div>
-      </div>
-    `).join('');
-
-  } catch (err) {
-    console.warn('API search fallback:', err);
-    const qLower = query.toLowerCase();
-    const localMatches = EXPLORE_CURATED_SPOTLIGHTS.filter(b =>
-      b.title.toLowerCase().includes(qLower) ||
-      b.author.toLowerCase().includes(qLower) ||
-      (b.subject && b.subject.some(s => s.toLowerCase().includes(qLower)))
-    );
-
-    if (localMatches.length > 0) {
-      window._exploreAPIResults = localMatches.map(m => ({
-        title: m.title,
-        author_name: [m.author],
-        cover_i: m.cover_i,
-        first_publish_year: m.year,
-        number_of_pages_median: m.pages || 300,
-        subject: m.subject
-      }));
-
-      if (statusEl) statusEl.innerHTML = `✨ Curated match: <strong>${localMatches.length}</strong> kitabein mili!`;
-      resultsGrid.innerHTML = window._exploreAPIResults.map((doc, idx) => `
-        <div class="grid-book-card" data-explore-index="${idx}" data-is-search="true" style="cursor:pointer;position:relative;" onclick="openExploreSearchBookDetail(${idx})">
-          <div class="grid-cover-wrap">
-            <img src="${doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : 'cover_placeholder.jpg'}" alt="${escapeHtml(doc.title)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
+  if (window._exploreAPIResults.length === 0) {
+    resultsGrid.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:24px;color:var(--text-secondary);">Koi kitab nahi mili "${escapeHtml(query)}" ke liye. Doosra naam likhein! 🔍</div>`;
+  } else {
+    resultsGrid.innerHTML = window._exploreAPIResults.map((doc, idx) => {
+      const title = doc.title || 'Unknown Title';
+      const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+      const coverId = doc.cover_i;
+      const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : 'cover_placeholder.jpg';
+      return `
+        <div class="grid-book-card" data-explore-index="${idx}" data-is-search="true" style="cursor:pointer;" onclick="openExploreSearchBookDetail(${idx})">
+          <div class="grid-cover-wrap" style="aspect-ratio:1/1.45;background:linear-gradient(135deg,#1e293b,#0f172a);border-radius:12px;overflow:hidden;">
+            <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy" onerror="this.src='cover_placeholder.jpg';">
           </div>
           <div class="grid-book-meta">
-            <div class="grid-book-title">${escapeHtml(doc.title)}</div>
-            <div class="grid-book-author">${escapeHtml(doc.author_name[0])} · ${doc.first_publish_year}</div>
+            <div class="grid-book-title">${escapeHtml(title)}</div>
+            <div class="grid-book-author">${escapeHtml(author)}</div>
           </div>
-        </div>
-      `).join('');
-    } else {
-      if (statusEl) statusEl.innerHTML = `⚠️ Search offline fallback ready.`;
-      resultsGrid.innerHTML = `
-        <div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted);font-size:0.82rem;">
-          Internet slow ya offline hai. Neeche recommendations explore karein.
-        </div>
-      `;
-    }
+        </div>`;
+    }).join('');
   }
 }
 
@@ -710,12 +790,10 @@ function clearExploreSearch() {
   if (clearBtn) clearBtn.style.display = 'none';
   const statusEl = document.getElementById('exploreAPIStatus');
   if (statusEl) statusEl.style.display = 'none';
-  const resultsSection = document.getElementById('exploreAPIResultsSection');
-  if (resultsSection) resultsSection.style.display = 'none';
+  const resultsSec = document.getElementById('exploreAPIResultsSection');
+  if (resultsSec) resultsSec.style.display = 'none';
   window._exploreAPIResults = null;
 }
-
-// ================= GLOBAL HELPERS & RE-RENDER =================
 
 function renderExploreBooksGrid() {
   if (window._exploreDefaultBooks && window._exploreDefaultBooks.length > 0) {
@@ -775,8 +853,8 @@ window.initExploreView = initExploreView;
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(initExploreView, 200);
+    setTimeout(initExploreView, 150);
   });
 } else {
-  setTimeout(initExploreView, 200);
+  setTimeout(initExploreView, 150);
 }

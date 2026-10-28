@@ -1,74 +1,16 @@
 {
-  "version": "1.0.0",
-  "updatedAt": "2026-10-28T02:05:32.236Z",
   "activeRelease": {
-    "version": "v0.0.55",
-    "name": "Mind Focus Books v0.0.55 (Native Update Engine & 3D Dossier Fix)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.55/MindFocusBooks-Native.apk",
-    "features": [
-      "🚀 Native Android Update Engine: Background Java thread + Fastly/jsDelivr CDNs + Guaranteed auto-popup",
-      "📖 1-Tap 3D Book Dossier: Fixed escapeHtml & touch delegation on all book cards",
-      "🎨 Flawless 3-Column Layout: Fixed 1:1.45 aspect ratio across all devices",
-      "⚡ Zero-delay smooth click & reading detail transition"
-    ],
-    "stagedAt": "2026-10-28T02:05:32.395Z",
-    "isDeployed": true
+    "version": "v0.0.56",
+    "name": "Mind Focus Books v0.0.56 (Native Explore & Update Engine)",
+    "releaseNotes": "Critical fix: Bundled explore.js into native APK assets, instant curated explore feed, bulletproof 3D book dossier sheet, and multi-CDN background updater.",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.56/MindFocusBooks-Native.apk",
+    "mandatory": false,
+    "timestamp": "2026-10-28T08:00:00Z"
   },
-  "stagedRelease": {
-    "version": "v0.0.55",
-    "name": "Mind Focus Books v0.0.55 (Native Update Engine & 3D Dossier Fix)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.55/MindFocusBooks-Native.apk",
-    "features": [
-      "🚀 Native Android Update Engine: Background Java thread + Fastly/jsDelivr CDNs + Guaranteed auto-popup",
-      "📖 1-Tap 3D Book Dossier: Fixed escapeHtml & touch delegation on all book cards",
-      "🎨 Flawless 3-Column Layout: Fixed 1:1.45 aspect ratio across all devices",
-      "⚡ Zero-delay smooth click & reading detail transition"
-    ],
-    "stagedAt": "2026-10-28T02:05:32.395Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
-    "version": "v0.0.54",
-    "name": "Mind Focus Books v0.0.54",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.54/MindFocusBooks-Native.apk",
-    "features": [
-      "Modular explore.js architecture"
-    ],
-    "stagedAt": "2026-10-28T01:44:17.000Z",
-    "isDeployed": true
-  },
+  "stagedRelease": null,
   "features": {
-    "appEmergencyLockdown": false,
-    "lockdownMessage": "",
-    "maintenanceMode": false,
-    "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We will be back shortly!",
-    "chatHelpDeskEnabled": true,
-    "telemetryEnabled": true,
-    "mobileDevToolsEnabled": true,
-    "broadcastNoticeEnabled": true,
-    "appUpdatesEnabled": true,
-    "streakShieldsEnabled": true,
-    "flashcardsEnabled": true,
-    "ambientAudioEnabled": true,
-    "visualPhysicsEnabled": true,
-    "barcodeScannerEnabled": true,
-    "audiobookVoiceEnabled": true,
-    "quotesEnabled": true,
-    "communityBooksSync": true,
-    "dictionaryBookEnabled": true,
-    "pdfExportEnabled": true
-  },
-  "globalBanner": {
-    "active": false,
-    "text": "✨ Welcome to Mind Focus Books Tracker! Read distraction-free.",
-    "type": "info",
-    "link": ""
-  },
-  "bookOfTheDay": {
-    "title": "Atomic Habits",
-    "author": "James Clear",
-    "category": "Self Improvement",
-    "cover": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80",
-    "quote": "You do not rise to the level of your goals. You fall to the level of your systems."
+    "inAppUpdates": true,
+    "smartBookDossier": true,
+    "exploreModularEngine": true
   }
 }

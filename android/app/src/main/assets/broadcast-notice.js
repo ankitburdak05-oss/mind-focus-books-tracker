@@ -1,14 +1,10 @@
-window.BROADCAST_NOTICE = {
-  "id": "notice-v0.0.31",
-  "version": "v0.0.31",
-  "type": "card1",
-  "card": "card1",
-  "active": false,
-  "icon": "🌸",
-  "title": "Mind Focus Books v0.0.31 Ready!",
-  "message": "Naya v0.0.31 release update ready hai! Ab aap Botanical Notification Studio me kisi bhi book ke notes aur cover ko phone notification me set kar sakte hain, direct typeable time (HH:MM AM/PM), Android status bar BigPicture alerts aur permission bridge ke sath. Update karein, aapka data 100% surakshit rahega.",
-  "btnText": "⚡ Update Now (v0.0.31)",
-  "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-17T15:30:00.000Z"
+window.__LIVE_BROADCAST_NOTICE__ = {
+  "id": "notice-v0.0.56",
+  "version": "v0.0.56",
+  "active": true,
+  "title": "⚡ Mind Focus v0.0.56 Update Ready",
+  "message": "Explore Tab ab phone me instant open ho raha hai, 3D Book Dossier tap kaam kar raha hai aur native update engine activate ho chuka hai!",
+  "actionText": "Update Now",
+  "actionUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.56/MindFocusBooks-Native.apk",
+  "type": "info"
 };

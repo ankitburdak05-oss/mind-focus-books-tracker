@@ -1,92 +1,16 @@
 {
-  "version": "1.0.0",
-  "updatedAt": "2026-10-17T11:00:00.000Z",
   "activeRelease": {
-    "version": "v0.0.39",
-    "name": "Mind Focus Books v0.0.39 (Direct WhatsApp Backup & Master Restore Suite)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/latest/download/MindFocusBooks-Native.apk",
-    "features": [
-      "💬 Direct WhatsApp Backup Sharing: Poora master backup JSON file sidha WhatsApp chat, family ya personal chat par 1-tap me bhejein.",
-      "📱 WhatsApp Reading Summary: Apni current books, streak aur yearly progress ka sundar WhatsApp message share karein.",
-      "📥 Master Backup & Restore: 1-click me sabhi kitabein, custom shelves, notes, reading progress, quotes aur journal entries restore karein.",
-      "📊 CSV Books Importer: Goodreads ya custom CSV spreadsheet se bulk me kitabein import karein.",
-      "⚡ Ultra Clean & Fast: Zero clutter, zero notification bloat, maximum performance."
-    ],
-    "stagedAt": "2026-10-22T08:38:01.868Z",
-    "isDeployed": true
+    "version": "v0.0.56",
+    "name": "Mind Focus Books v0.0.56 (Native Explore & Update Engine)",
+    "releaseNotes": "Critical fix: Bundled explore.js into native APK assets, instant curated explore feed, bulletproof 3D book dossier sheet, and multi-CDN background updater.",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.56/MindFocusBooks-Native.apk",
+    "mandatory": false,
+    "timestamp": "2026-10-28T08:00:00Z"
   },
-  "stagedRelease": {
-    "version": "v3.19.0",
-    "name": "Mind Focus Books v3.19.0 - Screens 4 to 20 Master Suite Upgrade",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.19.0/MindFocusBooks-Native.apk",
-    "features": [
-      "📊 Screen 4: Reading Progress Donut, Weekly Streak Days (M-S) & 12-Month Bar Chart",
-      "👤 Screen 5: Profile Identity with Glowing Aura, 3 Stat Pills & Charles Eliot Quote",
-      "⏱️ Screen 8: Scenic Focus Timer with Pomodoro, Deep Work & Circular Dial",
-      "📝 Screen 9: Notes & Highlights Manager with Filters and Floating Action Add (+)",
-      "🎨 Screen 10: Reading Themes & Typography Sliders (Font Size, Spacing, Brightness)",
-      "🎯 Screen 11: Reading Goals with Donut Progress & Daily Habit Streaks",
-      "🏆 Screen 12: Achievements & Badges Showcase with Dynamic Progress Unlocks",
-      "💡 Screen 13: Scenic Daily Motivation Quotes with Save & Share Collection",
-      "✈️ Screen 14: Offline Mode & Asset Caching Manager",
-      "☁️ Screen 15: Cross-Device Cloud Sync with Multi-Device Indicators",
-      "📈 Screen 16: Deep Reading Analytics & Velocity Patterns",
-      "✨ Screen 17: Curated Book Recommendations",
-      "🛠️ Screen 18: App Customization with Accent Color Palettes & Wallpapers",
-      "📖 Screen 19: Reading Reflection Journal with Daily Logged Entries",
-      "🛡️ Screen 20: Privacy & Security with Biometric & PIN Protection"
-    ],
-    "stagedAt": "2026-10-01T09:15:00.000Z",
-    "isDeployed": true
-  },
-  "previousRelease": {
-    "version": "v3.17.0",
-    "name": "Mind Focus Books v3.17.0 - Ultra-Clean Mobile Redesign & Legacy Purge",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v3.17.0/MindFocusBooks-Native.apk",
-    "features": [
-      "✨ Brand-New Ultra-Clean Mobile Design across all 5 Navigation Tabs (Home, Library, Explore, Progress, Profile)",
-      "🗑️ 100% Legacy Code Cleanup: Removed all obsolete bloat for ultra-fast, smooth, crash-free mobile performance",
-      "📖 Dedicated Reading Detail Screen with tabs, daily goals, page logger & focus timer",
-      "📊 Interactive Native Analytics: Monthly Reading Progress Bar Chart & Reading by Genre Donut Chart",
-      "🛡️ Safe-Save Book Editor with live HD cover preview (preserves 313 real covers)",
-      "💾 One-Tap Backup & Export System (JSON, CSV, PDF)",
-      "🏷️ Official v3.17.0 Release"
-    ],
-    "stagedAt": "2026-09-29T18:45:00.000Z",
-    "isDeployed": true
-  },
+  "stagedRelease": null,
   "features": {
-    "appEmergencyLockdown": false,
-    "lockdownMessage": "",
-    "maintenanceMode": false,
-    "maintenanceMessage": "🚨 App Under Scheduled Maintenance. We are upgrading server engines and will be back shortly!",
-    "chatHelpDeskEnabled": true,
-    "telemetryEnabled": true,
-    "mobileDevToolsEnabled": true,
-    "broadcastNoticeEnabled": true,
-    "appUpdatesEnabled": true,
-    "streakShieldsEnabled": true,
-    "flashcardsEnabled": true,
-    "ambientAudioEnabled": true,
-    "visualPhysicsEnabled": true,
-    "barcodeScannerEnabled": true,
-    "audiobookVoiceEnabled": true,
-    "quotesEnabled": true,
-    "communityBooksSync": true,
-    "dictionaryBookEnabled": true,
-    "pdfExportEnabled": true
-  },
-  "globalBanner": {
-    "active": false,
-    "text": "✨ Welcome to Mind Focus Books Tracker! Read distraction-free.",
-    "type": "info",
-    "link": ""
-  },
-  "bookOfTheDay": {
-    "title": "Atomic Habits",
-    "author": "James Clear",
-    "category": "Self Improvement",
-    "cover": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400&q=80",
-    "quote": "You do not rise to the level of your goals. You fall to the level of your systems."
+    "inAppUpdates": true,
+    "smartBookDossier": true,
+    "exploreModularEngine": true
   }
 }
