@@ -1,16 +1,8 @@
-window.__DEFAULT_REMOTE_CONFIG__ = {
-  "activeRelease": {
-    "version": "v0.0.58",
-    "name": "Mind Focus Books v0.0.58 (Restored Proven Engine)",
-    "releaseNotes": "Restored proven v0.0.45 explore engine. Zero screen freeze, instant full book page opening, search with local & world discovery.",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.58/MindFocusBooks-Native.apk",
-    "mandatory": false,
-    "timestamp": "2026-10-28T08:35:00Z"
-  },
-  "stagedRelease": null,
-  "features": {
-    "inAppUpdates": true,
-    "smartBookDossier": true,
-    "exploreModularEngine": true
-  }
+window.REMOTE_CONFIG = {
+  "latest_version": "0.0.59",
+  "version_code": 59,
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.59/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.59: 3D Book Dossier Sheet 100% active on tap! Open Full Book Page & Read instant navigation restored, zero-freeze rock solid explore engine with instant search.",
+  "force_update": false,
+  "published_at": "2026-10-28T09:10:00Z"
 };

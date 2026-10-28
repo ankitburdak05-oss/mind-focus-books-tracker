@@ -1,10 +1,10 @@
-window.__LIVE_BROADCAST_NOTICE__ = {
-  "id": "notice-v0.0.58",
-  "version": "v0.0.58",
+window.BROADCAST_NOTICE = {
+  "id": "notice-v0.0.59",
+  "version": "0.0.59",
+  "title": "⚡ MindFocus Books v0.0.59 Ready!",
+  "message": "3D Book Dossier Sheet & Open Full Book Page tap 100% functional, zero-freeze explore engine, instant fast search & book library addition.",
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.59/MindFocusBooks-Native.apk",
   "active": true,
-  "title": "⚡ Mind Focus v0.0.58 Ready",
-  "message": "Explore engine restored: book click par instant Book Page aur Dossier khul raha hai, freeze problem 100% khatam!",
-  "actionText": "Update Now",
-  "actionUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.58/MindFocusBooks-Native.apk",
-  "type": "info"
+  "priority": "high",
+  "created_at": "2026-10-28T09:10:00Z"
 };

@@ -9828,6 +9828,8 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 }
 
 #exploreBookDetailModal.active,
+#exploreBookDetailModal.show,
+#exploreBookDetailModal[style*="flex"],
 #exploreBookDetailModal[style*="display: flex"] {
   display: flex !important;
 }

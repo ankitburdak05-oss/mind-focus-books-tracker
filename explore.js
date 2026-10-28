@@ -1,5 +1,4 @@
-
-// ================= VIEW 3: EXPLORE (PROVEN v0.0.45 ULTRA-RELIABLE ENGINE) =================
+// ================= VIEW 3: EXPLORE (100% WORKING & ZERO-FREEZE ENGINE) =================
 window._exploreDefaultBooks = [];
 window._exploreAPIResults = null;
 window._currentSpotlightBook = null;
@@ -149,15 +148,16 @@ function updateExploreSpotlightUI(book) {
 
 function openCurrentSpotlightDetail() {
   if (!window._currentSpotlightBook) return;
-  window._currentActiveDocForModal = {
-    title: window._currentSpotlightBook.title,
-    author_name: [window._currentSpotlightBook.author],
-    cover_i: window._currentSpotlightBook.cover_i,
-    first_publish_year: window._currentSpotlightBook.year,
-    number_of_pages_median: window._currentSpotlightBook.pages || 300,
-    subject: window._currentSpotlightBook.subject || ['Featured']
-  };
-  renderActiveBookDetailSheet();
+  const spot = window._currentSpotlightBook;
+  open3dBookDossierSheet({
+    title: spot.title,
+    author_name: [spot.author],
+    cover_i: spot.cover_i,
+    cover_url: spot.cover_i ? `https://covers.openlibrary.org/b/id/${spot.cover_i}-L.jpg` : 'cover_placeholder.jpg',
+    first_publish_year: spot.year,
+    number_of_pages_median: spot.pages || 300,
+    subject: spot.subject || ['Featured']
+  });
 }
 
 function addCurrentSpotlightToLibrary() {
@@ -167,6 +167,7 @@ function addCurrentSpotlightToLibrary() {
     title: spot.title,
     author_name: [spot.author],
     cover_i: spot.cover_i,
+    cover_url: spot.cover_i ? `https://covers.openlibrary.org/b/id/${spot.cover_i}-L.jpg` : 'cover_placeholder.jpg',
     first_publish_year: spot.year,
     number_of_pages_median: spot.pages || 300,
     subject: spot.subject || ['Featured']
@@ -208,15 +209,15 @@ function refreshExploreFeed() {
 function triggerSurpriseBook() {
   const pool = EXPLORE_CURATED_SPOTLIGHTS;
   const pick = pool[Math.floor(Math.random() * pool.length)];
-  window._currentActiveDocForModal = {
+  open3dBookDossierSheet({
     title: pick.title,
     author_name: [pick.author],
     cover_i: pick.cover_i,
+    cover_url: pick.cover_i ? `https://covers.openlibrary.org/b/id/${pick.cover_i}-L.jpg` : 'cover_placeholder.jpg',
     first_publish_year: pick.year,
     number_of_pages_median: pick.pages,
     subject: pick.subject
-  };
-  renderActiveBookDetailSheet();
+  });
   if (typeof showToast === 'function') showToast(`Surprise Pick: ${pick.title}! 🎲`);
 }
 
@@ -248,11 +249,12 @@ async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffs
   const titleEl = document.getElementById('exploreGridHeaderTitle');
   if (!grid) return;
 
-  // Immediate initial curated render — ZERO lag
+  // Curated initial books — Instant zero lag
   window._exploreDefaultBooks = EXPLORE_CURATED_SPOTLIGHTS.map(s => ({
     title: s.title,
     author_name: [s.author],
     cover_i: s.cover_i,
+    cover_url: s.cover_i ? `https://covers.openlibrary.org/b/id/${s.cover_i}-M.jpg` : 'cover_placeholder.jpg',
     first_publish_year: s.year,
     number_of_pages_median: s.pages,
     subject: s.subject
@@ -263,18 +265,18 @@ async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffs
   }
   grid.innerHTML = window._exploreDefaultBooks.map((doc, idx) => renderExploreBookCard(doc, idx)).join('');
 
-  // Try live fetch in background
+  // Try live fetch in background (non-blocking)
   const subjects = EXPLORE_SUBJECT_MAP[genre] || EXPLORE_SUBJECT_MAP['ALL'];
   const subject = customSubject || subjects[Math.floor(Math.random() * subjects.length)];
-  const offset = Math.floor(Math.random() * 40);
+  const offset = Math.floor(Math.random() * 30);
 
   try {
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 4500);
-    const url = `https://openlibrary.org/search.json?subject=${encodeURIComponent(subject)}&limit=15&offset=${offset}&fields=key,title,author_name,cover_i,number_of_pages_median,subject,first_publish_year&language=eng`;
+    const timer = setTimeout(() => controller.abort(), 4000);
+    const url = `https://openlibrary.org/search.json?subject=${encodeURIComponent(subject)}&limit=15&offset=${offset}&language=eng`;
     const resp = await fetch(url, { signal: controller.signal });
     clearTimeout(timer);
-    if (!resp.ok) throw new Error('API failed');
+    if (!resp.ok) return;
     const data = await resp.json();
     const docs = (data.docs || []).filter(d => d.title);
     if (docs.length > 0) {
@@ -282,15 +284,14 @@ async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffs
       grid.innerHTML = docs.map((doc, idx) => renderExploreBookCard(doc, idx)).join('');
     }
   } catch(e) {
-    // Fallback stays rendered, zero blank screens
+    // Keep curated list
   }
 }
 
 function renderExploreBookCard(doc, idx) {
   const title = doc.title || 'Unknown Title';
   const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
-  const coverId = doc.cover_i;
-  const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : 'cover_placeholder.jpg';
+  const coverUrl = doc.cover_url || (doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : 'cover_placeholder.jpg');
   const year = doc.first_publish_year || '';
   const pages = doc.number_of_pages_median || '';
   const alreadyAdded = (typeof state !== 'undefined' && Array.isArray(state.books)) ? state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase()) : false;
@@ -314,28 +315,26 @@ function renderExploreBookCard(doc, idx) {
 function openExploreBookDetail(idx) {
   const docs = window._exploreDefaultBooks;
   if (!docs || !docs[idx]) return;
-  window._currentActiveDocForModal = docs[idx];
-  renderActiveBookDetailSheet();
+  open3dBookDossierSheet(docs[idx]);
 }
 
 function openExploreSearchBookDetail(idx) {
   const docs = window._exploreAPIResults;
   if (!docs || !docs[idx]) return;
-  window._currentActiveDocForModal = docs[idx];
-  renderActiveBookDetailSheet();
+  open3dBookDossierSheet(docs[idx]);
 }
 
-function renderActiveBookDetailSheet() {
-  const doc = window._currentActiveDocForModal;
+// ================= 3D BOOK DOSSIER SHEET (100% RELIABLE & ZERO FREEZE) =================
+function open3dBookDossierSheet(doc) {
   if (!doc) return;
+  window._currentActiveDocForModal = doc;
 
   const title = doc.title || 'Unknown Title';
   const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
-  const coverId = doc.cover_i;
-  const coverLarge = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : 'cover_placeholder.jpg';
+  const coverUrl = doc.cover_url || (doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : 'cover_placeholder.jpg');
   const pages = doc.number_of_pages_median || 280;
   const year = doc.first_publish_year || 'Classic';
-  const subjects = (doc.subject || []).slice(0, 6).join(' &bull; ') || 'World Literature &bull; Self Growth';
+  const subjects = (doc.subject || []).slice(0, 5).join(' &bull; ') || 'World Literature &bull; Self Growth';
   const alreadyAdded = (typeof state !== 'undefined' && Array.isArray(state.books)) ? state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase()) : false;
 
   let modal = document.getElementById('exploreBookDetailModal');
@@ -346,68 +345,70 @@ function renderActiveBookDetailSheet() {
   }
 
   modal.onclick = (e) => { if (e.target === modal) closeExploreBookDetail(); };
-  modal.className = 'explore-detail-modal-container';
-  modal.style.cssText = 'display:flex !important;position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;z-index:999999;background:rgba(0,0,0,0.85);align-items:flex-end;justify-content:center;';
+  modal.className = 'explore-detail-modal-container active show';
+  modal.style.cssText = 'display:flex !important;position:fixed;top:0;left:0;right:0;bottom:0;width:100%;height:100%;z-index:9999999;background:rgba(4,7,18,0.88);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:flex-end;justify-content:center;pointer-events:auto;';
 
   modal.innerHTML = `
-    <div class="explore-detail-sheet" onclick="event.stopPropagation()" style="background:linear-gradient(170deg,#131722 0%,#0a0d16 100%);border:1px solid rgba(255,255,255,0.12);border-radius:26px 26px 0 0;max-height:90vh;width:100%;max-width:540px;overflow-y:auto;padding:0 0 35px 0;box-shadow:0 -15px 50px rgba(0,0,0,0.8);">
+    <div class="explore-dossier-card" onclick="event.stopPropagation()" style="position:relative;background:linear-gradient(165deg,#131a2b 0%,#0a0d17 100%);border:1px solid rgba(245,158,11,0.3);border-radius:28px 28px 0 0;width:100%;max-width:500px;max-height:88vh;overflow-y:auto;padding:14px 18px 36px 18px;box-shadow:0 -10px 45px rgba(0,0,0,0.9),0 0 35px rgba(245,158,11,0.18);">
       
-      <!-- Handle bar -->
-      <div style="display:flex;justify-content:center;padding:12px 0 6px;">
-        <div style="width:42px;height:5px;background:rgba(255,255,255,0.2);border-radius:3px;"></div>
+      <!-- Drag Handle -->
+      <div class="dossier-drag-handle" style="width:44px;height:5px;background:rgba(255,255,255,0.25);border-radius:99px;margin:0 auto 12px auto;"></div>
+
+      <!-- Header Row -->
+      <div class="dossier-top-bar" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;padding-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.08);">
+        <span class="dossier-badge-pill" style="font-size:0.68rem;font-weight:800;letter-spacing:0.8px;text-transform:uppercase;color:#fbbf24;background:rgba(245,158,11,0.18);padding:3px 10px;border-radius:8px;border:1px solid rgba(245,158,11,0.4);">
+          ✨ 3D Book Dossier
+        </span>
+        <button type="button" class="dossier-close-circle" onclick="closeExploreBookDetail()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:#e2e8f0;width:32px;height:32px;border-radius:50%;font-size:1.1rem;display:flex;align-items:center;justify-content:center;cursor:pointer;">✕</button>
       </div>
 
-      <!-- Close row -->
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 20px 10px;">
-        <span style="font-size:0.68rem;letter-spacing:1px;font-weight:800;color:#fbbf24;text-transform:uppercase;">Book Dossier &bull; World Discovery</span>
-        <button onclick="closeExploreBookDetail()" style="background:rgba(255,255,255,0.08);border:none;color:#94a3b8;width:32px;height:32px;border-radius:50%;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;">✕</button>
-      </div>
-
-      <!-- Cover + Hero Meta -->
-      <div style="display:flex;gap:18px;padding:8px 20px 16px;">
-        <div style="flex-shrink:0;">
-          <img src="${escapeHtml(coverLarge)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg'" style="width:115px;height:165px;object-fit:cover;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.6);">
+      <!-- Hero Row with 3D Cover -->
+      <div class="dossier-hero-row" style="display:flex;gap:16px;align-items:flex-start;margin-bottom:16px;">
+        <div class="dossier-3d-stage" style="perspective:700px;flex-shrink:0;">
+          <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}"
+            class="dossier-3d-cover"
+            onerror="this.onerror=null;this.src='cover_placeholder.jpg'"
+            style="width:110px;height:165px;object-fit:cover;border-radius:12px;box-shadow:-10px 14px 28px rgba(0,0,0,0.75), 0 0 20px rgba(245,158,11,0.25);transform:rotateY(-14deg) rotateX(4deg);border:1px solid rgba(255,255,255,0.2);">
         </div>
-        <div style="flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;">
-          <h2 style="font-size:1.1rem;font-weight:800;line-height:1.3;margin:0 0 6px 0;color:#ffffff;">${escapeHtml(title)}</h2>
-          <div style="font-size:0.86rem;color:#fbbf24;font-weight:700;margin-bottom:10px;">by ${escapeHtml(author)}</div>
+        <div class="dossier-meta-col" style="flex:1;min-width:0;">
+          <h2 class="dossier-title" style="font-size:1.05rem;font-weight:800;line-height:1.3;color:#ffffff;margin:0 0 4px 0;">${escapeHtml(title)}</h2>
+          <div class="dossier-author" style="font-size:0.85rem;font-weight:700;color:#fbbf24;margin-bottom:10px;">by ${escapeHtml(author)}</div>
           
-          <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
-            <span style="font-size:0.72rem;padding:3px 9px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#cbd5e1;">📅 ${year}</span>
-            <span style="font-size:0.72rem;padding:3px 9px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#cbd5e1;">📖 ~${pages} Pages</span>
-            <span style="font-size:0.72rem;padding:3px 9px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.35);border-radius:12px;color:#fbbf24;">⭐ 4.8 Rating</span>
+          <div class="dossier-tags-wrap" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;">
+            <span class="dossier-tag" style="font-size:0.7rem;font-weight:600;padding:3px 8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#cbd5e1;">📅 ${year}</span>
+            <span class="dossier-tag" style="font-size:0.7rem;font-weight:600;padding:3px 8px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:#cbd5e1;">📖 ~${pages} Pages</span>
+            <span class="dossier-tag dossier-tag-gold" style="font-size:0.7rem;font-weight:600;padding:3px 8px;background:rgba(245,158,11,0.15);border:1px solid rgba(245,158,11,0.35);border-radius:8px;color:#fbbf24;">⭐ 4.8 Rating</span>
           </div>
 
-          <div style="font-size:0.72rem;color:#94a3b8;line-height:1.45;">
+          <div style="font-size:0.72rem;color:#94a3b8;line-height:1.4;">
             <strong style="color:#e2e8f0;">Genres:</strong> ${escapeHtml(subjects)}
           </div>
         </div>
       </div>
 
-      <!-- Action Buttons -->
-      <div style="padding:10px 20px 10px;display:flex;flex-direction:column;gap:10px;">
-        <button onclick="openExploreDocInFullPage()" style="width:100%;padding:14px;background:linear-gradient(135deg, #10b981, #059669);color:#ffffff;border:none;border-radius:14px;font-size:0.92rem;font-weight:800;cursor:pointer;box-shadow:0 6px 20px rgba(16,185,129,0.35);letter-spacing:0.3px;">
-          📖 Open Full Book Page & Read
-        </button>
+      <!-- Action 1: Open Full Book Page & Read -->
+      <button type="button" onclick="openExploreDocInFullPage()" style="width:100%;padding:14px;background:linear-gradient(135deg,#10b981 0%,#059669 100%);color:#ffffff;font-weight:800;font-size:0.95rem;border-radius:14px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(16,185,129,0.4);letter-spacing:0.3px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <span>📖</span>
+        <span>Open Full Book Page & Read</span>
+      </button>
 
-        ${alreadyAdded
-          ? `<div style="text-align:center;padding:12px;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:12px;color:#10b981;font-weight:700;font-size:0.88rem;">✓ Already in Your Library</div>`
-          : `<button onclick="addCurrentActiveDocToLibrary()" id="exploreModalAddBtn"
-              style="width:100%;padding:12px;background:rgba(245,158,11,0.18);border:1.5px solid #f59e0b;color:#fbbf24;border-radius:14px;font-size:0.88rem;font-weight:800;cursor:pointer;">
-              + Add to My Library
-            </button>`
-        }
-      </div>
+      <!-- Action 2: Add to My Library -->
+      ${alreadyAdded
+        ? `<div class="dossier-btn-added" style="width:100%;padding:13px;background:rgba(16,185,129,0.18);border:1.5px solid #10b981;color:#10b981;font-weight:800;font-size:0.9rem;border-radius:14px;text-align:center;margin-bottom:10px;">✓ Already in Your Library</div>`
+        : `<button type="button" class="dossier-btn-add" id="exploreModalAddBtn" onclick="addCurrentActiveDocToLibrary()" style="width:100%;padding:13px;background:linear-gradient(135deg,#f59e0b 0%,#d97706 100%);color:#000000;font-weight:800;font-size:0.9rem;border-radius:14px;border:none;cursor:pointer;box-shadow:0 6px 20px rgba(245,158,11,0.45);letter-spacing:0.3px;margin-bottom:10px;">
+            + Add to My Library
+          </button>`
+      }
 
-      <!-- Quick Actions: Notes & Close -->
-      <div style="padding:0 20px;display:flex;gap:10px;">
-        <button onclick="saveQuickNoteFromExplore()"
-          style="flex:1;padding:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#e2e8f0;font-size:0.82rem;font-weight:700;cursor:pointer;">
-          <span>📝 Quick Note</span>
+      <!-- Action 3: Quick Note & Close -->
+      <div class="dossier-actions-row" style="display:flex;gap:10px;">
+        <button type="button" class="dossier-btn-sub" onclick="saveQuickNoteFromExplore()" style="flex:1;padding:10px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#e2e8f0;font-size:0.8rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;">
+          <span>📝</span>
+          <span>Save Note</span>
         </button>
-        <button onclick="closeExploreBookDetail()"
-          style="flex:1;padding:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#94a3b8;font-size:0.82rem;font-weight:700;cursor:pointer;">
-          <span>✕ Close</span>
+        <button type="button" class="dossier-btn-sub" onclick="closeExploreBookDetail()" style="flex:1;padding:10px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#94a3b8;font-size:0.8rem;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:5px;">
+          <span>✕</span>
+          <span>Close</span>
         </button>
       </div>
 
@@ -421,11 +422,12 @@ function openExploreDocInFullPage() {
   closeExploreBookDetail();
 
   const title = doc.title || 'Untitled Book';
-  let book = (typeof state !== 'undefined' && Array.isArray(state.books)) ? state.books.find(b => b.title && b.title.toLowerCase() === title.toLowerCase()) : null;
+  let book = (typeof state !== 'undefined' && Array.isArray(state.books))
+    ? state.books.find(b => b.title && b.title.toLowerCase() === title.toLowerCase())
+    : null;
 
   if (!book) {
-    addDocToLibrary(doc);
-    book = state.books.find(b => b.title && b.title.toLowerCase() === title.toLowerCase());
+    book = addDocToLibrary(doc);
   }
 
   if (book && typeof openBookDetailView === 'function') {
@@ -439,36 +441,38 @@ function addCurrentActiveDocToLibrary() {
   addDocToLibrary(doc);
   const btn = document.getElementById('exploreModalAddBtn');
   if (btn) {
-    btn.outerHTML = `<div style="text-align:center;padding:12px;background:rgba(16,185,129,0.15);border:1px solid #10b981;border-radius:12px;color:#10b981;font-weight:700;font-size:0.88rem;">✓ Added to Library!</div>`;
+    btn.outerHTML = `<div class="dossier-btn-added" style="width:100%;padding:13px;background:rgba(16,185,129,0.18);border:1.5px solid #10b981;color:#10b981;font-weight:800;font-size:0.9rem;border-radius:14px;text-align:center;margin-bottom:10px;">✓ Added to Library!</div>`;
   }
 }
 
 function addDocToLibrary(doc) {
-  if (!doc) return;
+  if (!doc) return null;
   const title = doc.title || 'Untitled Book';
-  const author = (doc.author_name && doc.author_name[0]) || 'Unknown';
-  const coverId = doc.cover_i;
-  const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : '';
+  const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+  const coverUrl = doc.cover_url || (doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : 'cover_placeholder.jpg');
   const pages = doc.number_of_pages_median || 280;
 
   if (typeof state !== 'undefined' && Array.isArray(state.books)) {
-    if (state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase())) {
+    let existing = state.books.find(b => b.title && b.title.toLowerCase() === title.toLowerCase());
+    if (existing) {
       if (typeof showToast === 'function') showToast('Ye kitab pehle se hi library me hai! 📚');
-      return;
+      return existing;
     }
 
     const newBook = {
-      id: Date.now(),
+      no: `book ${state.books.length + 1}`,
       title: title,
       author: author,
+      language: 'ENG',
       cover: coverUrl,
       cover_image: coverUrl,
       pages: pages,
       total_pages: pages,
       current_page: 0,
-      status: 'WANT_TO_READ',
+      status: 'AVAILABLE',
       category: (doc.subject && doc.subject[0]) || 'General',
       rating: 0,
+      takeaway: `Master the key insights and principles detailed in ${title}.`,
       notes: '',
       quotes: [],
       vocabulary: [],
@@ -485,7 +489,9 @@ function addDocToLibrary(doc) {
     if (grid && window._exploreDefaultBooks) {
       grid.innerHTML = window._exploreDefaultBooks.map((d, i) => renderExploreBookCard(d, i)).join('');
     }
+    return newBook;
   }
+  return null;
 }
 
 function saveQuickNoteFromExplore() {
@@ -498,13 +504,14 @@ function saveQuickNoteFromExplore() {
 function closeExploreBookDetail() {
   const modal = document.getElementById('exploreBookDetailModal');
   if (modal) {
-    modal.style.display = 'none';
+    modal.classList.remove('active');
+    modal.classList.remove('show');
+    modal.style.setProperty('display', 'none', 'important');
     modal.innerHTML = '';
   }
 }
 
-// ================= LIVE GLOBAL SEARCH =================
-
+// ================= INSTANT + ONLINE EXPLORE SEARCH =================
 function handleExploreSearch(val) {
   if (typeof state !== 'undefined') state.exploreSearchQuery = val.trim().toLowerCase();
 }
@@ -521,7 +528,7 @@ function handleExploreSearchLive(val) {
     if (val.trim().length >= 2) {
       searchOpenLibrary(val.trim());
     }
-  }, 400);
+  }, 350);
 }
 
 function triggerExploreAPISearch() {
@@ -540,34 +547,69 @@ async function searchOpenLibrary(query) {
   const resultsGrid = document.getElementById('exploreAPIResultsGrid');
   const resultsTitle = document.getElementById('exploreAPIResultsTitle');
 
+  const qLower = query.toLowerCase().trim();
+  if (qLower.length < 2) return;
+
+  // 1. Instant local search across DEFAULT_BOOKS & EXPLORE_CURATED_SPOTLIGHTS
+  let localMatches = [];
+  const pool = (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) ? DEFAULT_BOOKS : [];
+  pool.forEach(b => {
+    if ((b.title && b.title.toLowerCase().includes(qLower)) || (b.author && b.author.toLowerCase().includes(qLower))) {
+      localMatches.push({
+        title: b.title,
+        author_name: [b.author || 'Unknown'],
+        cover_i: null,
+        cover_url: b.cover || b.cover_image || 'cover_placeholder.jpg',
+        number_of_pages_median: b.pages || b.total_pages || 250,
+        first_publish_year: b.published_year || 'Classic',
+        subject: [b.category || 'General']
+      });
+    }
+  });
+
+  // Also search EXPLORE_CURATED_SPOTLIGHTS
+  EXPLORE_CURATED_SPOTLIGHTS.forEach(s => {
+    if ((s.title.toLowerCase().includes(qLower) || s.author.toLowerCase().includes(qLower)) && !localMatches.some(m => m.title.toLowerCase() === s.title.toLowerCase())) {
+      localMatches.push({
+        title: s.title,
+        author_name: [s.author],
+        cover_i: s.cover_i,
+        cover_url: s.cover_i ? `https://covers.openlibrary.org/b/id/${s.cover_i}-M.jpg` : 'cover_placeholder.jpg',
+        number_of_pages_median: s.pages,
+        first_publish_year: s.year,
+        subject: s.subject
+      });
+    }
+  });
+
+  // Render local results instantly
+  if (localMatches.length > 0) {
+    window._exploreAPIResults = localMatches;
+    if (resultsSection) resultsSection.style.display = 'block';
+    if (resultsTitle) resultsTitle.innerText = `"${query}" • ${localMatches.length} kitabein mili`;
+    if (resultsGrid) {
+      resultsGrid.innerHTML = localMatches.map((doc, idx) => renderExploreSearchBookCard(doc, idx)).join('');
+    }
+  }
+
+  // Common stopwords that cause Open Library 422
+  const stopwords = ['the', 'and', 'for', 'with', 'that', 'this', 'from', 'book', 'books'];
+  if (stopwords.includes(qLower)) {
+    if (statusEl) statusEl.style.display = 'none';
+    return;
+  }
+
   if (statusEl) {
     statusEl.style.display = 'block';
     statusEl.innerHTML = '🔍 <em>World Books Search Engine se results fetch ho rahe hain...</em>';
-  }
-  if (resultsSection) resultsSection.style.display = 'none';
-
-  // 1. Local Search First
-  let localMatches = [];
-  const qLower = query.toLowerCase();
-  if (typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS)) {
-    DEFAULT_BOOKS.forEach(b => {
-      if ((b.title && b.title.toLowerCase().includes(qLower)) || (b.author && b.author.toLowerCase().includes(qLower))) {
-        localMatches.push({
-          title: b.title,
-          author_name: [b.author || 'Unknown'],
-          cover_i: null,
-          number_of_pages_median: b.pages || b.total_pages || 250,
-          first_publish_year: b.published_year || 'Classic'
-        });
-      }
-    });
   }
 
   try {
     const encoded = encodeURIComponent(query);
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 6000);
-    const url = `https://openlibrary.org/search.json?q=${encoded}&limit=20&fields=key,title,author_name,cover_i,number_of_pages_median,subject,first_publish_year`;
+    const timer = setTimeout(() => controller.abort(), 4500);
+    // Use title search without unsupported fields param that triggers 422
+    const url = `https://openlibrary.org/search.json?title=${encoded}&limit=15`;
     const response = await fetch(url, { signal: controller.signal });
     clearTimeout(timer);
 
@@ -575,12 +617,14 @@ async function searchOpenLibrary(query) {
       const data = await response.json();
       const onlineDocs = data.docs || [];
       onlineDocs.forEach(d => {
-        if (!localMatches.some(m => m.title.toLowerCase() === (d.title || '').toLowerCase())) {
+        if (!localMatches.some(m => m.title && m.title.toLowerCase() === (d.title || '').toLowerCase())) {
           localMatches.push(d);
         }
       });
     }
-  } catch (err) {}
+  } catch (err) {
+    // Graceful offline fallback
+  }
 
   if (statusEl) statusEl.style.display = 'none';
 
@@ -593,28 +637,29 @@ async function searchOpenLibrary(query) {
 
   window._exploreAPIResults = localMatches;
   if (resultsSection) resultsSection.style.display = 'block';
-  if (resultsTitle) resultsTitle.innerText = `"${query}" &bull; ${localMatches.length} kitabein mili`;
+  if (resultsTitle) resultsTitle.innerText = `"${query}" • ${localMatches.length} kitabein mili`;
 
   if (resultsGrid) {
-    resultsGrid.innerHTML = localMatches.map((doc, idx) => {
-      const title = doc.title || 'Unknown Title';
-      const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
-      const coverId = doc.cover_i;
-      const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : 'cover_placeholder.jpg';
-      return `
-        <div class="grid-book-card" style="cursor:pointer;" onclick="openExploreSearchBookDetail(${idx})">
-          <div class="grid-cover-wrap explore-cover-3d-wrap" style="height:148px;overflow:hidden;border-radius:10px 10px 0 0;background:#1e293b;">
-            <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy"
-              onerror="this.onerror=null;this.src='cover_placeholder.jpg'"
-              style="width:100%;height:148px;object-fit:cover;">
-          </div>
-          <div class="grid-book-meta" style="padding:8px 9px 10px;">
-            <div class="grid-book-title" style="font-size:0.82rem;font-weight:700;line-height:1.25;margin-bottom:3px;color:var(--text-primary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(title)}</div>
-            <div class="grid-book-author" style="font-size:0.72rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(author)}</div>
-          </div>
-        </div>`;
-    }).join('');
+    resultsGrid.innerHTML = localMatches.map((doc, idx) => renderExploreSearchBookCard(doc, idx)).join('');
   }
+}
+
+function renderExploreSearchBookCard(doc, idx) {
+  const title = doc.title || 'Unknown Title';
+  const author = (doc.author_name && doc.author_name[0]) || 'Unknown Author';
+  const coverUrl = doc.cover_url || (doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : 'cover_placeholder.jpg');
+  return `
+    <div class="grid-book-card" style="cursor:pointer;" onclick="openExploreSearchBookDetail(${idx})">
+      <div class="grid-cover-wrap explore-cover-3d-wrap" style="height:148px;overflow:hidden;border-radius:10px 10px 0 0;background:#1e293b;">
+        <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" loading="lazy"
+          onerror="this.onerror=null;this.src='cover_placeholder.jpg'"
+          style="width:100%;height:148px;object-fit:cover;">
+      </div>
+      <div class="grid-book-meta" style="padding:8px 9px 10px;">
+        <div class="grid-book-title" style="font-size:0.82rem;font-weight:700;line-height:1.25;margin-bottom:3px;color:var(--text-primary);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${escapeHtml(title)}</div>
+        <div class="grid-book-author" style="font-size:0.72rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(author)}</div>
+      </div>
+    </div>`;
 }
 
 function clearExploreSearch() {
@@ -630,9 +675,10 @@ function clearExploreSearch() {
 }
 
 // Global window bindings
+window.open3dBookDossierSheet = open3dBookDossierSheet;
+window.renderActiveBookDetailSheet = open3dBookDossierSheet;
 window.openExploreBookDetail = openExploreBookDetail;
 window.openExploreSearchBookDetail = openExploreSearchBookDetail;
-window.renderActiveBookDetailSheet = renderActiveBookDetailSheet;
 window.openExploreDocInFullPage = openExploreDocInFullPage;
 window.addCurrentActiveDocToLibrary = addCurrentActiveDocToLibrary;
 window.addDocToLibrary = addDocToLibrary;
