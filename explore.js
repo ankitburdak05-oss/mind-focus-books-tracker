@@ -2,41 +2,42 @@
 // ================= SMART NAME & TITLE SANITIZER =================
 function cleanDiacritics(str) {
   if (!str) return '';
-  return str
-    .replace(/[āĀ]/g, 'a')
-    .replace(/[īĪ]/g, 'i')
-    .replace(/[ūŪ]/g, 'u')
+  let s = str
+    .replace(/ṃ/g, 'n')
+    .replace(/Ṃ/g, 'N')
+    .replace(/m̐/g, 'n')
+    .replace(/M̐/g, 'N')
+    .replace(/[ñṅṇ]/g, 'n')
+    .replace(/[ÑṄṆ]/g, 'N')
     .replace(/[ṛṚ]/g, 'ri')
-    .replace(/[ēĒ]/g, 'e')
-    .replace(/[ōŌ]/g, 'o')
-    .replace(/[ṃm̐]/g, 'n')
-    .replace(/[ôÔ]/g, 'o')
     .replace(/[ḥḤ]/g, 'h')
     .replace(/[ṭṬ]/g, 't')
     .replace(/[ḍḌ]/g, 'd')
-    .replace(/[ṇṆ]/g, 'n')
     .replace(/[śŚṣṢ]/g, 'sh');
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').normalize('NFC');
 }
 
 function cleanBookTitle(rawTitle) {
   if (!rawTitle) return 'Untitled Book';
   let t = String(rawTitle).trim();
-  const lower = t.toLowerCase();
+  
+  // Clean diacritics and quotes first so matching is rock solid
+  const normalized = cleanDiacritics(t).toLowerCase().replace(/['`’‘]/g, '');
 
   // 1. Normalize transliterated Hindi/Urdu classics
-  if (lower.includes('ajab ghazab') || lower.includes('ajab-gazab') || lower.includes('ajab gazab')) {
+  if (normalized.includes('ajab ghazab') || normalized.includes('ajab-gazab') || normalized.includes('ajab gazab')) {
     return 'Jaun Elia: Ek Ajab Ghazab Shayar (जौन एलिया : एक अजब-गज़ब शायर)';
   }
-  if (lower.includes('jona eliya') || lower.includes('maim jo') || lower.includes('main jo hoon') || lower.includes('maiṃ jo')) {
+  if (normalized.includes('jona eliya') || (normalized.includes('jo') && normalized.includes('elia') && (normalized.includes('hun') || normalized.includes('hum'))) || normalized.includes('main jo') || normalized.includes('maim jo')) {
     return 'Main Jo Hoon Jon Elia Hoon (मैं जो हूँ जॉन एलिया हूँ)';
   }
-  if (t === 'جون ایلیا' || lower === 'jaun elia' || lower === 'kulliyat-i jaun eliya') {
+  if (t.includes('جون ایلیا') || normalized === 'jaun elia' || normalized.includes('kulliyat')) {
     return 'Kulliyat-e-Jaun Elia (कुलियात-ए-जौन एलिया)';
   }
-  if (lower.includes('courage to be disliked')) {
+  if (normalized.includes('courage to be disliked')) {
     return 'The Courage to Be Disliked';
   }
-  if (lower.includes('dark psychology') && (lower.includes('manipulation') || lower.includes('secrets'))) {
+  if (normalized.includes('dark psychology') && (normalized.includes('manipulation') || normalized.includes('secrets'))) {
     return 'Dark Psychology and Secret Manipulation';
   }
 
@@ -44,7 +45,7 @@ function cleanBookTitle(rawTitle) {
   t = cleanDiacritics(t);
 
   // 3. Clean quotes around single words: 'Jona' -> Jona
-  t = t.replace(/'([A-Za-z]+)'/g, '$1');
+  t = t.replace(/['`’‘]/g, '');
 
   // 4. Translate raw Urdu text if alone
   if (/^[\u0600-\u06FF\s\p{P}]+$/u.test(t)) {
