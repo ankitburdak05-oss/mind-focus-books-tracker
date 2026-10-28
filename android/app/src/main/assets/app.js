@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.65';
-const CURRENT_APP_VERSION = 'v0.0.65';
+const APP_VERSION = '0.0.66';
+const CURRENT_APP_VERSION = 'v0.0.66';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -700,9 +700,9 @@ function renderLibraryGrid() {
     // Compact Horizontal List Mode (1 Row per Book)
     if (isCompactList) {
       return `
-        <div class="compact-book-row" onclick="openBookDetailViewByIndex(${originalIndex})">
+        <div class="compact-book-row" onclick="openBookDetailViewByIndex(${originalIndex})" style="position:relative; display:flex; align-items:center;">
           <img class="compact-book-thumb" src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
-          <div class="compact-book-info">
+          <div class="compact-book-info" style="flex:1; min-width:0;">
             <div class="compact-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
             <div class="compact-book-author">${escapeHtml(book.author || 'Unknown')}</div>
             <div class="compact-book-meta-row">
@@ -713,6 +713,7 @@ function renderLibraryGrid() {
               <span class="compact-pct-text">${pct}%</span>
             </div>
           </div>
+          <button type="button" class="card-kebab-btn compact-kebab-btn" style="position:static; margin-left:auto; flex-shrink:0;" onclick="event.stopPropagation(); openBookActionMenu(event, ${originalIndex})" title="Book Options">⋮</button>
         </div>
       `;
     }
@@ -720,8 +721,9 @@ function renderLibraryGrid() {
     // Grid Mode (1 to 10 Columns)
     return `
       <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
-        <div class="grid-cover-wrap">
+        <div class="grid-cover-wrap" style="position:relative;">
           <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
+          <button type="button" class="card-kebab-btn" onclick="event.stopPropagation(); openBookActionMenu(event, ${originalIndex})" title="Book Options">⋮</button>
         </div>
         <div class="grid-book-meta">
           <div class="grid-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
@@ -9709,3 +9711,113 @@ if (typeof window !== 'undefined') {
     }
   };
 }
+
+
+// ================= GLOBAL BOOK 3-DOT ACTION MENU ENGINE =================
+let _activeActionBookIndex = null;
+
+function openBookActionMenu(event, indexOrCurrent) {
+  if (event) {
+    if (typeof event.stopPropagation === 'function') event.stopPropagation();
+    if (typeof event.preventDefault === 'function') event.preventDefault();
+  }
+
+  let book = null;
+  let idx = -1;
+
+  if (indexOrCurrent === 'current') {
+    book = state.currentBook;
+    idx = state.books.indexOf(book);
+  } else {
+    idx = parseInt(indexOrCurrent, 10);
+    book = state.books[idx];
+  }
+
+  if (!book) {
+    if (typeof showToast === 'function') showToast('Book not found');
+    return;
+  }
+
+  _activeActionBookIndex = idx;
+
+  const modal = document.getElementById('bookActionMenuModal');
+  const titleEl = document.getElementById('bookActionTitle');
+  const authorEl = document.getElementById('bookActionAuthor');
+  const coverImg = document.getElementById('bookActionCoverImg');
+
+  if (titleEl) titleEl.innerText = book.title || 'Untitled Book';
+  if (authorEl) authorEl.innerText = book.author || 'Unknown Author';
+  if (coverImg) {
+    coverImg.src = getBookCoverUrl(book);
+    coverImg.onerror = function() { this.src = 'cover_placeholder.jpg'; };
+  }
+
+  if (modal) {
+    modal.style.display = 'flex';
+    modal.classList.add('active');
+  }
+}
+
+function closeBookActionMenu() {
+  const modal = document.getElementById('bookActionMenuModal');
+  if (modal) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+  }
+}
+
+function triggerBookMenuAction(action) {
+  const idx = _activeActionBookIndex;
+  closeBookActionMenu();
+
+  if (idx === null || idx < 0 || idx >= state.books.length) return;
+  const book = state.books[idx];
+
+  if (action === 'read') {
+    openBookDetailViewByIndex(idx);
+  } else if (action === 'edit') {
+    openEditModal(idx);
+  } else if (action === 'copy') {
+    const text = `${book.title || ''} by ${book.author || ''}`.trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+      if (typeof showToast === 'function') showToast(`📋 Copied: "${book.title}"`);
+    } else {
+      prompt('Copy book details:', text);
+    }
+  } else if (action === 'delete') {
+    confirmDeleteBook(idx);
+  }
+}
+
+function confirmDeleteBook(index) {
+  if (index < 0 || index >= state.books.length) return;
+  const book = state.books[index];
+  const title = book.title || 'Untitled Book';
+
+  const confirmed = confirm(`Are you sure you want to delete "${title}" from your library?`);
+  if (!confirmed) return;
+
+  // Move to trashBin for safety
+  const deleted = state.books.splice(index, 1)[0];
+  if (!state.trashBin) state.trashBin = [];
+  state.trashBin.unshift(deleted);
+
+  // Save changes
+  saveState();
+  if (typeof renderApp === 'function') renderApp();
+  else if (typeof renderLibraryView === 'function') renderLibraryView();
+
+  if (typeof showToast === 'function') showToast(`🗑️ "${title}" deleted from Library.`);
+
+  // If currently viewing this book in detail view, close it
+  const detailView = document.getElementById('viewBookDetail');
+  if (detailView && detailView.classList.contains('active')) {
+    closeBookDetailView();
+  }
+}
+
+window.openBookActionMenu = openBookActionMenu;
+window.closeBookActionMenu = closeBookActionMenu;
+window.triggerBookMenuAction = triggerBookMenuAction;
+window.confirmDeleteBook = confirmDeleteBook;
