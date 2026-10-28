@@ -10045,3 +10045,97 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   transform: scale(0.96);
 }
 
+
+
+/* ================= DEDICATED EXPLORE GRID & CARD ARCHITECTURE ================= */
+#exploreBooksGrid,
+#exploreAPIResultsGrid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 12px !important;
+  padding: 4px 0 16px 0 !important;
+  width: 100% !important;
+}
+
+@media (min-width: 600px) {
+  #exploreBooksGrid,
+  #exploreAPIResultsGrid {
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 16px !important;
+  }
+}
+
+@media (min-width: 900px) {
+  #exploreBooksGrid,
+  #exploreAPIResultsGrid {
+    grid-template-columns: repeat(6, 1fr) !important;
+    gap: 20px !important;
+  }
+}
+
+#exploreBooksGrid .grid-book-card,
+#exploreAPIResultsGrid .grid-book-card {
+  background: var(--bg-card) !important;
+  border: 1px solid var(--border-card) !important;
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: transform 0.18s ease, box-shadow 0.18s ease !important;
+  position: relative !important;
+}
+
+#exploreBooksGrid .grid-book-card:active,
+#exploreAPIResultsGrid .grid-book-card:active {
+  transform: scale(0.96) !important;
+}
+
+#exploreBooksGrid .grid-cover-wrap,
+#exploreAPIResultsGrid .grid-cover-wrap {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 1 / 1.45 !important;
+  background: var(--bg-elevated) !important;
+  overflow: hidden !important;
+}
+
+#exploreBooksGrid .grid-cover-wrap img,
+#exploreAPIResultsGrid .grid-cover-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+#exploreBooksGrid .grid-book-meta,
+#exploreAPIResultsGrid .grid-book-meta {
+  padding: 8px 10px 10px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  flex: 1 !important;
+  justify-content: space-between !important;
+}
+
+#exploreBooksGrid .grid-book-title,
+#exploreAPIResultsGrid .grid-book-title {
+  font-size: 0.8rem !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  line-height: 1.25 !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  margin-bottom: 4px !important;
+}
+
+#exploreBooksGrid .grid-book-author,
+#exploreAPIResultsGrid .grid-book-author {
+  font-size: 0.72rem !important;
+  color: var(--text-secondary) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+

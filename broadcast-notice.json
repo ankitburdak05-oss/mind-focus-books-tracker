@@ -1,14 +1,14 @@
 {
-  "id": "notice-v0.0.53-final",
-  "version": "v0.0.53",
+  "id": "notice-v0.0.54-final",
+  "version": "v0.0.54",
   "type": "card1",
   "card": "card1",
   "active": true,
   "icon": "🚀",
-  "title": "Mind Focus Books v0.0.53 Ready!",
-  "message": "Official v0.0.53 Update! Removed App Features Directory option, and verified auto-update engine.",
-  "btnText": "⚡ Update Now (v0.0.53)",
+  "title": "Mind Focus Books v0.0.54 Ready!",
+  "message": "Official v0.0.54 Update! Dedicated explore.js engine, flawless 3-column book layout, and 1-tap 3D Book Dossier Sheet.",
+  "btnText": "⚡ Update Now (v0.0.54)",
   "action": "update",
-  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.53/MindFocusBooks-Native.apk",
-  "timestamp": "2026-10-28T01:14:58.002Z"
+  "apkUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.54/MindFocusBooks-Native.apk",
+  "timestamp": "2026-10-28T01:42:19.980Z"
 }

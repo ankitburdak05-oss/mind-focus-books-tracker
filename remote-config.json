@@ -1,40 +1,40 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-10-28T01:14:57.973Z",
+  "updatedAt": "2026-10-28T01:42:19.943Z",
   "activeRelease": {
-    "version": "v0.0.53",
-    "name": "Mind Focus Books v0.0.53 (Verified In-App Auto Update)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.53/MindFocusBooks-Native.apk",
+    "version": "v0.0.54",
+    "name": "Mind Focus Books v0.0.54 (Dedicated Explore Engine & 3D Dossier)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.54/MindFocusBooks-Native.apk",
     "features": [
-      "🚀 Guaranteed In-App Update Engine: Automatic popup & 3D update banner",
-      "🧹 Cleaned Profile menu: Removed App Features Directory option",
-      "📖 3D Book Dossier Sheet on book tap with tilted cover and quick Add to Library",
-      "⚡ Multi-CDN fallback and native Java bridge for update detection"
+      "📚 Modular Explore Engine: Dedicated explore.js architecture with zero bloat",
+      "🎨 Flawless 3-Column Book Layout: Fixed 1:1.45 aspect ratio and clean rounded cards",
+      "📖 1-Tap 3D Book Dossier: Instant tilted cover, metadata, + Add to Library & Save Note",
+      "🚀 Guaranteed In-App Update Engine: Automatic popup & 3D update banner"
     ],
-    "stagedAt": "2026-10-28T01:14:57.997Z",
+    "stagedAt": "2026-10-28T01:42:19.974Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v0.0.53",
-    "name": "Mind Focus Books v0.0.53 (Verified In-App Auto Update)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.53/MindFocusBooks-Native.apk",
+    "version": "v0.0.54",
+    "name": "Mind Focus Books v0.0.54 (Dedicated Explore Engine & 3D Dossier)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.54/MindFocusBooks-Native.apk",
     "features": [
-      "🚀 Guaranteed In-App Update Engine: Automatic popup & 3D update banner",
-      "🧹 Cleaned Profile menu: Removed App Features Directory option",
-      "📖 3D Book Dossier Sheet on book tap with tilted cover and quick Add to Library",
-      "⚡ Multi-CDN fallback and native Java bridge for update detection"
+      "📚 Modular Explore Engine: Dedicated explore.js architecture with zero bloat",
+      "🎨 Flawless 3-Column Book Layout: Fixed 1:1.45 aspect ratio and clean rounded cards",
+      "📖 1-Tap 3D Book Dossier: Instant tilted cover, metadata, + Add to Library & Save Note",
+      "🚀 Guaranteed In-App Update Engine: Automatic popup & 3D update banner"
     ],
-    "stagedAt": "2026-10-28T01:14:57.997Z",
+    "stagedAt": "2026-10-28T01:42:19.974Z",
     "isDeployed": true
   },
   "previousRelease": {
-    "version": "v0.0.52",
-    "name": "Mind Focus Books v0.0.52",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.52/MindFocusBooks-Native.apk",
+    "version": "v0.0.53",
+    "name": "Mind Focus Books v0.0.53",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.53/MindFocusBooks-Native.apk",
     "features": [
-      "Guaranteed Auto-Update & 3D Dossier Sheet"
+      "Cleaned Profile menu & Verified auto-update"
     ],
-    "stagedAt": "2026-10-27T17:28:14.000Z",
+    "stagedAt": "2026-10-28T01:17:36.000Z",
     "isDeployed": true
   },
   "features": {
