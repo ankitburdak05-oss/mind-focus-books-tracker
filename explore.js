@@ -3,6 +3,17 @@
 // Standalone Modular Architecture for World Discovery & Book Inspection
 // ==========================================================================
 
+function escapeHtml(str) {
+  if (str === null || str === undefined) return '';
+  return String(str).replace(/[&<>'"]/g, tag => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    "'": '&#39;',
+    '"': '&quot;'
+  }[tag] || tag));
+}
+
 window._exploreDefaultBooks = [];
 window._exploreAPIResults = null;
 window._currentSpotlightBook = null;
@@ -129,11 +140,12 @@ function rotateExploreSpotlight() {
 function updateExploreSpotlightUI(book) {
   if (!book) return;
   const coverImg = document.getElementById('featuredCoverImg');
-  const titleEl = document.getElementById('featuredBookTitle');
-  const authorEl = document.getElementById('featuredBookAuthor');
-  const descEl = document.getElementById('featuredBookDesc');
-  const badgeEl = document.getElementById('featuredBadgeRating');
-  const btnEl = document.getElementById('featuredAddBtn');
+  const titleEl = document.getElementById('featuredTitle');
+  const authorEl = document.getElementById('featuredAuthor');
+  const descEl = document.getElementById('featuredDesc');
+  const badgeEl = document.getElementById('featuredRatingVal');
+  const yearEl = document.getElementById('featuredYearVal');
+  const addBtn = document.getElementById('featuredAddActionBtn');
 
   if (coverImg) {
     coverImg.src = book.cover_i ? `https://covers.openlibrary.org/b/id/${book.cover_i}-L.jpg` : 'cover_placeholder.jpg';
@@ -143,26 +155,19 @@ function updateExploreSpotlightUI(book) {
     };
   }
   if (titleEl) titleEl.innerText = book.title;
-  if (authorEl) authorEl.innerText = `by ${book.author} (${book.year || 'Classic'})`;
+  if (authorEl) authorEl.innerText = book.author;
+  if (yearEl) yearEl.innerText = book.year || 'Classic';
   if (descEl) descEl.innerText = book.desc || 'World-renowned discovery from Open Library.';
-  if (badgeEl) badgeEl.innerText = book.rating || '⭐ 4.8 Rating';
+  if (badgeEl) badgeEl.innerText = book.rating || '4.8 (Global Reader Choice)';
 
-  if (btnEl && typeof state !== 'undefined' && state.books) {
-    const already = state.books.some(b => b.title && b.title.toLowerCase() === book.title.toLowerCase());
+  if (addBtn && typeof window.state !== 'undefined' && Array.isArray(window.state.books)) {
+    const already = window.state.books.some(b => b && b.title && b.title.toLowerCase() === book.title.toLowerCase());
     if (already) {
-      btnEl.innerText = '✓ In Library';
-      btnEl.style.opacity = '0.85';
-      btnEl.onclick = function(e) {
-        e.stopPropagation();
-        if (typeof showToast === 'function') showToast('Ye kitab pehle se hi library me hai! 📚');
-      };
+      addBtn.innerText = '✓ In Library';
+      addBtn.style.opacity = '0.85';
     } else {
-      btnEl.innerText = '+ Add to Library';
-      btnEl.style.opacity = '1';
-      btnEl.onclick = function(e) {
-        e.stopPropagation();
-        addCurrentSpotlightToLibrary();
-      };
+      addBtn.innerText = '+ Add to Library';
+      addBtn.style.opacity = '1';
     }
   }
 }
@@ -225,11 +230,11 @@ function setExploreMode(mode) {
     mindset: 'habits'
   };
 
-  loadExploreDefaultBooks(state.exploreGenre || 'ALL', modeSubjectMap[mode] || null, true);
+  loadExploreDefaultBooks((typeof window.state !== 'undefined' && window.state.exploreGenre) || 'ALL', modeSubjectMap[mode] || null, true);
 }
 
 function refreshExploreFeed() {
-  const currentGenre = (typeof state !== 'undefined' && state.exploreGenre) || 'ALL';
+  const currentGenre = (typeof window.state !== 'undefined' && window.state.exploreGenre) || 'ALL';
   loadExploreDefaultBooks(currentGenre, null, true);
   if (typeof showToast === 'function') {
     showToast('✨ Nayi kitabein khoji jaa rahi hain...');
@@ -269,8 +274,8 @@ function filterExploreCategoryTile(categoryName, query) {
 }
 
 function filterExploreGenre(genre) {
-  if (typeof state !== 'undefined') {
-    state.exploreGenre = genre;
+  if (typeof window.state !== 'undefined') {
+    window.state.exploreGenre = genre;
   }
   const chips = document.querySelectorAll('#exploreGenreChips .filter-chip');
   chips.forEach(c => {
@@ -292,7 +297,7 @@ async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffs
 
   grid.innerHTML = `
     <div style="grid-column:1/-1;text-align:center;padding:36px 16px;color:var(--text-secondary);">
-      <div style="font-size:1.8rem;margin-bottom:8px;animation:spin 1s linear infinite;">⏳</div>
+      <div style="font-size:1.8rem;margin-bottom:8px;">⏳</div>
       <div style="font-weight:700;color:var(--text-primary);font-size:0.92rem;">Open Library se kitabein load ho rahi hain...</div>
       <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">World-renowned reading feed</div>
     </div>
@@ -319,7 +324,7 @@ async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffs
       key: w.key,
       title: w.title,
       author_name: w.authors ? w.authors.map(a => a.name) : ['Unknown Author'],
-      cover_i: w.cover_id || (w.cover_edition_key ? null : null),
+      cover_i: w.cover_id || null,
       first_publish_year: w.first_publish_year || 'Classic',
       number_of_pages_median: 280,
       subject: w.subject || [genre || 'General']
@@ -332,7 +337,7 @@ async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffs
     grid.innerHTML = window._exploreDefaultBooks.map((doc, idx) => renderExploreBookCard(doc, idx)).join('');
 
   } catch (err) {
-    console.warn('Explore live feed fetch failed, switching to curated offline catalog:', err);
+    console.warn('Explore live feed fallback:', err);
     window._exploreDefaultBooks = EXPLORE_CURATED_SPOTLIGHTS.map(s => ({
       title: s.title,
       author_name: [s.author],
@@ -358,12 +363,12 @@ function renderExploreBookCard(doc, idx) {
   const coverId = doc.cover_i;
   const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-M.jpg` : 'cover_placeholder.jpg';
   const year = doc.first_publish_year || '';
-  const alreadyAdded = (typeof state !== 'undefined' && state.books)
-    ? state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase())
+  const alreadyAdded = (typeof window.state !== 'undefined' && Array.isArray(window.state.books))
+    ? window.state.books.some(b => b && b.title && b.title.toLowerCase() === title.toLowerCase())
     : false;
 
   return `
-    <div class="grid-book-card" style="cursor:pointer;position:relative;" onclick="openExploreBookDetail(${idx})">
+    <div class="grid-book-card" data-explore-index="${idx}" data-is-search="false" style="cursor:pointer;position:relative;" onclick="openExploreBookDetail(${idx})">
       <div class="grid-cover-wrap">
         <img src="${escapeHtml(coverUrl)}" alt="${escapeHtml(title)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
         ${alreadyAdded ? '<span style="position:absolute;top:6px;right:6px;background:rgba(16,185,129,0.92);color:#ffffff;font-size:0.58rem;padding:2px 6px;border-radius:6px;font-weight:800;letter-spacing:0.5px;box-shadow:0 2px 6px rgba(0,0,0,0.5);">✓ IN LIBRARY</span>' : ''}
@@ -408,8 +413,8 @@ function open3dBookDossierSheet(doc) {
   const pages = doc.number_of_pages_median || 280;
   const year = doc.first_publish_year || 'Classic';
   const subjects = (doc.subject || []).slice(0, 5).join(' • ') || 'Personal Growth • Literature';
-  const alreadyAdded = (typeof state !== 'undefined' && state.books)
-    ? state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase())
+  const alreadyAdded = (typeof window.state !== 'undefined' && Array.isArray(window.state.books))
+    ? window.state.books.some(b => b && b.title && b.title.toLowerCase() === title.toLowerCase())
     : false;
 
   let modal = document.getElementById('exploreBookDetailModal');
@@ -475,7 +480,7 @@ function open3dBookDossierSheet(doc) {
   `;
 
   modal.classList.add('active');
-  modal.style.display = 'flex';
+  modal.style.cssText = 'display:flex !important;position:fixed !important;inset:0 !important;z-index:2000000 !important;align-items:flex-end !important;justify-content:center !important;background:rgba(4,7,18,0.88) !important;backdrop-filter:blur(12px) !important;pointer-events:auto !important;';
 }
 
 function addDossierBookToLibrary() {
@@ -488,8 +493,8 @@ function addDossierBookToLibrary() {
   const coverUrl = coverId ? `https://covers.openlibrary.org/b/id/${coverId}-L.jpg` : '';
   const pages = doc.number_of_pages_median || 280;
 
-  if (typeof state !== 'undefined' && state.books) {
-    if (state.books.some(b => b.title && b.title.toLowerCase() === title.toLowerCase())) {
+  if (typeof window.state !== 'undefined' && Array.isArray(window.state.books)) {
+    if (window.state.books.some(b => b && b.title && b.title.toLowerCase() === title.toLowerCase())) {
       if (typeof showToast === 'function') showToast('Ye kitab pehle se hi library me hai! 📚');
       return;
     }
@@ -512,7 +517,7 @@ function addDossierBookToLibrary() {
       fromExplore: true
     };
 
-    state.books.push(newBook);
+    window.state.books.push(newBook);
     if (typeof saveBooks === 'function') saveBooks();
     if (typeof saveState === 'function') saveState();
 
@@ -532,11 +537,11 @@ function saveQuickNoteFromDossier() {
   const doc = window._currentDossierDoc;
   if (!doc) return;
   closeExploreBookDetail();
-  if (typeof state !== 'undefined' && state.books) {
-    let b = state.books.find(x => x.title && x.title.toLowerCase() === (doc.title || '').toLowerCase());
+  if (typeof window.state !== 'undefined' && Array.isArray(window.state.books)) {
+    let b = window.state.books.find(x => x && x.title && x.title.toLowerCase() === (doc.title || '').toLowerCase());
     if (!b) {
       addDossierBookToLibrary();
-      b = state.books.find(x => x.title && x.title.toLowerCase() === (doc.title || '').toLowerCase());
+      b = window.state.books.find(x => x && x.title && x.title.toLowerCase() === (doc.title || '').toLowerCase());
     }
     if (b && typeof openBookDetailView === 'function') {
       openBookDetailView(b);
@@ -642,10 +647,10 @@ async function searchOpenLibrary(query) {
     }
 
     resultsGrid.innerHTML = window._exploreAPIResults.map((doc, idx) => `
-      <div class="grid-book-card" style="cursor:pointer;position:relative;" onclick="openExploreSearchBookDetail(${idx})">
+      <div class="grid-book-card" data-explore-index="${idx}" data-is-search="true" style="cursor:pointer;position:relative;" onclick="openExploreSearchBookDetail(${idx})">
         <div class="grid-cover-wrap">
           <img src="${doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : 'cover_placeholder.jpg'}" alt="${escapeHtml(doc.title)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
-          ${(typeof state !== 'undefined' && state.books && state.books.some(b => b.title && b.title.toLowerCase() === (doc.title || '').toLowerCase()))
+          ${(typeof window.state !== 'undefined' && Array.isArray(window.state.books) && window.state.books.some(b => b && b.title && b.title.toLowerCase() === (doc.title || '').toLowerCase()))
             ? '<span style="position:absolute;top:6px;right:6px;background:rgba(16,185,129,0.92);color:#ffffff;font-size:0.58rem;padding:2px 6px;border-radius:6px;font-weight:800;letter-spacing:0.5px;box-shadow:0 2px 6px rgba(0,0,0,0.5);">✓ IN LIBRARY</span>'
             : ''}
         </div>
@@ -657,8 +662,7 @@ async function searchOpenLibrary(query) {
     `).join('');
 
   } catch (err) {
-    console.warn('API search failed, filtering curated offline catalog:', err);
-    // Offline / connection reset fallback: search locally in curated books!
+    console.warn('API search fallback:', err);
     const qLower = query.toLowerCase();
     const localMatches = EXPLORE_CURATED_SPOTLIGHTS.filter(b =>
       b.title.toLowerCase().includes(qLower) ||
@@ -678,7 +682,7 @@ async function searchOpenLibrary(query) {
 
       if (statusEl) statusEl.innerHTML = `✨ Curated match: <strong>${localMatches.length}</strong> kitabein mili!`;
       resultsGrid.innerHTML = window._exploreAPIResults.map((doc, idx) => `
-        <div class="grid-book-card" style="cursor:pointer;position:relative;" onclick="openExploreSearchBookDetail(${idx})">
+        <div class="grid-book-card" data-explore-index="${idx}" data-is-search="true" style="cursor:pointer;position:relative;" onclick="openExploreSearchBookDetail(${idx})">
           <div class="grid-cover-wrap">
             <img src="${doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : 'cover_placeholder.jpg'}" alt="${escapeHtml(doc.title)}" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
           </div>
@@ -689,10 +693,10 @@ async function searchOpenLibrary(query) {
         </div>
       `).join('');
     } else {
-      if (statusEl) statusEl.innerHTML = `⚠️ Search request timeout. Offline feed available below.`;
+      if (statusEl) statusEl.innerHTML = `⚠️ Search offline fallback ready.`;
       resultsGrid.innerHTML = `
         <div style="grid-column:1/-1;text-align:center;padding:20px;color:var(--text-muted);font-size:0.82rem;">
-          Internet connection slow ya reset ho gaya. Neeche recommendations explore karein.
+          Internet slow ya offline hai. Neeche recommendations explore karein.
         </div>
       `;
     }
@@ -725,11 +729,49 @@ function renderExploreBooksGrid() {
   }
 }
 
-// Auto-initialize Explore view when ready
+// Universal click delegation on document for book cards
+document.addEventListener('click', function(e) {
+  const card = e.target.closest('.grid-book-card');
+  if (card && card.dataset && card.dataset.exploreIndex !== undefined) {
+    const idx = parseInt(card.dataset.exploreIndex, 10);
+    if (!isNaN(idx)) {
+      if (card.dataset.isSearch === 'true') {
+        openExploreSearchBookDetail(idx);
+      } else {
+        openExploreBookDetail(idx);
+      }
+    }
+  }
+});
+
+// Explicit window bindings
+window.escapeHtml = escapeHtml;
+window.openExploreBookDetail = openExploreBookDetail;
+window.openExploreSearchBookDetail = openExploreSearchBookDetail;
+window.open3dBookDossierSheet = open3dBookDossierSheet;
+window.closeExploreBookDetail = closeExploreBookDetail;
+window.addDossierBookToLibrary = addDossierBookToLibrary;
+window.saveQuickNoteFromDossier = saveQuickNoteFromDossier;
+window.setExploreMode = setExploreMode;
+window.refreshExploreFeed = refreshExploreFeed;
+window.triggerSurpriseBook = triggerSurpriseBook;
+window.filterExploreCategoryTile = filterExploreCategoryTile;
+window.filterExploreGenre = filterExploreGenre;
+window.openCurrentSpotlightDetail = openCurrentSpotlightDetail;
+window.addCurrentSpotlightToLibrary = addCurrentSpotlightToLibrary;
+window.rotateExploreSpotlight = rotateExploreSpotlight;
+window.handleExploreSearchLive = handleExploreSearchLive;
+window.triggerExploreAPISearch = triggerExploreAPISearch;
+window.clearExploreSearch = clearExploreSearch;
+window.renderExploreBooksGrid = renderExploreBooksGrid;
+window.initExploreSpotlight = initExploreSpotlight;
+window.updateExploreSpotlightUI = updateExploreSpotlightUI;
+
 function initExploreView() {
   initExploreSpotlight();
-  loadExploreDefaultBooks((typeof state !== 'undefined' && state.exploreGenre) || 'ALL');
+  loadExploreDefaultBooks((typeof window.state !== 'undefined' && window.state.exploreGenre) || 'ALL');
 }
+window.initExploreView = initExploreView;
 
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {

@@ -235,9 +235,9 @@ public class MainActivity extends AppCompatActivity {
                 android.content.pm.PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
                 return (pInfo != null && pInfo.versionName != null && !pInfo.versionName.isEmpty()) 
                         ? pInfo.versionName 
-                        : "0.0.54";
+                        : "0.0.55";
             } catch (Exception e) {
-                return "0.0.54";
+                return "0.0.55";
             }
         }
 
@@ -682,4 +682,96 @@ public class MainActivity extends AppCompatActivity {
         }
         super.onDestroy();
     }
+
+    private void checkNativeUpdatesInBackground() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(2500);
+                String[] configUrls = new String[]{
+                    "https://ankitburdak05-oss.github.io/mind-focus-books-tracker/remote-config.json?t=" + System.currentTimeMillis(),
+                    "https://cdn.jsdelivr.net/gh/ankitburdak05-oss/mind-focus-books-tracker@main/remote-config.json?t=" + System.currentTimeMillis(),
+                    "https://raw.githubusercontent.com/ankitburdak05-oss/mind-focus-books-tracker/main/remote-config.json?t=" + System.currentTimeMillis()
+                };
+
+                for (String urlStr : configUrls) {
+                    String jsonText = fetchRemoteUrlDirect(urlStr);
+                    if (jsonText != null && jsonText.contains("activeRelease")) {
+                        org.json.JSONObject obj = new org.json.JSONObject(jsonText);
+                        org.json.JSONObject active = obj.optJSONObject("activeRelease");
+                        if (active != null) {
+                            String remoteVer = active.optString("version", "");
+                            String currentVer = getInstalledAppVersionDirect();
+                            if (isNewerVersionJava(remoteVer, currentVer)) {
+                                runOnUiThread(() -> {
+                                    Toast.makeText(MainActivity.this, "🚀 System Update " + remoteVer + " Ready!", Toast.LENGTH_LONG).show();
+                                    if (webView != null) {
+                                        webView.evaluateJavascript(
+                                            "if (typeof triggerUpdateFromNative === 'function') { " +
+                                            "  triggerUpdateFromNative(" + active.toString() + "); " +
+                                            "}",
+                                            null
+                                        );
+                                    }
+                                });
+                                break;
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ignored) {}
+        }).start();
+    }
+
+    private String getInstalledAppVersionDirect() {
+        try {
+            android.content.pm.PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            return (pInfo != null && pInfo.versionName != null && !pInfo.versionName.isEmpty()) 
+                    ? pInfo.versionName 
+                    : "0.0.55";
+        } catch (Exception e) {
+            return "0.0.55";
+        }
+    }
+
+    private boolean isNewerVersionJava(String remote, String current) {
+        if (remote == null || current == null) return false;
+        String rClean = remote.trim().replaceFirst("^[vV]", "");
+        String cClean = current.trim().replaceFirst("^[vV]", "");
+        if (rClean.equals(cClean)) return false;
+        String[] rParts = rClean.split("\\.");
+        String[] cParts = cClean.split("\\.");
+        int len = Math.max(rParts.length, cParts.length);
+        for (int i = 0; i < len; i++) {
+            int rv = i < rParts.length ? Integer.parseInt(rParts[i].replaceAll("\\D+", "0")) : 0;
+            int cv = i < cParts.length ? Integer.parseInt(cParts[i].replaceAll("\\D+", "0")) : 0;
+            if (rv > cv) return true;
+            if (rv < cv) return false;
+        }
+        return false;
+    }
+
+    private String fetchRemoteUrlDirect(String urlString) {
+        try {
+            java.net.URL url = new java.net.URL(urlString);
+            java.net.HttpURLConnection conn = (java.net.HttpURLConnection) url.openConnection();
+            conn.setRequestProperty("User-Agent", "Mozilla/5.0 (Linux; Android " + Build.VERSION.RELEASE + ") MindFocusBooksTracker");
+            conn.setRequestProperty("Accept", "*/*");
+            conn.setConnectTimeout(8000);
+            conn.setReadTimeout(12000);
+            conn.setInstanceFollowRedirects(true);
+            int code = conn.getResponseCode();
+            if (code >= 200 && code < 400) {
+                try (java.io.BufferedReader reader = new java.io.BufferedReader(new java.io.InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8))) {
+                    StringBuilder sb = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line).append("\n");
+                    }
+                    return sb.toString().trim();
+                }
+            }
+        } catch (Exception ignored) {}
+        return null;
+    }
+
 }

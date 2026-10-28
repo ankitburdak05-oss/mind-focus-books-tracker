@@ -1,40 +1,40 @@
 {
   "version": "1.0.0",
-  "updatedAt": "2026-10-28T01:42:19.943Z",
+  "updatedAt": "2026-10-28T02:05:32.236Z",
   "activeRelease": {
-    "version": "v0.0.54",
-    "name": "Mind Focus Books v0.0.54 (Dedicated Explore Engine & 3D Dossier)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.54/MindFocusBooks-Native.apk",
+    "version": "v0.0.55",
+    "name": "Mind Focus Books v0.0.55 (Native Update Engine & 3D Dossier Fix)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.55/MindFocusBooks-Native.apk",
     "features": [
-      "📚 Modular Explore Engine: Dedicated explore.js architecture with zero bloat",
-      "🎨 Flawless 3-Column Book Layout: Fixed 1:1.45 aspect ratio and clean rounded cards",
-      "📖 1-Tap 3D Book Dossier: Instant tilted cover, metadata, + Add to Library & Save Note",
-      "🚀 Guaranteed In-App Update Engine: Automatic popup & 3D update banner"
+      "🚀 Native Android Update Engine: Background Java thread + Fastly/jsDelivr CDNs + Guaranteed auto-popup",
+      "📖 1-Tap 3D Book Dossier: Fixed escapeHtml & touch delegation on all book cards",
+      "🎨 Flawless 3-Column Layout: Fixed 1:1.45 aspect ratio across all devices",
+      "⚡ Zero-delay smooth click & reading detail transition"
     ],
-    "stagedAt": "2026-10-28T01:42:19.974Z",
+    "stagedAt": "2026-10-28T02:05:32.395Z",
     "isDeployed": true
   },
   "stagedRelease": {
-    "version": "v0.0.54",
-    "name": "Mind Focus Books v0.0.54 (Dedicated Explore Engine & 3D Dossier)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.54/MindFocusBooks-Native.apk",
+    "version": "v0.0.55",
+    "name": "Mind Focus Books v0.0.55 (Native Update Engine & 3D Dossier Fix)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.55/MindFocusBooks-Native.apk",
     "features": [
-      "📚 Modular Explore Engine: Dedicated explore.js architecture with zero bloat",
-      "🎨 Flawless 3-Column Book Layout: Fixed 1:1.45 aspect ratio and clean rounded cards",
-      "📖 1-Tap 3D Book Dossier: Instant tilted cover, metadata, + Add to Library & Save Note",
-      "🚀 Guaranteed In-App Update Engine: Automatic popup & 3D update banner"
+      "🚀 Native Android Update Engine: Background Java thread + Fastly/jsDelivr CDNs + Guaranteed auto-popup",
+      "📖 1-Tap 3D Book Dossier: Fixed escapeHtml & touch delegation on all book cards",
+      "🎨 Flawless 3-Column Layout: Fixed 1:1.45 aspect ratio across all devices",
+      "⚡ Zero-delay smooth click & reading detail transition"
     ],
-    "stagedAt": "2026-10-28T01:42:19.974Z",
+    "stagedAt": "2026-10-28T02:05:32.395Z",
     "isDeployed": true
   },
   "previousRelease": {
-    "version": "v0.0.53",
-    "name": "Mind Focus Books v0.0.53",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.53/MindFocusBooks-Native.apk",
+    "version": "v0.0.54",
+    "name": "Mind Focus Books v0.0.54",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.54/MindFocusBooks-Native.apk",
     "features": [
-      "Cleaned Profile menu & Verified auto-update"
+      "Modular explore.js architecture"
     ],
-    "stagedAt": "2026-10-28T01:17:36.000Z",
+    "stagedAt": "2026-10-28T01:44:17.000Z",
     "isDeployed": true
   },
   "features": {

@@ -10139,3 +10139,9 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   text-overflow: ellipsis !important;
 }
 
+
+/* Ensure touches on card children pass through directly to card */
+#exploreBooksGrid .grid-book-card > *,
+#exploreAPIResultsGrid .grid-book-card > * {
+  pointer-events: none !important; /* Card child pass-through */
+}
