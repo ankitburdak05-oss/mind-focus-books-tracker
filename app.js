@@ -2,8 +2,8 @@
 // MIND & FOCUS BOOKS TRACKER — MODERN NATIVE APP ENGINE (v0.0.39)
 // ==========================================================================
 
-const APP_VERSION = '0.0.68';
-const CURRENT_APP_VERSION = 'v0.0.68';
+const APP_VERSION = '0.0.69';
+const CURRENT_APP_VERSION = 'v0.0.69';
 const STORAGE_KEY = 'mind_focus_books_v1';
 const PIN_KEY = 'mind_focus_pin_v1';
 const PROFILE_KEY = 'mind_focus_profile_v1';
@@ -736,7 +736,7 @@ function renderLibraryGrid() {
               <span class="compact-pct-text">${pct}%</span>
             </div>
           </div>
-          <button type="button" class="card-kebab-btn compact-kebab-btn" style="position:static; margin-left:auto; flex-shrink:0;" onclick="event.stopPropagation(); openBookActionMenu(event, ${originalIndex})" title="Book Options">⋮</button>
+          
         </div>
       `;
     }
@@ -746,7 +746,7 @@ function renderLibraryGrid() {
       <div class="grid-book-card" onclick="openBookDetailViewByIndex(${originalIndex})">
         <div class="grid-cover-wrap" style="position:relative;">
           <img src="${getBookCoverUrl(book)}" alt="${escapeHtml(book.title)}" loading="lazy" onerror="this.onerror=null;this.src='cover_placeholder.jpg';">
-          <button type="button" class="card-kebab-btn" onclick="event.stopPropagation(); openBookActionMenu(event, ${originalIndex})" title="Book Options">⋮</button>
+          
         </div>
         <div class="grid-book-meta">
           <div class="grid-book-title" title="${escapeHtml(book.title)}">${escapeHtml(book.title)}</div>
