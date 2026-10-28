@@ -1,10 +1,10 @@
 {
-  "id": "notice-v0.0.57",
-  "version": "v0.0.57",
+  "id": "notice-v0.0.58",
+  "version": "v0.0.58",
   "active": true,
-  "title": "⚡ Mind Focus v0.0.57 Update Ready",
-  "message": "Explore me book search aur 3D Book Dossier click 100% fixed! Ab koi bhi book search karein aur click karte hi dossier open hoga.",
+  "title": "⚡ Mind Focus v0.0.58 Ready",
+  "message": "Explore engine restored: book click par instant Book Page aur Dossier khul raha hai, freeze problem 100% khatam!",
   "actionText": "Update Now",
-  "actionUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.57/MindFocusBooks-Native.apk",
+  "actionUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.58/MindFocusBooks-Native.apk",
   "type": "info"
 }

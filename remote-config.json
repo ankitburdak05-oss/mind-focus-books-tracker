@@ -1,11 +1,11 @@
 {
   "activeRelease": {
-    "version": "v0.0.57",
-    "name": "Mind Focus Books v0.0.57 (Global Search & 3D Dossier Fix)",
-    "releaseNotes": "Full Open Library and local search engine, rock-solid 3D Book Dossier tap opening on all phone displays, zero off-screen rendering.",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.57/MindFocusBooks-Native.apk",
+    "version": "v0.0.58",
+    "name": "Mind Focus Books v0.0.58 (Restored Proven Engine)",
+    "releaseNotes": "Restored proven v0.0.45 explore engine. Zero screen freeze, instant full book page opening, search with local & world discovery.",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.58/MindFocusBooks-Native.apk",
     "mandatory": false,
-    "timestamp": "2026-10-28T08:20:00Z"
+    "timestamp": "2026-10-28T08:35:00Z"
   },
   "stagedRelease": null,
   "features": {
