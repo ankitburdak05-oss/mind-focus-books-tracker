@@ -1,10 +1,10 @@
 window.BROADCAST_NOTICE = {
-  "id": "notice-v0.0.61",
-  "version": "0.0.61",
-  "title": "⚡ MindFocus Books v0.0.61 Ready!",
-  "message": "v0.0.61: ChatGPT explore module fully integrated! 3D Book Dossier Sheet & Open Full Book Page instant navigation 100% active.",
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.61/MindFocusBooks-Native.apk",
+  "id": "notice-v0.0.62",
+  "version": "0.0.62",
+  "title": "⚡ MindFocus Books v0.0.62 Ready!",
+  "message": "v0.0.62: Clean Explore layout without Popular Categories section; 3D Dossier & Instant Book Page 100% active.",
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.62/MindFocusBooks-Native.apk",
   "active": true,
   "priority": "high",
-  "created_at": "2026-10-28T05:31:47.663Z"
+  "created_at": "2026-10-28T06:45:50.600Z"
 };

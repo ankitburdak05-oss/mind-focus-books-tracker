@@ -92,7 +92,7 @@ const EXPLORE_SUBJECT_MAP = {
 };
 
 function renderExploreView() {
-  renderPopularCategoryCounts();
+  // Popular categories removed
   initExploreSpotlight();
   loadExploreDefaultBooks((typeof state !== 'undefined' && state.exploreGenre) || 'ALL');
 }
