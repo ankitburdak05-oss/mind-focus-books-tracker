@@ -1,4 +1,89 @@
 
+// ================= SMART NAME & TITLE SANITIZER =================
+function cleanDiacritics(str) {
+  if (!str) return '';
+  return str
+    .replace(/[āĀ]/g, 'a')
+    .replace(/[īĪ]/g, 'i')
+    .replace(/[ūŪ]/g, 'u')
+    .replace(/[ṛṚ]/g, 'ri')
+    .replace(/[ēĒ]/g, 'e')
+    .replace(/[ōŌ]/g, 'o')
+    .replace(/[ṃm̐]/g, 'n')
+    .replace(/[ôÔ]/g, 'o')
+    .replace(/[ḥḤ]/g, 'h')
+    .replace(/[ṭṬ]/g, 't')
+    .replace(/[ḍḌ]/g, 'd')
+    .replace(/[ṇṆ]/g, 'n')
+    .replace(/[śŚṣṢ]/g, 'sh');
+}
+
+function cleanBookTitle(rawTitle) {
+  if (!rawTitle) return 'Untitled Book';
+  let t = String(rawTitle).trim();
+  const lower = t.toLowerCase();
+
+  // 1. Normalize transliterated Hindi/Urdu classics
+  if (lower.includes('ajab ghazab') || lower.includes('ajab-gazab') || lower.includes('ajab gazab')) {
+    return 'Jaun Elia: Ek Ajab Ghazab Shayar (जौन एलिया : एक अजब-गज़ब शायर)';
+  }
+  if (lower.includes('jona eliya') || lower.includes('maim jo') || lower.includes('main jo hoon') || lower.includes('maiṃ jo')) {
+    return 'Main Jo Hoon Jon Elia Hoon (मैं जो हूँ जॉन एलिया हूँ)';
+  }
+  if (t === 'جون ایلیا' || lower === 'jaun elia' || lower === 'kulliyat-i jaun eliya') {
+    return 'Kulliyat-e-Jaun Elia (कुलियात-ए-जौन एलिया)';
+  }
+  if (lower.includes('courage to be disliked')) {
+    return 'The Courage to Be Disliked';
+  }
+  if (lower.includes('dark psychology') && (lower.includes('manipulation') || lower.includes('secrets'))) {
+    return 'Dark Psychology and Secret Manipulation';
+  }
+
+  // 2. Clean diacritics
+  t = cleanDiacritics(t);
+
+  // 3. Clean quotes around single words: 'Jona' -> Jona
+  t = t.replace(/'([A-Za-z]+)'/g, '$1');
+
+  // 4. Translate raw Urdu text if alone
+  if (/^[\u0600-\u06FF\s\p{P}]+$/u.test(t)) {
+    if (t.includes('ایلیا')) return 'Jaun Elia (Shayari Collection) | जौन एलिया';
+  }
+
+  return t;
+}
+
+function cleanBookAuthor(rawAuthor) {
+  if (!rawAuthor) return 'Unknown Author';
+  let a = String(rawAuthor).trim();
+  const lower = a.toLowerCase();
+
+  if (lower.includes('jaun eliy') || lower.includes('jon elia') || lower.includes('jaun elia') || a.includes('جون ایلیا')) {
+    return 'Jaun Elia (जॉन एलिया)';
+  }
+  if (a.includes('نیہا') || a.includes('اقبال')) {
+    return 'Iqbal & Jaun Elia';
+  }
+  if (lower.includes('kishimi') || lower.includes('koga')) {
+    return 'Ichiro Kishimi & Fumitake Koga';
+  }
+  if (lower.includes('cooper') && lower.includes('william')) {
+    return 'William Cooper';
+  }
+
+  // Fix "Last, First"
+  if (a.includes(',') && !a.includes('&') && !a.includes('and')) {
+    const parts = a.split(',').map(p => p.trim());
+    if (parts.length === 2 && parts[0].length > 0 && parts[1].length > 0) {
+      a = `${parts[1]} ${parts[0]}`;
+    }
+  }
+
+  return cleanDiacritics(a);
+}
+
+
 function getExploreDocCoverUrl(doc) {
   if (doc.cover_url && !doc.cover_url.includes('placeholder')) return doc.cover_url;
   if (doc.cover_i) return `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg`;
@@ -48,6 +133,22 @@ function escapeHtml(str) {
 
 // Curated Masterpiece Books with Full Metadata
 const EXPLORE_CURATED_SPOTLIGHTS = [
+  {
+    key: 'curated_jaun_elia_ajab_ghazab',
+    title: 'Jaun Elia: Ek Ajab Ghazab Shayar | जौन एलिया : एक अजब-गज़ब शायर',
+    author: 'Jaun Elia (Edited by Muntazir Firozabadi)',
+    author_name: ['Jaun Elia', 'Muntazir Firozabadi'],
+    year: '2016',
+    first_publish_year: '2016',
+    cover_url: 'jaun_elia_ajab_ghazab.jpg',
+    rating: '4.9 (Amazon Bestseller)',
+    desc: 'जौन एलिया के चुनिंदा शेर, नज्में, गजलें और उनकी अनसुनी ज़िंदगी के किस्से। अजब-गज़ब फलसफा और शायरी।',
+    pages: 240,
+    number_of_pages_median: 240,
+    publisher: 'Hind Yugm',
+    language: 'Hindi / Urdu',
+    subject: ['Poetry', 'Shayari', 'Ghazal', 'Hindi Literature']
+  },
   {
     key: 'curated_jon_elia',
     title: "Main Jo Hoon Jon Elia Hoon (मैं जो हूँ जॉन एलिया हूँ)",
@@ -408,8 +509,8 @@ async function loadExploreDefaultBooks(genre, customSubject = null, forceNewOffs
 }
 
 function renderExploreBookCard(doc, idx) {
-  const title = doc.title || 'Unknown Title';
-  const author = (doc.author_name && doc.author_name[0]) || doc.author || 'Unknown Author';
+  const title = cleanBookTitle(doc.title);
+  const author = cleanBookAuthor((doc.author_name && doc.author_name[0]) || doc.author);
   const coverUrl = getExploreDocCoverUrl(doc);
   const year = doc.first_publish_year || '';
   const pages = doc.number_of_pages_median || '';
@@ -491,7 +592,7 @@ function open3dBookDossierSheet(doc) {
   window._currentActiveDocForModal = doc;
 
   const title = doc.title || 'Unknown Title';
-  const author = (doc.author_name && doc.author_name[0]) || doc.author || 'Unknown Author';
+  const author = cleanBookAuthor((doc.author_name && doc.author_name[0]) || doc.author);
   const coverUrl = doc.cover_url || (doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-L.jpg` : 'cover_placeholder.jpg');
   const pages = doc.number_of_pages_median || doc.pages || 280;
   const year = doc.first_publish_year || doc.year || 'Classic';
@@ -811,32 +912,35 @@ async function searchOpenLibrary(query) {
     ...(typeof DEFAULT_BOOKS !== 'undefined' && Array.isArray(DEFAULT_BOOKS) ? DEFAULT_BOOKS : [])
   ];
 
-  const seenTitles = new Set();
+  const seenKeys = new Set();
   
-  // Support aliases (e.g. jo aliya -> jaun elia)
-  const isJonElia = qLower.includes('aliya') || qLower.includes('aaliya') || qLower.includes('elia') || qLower.includes('eliyah');
+  // Specific alias matching (e.g. jo aliya / jaun elia)
+  const isJonElia = qLower.includes('aliya') || qLower.includes('aaliya') || qLower.includes('elia') || qLower.includes('eliyah') || qLower.includes('jaun');
   const isCourage = qLower.includes('courage') || qLower.includes('disliked');
   const isDarkPsych = qLower.includes('dark') || qLower.includes('manipulation') || qLower.includes('psychology');
 
   searchPool.forEach(b => {
     if (!b || !b.title) return;
-    const t = b.title.toLowerCase();
-    const a = (b.author || (b.author_name && b.author_name[0]) || '').toLowerCase();
+    const cleanT = cleanBookTitle(b.title);
+    const cleanA = cleanBookAuthor(b.author || (b.author_name && b.author_name[0]));
+    const t = cleanT.toLowerCase();
+    const a = cleanA.toLowerCase();
     
     let matched = t.includes(qLower) || a.includes(qLower);
-    if (!matched && isJonElia && (t.includes('elia') || a.includes('elia') || t.includes('hūm̐'))) matched = true;
+    if (!matched && isJonElia && (t.includes('elia') || a.includes('elia') || t.includes('shayar'))) matched = true;
     if (!matched && isCourage && (t.includes('courage') || t.includes('disliked'))) matched = true;
     if (!matched && isDarkPsych && (t.includes('dark psychology') || t.includes('manipulation'))) matched = true;
 
     if (matched) {
-      const cleanKey = t.replace(/[^a-z0-9]/g, '');
-      if (!seenTitles.has(cleanKey)) {
-        seenTitles.add(cleanKey);
+      // Deduplicate key based on normalized title
+      const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (!seenKeys.has(dedupeKey)) {
+        seenKeys.add(dedupeKey);
         const cover = b.cover_url || b.cover_image || b.cover || (b.cover_i ? `https://covers.openlibrary.org/b/id/${b.cover_i}-L.jpg` : 'cover_placeholder.jpg');
         localMatches.push({
-          title: b.title,
-          author: b.author || (b.author_name && b.author_name[0]) || 'Unknown',
-          author_name: [b.author || (b.author_name && b.author_name[0]) || 'Unknown'],
+          title: cleanT,
+          author: cleanA,
+          author_name: [cleanA],
           cover_url: cover,
           cover_i: b.cover_i,
           number_of_pages_median: b.pages || b.total_pages || 250,
@@ -856,7 +960,7 @@ async function searchOpenLibrary(query) {
     }
   }
 
-  // 2. Online search via OpenLibrary general 'q=' query (searches title, author & topics)
+  // 2. Online search via OpenLibrary general 'q=' query
   if (statusEl) {
     statusEl.style.display = 'block';
     statusEl.innerHTML = '🔍 <em>World Books Database se real covers aur kitabein search ho rahi hain...</em>';
@@ -875,11 +979,22 @@ async function searchOpenLibrary(query) {
       const onlineDocs = data.docs || [];
       onlineDocs.forEach(d => {
         if (!d || !d.title) return;
-        const cleanKey = d.title.toLowerCase().replace(/[^a-z0-9]/g, '');
-        if (!seenTitles.has(cleanKey)) {
-          seenTitles.add(cleanKey);
-          d.cover_url = getExploreDocCoverUrl(d);
-          localMatches.push(d);
+        const cleanT = cleanBookTitle(d.title);
+        const cleanA = cleanBookAuthor((d.author_name && d.author_name[0]) || d.author);
+        const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
+        
+        // Filter out if already seen OR if it has NO real cover image!
+        if (!seenKeys.has(dedupeKey)) {
+          const cover = getExploreDocCoverUrl(d);
+          // Only show books that have a REAL cover (exclude generic placeholders)
+          if (cover && !cover.includes('placeholder')) {
+            seenKeys.add(dedupeKey);
+            d.title = cleanT;
+            d.author = cleanA;
+            d.author_name = [cleanA];
+            d.cover_url = cover;
+            localMatches.push(d);
+          }
         }
       });
     }
@@ -903,7 +1018,7 @@ async function searchOpenLibrary(query) {
 }
 
 function renderExploreSearchBookCard(doc, idx) {
-  const title = doc.title || 'Unknown Title';
+  const title = cleanBookTitle(doc.title);
   const author = (doc.author_name && doc.author_name[0]) || doc.author || 'Unknown Author';
   const coverUrl = doc.cover_url || (doc.cover_i ? `https://covers.openlibrary.org/b/id/${doc.cover_i}-M.jpg` : 'cover_placeholder.jpg');
 

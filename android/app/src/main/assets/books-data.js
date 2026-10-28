@@ -5550,4 +5550,26 @@ var DEFAULT_BOOKS = (typeof window !== 'undefined' && window.DEFAULT_BOOKS) ? wi
   "cover": "https://covers.openlibrary.org/b/id/15131420-L.jpg",
   "cover_image": "https://covers.openlibrary.org/b/id/15131420-L.jpg"
 }
+,
+  {
+  "no": "book 324",
+  "title": "Jaun Elia: Ek Ajab Ghazab Shayar | जौन एलिया : एक अजब-गज़ब शायर",
+  "author": "Jaun Elia (Edited by Muntazir Firozabadi)",
+  "language": "HINDI / URDU",
+  "status": "WISHLIST",
+  "start_date": "",
+  "end_date": "",
+  "count_days": 0,
+  "rating": 4.9,
+  "category": "Poetry & Shayari",
+  "takeaway": "जौन एलिया के प्रसिद्ध और चुनिंदा शेर, गजलें, नज्में और उनकी अनसुनी ज़िंदगी के किस्से। अजब-गज़ब फलसफा और शायरी।",
+  "availability": "AVAILABLE",
+  "pages": 240,
+  "total_pages": 240,
+  "price": 157,
+  "isbn": "978-93-8441-999-8",
+  "cover_url": "jaun_elia_ajab_ghazab.jpg",
+  "cover": "jaun_elia_ajab_ghazab.jpg",
+  "cover_image": "jaun_elia_ajab_ghazab.jpg"
+}
 ];

@@ -1,10 +1,11 @@
 window.BROADCAST_NOTICE = {
-  "id": "notice-v0.0.67",
-  "version": "0.0.67",
-  "title": "⚡ MindFocus Books v0.0.67 Ready!",
-  "message": "v0.0.67: Bulletproof book click engine with persistent cache & DOM extraction; 100% guarantee dossier sheet opens on any book card tap.",
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.67/MindFocusBooks-Native.apk",
-  "active": true,
-  "priority": "high",
-  "created_at": "2026-10-28T08:12:13.751Z"
+  "id": "notice-v0.0.68",
+  "version": "0.0.68",
+  "title": "📚 MindFocus Books v0.0.68 Ready!",
+  "message": "v0.0.68: Added Jaun Elia: Ek Ajab Ghazab Shayar with real official cover, cleaned search title diacritics & transliterations, and deduplicated explore search cards.",
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.68/MindFocusBooks-Native.apk",
+  "action_text": "Download v0.0.68 APK",
+  "badge_text": "NEW UPDATE",
+  "auto_show": true,
+  "timestamp": 1793185304702
 };
