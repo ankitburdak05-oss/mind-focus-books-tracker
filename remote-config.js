@@ -1,19 +1,19 @@
 window.REMOTE_CONFIG = {
   "activeRelease": {
-    "version": "v0.0.62",
-    "name": "Mind Focus Books v0.0.62 (Clean Explore Layout)",
-    "releaseNotes": "v0.0.62: Clean Explore layout without Popular Categories section; 3D Dossier & Instant Book Page 100% active.",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.62/MindFocusBooks-Native.apk",
+    "version": "v0.0.63",
+    "name": "Mind Focus Books v0.0.63 (Bulletproof Click Engine)",
+    "releaseNotes": "v0.0.63: Bulletproof book click engine with persistent cache & DOM extraction; 100% guarantee dossier sheet opens on any book card tap.",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.63/MindFocusBooks-Native.apk",
     "mandatory": false,
-    "timestamp": "2026-10-28T06:45:50.600Z"
+    "timestamp": "2026-10-28T08:12:13.751Z"
   },
   "stagedRelease": null,
-  "latest_version": "0.0.62",
-  "version_code": 62,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.62/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.62: Clean Explore layout without Popular Categories section; 3D Dossier & Instant Book Page 100% active.",
+  "latest_version": "0.0.63",
+  "version_code": 63,
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.63/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.63: Bulletproof book click engine with persistent cache & DOM extraction; 100% guarantee dossier sheet opens on any book card tap.",
   "force_update": false,
-  "published_at": "2026-10-28T06:45:50.600Z",
+  "published_at": "2026-10-28T08:12:13.751Z",
   "features": {
     "inAppUpdates": true,
     "smartBookDossier": true,
