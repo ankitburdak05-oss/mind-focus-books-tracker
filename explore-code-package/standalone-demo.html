@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindFocus Explore Module - Standalone Test</title>
+  <link rel="stylesheet" href="explore.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 16px;
+      background: #0a0e17;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    .demo-container {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    .demo-header {
+      padding: 12px 0 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-container">
+    <div class="demo-header">
+      <h1 style="margin:0 0 6px 0;font-size:1.4rem;">📚 Explore & 3D Dossier Demo</h1>
+      <p style="margin:0;font-size:0.85rem;color:#94a3b8;">Click on any book card below to open the 3D Book Dossier Sheet.</p>
+    </div>
+
+    <!-- Explore HTML Component -->
+    <section id="viewExplore" class="app-view">
+      <div class="view-header-block">
+        <h2 class="view-main-title">Explore</h2>
+        <p class="view-sub-title">Discover new books, authors and ideas</p>
+      </div>
+
+      <!-- Search Bar with Live Filter & Action Controls -->
+      <div class="search-bar-wrap" style="display:flex;gap:8px;align-items:center;">
+        <div class="search-input-box" style="position:relative;flex:1;">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="exploreSearchInput" placeholder="Duniya ki koi bhi book ya author dhundho..." oninput="handleExploreSearchLive(this.value)" autocomplete="off" onkeydown="if(event.key==='Enter')triggerExploreAPISearch()">
+          <button type="button" id="exploreSearchClearBtn" onclick="clearExploreSearch()" style="display:none;position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--text-secondary);font-size:1.1rem;cursor:pointer;padding:4px;">&#x2715;</button>
+        </div>
+        <button type="button" class="btn-gold-pill" onclick="triggerExploreAPISearch()" style="white-space:nowrap;flex-shrink:0;padding:10px 16px;">?? Search</button>
+      </div>
+
+      <!-- Action Strip: Refresh, Surprise Me, Curated Feed Mode -->
+      <div class="explore-controls-bar">
+        <div class="explore-sub-tabs">
+          <button type="button" class="explore-sub-pill active" id="exploreModeTrending" onclick="setExploreMode('trending')">🔥 Trending</button>
+          <button type="button" class="explore-sub-pill" id="exploreModeBestsellers" onclick="setExploreMode('bestseller')">⭐ Bestsellers</button>
+          <button type="button" class="explore-sub-pill" id="exploreModeClassics" onclick="setExploreMode('classics')">👑 Classics</button>
+          <button type="button" class="explore-sub-pill" id="exploreModeMindset" onclick="setExploreMode('mindset')">🧠 Mind & Focus</button>
+        </div>
+        <div class="explore-quick-actions">
+          <button type="button" class="btn-explore-surprise" onclick="triggerSurpriseBook()" title="Random recommended book">🎲 Surprise</button>
+          <button type="button" class="btn-explore-refresh" onclick="refreshExploreFeed()" title="Nayi kitabein load karein">✨ Naya</button>
+        </div>
+      </div>
+
+      <!-- API Search Status -->
+      <div id="exploreAPIStatus" style="display:none;text-align:center;padding:10px 16px;color:var(--text-secondary);font-size:0.85rem;"></div>
+
+      <!-- API Search Results -->
+      <div id="exploreAPIResultsSection" style="display:none;">
+        <div class="section-container">
+          <div class="section-header">
+            <h2 class="section-title" id="exploreAPIResultsTitle">Search Results</h2>
+            <button type="button" class="section-link-btn" onclick="clearExploreSearch()">&#x2715; Clear</button>
+          </div>
+          <div class="library-books-grid" id="exploreAPIResultsGrid"></div>
+        </div>
+      </div>
+
+      <!-- Genre Pills -->
+      <div class="filter-chips-scroll" id="exploreGenreChips">
+        <button type="button" class="filter-chip active" onclick="filterExploreGenre('ALL')">All</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Productivity')">Productivity</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Self Help')">Self Help</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Fiction')">Fiction</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Business')">Business</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Technology')">Technology</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Dark Psychology')">Dark Psychology</button>
+        <button type="button" class="filter-chip" onclick="filterExploreGenre('Philosophy')">Philosophy</button>
+      </div>
+
+            <!-- Dynamic Featured Spotlight Book (Rotates with Explore Feed) -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">🌍 World Spotlight Book</h2>
+          <button type="button" class="section-link-btn" onclick="rotateExploreSpotlight()">Next Pick ↗</button>
+        </div>
+        <div class="featured-book-hero" id="exploreFeaturedCard" style="cursor:pointer;" onclick="openCurrentSpotlightDetail()">
+          <div class="featured-cover-wrap explore-cover-3d-wrap">
+            <img id="featuredCoverImg" class="explore-cover-3d-img" src="https://covers.openlibrary.org/b/id/12539702-L.jpg" alt="Featured Book" onerror="this.src='cover_placeholder.jpg'">
+          </div>
+          <div class="featured-details">
+            <div style="display:flex; gap:6px; align-items:center; margin-bottom:4px;">
+              <span style="background:rgba(245,158,11,0.2); color:#fbbf24; font-size:0.65rem; font-weight:800; padding:2px 8px; border-radius:10px; border:1px solid rgba(245,158,11,0.4);">GLOBAL PICK</span>
+              <span id="featuredYearVal" style="color:var(--text-secondary); font-size:0.7rem;">2018</span>
+            </div>
+            <h3 class="featured-title" id="featuredTitle">Atomic Habits</h3>
+            <div class="featured-author" id="featuredAuthor">James Clear</div>
+            <div class="featured-rating" style="margin:4px 0 6px;">
+              <span class="star-icon" style="color:#fbbf24;">⭐⭐⭐⭐⭐</span>
+              <span id="featuredRatingVal" style="font-weight:700; color:#fbbf24;">4.8 (Global Reader Choice)</span>
+            </div>
+            <p class="featured-desc" id="featuredDesc">Tiny changes, remarkable results. Build good habits, break bad ones and master the tiny behaviors that lead to remarkable results.</p>
+            <div style="display:flex; gap:8px; margin-top:8px;" onclick="event.stopPropagation();">
+              <button type="button" class="btn-gold-pill" id="featuredDetailActionBtn" onclick="openCurrentSpotlightDetail()">📖 View Details</button>
+              <button type="button" class="btn-read-now-sm" id="featuredAddActionBtn" onclick="addCurrentSpotlightToLibrary()">+ Add to Library</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Popular Categories (2x2 Grid) -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title">Popular Categories</h2>
+        </div>
+        <div class="popular-categories-grid">
+          <div class="category-tile cat-productivity" onclick="filterExploreCategoryTile('Mindset & Logic', 'psychology')">
+            <div class="cat-icon-badge purple">💡</div>
+            <div class="cat-info">
+              <div class="cat-name">Mindset & Logic</div>
+              <div class="cat-count">World Bestsellers ✨</div>
+            </div>
+          </div>
+
+          <div class="category-tile cat-selfhelp" onclick="filterExploreCategoryTile('Brain Science', 'neuroscience')">
+            <div class="cat-icon-badge gold">🧠</div>
+            <div class="cat-info">
+              <div class="cat-name">Brain Science</div>
+              <div class="cat-count">Deep Focus Picks 🎯</div>
+            </div>
+          </div>
+
+          <div class="category-tile cat-fiction" onclick="filterExploreCategoryTile('Classic Fiction', 'fiction')">
+            <div class="cat-icon-badge blue">🔍</div>
+            <div class="cat-info">
+              <div class="cat-name">Fiction & Mystery</div>
+              <div class="cat-count">Top Rated Novels 📚</div>
+            </div>
+          </div>
+
+          <div class="category-tile cat-business" onclick="filterExploreCategoryTile('Focus & Habits', 'habits')">
+            <div class="cat-icon-badge rose">🎯</div>
+            <div class="cat-info">
+              <div class="cat-name">Focus & Habits</div>
+              <div class="cat-count">High Performance 🔥</div>
+            </div>
+          </div>
+
+          <div class="category-tile cat-strategy" onclick="filterExploreCategoryTile('Dark Psychology', 'manipulation')">
+            <div class="cat-icon-badge teal">🕶️</div>
+            <div class="cat-info">
+              <div class="cat-name">Dark Psychology</div>
+              <div class="cat-count">Power & Strategy ♟️</div>
+            </div>
+          </div>
+
+          <div class="category-tile cat-wealth" onclick="filterExploreCategoryTile('Wealth & Finance', 'wealth')">
+            <div class="cat-icon-badge gold">??</div>
+            <div class="cat-info">
+              <div class="cat-name">Wealth & Finance</div>
+              <div class="cat-count">Money Masters 💰</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Explore Books Grid -->
+      <div class="section-container">
+        <div class="section-header">
+          <h2 class="section-title" id="exploreGridHeaderTitle">Explore Recommendations</h2>
+        </div>
+        <div class="library-books-grid" id="exploreBooksGrid">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 3D Dossier Modal -->
+    <div id="exploreBookDetailModal" style="display:none;" onclick="if(event.target===this)closeExploreBookDetail()"></div>
+  </div>
+
+  <script>
+    // Minimal mock state for standalone testing
+    window.state = {
+      books: [],
+      exploreGenre: 'ALL'
+    };
+    window.DEFAULT_BOOKS = [
+      { title: "Atomic Habits", author: "James Clear", pages: 320, category: "Self Help" },
+      { title: "Deep Work", author: "Cal Newport", pages: 304, category: "Productivity" },
+      { title: "The 48 Laws of Power", author: "Robert Greene", pages: 452, category: "Strategy" }
+    ];
+    window.showToast = function(msg) {
+      alert(msg);
+    };
+    window.openBookDetailView = function(book) {
+      alert("Opening Full Book Page for: " + book.title + "\nAuthor: " + book.author + "\nPages: " + (book.pages || book.total_pages));
+    };
+    window.saveBooks = function() {
+      console.log("Books saved. Total books in library:", state.books.length);
+    };
+    window.renderPopularCategoryCounts = function() {};
+  </script>
+  <script src="explore.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof renderExploreView === 'function') renderExploreView();
+    });
+  </script>
+</body>
+</html>
