@@ -1,42 +1,42 @@
-plugins {
-    id 'com.android.application'
-}
-
-android {
-    namespace 'com.mindfocus.bookstracker'
-    compileSdk 34
-
-    defaultConfig {
-        applicationId "com.mindfocus.bookstracker"
-        minSdk 21
-        targetSdk 34
-        versionCode System.getenv("GITHUB_RUN_NUMBER") ? (Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER")) + 8509) : 8509
-        versionName "0.0.69"
-    }
-
-    signingConfigs {
-        release {
-            storeFile file("mindfocus.keystore")
-            storePassword "mindfocus123"
-            keyAlias "mindfocus"
-            keyPassword "mindfocus123"
-        }
-    }
-
-    buildTypes {
-        debug {
-            minifyEnabled false
-            debuggable true
-            signingConfig signingConfigs.release
-        }
-        release {
-            minifyEnabled false
-            signingConfig signingConfigs.release
-        }
-    }
-}
-
-dependencies {
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'androidx.webkit:webkit:1.10.0'
-}
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.mindfocus.bookstracker'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.mindfocus.bookstracker"
+        minSdk 21
+        targetSdk 34
+        versionCode System.getenv("GITHUB_RUN_NUMBER") ? (Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER")) + 8509) : 8509
+        versionName "0.0.70"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("mindfocus.keystore")
+            storePassword "mindfocus123"
+            keyAlias "mindfocus"
+            keyPassword "mindfocus123"
+        }
+    }
+
+    buildTypes {
+        debug {
+            minifyEnabled false
+            debuggable true
+            signingConfig signingConfigs.release
+        }
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.webkit:webkit:1.10.0'
+}
