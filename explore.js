@@ -1303,7 +1303,7 @@ function open3dBookDossierSheet(doc) {
       <!-- Action 0: Full Page Online Book Reader -->
       <button type="button" onclick="openExploreLiveOnlineReader()" style="width:100%;padding:14px;background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 50%,#4338ca 100%);color:#ffffff;font-weight:800;font-size:0.96rem;border-radius:14px;border:none;cursor:pointer;box-shadow:0 6px 22px rgba(37,99,235,0.45);letter-spacing:0.3px;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform 0.15s ease,box-shadow 0.15s ease;">
         <span style="font-size:1.15rem;">📖</span>
-        <span>Free Read Online / Panne Padhein (Full Screen)</span>
+        <span>📖 Hindi Me Pura Panne Padhein (Free Online)</span>
       </button>
 
       <!-- Action 1: Open Full Book Page & Read -->
@@ -2528,26 +2528,122 @@ window.loadMoreExploreSearchResults = loadMoreExploreSearchResults;
 window.openExploreLiveOnlineReader = openExploreLiveOnlineReader;
 window.closeExploreLiveOnlineReader = closeExploreLiveOnlineReader;
 
-// ================= FULL PAGE LIVE ONLINE BOOK READER =================
+// ================= FULL PAGE LIVE ONLINE BOOK READER (HINDI FIRST) =================
+const HINDI_IA_MAP = {
+  'think and grow rich': 'sociyeauraamirab0000hill',
+  'think & grow rich': 'sociyeauraamirab0000hill',
+  'sochiye aur ameer baniye': 'sociyeauraamirab0000hill',
+  'the secret': 'rahasya0000byrn',
+  'rahasya': 'rahasya0000byrn',
+  'the alchemist': 'alkemist0000coel',
+  'alchemist': 'alkemist0000coel',
+  'godan': 'godan0000prem',
+  'gaban': 'gaban0000prem',
+  'mansarovar': 'mansarovar0000prem',
+  'kulliyat-e-jaun-elia': 'kulliyat-e-jaun-elia',
+  'jaun elia': 'kulliyat-e-jaun-elia',
+  'rich dad poor dad': 'rich-dad-poor-dad-hindi',
+  'the power of your subconscious mind': 'aapke-avchetan-man-ki-shakti-hindi',
+  'bhagavad gita': 'shrimad-bhagwat-geeta-hindi-gita-press',
+  'gita': 'shrimad-bhagwat-geeta-hindi-gita-press',
+  'chanakya': 'chanakya-neeti-hindi'
+};
+
+let _currentReaderDoc = null;
+let _currentReaderLang = 'hin';
+
+function getBestHindiReaderUrl(doc) {
+  const t = (doc.title || '').toLowerCase().trim();
+  const cleanT = cleanBookTitle(doc.title || '').toLowerCase();
+
+  // 1. Check known mapping
+  for (const [key, iaId] of Object.entries(HINDI_IA_MAP)) {
+    if (t.includes(key) || cleanT.includes(key)) {
+      return `https://archive.org/embed/${iaId}`;
+    }
+  }
+
+  // 2. Scan doc.ia for Hindi identifiers
+  if (doc.ia && Array.isArray(doc.ia)) {
+    const hindiId = doc.ia.find(id => {
+      const s = String(id).toLowerCase();
+      return s.includes('hin') || s.includes('sociye') || s.includes('rahasya') || s.includes('hindi') || s.includes('kahani') || s.includes('upanyas');
+    });
+    if (hindiId) {
+      return `https://archive.org/embed/${encodeURIComponent(hindiId)}`;
+    }
+  }
+
+  // 3. General Hindi query on Internet Archive texts
+  const cleanSearch = cleanT.replace(/[^a-zA-Z0-9 ]/g, ' ').trim();
+  return `https://archive.org/details/texts?query=(${encodeURIComponent(cleanSearch)})+AND+(language:hindi+OR+language:hin)`;
+}
+
+function getBestEnglishReaderUrl(doc) {
+  if (doc.ia && Array.isArray(doc.ia) && doc.ia[0]) {
+    return `https://archive.org/embed/${encodeURIComponent(doc.ia[0])}`;
+  } else if (doc.edition_key && Array.isArray(doc.edition_key) && doc.edition_key[0]) {
+    return `https://openlibrary.org/books/${encodeURIComponent(doc.edition_key[0])}?mode=embed`;
+  } else if (doc.key) {
+    const cleanKey = String(doc.key).replace(/^\/?/, '/');
+    return `https://openlibrary.org${cleanKey}`;
+  } else if (doc.isbn && Array.isArray(doc.isbn) && doc.isbn[0]) {
+    return `https://openlibrary.org/isbn/${encodeURIComponent(doc.isbn[0])}`;
+  } else {
+    return `https://archive.org/details/texts?query=${encodeURIComponent(doc.title + ' ' + (doc.author || ''))}`;
+  }
+}
+
+function switchReaderLanguage(lang) {
+  _currentReaderLang = lang;
+  const iframe = document.getElementById('exploreReaderIframe');
+  const loader = document.getElementById('exploreReaderLoader');
+  const loaderText = document.getElementById('exploreReaderLoaderText');
+  const hinBtn = document.getElementById('readerLangHinBtn');
+  const engBtn = document.getElementById('readerLangEngBtn');
+
+  if (loader) loader.style.display = 'flex';
+  if (loaderText) {
+    loaderText.innerText = lang === 'hin' ? 'Hindi Edition load ho raha hai... ⏳' : 'English Edition load ho raha hai... ⏳';
+  }
+
+  if (lang === 'hin') {
+    if (hinBtn) {
+      hinBtn.style.background = '#f59e0b';
+      hinBtn.style.color = '#000000';
+    }
+    if (engBtn) {
+      engBtn.style.background = 'rgba(255,255,255,0.1)';
+      engBtn.style.color = '#cbd5e1';
+    }
+    if (iframe && _currentReaderDoc) {
+      iframe.src = getBestHindiReaderUrl(_currentReaderDoc);
+    }
+  } else {
+    if (engBtn) {
+      engBtn.style.background = '#3b82f6';
+      engBtn.style.color = '#ffffff';
+    }
+    if (hinBtn) {
+      hinBtn.style.background = 'rgba(255,255,255,0.1)';
+      hinBtn.style.color = '#cbd5e1';
+    }
+    if (iframe && _currentReaderDoc) {
+      iframe.src = getBestEnglishReaderUrl(_currentReaderDoc);
+    }
+  }
+}
+
 function openExploreLiveOnlineReader(docInput) {
   const doc = docInput || window._currentActiveDocForModal || (typeof EXPLORE_CURATED_SPOTLIGHTS !== 'undefined' ? EXPLORE_CURATED_SPOTLIGHTS[0] : {});
+  _currentReaderDoc = doc;
+  _currentReaderLang = 'hin';
+
   const title = cleanBookTitle(doc.title || 'Untitled Book');
   const author = cleanBookAuthor((doc.author_name && doc.author_name[0]) || doc.author);
 
-  // Compute best reader embed URL
-  let readerUrl = '';
-  if (doc.ia && Array.isArray(doc.ia) && doc.ia[0]) {
-    readerUrl = `https://archive.org/embed/${encodeURIComponent(doc.ia[0])}`;
-  } else if (doc.edition_key && Array.isArray(doc.edition_key) && doc.edition_key[0]) {
-    readerUrl = `https://openlibrary.org/books/${encodeURIComponent(doc.edition_key[0])}?mode=embed`;
-  } else if (doc.key) {
-    const cleanKey = String(doc.key).replace(/^\/?/, '/');
-    readerUrl = `https://openlibrary.org${cleanKey}`;
-  } else if (doc.isbn && Array.isArray(doc.isbn) && doc.isbn[0]) {
-    readerUrl = `https://openlibrary.org/isbn/${encodeURIComponent(doc.isbn[0])}`;
-  } else {
-    readerUrl = `https://archive.org/details/texts?query=${encodeURIComponent(title + ' ' + author)}`;
-  }
+  // Default to Hindi Edition first!
+  const defaultUrl = getBestHindiReaderUrl(doc);
 
   let overlay = document.getElementById('exploreFullPageReaderOverlay');
   if (!overlay) {
@@ -2559,18 +2655,27 @@ function openExploreLiveOnlineReader(docInput) {
   overlay.style.cssText = 'position:fixed;inset:0;width:100vw;height:100vh;z-index:999999;background:#0b0f19;display:flex;flex-direction:column;';
 
   overlay.innerHTML = `
-    <!-- Top Control Bar -->
-    <div style="height:54px;background:#111827;border-bottom:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:space-between;padding:0 14px;box-shadow:0 4px 12px rgba(0,0,0,0.5);flex-shrink:0;">
-      <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;">
-        <span style="font-size:1.25rem;">📖</span>
+    <!-- Top Control Bar with Language Switcher -->
+    <div style="height:54px;background:#111827;border-bottom:1px solid rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:space-between;padding:0 12px;box-shadow:0 4px 12px rgba(0,0,0,0.5);flex-shrink:0;">
+      <div style="display:flex;align-items:center;gap:8px;min-width:0;flex:1;">
+        <span style="font-size:1.2rem;">📖</span>
         <div style="min-width:0;overflow:hidden;">
-          <div style="font-weight:700;font-size:0.9rem;color:#f8fafc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(title)}</div>
-          <div style="font-size:0.72rem;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(author)} &bull; Online Full Reader</div>
+          <div style="font-weight:700;font-size:0.88rem;color:#f8fafc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(title)}</div>
+          <div style="font-size:0.7rem;color:#94a3b8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${escapeHtml(author)} &bull; Hindi Reader</div>
         </div>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+      <!-- Language Switcher & Close -->
+      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0;">
+        <button id="readerLangHinBtn" type="button" onclick="switchReaderLanguage('hin')" 
+          style="padding:5px 12px;background:#f59e0b;color:#000000;font-size:0.78rem;font-weight:800;border:none;border-radius:16px;cursor:pointer;">
+          🇮🇳 Hindi
+        </button>
+        <button id="readerLangEngBtn" type="button" onclick="switchReaderLanguage('eng')" 
+          style="padding:5px 12px;background:rgba(255,255,255,0.1);color:#cbd5e1;font-size:0.78rem;font-weight:700;border:none;border-radius:16px;cursor:pointer;">
+          🌐 English
+        </button>
         <button type="button" onclick="closeExploreLiveOnlineReader()" 
-          style="display:inline-flex;align-items:center;gap:5px;padding:7px 16px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#ffffff;font-size:0.84rem;font-weight:700;border:none;border-radius:24px;cursor:pointer;box-shadow:0 4px 12px rgba(239,68,68,0.35);">
+          style="display:inline-flex;align-items:center;gap:4px;padding:6px 14px;background:linear-gradient(135deg,#ef4444,#dc2626);color:#ffffff;font-size:0.82rem;font-weight:700;border:none;border-radius:20px;cursor:pointer;margin-left:4px;">
           <span>✕ Close</span>
         </button>
       </div>
@@ -2578,11 +2683,11 @@ function openExploreLiveOnlineReader(docInput) {
     <!-- Loading status indicator -->
     <div id="exploreReaderLoader" style="position:absolute;top:70px;left:50%;transform:translateX(-50%);background:rgba(15,23,42,0.95);padding:10px 18px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);color:#93c5fd;font-size:0.82rem;font-weight:600;display:flex;align-items:center;gap:8px;z-index:10;pointer-events:none;">
       <span>⏳</span>
-      <span>Kitab ke panne load ho rahe hain...</span>
+      <span id="exploreReaderLoaderText">Hindi Edition ke panne load ho rahe hain...</span>
     </div>
     <!-- Live Full-screen Reader iframe -->
     <div style="flex:1;position:relative;background:#030712;width:100%;height:calc(100vh - 54px);">
-      <iframe id="exploreReaderIframe" src="${escapeHtml(readerUrl)}" 
+      <iframe id="exploreReaderIframe" src="${escapeHtml(defaultUrl)}" 
         style="width:100%;height:100%;border:none;background:#ffffff;" 
         allowfullscreen="true" 
         onload="const el = document.getElementById('exploreReaderLoader'); if (el) el.style.display='none';">
@@ -2603,6 +2708,10 @@ function closeExploreLiveOnlineReader() {
   }
 }
 
+window.switchReaderLanguage = switchReaderLanguage;
+window.openExploreLiveOnlineReader = openExploreLiveOnlineReader;
+window.closeExploreLiveOnlineReader = closeExploreLiveOnlineReader;
+
 // Android Back Button & Escape Key listener for Reader
 if (typeof window !== 'undefined') {
   window.addEventListener('popstate', function(e) {
@@ -2612,17 +2721,3 @@ if (typeof window !== 'undefined') {
     }
   });
 }
-
-
-window.updateExploreLoadMoreUI = updateExploreLoadMoreUI;
-
-window.renderExploreBooksGrid = function() { loadExploreDefaultBooks((typeof state !== 'undefined' && state.exploreGenre) || 'ALL'); };
-
-window.initExploreSpotlight = initExploreSpotlight;
-
-window.updateExploreSpotlightUI = updateExploreSpotlightUI;
-
-window.renderExploreView = renderExploreView;
-
-window.initExploreView = renderExploreView;
-

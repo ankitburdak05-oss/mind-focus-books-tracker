@@ -1,10 +1,10 @@
 window.BROADCAST_NOTICE = {
-  "id": "notice-v0.0.71",
-  "version": "0.0.71",
-  "title": "📚 MindFocus Books v0.0.71 Ready!",
-  "message": "v0.0.71: Explore book details me ab Free Read Online (Full Screen) reader se direct book ke panne padhein",
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.71/MindFocusBooks-Native.apk",
-  "action_text": "Download v0.0.71 APK",
+  "id": "notice-v0.0.72",
+  "version": "0.0.72",
+  "title": "📚 MindFocus Books v0.0.72 Ready!",
+  "message": "v0.0.72: Ab online book reader me Hindi bhasha ke panne pehle khulenge, sath me Hindi/English switch button bhi hai",
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.72/MindFocusBooks-Native.apk",
+  "action_text": "Download v0.0.72 APK",
   "badge_text": "NEW UPDATE",
   "auto_show": true,
   "timestamp": 1793189029182
