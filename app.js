@@ -4585,27 +4585,17 @@ function logTodaysReadingSession() {
 }
 
 function openMonthlyDeepDiveModal() {
-  const modal = document.getElementById('progressMonthlyArchiveModal');
-  if (!modal) return;
-  const container = document.getElementById('monthlyArchiveContainer');
-  if (container) {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const curMonth = new Date().getMonth();
-    container.innerHTML = months.map((m, idx) => {
-      const isCurrent = idx === curMonth;
-      const doneThisMonth = isCurrent ? state.books.filter(b => b.status === 'DONE').length : 0;
-      return `
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(255,255,255,${isCurrent?'0.08':'0.03'});border:1px solid ${isCurrent?'var(--accent-gold)':'rgba(255,255,255,0.07)'};border-radius:12px;">
-          <div>
-            <div style="font-size:0.9rem;font-weight:700;color:${isCurrent?'var(--accent-gold)':'#fff'};">${m} 2026 ${isCurrent?'<span style="font-size:0.68rem;padding:2px 6px;border-radius:10px;background:rgba(245,158,11,0.2);margin-left:6px;">Current Month</span>':''}</div>
-            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Target: 2 Books &bull; Completed: ${doneThisMonth} Books</div>
-          </div>
-          <span style="font-size:1.1rem;font-weight:800;color:${doneThisMonth>0?'#10b981':'var(--text-muted)'};">${doneThisMonth}</span>
-        </div>
-      `;
-    }).join('');
+  if (typeof window.openMonthlyDeepDiveModal === 'function' && window.openMonthlyDeepDiveModal !== openMonthlyDeepDiveModal) {
+    window.openMonthlyDeepDiveModal();
+    return;
   }
-  modal.style.display = 'flex';
+  const modal = document.getElementById('progressMonthlyArchiveModal');
+  if (modal) {
+    if (typeof renderArchiveYearView === 'function') {
+      renderArchiveYearView(window._activeArchiveYear || 2026);
+    }
+    modal.style.display = 'flex';
+  }
 }
 function closeMonthlyDeepDiveModal() {
   const modal = document.getElementById('progressMonthlyArchiveModal');
@@ -20268,7 +20258,7 @@ window.renderMonthlyBarChart = function() {
   const curStatsEl = document.getElementById('monthlyCurrentStats');
   if (curNameEl) curNameEl.innerText = `${monthNames[curMonth]} 2026 (Active Month) 🔥`;
   if (curStatsEl) {
-    curStatsEl.innerText = `${octData.completed} books completed &bull; ${octData.activeReading} currently reading`;
+    curStatsEl.innerHTML = `${octData.completed} books completed • ${octData.activeReading} currently reading`;
   }
 };
 
@@ -20277,7 +20267,12 @@ window.openMonthlyDeepDiveModal = function() {
   const modal = document.getElementById('progressMonthlyArchiveModal');
   if (!modal) return;
 
-  renderArchiveYearView(window._activeArchiveYear || 2026);
+  const targetYear = window._activeArchiveYear || 2026;
+  if (typeof window.switchArchiveYear === 'function') {
+    window.switchArchiveYear(targetYear, false);
+  } else {
+    renderArchiveYearView(targetYear);
+  }
   modal.style.display = 'flex';
 };
 
@@ -20286,18 +20281,26 @@ window.closeMonthlyDeepDiveModal = function() {
   if (modal) modal.style.display = 'none';
 };
 
-window.switchArchiveYear = function(year) {
+window.switchArchiveYear = function(year, showToastNotice = true) {
   window._activeArchiveYear = parseInt(year, 10);
 
   // Update year tabs active class
   const years = [2024, 2025, 2026, 2027, 2028, 2029, 2030];
   years.forEach(y => {
     const tab = document.getElementById(`archTab${y}`);
-    if (tab) tab.classList.toggle('active', y === window._activeArchiveYear);
+    if (tab) {
+      if (y === window._activeArchiveYear) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    }
   });
 
   renderArchiveYearView(window._activeArchiveYear);
-  if (typeof showToast === 'function') showToast(`Loaded ${window._activeArchiveYear} Reading Archive & Roadmap 📅`);
+  if (showToastNotice && typeof showToast === 'function') {
+    showToast(`Loaded ${window._activeArchiveYear} Reading Archive & Roadmap 📅`);
+  }
 };
 
 function renderArchiveYearView(targetYear) {
@@ -20404,7 +20407,7 @@ function renderArchiveYearView(targetYear) {
               ${statusPill}
             </div>
             <div style="font-size:0.75rem;color:var(--text-muted);margin-top:3px;">
-              Target: ${monthlyTarget} Books &bull; Completed: <strong style="color:${doneCount > 0 ? '#10b981' : '#ffffff'};">${doneCount} Books</strong>
+              Target: ${monthlyTarget} Books • Completed: <strong style="color:${doneCount > 0 ? '#10b981' : '#ffffff'};">${doneCount} Books</strong>
             </div>
           </div>
           <div style="text-align:right;">

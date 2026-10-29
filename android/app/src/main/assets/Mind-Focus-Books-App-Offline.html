@@ -2263,6 +2263,51 @@ body {
   flex-shrink: 0 !important;
 }
 
+/* ================= MULTI-YEAR ARCHIVE PILL SWITCHER (v0.0.83) ================= */
+.archive-year-nav-bar {
+  display: flex !important;
+  gap: 8px !important;
+  overflow-x: auto !important;
+  padding: 10px 16px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch !important;
+  flex-shrink: 0 !important;
+}
+.archive-year-nav-bar::-webkit-scrollbar {
+  display: none !important;
+}
+.archive-year-pill {
+  padding: 8px 18px !important;
+  border-radius: 999px !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #f1f5f9 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+}
+.archive-year-pill:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+.archive-year-pill.active {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  border-color: #fbbf24 !important;
+  color: #0b0f19 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5) !important;
+  transform: scale(1.03) !important;
+}
+
 .btn-studio-back {
   background: var(--bg-card);
   border: 1px solid var(--border-card);
@@ -10393,6 +10438,52 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
   font-weight: 700;
 }
+
+/* ================= MULTI-YEAR ARCHIVE PILL SWITCHER (v0.0.83) ================= */
+.archive-year-nav-bar {
+  display: flex !important;
+  gap: 8px !important;
+  overflow-x: auto !important;
+  padding: 10px 16px !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  scrollbar-width: none !important;
+  -webkit-overflow-scrolling: touch !important;
+  flex-shrink: 0 !important;
+}
+.archive-year-nav-bar::-webkit-scrollbar {
+  display: none !important;
+}
+.archive-year-pill {
+  padding: 8px 18px !important;
+  border-radius: 999px !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #f1f5f9 !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25) !important;
+}
+.archive-year-pill:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+}
+.archive-year-pill.active {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+  border-color: #fbbf24 !important;
+  color: #0b0f19 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5) !important;
+  transform: scale(1.03) !important;
+}
+
 </style>
 
 
@@ -12083,19 +12174,6 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           </div>
           <span style="font-size:0.75rem;color:var(--accent-gold);font-weight:700;">Open Archive ›</span>
         </div>
-      </div><span class="monthly-bar-month">Jan</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Feb</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Mar</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Apr</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">May</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Jun</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Jul</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Aug</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Sep</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Oct</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Nov</span></div>
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Dec</span></div>
-        </div>
       </div>
 
       <!-- 👑 LUXURY PLATINUM READING BUDGET CARD (TOTAL SPENT ON TOP, LEFT TO SPEND BELOW) -->
@@ -12105,7 +12183,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           <div class="luxury-chip-wrap">
             <div class="luxury-emv-chip"></div>
             <div>
-              <div class="luxury-card-badge">MIND FOCUS PLATINUM &bull; 2026</div>
+              <div class="luxury-card-badge">MIND FOCUS PLATINUM • 2026</div>
               <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.5px;">READING BUDGET &amp; EXPENSES</div>
             </div>
           </div>
@@ -25325,11 +25403,12 @@ if (typeof module !== 'undefined' && module.exports) {
 </script>
 
   <script>
-window.APP_BROADCAST_NOTICE = {
+// Mind Focus Books Tracker — Remote Broadcast In-App Notice
+window._mindFocusBroadcastNotice = {
   "id": "notice-v0.0.74",
-  "version": "v0.0.82",
-  "title": "\ud83d\udcda MindFocus Books v0.0.74 Ready!",
-  "message": "v0.0.82: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
+  "version": "v0.0.83",
+  "title": "📚 MindFocus Books v0.0.74 Ready!",
+  "message": "v0.0.83: Fixed Progress tab monthly layout & Vibrant Multi-Year (2024-2030) Pill Switcher",
   "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.74/MindFocusBooks-Native.apk",
   "action_text": "Download v0.0.74 APK",
   "badge_text": "NEW UPDATE",
@@ -25340,27 +25419,28 @@ window.APP_BROADCAST_NOTICE = {
 </script>
 
   <script>
-window.APP_REMOTE_CONFIG = {
+// Remote Config fallback for Mind Focus Books
+window._mindFocusRemoteConfig = {
   "activeRelease": {
-    "version": "v0.0.82",
-    "name": "Mind Focus Books v0.0.82 (Executive Budget & Progress Studio)",
-    "releaseNotes": "v0.0.82: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.82/MindFocusBooks-Native.apk",
+    "version": "v0.0.83",
+    "name": "Mind Focus Books v0.0.83 (Multi-Year Archive & Layout Fix)",
+    "releaseNotes": "v0.0.83: Fixed Progress tab monthly layout & Vibrant Multi-Year (2024-2030) Pill Switcher",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.83/MindFocusBooks-Native.apk",
     "mandatory": false,
     "timestamp": "2026-10-28T12:03:49.052Z"
   },
   "latest": {
-    "version": "v0.0.82",
-    "name": "Mind Focus Books v0.0.82 (Executive Budget & Progress Studio)",
-    "releaseNotes": "v0.0.82: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.82/MindFocusBooks-Native.apk"
+    "version": "v0.0.83",
+    "name": "Mind Focus Books v0.0.83 (Multi-Year Archive & Layout Fix)",
+    "releaseNotes": "v0.0.83: Fixed Progress tab monthly layout & Vibrant Multi-Year (2024-2030) Pill Switcher",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.83/MindFocusBooks-Native.apk"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
-  "latest_version": "0.0.78",
-  "version_code": 8578,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.82/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.82: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
+  "latest_version": "0.0.83",
+  "version_code": 8583,
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.83/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.83: Fixed Progress tab monthly layout & Vibrant Multi-Year (2024-2030) Pill Switcher",
   "force_update": false,
   "maintenance": false,
   "published_at": "2026-10-28T12:03:49.101Z",
@@ -29960,18 +30040,18 @@ function getCurrencySymbol() {
         </div>
         <button type="button" class="modal-close-btn studio-close-btn" onclick="closeMonthlyDeepDiveModal()" title="Close">&times;</button>
       </div>
+            <!-- Sticky Multi-Year Switcher Bar (2024 - 2030) -->
+      <div class="archive-year-nav-bar" id="monthlyArchiveYearTabs">
+        <button type="button" class="archive-year-pill" id="archTab2024" onclick="switchArchiveYear(2024)">2024</button>
+        <button type="button" class="archive-year-pill" id="archTab2025" onclick="switchArchiveYear(2025)">2025</button>
+        <button type="button" class="archive-year-pill active" id="archTab2026" onclick="switchArchiveYear(2026)">⭐ 2026 (Now)</button>
+        <button type="button" class="archive-year-pill" id="archTab2027" onclick="switchArchiveYear(2027)">2027</button>
+        <button type="button" class="archive-year-pill" id="archTab2028" onclick="switchArchiveYear(2028)">2028</button>
+        <button type="button" class="archive-year-pill" id="archTab2029" onclick="switchArchiveYear(2029)">2029</button>
+        <button type="button" class="archive-year-pill" id="archTab2030" onclick="switchArchiveYear(2030)">2030</button>
+      </div>
+
       <div class="modal-body studio-body" style="padding:16px;">
-        
-        <!-- Year Switcher Bar: 2024 to 2030 -->
-        <div class="studio-sub-tabs-bar" id="monthlyArchiveYearTabs" style="display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px;scrollbar-width:none;">
-          <button type="button" class="studio-tab-btn" id="archTab2024" onclick="switchArchiveYear(2024)">2024</button>
-          <button type="button" class="studio-tab-btn" id="archTab2025" onclick="switchArchiveYear(2025)">2025</button>
-          <button type="button" class="studio-tab-btn active" id="archTab2026" onclick="switchArchiveYear(2026)">⭐ 2026 (Now)</button>
-          <button type="button" class="studio-tab-btn" id="archTab2027" onclick="switchArchiveYear(2027)">2027</button>
-          <button type="button" class="studio-tab-btn" id="archTab2028" onclick="switchArchiveYear(2028)">2028</button>
-          <button type="button" class="studio-tab-btn" id="archTab2029" onclick="switchArchiveYear(2029)">2029</button>
-          <button type="button" class="studio-tab-btn" id="archTab2030" onclick="switchArchiveYear(2030)">2030</button>
-        </div>
 
         <!-- Annual Summary KPI Card for Selected Year -->
         <div class="studio-card-box" id="archiveYearKpiBox" style="padding:14px;margin-bottom:14px;background:linear-gradient(135deg, rgba(30, 27, 75, 0.4), rgba(15, 23, 42, 0.7));border:1px solid rgba(245, 158, 11, 0.25);">
@@ -30698,27 +30778,17 @@ function logTodaysReadingSession() {
 }
 
 function openMonthlyDeepDiveModal() {
-  const modal = document.getElementById('progressMonthlyArchiveModal');
-  if (!modal) return;
-  const container = document.getElementById('monthlyArchiveContainer');
-  if (container) {
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-    const curMonth = new Date().getMonth();
-    container.innerHTML = months.map((m, idx) => {
-      const isCurrent = idx === curMonth;
-      const doneThisMonth = isCurrent ? state.books.filter(b => b.status === 'DONE').length : 0;
-      return `
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(255,255,255,${isCurrent?'0.08':'0.03'});border:1px solid ${isCurrent?'var(--accent-gold)':'rgba(255,255,255,0.07)'};border-radius:12px;">
-          <div>
-            <div style="font-size:0.9rem;font-weight:700;color:${isCurrent?'var(--accent-gold)':'#fff'};">${m} 2026 ${isCurrent?'<span style="font-size:0.68rem;padding:2px 6px;border-radius:10px;background:rgba(245,158,11,0.2);margin-left:6px;">Current Month</span>':''}</div>
-            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Target: 2 Books &bull; Completed: ${doneThisMonth} Books</div>
-          </div>
-          <span style="font-size:1.1rem;font-weight:800;color:${doneThisMonth>0?'#10b981':'var(--text-muted)'};">${doneThisMonth}</span>
-        </div>
-      `;
-    }).join('');
+  if (typeof window.openMonthlyDeepDiveModal === 'function' && window.openMonthlyDeepDiveModal !== openMonthlyDeepDiveModal) {
+    window.openMonthlyDeepDiveModal();
+    return;
   }
-  modal.style.display = 'flex';
+  const modal = document.getElementById('progressMonthlyArchiveModal');
+  if (modal) {
+    if (typeof renderArchiveYearView === 'function') {
+      renderArchiveYearView(window._activeArchiveYear || 2026);
+    }
+    modal.style.display = 'flex';
+  }
 }
 function closeMonthlyDeepDiveModal() {
   const modal = document.getElementById('progressMonthlyArchiveModal');
@@ -46381,7 +46451,7 @@ window.renderMonthlyBarChart = function() {
   const curStatsEl = document.getElementById('monthlyCurrentStats');
   if (curNameEl) curNameEl.innerText = `${monthNames[curMonth]} 2026 (Active Month) 🔥`;
   if (curStatsEl) {
-    curStatsEl.innerText = `${octData.completed} books completed &bull; ${octData.activeReading} currently reading`;
+    curStatsEl.innerHTML = `${octData.completed} books completed • ${octData.activeReading} currently reading`;
   }
 };
 
@@ -46390,7 +46460,12 @@ window.openMonthlyDeepDiveModal = function() {
   const modal = document.getElementById('progressMonthlyArchiveModal');
   if (!modal) return;
 
-  renderArchiveYearView(window._activeArchiveYear || 2026);
+  const targetYear = window._activeArchiveYear || 2026;
+  if (typeof window.switchArchiveYear === 'function') {
+    window.switchArchiveYear(targetYear, false);
+  } else {
+    renderArchiveYearView(targetYear);
+  }
   modal.style.display = 'flex';
 };
 
@@ -46399,18 +46474,26 @@ window.closeMonthlyDeepDiveModal = function() {
   if (modal) modal.style.display = 'none';
 };
 
-window.switchArchiveYear = function(year) {
+window.switchArchiveYear = function(year, showToastNotice = true) {
   window._activeArchiveYear = parseInt(year, 10);
 
   // Update year tabs active class
   const years = [2024, 2025, 2026, 2027, 2028, 2029, 2030];
   years.forEach(y => {
     const tab = document.getElementById(`archTab${y}`);
-    if (tab) tab.classList.toggle('active', y === window._activeArchiveYear);
+    if (tab) {
+      if (y === window._activeArchiveYear) {
+        tab.classList.add('active');
+      } else {
+        tab.classList.remove('active');
+      }
+    }
   });
 
   renderArchiveYearView(window._activeArchiveYear);
-  if (typeof showToast === 'function') showToast(`Loaded ${window._activeArchiveYear} Reading Archive & Roadmap 📅`);
+  if (showToastNotice && typeof showToast === 'function') {
+    showToast(`Loaded ${window._activeArchiveYear} Reading Archive & Roadmap 📅`);
+  }
 };
 
 function renderArchiveYearView(targetYear) {
@@ -46517,7 +46600,7 @@ function renderArchiveYearView(targetYear) {
               ${statusPill}
             </div>
             <div style="font-size:0.75rem;color:var(--text-muted);margin-top:3px;">
-              Target: ${monthlyTarget} Books &bull; Completed: <strong style="color:${doneCount > 0 ? '#10b981' : '#ffffff'};">${doneCount} Books</strong>
+              Target: ${monthlyTarget} Books • Completed: <strong style="color:${doneCount > 0 ? '#10b981' : '#ffffff'};">${doneCount} Books</strong>
             </div>
           </div>
           <div style="text-align:right;">
@@ -46871,18 +46954,18 @@ function renderArchiveYearView(targetYear) {
         </div>
         <button type="button" class="modal-close-btn studio-close-btn" onclick="closeMonthlyDeepDiveModal()" title="Close">&times;</button>
       </div>
+            <!-- Sticky Multi-Year Switcher Bar (2024 - 2030) -->
+      <div class="archive-year-nav-bar" id="monthlyArchiveYearTabs">
+        <button type="button" class="archive-year-pill" id="archTab2024" onclick="switchArchiveYear(2024)">2024</button>
+        <button type="button" class="archive-year-pill" id="archTab2025" onclick="switchArchiveYear(2025)">2025</button>
+        <button type="button" class="archive-year-pill active" id="archTab2026" onclick="switchArchiveYear(2026)">⭐ 2026 (Now)</button>
+        <button type="button" class="archive-year-pill" id="archTab2027" onclick="switchArchiveYear(2027)">2027</button>
+        <button type="button" class="archive-year-pill" id="archTab2028" onclick="switchArchiveYear(2028)">2028</button>
+        <button type="button" class="archive-year-pill" id="archTab2029" onclick="switchArchiveYear(2029)">2029</button>
+        <button type="button" class="archive-year-pill" id="archTab2030" onclick="switchArchiveYear(2030)">2030</button>
+      </div>
+
       <div class="modal-body studio-body" style="padding:16px;">
-        
-        <!-- Year Switcher Bar: 2024 to 2030 -->
-        <div class="studio-sub-tabs-bar" id="monthlyArchiveYearTabs" style="display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px;scrollbar-width:none;">
-          <button type="button" class="studio-tab-btn" id="archTab2024" onclick="switchArchiveYear(2024)">2024</button>
-          <button type="button" class="studio-tab-btn" id="archTab2025" onclick="switchArchiveYear(2025)">2025</button>
-          <button type="button" class="studio-tab-btn active" id="archTab2026" onclick="switchArchiveYear(2026)">⭐ 2026 (Now)</button>
-          <button type="button" class="studio-tab-btn" id="archTab2027" onclick="switchArchiveYear(2027)">2027</button>
-          <button type="button" class="studio-tab-btn" id="archTab2028" onclick="switchArchiveYear(2028)">2028</button>
-          <button type="button" class="studio-tab-btn" id="archTab2029" onclick="switchArchiveYear(2029)">2029</button>
-          <button type="button" class="studio-tab-btn" id="archTab2030" onclick="switchArchiveYear(2030)">2030</button>
-        </div>
 
         <!-- Annual Summary KPI Card for Selected Year -->
         <div class="studio-card-box" id="archiveYearKpiBox" style="padding:14px;margin-bottom:14px;background:linear-gradient(135deg, rgba(30, 27, 75, 0.4), rgba(15, 23, 42, 0.7));border:1px solid rgba(245, 158, 11, 0.25);">
