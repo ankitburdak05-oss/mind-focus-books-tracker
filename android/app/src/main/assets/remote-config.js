@@ -1,24 +1,24 @@
 window.REMOTE_CONFIG = {
   "activeRelease": {
-    "version": "v0.0.70",
-    "name": "Mind Focus Books v0.0.70 (Clean Book Covers & Inside 3-Dot Menu)",
-    "releaseNotes": "v0.0.70: Added Load More pagination button for Explore search results to load batches of 20+ books seamlessly",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.70/MindFocusBooks-Native.apk",
+    "version": "v0.0.71",
+    "name": "Mind Focus Books v0.0.71 (Clean Book Covers & Inside 3-Dot Menu)",
+    "releaseNotes": "v0.0.71: Added Full Page Free Read Online book reader directly inside Explore book details sheet",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.71/MindFocusBooks-Native.apk",
     "mandatory": false,
     "timestamp": "2026-10-28T12:03:49.052Z"
   },
   "latest": {
-    "version": "v0.0.70",
-    "name": "Mind Focus Books v0.0.70 (Clean Book Covers & Inside 3-Dot Menu)",
-    "releaseNotes": "v0.0.70: Added Load More pagination button for Explore search results to load batches of 20+ books seamlessly",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.70/MindFocusBooks-Native.apk"
+    "version": "v0.0.71",
+    "name": "Mind Focus Books v0.0.71 (Clean Book Covers & Inside 3-Dot Menu)",
+    "releaseNotes": "v0.0.71: Added Full Page Free Read Online book reader directly inside Explore book details sheet",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.71/MindFocusBooks-Native.apk"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
-  "latest_version": "0.0.70",
-  "version_code": 8570,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.70/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.70: Added Load More pagination button for Explore search results to load batches of 20+ books seamlessly",
+  "latest_version": "0.0.71",
+  "version_code": 8571,
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.71/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.71: Added Full Page Free Read Online book reader directly inside Explore book details sheet",
   "force_update": false,
   "maintenance": false,
   "published_at": "2026-10-28T12:03:49.101Z",
