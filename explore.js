@@ -269,6 +269,109 @@ function escapeHtml(str) {
 // Curated Masterpiece Books with Full Metadata
 
 const EXPLORE_CURATED_SPOTLIGHTS = [
+  {
+    key: 'curated_deewan_e_ghalib',
+    title: 'Deewan-e-Ghalib | दीवान-ए-ग़ालिब',
+    author: 'Mirza Asadullah Khan Ghalib (मिर्ज़ा ग़ालिब)',
+    author_name: ['Mirza Asadullah Khan Ghalib', 'मिर्ज़ा ग़ालिब'],
+    year: '1841',
+    first_publish_year: '1841',
+    cover_i: 2267955,
+    cover_url: 'https://covers.openlibrary.org/b/id/2267955-L.jpg',
+    rating: '5.0 (All Time Urdu Masterpiece)',
+    desc: 'मिर्ज़ा ग़ालिब की अमर गज़लें, शेर और शायरी का संपूर्ण प्रामाणिक संग्रह। उर्दू और हिंदी साहित्य का मुकुट।',
+    pages: 280,
+    number_of_pages_median: 280,
+    publisher: 'Rajkamal Prakashan',
+    language: 'Hindi / Urdu',
+    subject: ['Poetry', 'Shayari', 'Ghazal', 'Urdu Classics', 'Hindi Literature']
+  },
+  {
+    key: 'curated_gulzar_raat_pashmine',
+    title: 'Raat Pashmine Ki | रात पश्मीने की (कविता और शायरी)',
+    author: 'Gulzar (गुलज़ार)',
+    author_name: ['Gulzar', 'गुलज़ार'],
+    year: '2002',
+    first_publish_year: '2002',
+    cover_i: 7289196,
+    cover_url: 'https://covers.openlibrary.org/b/id/7289196-L.jpg',
+    rating: '4.9 (Sahitya Akademi Awardee)',
+    desc: 'गुलज़ार की जादुई नज़्में, शेर और त्रिवेणी। ज़िंदगी, प्यार और एहसासों की सबसे नायाब शायरी।',
+    pages: 180,
+    number_of_pages_median: 180,
+    publisher: 'Rupa Publications',
+    language: 'Hindi / Urdu',
+    subject: ['Poetry', 'Shayari', 'Nazm', 'Hindi Literature']
+  },
+  {
+    key: 'curated_rahat_indori_naraz',
+    title: 'Naraz | नाराज़ (राहत इन्दौरी की चुनिंदा शायरी)',
+    author: 'Rahat Indori (राहत इन्दौरी)',
+    author_name: ['Rahat Indori', 'राहत इन्दौरी'],
+    year: '2019',
+    first_publish_year: '2019',
+    cover_i: 13215068,
+    cover_url: 'https://covers.openlibrary.org/b/id/13215068-L.jpg',
+    rating: '4.9 (Best Mushaira Shayari)',
+    desc: 'राहत इन्दौरी के बेबाक और दिल छू लेने वाले शेर और गज़लें। मुशायरे की दुनिया के बेताज बादशाह की शायरी।',
+    pages: 160,
+    number_of_pages_median: 160,
+    publisher: 'Manjul Publishing House',
+    language: 'Hindi / Urdu',
+    subject: ['Poetry', 'Shayari', 'Ghazal', 'Hindi Literature']
+  },
+  {
+    key: 'curated_dushyant_saaye_mein_dhoop',
+    title: 'Saaye Mein Dhoop | साए में धूप (हिंदी गज़लें)',
+    author: 'Dushyant Kumar (दुष्यंत कुमार)',
+    author_name: ['Dushyant Kumar', 'दुष्यंत कुमार'],
+    year: '1975',
+    first_publish_year: '1975',
+    cover_i: 7456938,
+    cover_url: 'https://covers.openlibrary.org/b/id/7456938-L.jpg',
+    rating: '4.9 (Hindi Ghazal Landmark)',
+    desc: 'हो गई है पीर पर्वत-सी पिघलनी चाहिए। हिंदी गज़ल विधा को क्रांति और जन-आंदोलन बनाने वाला अमर संग्रह।',
+    pages: 120,
+    number_of_pages_median: 120,
+    publisher: 'Radhakrishna Prakashan',
+    language: 'Hindi / Urdu',
+    subject: ['Poetry', 'Shayari', 'Ghazal', 'Hindi Literature']
+  },
+  {
+    key: 'curated_madhushala_bachchan',
+    title: 'Madhushala | मधुशाला',
+    author: 'Harivansh Rai Bachchan (हरिवंश राय बच्चन)',
+    author_name: ['Harivansh Rai Bachchan', 'हरिवंश राय बच्चन'],
+    year: '1935',
+    first_publish_year: '1935',
+    cover_i: 8238736,
+    cover_url: 'https://covers.openlibrary.org/b/id/8238736-L.jpg',
+    rating: '5.0 (Timeless Hindi Classic)',
+    desc: 'मदिरालय जाने को घर से चलता है पीनेवला... जीवन के गहरे फलसफे को रुबाइयों में ढालने वाला महान काव्य।',
+    pages: 160,
+    number_of_pages_median: 160,
+    publisher: 'Rajpal and Sons',
+    language: 'Hindi',
+    subject: ['Poetry', 'Hindi Literature', 'Shayari', 'Classics']
+  },
+  {
+    key: 'curated_sahir_talkhiyan',
+    title: 'Talkhiyan | तल्ख़ियाँ (साहिर लुधियानवी की शायरी)',
+    author: 'Sahir Ludhianvi (साहिर लुधियानवी)',
+    author_name: ['Sahir Ludhianvi', 'साहिर लुधियानवी'],
+    year: '1944',
+    first_publish_year: '1944',
+    cover_i: 3908810,
+    cover_url: 'https://covers.openlibrary.org/b/id/3908810-L.jpg',
+    rating: '4.9 (Masterpiece Urdu Poetry)',
+    desc: 'ताजमहल और कभी-कभी मेरे दिल में ख्याल आता है जैसी कालजयी रचनाओं के रचयिता साहिर का महान संग्रह।',
+    pages: 200,
+    number_of_pages_median: 200,
+    publisher: 'Star Publications',
+    language: 'Hindi / Urdu',
+    subject: ['Poetry', 'Shayari', 'Nazm', 'Urdu Literature']
+  },
+
 
   {
 
@@ -1900,6 +2003,7 @@ function triggerExploreAPISearch() {
 }
 
 
+
 // ============================================================================
 // UNIVERSAL COUNTRY & ORIGIN ENGINE (India, USA, UK, Japan, Russia, Germany, France, All)
 // ============================================================================
@@ -1911,6 +2015,39 @@ window._exploreActiveCountry = (function() {
   }
 })();
 
+function generateInlineBookCoverSvg(title, author) {
+  const cleanT = (title || 'Kitab').slice(0, 32).replace(/["'<>&]/g, '');
+  const cleanA = (author || 'Lekhak').slice(0, 24).replace(/["'<>&]/g, '');
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="450" viewBox="0 0 300 450">
+    <defs>
+      <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#1e1b4b"/>
+        <stop offset="50%" stop-color="#312e81"/>
+        <stop offset="100%" stop-color="#0f172a"/>
+      </linearGradient>
+      <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#fbbf24"/>
+        <stop offset="100%" stop-color="#d97706"/>
+      </linearGradient>
+    </defs>
+    <rect width="300" height="450" rx="8" fill="url(#bgGrad)"/>
+    <rect x="12" y="12" width="276" height="426" rx="6" fill="none" stroke="rgba(251,191,36,0.3)" stroke-width="1.5" stroke-dasharray="4 2"/>
+    <circle cx="150" cy="100" r="34" fill="rgba(251,191,36,0.12)" stroke="url(#goldGrad)" stroke-width="1.5"/>
+    <text x="150" y="112" font-size="30" text-anchor="middle" fill="#fbbf24">📖</text>
+    <text x="150" y="210" font-family="system-ui,-apple-system,sans-serif" font-size="17" font-weight="700" fill="#ffffff" text-anchor="middle">
+      ${cleanT}
+    </text>
+    <line x1="80" y1="245" x2="220" y2="245" stroke="#fbbf24" stroke-width="1" opacity="0.4"/>
+    <text x="150" y="275" font-family="system-ui,-apple-system,sans-serif" font-size="13" font-weight="500" fill="#cbd5e1" text-anchor="middle">
+      ${cleanA}
+    </text>
+    <text x="150" y="410" font-family="system-ui,-apple-system,sans-serif" font-size="10" font-weight="600" fill="#64748b" text-anchor="middle" letter-spacing="1.5">
+      MIND FOCUS BOOKS
+    </text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
 const EXPLORE_COUNTRY_DEFINITIONS = {
   all: {
     id: 'all',
@@ -1921,7 +2058,23 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     querySuffix: '',
     languages: [],
     places: [],
-    authors: []
+    authors: [],
+    categoryQueries: {
+      SHAYARI: 'urdu poetry OR hindi poetry OR ghazal OR poetry',
+      FUNNY: 'comedy humor satire jokes',
+      ACTION_THRILLER: 'thriller mystery crime detective',
+      FOCUS_MINDSET: 'deep work atomic habits productivity focus',
+      ROMANCE: 'romance love stories romantic novel',
+      HORROR: 'horror ghost stories haunted',
+      BUSINESS_MONEY: 'business investing finance wealth money',
+      PSYCHOLOGY: 'psychology human behavior thinking',
+      PHILOSOPHY_SPIRITUAL: 'philosophy spirituality wisdom',
+      BIOGRAPHY_HISTORY: 'biography autobiography history',
+      SCIFI_TECH: 'science fiction technology space future',
+      HINDI_CLASSICS: 'classic literature great novels',
+      HEALTH_FITNESS: 'health fitness diet exercise nutrition',
+      KIDS_STORIES: 'children stories fairy tales moral stories'
+    }
   },
   in: {
     id: 'in',
@@ -1947,26 +2100,26 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
       'tripathi', 'chetan bhagat', 'bhagat', 'harishankar parsai', 'parsai', 'ashwin sanghi', 
       'sanghi', 'surendra mohan pathak', 'pathak', 'ved prakash sharma', 'divya prakash dubey', 
       'dubey', 'manto', 'saadat hasan manto', 'iqbal', 'allama iqbal', 'kumar vishwas', 
-      'vishwas', 'dushyant kumar', 'kabir', 'tulsidas', 'surdas', 'mira bai', 'ravinder singh', 
-      'durjoy datta', 'devdutt pattanaik', 'anand neelakantan', 'sudha murty', 'vikram chandra', 
-      'chitra banerjee', 'manoj das', 'kamleshwar', 'bhisham sahni', 'phanishwar nath renu', 
-      'shrilal shukla', 'mohan rakesh', 'kashinath singh', 'alakh pandey', 'dr. vivek bindra'
+      'vishwas', 'dushyant kumar', 'kabir', 'tulsidas', 'surdas', 'mira bai', 'sahir ludhianvi', 
+      'kaifi azmi', 'ravinder singh', 'durjoy datta', 'devdutt pattanaik', 'anand neelakantan', 
+      'sudha murty', 'vikram chandra', 'chitra banerjee', 'manoj das', 'kamleshwar', 
+      'bhisham sahni', 'phanishwar nath renu', 'shrilal shukla', 'mohan rakesh', 'kashinath singh'
     ],
     categoryQueries: {
-      SHAYARI: 'urdu poetry india',
-      FUNNY: 'harishankar parsai hindi humor',
-      ACTION_THRILLER: 'ashwin sanghi indian thriller',
-      FOCUS_MINDSET: 'swami vivekananda meditation concentration',
-      ROMANCE: 'gunahon ka devta premchand love',
-      HORROR: 'indian ghost stories bhoot',
-      BUSINESS_MONEY: 'ratan tata investing india',
-      PSYCHOLOGY: 'swami vivekananda manovigyan mind',
-      PHILOSOPHY_SPIRITUAL: 'bhagavad gita vedas upanishads',
-      BIOGRAPHY_HISTORY: 'apj abdul kalam bhagat singh',
-      SCIFI_TECH: 'satyajit ray shonku indian science fiction',
-      HINDI_CLASSICS: 'munshi premchand godan',
-      HEALTH_FITNESS: 'patanjali yoga sutras ayurveda',
-      KIDS_STORIES: 'panchatantra hitopadesha jataka'
+      SHAYARI: 'urdu poetry OR hindi poetry OR ghazal OR mirza ghalib OR jaun elia',
+      FUNNY: 'harishankar parsai OR sharad joshi OR hasya vyangya OR hindi humor',
+      ACTION_THRILLER: 'ashwin sanghi OR surendra mohan pathak OR indian thriller',
+      FOCUS_MINDSET: 'swami vivekananda meditation OR bhagavad gita focus mind',
+      ROMANCE: 'gunahon ka devta OR divya prakash dubey OR hindi prem katha',
+      HORROR: 'indian ghost stories OR bhoot pret kahani',
+      BUSINESS_MONEY: 'ratan tata OR indian stock market investing money',
+      PSYCHOLOGY: 'swami vivekananda manovigyan mind power',
+      PHILOSOPHY_SPIRITUAL: 'bhagavad gita OR upanishads OR adi shankaracharya',
+      BIOGRAPHY_HISTORY: 'apj abdul kalam OR bhagat singh OR mahatma gandhi',
+      SCIFI_TECH: 'satyajit ray shonku OR indian science fiction',
+      HINDI_CLASSICS: 'munshi premchand godan OR ramdhari singh dinkar',
+      HEALTH_FITNESS: 'patanjali yoga sutras OR ayurveda swasthya',
+      KIDS_STORIES: 'panchatantra OR hitopadesha OR akbar birbal'
     }
   },
   us: {
@@ -1978,11 +2131,21 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     querySuffix: 'american',
     languages: ['eng'],
     places: ['united states', 'usa', 'u.s.a.', 'new york', 'boston', 'chicago', 'california', 'los angeles', 'washington', 'texas', 'philadelphia', 'san francisco'],
-    authors: ['carnegie', 'clear', 'james clear', 'manson', 'mark manson', 'kiyosaki', 'robert kiyosaki', 'hill', 'napoleon hill', 'hemingway', 'twain', 'stephen king', 'steinbeck', 'fitzgerald', 'faulkner', 'poe', 'frost', 'asimov', 'cal newport', 'morgan housel', 'robert greene', 'tim ferriss', 'stephen covey', 'brene brown', 'dan brown'],
+    authors: [
+      'carnegie', 'dale carnegie', 'clear', 'james clear', 'manson', 'mark manson', 
+      'kiyosaki', 'robert kiyosaki', 'hill', 'napoleon hill', 'hemingway', 'ernest hemingway', 
+      'twain', 'mark twain', 'stephen king', 'steinbeck', 'fitzgerald', 'faulkner', 
+      'poe', 'edgar allan poe', 'robert frost', 'walt whitman', 'emily dickinson', 'maya angelou', 
+      'sylvia plath', 'asimov', 'cal newport', 'morgan housel', 'robert greene', 'tim ferriss', 
+      'stephen covey', 'brene brown', 'dan brown'
+    ],
     categoryQueries: {
+      SHAYARI: 'american poetry poems robert frost walt whitman emily dickinson',
       FOCUS_MINDSET: 'james clear atomic habits deep work',
       BUSINESS_MONEY: 'morgan housel psychology of money kiyosaki',
-      ACTION_THRILLER: 'stephen king thriller mystery',
+      ACTION_THRILLER: 'stephen king thriller mystery dan brown',
+      ROMANCE: 'nicholas sparks american romance novel',
+      HORROR: 'stephen king horror ghost stories',
       SCIFI_TECH: 'isaac asimov philip k dick science fiction',
       KIDS_STORIES: 'dr seuss shel silverstein children stories'
     }
@@ -1996,12 +2159,19 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     querySuffix: 'british',
     languages: ['eng'],
     places: ['united kingdom', 'uk', 'u.k.', 'england', 'london', 'oxford', 'cambridge', 'scotland', 'edinburgh', 'manchester'],
-    authors: ['orwell', 'george orwell', 'doyle', 'arthur conan doyle', 'agatha christie', 'christie', 'j.k. rowling', 'rowling', 'tolkien', 'j.r.r. tolkien', 'dickens', 'charles dickens', 'jane austen', 'austen', 'shakespeare', 'william shakespeare', 'virginia woolf', 'oscar wilde', 'c.s. lewis', 'roald dahl', 'thomas hardy', 'rudyard kipling', 'h.g. wells', 'mary shelley'],
+    authors: [
+      'orwell', 'george orwell', 'doyle', 'arthur conan doyle', 'agatha christie', 'christie', 
+      'j.k. rowling', 'rowling', 'tolkien', 'j.r.r. tolkien', 'dickens', 'charles dickens', 
+      'jane austen', 'austen', 'shakespeare', 'william shakespeare', 'virginia woolf', 
+      'oscar wilde', 'c.s. lewis', 'roald dahl', 'thomas hardy', 'rudyard kipling', 
+      'h.g. wells', 'mary shelley', 'william wordsworth', 'john keats', 'lord byron'
+    ],
     categoryQueries: {
+      SHAYARI: 'british poetry sonnets shakespeare keats wordsworth',
       ACTION_THRILLER: 'arthur conan doyle sherlock agatha christie',
       SCIFI_TECH: 'george orwell 1984 h g wells science fiction',
       KIDS_STORIES: 'roald dahl cs lewis narnia harry potter',
-      ROMANCE: 'jane austen pride and prejudice'
+      ROMANCE: 'jane austen pride and prejudice romance'
     }
   },
   jp: {
@@ -2013,10 +2183,15 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     querySuffix: 'japan',
     languages: ['jpn'],
     places: ['japan', 'tokyo', 'kyoto', 'osaka'],
-    authors: ['murakami', 'haruki murakami', 'dazai', 'osamu dazai', 'mishima', 'yukio mishima', 'keigo higashino', 'higashino', 'kawakami', 'kawabata', 'akutagawa', 'yoko ogawa', 'endo', 'oe', 'suzuki', 'matsuo basho', 'kenji miyazawa'],
+    authors: [
+      'murakami', 'haruki murakami', 'dazai', 'osamu dazai', 'mishima', 'yukio mishima', 
+      'keigo higashino', 'higashino', 'kawakami', 'kawabata', 'akutagawa', 'yoko ogawa', 
+      'endo', 'oe', 'suzuki', 'matsuo basho', 'kenji miyazawa'
+    ],
     categoryQueries: {
+      SHAYARI: 'haiku japanese poetry matsuo basho',
       FOCUS_MINDSET: 'ikigai kaizen japanese mindset',
-      ACTION_THRILLER: 'keigo higashino japanese mystery',
+      ACTION_THRILLER: 'keigo higashino japanese mystery thriller',
       ROMANCE: 'haruki murakami norwegian wood'
     }
   },
@@ -2029,8 +2204,13 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     querySuffix: 'russian',
     languages: ['rus'],
     places: ['russia', 'moscow', 'saint petersburg', 'st. petersburg', 'soviet union', 'ussr'],
-    authors: ['tolstoy', 'leo tolstoy', 'dostoevsky', 'fyodor dostoevsky', 'chekhov', 'anton chekhov', 'gorky', 'maxim gorky', 'pushkin', 'gogol', 'turgenev', 'nabokov', 'bulgakov', 'solzhenitsyn'],
+    authors: [
+      'tolstoy', 'leo tolstoy', 'dostoevsky', 'fyodor dostoevsky', 'chekhov', 'anton chekhov', 
+      'gorky', 'maxim gorky', 'pushkin', 'alexander pushkin', 'gogol', 'turgenev', 
+      'nabokov', 'bulgakov', 'solzhenitsyn', 'anna akhmatova'
+    ],
     categoryQueries: {
+      SHAYARI: 'russian poetry poems alexander pushkin akhmatova',
       PHILOSOPHY_SPIRITUAL: 'leo tolstoy fyodor dostoevsky',
       ACTION_THRILLER: 'dostoevsky crime and punishment',
       HINDI_CLASSICS: 'leo tolstoy war and peace'
@@ -2045,8 +2225,13 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     querySuffix: 'german',
     languages: ['ger'],
     places: ['germany', 'berlin', 'munich', 'frankfurt', 'leipzig', 'vienna', 'austria', 'switzerland', 'zurich'],
-    authors: ['kafka', 'franz kafka', 'hesse', 'hermann hesse', 'nietzsche', 'friedrich nietzsche', 'goethe', 'thomas mann', 'remarque', 'schopenhauer', 'immanuel kant', 'karl marx', 'sigmund freud', 'bertolt brecht'],
+    authors: [
+      'kafka', 'franz kafka', 'hesse', 'hermann hesse', 'nietzsche', 'friedrich nietzsche', 
+      'goethe', 'johann wolfgang von goethe', 'thomas mann', 'remarque', 'schopenhauer', 
+      'immanuel kant', 'karl marx', 'sigmund freud', 'bertolt brecht', 'rainer maria rilke'
+    ],
     categoryQueries: {
+      SHAYARI: 'german poetry poems goethe rilke',
       FOCUS_MINDSET: 'hermann hesse siddhartha nietzsche',
       PHILOSOPHY_SPIRITUAL: 'nietzsche schopenhauer hesse',
       PSYCHOLOGY: 'sigmund freud psychology'
@@ -2061,8 +2246,14 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     querySuffix: 'french',
     languages: ['fre'],
     places: ['france', 'paris', 'lyon', 'marseille'],
-    authors: ['victor hugo', 'hugo', 'alexandre dumas', 'dumas', 'albert camus', 'camus', 'antoine de saint-exupery', 'saint-exupery', 'marcel proust', 'proust', 'jules verne', 'verne', 'voltaire', 'flaubert', 'gustave flaubert', 'emile zola', 'charles baudelaire', 'jean-paul sartre', 'sartre', 'simone de beauvoir'],
+    authors: [
+      'victor hugo', 'hugo', 'alexandre dumas', 'dumas', 'albert camus', 'camus', 
+      'antoine de saint-exupery', 'saint-exupery', 'marcel proust', 'proust', 
+      'jules verne', 'verne', 'voltaire', 'flaubert', 'gustave flaubert', 'emile zola', 
+      'charles baudelaire', 'jean-paul sartre', 'sartre', 'simone de beauvoir', 'arthur rimbaud'
+    ],
     categoryQueries: {
+      SHAYARI: 'french poetry poems charles baudelaire rimbaud',
       ACTION_THRILLER: 'alexandre dumas count of monte cristo',
       SCIFI_TECH: 'jules verne 20000 leagues under the sea',
       PHILOSOPHY_SPIRITUAL: 'albert camus the stranger the myth of sisyphus',
@@ -2108,42 +2299,56 @@ function isDocMatchingCountry(doc, countryCode) {
   const cDef = EXPLORE_COUNTRY_DEFINITIONS[countryCode];
   if (!cDef) return true;
 
-  // 1. Language check
-  const langs = (Array.isArray(doc.language) ? doc.language : [doc.language || '']).map(l => String(l).toLowerCase());
-  for (const l of cDef.languages) {
-    if (langs.includes(l)) return true;
+  // 1. Language check with strict exclusion of conflicting languages
+  const langs = (Array.isArray(doc.language) ? doc.language : [doc.language || '']).map(l => String(l).toLowerCase().trim());
+  
+  // If searching outside India and doc has Hindi/Urdu/Sanskrit, exclude!
+  if (countryCode !== 'in' && (langs.includes('hin') || langs.includes('urd') || langs.includes('san') || langs.includes('ben'))) {
+    return false;
+  }
+  // If searching India and doc has primary Indian language, match!
+  if (countryCode === 'in') {
+    for (const l of cDef.languages) {
+      if (langs.includes(l)) return true;
+    }
   }
 
-  // 2. Publish Place check
+  // 2. Publish Place check (word boundary)
   const places = (Array.isArray(doc.publish_place) ? doc.publish_place : [doc.publish_place || '']).join(' ').toLowerCase();
-  for (const p of cDef.places) {
-    if (places.includes(p)) return true;
+  if (places) {
+    for (const p of cDef.places) {
+      const rx = new RegExp('\\b' + p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+      if (rx.test(places)) return true;
+    }
   }
 
-  // 3. Author check
+  // 3. Author check (word boundary against author name ONLY!)
   const authors = (Array.isArray(doc.author_name) ? doc.author_name : [doc.author || '']).join(' ').toLowerCase();
-  for (const a of cDef.authors) {
-    if (authors.includes(a)) return true;
+  if (authors) {
+    for (const a of cDef.authors) {
+      const rx = new RegExp('\\b' + a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+      if (rx.test(authors)) return true;
+    }
   }
 
-  // 4. Title & Subject keywords check
+  // 4. Title & Subject check (word boundary for significant country terms, min 4 chars)
   const title = (doc.title || '').toLowerCase();
   const subjects = (Array.isArray(doc.subject) ? doc.subject.join(' ') : (doc.category || '')).toLowerCase();
-  const fullText = title + ' ' + subjects;
+  const textToCheck = title + ' ' + subjects;
 
-  for (const kw of cDef.places) {
-    if (fullText.includes(kw)) return true;
-  }
-  for (const kw of cDef.authors) {
-    if (fullText.includes(kw)) return true;
+  for (const p of cDef.places) {
+    if (p.length >= 4) {
+      const rx = new RegExp('\\b' + p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+      if (rx.test(textToCheck)) return true;
+    }
   }
 
   return false;
 }
 
 function getCountryQueryForSearch(category, coreQ, countryCode) {
-  const cDef = EXPLORE_COUNTRY_DEFINITIONS[countryCode] || EXPLORE_COUNTRY_DEFINITIONS['all'];
-  if (countryCode !== 'all' && cDef.categoryQueries && category && cDef.categoryQueries[category.id]) {
+  const cDef = EXPLORE_COUNTRY_DEFINITIONS[countryCode] || EXPLORE_COUNTRY_DEFINITIONS['in'];
+  if (category && cDef.categoryQueries && cDef.categoryQueries[category.id]) {
     return cDef.categoryQueries[category.id];
   }
   if (category) {
@@ -2154,7 +2359,6 @@ function getCountryQueryForSearch(category, coreQ, countryCode) {
   }
   return coreQ;
 }
-
 
 async function searchOpenLibrary(query) {
   const statusEl = document.getElementById('exploreAPIStatus');
@@ -2236,7 +2440,10 @@ async function searchOpenLibrary(query) {
       const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
       if (!_exploreSearchSeenKeys.has(dedupeKey)) {
         _exploreSearchSeenKeys.add(dedupeKey);
-        const cover = b.cover_url || b.cover_image || b.cover || (b.cover_i ? `https://covers.openlibrary.org/b/id/${b.cover_i}-L.jpg` : 'cover_placeholder.jpg');
+        let cover = b.cover_url || b.cover_image || b.cover;
+        if (!cover || cover.includes('placeholder')) {
+          cover = b.cover_i ? `https://covers.openlibrary.org/b/id/${b.cover_i}-L.jpg` : generateInlineBookCoverSvg(cleanT, cleanA);
+        }
         scoredMatches.push({
           score: score,
           doc: {
@@ -2281,14 +2488,14 @@ async function searchOpenLibrary(query) {
     const encoded = encodeURIComponent(apiQuery);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 7000);
-    const url = `https://openlibrary.org/search.json?q=${encoded}&page=1&limit=35`;
+    const url = `https://openlibrary.org/search.json?q=${encoded}&page=1&limit=50`;
     const response = await fetch(url, { signal: controller.signal });
     clearTimeout(timer);
 
     if (response.ok) {
       const data = await response.json();
       const onlineDocs = data.docs || [];
-      if (onlineDocs.length < 35) {
+      if (onlineDocs.length < 50) {
         _exploreSearchHasMore = false;
       }
       onlineDocs.forEach(d => {
@@ -2302,15 +2509,16 @@ async function searchOpenLibrary(query) {
         const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
         
         if (!_exploreSearchSeenKeys.has(dedupeKey)) {
-          const cover = getExploreDocCoverUrl(d);
-          if (cover && !cover.includes('placeholder')) {
-            _exploreSearchSeenKeys.add(dedupeKey);
-            d.title = cleanT;
-            d.author = cleanA;
-            d.author_name = [cleanA];
-            d.cover_url = cover;
-            window._exploreAPIResults.push(d);
+          _exploreSearchSeenKeys.add(dedupeKey);
+          let cover = getExploreDocCoverUrl(d);
+          if (!cover || cover.includes('placeholder')) {
+            cover = generateInlineBookCoverSvg(cleanT, cleanA);
           }
+          d.title = cleanT;
+          d.author = cleanA;
+          d.author_name = [cleanA];
+          d.cover_url = cover;
+          window._exploreAPIResults.push(d);
         }
       });
     } else {
@@ -2414,14 +2622,14 @@ async function loadMoreExploreSearchResults() {
     const encoded = encodeURIComponent(apiQuery);
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), 7000);
-    const url = `https://openlibrary.org/search.json?q=${encoded}&page=${_exploreSearchPage}&limit=35`;
+    const url = `https://openlibrary.org/search.json?q=${encoded}&page=${_exploreSearchPage}&limit=50`;
     const response = await fetch(url, { signal: controller.signal });
     clearTimeout(timer);
 
     if (response.ok) {
       const data = await response.json();
       const onlineDocs = data.docs || [];
-      if (onlineDocs.length < 35) {
+      if (onlineDocs.length < 50) {
         _exploreSearchHasMore = false;
       }
 
@@ -2436,16 +2644,17 @@ async function loadMoreExploreSearchResults() {
         const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
 
         if (!_exploreSearchSeenKeys.has(dedupeKey)) {
-          const cover = getExploreDocCoverUrl(d);
-          if (cover && !cover.includes('placeholder')) {
-            _exploreSearchSeenKeys.add(dedupeKey);
-            d.title = cleanT;
-            d.author = cleanA;
-            d.author_name = [cleanA];
-            d.cover_url = cover;
-            newBatch.push(d);
-            window._exploreAPIResults.push(d);
+          _exploreSearchSeenKeys.add(dedupeKey);
+          let cover = getExploreDocCoverUrl(d);
+          if (!cover || cover.includes('placeholder')) {
+            cover = generateInlineBookCoverSvg(cleanT, cleanA);
           }
+          d.title = cleanT;
+          d.author = cleanA;
+          d.author_name = [cleanA];
+          d.cover_url = cover;
+          newBatch.push(d);
+          window._exploreAPIResults.push(d);
         }
       });
     } else {
@@ -2475,6 +2684,7 @@ async function loadMoreExploreSearchResults() {
   _isExploreLoadingMore = false;
   updateExploreLoadMoreUI();
 }
+
 
 function renderExploreSearchBookCard(doc, idx) {
 
