@@ -71,6 +71,232 @@
 <style>
 /* ================= PROGRESS & BUDGET STUDIO STYLES ================= */
 
+
+/* ================= LUXURY FINTECH BUDGET CARD & FOCUS STOPWATCH ================= */
+.luxury-budget-card {
+  position: relative;
+  background: radial-gradient(ellipse at 80% 0%, rgba(245, 158, 11, 0.22) 0%, rgba(15, 23, 42, 0.95) 70%),
+              linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.4) !important;
+  border-radius: 20px !important;
+  padding: 20px !important;
+  margin-bottom: 20px !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(245, 158, 11, 0.3) !important;
+  overflow: hidden;
+}
+.luxury-card-glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.25) 0%, transparent 70%);
+  pointer-events: none;
+}
+.luxury-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+.luxury-chip-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.luxury-emv-chip {
+  width: 32px;
+  height: 24px;
+  background: linear-gradient(135deg, #fcd34d, #b45309);
+  border-radius: 5px;
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.5), 0 2px 4px rgba(0,0,0,0.3);
+}
+.luxury-card-badge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #fbbf24;
+  text-transform: uppercase;
+}
+.luxury-balance-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+.luxury-balance-num {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #ffffff;
+  letter-spacing: -0.5px;
+  margin: 0;
+  text-shadow: 0 2px 10px rgba(245, 158, 11, 0.25);
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+.luxury-balance-sub {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.luxury-meter-wrap {
+  margin: 16px 0;
+}
+.luxury-meter-track {
+  height: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+.luxury-meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981 0%, #f59e0b 70%, #ef4444 100%);
+  border-radius: 4px;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+.luxury-meter-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 5px;
+}
+.luxury-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-top: 14px;
+}
+.luxury-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+.luxury-btn.primary {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #0f172a;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+}
+.luxury-btn.secondary {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+.luxury-btn:hover {
+  transform: translateY(-1px);
+}
+.luxury-store-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+.luxury-store-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 0.68rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.stopwatch-card {
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.8), rgba(30, 27, 75, 0.6)) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  border-radius: 18px !important;
+  padding: 18px !important;
+  margin-bottom: 18px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+  text-align: center;
+}
+.stopwatch-digital-display {
+  font-family: monospace;
+  font-size: 2.8rem;
+  font-weight: 900;
+  color: #38bdf8;
+  letter-spacing: 2px;
+  margin: 12px 0;
+  text-shadow: 0 0 16px rgba(56, 189, 248, 0.35);
+}
+.stopwatch-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 12px;
+}
+.stopwatch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+.stopwatch-btn.start {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+.stopwatch-btn.pause {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #0f172a;
+}
+.stopwatch-btn.stop {
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #ef4444;
+}
+.xp-quest-card {
+  background: linear-gradient(135deg, rgba(88, 28, 135, 0.25), rgba(15, 23, 42, 0.6)) !important;
+  border: 1px solid rgba(168, 85, 247, 0.3) !important;
+  border-radius: 18px !important;
+  padding: 18px !important;
+  margin-bottom: 18px !important;
+}
+.xp-quest-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  margin-top: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.xp-quest-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+.xp-quest-item.completed {
+  border-color: rgba(16, 185, 129, 0.3);
+  background: rgba(16, 185, 129, 0.08);
+}
+
 /* ================= PROGRESS STUDIO COMPREHENSIVE SUITE (v0.0.79) ================= */
 .prog-quick-action-strip {
   display: flex;
@@ -1329,7 +1555,7 @@
       <div class="view-header-block flex-between">
         <div>
           <h2 class="view-main-title">Reading Progress &amp; Analytics</h2>
-          <p class="view-sub-title">Executive reading command center &bull; 360&deg; growth suite</p>
+          <p class="view-sub-title">VIP Reader Command Center &bull; Live Focus &amp; Budget Studio</p>
         </div>
         <div style="display:flex;gap:6px;">
           <button type="button" class="btn-gold-pill" onclick="openShareReportModal()" title="Share Progress Report">
@@ -1338,75 +1564,147 @@
         </div>
       </div>
 
-      <!-- Quick Action & Session Trigger Bar -->
-      <div class="prog-quick-action-strip">
-        <button type="button" class="prog-quick-btn primary" onclick="openSessionLoggerModal()">
-          <span>➕</span> Log Reading Session
-        </button>
-        <button type="button" class="prog-quick-btn gold" onclick="openSpeedCalculatorModal()">
-          <span>⚡</span> Reading Pace Lab
-        </button>
-        <button type="button" class="prog-quick-btn blue" onclick="runSlumpBuster()">
-          <span>🚀</span> Slump Buster
-        </button>
-        <button type="button" class="prog-quick-btn" onclick="openQuotesVaultModal()">
-          <span>📜</span> Quotes &amp; Insights
-        </button>
-        <button type="button" class="prog-quick-btn" onclick="openAchievementsModal()">
-          <span>🏅</span> Reader Badges
-        </button>
-      </div>
-
-      <!-- Segmented Time Filter Pills (This Month, This Year, All Time) -->
+      <!-- Time Filter Segment -->
       <div class="progress-time-pills">
         <button type="button" class="prog-time-pill active" id="progPillMonth" onclick="setProgressPillFilter('month')">This Month</button>
         <button type="button" class="prog-time-pill" id="progPillYear" onclick="setProgressPillFilter('year')">This Year</button>
         <button type="button" class="prog-time-pill" id="progPillAll" onclick="setProgressPillFilter('all')">All Time</button>
       </div>
 
-      <!-- 1. Annual 2026 Goal & Marathon Card -->
-      <div class="prog-section-card" id="progAnnualGoalCard">
-        <div class="prog-section-header">
-          <div class="prog-card-title">
-            <span>🎯</span>
-            <span>2026 Reading &amp; Page Marathon</span>
+      <!-- 👑 MODULE 1: THE LUXURY PLATINUM READING BUDGET CARD -->
+      <div class="luxury-budget-card" id="luxuryReadingBudgetCard">
+        <div class="luxury-card-glow"></div>
+        <div class="luxury-card-top">
+          <div class="luxury-chip-wrap">
+            <div class="luxury-emv-chip"></div>
+            <div>
+              <div class="luxury-card-badge">MIND FOCUS PLATINUM &bull; 2026</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.5px;">OFFICIAL READING BUDGET</div>
+            </div>
           </div>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span class="prog-pill-badge green" id="progGoalVelocityBadge">🚀 Ahead of Schedule</span>
-            <button type="button" class="btn-ghost-sm" onclick="openAnnualGoalModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">⚙️ Set Target</button>
-          </div>
+          <span id="luxuryHealthBadge" class="prog-pill-badge green">🟢 On Track</span>
         </div>
-        
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-          <div style="background:rgba(255,255,255,0.03);padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.72rem;color:var(--text-secondary);">Books Completed</div>
-            <div style="display:flex;align-items:baseline;gap:6px;margin-top:2px;">
-              <span id="progGoalBooksVal" style="font-size:1.4rem;font-weight:900;color:var(--accent-gold);">0</span>
-              <span id="progGoalTargetVal" style="font-size:0.8rem;color:var(--text-muted);">/ 25 Books</span>
-            </div>
-            <div class="rg-progress-track" style="margin-top:8px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;">
-              <div id="progGoalBooksBar" style="width:0%;height:100%;background:linear-gradient(90deg,#f59e0b,#10b981);transition:width 0.3s ease;"></div>
-            </div>
-          </div>
 
-          <div style="background:rgba(255,255,255,0.03);padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
-            <div style="font-size:0.72rem;color:var(--text-secondary);">Pages Read Marathon</div>
-            <div style="display:flex;align-items:baseline;gap:6px;margin-top:2px;">
-              <span id="progGoalPagesVal" style="font-size:1.4rem;font-weight:900;color:#38bdf8;">0</span>
-              <span id="progGoalPagesTargetVal" style="font-size:0.8rem;color:var(--text-muted);">/ 6,000 Pgs</span>
-            </div>
-            <div class="rg-progress-track" style="margin-top:8px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;">
-              <div id="progGoalPagesBar" style="width:0%;height:100%;background:linear-gradient(90deg,#38bdf8,#818cf8);transition:width 0.3s ease;"></div>
-            </div>
+        <div>
+          <div class="luxury-balance-label">AVAILABLE REMAINING BUDGET</div>
+          <div class="luxury-balance-num">
+            <span id="luxuryRemainingBalance">₹5,000</span>
+            <span style="font-size:0.9rem;font-weight:600;color:var(--text-muted);text-transform:none;">Left to spend</span>
+          </div>
+          <div class="luxury-balance-sub" id="luxuryBudgetSpentSubtitle">
+            Total Spent: <strong style="color:#ffffff;" id="luxuryTotalSpent">₹0</strong> of <span id="luxuryAnnualTarget">₹5,000</span> Annual Target
           </div>
         </div>
-        <div style="font-size:0.75rem;color:var(--text-muted);display:flex;justify-content:space-between;align-items:center;">
-          <span id="progGoalAdviceText">Read 15 pages per day to hit your annual reading milestone!</span>
-          <span id="progGoalPctText" style="font-weight:700;color:var(--accent-gold);">0%</span>
+
+        <!-- Progress Track -->
+        <div class="luxury-meter-wrap" onclick="openReadingBudgetStudioModal('target')" style="cursor:pointer;" title="Tap to change target">
+          <div class="luxury-meter-track">
+            <div class="luxury-meter-fill" id="luxuryBudgetMeterFill" style="width: 0%;"></div>
+          </div>
+          <div class="luxury-meter-labels">
+            <span>0% Used</span>
+            <span id="luxuryMeterPct">0% of Budget</span>
+            <span>100% Cap</span>
+          </div>
+        </div>
+
+        <!-- 4 Quick Actions directly on the luxury card -->
+        <div class="luxury-actions-grid">
+          <button type="button" class="luxury-btn primary" onclick="openReadingBudgetStudioModal('add')">
+            <span>➕</span> Add Book Price
+          </button>
+          <button type="button" class="luxury-btn secondary" onclick="openReadingBudgetStudioModal('target')">
+            <span>🎯</span> Adjust Budget
+          </button>
+          <button type="button" class="luxury-btn secondary" onclick="quickLogExpensePreset(250)">
+            <span>⚡</span> Quick +₹250
+          </button>
+          <button type="button" class="luxury-btn secondary" onclick="openReadingBudgetStudioModal('history')">
+            <span>📜</span> View Expenses (<span id="luxuryPricedCount">0</span>)
+          </button>
+        </div>
+
+        <!-- Store Source Strip -->
+        <div class="luxury-store-bar" id="luxuryStoreBar">
+          <span style="font-size:0.68rem;color:var(--text-muted);font-weight:700;">STORES:</span>
+          <div class="luxury-store-chip" id="luxuryStoreAmazon">🛒 Amazon: ₹0</div>
+          <div class="luxury-store-chip" id="luxuryStoreFlipkart">🛍️ Flipkart: ₹0</div>
+          <div class="luxury-store-chip" id="luxuryStoreLocal">🏪 Local Stall: ₹0</div>
+          <div class="luxury-store-chip" id="luxuryStoreKindle">📱 Kindle: ₹0</div>
         </div>
       </div>
 
-      <!-- 2. Screen 4: Donut Card with Center Books Read & 3 Stats -->
+      <!-- ⏱️ MODULE 2: LIVE READING STOPWATCH & FOCUS SESSION TRACKER -->
+      <div class="stopwatch-card" id="liveReadingStopwatchCard">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+          <div style="display:flex;align-items:center;gap:6px;font-size:0.9rem;font-weight:800;color:#fff;">
+            <span>⏱️</span> Live Reading Focus Session
+          </div>
+          <span class="prog-pill-badge blue" id="stopwatchStatusBadge">Ready</span>
+        </div>
+
+        <!-- Digital Timer Display -->
+        <div class="stopwatch-digital-display" id="stopwatchDigitalDisplay">00:00:00</div>
+
+        <!-- Select Active Book -->
+        <div style="margin-bottom:10px;">
+          <select id="stopwatchBookSelect" style="width:100%;max-width:320px;padding:8px 12px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.82rem;">
+            <!-- Populated by JS -->
+          </select>
+        </div>
+
+        <!-- Controls -->
+        <div class="stopwatch-controls">
+          <button type="button" class="stopwatch-btn start" id="stopwatchBtnStart" onclick="startReadingStopwatch()">
+            <span>▶️</span> Start Focus
+          </button>
+          <button type="button" class="stopwatch-btn pause" id="stopwatchBtnPause" onclick="pauseReadingStopwatch()" style="display:none;">
+            <span>⏸️</span> Pause
+          </button>
+          <button type="button" class="stopwatch-btn stop" id="stopwatchBtnStop" onclick="finishReadingStopwatch()" style="display:none;">
+            <span>⏹️</span> Finish &amp; Log
+          </button>
+        </div>
+      </div>
+
+      <!-- 🎮 MODULE 3: READER LEVEL & DAILY QUESTS (GAMIFIED) -->
+      <div class="xp-quest-card" id="readerXpQuestCard">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+          <div>
+            <div style="font-size:0.95rem;font-weight:900;color:#fff;" id="readerLevelTitle">⭐ Level 3: Avid Bookworm</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;" id="readerXpProgressText">240 / 400 XP to Level 4 (Master Scholar)</div>
+          </div>
+          <div style="font-size:1.6rem;">🏆</div>
+        </div>
+        <div class="rg-progress-track" style="height:7px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;margin-bottom:12px;">
+          <div id="readerXpBar" style="width:60%;height:100%;background:linear-gradient(90deg,#a855f7,#ec4899);transition:width 0.4s ease;"></div>
+        </div>
+
+        <div style="font-size:0.8rem;font-weight:800;color:#ffffff;margin-bottom:4px;">Daily Reading Quests:</div>
+        <div class="xp-quest-item" id="quest1" onclick="toggleDailyQuest(1, 50)">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <input type="checkbox" id="questCheck1" style="width:16px;height:16px;accent-color:#10b981;" onclick="event.stopPropagation();toggleDailyQuest(1, 50)">
+            <span style="font-size:0.82rem;color:#ffffff;">Read for 15 minutes today</span>
+          </div>
+          <span style="font-size:0.75rem;font-weight:700;color:#ec4899;">+50 XP</span>
+        </div>
+        <div class="xp-quest-item" id="quest2" onclick="toggleDailyQuest(2, 75)">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <input type="checkbox" id="questCheck2" style="width:16px;height:16px;accent-color:#10b981;" onclick="event.stopPropagation();toggleDailyQuest(2, 75)">
+            <span style="font-size:0.82rem;color:#ffffff;">Finish a reading chapter</span>
+          </div>
+          <span style="font-size:0.75rem;font-weight:700;color:#ec4899;">+75 XP</span>
+        </div>
+        <div class="xp-quest-item" id="quest3" onclick="toggleDailyQuest(3, 40)">
+          <div style="display:flex;align-items:center;gap:10px;">
+            <input type="checkbox" id="questCheck3" style="width:16px;height:16px;accent-color:#10b981;" onclick="event.stopPropagation();toggleDailyQuest(3, 40)">
+            <span style="font-size:0.82rem;color:#ffffff;">Log book price in budget</span>
+          </div>
+          <span style="font-size:0.75rem;font-weight:700;color:#ec4899;">+40 XP</span>
+        </div>
+      </div>
+
+      <!-- 📊 MODULE 4: CORE READING DONUT & STATUS BREAKDOWN -->
       <div class="progress-donut-card" onclick="openProgressBreakdownModal()" style="cursor:pointer;" title="Tap to view books breakdown">
         <div class="donut-visual-container">
           <svg viewBox="0 0 120 120" style="width: 100%; height: 100%; transform: rotate(-90deg);">
@@ -1450,7 +1748,7 @@
         </div>
       </div>
 
-      <!-- 3. Screen 4: Reading Streak Card with M T W T F S S Weekday Dots -->
+      <!-- 🔥 MODULE 5: 30-DAY STREAK CARD WITH WEEKDAY TRACK -->
       <div class="streak-card-v4" onclick="openProgressStreakModal()" style="cursor:pointer;" title="Tap to view Streak Studio">
         <div class="streak-card-header">
           <div class="streak-title-badge">
@@ -1462,7 +1760,7 @@
             <span class="streak-see-all-link">Studio &rsaquo;</span>
           </div>
         </div>
-        <div class="streak-sub-text">Keep it going! Every single page builds your dream.</div>
+        <div class="streak-sub-text">Consistency builds greatness. Every page is a step forward.</div>
         <div class="streak-days-track">
           <div class="streak-day-badge"><span class="streak-day-name">M</span><span class="streak-day-icon">⚪</span></div>
           <div class="streak-day-badge"><span class="streak-day-name">T</span><span class="streak-day-icon">⚪</span></div>
@@ -1474,7 +1772,7 @@
         </div>
       </div>
 
-      <!-- 4. Screen 4: Monthly Progress 12-Month Bar Chart -->
+      <!-- 📅 MODULE 6: MONTHLY 12-MONTH BAR CHART -->
       <div class="monthly-chart-card-v4" onclick="openMonthlyDeepDiveModal()" style="cursor:pointer;" title="Tap to view Monthly Reading Archive">
         <div class="monthly-chart-header">
           <span class="monthly-chart-title">Monthly Progress (12 Months)</span>
@@ -1493,289 +1791,6 @@
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Oct</span></div>
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Nov</span></div>
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Dec</span></div>
-        </div>
-      </div>
-
-      <!-- 5. Executive Reading Budget & Expense Studio Card -->
-      <div class="reading-budget-card" id="mainReadingBudgetCard">
-        <div class="rb-header">
-          <div class="rb-info">
-            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;">
-              <span class="rb-badge">💰 READING BUDGET &amp; EXPENSES</span>
-              <span id="rbBudgetHealthBadge" class="rb-health-pill">🟢 On Track</span>
-            </div>
-            <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
-              <h3 class="rb-title" id="rbTotalSpentDisplay">₹0 Total Spent</h3>
-              <span class="rb-remaining-pill" id="rbRemainingDisplay">₹5,000 Left</span>
-            </div>
-            <span class="rb-sub" id="rbBudgetSubtitle">0 of 0 books priced &bull; Tap Studio to manage</span>
-          </div>
-          <div class="rb-actions">
-            <button type="button" class="rb-studio-btn" onclick="openReadingBudgetStudioModal('target')">
-              <span>⚙️</span> Budget Studio
-            </button>
-            <button type="button" class="rb-quick-add-btn" onclick="openReadingBudgetStudioModal('add')">
-              <span>➕</span> Add Price
-            </button>
-          </div>
-        </div>
-
-        <!-- Target Progress Meter with Milestones -->
-        <div class="rb-target-box" id="rbTargetBox" onclick="openReadingBudgetStudioModal('target')" style="cursor:pointer;" title="Tap to adjust budget target">
-          <div class="rb-target-labels">
-            <span id="rbBudgetLabel">Annual Target: ₹5,000</span>
-            <span id="rbBudgetPct" style="font-weight:700;color:var(--accent-gold);">0% used</span>
-          </div>
-          <div class="rg-progress-track">
-            <div class="rb-progress-bar" id="rbProgressBar" style="width: 0%;"></div>
-          </div>
-          <div class="rb-milestone-ticks">
-            <span>₹0</span>
-            <span>25%</span>
-            <span>50%</span>
-            <span>75%</span>
-            <span>100%</span>
-          </div>
-        </div>
-
-        <!-- 4 Interactive Breakdown Tiles -->
-        <div class="rb-breakdown-grid">
-          <div class="rb-stat-item" onclick="openReadingBudgetStudioModal('history', 'DONE')" style="cursor:pointer;" title="View read books expenses">
-            <div class="rb-stat-icon">📗</div>
-            <div class="rb-stat-content">
-              <span class="rb-stat-label">Read Books</span>
-              <span class="rb-stat-val" id="rbSpentCompleted">₹0</span>
-            </div>
-          </div>
-          <div class="rb-stat-item" onclick="openReadingBudgetStudioModal('history', 'READING')" style="cursor:pointer;" title="View currently reading expenses">
-            <div class="rb-stat-icon">📖</div>
-            <div class="rb-stat-content">
-              <span class="rb-stat-label">Reading</span>
-              <span class="rb-stat-val" id="rbSpentReading">₹0</span>
-            </div>
-          </div>
-          <div class="rb-stat-item" onclick="openReadingBudgetStudioModal('history', 'WISHLIST')" style="cursor:pointer;" title="View wishlist estimated cost">
-            <div class="rb-stat-icon">⏳</div>
-            <div class="rb-stat-content">
-              <span class="rb-stat-label">Wishlist Value</span>
-              <span class="rb-stat-val" id="rbSpentWishlist">₹0</span>
-            </div>
-          </div>
-          <div class="rb-stat-item" onclick="openReadingBudgetStudioModal('history')" style="cursor:pointer;" title="View all books expenses">
-            <div class="rb-stat-icon">📊</div>
-            <div class="rb-stat-content">
-              <span class="rb-stat-label">Avg / Book</span>
-              <span class="rb-stat-val" id="rbAvgPrice">₹0</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- ROI Metrics Strip -->
-        <div class="rb-roi-strip">
-          <div class="rb-roi-col">
-            <div class="rb-roi-val" id="rbRoiCostPerPage">₹0.00</div>
-            <div class="rb-roi-lbl">Cost / Page</div>
-          </div>
-          <div class="rb-roi-col">
-            <div class="rb-roi-val" id="rbRoiCostPerHour">₹0.00</div>
-            <div class="rb-roi-lbl">Cost / Hour</div>
-          </div>
-          <div class="rb-roi-col">
-            <div class="rb-roi-val" id="rbRoiMoneySaved">₹0.00</div>
-            <div class="rb-roi-lbl">Free Books Saved</div>
-          </div>
-          <div class="rb-roi-col">
-            <div class="rb-roi-val" id="rbRoiTopStore">Local / Online</div>
-            <div class="rb-roi-lbl">Top Store Source</div>
-          </div>
-        </div>
-
-        <!-- Quick Expense Log Strip -->
-        <div class="rb-expense-strip" id="rbRecentExpenseStrip" onclick="openReadingBudgetStudioModal('history')" style="cursor:pointer;margin-top:12px;" title="View full expenses log">
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span>📜</span>
-            <span id="rbRecentExpenseText" style="font-size:0.78rem;color:var(--text-secondary);">No expenses recorded yet &bull; Tap to add</span>
-          </div>
-          <span style="font-size:0.75rem;color:var(--accent-gold);font-weight:600;white-space:nowrap;">View All Records ›</span>
-        </div>
-      </div>
-
-      <!-- 6. StoryGraph-Style Reading Pace & Finish Date Predictor Card -->
-      <div class="prog-section-card" id="progReadingPaceCard">
-        <div class="prog-section-header">
-          <div class="prog-card-title">
-            <span>⚡</span>
-            <span>Reading Pace &amp; Finish Predictor</span>
-          </div>
-          <button type="button" class="btn-ghost-sm" onclick="openSpeedCalculatorModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">⚡ Pace Studio</button>
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);padding:10px 14px;border-radius:12px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.06);">
-          <div>
-            <div style="font-size:0.72rem;color:var(--text-secondary);">Your Average Velocity</div>
-            <div style="font-size:1.15rem;font-weight:800;color:#ffffff;" id="progAvgSpeedDisplay">40 Pages / Hour</div>
-          </div>
-          <span class="prog-pill-badge blue" id="progPaceTierBadge">⚡ Moderate Pace</span>
-        </div>
-
-        <!-- Active Book Predictor Dropdown -->
-        <div style="margin-bottom:10px;">
-          <label style="font-size:0.72rem;color:var(--text-muted);display:block;margin-bottom:4px;">Select Book to Predict Finish Date:</label>
-          <select id="progPaceBookSelect" onchange="updatePacePredictionView()" style="width:100%;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#ffffff;font-size:0.82rem;">
-            <!-- Filled by JS -->
-          </select>
-        </div>
-
-        <!-- Live Prediction Output -->
-        <div id="progPacePredictionResult" style="padding:10px 12px;border-radius:10px;background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(5,150,105,0.05));border:1px solid rgba(16,185,129,0.3);display:flex;align-items:center;justify-content:space-between;">
-          <div>
-            <div style="font-size:0.72rem;color:#10b981;font-weight:700;">🗓️ Projected Finish Date</div>
-            <div style="font-size:0.95rem;font-weight:800;color:#ffffff;margin-top:2px;" id="progPaceProjectedDate">Nov 5, 2026</div>
-          </div>
-          <div style="text-align:right;">
-            <span style="font-size:0.8rem;font-weight:700;color:var(--accent-gold);" id="progPaceRemainingInfo">0 pgs left</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 7. StoryGraph-Style Mood Spectrum Card -->
-      <div class="prog-section-card" id="progMoodSpectrumCard">
-        <div class="prog-section-header">
-          <div class="prog-card-title">
-            <span>🎭</span>
-            <span>StoryGraph Mood Spectrum</span>
-          </div>
-          <button type="button" class="btn-ghost-sm" onclick="openMoodStudioModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">🏷️ Tag Moods</button>
-        </div>
-        <div class="prog-mood-bar-wrap" id="progMoodMultiBar">
-          <div class="prog-mood-seg" style="width:35%;background:#3b82f6;" title="Mind-Expanding"></div>
-          <div class="prog-mood-seg" style="width:25%;background:#f59e0b;" title="Inspiring"></div>
-          <div class="prog-mood-seg" style="width:20%;background:#a855f7;" title="Emotional"></div>
-          <div class="prog-mood-seg" style="width:10%;background:#10b981;" title="Peaceful"></div>
-          <div class="prog-mood-seg" style="width:10%;background:#ef4444;" title="Gripping"></div>
-        </div>
-        <div class="prog-chips-flow" id="progMoodChipsContainer">
-          <!-- Dynamic mood filter chips -->
-        </div>
-      </div>
-
-      <!-- 8. Reading Format & Medium Distribution Card -->
-      <div class="prog-section-card" id="progFormatCard">
-        <div class="prog-section-header">
-          <div class="prog-card-title">
-            <span>📱</span>
-            <span>Format &amp; Medium Breakdown</span>
-          </div>
-          <span class="prog-pill-badge" id="progFormatDominantPill">📕 Physical Reader</span>
-        </div>
-        <div class="prog-format-grid">
-          <div class="prog-format-item" onclick="openProgressBreakdownModal('PHYSICAL')">
-            <div style="font-size:1.3rem;">📕</div>
-            <div class="prog-format-val" id="progFormatPhysicalVal">0</div>
-            <div class="prog-format-lbl">Paperbacks</div>
-          </div>
-          <div class="prog-format-item" onclick="openProgressBreakdownModal('EBOOK')">
-            <div style="font-size:1.3rem;">📱</div>
-            <div class="prog-format-val" id="progFormatEbookVal">0</div>
-            <div class="prog-format-lbl">E-Books / PDF</div>
-          </div>
-          <div class="prog-format-item" onclick="openProgressBreakdownModal('AUDIO')">
-            <div style="font-size:1.3rem;">🎧</div>
-            <div class="prog-format-val" id="progFormatAudioVal">0</div>
-            <div class="prog-format-lbl">Audiobooks</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 9. DNF (Did Not Finish) & Slump Buster Lab -->
-      <div class="prog-section-card" id="progSlumpBusterCard" style="background:linear-gradient(135deg,rgba(239,68,68,0.1),rgba(30,27,75,0.4)) !important;border-color:rgba(239,68,68,0.25) !important;">
-        <div class="prog-section-header">
-          <div class="prog-card-title">
-            <span>🚀</span>
-            <span>Reading Slump Buster &amp; DNF Vault</span>
-          </div>
-          <button type="button" class="btn-ghost-sm" onclick="openDnfVaultModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">🚪 DNF Vault (<span id="progDnfCount">0</span>)</button>
-        </div>
-        <p style="font-size:0.78rem;color:var(--text-secondary);margin:0 0 10px 0;line-height:1.4;">
-          Reading fatigue? Slump buster finds the quickest 5-star gem from your library (&lt;150 pages) to kickstart your focus in 5 minutes!
-        </p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button type="button" class="prog-quick-btn primary" onclick="runSlumpBuster()">
-            <span>⚡</span> Bust My Slump Now!
-          </button>
-          <button type="button" class="prog-quick-btn" onclick="openQuickDnfPrompt()">
-            <span>⏸️</span> Pause a Book Without Guilt
-          </button>
-        </div>
-      </div>
-
-      <!-- 10. Achievements & Reader Hall of Fame -->
-      <div class="prog-section-card" id="progAchievementsCard">
-        <div class="prog-section-header">
-          <div class="prog-card-title">
-            <span>🏅</span>
-            <span>Reader Hall of Fame &amp; Badges</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <span class="prog-pill-badge gold" id="progBadgesUnlockedPill">0 / 10 Earned</span>
-            <button type="button" class="btn-ghost-sm" onclick="openAchievementsModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">Showcase ›</button>
-          </div>
-        </div>
-        <div class="prog-badge-grid" id="progMiniBadgeGrid">
-          <!-- 10 Badges rendered by JS -->
-        </div>
-      </div>
-
-      <!-- 11. Golden Quotes & Key Insights Vault -->
-      <div class="prog-section-card" id="progQuotesVaultCard">
-        <div class="prog-section-header">
-          <div class="prog-card-title">
-            <span>📜</span>
-            <span>Quotes &amp; Golden Insights Vault</span>
-          </div>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <button type="button" class="btn-ghost-sm" onclick="openAddQuoteModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10b981;cursor:pointer;font-weight:700;">➕ Add Quote</button>
-            <button type="button" class="btn-ghost-sm" onclick="openQuotesVaultModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">All (<span id="progQuotesTotalCount">0</span>) ›</button>
-          </div>
-        </div>
-        
-        <div id="progQuoteFeaturedBox" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);margin-bottom:8px;">
-          <div style="font-size:1.4rem;color:var(--accent-gold);margin-bottom:4px;">“</div>
-          <p id="progFeaturedQuoteText" style="font-size:0.85rem;color:#ffffff;font-style:italic;margin:0 0 8px 0;line-height:1.4;">
-            A reader lives a thousand lives before he dies. The man who never reads lives only one.
-          </p>
-          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;color:var(--text-muted);">
-            <span id="progFeaturedQuoteAuthor">— George R.R. Martin</span>
-            <div style="display:flex;gap:6px;">
-              <button type="button" onclick="renderNextRandomQuote()" title="Next Quote" style="background:none;border:none;color:var(--accent-gold);cursor:pointer;font-size:0.75rem;font-weight:700;">🎲 Next</button>
-              <button type="button" onclick="copyCurrentFeaturedQuote()" title="Copy Quote" style="background:none;border:none;color:#38bdf8;cursor:pointer;font-size:0.75rem;font-weight:700;">📋 Copy</button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 12. Reader Analytics Report & Data Hub Card -->
-      <div class="prog-section-card" id="progDataHubCard">
-        <div class="prog-section-header">
-          <div class="prog-card-title">
-            <span>📤</span>
-            <span>Progress Reports &amp; Data Hub</span>
-          </div>
-          <span class="prog-pill-badge blue">Safe &bull; Offline Sync</span>
-        </div>
-        <p style="font-size:0.78rem;color:var(--text-secondary);margin:0 0 10px 0;">
-          Share your reading milestones with friends or export your reading logs &amp; budget for safe backup.
-        </p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <button type="button" class="prog-quick-btn gold" onclick="copyProgressShareCard()">
-            <span>📋</span> Copy WhatsApp Report
-          </button>
-          <button type="button" class="prog-quick-btn" onclick="exportProgressBackupJson()">
-            <span>💾</span> Backup JSON
-          </button>
-          <button type="button" class="prog-quick-btn" onclick="triggerRestoreProgressJson()">
-            <span>📥</span> Restore Data
-          </button>
-          <input type="file" id="progRestoreFileInput" accept=".json" style="display:none;" onchange="handleRestoreProgressFile(event)">
         </div>
       </div>
 

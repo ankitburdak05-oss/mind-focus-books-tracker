@@ -21078,3 +21078,315 @@ document.addEventListener('DOMContentLoaded', () => {
     try { renderAnnualGoalMilestones(); renderQuotesVaultPreview(); } catch(e) {}
   }, 500);
 });
+
+
+
+// ============================================================================
+// LUXURY READING BUDGET & FOCUS STOPWATCH SUITE (v0.0.80)
+// ============================================================================
+
+// 1. Updated renderReadingBudget with Luxury Card support
+const _baseRenderReadingBudget = window.renderReadingBudget;
+window.renderReadingBudget = function() {
+  if (typeof _baseRenderReadingBudget === 'function') {
+    try { _baseRenderReadingBudget(); } catch(e) {}
+  }
+
+  const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
+  const currencySym = typeof getCurrencySymbol === 'function' ? getCurrencySymbol() : '₹';
+  const prices = JSON.parse(localStorage.getItem('mf_book_prices') || '{}');
+  
+  let totalSpent = 0;
+  let pricedCount = 0;
+  const storeTotals = { Amazon: 0, Flipkart: 0, Local: 0, Kindle: 0 };
+
+  (state.books || []).forEach(b => {
+    const pr = parseFloat(prices[b.id] || b.price || 0);
+    if (pr > 0) {
+      totalSpent += pr;
+      pricedCount++;
+      const st = (b.store || '').toLowerCase();
+      if (st.includes('amazon')) storeTotals.Amazon += pr;
+      else if (st.includes('flipkart')) storeTotals.Flipkart += pr;
+      else if (st.includes('kindle') || st.includes('ebook')) storeTotals.Kindle += pr;
+      else storeTotals.Local += pr;
+    }
+  });
+
+  const remaining = Math.max(0, annualBudget - totalSpent);
+  const usedPct = annualBudget > 0 ? Math.min(100, Math.round((totalSpent / annualBudget) * 100)) : 0;
+
+  // Update Luxury Card Elements
+  const elRemaining = document.getElementById('luxuryRemainingBalance');
+  const elTotal = document.getElementById('luxuryTotalSpent');
+  const elTarget = document.getElementById('luxuryAnnualTarget');
+  const elMeter = document.getElementById('luxuryBudgetMeterFill');
+  const elMeterPct = document.getElementById('luxuryMeterPct');
+  const elHealth = document.getElementById('luxuryHealthBadge');
+  const elPricedCount = document.getElementById('luxuryPricedCount');
+
+  if (elRemaining) elRemaining.innerText = `${currencySym}${remaining.toLocaleString()}`;
+  if (elTotal) elTotal.innerText = `${currencySym}${totalSpent.toLocaleString()}`;
+  if (elTarget) elTarget.innerText = `${currencySym}${annualBudget.toLocaleString()}`;
+  if (elPricedCount) elPricedCount.innerText = pricedCount;
+
+  if (elMeter) {
+    elMeter.style.width = `${usedPct}%`;
+    if (totalSpent > annualBudget) {
+      elMeter.style.background = '#ef4444';
+      elMeter.style.boxShadow = '0 0 10px rgba(239,68,68,0.6)';
+    } else {
+      elMeter.style.background = 'linear-gradient(90deg, #10b981 0%, #f59e0b 70%, #ef4444 100%)';
+      elMeter.style.boxShadow = '0 0 10px rgba(245,158,11,0.5)';
+    }
+  }
+
+  if (elMeterPct) {
+    elMeterPct.innerText = totalSpent > annualBudget 
+      ? `Exceeded by ${currencySym}${(totalSpent - annualBudget).toLocaleString()}` 
+      : `${usedPct}% of Target Used`;
+  }
+
+  if (elHealth) {
+    if (totalSpent > annualBudget) {
+      elHealth.className = 'prog-pill-badge purple';
+      elHealth.innerText = '🔴 Over Budget';
+      elHealth.style.background = 'rgba(239,68,68,0.2)';
+      elHealth.style.color = '#ef4444';
+    } else if (annualBudget > 0 && totalSpent >= annualBudget * 0.8) {
+      elHealth.className = 'prog-pill-badge gold';
+      elHealth.innerText = '🟡 Caution (80%+)';
+    } else {
+      elHealth.className = 'prog-pill-badge green';
+      elHealth.innerText = '🟢 On Track';
+    }
+  }
+
+  // Update Store Chips
+  const elAmz = document.getElementById('luxuryStoreAmazon');
+  const elFlp = document.getElementById('luxuryStoreFlipkart');
+  const elLoc = document.getElementById('luxuryStoreLocal');
+  const elKnd = document.getElementById('luxuryStoreKindle');
+
+  if (elAmz) elAmz.innerText = `🛒 Amazon: ${currencySym}${storeTotals.Amazon.toLocaleString()}`;
+  if (elFlp) elFlp.innerText = `🛍️ Flipkart: ${currencySym}${storeTotals.Flipkart.toLocaleString()}`;
+  if (elLoc) elLoc.innerText = `🏪 Local Stall: ${currencySym}${storeTotals.Local.toLocaleString()}`;
+  if (elKnd) elKnd.innerText = `📱 Kindle: ${currencySym}${storeTotals.Kindle.toLocaleString()}`;
+};
+
+// Quick ₹250 / ₹500 Log Preset
+function quickLogExpensePreset(amount) {
+  const allBooks = state.books || [];
+  if (allBooks.length === 0) {
+    alert("Please add at least 1 book to your library first!");
+    return;
+  }
+  const readingBooks = allBooks.filter(b => b.status === 'READING');
+  const targetBook = readingBooks.length > 0 ? readingBooks[0] : allBooks[0];
+
+  const prices = JSON.parse(localStorage.getItem('mf_book_prices') || '{}');
+  prices[targetBook.id] = (parseFloat(prices[targetBook.id] || 0) + amount);
+  localStorage.setItem('mf_book_prices', JSON.stringify(prices));
+
+  targetBook.price = prices[targetBook.id];
+  if (typeof saveStateToStorage === 'function') saveStateToStorage();
+
+  renderReadingBudget();
+  if (typeof showToast === 'function') {
+    showToast(`⚡ +₹${amount} logged for "${targetBook.title}"!`);
+  }
+}
+
+// 2. LIVE READING STOPWATCH CONTROLLER
+let _stopwatchInterval = null;
+let _stopwatchSeconds = 0;
+let _stopwatchRunning = false;
+
+function initStopwatchBookSelect() {
+  const select = document.getElementById('stopwatchBookSelect');
+  if (!select) return;
+  const allBooks = state.books || [];
+  const readingBooks = allBooks.filter(b => b.status === 'READING');
+  const list = readingBooks.length > 0 ? readingBooks : allBooks;
+  select.innerHTML = list.map(b => `<option value="${b.id}">${b.title} (p. ${b.current_page || 0}/${b.total_pages || 250})</option>`).join('');
+}
+
+function startReadingStopwatch() {
+  if (_stopwatchRunning) return;
+  _stopwatchRunning = true;
+
+  const btnStart = document.getElementById('stopwatchBtnStart');
+  const btnPause = document.getElementById('stopwatchBtnPause');
+  const btnStop = document.getElementById('stopwatchBtnStop');
+  const statusBadge = document.getElementById('stopwatchStatusBadge');
+
+  if (btnStart) btnStart.style.display = 'none';
+  if (btnPause) btnPause.style.display = 'inline-flex';
+  if (btnStop) btnStop.style.display = 'inline-flex';
+
+  if (statusBadge) {
+    statusBadge.innerText = '🔴 Reading in Focus';
+    statusBadge.className = 'prog-pill-badge green';
+  }
+
+  _stopwatchInterval = setInterval(() => {
+    _stopwatchSeconds++;
+    renderStopwatchDisplay();
+  }, 1000);
+}
+
+function pauseReadingStopwatch() {
+  if (!_stopwatchRunning) return;
+  _stopwatchRunning = false;
+  clearInterval(_stopwatchInterval);
+
+  const btnStart = document.getElementById('stopwatchBtnStart');
+  const btnPause = document.getElementById('stopwatchBtnPause');
+  const statusBadge = document.getElementById('stopwatchStatusBadge');
+
+  if (btnStart) {
+    btnStart.style.display = 'inline-flex';
+    btnStart.innerHTML = '<span>▶️</span> Resume';
+  }
+  if (btnPause) btnPause.style.display = 'none';
+
+  if (statusBadge) {
+    statusBadge.innerText = '⏸️ Paused';
+    statusBadge.className = 'prog-pill-badge gold';
+  }
+}
+
+function finishReadingStopwatch() {
+  pauseReadingStopwatch();
+  const select = document.getElementById('stopwatchBookSelect');
+  const book = (state.books || []).find(b => String(b.id) === String(select?.value));
+  const minsRead = Math.max(1, Math.round(_stopwatchSeconds / 60));
+
+  const pagesReadPrompt = prompt(`Focus session completed: ${minsRead} minutes! ⏱️\n\nHow many pages did you read?`, "10");
+  const pagesRead = parseInt(pagesReadPrompt || '0', 10);
+
+  if (book && pagesRead > 0) {
+    book.current_page = (parseInt(book.current_page || 0, 10)) + pagesRead;
+    if (book.total_pages && book.current_page >= book.total_pages) {
+      book.status = 'DONE';
+    }
+  }
+
+  // Award XP & Streak
+  state.stats.readingStreak = (state.stats.readingStreak || 0) + 1;
+  state.stats.lastReadDate = new Date().toISOString();
+  if (typeof saveStateToStorage === 'function') saveStateToStorage();
+
+  addReaderXp(pagesRead > 0 ? 50 : 25);
+
+  // Reset timer
+  _stopwatchSeconds = 0;
+  renderStopwatchDisplay();
+
+  const btnStart = document.getElementById('stopwatchBtnStart');
+  const btnStop = document.getElementById('stopwatchBtnStop');
+  const statusBadge = document.getElementById('stopwatchStatusBadge');
+
+  if (btnStart) {
+    btnStart.style.display = 'inline-flex';
+    btnStart.innerHTML = '<span>▶️</span> Start Focus';
+  }
+  if (btnStop) btnStop.style.display = 'none';
+  if (statusBadge) {
+    statusBadge.innerText = 'Ready';
+    statusBadge.className = 'prog-pill-badge blue';
+  }
+
+  renderProgressView();
+  if (typeof showToast === 'function') {
+    showToast(`🎉 +${pagesRead} pages logged! Streak increased & +50 XP!`);
+  }
+}
+
+function renderStopwatchDisplay() {
+  const hrs = Math.floor(_stopwatchSeconds / 3600);
+  const mins = Math.floor((_stopwatchSeconds % 3600) / 60);
+  const secs = _stopwatchSeconds % 60;
+  const str = `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+  const el = document.getElementById('stopwatchDigitalDisplay');
+  if (el) el.innerText = str;
+}
+
+// 3. GAMIFIED READER XP & QUESTS
+let _readerXp = parseInt(localStorage.getItem('mf_reader_xp') || '240', 10);
+
+function getReaderLevel(xp) {
+  if (xp >= 1000) return { level: 5, title: '👑 Grand Literary Master', max: 1500, prev: 1000 };
+  if (xp >= 600) return { level: 4, title: '⭐ Level 4: Master Scholar', max: 1000, prev: 600 };
+  if (xp >= 300) return { level: 3, title: '📖 Level 3: Avid Bookworm', max: 600, prev: 300 };
+  if (xp >= 100) return { level: 2, title: '🌱 Level 2: Keen Reader', max: 300, prev: 100 };
+  return { level: 1, title: '🔰 Level 1: Novice Reader', max: 100, prev: 0 };
+}
+
+function renderReaderXpSystem() {
+  const info = getReaderLevel(_readerXp);
+  const titleEl = document.getElementById('readerLevelTitle');
+  const textEl = document.getElementById('readerXpProgressText');
+  const barEl = document.getElementById('readerXpBar');
+
+  if (titleEl) titleEl.innerText = info.title;
+  if (textEl) textEl.innerText = `${_readerXp} / ${info.max} XP to Next Rank`;
+  if (barEl) {
+    const range = info.max - info.prev;
+    const currentInRange = _readerXp - info.prev;
+    const pct = Math.min(100, Math.max(5, Math.round((currentInRange / range) * 100)));
+    barEl.style.width = `${pct}%`;
+  }
+}
+
+function addReaderXp(pts) {
+  _readerXp += pts;
+  localStorage.setItem('mf_reader_xp', String(_readerXp));
+  renderReaderXpSystem();
+}
+
+function toggleDailyQuest(questNum, xp) {
+  const check = document.getElementById(`questCheck${questNum}`);
+  const item = document.getElementById(`quest${questNum}`);
+  if (!check) return;
+
+  const isChecked = !check.checked;
+  check.checked = isChecked;
+
+  if (item) item.classList.toggle('completed', isChecked);
+
+  if (isChecked) {
+    addReaderXp(xp);
+    if (typeof showToast === 'function') showToast(`🎉 Quest completed! +${xp} XP!`);
+  } else {
+    addReaderXp(-xp);
+  }
+}
+
+// 4. Overwrite old openSetGoalPrompt with modern modal
+window.openSetGoalPrompt = function() {
+  if (typeof openAnnualGoalModal === 'function') {
+    openAnnualGoalModal();
+  }
+};
+
+// Bind initialization on tab switch
+const _oldProgTabHook = window.renderProgressView;
+window.renderProgressView = function() {
+  if (typeof _oldProgTabHook === 'function') {
+    try { _oldProgTabHook(); } catch(e) {}
+  }
+  renderReadingBudget();
+  initStopwatchBookSelect();
+  renderReaderXpSystem();
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    try {
+      renderReadingBudget();
+      initStopwatchBookSelect();
+      renderReaderXpSystem();
+    } catch(e) {}
+  }, 400);
+});
