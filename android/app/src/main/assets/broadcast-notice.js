@@ -1,8 +1,8 @@
 window.APP_BROADCAST_NOTICE = {
   "id": "notice-v0.0.74",
-  "version": "v0.0.81",
+  "version": "v0.0.82",
   "title": "\ud83d\udcda MindFocus Books v0.0.74 Ready!",
-  "message": "v0.0.81: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
+  "message": "v0.0.82: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
   "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.74/MindFocusBooks-Native.apk",
   "action_text": "Download v0.0.74 APK",
   "badge_text": "NEW UPDATE",

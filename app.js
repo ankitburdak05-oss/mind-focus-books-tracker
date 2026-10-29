@@ -20168,3 +20168,251 @@ document.addEventListener('DOMContentLoaded', () => {
     try { renderReadingBudget(); } catch(e) {}
   }, 300);
 });
+
+
+
+// ============================================================================
+// DYNAMIC 12-MONTH VELOCITY BAR CHART & MULTI-YEAR ARCHIVE (v0.0.82)
+// Active October Highlight + Full Year Switcher (2024 - 2030)
+// ============================================================================
+
+window._activeArchiveYear = 2026;
+
+// Helper to determine if a book belongs to a specific month & year
+function getBookMonthYear(book) {
+  const dStr = book.completed_date || book.end_date || book.start_date || '';
+  if (dStr) {
+    const d = new Date(dStr);
+    if (!isNaN(d.getTime())) {
+      return { year: d.getFullYear(), month: d.getMonth() };
+    }
+  }
+  return null;
+}
+
+// 1. Dynamic Bahar: renderMonthlyBarChart()
+window.renderMonthlyBarChart = function() {
+  const container = document.getElementById('monthlyBarsContainer');
+  if (!container) return;
+
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const now = new Date();
+  const curYear = now.getFullYear();
+  const curMonth = now.getMonth(); // 9 = October
+
+  const allBooks = state.books || [];
+  const completedBooks = allBooks.filter(b => b.status === 'DONE');
+  const readingBooks = allBooks.filter(b => b.status === 'READING');
+
+  // Compute stats for each of the 12 months in 2026
+  const monthData = monthNames.map((name, idx) => {
+    let completedInMonth = 0;
+    completedBooks.forEach(b => {
+      const my = getBookMonthYear(b);
+      if (my && my.year === curYear && my.month === idx) {
+        completedInMonth++;
+      } else if (!my && idx === curMonth) {
+        // Fallback for books without date completed in current month
+        completedInMonth++;
+      }
+    });
+
+    const isCurrent = (idx === curMonth);
+    // In current month (October), active reading books also contribute to the velocity score
+    const activeScore = completedInMonth + (isCurrent ? readingBooks.length : 0);
+
+    return {
+      name,
+      monthIndex: idx,
+      completed: completedInMonth,
+      activeReading: isCurrent ? readingBooks.length : 0,
+      score: activeScore,
+      isCurrent
+    };
+  });
+
+  const maxVal = Math.max(3, ...monthData.map(m => m.score));
+
+  // Render 12 Dynamic Bars
+  container.innerHTML = monthData.map(m => {
+    const isCurrent = m.isCurrent;
+    let heightPct = Math.round((m.score / maxVal) * 100);
+    
+    // In October (active month), even if 0 completed yet, show active 28% pulse so it is NEVER flat empty!
+    if (isCurrent && heightPct < 28) {
+      heightPct = 28;
+    }
+
+    const valDisplay = m.completed > 0 ? m.completed : (isCurrent && m.activeReading > 0 ? `📖` : '');
+
+    return `
+      <div class="monthly-bar-col ${isCurrent ? 'active-month' : ''}" title="${m.name} 2026: ${m.completed} finished, ${m.activeReading} reading">
+        <span class="monthly-bar-val-badge">${valDisplay}</span>
+        <div class="monthly-bar-track">
+          <div class="monthly-bar-fill" style="height: ${heightPct}%;"></div>
+        </div>
+        <span class="monthly-bar-month">${m.name}${isCurrent ? '🔥' : ''}</span>
+      </div>
+    `;
+  }).join('');
+
+  // Update Ratio on Header
+  const totalCompletedYear = completedBooks.length;
+  const goal = parseInt(localStorage.getItem('mf_reading_goal_2026') || '25', 10);
+  const ratioEl = document.getElementById('monthlyProgressRatio');
+  if (ratioEl) ratioEl.innerText = `${totalCompletedYear}/${goal} books`;
+
+  // Update Active Month Strip
+  const octData = monthData[curMonth];
+  const curNameEl = document.getElementById('monthlyCurrentName');
+  const curStatsEl = document.getElementById('monthlyCurrentStats');
+  if (curNameEl) curNameEl.innerText = `${monthNames[curMonth]} 2026 (Active Month) 🔥`;
+  if (curStatsEl) {
+    curStatsEl.innerText = `${octData.completed} books completed &bull; ${octData.activeReading} currently reading`;
+  }
+};
+
+// 2. Dynamic Under: Multi-Year Archive Modal (2024 - 2030)
+window.openMonthlyDeepDiveModal = function() {
+  const modal = document.getElementById('progressMonthlyArchiveModal');
+  if (!modal) return;
+
+  renderArchiveYearView(window._activeArchiveYear || 2026);
+  modal.style.display = 'flex';
+};
+
+window.closeMonthlyDeepDiveModal = function() {
+  const modal = document.getElementById('progressMonthlyArchiveModal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.switchArchiveYear = function(year) {
+  window._activeArchiveYear = parseInt(year, 10);
+
+  // Update year tabs active class
+  const years = [2024, 2025, 2026, 2027, 2028, 2029, 2030];
+  years.forEach(y => {
+    const tab = document.getElementById(`archTab${y}`);
+    if (tab) tab.classList.toggle('active', y === window._activeArchiveYear);
+  });
+
+  renderArchiveYearView(window._activeArchiveYear);
+  if (typeof showToast === 'function') showToast(`Loaded ${window._activeArchiveYear} Reading Archive & Roadmap 📅`);
+};
+
+function renderArchiveYearView(targetYear) {
+  const container = document.getElementById('monthlyArchiveContainer');
+  const yearTitleEl = document.getElementById('archiveYearTitle');
+  const yearBadgeEl = document.getElementById('archiveYearStatusBadge');
+  const kpiBooksEl = document.getElementById('archiveKpiBooks');
+  const kpiPagesEl = document.getElementById('archiveKpiPages');
+  const kpiTargetEl = document.getElementById('archiveKpiTarget');
+  const kpiPctEl = document.getElementById('archiveKpiPct');
+
+  const now = new Date();
+  const curYear = now.getFullYear();
+  const curMonth = now.getMonth();
+
+  const isCurrentYear = targetYear === curYear;
+  const isPastYear = targetYear < curYear;
+  const isFutureYear = targetYear > curYear;
+
+  // Yearly target for that year
+  const goalTarget = parseInt(localStorage.getItem(`mf_reading_goal_${targetYear}`) || '25', 10);
+
+  // Books completed in that year
+  const allBooks = state.books || [];
+  const yearCompletedBooks = allBooks.filter(b => {
+    if (b.status !== 'DONE') return false;
+    const my = getBookMonthYear(b);
+    return my ? my.year === targetYear : (isCurrentYear ? true : false);
+  });
+
+  const totalBooks = yearCompletedBooks.length;
+  const totalPages = yearCompletedBooks.reduce((acc, b) => acc + (parseInt(b.current_page || b.total_pages || 250, 10)), 0);
+  const pct = Math.min(100, Math.round((totalBooks / Math.max(1, goalTarget)) * 100));
+
+  if (yearTitleEl) yearTitleEl.innerText = `🏆 ${targetYear} Reading Archive & Roadmap`;
+  if (yearBadgeEl) {
+    if (isCurrentYear) {
+      yearBadgeEl.className = 'prog-pill-badge green';
+      yearBadgeEl.innerText = 'Active Reading Year 🔥';
+    } else if (isPastYear) {
+      yearBadgeEl.className = 'prog-pill-badge blue';
+      yearBadgeEl.innerText = 'Past Completed Archive';
+    } else {
+      yearBadgeEl.className = 'prog-pill-badge gold';
+      yearBadgeEl.innerText = 'Future Goal Roadmap 🚀';
+    }
+  }
+
+  if (kpiBooksEl) kpiBooksEl.innerText = totalBooks;
+  if (kpiPagesEl) kpiPagesEl.innerText = totalPages.toLocaleString();
+  if (kpiTargetEl) kpiTargetEl.innerText = goalTarget;
+  if (kpiPctEl) kpiPctEl.innerText = `${pct}%`;
+
+  // Render 12 Month Cards
+  if (!container) return;
+
+  const fullMonths = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  container.innerHTML = fullMonths.map((mName, mIdx) => {
+    const isThisMonth = isCurrentYear && mIdx === curMonth;
+    const isPastMonth = isPastYear || (isCurrentYear && mIdx < curMonth);
+    const isFutureMonth = isFutureYear || (isCurrentYear && mIdx > curMonth);
+
+    // Books completed in this month
+    const monthBooks = yearCompletedBooks.filter(b => {
+      const my = getBookMonthYear(b);
+      return my ? my.month === mIdx : (isThisMonth ? true : false);
+    });
+
+    const doneCount = monthBooks.length;
+    const monthlyTarget = 2; // Default 2 books per month
+
+    let statusPill = '';
+    if (isThisMonth) {
+      statusPill = `<span style="font-size:0.68rem;padding:3px 8px;border-radius:10px;background:rgba(245,158,11,0.25);color:#fbbf24;font-weight:800;border:1px solid rgba(245,158,11,0.4);">🔥 CURRENT ACTIVE MONTH</span>`;
+    } else if (doneCount > 0) {
+      statusPill = `<span style="font-size:0.68rem;padding:3px 8px;border-radius:10px;background:rgba(16,185,129,0.2);color:#10b981;font-weight:700;">✅ Achieved</span>`;
+    } else if (isFutureMonth) {
+      statusPill = `<span style="font-size:0.68rem;padding:3px 8px;border-radius:10px;background:rgba(59,130,246,0.15);color:#60a5fa;font-weight:700;">🎯 Planned Goal</span>`;
+    } else {
+      statusPill = `<span style="font-size:0.68rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);color:var(--text-muted);">Past Month</span>`;
+    }
+
+    const booksListHtml = monthBooks.length > 0 ? `
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,255,255,0.1);display:flex;flex-direction:column;gap:4px;">
+        ${monthBooks.map(b => `
+          <div style="font-size:0.75rem;color:#ffffff;display:flex;align-items:center;justify-content:space-between;">
+            <span>📖 <strong>${b.title}</strong> (${b.author || 'Author'})</span>
+            <span style="color:#10b981;font-weight:700;">Completed ✓</span>
+          </div>
+        `).join('')}
+      </div>
+    ` : '';
+
+    return `
+      <div style="padding:14px;background:rgba(255,255,255,${isThisMonth ? '0.08' : '0.03'});border:1px solid ${isThisMonth ? 'var(--accent-gold)' : 'rgba(255,255,255,0.08)'};border-radius:14px;box-shadow:${isThisMonth ? '0 4px 18px rgba(245,158,11,0.18)' : 'none'};">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:0.95rem;font-weight:800;color:${isThisMonth ? 'var(--accent-gold)' : '#ffffff'};">${mName} ${targetYear}</span>
+              ${statusPill}
+            </div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:3px;">
+              Target: ${monthlyTarget} Books &bull; Completed: <strong style="color:${doneCount > 0 ? '#10b981' : '#ffffff'};">${doneCount} Books</strong>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-size:1.3rem;font-weight:900;color:${doneCount > 0 ? '#10b981' : (isThisMonth ? 'var(--accent-gold)' : 'var(--text-muted)')};">${doneCount}</span>
+          </div>
+        </div>
+        ${booksListHtml}
+      </div>
+    `;
+  }).join('');
+}

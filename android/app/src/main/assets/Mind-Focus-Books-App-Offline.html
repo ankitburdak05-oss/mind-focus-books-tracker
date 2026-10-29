@@ -10400,6 +10400,98 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 /* ================= PROGRESS & BUDGET STUDIO STYLES ================= */
 
 
+
+/* ================= MONTHLY PROGRESS & MULTI-YEAR ARCHIVE (v0.0.82) ================= */
+.monthly-chart-card-v4 {
+  background: radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.15) 0%, rgba(15, 23, 42, 0.98) 85%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  border-radius: 20px !important;
+  padding: 18px !important;
+  margin-bottom: 18px !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(245, 158, 11, 0.2) !important;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.monthly-chart-card-v4:hover {
+  border-color: rgba(245, 158, 11, 0.5) !important;
+}
+.monthly-bars-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 125px;
+  padding: 8px 4px 4px 4px;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.monthly-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 5px;
+  position: relative;
+}
+.monthly-bar-val-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+.monthly-bar-track {
+  width: 100%;
+  max-width: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  height: 82px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+}
+.monthly-bar-col.active-month .monthly-bar-track {
+  border-color: #f59e0b;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
+  background: rgba(245, 158, 11, 0.08);
+}
+.monthly-bar-fill {
+  width: 100%;
+  background: linear-gradient(180deg, #10b981 0%, #f59e0b 60%, #ea580c 100%);
+  border-radius: 8px;
+  transition: height 0.4s ease;
+}
+.monthly-bar-col.active-month .monthly-bar-fill {
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+}
+.monthly-bar-month {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.2px;
+}
+.monthly-bar-col.active-month .monthly-bar-month {
+  color: #fbbf24;
+  font-weight: 900;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+.monthly-active-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-top: 6px;
+  transition: background 0.2s ease;
+}
+.monthly-active-strip:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
 /* ================= LUXURY FINTECH BUDGET CARD & FOCUS STOPWATCH ================= */
 .luxury-budget-card {
   position: relative;
@@ -11959,14 +12051,39 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         </div>
       </div>
 
-      <!-- Screen 4: Monthly Progress 12-Month Bar Chart -->
-      <div class="monthly-chart-card-v4" onclick="openMonthlyDeepDiveModal()" style="cursor:pointer;" title="Tap to view Monthly Reading Archive">
+      <!-- Screen 4: Executive 12-Month Reading Velocity Bar Chart -->
+      <div class="monthly-chart-card-v4" onclick="openMonthlyDeepDiveModal()" style="cursor:pointer;" title="Tap to view Multi-Year Archive (2026-2030)">
         <div class="monthly-chart-header">
-          <span class="monthly-chart-title">Monthly Progress</span>
-          <span class="monthly-chart-count" id="monthlyProgressRatio">0 books</span>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="monthly-chart-title">📅 Monthly Reading Velocity</span>
+              <span class="prog-pill-badge gold" id="monthlyChartYearBadge">2026</span>
+            </div>
+            <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">Real-time monthly book &amp; page completions</div>
+          </div>
+          <div style="text-align:right;">
+            <span class="monthly-chart-count" id="monthlyProgressRatio">0 books</span>
+            <div style="font-size:0.68rem;color:var(--accent-gold);margin-top:3px;font-weight:600;">Archive 2026-30 ›</div>
+          </div>
         </div>
-        <div class="monthly-bars-container">
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Jan</span></div>
+
+        <!-- 12-Month Dynamic Bars Container (Rendered by JS with glowing October) -->
+        <div class="monthly-bars-container" id="monthlyBarsContainer">
+          <!-- Populated dynamically by renderMonthlyBarChart() -->
+        </div>
+
+        <!-- Active Month Banner Strip -->
+        <div class="monthly-active-strip" id="monthlyActiveStrip">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:1.1rem;">🔥</span>
+            <div>
+              <span style="font-size:0.78rem;font-weight:700;color:#ffffff;" id="monthlyCurrentName">October 2026 (Active Month)</span>
+              <span style="font-size:0.72rem;color:var(--text-secondary);display:block;" id="monthlyCurrentStats">Tracking reading progress &amp; velocity</span>
+            </div>
+          </div>
+          <span style="font-size:0.75rem;color:var(--accent-gold);font-weight:700;">Open Archive ›</span>
+        </div>
+      </div><span class="monthly-bar-month">Jan</span></div>
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Feb</span></div>
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Mar</span></div>
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Apr</span></div>
@@ -25210,9 +25327,9 @@ if (typeof module !== 'undefined' && module.exports) {
   <script>
 window.APP_BROADCAST_NOTICE = {
   "id": "notice-v0.0.74",
-  "version": "v0.0.81",
+  "version": "v0.0.82",
   "title": "\ud83d\udcda MindFocus Books v0.0.74 Ready!",
-  "message": "v0.0.81: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
+  "message": "v0.0.82: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
   "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.74/MindFocusBooks-Native.apk",
   "action_text": "Download v0.0.74 APK",
   "badge_text": "NEW UPDATE",
@@ -25225,25 +25342,25 @@ window.APP_BROADCAST_NOTICE = {
   <script>
 window.APP_REMOTE_CONFIG = {
   "activeRelease": {
-    "version": "v0.0.81",
-    "name": "Mind Focus Books v0.0.81 (Executive Budget & Progress Studio)",
-    "releaseNotes": "v0.0.81: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.81/MindFocusBooks-Native.apk",
+    "version": "v0.0.82",
+    "name": "Mind Focus Books v0.0.82 (Executive Budget & Progress Studio)",
+    "releaseNotes": "v0.0.82: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.82/MindFocusBooks-Native.apk",
     "mandatory": false,
     "timestamp": "2026-10-28T12:03:49.052Z"
   },
   "latest": {
-    "version": "v0.0.81",
-    "name": "Mind Focus Books v0.0.81 (Executive Budget & Progress Studio)",
-    "releaseNotes": "v0.0.81: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.81/MindFocusBooks-Native.apk"
+    "version": "v0.0.82",
+    "name": "Mind Focus Books v0.0.82 (Executive Budget & Progress Studio)",
+    "releaseNotes": "v0.0.82: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.82/MindFocusBooks-Native.apk"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
   "latest_version": "0.0.78",
   "version_code": 8578,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.81/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.81: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.82/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.82: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
   "force_update": false,
   "maintenance": false,
   "published_at": "2026-10-28T12:03:49.101Z",
@@ -29825,6 +29942,7 @@ function getCurrencySymbol() {
   </div>
 
   <!-- ================= MONTHLY DEEP DIVE ARCHIVE MODAL ================= -->
+  <!-- ================= MULTI-YEAR READING ARCHIVE STUDIO (2024 - 2030) ================= -->
   <div class="modal-overlay modal-overlay-fullscreen" id="progressMonthlyArchiveModal" style="display:none;" onclick="if(event.target===this)closeMonthlyDeepDiveModal()">
     <div class="modal-card modal-card-fullscreen-studio">
       <div class="modal-header studio-header">
@@ -29836,16 +29954,56 @@ function getCurrencySymbol() {
             </svg>
           </button>
           <div>
-            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📅 Monthly Reading Archive</h3>
-            <span style="font-size:0.75rem;color:var(--text-muted);">Month-by-month reading performance &amp; milestones</span>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📅 Multi-Year Reading Archive</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Explore past reads, current progress &amp; future roadmaps</span>
           </div>
         </div>
         <button type="button" class="modal-close-btn studio-close-btn" onclick="closeMonthlyDeepDiveModal()" title="Close">&times;</button>
       </div>
       <div class="modal-body studio-body" style="padding:16px;">
-        <div id="monthlyArchiveContainer" style="display:flex;flex-direction:column;gap:12px;">
-          <!-- Dynamically populated -->
+        
+        <!-- Year Switcher Bar: 2024 to 2030 -->
+        <div class="studio-sub-tabs-bar" id="monthlyArchiveYearTabs" style="display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px;scrollbar-width:none;">
+          <button type="button" class="studio-tab-btn" id="archTab2024" onclick="switchArchiveYear(2024)">2024</button>
+          <button type="button" class="studio-tab-btn" id="archTab2025" onclick="switchArchiveYear(2025)">2025</button>
+          <button type="button" class="studio-tab-btn active" id="archTab2026" onclick="switchArchiveYear(2026)">⭐ 2026 (Now)</button>
+          <button type="button" class="studio-tab-btn" id="archTab2027" onclick="switchArchiveYear(2027)">2027</button>
+          <button type="button" class="studio-tab-btn" id="archTab2028" onclick="switchArchiveYear(2028)">2028</button>
+          <button type="button" class="studio-tab-btn" id="archTab2029" onclick="switchArchiveYear(2029)">2029</button>
+          <button type="button" class="studio-tab-btn" id="archTab2030" onclick="switchArchiveYear(2030)">2030</button>
         </div>
+
+        <!-- Annual Summary KPI Card for Selected Year -->
+        <div class="studio-card-box" id="archiveYearKpiBox" style="padding:14px;margin-bottom:14px;background:linear-gradient(135deg, rgba(30, 27, 75, 0.4), rgba(15, 23, 42, 0.7));border:1px solid rgba(245, 158, 11, 0.25);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="font-size:0.95rem;font-weight:800;color:#ffffff;" id="archiveYearTitle">🏆 2026 Annual Performance</div>
+            <span class="prog-pill-badge green" id="archiveYearStatusBadge">Active Reading Year</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;">
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:var(--accent-gold);" id="archiveKpiBooks">0</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Books Read</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:#38bdf8;" id="archiveKpiPages">0</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Pages Read</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:#a855f7;" id="archiveKpiTarget">25</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Goal Target</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:#10b981;" id="archiveKpiPct">0%</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Achieved</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12-Month Deep Dive Cards Container -->
+        <div id="monthlyArchiveContainer" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Dynamically populated by JS -->
+        </div>
+
       </div>
     </div>
   </div>
@@ -46124,6 +46282,254 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 300);
 });
 
+
+
+// ============================================================================
+// DYNAMIC 12-MONTH VELOCITY BAR CHART & MULTI-YEAR ARCHIVE (v0.0.82)
+// Active October Highlight + Full Year Switcher (2024 - 2030)
+// ============================================================================
+
+window._activeArchiveYear = 2026;
+
+// Helper to determine if a book belongs to a specific month & year
+function getBookMonthYear(book) {
+  const dStr = book.completed_date || book.end_date || book.start_date || '';
+  if (dStr) {
+    const d = new Date(dStr);
+    if (!isNaN(d.getTime())) {
+      return { year: d.getFullYear(), month: d.getMonth() };
+    }
+  }
+  return null;
+}
+
+// 1. Dynamic Bahar: renderMonthlyBarChart()
+window.renderMonthlyBarChart = function() {
+  const container = document.getElementById('monthlyBarsContainer');
+  if (!container) return;
+
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const now = new Date();
+  const curYear = now.getFullYear();
+  const curMonth = now.getMonth(); // 9 = October
+
+  const allBooks = state.books || [];
+  const completedBooks = allBooks.filter(b => b.status === 'DONE');
+  const readingBooks = allBooks.filter(b => b.status === 'READING');
+
+  // Compute stats for each of the 12 months in 2026
+  const monthData = monthNames.map((name, idx) => {
+    let completedInMonth = 0;
+    completedBooks.forEach(b => {
+      const my = getBookMonthYear(b);
+      if (my && my.year === curYear && my.month === idx) {
+        completedInMonth++;
+      } else if (!my && idx === curMonth) {
+        // Fallback for books without date completed in current month
+        completedInMonth++;
+      }
+    });
+
+    const isCurrent = (idx === curMonth);
+    // In current month (October), active reading books also contribute to the velocity score
+    const activeScore = completedInMonth + (isCurrent ? readingBooks.length : 0);
+
+    return {
+      name,
+      monthIndex: idx,
+      completed: completedInMonth,
+      activeReading: isCurrent ? readingBooks.length : 0,
+      score: activeScore,
+      isCurrent
+    };
+  });
+
+  const maxVal = Math.max(3, ...monthData.map(m => m.score));
+
+  // Render 12 Dynamic Bars
+  container.innerHTML = monthData.map(m => {
+    const isCurrent = m.isCurrent;
+    let heightPct = Math.round((m.score / maxVal) * 100);
+    
+    // In October (active month), even if 0 completed yet, show active 28% pulse so it is NEVER flat empty!
+    if (isCurrent && heightPct < 28) {
+      heightPct = 28;
+    }
+
+    const valDisplay = m.completed > 0 ? m.completed : (isCurrent && m.activeReading > 0 ? `📖` : '');
+
+    return `
+      <div class="monthly-bar-col ${isCurrent ? 'active-month' : ''}" title="${m.name} 2026: ${m.completed} finished, ${m.activeReading} reading">
+        <span class="monthly-bar-val-badge">${valDisplay}</span>
+        <div class="monthly-bar-track">
+          <div class="monthly-bar-fill" style="height: ${heightPct}%;"></div>
+        </div>
+        <span class="monthly-bar-month">${m.name}${isCurrent ? '🔥' : ''}</span>
+      </div>
+    `;
+  }).join('');
+
+  // Update Ratio on Header
+  const totalCompletedYear = completedBooks.length;
+  const goal = parseInt(localStorage.getItem('mf_reading_goal_2026') || '25', 10);
+  const ratioEl = document.getElementById('monthlyProgressRatio');
+  if (ratioEl) ratioEl.innerText = `${totalCompletedYear}/${goal} books`;
+
+  // Update Active Month Strip
+  const octData = monthData[curMonth];
+  const curNameEl = document.getElementById('monthlyCurrentName');
+  const curStatsEl = document.getElementById('monthlyCurrentStats');
+  if (curNameEl) curNameEl.innerText = `${monthNames[curMonth]} 2026 (Active Month) 🔥`;
+  if (curStatsEl) {
+    curStatsEl.innerText = `${octData.completed} books completed &bull; ${octData.activeReading} currently reading`;
+  }
+};
+
+// 2. Dynamic Under: Multi-Year Archive Modal (2024 - 2030)
+window.openMonthlyDeepDiveModal = function() {
+  const modal = document.getElementById('progressMonthlyArchiveModal');
+  if (!modal) return;
+
+  renderArchiveYearView(window._activeArchiveYear || 2026);
+  modal.style.display = 'flex';
+};
+
+window.closeMonthlyDeepDiveModal = function() {
+  const modal = document.getElementById('progressMonthlyArchiveModal');
+  if (modal) modal.style.display = 'none';
+};
+
+window.switchArchiveYear = function(year) {
+  window._activeArchiveYear = parseInt(year, 10);
+
+  // Update year tabs active class
+  const years = [2024, 2025, 2026, 2027, 2028, 2029, 2030];
+  years.forEach(y => {
+    const tab = document.getElementById(`archTab${y}`);
+    if (tab) tab.classList.toggle('active', y === window._activeArchiveYear);
+  });
+
+  renderArchiveYearView(window._activeArchiveYear);
+  if (typeof showToast === 'function') showToast(`Loaded ${window._activeArchiveYear} Reading Archive & Roadmap 📅`);
+};
+
+function renderArchiveYearView(targetYear) {
+  const container = document.getElementById('monthlyArchiveContainer');
+  const yearTitleEl = document.getElementById('archiveYearTitle');
+  const yearBadgeEl = document.getElementById('archiveYearStatusBadge');
+  const kpiBooksEl = document.getElementById('archiveKpiBooks');
+  const kpiPagesEl = document.getElementById('archiveKpiPages');
+  const kpiTargetEl = document.getElementById('archiveKpiTarget');
+  const kpiPctEl = document.getElementById('archiveKpiPct');
+
+  const now = new Date();
+  const curYear = now.getFullYear();
+  const curMonth = now.getMonth();
+
+  const isCurrentYear = targetYear === curYear;
+  const isPastYear = targetYear < curYear;
+  const isFutureYear = targetYear > curYear;
+
+  // Yearly target for that year
+  const goalTarget = parseInt(localStorage.getItem(`mf_reading_goal_${targetYear}`) || '25', 10);
+
+  // Books completed in that year
+  const allBooks = state.books || [];
+  const yearCompletedBooks = allBooks.filter(b => {
+    if (b.status !== 'DONE') return false;
+    const my = getBookMonthYear(b);
+    return my ? my.year === targetYear : (isCurrentYear ? true : false);
+  });
+
+  const totalBooks = yearCompletedBooks.length;
+  const totalPages = yearCompletedBooks.reduce((acc, b) => acc + (parseInt(b.current_page || b.total_pages || 250, 10)), 0);
+  const pct = Math.min(100, Math.round((totalBooks / Math.max(1, goalTarget)) * 100));
+
+  if (yearTitleEl) yearTitleEl.innerText = `🏆 ${targetYear} Reading Archive & Roadmap`;
+  if (yearBadgeEl) {
+    if (isCurrentYear) {
+      yearBadgeEl.className = 'prog-pill-badge green';
+      yearBadgeEl.innerText = 'Active Reading Year 🔥';
+    } else if (isPastYear) {
+      yearBadgeEl.className = 'prog-pill-badge blue';
+      yearBadgeEl.innerText = 'Past Completed Archive';
+    } else {
+      yearBadgeEl.className = 'prog-pill-badge gold';
+      yearBadgeEl.innerText = 'Future Goal Roadmap 🚀';
+    }
+  }
+
+  if (kpiBooksEl) kpiBooksEl.innerText = totalBooks;
+  if (kpiPagesEl) kpiPagesEl.innerText = totalPages.toLocaleString();
+  if (kpiTargetEl) kpiTargetEl.innerText = goalTarget;
+  if (kpiPctEl) kpiPctEl.innerText = `${pct}%`;
+
+  // Render 12 Month Cards
+  if (!container) return;
+
+  const fullMonths = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  container.innerHTML = fullMonths.map((mName, mIdx) => {
+    const isThisMonth = isCurrentYear && mIdx === curMonth;
+    const isPastMonth = isPastYear || (isCurrentYear && mIdx < curMonth);
+    const isFutureMonth = isFutureYear || (isCurrentYear && mIdx > curMonth);
+
+    // Books completed in this month
+    const monthBooks = yearCompletedBooks.filter(b => {
+      const my = getBookMonthYear(b);
+      return my ? my.month === mIdx : (isThisMonth ? true : false);
+    });
+
+    const doneCount = monthBooks.length;
+    const monthlyTarget = 2; // Default 2 books per month
+
+    let statusPill = '';
+    if (isThisMonth) {
+      statusPill = `<span style="font-size:0.68rem;padding:3px 8px;border-radius:10px;background:rgba(245,158,11,0.25);color:#fbbf24;font-weight:800;border:1px solid rgba(245,158,11,0.4);">🔥 CURRENT ACTIVE MONTH</span>`;
+    } else if (doneCount > 0) {
+      statusPill = `<span style="font-size:0.68rem;padding:3px 8px;border-radius:10px;background:rgba(16,185,129,0.2);color:#10b981;font-weight:700;">✅ Achieved</span>`;
+    } else if (isFutureMonth) {
+      statusPill = `<span style="font-size:0.68rem;padding:3px 8px;border-radius:10px;background:rgba(59,130,246,0.15);color:#60a5fa;font-weight:700;">🎯 Planned Goal</span>`;
+    } else {
+      statusPill = `<span style="font-size:0.68rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);color:var(--text-muted);">Past Month</span>`;
+    }
+
+    const booksListHtml = monthBooks.length > 0 ? `
+      <div style="margin-top:8px;padding-top:8px;border-top:1px dashed rgba(255,255,255,0.1);display:flex;flex-direction:column;gap:4px;">
+        ${monthBooks.map(b => `
+          <div style="font-size:0.75rem;color:#ffffff;display:flex;align-items:center;justify-content:space-between;">
+            <span>📖 <strong>${b.title}</strong> (${b.author || 'Author'})</span>
+            <span style="color:#10b981;font-weight:700;">Completed ✓</span>
+          </div>
+        `).join('')}
+      </div>
+    ` : '';
+
+    return `
+      <div style="padding:14px;background:rgba(255,255,255,${isThisMonth ? '0.08' : '0.03'});border:1px solid ${isThisMonth ? 'var(--accent-gold)' : 'rgba(255,255,255,0.08)'};border-radius:14px;box-shadow:${isThisMonth ? '0 4px 18px rgba(245,158,11,0.18)' : 'none'};">
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="display:flex;align-items:center;gap:8px;">
+              <span style="font-size:0.95rem;font-weight:800;color:${isThisMonth ? 'var(--accent-gold)' : '#ffffff'};">${mName} ${targetYear}</span>
+              ${statusPill}
+            </div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:3px;">
+              Target: ${monthlyTarget} Books &bull; Completed: <strong style="color:${doneCount > 0 ? '#10b981' : '#ffffff'};">${doneCount} Books</strong>
+            </div>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-size:1.3rem;font-weight:900;color:${doneCount > 0 ? '#10b981' : (isThisMonth ? 'var(--accent-gold)' : 'var(--text-muted)')};">${doneCount}</span>
+          </div>
+        </div>
+        ${booksListHtml}
+      </div>
+    `;
+  }).join('');
+}
+
 </script>
 
 
@@ -46447,6 +46853,7 @@ document.addEventListener('DOMContentLoaded', () => {
   </div>
 
   <!-- ================= MONTHLY DEEP DIVE ARCHIVE MODAL ================= -->
+  <!-- ================= MULTI-YEAR READING ARCHIVE STUDIO (2024 - 2030) ================= -->
   <div class="modal-overlay modal-overlay-fullscreen" id="progressMonthlyArchiveModal" style="display:none;" onclick="if(event.target===this)closeMonthlyDeepDiveModal()">
     <div class="modal-card modal-card-fullscreen-studio">
       <div class="modal-header studio-header">
@@ -46458,16 +46865,56 @@ document.addEventListener('DOMContentLoaded', () => {
             </svg>
           </button>
           <div>
-            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📅 Monthly Reading Archive</h3>
-            <span style="font-size:0.75rem;color:var(--text-muted);">Month-by-month reading performance &amp; milestones</span>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📅 Multi-Year Reading Archive</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Explore past reads, current progress &amp; future roadmaps</span>
           </div>
         </div>
         <button type="button" class="modal-close-btn studio-close-btn" onclick="closeMonthlyDeepDiveModal()" title="Close">&times;</button>
       </div>
       <div class="modal-body studio-body" style="padding:16px;">
-        <div id="monthlyArchiveContainer" style="display:flex;flex-direction:column;gap:12px;">
-          <!-- Dynamically populated -->
+        
+        <!-- Year Switcher Bar: 2024 to 2030 -->
+        <div class="studio-sub-tabs-bar" id="monthlyArchiveYearTabs" style="display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px;scrollbar-width:none;">
+          <button type="button" class="studio-tab-btn" id="archTab2024" onclick="switchArchiveYear(2024)">2024</button>
+          <button type="button" class="studio-tab-btn" id="archTab2025" onclick="switchArchiveYear(2025)">2025</button>
+          <button type="button" class="studio-tab-btn active" id="archTab2026" onclick="switchArchiveYear(2026)">⭐ 2026 (Now)</button>
+          <button type="button" class="studio-tab-btn" id="archTab2027" onclick="switchArchiveYear(2027)">2027</button>
+          <button type="button" class="studio-tab-btn" id="archTab2028" onclick="switchArchiveYear(2028)">2028</button>
+          <button type="button" class="studio-tab-btn" id="archTab2029" onclick="switchArchiveYear(2029)">2029</button>
+          <button type="button" class="studio-tab-btn" id="archTab2030" onclick="switchArchiveYear(2030)">2030</button>
         </div>
+
+        <!-- Annual Summary KPI Card for Selected Year -->
+        <div class="studio-card-box" id="archiveYearKpiBox" style="padding:14px;margin-bottom:14px;background:linear-gradient(135deg, rgba(30, 27, 75, 0.4), rgba(15, 23, 42, 0.7));border:1px solid rgba(245, 158, 11, 0.25);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="font-size:0.95rem;font-weight:800;color:#ffffff;" id="archiveYearTitle">🏆 2026 Annual Performance</div>
+            <span class="prog-pill-badge green" id="archiveYearStatusBadge">Active Reading Year</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;">
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:var(--accent-gold);" id="archiveKpiBooks">0</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Books Read</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:#38bdf8;" id="archiveKpiPages">0</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Pages Read</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:#a855f7;" id="archiveKpiTarget">25</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Goal Target</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:#10b981;" id="archiveKpiPct">0%</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Achieved</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12-Month Deep Dive Cards Container -->
+        <div id="monthlyArchiveContainer" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Dynamically populated by JS -->
+        </div>
+
       </div>
     </div>
   </div>

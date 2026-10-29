@@ -72,6 +72,98 @@
 /* ================= PROGRESS & BUDGET STUDIO STYLES ================= */
 
 
+
+/* ================= MONTHLY PROGRESS & MULTI-YEAR ARCHIVE (v0.0.82) ================= */
+.monthly-chart-card-v4 {
+  background: radial-gradient(ellipse at 50% 0%, rgba(245, 158, 11, 0.15) 0%, rgba(15, 23, 42, 0.98) 85%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.3) !important;
+  border-radius: 20px !important;
+  padding: 18px !important;
+  margin-bottom: 18px !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(245, 158, 11, 0.2) !important;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.monthly-chart-card-v4:hover {
+  border-color: rgba(245, 158, 11, 0.5) !important;
+}
+.monthly-bars-container {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 125px;
+  padding: 8px 4px 4px 4px;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+.monthly-bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: flex-end;
+  gap: 5px;
+  position: relative;
+}
+.monthly-bar-val-badge {
+  font-size: 0.65rem;
+  font-weight: 800;
+  color: var(--accent-gold);
+  line-height: 1;
+}
+.monthly-bar-track {
+  width: 100%;
+  max-width: 18px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  height: 82px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.2s ease;
+}
+.monthly-bar-col.active-month .monthly-bar-track {
+  border-color: #f59e0b;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.45);
+  background: rgba(245, 158, 11, 0.08);
+}
+.monthly-bar-fill {
+  width: 100%;
+  background: linear-gradient(180deg, #10b981 0%, #f59e0b 60%, #ea580c 100%);
+  border-radius: 8px;
+  transition: height 0.4s ease;
+}
+.monthly-bar-col.active-month .monthly-bar-fill {
+  background: linear-gradient(180deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+}
+.monthly-bar-month {
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #94a3b8;
+  letter-spacing: 0.2px;
+}
+.monthly-bar-col.active-month .monthly-bar-month {
+  color: #fbbf24;
+  font-weight: 900;
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+.monthly-active-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  margin-top: 6px;
+  transition: background 0.2s ease;
+}
+.monthly-active-strip:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
 /* ================= LUXURY FINTECH BUDGET CARD & FOCUS STOPWATCH ================= */
 .luxury-budget-card {
   position: relative;
@@ -1631,14 +1723,39 @@
         </div>
       </div>
 
-      <!-- Screen 4: Monthly Progress 12-Month Bar Chart -->
-      <div class="monthly-chart-card-v4" onclick="openMonthlyDeepDiveModal()" style="cursor:pointer;" title="Tap to view Monthly Reading Archive">
+      <!-- Screen 4: Executive 12-Month Reading Velocity Bar Chart -->
+      <div class="monthly-chart-card-v4" onclick="openMonthlyDeepDiveModal()" style="cursor:pointer;" title="Tap to view Multi-Year Archive (2026-2030)">
         <div class="monthly-chart-header">
-          <span class="monthly-chart-title">Monthly Progress</span>
-          <span class="monthly-chart-count" id="monthlyProgressRatio">0 books</span>
+          <div>
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="monthly-chart-title">📅 Monthly Reading Velocity</span>
+              <span class="prog-pill-badge gold" id="monthlyChartYearBadge">2026</span>
+            </div>
+            <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">Real-time monthly book &amp; page completions</div>
+          </div>
+          <div style="text-align:right;">
+            <span class="monthly-chart-count" id="monthlyProgressRatio">0 books</span>
+            <div style="font-size:0.68rem;color:var(--accent-gold);margin-top:3px;font-weight:600;">Archive 2026-30 ›</div>
+          </div>
         </div>
-        <div class="monthly-bars-container">
-          <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Jan</span></div>
+
+        <!-- 12-Month Dynamic Bars Container (Rendered by JS with glowing October) -->
+        <div class="monthly-bars-container" id="monthlyBarsContainer">
+          <!-- Populated dynamically by renderMonthlyBarChart() -->
+        </div>
+
+        <!-- Active Month Banner Strip -->
+        <div class="monthly-active-strip" id="monthlyActiveStrip">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:1.1rem;">🔥</span>
+            <div>
+              <span style="font-size:0.78rem;font-weight:700;color:#ffffff;" id="monthlyCurrentName">October 2026 (Active Month)</span>
+              <span style="font-size:0.72rem;color:var(--text-secondary);display:block;" id="monthlyCurrentStats">Tracking reading progress &amp; velocity</span>
+            </div>
+          </div>
+          <span style="font-size:0.75rem;color:var(--accent-gold);font-weight:700;">Open Archive ›</span>
+        </div>
+      </div><span class="monthly-bar-month">Jan</span></div>
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Feb</span></div>
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Mar</span></div>
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Apr</span></div>
@@ -9187,6 +9304,7 @@
   </div>
 
   <!-- ================= MONTHLY DEEP DIVE ARCHIVE MODAL ================= -->
+  <!-- ================= MULTI-YEAR READING ARCHIVE STUDIO (2024 - 2030) ================= -->
   <div class="modal-overlay modal-overlay-fullscreen" id="progressMonthlyArchiveModal" style="display:none;" onclick="if(event.target===this)closeMonthlyDeepDiveModal()">
     <div class="modal-card modal-card-fullscreen-studio">
       <div class="modal-header studio-header">
@@ -9198,16 +9316,56 @@
             </svg>
           </button>
           <div>
-            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📅 Monthly Reading Archive</h3>
-            <span style="font-size:0.75rem;color:var(--text-muted);">Month-by-month reading performance &amp; milestones</span>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📅 Multi-Year Reading Archive</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Explore past reads, current progress &amp; future roadmaps</span>
           </div>
         </div>
         <button type="button" class="modal-close-btn studio-close-btn" onclick="closeMonthlyDeepDiveModal()" title="Close">&times;</button>
       </div>
       <div class="modal-body studio-body" style="padding:16px;">
-        <div id="monthlyArchiveContainer" style="display:flex;flex-direction:column;gap:12px;">
-          <!-- Dynamically populated -->
+        
+        <!-- Year Switcher Bar: 2024 to 2030 -->
+        <div class="studio-sub-tabs-bar" id="monthlyArchiveYearTabs" style="display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px;scrollbar-width:none;">
+          <button type="button" class="studio-tab-btn" id="archTab2024" onclick="switchArchiveYear(2024)">2024</button>
+          <button type="button" class="studio-tab-btn" id="archTab2025" onclick="switchArchiveYear(2025)">2025</button>
+          <button type="button" class="studio-tab-btn active" id="archTab2026" onclick="switchArchiveYear(2026)">⭐ 2026 (Now)</button>
+          <button type="button" class="studio-tab-btn" id="archTab2027" onclick="switchArchiveYear(2027)">2027</button>
+          <button type="button" class="studio-tab-btn" id="archTab2028" onclick="switchArchiveYear(2028)">2028</button>
+          <button type="button" class="studio-tab-btn" id="archTab2029" onclick="switchArchiveYear(2029)">2029</button>
+          <button type="button" class="studio-tab-btn" id="archTab2030" onclick="switchArchiveYear(2030)">2030</button>
         </div>
+
+        <!-- Annual Summary KPI Card for Selected Year -->
+        <div class="studio-card-box" id="archiveYearKpiBox" style="padding:14px;margin-bottom:14px;background:linear-gradient(135deg, rgba(30, 27, 75, 0.4), rgba(15, 23, 42, 0.7));border:1px solid rgba(245, 158, 11, 0.25);">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+            <div style="font-size:0.95rem;font-weight:800;color:#ffffff;" id="archiveYearTitle">🏆 2026 Annual Performance</div>
+            <span class="prog-pill-badge green" id="archiveYearStatusBadge">Active Reading Year</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;">
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:var(--accent-gold);" id="archiveKpiBooks">0</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Books Read</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:#38bdf8;" id="archiveKpiPages">0</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Pages Read</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:#a855f7;" id="archiveKpiTarget">25</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Goal Target</div>
+            </div>
+            <div style="background:rgba(255,255,255,0.03);padding:8px 4px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);">
+              <div style="font-size:1.15rem;font-weight:900;color:#10b981;" id="archiveKpiPct">0%</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);margin-top:2px;">Achieved</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 12-Month Deep Dive Cards Container -->
+        <div id="monthlyArchiveContainer" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Dynamically populated by JS -->
+        </div>
+
       </div>
     </div>
   </div>
