@@ -1,10 +1,10 @@
 {
-  "id": "notice-v0.0.72",
-  "version": "0.0.72",
-  "title": "📚 MindFocus Books v0.0.72 Ready!",
-  "message": "v0.0.72: Ab online book reader me Hindi bhasha ke panne pehle khulenge, sath me Hindi/English switch button bhi hai",
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.72/MindFocusBooks-Native.apk",
-  "action_text": "Download v0.0.72 APK",
+  "id": "notice-v0.0.73",
+  "version": "0.0.73",
+  "title": "📚 MindFocus Books v0.0.73 Ready!",
+  "message": "v0.0.73: v0.0.73: Online reader button hata diya gaya hai, clean book dossier restored",
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.73/MindFocusBooks-Native.apk",
+  "action_text": "Download v0.0.73 APK",
   "badge_text": "NEW UPDATE",
   "auto_show": true,
   "timestamp": 1793189029182
