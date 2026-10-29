@@ -1,8 +1,8 @@
 window.APP_BROADCAST_NOTICE = {
   "id": "notice-v0.0.74",
-  "version": "v0.0.74",
+  "version": "v0.0.75",
   "title": "\ud83d\udcda MindFocus Books v0.0.74 Ready!",
-  "message": "v0.0.74: Added Universal Smart Category & Mood Search across 14+ categories (Shayari, Funny, Action, Focus, Romance, Horror, Business, etc.)",
+  "message": "v0.0.75: Added Country & Origin Filter (India \ud83c\uddee\ud83c\uddf3, All \ud83c\udf10, USA \ud83c\uddfa\ud83c\uddf8, UK \ud83c\uddec\ud83c\udde7, Japan \ud83c\uddef\ud83c\uddf5, Russia \ud83c\uddf7\ud83c\uddfa, Germany \ud83c\udde9\ud83c\uddea, France \ud83c\uddeb\ud83c\uddf7) in Explore Search",
   "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.74/MindFocusBooks-Native.apk",
   "action_text": "Download v0.0.74 APK",
   "badge_text": "NEW UPDATE",

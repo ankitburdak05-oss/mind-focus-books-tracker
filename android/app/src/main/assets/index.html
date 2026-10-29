@@ -26,6 +26,47 @@
 
   <link rel="stylesheet" href="style.css?v=0.0.55">
 
+
+<style>
+/* Explore Country Filter Bar Styling */
+.explore-country-filter-wrap {
+  position: relative;
+  width: 100%;
+}
+.explore-country-chips-scroll::-webkit-scrollbar {
+  display: none;
+}
+.explore-country-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  white-space: nowrap;
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary, #cbd5e1);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  flex-shrink: 0;
+}
+.explore-country-chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+.explore-country-chip.active {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.25), rgba(217, 119, 6, 0.35)) !important;
+  color: #fbbf24 !important;
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+  font-weight: 700;
+}
+</style>
+
 </head>
 
 <body>
@@ -172,7 +213,7 @@
 
               <span class="h3d-glow-tag">3D SYSTEM UPDATE</span>
 
-              <span class="h3d-version-pill" id="homeUpdateBadgePill">v0.0.74</span>
+              <span class="h3d-version-pill" id="homeUpdateBadgePill">v0.0.75</span>
 
             </div>
 
@@ -658,7 +699,43 @@
 
       </div>
 
-
+      <!-- Country & Origin Filter Bar (All, India, USA, UK, Japan, Russia, Germany, France) -->
+      <div id="exploreCountryFilterBar" class="explore-country-filter-wrap" style="margin: 10px 0 12px; display: flex; flex-direction: column; gap: 6px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:0 2px;">
+          <span style="font-size:0.75rem;font-weight:700;color:var(--text-muted, #94a3b8);text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;">
+            <span>🌍</span> Desh / Country Chuno:
+          </span>
+          <span id="exploreActiveCountryLabel" style="font-size:0.74rem;font-weight:600;color:#f59e0b;background:rgba(245,158,11,0.12);padding:2px 10px;border-radius:12px;border:1px solid rgba(245,158,11,0.25);">
+            🇮🇳 Bharat (India)
+          </span>
+        </div>
+        <div class="explore-country-chips-scroll" style="display:flex;gap:7px;overflow-x:auto;padding:2px 2px 6px;scrollbar-width:none;-webkit-overflow-scrolling:touch;">
+          <button type="button" class="explore-country-chip active" data-country="in" onclick="selectExploreCountry('in', this)">
+            <span>🇮🇳</span> Bharat (India)
+          </button>
+          <button type="button" class="explore-country-chip" data-country="all" onclick="selectExploreCountry('all', this)">
+            <span>🌐</span> Sabhi Desh (All)
+          </button>
+          <button type="button" class="explore-country-chip" data-country="us" onclick="selectExploreCountry('us', this)">
+            <span>🇺🇸</span> USA
+          </button>
+          <button type="button" class="explore-country-chip" data-country="uk" onclick="selectExploreCountry('uk', this)">
+            <span>🇬🇧</span> UK
+          </button>
+          <button type="button" class="explore-country-chip" data-country="jp" onclick="selectExploreCountry('jp', this)">
+            <span>🇯🇵</span> Japan
+          </button>
+          <button type="button" class="explore-country-chip" data-country="ru" onclick="selectExploreCountry('ru', this)">
+            <span>🇷🇺</span> Russia
+          </button>
+          <button type="button" class="explore-country-chip" data-country="de" onclick="selectExploreCountry('de', this)">
+            <span>🇩🇪</span> Germany
+          </button>
+          <button type="button" class="explore-country-chip" data-country="fr" onclick="selectExploreCountry('fr', this)">
+            <span>🇫🇷</span> France
+          </button>
+        </div>
+      </div>
 
       <!-- Action Strip: Refresh, Surprise Me, Curated Feed Mode -->
 
@@ -4974,7 +5051,7 @@
 
               <div class="ig-row-right">
 
-                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.74</span>
+                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.75</span>
 
               </div>
 
@@ -8274,9 +8351,9 @@
 
   <script src="remote-config.js"></script>
 
-  <script src="explore.js?v=0.0.74"></script>
+  <script src="explore.js?v=0.0.75"></script>
 
-  <script src="app.js?v=0.0.74"></script>
+  <script src="app.js?v=0.0.75"></script>
 
 
 

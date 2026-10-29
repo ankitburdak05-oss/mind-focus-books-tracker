@@ -1899,12 +1899,272 @@ function triggerExploreAPISearch() {
   searchOpenLibrary(query);
 }
 
+
+// ============================================================================
+// UNIVERSAL COUNTRY & ORIGIN ENGINE (India, USA, UK, Japan, Russia, Germany, France, All)
+// ============================================================================
+window._exploreActiveCountry = (function() {
+  try {
+    return localStorage.getItem('explore_book_country') || 'in';
+  } catch(e) {
+    return 'in';
+  }
+})();
+
+const EXPLORE_COUNTRY_DEFINITIONS = {
+  all: {
+    id: 'all',
+    label: 'Sabhi Desh (All)',
+    short: 'All',
+    flag: '🌐',
+    statusText: 'World Library (Sabhi Desh)',
+    querySuffix: '',
+    languages: [],
+    places: [],
+    authors: []
+  },
+  in: {
+    id: 'in',
+    label: 'Bharat (India)',
+    short: 'India',
+    flag: '🇮🇳',
+    statusText: 'Bharat & Hindi/Urdu Sahitya Database',
+    querySuffix: 'india',
+    languages: ['hin', 'urd', 'san', 'ben', 'mar', 'tam', 'tel', 'pan', 'guj', 'mal', 'kan', 'ori', 'inc'],
+    places: [
+      'india', 'bharat', 'delhi', 'new delhi', 'mumbai', 'bombay', 'kolkata', 'calcutta', 
+      'chennai', 'madras', 'varanasi', 'banaras', 'kashi', 'lucknow', 'hyderabad', 'bangalore', 
+      'bengaluru', 'pune', 'allahabad', 'prayagraj', 'patna', 'jaipur', 'lahore', 'punjab', 
+      'bengal', 'kashmir', 'agra', 'ahmedabad', 'bhopal', 'indore', 'chandigarh'
+    ],
+    authors: [
+      'premchand', 'munshi premchand', 'ghalib', 'mirza ghalib', 'jaun elia', 'elia', 
+      'dinkar', 'ramdhari singh dinkar', 'bachchan', 'harivansh rai bachchan', 
+      'dharamvir bharati', 'bharati', 'tagore', 'rabindranath tagore', 'r.k. narayan', 
+      'rk narayan', 'ruskin bond', 'kalam', 'apj abdul kalam', 'gandhi', 'mahatma gandhi', 
+      'ambedkar', 'b.r. ambedkar', 'vivekananda', 'swami vivekananda', 'chanakya', 
+      'rahat indori', 'indori', 'gulzar', 'faiz', 'faiz ahmad faiz', 'amish', 'amish tripathi', 
+      'tripathi', 'chetan bhagat', 'bhagat', 'harishankar parsai', 'parsai', 'ashwin sanghi', 
+      'sanghi', 'surendra mohan pathak', 'pathak', 'ved prakash sharma', 'divya prakash dubey', 
+      'dubey', 'manto', 'saadat hasan manto', 'iqbal', 'allama iqbal', 'kumar vishwas', 
+      'vishwas', 'dushyant kumar', 'kabir', 'tulsidas', 'surdas', 'mira bai', 'ravinder singh', 
+      'durjoy datta', 'devdutt pattanaik', 'anand neelakantan', 'sudha murty', 'vikram chandra', 
+      'chitra banerjee', 'manoj das', 'kamleshwar', 'bhisham sahni', 'phanishwar nath renu', 
+      'shrilal shukla', 'mohan rakesh', 'kashinath singh', 'alakh pandey', 'dr. vivek bindra'
+    ],
+    categoryQueries: {
+      SHAYARI: 'urdu poetry india',
+      FUNNY: 'harishankar parsai hindi humor',
+      ACTION_THRILLER: 'ashwin sanghi indian thriller',
+      FOCUS_MINDSET: 'swami vivekananda meditation concentration',
+      ROMANCE: 'gunahon ka devta premchand love',
+      HORROR: 'indian ghost stories bhoot',
+      BUSINESS_MONEY: 'ratan tata investing india',
+      PSYCHOLOGY: 'swami vivekananda manovigyan mind',
+      PHILOSOPHY_SPIRITUAL: 'bhagavad gita vedas upanishads',
+      BIOGRAPHY_HISTORY: 'apj abdul kalam bhagat singh',
+      SCIFI_TECH: 'satyajit ray shonku indian science fiction',
+      HINDI_CLASSICS: 'munshi premchand godan',
+      HEALTH_FITNESS: 'patanjali yoga sutras ayurveda',
+      KIDS_STORIES: 'panchatantra hitopadesha jataka'
+    }
+  },
+  us: {
+    id: 'us',
+    label: 'USA',
+    short: 'USA',
+    flag: '🇺🇸',
+    statusText: 'United States Database',
+    querySuffix: 'american',
+    languages: ['eng'],
+    places: ['united states', 'usa', 'u.s.a.', 'new york', 'boston', 'chicago', 'california', 'los angeles', 'washington', 'texas', 'philadelphia', 'san francisco'],
+    authors: ['carnegie', 'clear', 'james clear', 'manson', 'mark manson', 'kiyosaki', 'robert kiyosaki', 'hill', 'napoleon hill', 'hemingway', 'twain', 'stephen king', 'steinbeck', 'fitzgerald', 'faulkner', 'poe', 'frost', 'asimov', 'cal newport', 'morgan housel', 'robert greene', 'tim ferriss', 'stephen covey', 'brene brown', 'dan brown'],
+    categoryQueries: {
+      FOCUS_MINDSET: 'james clear atomic habits deep work',
+      BUSINESS_MONEY: 'morgan housel psychology of money kiyosaki',
+      ACTION_THRILLER: 'stephen king thriller mystery',
+      SCIFI_TECH: 'isaac asimov philip k dick science fiction',
+      KIDS_STORIES: 'dr seuss shel silverstein children stories'
+    }
+  },
+  uk: {
+    id: 'uk',
+    label: 'UK (Britain)',
+    short: 'UK',
+    flag: '🇬🇧',
+    statusText: 'British Literature Database',
+    querySuffix: 'british',
+    languages: ['eng'],
+    places: ['united kingdom', 'uk', 'u.k.', 'england', 'london', 'oxford', 'cambridge', 'scotland', 'edinburgh', 'manchester'],
+    authors: ['orwell', 'george orwell', 'doyle', 'arthur conan doyle', 'agatha christie', 'christie', 'j.k. rowling', 'rowling', 'tolkien', 'j.r.r. tolkien', 'dickens', 'charles dickens', 'jane austen', 'austen', 'shakespeare', 'william shakespeare', 'virginia woolf', 'oscar wilde', 'c.s. lewis', 'roald dahl', 'thomas hardy', 'rudyard kipling', 'h.g. wells', 'mary shelley'],
+    categoryQueries: {
+      ACTION_THRILLER: 'arthur conan doyle sherlock agatha christie',
+      SCIFI_TECH: 'george orwell 1984 h g wells science fiction',
+      KIDS_STORIES: 'roald dahl cs lewis narnia harry potter',
+      ROMANCE: 'jane austen pride and prejudice'
+    }
+  },
+  jp: {
+    id: 'jp',
+    label: 'Japan',
+    short: 'Japan',
+    flag: '🇯🇵',
+    statusText: 'Japanese Literature Database',
+    querySuffix: 'japan',
+    languages: ['jpn'],
+    places: ['japan', 'tokyo', 'kyoto', 'osaka'],
+    authors: ['murakami', 'haruki murakami', 'dazai', 'osamu dazai', 'mishima', 'yukio mishima', 'keigo higashino', 'higashino', 'kawakami', 'kawabata', 'akutagawa', 'yoko ogawa', 'endo', 'oe', 'suzuki', 'matsuo basho', 'kenji miyazawa'],
+    categoryQueries: {
+      FOCUS_MINDSET: 'ikigai kaizen japanese mindset',
+      ACTION_THRILLER: 'keigo higashino japanese mystery',
+      ROMANCE: 'haruki murakami norwegian wood'
+    }
+  },
+  ru: {
+    id: 'ru',
+    label: 'Russia',
+    short: 'Russia',
+    flag: '🇷🇺',
+    statusText: 'Russian Classics Database',
+    querySuffix: 'russian',
+    languages: ['rus'],
+    places: ['russia', 'moscow', 'saint petersburg', 'st. petersburg', 'soviet union', 'ussr'],
+    authors: ['tolstoy', 'leo tolstoy', 'dostoevsky', 'fyodor dostoevsky', 'chekhov', 'anton chekhov', 'gorky', 'maxim gorky', 'pushkin', 'gogol', 'turgenev', 'nabokov', 'bulgakov', 'solzhenitsyn'],
+    categoryQueries: {
+      PHILOSOPHY_SPIRITUAL: 'leo tolstoy fyodor dostoevsky',
+      ACTION_THRILLER: 'dostoevsky crime and punishment',
+      HINDI_CLASSICS: 'leo tolstoy war and peace'
+    }
+  },
+  de: {
+    id: 'de',
+    label: 'Germany',
+    short: 'Germany',
+    flag: '🇩🇪',
+    statusText: 'German Literature Database',
+    querySuffix: 'german',
+    languages: ['ger'],
+    places: ['germany', 'berlin', 'munich', 'frankfurt', 'leipzig', 'vienna', 'austria', 'switzerland', 'zurich'],
+    authors: ['kafka', 'franz kafka', 'hesse', 'hermann hesse', 'nietzsche', 'friedrich nietzsche', 'goethe', 'thomas mann', 'remarque', 'schopenhauer', 'immanuel kant', 'karl marx', 'sigmund freud', 'bertolt brecht'],
+    categoryQueries: {
+      FOCUS_MINDSET: 'hermann hesse siddhartha nietzsche',
+      PHILOSOPHY_SPIRITUAL: 'nietzsche schopenhauer hesse',
+      PSYCHOLOGY: 'sigmund freud psychology'
+    }
+  },
+  fr: {
+    id: 'fr',
+    label: 'France',
+    short: 'France',
+    flag: '🇫🇷',
+    statusText: 'French Classics Database',
+    querySuffix: 'french',
+    languages: ['fre'],
+    places: ['france', 'paris', 'lyon', 'marseille'],
+    authors: ['victor hugo', 'hugo', 'alexandre dumas', 'dumas', 'albert camus', 'camus', 'antoine de saint-exupery', 'saint-exupery', 'marcel proust', 'proust', 'jules verne', 'verne', 'voltaire', 'flaubert', 'gustave flaubert', 'emile zola', 'charles baudelaire', 'jean-paul sartre', 'sartre', 'simone de beauvoir'],
+    categoryQueries: {
+      ACTION_THRILLER: 'alexandre dumas count of monte cristo',
+      SCIFI_TECH: 'jules verne 20000 leagues under the sea',
+      PHILOSOPHY_SPIRITUAL: 'albert camus the stranger the myth of sisyphus',
+      KIDS_STORIES: 'antoine de saint-exupery the little prince'
+    }
+  }
+};
+
+function selectExploreCountry(countryCode, btnEl) {
+  if (!EXPLORE_COUNTRY_DEFINITIONS[countryCode]) countryCode = 'in';
+  window._exploreActiveCountry = countryCode;
+  try {
+    localStorage.setItem('explore_book_country', countryCode);
+  } catch(e) {}
+
+  // Update button classes
+  const chips = document.querySelectorAll('.explore-country-chip');
+  chips.forEach(c => {
+    if (c.getAttribute('data-country') === countryCode) {
+      c.classList.add('active');
+    } else {
+      c.classList.remove('active');
+    }
+  });
+
+  // Update label
+  const cDef = EXPLORE_COUNTRY_DEFINITIONS[countryCode];
+  const labelEl = document.getElementById('exploreActiveCountryLabel');
+  if (labelEl && cDef) {
+    labelEl.innerHTML = `${cDef.flag} ${cDef.label}`;
+  }
+
+  // Trigger re-search with current search text or query
+  const input = document.getElementById('exploreSearchInput');
+  const currentQ = (input ? input.value : '').trim() || _exploreSearchQuery;
+  if (currentQ && currentQ.length >= 2) {
+    searchOpenLibrary(currentQ);
+  }
+}
+
+function isDocMatchingCountry(doc, countryCode) {
+  if (!countryCode || countryCode === 'all') return true;
+  const cDef = EXPLORE_COUNTRY_DEFINITIONS[countryCode];
+  if (!cDef) return true;
+
+  // 1. Language check
+  const langs = (Array.isArray(doc.language) ? doc.language : [doc.language || '']).map(l => String(l).toLowerCase());
+  for (const l of cDef.languages) {
+    if (langs.includes(l)) return true;
+  }
+
+  // 2. Publish Place check
+  const places = (Array.isArray(doc.publish_place) ? doc.publish_place : [doc.publish_place || '']).join(' ').toLowerCase();
+  for (const p of cDef.places) {
+    if (places.includes(p)) return true;
+  }
+
+  // 3. Author check
+  const authors = (Array.isArray(doc.author_name) ? doc.author_name : [doc.author || '']).join(' ').toLowerCase();
+  for (const a of cDef.authors) {
+    if (authors.includes(a)) return true;
+  }
+
+  // 4. Title & Subject keywords check
+  const title = (doc.title || '').toLowerCase();
+  const subjects = (Array.isArray(doc.subject) ? doc.subject.join(' ') : (doc.category || '')).toLowerCase();
+  const fullText = title + ' ' + subjects;
+
+  for (const kw of cDef.places) {
+    if (fullText.includes(kw)) return true;
+  }
+  for (const kw of cDef.authors) {
+    if (fullText.includes(kw)) return true;
+  }
+
+  return false;
+}
+
+function getCountryQueryForSearch(category, coreQ, countryCode) {
+  const cDef = EXPLORE_COUNTRY_DEFINITIONS[countryCode] || EXPLORE_COUNTRY_DEFINITIONS['all'];
+  if (countryCode !== 'all' && cDef.categoryQueries && category && cDef.categoryQueries[category.id]) {
+    return cDef.categoryQueries[category.id];
+  }
+  if (category) {
+    return category.apiQueries[0];
+  }
+  if (countryCode !== 'all' && cDef.querySuffix) {
+    return `${coreQ} ${cDef.querySuffix}`;
+  }
+  return coreQ;
+}
+
+
 async function searchOpenLibrary(query) {
   const statusEl = document.getElementById('exploreAPIStatus');
   const resultsSection = document.getElementById('exploreAPIResultsSection');
   const resultsGrid = document.getElementById('exploreAPIResultsGrid');
   const resultsTitle = document.getElementById('exploreAPIResultsTitle');
   const loadMoreWrap = document.getElementById('exploreSearchLoadMoreWrap');
+  const countryBar = document.getElementById('exploreCountryFilterBar');
+
+  if (countryBar) countryBar.style.display = 'flex';
 
   const qLower = query.toLowerCase().trim();
   if (qLower.length < 2) return;
@@ -1912,6 +2172,9 @@ async function searchOpenLibrary(query) {
   const coreQ = extractCoreSearchTerms(qLower);
   const matchedCat = detectCategoryIntent(coreQ, qLower);
   _currentMatchedCategory = matchedCat;
+
+  const activeCountry = window._exploreActiveCountry || 'in';
+  const cDef = EXPLORE_COUNTRY_DEFINITIONS[activeCountry] || EXPLORE_COUNTRY_DEFINITIONS['in'];
 
   // Reset pagination state for fresh search
   _exploreSearchQuery = query.trim();
@@ -1937,6 +2200,10 @@ async function searchOpenLibrary(query) {
 
   searchPool.forEach(b => {
     if (!b || !b.title) return;
+
+    // Filter by selected country
+    if (!isDocMatchingCountry(b, activeCountry)) return;
+
     const cleanT = cleanBookTitle(b.title);
     const cleanA = cleanBookAuthor(b.author || (b.author_name && b.author_name[0]));
     const t = cleanT.toLowerCase();
@@ -1995,7 +2262,8 @@ async function searchOpenLibrary(query) {
     window._exploreAPIResults = [...localMatches];
     if (resultsSection) resultsSection.style.display = 'block';
     const displayCategory = matchedCat ? ` &bull; ${matchedCat.label}` : '';
-    if (resultsTitle) resultsTitle.innerHTML = `"${query}"${displayCategory} <span style="font-size:0.75rem;color:var(--text-muted);">&bull; ${window._exploreAPIResults.length} kitabein</span>`;
+    const countryBadge = activeCountry !== 'all' ? ` &bull; ${cDef.flag} ${cDef.short}` : '';
+    if (resultsTitle) resultsTitle.innerHTML = `"${query}"${displayCategory}${countryBadge} <span style="font-size:0.75rem;color:var(--text-muted);">&bull; ${window._exploreAPIResults.length} kitabein</span>`;
     if (resultsGrid) {
       resultsGrid.innerHTML = window._exploreAPIResults.map((doc, idx) => renderExploreSearchBookCard(doc, idx)).join('');
     }
@@ -2004,15 +2272,15 @@ async function searchOpenLibrary(query) {
   // 2. Online search via OpenLibrary (Page 1)
   if (statusEl) {
     statusEl.style.display = 'block';
-    const statusCategoryName = matchedCat ? matchedCat.label : 'World Books';
-    statusEl.innerHTML = `🔍 <em>${statusCategoryName} database se real covers aur kitabein search ho rahi hain...</em>`;
+    const statusCategoryName = matchedCat ? matchedCat.label : 'Books';
+    statusEl.innerHTML = `🔍 <em>${cDef.flag} ${cDef.statusText} se "${statusCategoryName}" khoji ja rahi hain...</em>`;
   }
 
   try {
-    const apiQuery = matchedCat ? matchedCat.apiQueries[0] : coreQ;
+    const apiQuery = getCountryQueryForSearch(matchedCat, coreQ, activeCountry);
     const encoded = encodeURIComponent(apiQuery);
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 6500);
+    const timer = setTimeout(() => controller.abort(), 7000);
     const url = `https://openlibrary.org/search.json?q=${encoded}&page=1&limit=35`;
     const response = await fetch(url, { signal: controller.signal });
     clearTimeout(timer);
@@ -2025,6 +2293,10 @@ async function searchOpenLibrary(query) {
       }
       onlineDocs.forEach(d => {
         if (!d || !d.title) return;
+
+        // Apply country filter check
+        if (!isDocMatchingCountry(d, activeCountry)) return;
+
         const cleanT = cleanBookTitle(d.title);
         const cleanA = cleanBookAuthor((d.author_name && d.author_name[0]) || d.author);
         const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -2052,8 +2324,18 @@ async function searchOpenLibrary(query) {
 
   if (!window._exploreAPIResults || window._exploreAPIResults.length === 0) {
     if (resultsSection) resultsSection.style.display = 'block';
-    if (resultsTitle) resultsTitle.innerText = `"${query}" ke liye koi book nahi mili`;
-    if (resultsGrid) resultsGrid.innerHTML = '<div style="padding:32px;text-align:center;color:var(--text-secondary);grid-column:1/-1;">Koi book nahi mili. Dusra naam try karein.</div>';
+    const cName = cDef ? `${cDef.flag} ${cDef.label}` : '';
+    if (resultsTitle) resultsTitle.innerText = `"${query}" ke liye ${cName} me koi book nahi mili`;
+    if (resultsGrid) resultsGrid.innerHTML = `
+      <div style="padding:32px 16px;text-align:center;color:var(--text-secondary);grid-column:1/-1;">
+        <div style="font-size:2rem;margin-bottom:8px;">📚</div>
+        <div style="font-size:0.95rem;font-weight:600;color:#fff;margin-bottom:4px;">Koi book nahi mili</div>
+        <div style="font-size:0.82rem;color:var(--text-muted);margin-bottom:14px;">"${cDef.label}" me is naam ki koi book nahi mili. Dusra desh (e.g. Sabhi Desh 🌐) ya dusra naam try karein.</div>
+        <button type="button" class="btn-gold-pill" onclick="selectExploreCountry('all', document.querySelector('.explore-country-chip[data-country=all]'))" style="font-size:0.8rem;padding:8px 18px;">
+          🌐 Sabhi Desh (All) Me Dhundho
+        </button>
+      </div>
+    `;
     if (loadMoreWrap) {
       loadMoreWrap.style.display = 'none';
       loadMoreWrap.innerHTML = '';
@@ -2063,7 +2345,8 @@ async function searchOpenLibrary(query) {
 
   if (resultsSection) resultsSection.style.display = 'block';
   const displayCategory = matchedCat ? ` &bull; ${matchedCat.label}` : '';
-  if (resultsTitle) resultsTitle.innerHTML = `"${query}"${displayCategory} <span style="font-size:0.75rem;color:var(--text-muted);">&bull; ${window._exploreAPIResults.length} kitabein</span>`;
+  const countryBadge = activeCountry !== 'all' ? ` &bull; ${cDef.flag} ${cDef.short}` : '';
+  if (resultsTitle) resultsTitle.innerHTML = `"${query}"${displayCategory}${countryBadge} <span style="font-size:0.75rem;color:var(--text-muted);">&bull; ${window._exploreAPIResults.length} kitabein</span>`;
   if (resultsGrid) {
     resultsGrid.innerHTML = window._exploreAPIResults.map((doc, idx) => renderExploreSearchBookCard(doc, idx)).join('');
   }
@@ -2109,6 +2392,9 @@ async function loadMoreExploreSearchResults() {
   const resultsGrid = document.getElementById('exploreAPIResultsGrid');
   const resultsTitle = document.getElementById('exploreAPIResultsTitle');
 
+  const activeCountry = window._exploreActiveCountry || 'in';
+  const cDef = EXPLORE_COUNTRY_DEFINITIONS[activeCountry] || EXPLORE_COUNTRY_DEFINITIONS['in'];
+
   _isExploreLoadingMore = true;
   if (loadMoreBtn) {
     loadMoreBtn.disabled = true;
@@ -2123,10 +2409,11 @@ async function loadMoreExploreSearchResults() {
   const newBatch = [];
 
   try {
-    const apiQuery = _currentMatchedCategory ? _currentMatchedCategory.apiQueries[0] : extractCoreSearchTerms(_exploreSearchQuery);
+    const coreQ = extractCoreSearchTerms(_exploreSearchQuery.toLowerCase());
+    const apiQuery = getCountryQueryForSearch(_currentMatchedCategory, coreQ, activeCountry);
     const encoded = encodeURIComponent(apiQuery);
     const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 6500);
+    const timer = setTimeout(() => controller.abort(), 7000);
     const url = `https://openlibrary.org/search.json?q=${encoded}&page=${_exploreSearchPage}&limit=35`;
     const response = await fetch(url, { signal: controller.signal });
     clearTimeout(timer);
@@ -2140,6 +2427,10 @@ async function loadMoreExploreSearchResults() {
 
       onlineDocs.forEach(d => {
         if (!d || !d.title) return;
+
+        // Apply country filter check
+        if (!isDocMatchingCountry(d, activeCountry)) return;
+
         const cleanT = cleanBookTitle(d.title);
         const cleanA = cleanBookAuthor((d.author_name && d.author_name[0]) || d.author);
         const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -2153,6 +2444,7 @@ async function loadMoreExploreSearchResults() {
             d.author_name = [cleanA];
             d.cover_url = cover;
             newBatch.push(d);
+            window._exploreAPIResults.push(d);
           }
         }
       });
@@ -2160,26 +2452,18 @@ async function loadMoreExploreSearchResults() {
       _exploreSearchHasMore = false;
     }
   } catch (err) {
-    console.warn('Load more search error:', err);
+    console.warn('Load more OpenLibrary error:', err);
     _exploreSearchHasMore = false;
   }
 
-  if (newBatch.length > 0) {
-    const newCardsHtml = newBatch.map((doc, bIdx) => {
-      const globalIdx = startIndex + bIdx;
-      window._exploreAPIResults.push(doc);
-      return renderExploreSearchBookCard(doc, globalIdx);
-    }).join('');
+  if (newBatch.length > 0 && resultsGrid) {
+    const newCardsHtml = newBatch.map((doc, idx) => renderExploreSearchBookCard(doc, startIndex + idx)).join('');
+    resultsGrid.insertAdjacentHTML('beforeend', newCardsHtml);
 
-    if (resultsGrid) {
-      resultsGrid.insertAdjacentHTML('beforeend', newCardsHtml);
-    }
-    const displayCategory = _currentMatchedCategory ? ` &bull; ${_currentMatchedCategory.label}` : '';
     if (resultsTitle) {
-      resultsTitle.innerHTML = `"${_exploreSearchQuery}"${displayCategory} <span style="font-size:0.75rem;color:var(--text-muted);">&bull; ${window._exploreAPIResults.length} kitabein</span>`;
-    }
-    if (typeof showToast === 'function') {
-      showToast(`+${newBatch.length} nayi kitabein jud gayi hain! 📚`);
+      const displayCategory = _currentMatchedCategory ? ` &bull; ${_currentMatchedCategory.label}` : '';
+      const countryBadge = activeCountry !== 'all' ? ` &bull; ${cDef.flag} ${cDef.short}` : '';
+      resultsTitle.innerHTML = `"${_exploreSearchQuery}"${displayCategory}${countryBadge} <span style="font-size:0.75rem;color:var(--text-muted);">&bull; ${window._exploreAPIResults.length} kitabein</span>`;
     }
   } else {
     _exploreSearchHasMore = false;
@@ -2369,3 +2653,6 @@ window.renderExploreView = renderExploreView;
 
 window.initExploreView = renderExploreView;
 
+
+window.selectExploreCountry = selectExploreCountry;
+window.isDocMatchingCountry = isDocMatchingCountry;
