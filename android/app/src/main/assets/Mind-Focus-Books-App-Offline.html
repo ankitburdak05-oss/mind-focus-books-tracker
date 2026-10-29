@@ -10395,6 +10395,165 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 }
 </style>
 
+
+<style>
+/* ================= PROGRESS & BUDGET STUDIO STYLES ================= */
+.reading-budget-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.4), rgba(15, 23, 42, 0.6)) !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  margin-bottom: 18px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(16, 185, 129, 0.2);
+  overflow: hidden;
+}
+.rb-health-pill {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+.rb-remaining-pill {
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.rb-studio-btn, .rb-quick-add-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+.rb-studio-btn {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  color: #fbbf24;
+}
+.rb-studio-btn:hover {
+  background: rgba(245, 158, 11, 0.3);
+}
+.rb-quick-add-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+}
+.rb-quick-add-btn:hover {
+  transform: translateY(-1px);
+}
+.rb-milestone-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  padding: 0 2px;
+}
+.rb-breakdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.rb-stat-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 10px 12px;
+  transition: all 0.2s ease;
+}
+.rb-stat-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+.rb-stat-icon {
+  font-size: 1.3rem;
+}
+.rb-stat-content {
+  display: flex;
+  flex-direction: column;
+}
+.rb-stat-label {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+.rb-stat-val {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin-top: 1px;
+}
+.rb-expense-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  transition: background 0.2s ease;
+}
+.rb-expense-strip:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+.rb-preset-pill, .rb-store-pill {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.rb-preset-pill:hover, .rb-store-pill:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+.rb-store-pill.active {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: #10b981;
+  color: #10b981;
+  font-weight: 700;
+}
+.studio-tab-btn {
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.studio-tab-btn.active {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: var(--accent-gold);
+  color: var(--accent-gold);
+  font-weight: 700;
+}
+</style>
+
 </head>
 
 <body>
@@ -10541,7 +10700,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
               <span class="h3d-glow-tag">3D SYSTEM UPDATE</span>
 
-              <span class="h3d-version-pill" id="homeUpdateBadgePill">v0.0.77</span>
+              <span class="h3d-version-pill" id="homeUpdateBadgePill">v0.0.78</span>
 
             </div>
 
@@ -11275,7 +11434,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
       <!-- Screen 4: Donut Card with Center Books Read & 3 Stats -->
 
-      <div class="progress-donut-card">
+      <div class="progress-donut-card" onclick="openProgressBreakdownModal()" style="cursor:pointer;" title="Tap to view books breakdown">
 
         <div class="donut-visual-container">
 
@@ -11363,7 +11522,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
       <!-- Screen 4: Reading Streak Card with M T W T F S S Weekday Dots -->
 
-      <div class="streak-card-v4">
+      <div class="streak-card-v4" onclick="openProgressStreakModal()" style="cursor:pointer;" title="Tap to view Streak Studio">
 
         <div class="streak-card-header">
 
@@ -11405,7 +11564,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
       <!-- Screen 4: Monthly Progress 12-Month Bar Chart -->
 
-      <div class="monthly-chart-card-v4">
+      <div class="monthly-chart-card-v4" onclick="openMonthlyDeepDiveModal()" style="cursor:pointer;" title="Tap to view Monthly Reading Archive">
 
         <div class="monthly-chart-header">
 
@@ -11447,96 +11606,88 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
 
 
-      <!-- Preserved: Reading Budget & Investment Card -->
-
-      <div class="reading-budget-card">
-
+      <!-- Executive Reading Budget & Expense Studio Card -->
+      <div class="reading-budget-card" id="mainReadingBudgetCard">
         <div class="rb-header">
-
           <div class="rb-info">
-
-            <span class="rb-badge">💰 READING BUDGET &amp; EXPENSES</span>
-
-            <h3 class="rb-title" id="rbTotalSpentDisplay">₹0 Total Spent</h3>
-
-            <span class="rb-sub" id="rbBudgetSubtitle">0 books with price recorded</span>
-
+            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;">
+              <span class="rb-badge">💰 READING BUDGET &amp; EXPENSES</span>
+              <span id="rbBudgetHealthBadge" class="rb-health-pill">🟢 On Track</span>
+            </div>
+            <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
+              <h3 class="rb-title" id="rbTotalSpentDisplay">₹0 Total Spent</h3>
+              <span class="rb-remaining-pill" id="rbRemainingDisplay">₹5,000 Left</span>
+            </div>
+            <span class="rb-sub" id="rbBudgetSubtitle">0 of 0 books priced &bull; Tap Studio to manage</span>
           </div>
-
           <div class="rb-actions">
-
-            <button type="button" class="rb-set-budget-btn" onclick="openSetBudgetPrompt()">Edit Budget Target</button>
-
+            <button type="button" class="rb-studio-btn" onclick="openReadingBudgetStudioModal('target')">
+              <span>⚙️</span> Budget Studio
+            </button>
+            <button type="button" class="rb-quick-add-btn" onclick="openReadingBudgetStudioModal('add')">
+              <span>➕</span> Add Price
+            </button>
           </div>
-
         </div>
 
-
-
-        <div class="rb-target-box" id="rbTargetBox">
-
+        <!-- Target Progress Meter with Milestones -->
+        <div class="rb-target-box" id="rbTargetBox" onclick="openReadingBudgetStudioModal('target')" style="cursor:pointer;" title="Tap to adjust budget target">
           <div class="rb-target-labels">
-
-            <span id="rbBudgetLabel">Annual Budget Target: ₹5,000</span>
-
-            <span id="rbBudgetPct">0% used</span>
-
+            <span id="rbBudgetLabel">Annual Target: ₹5,000</span>
+            <span id="rbBudgetPct" style="font-weight:700;color:var(--accent-gold);">0% used</span>
           </div>
-
           <div class="rg-progress-track">
-
             <div class="rb-progress-bar" id="rbProgressBar" style="width: 0%;"></div>
-
           </div>
-
+          <div class="rb-milestone-ticks">
+            <span>₹0</span>
+            <span>25%</span>
+            <span>50%</span>
+            <span>75%</span>
+            <span>100%</span>
+          </div>
         </div>
 
-
-
+        <!-- 4 Interactive Breakdown Tiles -->
         <div class="rb-breakdown-grid">
-
-          <div class="rb-stat-item">
-
-            <span class="rb-stat-label">✅ Read Books</span>
-
-            <span class="rb-stat-val" id="rbSpentCompleted">₹0</span>
-
+          <div class="rb-stat-item" onclick="openReadingBudgetStudioModal('history', 'DONE')" style="cursor:pointer;" title="View read books expenses">
+            <div class="rb-stat-icon">📗</div>
+            <div class="rb-stat-content">
+              <span class="rb-stat-label">Read Books</span>
+              <span class="rb-stat-val" id="rbSpentCompleted">₹0</span>
+            </div>
           </div>
-
-          <div class="rb-stat-item">
-
-            <span class="rb-stat-label">📖 Reading</span>
-
-            <span class="rb-stat-val" id="rbSpentReading">₹0</span>
-
+          <div class="rb-stat-item" onclick="openReadingBudgetStudioModal('history', 'READING')" style="cursor:pointer;" title="View currently reading expenses">
+            <div class="rb-stat-icon">📖</div>
+            <div class="rb-stat-content">
+              <span class="rb-stat-label">Reading</span>
+              <span class="rb-stat-val" id="rbSpentReading">₹0</span>
+            </div>
           </div>
-
-          <div class="rb-stat-item">
-
-            <span class="rb-stat-label">⏳ Wishlist Value</span>
-
-            <span class="rb-stat-val" id="rbSpentWishlist">₹0</span>
-
+          <div class="rb-stat-item" onclick="openReadingBudgetStudioModal('history', 'WISHLIST')" style="cursor:pointer;" title="View wishlist estimated cost">
+            <div class="rb-stat-icon">⏳</div>
+            <div class="rb-stat-content">
+              <span class="rb-stat-label">Wishlist Value</span>
+              <span class="rb-stat-val" id="rbSpentWishlist">₹0</span>
+            </div>
           </div>
-
-          <div class="rb-stat-item">
-
-            <span class="rb-stat-label">📊 Avg / Book</span>
-
-            <span class="rb-stat-val" id="rbAvgPrice">₹0</span>
-
+          <div class="rb-stat-item" onclick="openReadingBudgetStudioModal('history')" style="cursor:pointer;" title="View all books expenses">
+            <div class="rb-stat-icon">📊</div>
+            <div class="rb-stat-content">
+              <span class="rb-stat-label">Avg / Book</span>
+              <span class="rb-stat-val" id="rbAvgPrice">₹0</span>
+            </div>
           </div>
-
         </div>
 
-
-
-        <div class="rb-helper-strip">
-
-          <span class="rb-helper-text">💡 Real prices are recorded only when you add or edit a book.</span>
-
+        <!-- Quick Expense Log Strip -->
+        <div class="rb-expense-strip" id="rbRecentExpenseStrip" onclick="openReadingBudgetStudioModal('history')" style="cursor:pointer;" title="View full expenses log">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span>📜</span>
+            <span id="rbRecentExpenseText" style="font-size:0.78rem;color:var(--text-secondary);">No expenses recorded yet &bull; Tap to add</span>
+          </div>
+          <span style="font-size:0.75rem;color:var(--accent-gold);font-weight:600;white-space:nowrap;">View All Records ›</span>
         </div>
-
       </div>
 
     </section>
@@ -15379,7 +15530,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
               <div class="ig-row-right">
 
-                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.77</span>
+                <span class="ig-badge-val" id="appSettingsVersionBadge" style="background: rgba(16, 185, 129, 0.18); color: #10b981; font-weight: 800;">v0.0.78</span>
 
               </div>
 
@@ -24699,9 +24850,9 @@ if (typeof module !== 'undefined' && module.exports) {
   <script>
 window.APP_BROADCAST_NOTICE = {
   "id": "notice-v0.0.74",
-  "version": "v0.0.77",
+  "version": "v0.0.78",
   "title": "\ud83d\udcda MindFocus Books v0.0.74 Ready!",
-  "message": "v0.0.77: Fix High-Yield Multi-Query Search (50+ Indian Shayari & Ghazal books loading instantly)",
+  "message": "v0.0.78: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
   "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.74/MindFocusBooks-Native.apk",
   "action_text": "Download v0.0.74 APK",
   "badge_text": "NEW UPDATE",
@@ -24714,25 +24865,25 @@ window.APP_BROADCAST_NOTICE = {
   <script>
 window.APP_REMOTE_CONFIG = {
   "activeRelease": {
-    "version": "v0.0.77",
-    "name": "Mind Focus Books v0.0.77 (50+ Shayari & Ghazal Books)",
-    "releaseNotes": "v0.0.77: Fix High-Yield Multi-Query Search (50+ Indian Shayari & Ghazal books loading instantly)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.77/MindFocusBooks-Native.apk",
+    "version": "v0.0.78",
+    "name": "Mind Focus Books v0.0.78 (Executive Budget & Progress Studio)",
+    "releaseNotes": "v0.0.78: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.78/MindFocusBooks-Native.apk",
     "mandatory": false,
     "timestamp": "2026-10-28T12:03:49.052Z"
   },
   "latest": {
-    "version": "v0.0.77",
-    "name": "Mind Focus Books v0.0.77 (50+ Shayari & Ghazal Books)",
-    "releaseNotes": "v0.0.77: Fix High-Yield Multi-Query Search (50+ Indian Shayari & Ghazal books loading instantly)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.77/MindFocusBooks-Native.apk"
+    "version": "v0.0.78",
+    "name": "Mind Focus Books v0.0.78 (Executive Budget & Progress Studio)",
+    "releaseNotes": "v0.0.78: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.78/MindFocusBooks-Native.apk"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
-  "latest_version": "0.0.77",
-  "version_code": 8577,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.77/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.77: Fix High-Yield Multi-Query Search (50+ Indian Shayari & Ghazal books loading instantly)",
+  "latest_version": "0.0.78",
+  "version_code": 8578,
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.78/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.78: Executive Reading Budget & Expense Studio + Interactive Progress Deep-Dives",
   "force_update": false,
   "maintenance": false,
   "published_at": "2026-10-28T12:03:49.101Z",
@@ -24745,7 +24896,7 @@ window.APP_REMOTE_CONFIG = {
 
 </script>
 
-  <script src="explore.js?v=0.0.77"></script>
+  <script src="explore.js?v=0.0.78"></script>
 
   <script>
 // ==========================================================================
@@ -24756,9 +24907,9 @@ window.APP_REMOTE_CONFIG = {
 
 
 
-const APP_VERSION = '0.0.77';
+const APP_VERSION = '0.0.78';
 
-const CURRENT_APP_VERSION = 'v0.0.77';
+const CURRENT_APP_VERSION = 'v0.0.78';
 
 const STORAGE_KEY = 'mind_focus_books_v1';
 
@@ -26440,177 +26591,125 @@ function openSetGoalPrompt() {
 
 
 
+
 function renderReadingBudget() {
-
   const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
-
   
-
   // All books with a valid price > 0 (ONLY user-entered prices)
-
-  const pricedBooks = state.books.filter(b => b.price && Number(b.price) > 0);
-
+  const pricedBooks = (state.books || []).filter(b => b.price && Number(b.price) > 0);
   const totalSpent = pricedBooks.reduce((acc, b) => acc + Number(b.price), 0);
-
   
-
   // Completed books price
-
-  const doneBooks = state.books.filter(b => b.status === 'DONE' && b.price && Number(b.price) > 0);
-
+  const doneBooks = (state.books || []).filter(b => b.status === 'DONE' && b.price && Number(b.price) > 0);
   const doneSpent = doneBooks.reduce((acc, b) => acc + Number(b.price), 0);
-
   
-
   // Currently reading books price
-
-  const readingBooks = state.books.filter(b => b.status === 'READING' && b.price && Number(b.price) > 0);
-
+  const readingBooks = (state.books || []).filter(b => b.status === 'READING' && b.price && Number(b.price) > 0);
   const readingSpent = readingBooks.reduce((acc, b) => acc + Number(b.price), 0);
-
   
-
   // Wishlist / Pending books price
-
-  const wishlistBooks = state.books.filter(b => b.status !== 'DONE' && b.status !== 'READING' && b.price && Number(b.price) > 0);
-
+  const wishlistBooks = (state.books || []).filter(b => b.status !== 'DONE' && b.status !== 'READING' && b.price && Number(b.price) > 0);
   const wishlistSpent = wishlistBooks.reduce((acc, b) => acc + Number(b.price), 0);
-
   
-
   // Avg price per priced book
-
   const avgPrice = pricedBooks.length ? Math.round(totalSpent / pricedBooks.length) : 0;
-
   
-
-  // Format with Indian Rupee symbol & commas
-
-  const formatINR = (num) => '₹' + Math.round(Number(num) || 0).toLocaleString('en-IN');
-
+  // Remaining balance
+  const remaining = Math.max(0, annualBudget - totalSpent);
   
-
   // Update metric card in stats row
-
   const elProgPrice = document.getElementById('progTotalPrice');
-
-  if (elProgPrice) elProgPrice.innerText = formatINR(totalSpent);
-
+  if (elProgPrice) elProgPrice.innerText = formatCurrencyAmount(totalSpent);
   
-
   // Update budget card elements
-
   const elTotalDisplay = document.getElementById('rbTotalSpentDisplay');
-
-  if (elTotalDisplay) elTotalDisplay.innerText = `${formatINR(totalSpent)} Total Spent`;
-
+  if (elTotalDisplay) elTotalDisplay.innerText = `${formatCurrencyAmount(totalSpent)} Total Spent`;
   
+  const elRemaining = document.getElementById('rbRemainingDisplay');
+  if (elRemaining) {
+    if (totalSpent > annualBudget) {
+      elRemaining.innerText = `Exceeded by ${formatCurrencyAmount(totalSpent - annualBudget)}`;
+      elRemaining.style.background = 'rgba(239,68,68,0.15)';
+      elRemaining.style.color = '#ef4444';
+      elRemaining.style.borderColor = 'rgba(239,68,68,0.3)';
+    } else {
+      elRemaining.innerText = `${formatCurrencyAmount(remaining)} Left`;
+      elRemaining.style.background = 'rgba(245,158,11,0.15)';
+      elRemaining.style.color = '#fbbf24';
+      elRemaining.style.borderColor = 'rgba(245,158,11,0.3)';
+    }
+  }
+
+  const healthBadge = document.getElementById('rbBudgetHealthBadge');
+  if (healthBadge) {
+    if (totalSpent > annualBudget) {
+      healthBadge.innerText = '🔴 Budget Exceeded';
+      healthBadge.style.background = 'rgba(239,68,68,0.2)';
+      healthBadge.style.color = '#ef4444';
+    } else if (annualBudget > 0 && totalSpent >= annualBudget * 0.8) {
+      healthBadge.innerText = '🟡 Caution (80%+)';
+      healthBadge.style.background = 'rgba(245,158,11,0.2)';
+      healthBadge.style.color = '#fbbf24';
+    } else {
+      healthBadge.innerText = '🟢 On Track';
+      healthBadge.style.background = 'rgba(16,185,129,0.2)';
+      healthBadge.style.color = '#10b981';
+    }
+  }
 
   const elSub = document.getElementById('rbBudgetSubtitle');
-
   if (elSub) {
-
     if (pricedBooks.length === 0) {
-
-      elSub.innerText = '0 books priced yet (Tap any book to edit and add price)';
-
+      elSub.innerText = '0 of ' + (state.books||[]).length + ' books priced • Tap Add Price to record expenses';
     } else {
-
-      elSub.innerText = `${pricedBooks.length} of ${state.books.length} books have prices recorded`;
-
+      elSub.innerText = `${pricedBooks.length} of ${(state.books||[]).length} books recorded • Average ${formatCurrencyAmount(avgPrice)}/book`;
     }
-
   }
-
   
-
   const elDone = document.getElementById('rbSpentCompleted');
-
-  if (elDone) elDone.innerText = formatINR(doneSpent);
-
+  if (elDone) elDone.innerText = formatCurrencyAmount(doneSpent);
   
-
   const elReading = document.getElementById('rbSpentReading');
-
-  if (elReading) elReading.innerText = formatINR(readingSpent);
-
+  if (elReading) elReading.innerText = formatCurrencyAmount(readingSpent);
   
-
   const elWishlist = document.getElementById('rbSpentWishlist');
-
-  if (elWishlist) elWishlist.innerText = formatINR(wishlistSpent);
-
+  if (elWishlist) elWishlist.innerText = formatCurrencyAmount(wishlistSpent);
   
-
   const elAvg = document.getElementById('rbAvgPrice');
-
-  if (elAvg) elAvg.innerText = formatINR(avgPrice);
-
+  if (elAvg) elAvg.innerText = formatCurrencyAmount(avgPrice);
   
-
   // Budget progress bar against annualBudget
-
   const budgetLabel = document.getElementById('rbBudgetLabel');
-
-  if (budgetLabel) budgetLabel.innerText = `Annual Budget Target: ${formatINR(annualBudget)}`;
-
+  if (budgetLabel) budgetLabel.innerText = `Annual Target: ${formatCurrencyAmount(annualBudget)}`;
   
-
   const pct = annualBudget > 0 ? Math.min(100, Math.round((totalSpent / annualBudget) * 100)) : 0;
-
   const elPct = document.getElementById('rbBudgetPct');
-
   if (elPct) elPct.innerText = `${pct}% used`;
-
   
-
   const bar = document.getElementById('rbProgressBar');
-
   if (bar) {
-
     bar.style.width = `${pct}%`;
-
     if (pct >= 100) {
-
       bar.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
-
     } else if (pct >= 80) {
-
       bar.style.background = 'linear-gradient(90deg, #f59e0b, #d97706)';
-
     } else {
-
       bar.style.background = 'linear-gradient(90deg, #10b981, #059669)';
-
     }
-
   }
 
-
-
-  // Update profile menu item subtitle
-
-  const profileSub = document.getElementById('profileTotalSpentSubText');
-
-  if (profileSub) {
-
-    profileSub.innerText = `${formatINR(totalSpent)} Total Spent • ${pricedBooks.length} Books`;
-
+  // Update recent expense text
+  const elRecent = document.getElementById('rbRecentExpenseText');
+  if (elRecent) {
+    if (pricedBooks.length > 0) {
+      const latest = pricedBooks[pricedBooks.length - 1];
+      elRecent.innerText = `Latest: "${latest.title.slice(0, 20)}..." (${formatCurrencyAmount(latest.price)})`;
+    } else {
+      elRecent.innerText = 'No expenses recorded yet • Tap to add';
+    }
   }
-
-
-
-  // If currently viewing the Total Spent screen, re-render it
-
-  const viewTotalSpent = document.getElementById('viewTotalSpent');
-
-  if (viewTotalSpent && viewTotalSpent.classList.contains('active')) {
-
-    renderTotalSpentView();
-
-  }
-
 }
+
 
 
 
@@ -29034,23 +29133,738 @@ function handleNiCategoryBack() {
 
 
 
-function openSetBudgetPrompt() {
 
-  const currentBudget = localStorage.getItem('mf_reading_budget_2026') || '5000';
+// ============================================================================
+// READING BUDGET & EXPENSE STUDIO ENGINE (v0.0.78)
+// ============================================================================
+window._activeRbStore = 'Amazon';
+window._activeRbCurrency = localStorage.getItem('mf_reading_currency') || 'INR';
 
-  const val = prompt('Set your 2026 Reading Budget (in ₹ Rupees):', currentBudget);
+function getCurrencySymbol() {
+  const c = window._activeRbCurrency || 'INR';
+  if (c === 'USD') return '
 
-  if (val && !isNaN(val) && parseFloat(val) > 0) {
 
-    localStorage.setItem('mf_reading_budget_2026', parseFloat(val));
 
+    <!-- ====== EXPLORE 3D BOOK DOSSIER MODAL ====== -->
+
+    <div id="exploreBookDetailModal" style="display:none;" onclick="if(event.target===this)closeExploreBookDetail()"></div>
+
+
+
+
+
+  <!-- ====== GLOBAL BOOK 3-DOT ACTION MENU MODAL ====== -->
+
+  <div id="bookActionMenuModal" class="book-action-modal-overlay" style="display:none;" onclick="if(event.target===this)closeBookActionMenu()">
+
+    <div class="book-action-sheet" onclick="event.stopPropagation()">
+
+      <div class="book-action-header">
+
+        <div class="book-action-cover-thumb">
+
+          <img id="bookActionCoverImg" src="cover_placeholder.jpg" alt="Cover">
+
+        </div>
+
+        <div class="book-action-meta">
+
+          <div class="book-action-title" id="bookActionTitle">Book Title</div>
+
+          <div class="book-action-author" id="bookActionAuthor">Author</div>
+
+        </div>
+
+        <button type="button" class="book-action-close-btn" onclick="closeBookActionMenu()">&times;</button>
+
+      </div>
+
+      <div class="book-action-list">
+
+        <button type="button" class="book-action-item" onclick="triggerBookMenuAction('read')">
+
+          <span class="action-icon">📖</span>
+
+          <div class="action-text-col">
+
+            <span class="action-name">Open & Read</span>
+
+            <span class="action-desc">View full reading pages and notes</span>
+
+          </div>
+
+        </button>
+
+        <button type="button" class="book-action-item" onclick="triggerBookMenuAction('edit')">
+
+          <span class="action-icon">✏️</span>
+
+          <div class="action-text-col">
+
+            <span class="action-name">Edit Details</span>
+
+            <span class="action-desc">Change title, author, category, cover, pages</span>
+
+          </div>
+
+        </button>
+
+        <button type="button" class="book-action-item" onclick="triggerBookMenuAction('copy')">
+
+          <span class="action-icon">📋</span>
+
+          <div class="action-text-col">
+
+            <span class="action-name">Copy Book Info</span>
+
+            <span class="action-desc">Copy title & author to clipboard</span>
+
+          </div>
+
+        </button>
+
+        <button type="button" class="book-action-item danger" onclick="triggerBookMenuAction('delete')">
+
+          <span class="action-icon">🗑️</span>
+
+          <div class="action-text-col">
+
+            <span class="action-name">Delete Book</span>
+
+            <span class="action-desc">Remove from library and move to trash</span>
+
+          </div>
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+
+  <!-- ================= READING BUDGET & EXPENSE STUDIO MODAL ================= -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="readingBudgetStudioModalOverlay" style="display:none;" onclick="if(event.target===this)closeReadingBudgetStudioModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeReadingBudgetStudioModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">💰 Budget &amp; Expense Studio</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Manage targets, book purchases &amp; spending analytics</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeReadingBudgetStudioModal()" title="Close">&times;</button>
+      </div>
+
+      <!-- Studio Sub-Nav Tabs -->
+      <div class="studio-sub-tabs-bar" style="display:flex;gap:6px;overflow-x:auto;padding:10px 16px;background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border-subtle);scrollbar-width:none;">
+        <button type="button" class="studio-tab-btn active" id="rbTabBtnTarget" onclick="switchBudgetStudioTab('target')">🎯 Set Target</button>
+        <button type="button" class="studio-tab-btn" id="rbTabBtnAdd" onclick="switchBudgetStudioTab('add')">➕ Add Expense</button>
+        <button type="button" class="studio-tab-btn" id="rbTabBtnHistory" onclick="switchBudgetStudioTab('history')">📜 Purchases Log</button>
+        <button type="button" class="studio-tab-btn" id="rbTabBtnAnalytics" onclick="switchBudgetStudioTab('analytics')">📊 Analytics</button>
+      </div>
+
+      <div class="modal-body studio-body" style="padding:16px;">
+        <!-- TAB 1: SET BUDGET TARGET -->
+        <div id="rbTabContentTarget" class="rb-tab-pane">
+          <div class="studio-card-box" style="margin-bottom:14px;">
+            <label style="font-size:0.82rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <span>🎯</span> 2026 Annual Reading Target
+            </label>
+            <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);padding:10px 14px;border-radius:12px;border:1px solid var(--border-subtle);margin-bottom:12px;">
+              <span id="rbStudioCurrencySymbol" style="font-size:1.4rem;font-weight:800;color:#10b981;">₹</span>
+              <input type="number" id="rbStudioTargetInput" placeholder="5000" min="0" step="100" style="flex:1;background:transparent;border:none;color:#fff;font-size:1.3rem;font-weight:800;outline:none;">
+            </div>
+
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px;">Quick Presets (1-Tap Selection):</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(2000)">₹2,000</button>
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(5000)">₹5,000</button>
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(10000)">₹10,000</button>
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(15000)">₹15,000</button>
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(25000)">₹25,000</button>
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(50000)">₹50,000</button>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+              <span style="font-size:0.8rem;color:var(--text-secondary);">Preferred Currency:</span>
+              <select id="rbStudioCurrencySelect" onchange="changeBudgetCurrency(this.value)" style="background:rgba(255,255,255,0.08);border:1px solid var(--border-subtle);color:#fff;padding:6px 12px;border-radius:8px;font-size:0.82rem;font-weight:600;">
+                <option value="INR" selected>₹ INR (Indian Rupee)</option>
+                <option value="USD">$ USD (US Dollar)</option>
+                <option value="EUR">€ EUR (Euro)</option>
+                <option value="GBP">£ GBP (British Pound)</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn-gold-pill" onclick="saveBudgetStudioTarget()" style="width:100%;padding:12px;font-size:0.92rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;">
+              <span>💾</span> Save Budget Target
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 2: ADD BOOK EXPENSE -->
+        <div id="rbTabContentAdd" class="rb-tab-pane" style="display:none;">
+          <div class="studio-card-box" style="margin-bottom:14px;">
+            <label style="font-size:0.82rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <span>📖</span> Select Book from Library
+            </label>
+            <select id="rbStudioBookSelect" style="width:100%;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid var(--border-subtle);color:#fff;font-size:0.88rem;margin-bottom:12px;">
+              <option value="">-- Choose a book to add price --</option>
+            </select>
+
+            <label style="font-size:0.82rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <span>💵</span> Price Paid / Cost (in ₹)
+            </label>
+            <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);padding:10px 14px;border-radius:12px;border:1px solid var(--border-subtle);margin-bottom:12px;">
+              <span style="font-size:1.2rem;font-weight:700;color:#10b981;">₹</span>
+              <input type="number" id="rbStudioPriceInput" placeholder="e.g. 299" min="0" step="10" style="flex:1;background:transparent;border:none;color:#fff;font-size:1.1rem;font-weight:700;outline:none;">
+            </div>
+
+            <label style="font-size:0.82rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <span>🏪</span> Purchase Store / Platform
+            </label>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;" id="rbStoreTagsContainer">
+              <button type="button" class="rb-store-pill active" onclick="selectRbStore(this, 'Amazon')">🛒 Amazon</button>
+              <button type="button" class="rb-store-pill" onclick="selectRbStore(this, 'Flipkart')">🛍️ Flipkart</button>
+              <button type="button" class="rb-store-pill" onclick="selectRbStore(this, 'Bookstore')">🏪 Bookstore</button>
+              <button type="button" class="rb-store-pill" onclick="selectRbStore(this, 'Kindle')">📱 Kindle</button>
+              <button type="button" class="rb-store-pill" onclick="selectRbStore(this, 'Gift/Free')">🎁 Gift/Free</button>
+            </div>
+
+            <button type="button" class="btn-gold-pill" onclick="addBookExpenseRecord()" style="width:100%;padding:12px;font-size:0.92rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;">
+              <span>➕</span> Record Book Expense
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 3: PURCHASES LOG -->
+        <div id="rbTabContentHistory" class="rb-tab-pane" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:0 2px;">
+            <span id="rbHistoryCountLabel" style="font-size:0.82rem;font-weight:600;color:var(--text-secondary);">0 Books Priced</span>
+            <button type="button" onclick="resetAllBookPrices()" style="background:none;border:none;color:#ef4444;font-size:0.75rem;cursor:pointer;font-weight:600;">Reset All Prices</button>
+          </div>
+          <div id="rbHistoryListContainer" style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;padding-right:2px;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- TAB 4: ANALYTICS & ROI -->
+        <div id="rbTabContentAnalytics" class="rb-tab-pane" style="display:none;">
+          <div class="studio-card-box" style="margin-bottom:12px;">
+            <h4 style="margin:0 0 10px;font-size:0.92rem;color:var(--accent-gold);display:flex;align-items:center;gap:6px;">
+              <span>📈</span> Reading Financial Metrics
+            </h4>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+              <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:10px;">
+                <div style="font-size:0.72rem;color:var(--text-muted);">Cost Per Page Read</div>
+                <div id="rbMetricCostPerPage" style="font-size:1.1rem;font-weight:800;color:#10b981;margin-top:2px;">₹0.00</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:10px;">
+                <div style="font-size:0.72rem;color:var(--text-muted);">Highest Priced Book</div>
+                <div id="rbMetricHighestBook" style="font-size:1.1rem;font-weight:800;color:var(--accent-gold);margin-top:2px;">None</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:10px;">
+                <div style="font-size:0.72rem;color:var(--text-muted);">Estimated Savings</div>
+                <div id="rbMetricSavings" style="font-size:1.1rem;font-weight:800;color:#3b82f6;margin-top:2px;">₹1,850</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:10px;">
+                <div style="font-size:0.72rem;color:var(--text-muted);">Budget Used</div>
+                <div id="rbMetricBudgetHealth" style="font-size:1.1rem;font-weight:800;color:#10b981;margin-top:2px;">0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PROGRESS COLLECTION BREAKDOWN MODAL ================= -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressCollectionBreakdownModal" style="display:none;" onclick="if(event.target===this)closeProgressBreakdownModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeProgressBreakdownModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📚 Reading Collection Deep-Dive</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Complete status breakdown of all your books</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeProgressBreakdownModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div class="studio-sub-tabs-bar" style="display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;scrollbar-width:none;">
+          <button type="button" class="studio-tab-btn active" id="progBreakdownTabAll" onclick="renderBreakdownList('ALL')">All Books</button>
+          <button type="button" class="studio-tab-btn" id="progBreakdownTabDone" onclick="renderBreakdownList('DONE')">✅ Read</button>
+          <button type="button" class="studio-tab-btn" id="progBreakdownTabReading" onclick="renderBreakdownList('READING')">📖 In Progress</button>
+          <button type="button" class="studio-tab-btn" id="progBreakdownTabWish" onclick="renderBreakdownList('TO_READ')">⏳ Want to Read</button>
+        </div>
+        <div id="progBreakdownListContainer" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= STREAK & CONSISTENCY MASTER MODAL ================= -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressStreakStudioModal" style="display:none;" onclick="if(event.target===this)closeProgressStreakModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeProgressStreakModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">🔥 Reading Streak &amp; Habit Master</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Consistency builds greatness &bull; Day-by-day record</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeProgressStreakModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div class="studio-card-box" style="text-align:center;padding:24px 16px;margin-bottom:14px;">
+          <div style="font-size:3rem;margin-bottom:6px;">🔥</div>
+          <div id="streakModalBigDays" style="font-size:2.2rem;font-weight:900;color:var(--accent-gold);">0 Days</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:14px;">Current Daily Reading Streak</div>
+          <button type="button" class="btn-gold-pill" onclick="logTodaysReadingSession()" style="padding:10px 24px;font-size:0.9rem;font-weight:700;">
+            🔥 Log Today's Reading
+          </button>
+        </div>
+
+        <div class="studio-card-box" style="margin-bottom:14px;">
+          <div style="font-size:0.82rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;">
+            📅 30-Day Activity Heatmap
+          </div>
+          <div id="streakHeatmapGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:10px;">
+            <!-- 30-day dots -->
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.72rem;color:var(--text-muted);">
+            <span>⚪ No Reading</span>
+            <span>🟢 Read Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MONTHLY DEEP DIVE ARCHIVE MODAL ================= -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressMonthlyArchiveModal" style="display:none;" onclick="if(event.target===this)closeMonthlyDeepDiveModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeMonthlyDeepDiveModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📅 Monthly Reading Archive</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Month-by-month reading performance &amp; milestones</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeMonthlyDeepDiveModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div id="monthlyArchiveContainer" style="display:flex;flex-direction:column;gap:12px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
+
+;
+  if (c === 'EUR') return '€';
+  if (c === 'GBP') return '£';
+  return '₹';
+}
+
+function formatCurrencyAmount(num) {
+  const sym = getCurrencySymbol();
+  return sym + Math.round(Number(num) || 0).toLocaleString(window._activeRbCurrency === 'INR' ? 'en-IN' : 'en-US');
+}
+
+function openReadingBudgetStudioModal(defaultTab, filterStatus) {
+  const modal = document.getElementById('readingBudgetStudioModalOverlay');
+  if (!modal) return;
+
+  // Initialize Target input
+  const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
+  const targetInput = document.getElementById('rbStudioTargetInput');
+  if (targetInput) targetInput.value = annualBudget;
+
+  const currSelect = document.getElementById('rbStudioCurrencySelect');
+  if (currSelect) currSelect.value = window._activeRbCurrency;
+
+  const currSym = document.getElementById('rbStudioCurrencySymbol');
+  if (currSym) currSym.innerText = getCurrencySymbol();
+
+  // Populate book dropdown for quick expense
+  populateRbBookSelect();
+
+  // Render history list
+  renderBudgetHistoryList(filterStatus);
+
+  // Update analytics metrics
+  updateBudgetAnalytics();
+
+  // Switch to requested tab
+  switchBudgetStudioTab(defaultTab || 'target');
+
+  modal.style.display = 'flex';
+}
+
+function closeReadingBudgetStudioModal() {
+  const modal = document.getElementById('readingBudgetStudioModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+
+function switchBudgetStudioTab(tab) {
+  const tabs = ['target', 'add', 'history', 'analytics'];
+  tabs.forEach(t => {
+    const pane = document.getElementById(`rbTabContent${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    const btn = document.getElementById(`rbTabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (pane) pane.style.display = (t === tab) ? 'block' : 'none';
+    if (btn) {
+      if (t === tab) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+  if (tab === 'history') {
+    renderBudgetHistoryList();
+  } else if (tab === 'analytics') {
+    updateBudgetAnalytics();
+  }
+}
+
+function setBudgetStudioPreset(amount) {
+  const input = document.getElementById('rbStudioTargetInput');
+  if (input) input.value = amount;
+}
+
+function changeBudgetCurrency(curr) {
+  window._activeRbCurrency = curr;
+  try { localStorage.setItem('mf_reading_currency', curr); } catch(e){}
+  const currSym = document.getElementById('rbStudioCurrencySymbol');
+  if (currSym) currSym.innerText = getCurrencySymbol();
+  renderReadingBudget();
+  renderBudgetHistoryList();
+}
+
+function saveBudgetStudioTarget() {
+  const input = document.getElementById('rbStudioTargetInput');
+  const val = parseFloat(input ? input.value : '5000');
+  if (!isNaN(val) && val >= 0) {
+    localStorage.setItem('mf_reading_budget_2026', val);
     renderReadingBudget();
+    if (typeof showToast === 'function') {
+      showToast(`2026 Reading Budget Target set to ${formatCurrencyAmount(val)}! 💰`);
+    }
+    closeReadingBudgetStudioModal();
+  } else {
+    if (typeof showToast === 'function') showToast('Kripya sahi budget amount darj karein!');
+  }
+}
 
-    showToast(`2026 Reading Budget set to ₹${Number(val).toLocaleString('en-IN')}! 💰`);
+function selectRbStore(btn, storeName) {
+  window._activeRbStore = storeName;
+  const pills = document.querySelectorAll('.rb-store-pill');
+  pills.forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
 
+function populateRbBookSelect() {
+  const select = document.getElementById('rbStudioBookSelect');
+  if (!select) return;
+  if (!state || !Array.isArray(state.books)) return;
+
+  const currentOpts = state.books.map(b => {
+    const priceText = (b.price && Number(b.price) > 0) ? ` (${formatCurrencyAmount(b.price)})` : '';
+    return `<option value="${b.id}">${b.title} by ${b.author}${priceText}</option>`;
+  }).join('');
+
+  select.innerHTML = `<option value="">-- Choose a book from your library --</option>` + currentOpts;
+}
+
+function addBookExpenseRecord() {
+  const select = document.getElementById('rbStudioBookSelect');
+  const priceInput = document.getElementById('rbStudioPriceInput');
+  const bookId = select ? select.value : '';
+  const priceVal = parseFloat(priceInput ? priceInput.value : '');
+
+  if (!bookId) {
+    if (typeof showToast === 'function') showToast('Pehle koi book select karein!');
+    return;
+  }
+  if (isNaN(priceVal) || priceVal < 0) {
+    if (typeof showToast === 'function') showToast('Kripya valid price darj karein!');
+    return;
   }
 
+  const book = state.books.find(b => b.id == bookId);
+  if (book) {
+    book.price = priceVal;
+    book.purchase_store = window._activeRbStore || 'Bookstore';
+    book.purchase_date = new Date().toISOString().split('T')[0];
+    saveState();
+    renderReadingBudget();
+    populateRbBookSelect();
+    renderBudgetHistoryList();
+    if (priceInput) priceInput.value = '';
+    if (typeof showToast === 'function') {
+      showToast(`Recorded ${formatCurrencyAmount(priceVal)} for "${book.title}"! 💰`);
+    }
+    switchBudgetStudioTab('history');
+  }
 }
+
+function deleteBookExpenseRecord(bookId) {
+  const book = state.books.find(b => b.id == bookId);
+  if (book) {
+    delete book.price;
+    delete book.purchase_store;
+    delete book.purchase_date;
+    saveState();
+    renderReadingBudget();
+    renderBudgetHistoryList();
+    populateRbBookSelect();
+    if (typeof showToast === 'function') showToast(`Removed price for "${book.title}"`);
+  }
+}
+
+function resetAllBookPrices() {
+  if (confirm('Kya aap sach me sabhi kitabo ke price reset karna chahte hain?')) {
+    state.books.forEach(b => {
+      delete b.price;
+      delete b.purchase_store;
+      delete b.purchase_date;
+    });
+    saveState();
+    renderReadingBudget();
+    renderBudgetHistoryList();
+    populateRbBookSelect();
+    if (typeof showToast === 'function') showToast('Sabhi book prices reset ho gaye!');
+  }
+}
+
+function renderBudgetHistoryList(filterStatus) {
+  const container = document.getElementById('rbHistoryListContainer');
+  const countLabel = document.getElementById('rbHistoryCountLabel');
+  if (!container || !state || !Array.isArray(state.books)) return;
+
+  let priced = state.books.filter(b => b.price && Number(b.price) > 0);
+  if (filterStatus) {
+    if (filterStatus === 'WISHLIST') priced = priced.filter(b => b.status !== 'DONE' && b.status !== 'READING');
+    else priced = priced.filter(b => b.status === filterStatus);
+  }
+
+  if (countLabel) countLabel.innerText = `${priced.length} Book${priced.length === 1 ? '' : 's'} Priced`;
+
+  if (priced.length === 0) {
+    container.innerHTML = `
+      <div style="padding:24px 16px;text-align:center;color:var(--text-muted);background:rgba(255,255,255,0.03);border-radius:12px;">
+        <div style="font-size:1.8rem;margin-bottom:6px;">🧾</div>
+        <div style="font-weight:600;color:#fff;font-size:0.9rem;">Koi purchase record nahi mila</div>
+        <div style="font-size:0.78rem;margin-top:4px;">"Add Expense" tab me jakar apni kisi bhi book ka price add karein.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = priced.map(b => {
+    const store = b.purchase_store || 'Bookstore';
+    const date = b.purchase_date || '2026';
+    return `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;">
+        <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;">
+          <div style="width:36px;height:48px;border-radius:6px;overflow:hidden;flex-shrink:0;background:#1e1b4b;display:flex;align-items:center;justify-content:center;">
+            ${b.cover_url ? `<img src="${b.cover_url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='cover_placeholder.jpg'">` : '<span style="font-size:1.1rem;">📖</span>'}
+          </div>
+          <div style="min-width:0;flex:1;">
+            <div style="font-size:0.85rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${b.title}</div>
+            <div style="font-size:0.74rem;color:var(--text-secondary);display:flex;align-items:center;gap:6px;margin-top:2px;">
+              <span>${b.author}</span> &bull; <span style="color:#10b981;font-weight:600;">${store}</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-left:12px;">
+          <span style="font-size:1rem;font-weight:800;color:#fbbf24;">${formatCurrencyAmount(b.price)}</span>
+          <button type="button" onclick="deleteBookExpenseRecord('${b.id}')" title="Remove price" style="background:rgba(239,68,68,0.15);border:none;color:#ef4444;width:26px;height:26px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.85rem;">✕</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateBudgetAnalytics() {
+  const priced = state.books.filter(b => b.price && Number(b.price) > 0);
+  const totalSpent = priced.reduce((acc, b) => acc + Number(b.price), 0);
+  const totalPages = state.books.reduce((acc, b) => acc + (b.current_page || 0), 0);
+  const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
+
+  // Cost per page
+  const costPerPage = totalPages > 0 ? (totalSpent / totalPages).toFixed(2) : '0.00';
+  const elCost = document.getElementById('rbMetricCostPerPage');
+  if (elCost) elCost.innerText = `${getCurrencySymbol()}${costPerPage}`;
+
+  // Highest priced book
+  let highestBook = null;
+  priced.forEach(b => {
+    if (!highestBook || Number(b.price) > Number(highestBook.price)) highestBook = b;
+  });
+  const elHighest = document.getElementById('rbMetricHighestBook');
+  if (elHighest) {
+    elHighest.innerText = highestBook ? `${highestBook.title.slice(0, 16)}... (${formatCurrencyAmount(highestBook.price)})` : 'None';
+  }
+
+  // Savings estimate (assumes avg printed book is ₹450 vs purchased)
+  const savings = Math.max(0, (state.books.length * 450) - totalSpent);
+  const elSavings = document.getElementById('rbMetricSavings');
+  if (elSavings) elSavings.innerText = formatCurrencyAmount(savings);
+
+  // Budget health %
+  const pct = annualBudget > 0 ? Math.round((totalSpent / annualBudget) * 100) : 0;
+  const elHealth = document.getElementById('rbMetricBudgetHealth');
+  if (elHealth) elHealth.innerText = `${pct}% used`;
+}
+
+// ================= PROGRESS DEEP-DIVE MODALS =================
+function openProgressBreakdownModal() {
+  const modal = document.getElementById('progressCollectionBreakdownModal');
+  if (modal) {
+    renderBreakdownList('ALL');
+    modal.style.display = 'flex';
+  }
+}
+function closeProgressBreakdownModal() {
+  const modal = document.getElementById('progressCollectionBreakdownModal');
+  if (modal) modal.style.display = 'none';
+}
+function renderBreakdownList(status) {
+  const container = document.getElementById('progBreakdownListContainer');
+  if (!container || !state || !Array.isArray(state.books)) return;
+
+  // Update tabs
+  ['ALL', 'DONE', 'READING', 'TO_READ'].forEach(s => {
+    const btn = document.getElementById(`progBreakdownTab${s === 'ALL' ? 'All' : s === 'DONE' ? 'Done' : s === 'READING' ? 'Reading' : 'Wish'}`);
+    if (btn) {
+      if (s === status) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+
+  let list = state.books;
+  if (status !== 'ALL') {
+    list = state.books.filter(b => b.status === status);
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-muted);">Is category me koi kitab nahi mili.</div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(b => {
+    const statusPill = b.status === 'DONE' ? '🟢 Read' : b.status === 'READING' ? '🟡 Reading' : '⚪ Want to Read';
+    const pagesInfo = b.total_pages ? `${b.current_page || 0}/${b.total_pages} p.` : '';
+    return `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;">
+        <div style="width:38px;height:52px;border-radius:6px;overflow:hidden;flex-shrink:0;background:#1e1b4b;">
+          ${b.cover_url ? `<img src="${b.cover_url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='cover_placeholder.jpg'">` : '<div style="display:flex;align-items:center;justify-content:center;height:100%;">📖</div>'}
+        </div>
+        <div style="min-width:0;flex:1;">
+          <div style="font-size:0.88rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${b.title}</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);">${b.author}</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.72rem;margin-top:3px;">
+            <span style="font-weight:600;">${statusPill}</span>
+            <span style="color:var(--text-muted);">${pagesInfo}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openProgressStreakModal() {
+  const modal = document.getElementById('progressStreakStudioModal');
+  if (!modal) return;
+  const streak = state.stats.readingStreak || 0;
+  const bigDays = document.getElementById('streakModalBigDays');
+  if (bigDays) bigDays.innerText = `${streak} Days`;
+
+  // Render 30-day heatmap
+  const grid = document.getElementById('streakHeatmapGrid');
+  if (grid) {
+    let dots = '';
+    for (let i = 29; i >= 0; i--) {
+      const isLit = i < streak;
+      const color = isLit ? '#10b981' : 'rgba(255,255,255,0.1)';
+      dots += `<div style="height:32px;background:${color};border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:${isLit?'#000':'#64748b'};font-weight:700;">${30-i}</div>`;
+    }
+    grid.innerHTML = dots;
+  }
+  modal.style.display = 'flex';
+}
+function closeProgressStreakModal() {
+  const modal = document.getElementById('progressStreakStudioModal');
+  if (modal) modal.style.display = 'none';
+}
+function logTodaysReadingSession() {
+  state.stats.readingStreak = (state.stats.readingStreak || 0) + 1;
+  saveState();
+  renderStreakTracker();
+  openProgressStreakModal();
+  if (typeof showToast === 'function') showToast(`🔥 Shaandar! Aaj ka reading session darj ho gaya! New Streak: ${state.stats.readingStreak} Days!`);
+}
+
+function openMonthlyDeepDiveModal() {
+  const modal = document.getElementById('progressMonthlyArchiveModal');
+  if (!modal) return;
+  const container = document.getElementById('monthlyArchiveContainer');
+  if (container) {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const curMonth = new Date().getMonth();
+    container.innerHTML = months.map((m, idx) => {
+      const isCurrent = idx === curMonth;
+      const doneThisMonth = isCurrent ? state.books.filter(b => b.status === 'DONE').length : 0;
+      return `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(255,255,255,${isCurrent?'0.08':'0.03'});border:1px solid ${isCurrent?'var(--accent-gold)':'rgba(255,255,255,0.07)'};border-radius:12px;">
+          <div>
+            <div style="font-size:0.9rem;font-weight:700;color:${isCurrent?'var(--accent-gold)':'#fff'};">${m} 2026 ${isCurrent?'<span style="font-size:0.68rem;padding:2px 6px;border-radius:10px;background:rgba(245,158,11,0.2);margin-left:6px;">Current Month</span>':''}</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Target: 2 Books &bull; Completed: ${doneThisMonth} Books</div>
+          </div>
+          <span style="font-size:1.1rem;font-weight:800;color:${doneThisMonth>0?'#10b981':'var(--text-muted)'};">${doneThisMonth}</span>
+        </div>
+      `;
+    }).join('');
+  }
+  modal.style.display = 'flex';
+}
+function closeMonthlyDeepDiveModal() {
+  const modal = document.getElementById('progressMonthlyArchiveModal');
+  if (modal) modal.style.display = 'none';
+}
+
 
 
 
@@ -34890,7 +35704,7 @@ function renderDictionaryWords(words, highlightQuery = '') {
 
     if (!highlightQuery || !text) return text || '';
 
-    const escaped = highlightQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\<script src="app.js?v=0.0.77"></script>');
+    const escaped = highlightQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\<script src="app.js?v=0.0.78"></script>');
 
     const regex = new RegExp(`(${escaped})`, 'gi');
 
@@ -44451,6 +45265,25 @@ window.triggerBookMenuAction = triggerBookMenuAction;
 window.confirmDeleteBook = confirmDeleteBook;
 
 
+window.openReadingBudgetStudioModal = openReadingBudgetStudioModal;
+window.closeReadingBudgetStudioModal = closeReadingBudgetStudioModal;
+window.switchBudgetStudioTab = switchBudgetStudioTab;
+window.setBudgetStudioPreset = setBudgetStudioPreset;
+window.changeBudgetCurrency = changeBudgetCurrency;
+window.saveBudgetStudioTarget = saveBudgetStudioTarget;
+window.selectRbStore = selectRbStore;
+window.addBookExpenseRecord = addBookExpenseRecord;
+window.deleteBookExpenseRecord = deleteBookExpenseRecord;
+window.resetAllBookPrices = resetAllBookPrices;
+window.openProgressBreakdownModal = openProgressBreakdownModal;
+window.closeProgressBreakdownModal = closeProgressBreakdownModal;
+window.renderBreakdownList = renderBreakdownList;
+window.openProgressStreakModal = openProgressStreakModal;
+window.closeProgressStreakModal = closeProgressStreakModal;
+window.logTodaysReadingSession = logTodaysReadingSession;
+window.openMonthlyDeepDiveModal = openMonthlyDeepDiveModal;
+window.closeMonthlyDeepDiveModal = closeMonthlyDeepDiveModal;
+
 </script>
 
 
@@ -44554,6 +45387,250 @@ window.confirmDeleteBook = confirmDeleteBook;
   </div>
 
 
+
+
+  <!-- ================= READING BUDGET & EXPENSE STUDIO MODAL ================= -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="readingBudgetStudioModalOverlay" style="display:none;" onclick="if(event.target===this)closeReadingBudgetStudioModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeReadingBudgetStudioModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">💰 Budget &amp; Expense Studio</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Manage targets, book purchases &amp; spending analytics</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeReadingBudgetStudioModal()" title="Close">&times;</button>
+      </div>
+
+      <!-- Studio Sub-Nav Tabs -->
+      <div class="studio-sub-tabs-bar" style="display:flex;gap:6px;overflow-x:auto;padding:10px 16px;background:rgba(0,0,0,0.3);border-bottom:1px solid var(--border-subtle);scrollbar-width:none;">
+        <button type="button" class="studio-tab-btn active" id="rbTabBtnTarget" onclick="switchBudgetStudioTab('target')">🎯 Set Target</button>
+        <button type="button" class="studio-tab-btn" id="rbTabBtnAdd" onclick="switchBudgetStudioTab('add')">➕ Add Expense</button>
+        <button type="button" class="studio-tab-btn" id="rbTabBtnHistory" onclick="switchBudgetStudioTab('history')">📜 Purchases Log</button>
+        <button type="button" class="studio-tab-btn" id="rbTabBtnAnalytics" onclick="switchBudgetStudioTab('analytics')">📊 Analytics</button>
+      </div>
+
+      <div class="modal-body studio-body" style="padding:16px;">
+        <!-- TAB 1: SET BUDGET TARGET -->
+        <div id="rbTabContentTarget" class="rb-tab-pane">
+          <div class="studio-card-box" style="margin-bottom:14px;">
+            <label style="font-size:0.82rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <span>🎯</span> 2026 Annual Reading Target
+            </label>
+            <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);padding:10px 14px;border-radius:12px;border:1px solid var(--border-subtle);margin-bottom:12px;">
+              <span id="rbStudioCurrencySymbol" style="font-size:1.4rem;font-weight:800;color:#10b981;">₹</span>
+              <input type="number" id="rbStudioTargetInput" placeholder="5000" min="0" step="100" style="flex:1;background:transparent;border:none;color:#fff;font-size:1.3rem;font-weight:800;outline:none;">
+            </div>
+
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:8px;">Quick Presets (1-Tap Selection):</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(2000)">₹2,000</button>
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(5000)">₹5,000</button>
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(10000)">₹10,000</button>
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(15000)">₹15,000</button>
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(25000)">₹25,000</button>
+              <button type="button" class="rb-preset-pill" onclick="setBudgetStudioPreset(50000)">₹50,000</button>
+            </div>
+
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+              <span style="font-size:0.8rem;color:var(--text-secondary);">Preferred Currency:</span>
+              <select id="rbStudioCurrencySelect" onchange="changeBudgetCurrency(this.value)" style="background:rgba(255,255,255,0.08);border:1px solid var(--border-subtle);color:#fff;padding:6px 12px;border-radius:8px;font-size:0.82rem;font-weight:600;">
+                <option value="INR" selected>₹ INR (Indian Rupee)</option>
+                <option value="USD">$ USD (US Dollar)</option>
+                <option value="EUR">€ EUR (Euro)</option>
+                <option value="GBP">£ GBP (British Pound)</option>
+              </select>
+            </div>
+
+            <button type="button" class="btn-gold-pill" onclick="saveBudgetStudioTarget()" style="width:100%;padding:12px;font-size:0.92rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;">
+              <span>💾</span> Save Budget Target
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 2: ADD BOOK EXPENSE -->
+        <div id="rbTabContentAdd" class="rb-tab-pane" style="display:none;">
+          <div class="studio-card-box" style="margin-bottom:14px;">
+            <label style="font-size:0.82rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <span>📖</span> Select Book from Library
+            </label>
+            <select id="rbStudioBookSelect" style="width:100%;padding:10px 12px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid var(--border-subtle);color:#fff;font-size:0.88rem;margin-bottom:12px;">
+              <option value="">-- Choose a book to add price --</option>
+            </select>
+
+            <label style="font-size:0.82rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <span>💵</span> Price Paid / Cost (in ₹)
+            </label>
+            <div style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.06);padding:10px 14px;border-radius:12px;border:1px solid var(--border-subtle);margin-bottom:12px;">
+              <span style="font-size:1.2rem;font-weight:700;color:#10b981;">₹</span>
+              <input type="number" id="rbStudioPriceInput" placeholder="e.g. 299" min="0" step="10" style="flex:1;background:transparent;border:none;color:#fff;font-size:1.1rem;font-weight:700;outline:none;">
+            </div>
+
+            <label style="font-size:0.82rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:0.04em;display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+              <span>🏪</span> Purchase Store / Platform
+            </label>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;" id="rbStoreTagsContainer">
+              <button type="button" class="rb-store-pill active" onclick="selectRbStore(this, 'Amazon')">🛒 Amazon</button>
+              <button type="button" class="rb-store-pill" onclick="selectRbStore(this, 'Flipkart')">🛍️ Flipkart</button>
+              <button type="button" class="rb-store-pill" onclick="selectRbStore(this, 'Bookstore')">🏪 Bookstore</button>
+              <button type="button" class="rb-store-pill" onclick="selectRbStore(this, 'Kindle')">📱 Kindle</button>
+              <button type="button" class="rb-store-pill" onclick="selectRbStore(this, 'Gift/Free')">🎁 Gift/Free</button>
+            </div>
+
+            <button type="button" class="btn-gold-pill" onclick="addBookExpenseRecord()" style="width:100%;padding:12px;font-size:0.92rem;font-weight:700;display:flex;align-items:center;justify-content:center;gap:6px;">
+              <span>➕</span> Record Book Expense
+            </button>
+          </div>
+        </div>
+
+        <!-- TAB 3: PURCHASES LOG -->
+        <div id="rbTabContentHistory" class="rb-tab-pane" style="display:none;">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding:0 2px;">
+            <span id="rbHistoryCountLabel" style="font-size:0.82rem;font-weight:600;color:var(--text-secondary);">0 Books Priced</span>
+            <button type="button" onclick="resetAllBookPrices()" style="background:none;border:none;color:#ef4444;font-size:0.75rem;cursor:pointer;font-weight:600;">Reset All Prices</button>
+          </div>
+          <div id="rbHistoryListContainer" style="display:flex;flex-direction:column;gap:8px;max-height:400px;overflow-y:auto;padding-right:2px;">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- TAB 4: ANALYTICS & ROI -->
+        <div id="rbTabContentAnalytics" class="rb-tab-pane" style="display:none;">
+          <div class="studio-card-box" style="margin-bottom:12px;">
+            <h4 style="margin:0 0 10px;font-size:0.92rem;color:var(--accent-gold);display:flex;align-items:center;gap:6px;">
+              <span>📈</span> Reading Financial Metrics
+            </h4>
+            <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+              <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:10px;">
+                <div style="font-size:0.72rem;color:var(--text-muted);">Cost Per Page Read</div>
+                <div id="rbMetricCostPerPage" style="font-size:1.1rem;font-weight:800;color:#10b981;margin-top:2px;">₹0.00</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:10px;">
+                <div style="font-size:0.72rem;color:var(--text-muted);">Highest Priced Book</div>
+                <div id="rbMetricHighestBook" style="font-size:1.1rem;font-weight:800;color:var(--accent-gold);margin-top:2px;">None</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:10px;">
+                <div style="font-size:0.72rem;color:var(--text-muted);">Estimated Savings</div>
+                <div id="rbMetricSavings" style="font-size:1.1rem;font-weight:800;color:#3b82f6;margin-top:2px;">₹1,850</div>
+              </div>
+              <div style="background:rgba(255,255,255,0.04);padding:10px;border-radius:10px;">
+                <div style="font-size:0.72rem;color:var(--text-muted);">Budget Used</div>
+                <div id="rbMetricBudgetHealth" style="font-size:1.1rem;font-weight:800;color:#10b981;margin-top:2px;">0%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= PROGRESS COLLECTION BREAKDOWN MODAL ================= -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressCollectionBreakdownModal" style="display:none;" onclick="if(event.target===this)closeProgressBreakdownModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeProgressBreakdownModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📚 Reading Collection Deep-Dive</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Complete status breakdown of all your books</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeProgressBreakdownModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div class="studio-sub-tabs-bar" style="display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;scrollbar-width:none;">
+          <button type="button" class="studio-tab-btn active" id="progBreakdownTabAll" onclick="renderBreakdownList('ALL')">All Books</button>
+          <button type="button" class="studio-tab-btn" id="progBreakdownTabDone" onclick="renderBreakdownList('DONE')">✅ Read</button>
+          <button type="button" class="studio-tab-btn" id="progBreakdownTabReading" onclick="renderBreakdownList('READING')">📖 In Progress</button>
+          <button type="button" class="studio-tab-btn" id="progBreakdownTabWish" onclick="renderBreakdownList('TO_READ')">⏳ Want to Read</button>
+        </div>
+        <div id="progBreakdownListContainer" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= STREAK & CONSISTENCY MASTER MODAL ================= -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressStreakStudioModal" style="display:none;" onclick="if(event.target===this)closeProgressStreakModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeProgressStreakModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">🔥 Reading Streak &amp; Habit Master</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Consistency builds greatness &bull; Day-by-day record</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeProgressStreakModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div class="studio-card-box" style="text-align:center;padding:24px 16px;margin-bottom:14px;">
+          <div style="font-size:3rem;margin-bottom:6px;">🔥</div>
+          <div id="streakModalBigDays" style="font-size:2.2rem;font-weight:900;color:var(--accent-gold);">0 Days</div>
+          <div style="font-size:0.85rem;color:var(--text-secondary);margin-bottom:14px;">Current Daily Reading Streak</div>
+          <button type="button" class="btn-gold-pill" onclick="logTodaysReadingSession()" style="padding:10px 24px;font-size:0.9rem;font-weight:700;">
+            🔥 Log Today's Reading
+          </button>
+        </div>
+
+        <div class="studio-card-box" style="margin-bottom:14px;">
+          <div style="font-size:0.82rem;font-weight:700;color:var(--accent-gold);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;">
+            📅 30-Day Activity Heatmap
+          </div>
+          <div id="streakHeatmapGrid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:10px;">
+            <!-- 30-day dots -->
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.72rem;color:var(--text-muted);">
+            <span>⚪ No Reading</span>
+            <span>🟢 Read Completed</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MONTHLY DEEP DIVE ARCHIVE MODAL ================= -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressMonthlyArchiveModal" style="display:none;" onclick="if(event.target===this)closeMonthlyDeepDiveModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeMonthlyDeepDiveModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📅 Monthly Reading Archive</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Month-by-month reading performance &amp; milestones</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeMonthlyDeepDiveModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div id="monthlyArchiveContainer" style="display:flex;flex-direction:column;gap:12px;">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 

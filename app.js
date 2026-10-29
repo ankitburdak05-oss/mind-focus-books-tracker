@@ -6,9 +6,9 @@
 
 
 
-const APP_VERSION = '0.0.77';
+const APP_VERSION = '0.0.78';
 
-const CURRENT_APP_VERSION = 'v0.0.77';
+const CURRENT_APP_VERSION = 'v0.0.78';
 
 const STORAGE_KEY = 'mind_focus_books_v1';
 
@@ -1690,177 +1690,125 @@ function openSetGoalPrompt() {
 
 
 
+
 function renderReadingBudget() {
-
   const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
-
   
-
   // All books with a valid price > 0 (ONLY user-entered prices)
-
-  const pricedBooks = state.books.filter(b => b.price && Number(b.price) > 0);
-
+  const pricedBooks = (state.books || []).filter(b => b.price && Number(b.price) > 0);
   const totalSpent = pricedBooks.reduce((acc, b) => acc + Number(b.price), 0);
-
   
-
   // Completed books price
-
-  const doneBooks = state.books.filter(b => b.status === 'DONE' && b.price && Number(b.price) > 0);
-
+  const doneBooks = (state.books || []).filter(b => b.status === 'DONE' && b.price && Number(b.price) > 0);
   const doneSpent = doneBooks.reduce((acc, b) => acc + Number(b.price), 0);
-
   
-
   // Currently reading books price
-
-  const readingBooks = state.books.filter(b => b.status === 'READING' && b.price && Number(b.price) > 0);
-
+  const readingBooks = (state.books || []).filter(b => b.status === 'READING' && b.price && Number(b.price) > 0);
   const readingSpent = readingBooks.reduce((acc, b) => acc + Number(b.price), 0);
-
   
-
   // Wishlist / Pending books price
-
-  const wishlistBooks = state.books.filter(b => b.status !== 'DONE' && b.status !== 'READING' && b.price && Number(b.price) > 0);
-
+  const wishlistBooks = (state.books || []).filter(b => b.status !== 'DONE' && b.status !== 'READING' && b.price && Number(b.price) > 0);
   const wishlistSpent = wishlistBooks.reduce((acc, b) => acc + Number(b.price), 0);
-
   
-
   // Avg price per priced book
-
   const avgPrice = pricedBooks.length ? Math.round(totalSpent / pricedBooks.length) : 0;
-
   
-
-  // Format with Indian Rupee symbol & commas
-
-  const formatINR = (num) => '₹' + Math.round(Number(num) || 0).toLocaleString('en-IN');
-
+  // Remaining balance
+  const remaining = Math.max(0, annualBudget - totalSpent);
   
-
   // Update metric card in stats row
-
   const elProgPrice = document.getElementById('progTotalPrice');
-
-  if (elProgPrice) elProgPrice.innerText = formatINR(totalSpent);
-
+  if (elProgPrice) elProgPrice.innerText = formatCurrencyAmount(totalSpent);
   
-
   // Update budget card elements
-
   const elTotalDisplay = document.getElementById('rbTotalSpentDisplay');
-
-  if (elTotalDisplay) elTotalDisplay.innerText = `${formatINR(totalSpent)} Total Spent`;
-
+  if (elTotalDisplay) elTotalDisplay.innerText = `${formatCurrencyAmount(totalSpent)} Total Spent`;
   
+  const elRemaining = document.getElementById('rbRemainingDisplay');
+  if (elRemaining) {
+    if (totalSpent > annualBudget) {
+      elRemaining.innerText = `Exceeded by ${formatCurrencyAmount(totalSpent - annualBudget)}`;
+      elRemaining.style.background = 'rgba(239,68,68,0.15)';
+      elRemaining.style.color = '#ef4444';
+      elRemaining.style.borderColor = 'rgba(239,68,68,0.3)';
+    } else {
+      elRemaining.innerText = `${formatCurrencyAmount(remaining)} Left`;
+      elRemaining.style.background = 'rgba(245,158,11,0.15)';
+      elRemaining.style.color = '#fbbf24';
+      elRemaining.style.borderColor = 'rgba(245,158,11,0.3)';
+    }
+  }
+
+  const healthBadge = document.getElementById('rbBudgetHealthBadge');
+  if (healthBadge) {
+    if (totalSpent > annualBudget) {
+      healthBadge.innerText = '🔴 Budget Exceeded';
+      healthBadge.style.background = 'rgba(239,68,68,0.2)';
+      healthBadge.style.color = '#ef4444';
+    } else if (annualBudget > 0 && totalSpent >= annualBudget * 0.8) {
+      healthBadge.innerText = '🟡 Caution (80%+)';
+      healthBadge.style.background = 'rgba(245,158,11,0.2)';
+      healthBadge.style.color = '#fbbf24';
+    } else {
+      healthBadge.innerText = '🟢 On Track';
+      healthBadge.style.background = 'rgba(16,185,129,0.2)';
+      healthBadge.style.color = '#10b981';
+    }
+  }
 
   const elSub = document.getElementById('rbBudgetSubtitle');
-
   if (elSub) {
-
     if (pricedBooks.length === 0) {
-
-      elSub.innerText = '0 books priced yet (Tap any book to edit and add price)';
-
+      elSub.innerText = '0 of ' + (state.books||[]).length + ' books priced • Tap Add Price to record expenses';
     } else {
-
-      elSub.innerText = `${pricedBooks.length} of ${state.books.length} books have prices recorded`;
-
+      elSub.innerText = `${pricedBooks.length} of ${(state.books||[]).length} books recorded • Average ${formatCurrencyAmount(avgPrice)}/book`;
     }
-
   }
-
   
-
   const elDone = document.getElementById('rbSpentCompleted');
-
-  if (elDone) elDone.innerText = formatINR(doneSpent);
-
+  if (elDone) elDone.innerText = formatCurrencyAmount(doneSpent);
   
-
   const elReading = document.getElementById('rbSpentReading');
-
-  if (elReading) elReading.innerText = formatINR(readingSpent);
-
+  if (elReading) elReading.innerText = formatCurrencyAmount(readingSpent);
   
-
   const elWishlist = document.getElementById('rbSpentWishlist');
-
-  if (elWishlist) elWishlist.innerText = formatINR(wishlistSpent);
-
+  if (elWishlist) elWishlist.innerText = formatCurrencyAmount(wishlistSpent);
   
-
   const elAvg = document.getElementById('rbAvgPrice');
-
-  if (elAvg) elAvg.innerText = formatINR(avgPrice);
-
+  if (elAvg) elAvg.innerText = formatCurrencyAmount(avgPrice);
   
-
   // Budget progress bar against annualBudget
-
   const budgetLabel = document.getElementById('rbBudgetLabel');
-
-  if (budgetLabel) budgetLabel.innerText = `Annual Budget Target: ${formatINR(annualBudget)}`;
-
+  if (budgetLabel) budgetLabel.innerText = `Annual Target: ${formatCurrencyAmount(annualBudget)}`;
   
-
   const pct = annualBudget > 0 ? Math.min(100, Math.round((totalSpent / annualBudget) * 100)) : 0;
-
   const elPct = document.getElementById('rbBudgetPct');
-
   if (elPct) elPct.innerText = `${pct}% used`;
-
   
-
   const bar = document.getElementById('rbProgressBar');
-
   if (bar) {
-
     bar.style.width = `${pct}%`;
-
     if (pct >= 100) {
-
       bar.style.background = 'linear-gradient(90deg, #ef4444, #dc2626)';
-
     } else if (pct >= 80) {
-
       bar.style.background = 'linear-gradient(90deg, #f59e0b, #d97706)';
-
     } else {
-
       bar.style.background = 'linear-gradient(90deg, #10b981, #059669)';
-
     }
-
   }
 
-
-
-  // Update profile menu item subtitle
-
-  const profileSub = document.getElementById('profileTotalSpentSubText');
-
-  if (profileSub) {
-
-    profileSub.innerText = `${formatINR(totalSpent)} Total Spent • ${pricedBooks.length} Books`;
-
+  // Update recent expense text
+  const elRecent = document.getElementById('rbRecentExpenseText');
+  if (elRecent) {
+    if (pricedBooks.length > 0) {
+      const latest = pricedBooks[pricedBooks.length - 1];
+      elRecent.innerText = `Latest: "${latest.title.slice(0, 20)}..." (${formatCurrencyAmount(latest.price)})`;
+    } else {
+      elRecent.innerText = 'No expenses recorded yet • Tap to add';
+    }
   }
-
-
-
-  // If currently viewing the Total Spent screen, re-render it
-
-  const viewTotalSpent = document.getElementById('viewTotalSpent');
-
-  if (viewTotalSpent && viewTotalSpent.classList.contains('active')) {
-
-    renderTotalSpentView();
-
-  }
-
 }
+
 
 
 
@@ -4284,23 +4232,386 @@ function handleNiCategoryBack() {
 
 
 
-function openSetBudgetPrompt() {
 
-  const currentBudget = localStorage.getItem('mf_reading_budget_2026') || '5000';
+// ============================================================================
+// READING BUDGET & EXPENSE STUDIO ENGINE (v0.0.78)
+// ============================================================================
+window._activeRbStore = 'Amazon';
+window._activeRbCurrency = localStorage.getItem('mf_reading_currency') || 'INR';
 
-  const val = prompt('Set your 2026 Reading Budget (in ₹ Rupees):', currentBudget);
+function getCurrencySymbol() {
+  const c = window._activeRbCurrency || 'INR';
+  if (c === 'USD') return '$';
+  if (c === 'EUR') return '€';
+  if (c === 'GBP') return '£';
+  return '₹';
+}
 
-  if (val && !isNaN(val) && parseFloat(val) > 0) {
+function formatCurrencyAmount(num) {
+  const sym = getCurrencySymbol();
+  return sym + Math.round(Number(num) || 0).toLocaleString(window._activeRbCurrency === 'INR' ? 'en-IN' : 'en-US');
+}
 
-    localStorage.setItem('mf_reading_budget_2026', parseFloat(val));
+function openReadingBudgetStudioModal(defaultTab, filterStatus) {
+  const modal = document.getElementById('readingBudgetStudioModalOverlay');
+  if (!modal) return;
 
+  // Initialize Target input
+  const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
+  const targetInput = document.getElementById('rbStudioTargetInput');
+  if (targetInput) targetInput.value = annualBudget;
+
+  const currSelect = document.getElementById('rbStudioCurrencySelect');
+  if (currSelect) currSelect.value = window._activeRbCurrency;
+
+  const currSym = document.getElementById('rbStudioCurrencySymbol');
+  if (currSym) currSym.innerText = getCurrencySymbol();
+
+  // Populate book dropdown for quick expense
+  populateRbBookSelect();
+
+  // Render history list
+  renderBudgetHistoryList(filterStatus);
+
+  // Update analytics metrics
+  updateBudgetAnalytics();
+
+  // Switch to requested tab
+  switchBudgetStudioTab(defaultTab || 'target');
+
+  modal.style.display = 'flex';
+}
+
+function closeReadingBudgetStudioModal() {
+  const modal = document.getElementById('readingBudgetStudioModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+
+function switchBudgetStudioTab(tab) {
+  const tabs = ['target', 'add', 'history', 'analytics'];
+  tabs.forEach(t => {
+    const pane = document.getElementById(`rbTabContent${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    const btn = document.getElementById(`rbTabBtn${t.charAt(0).toUpperCase() + t.slice(1)}`);
+    if (pane) pane.style.display = (t === tab) ? 'block' : 'none';
+    if (btn) {
+      if (t === tab) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+  if (tab === 'history') {
+    renderBudgetHistoryList();
+  } else if (tab === 'analytics') {
+    updateBudgetAnalytics();
+  }
+}
+
+function setBudgetStudioPreset(amount) {
+  const input = document.getElementById('rbStudioTargetInput');
+  if (input) input.value = amount;
+}
+
+function changeBudgetCurrency(curr) {
+  window._activeRbCurrency = curr;
+  try { localStorage.setItem('mf_reading_currency', curr); } catch(e){}
+  const currSym = document.getElementById('rbStudioCurrencySymbol');
+  if (currSym) currSym.innerText = getCurrencySymbol();
+  renderReadingBudget();
+  renderBudgetHistoryList();
+}
+
+function saveBudgetStudioTarget() {
+  const input = document.getElementById('rbStudioTargetInput');
+  const val = parseFloat(input ? input.value : '5000');
+  if (!isNaN(val) && val >= 0) {
+    localStorage.setItem('mf_reading_budget_2026', val);
     renderReadingBudget();
+    if (typeof showToast === 'function') {
+      showToast(`2026 Reading Budget Target set to ${formatCurrencyAmount(val)}! 💰`);
+    }
+    closeReadingBudgetStudioModal();
+  } else {
+    if (typeof showToast === 'function') showToast('Kripya sahi budget amount darj karein!');
+  }
+}
 
-    showToast(`2026 Reading Budget set to ₹${Number(val).toLocaleString('en-IN')}! 💰`);
+function selectRbStore(btn, storeName) {
+  window._activeRbStore = storeName;
+  const pills = document.querySelectorAll('.rb-store-pill');
+  pills.forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+}
 
+function populateRbBookSelect() {
+  const select = document.getElementById('rbStudioBookSelect');
+  if (!select) return;
+  if (!state || !Array.isArray(state.books)) return;
+
+  const currentOpts = state.books.map(b => {
+    const priceText = (b.price && Number(b.price) > 0) ? ` (${formatCurrencyAmount(b.price)})` : '';
+    return `<option value="${b.id}">${b.title} by ${b.author}${priceText}</option>`;
+  }).join('');
+
+  select.innerHTML = `<option value="">-- Choose a book from your library --</option>` + currentOpts;
+}
+
+function addBookExpenseRecord() {
+  const select = document.getElementById('rbStudioBookSelect');
+  const priceInput = document.getElementById('rbStudioPriceInput');
+  const bookId = select ? select.value : '';
+  const priceVal = parseFloat(priceInput ? priceInput.value : '');
+
+  if (!bookId) {
+    if (typeof showToast === 'function') showToast('Pehle koi book select karein!');
+    return;
+  }
+  if (isNaN(priceVal) || priceVal < 0) {
+    if (typeof showToast === 'function') showToast('Kripya valid price darj karein!');
+    return;
   }
 
+  const book = state.books.find(b => b.id == bookId);
+  if (book) {
+    book.price = priceVal;
+    book.purchase_store = window._activeRbStore || 'Bookstore';
+    book.purchase_date = new Date().toISOString().split('T')[0];
+    saveState();
+    renderReadingBudget();
+    populateRbBookSelect();
+    renderBudgetHistoryList();
+    if (priceInput) priceInput.value = '';
+    if (typeof showToast === 'function') {
+      showToast(`Recorded ${formatCurrencyAmount(priceVal)} for "${book.title}"! 💰`);
+    }
+    switchBudgetStudioTab('history');
+  }
 }
+
+function deleteBookExpenseRecord(bookId) {
+  const book = state.books.find(b => b.id == bookId);
+  if (book) {
+    delete book.price;
+    delete book.purchase_store;
+    delete book.purchase_date;
+    saveState();
+    renderReadingBudget();
+    renderBudgetHistoryList();
+    populateRbBookSelect();
+    if (typeof showToast === 'function') showToast(`Removed price for "${book.title}"`);
+  }
+}
+
+function resetAllBookPrices() {
+  if (confirm('Kya aap sach me sabhi kitabo ke price reset karna chahte hain?')) {
+    state.books.forEach(b => {
+      delete b.price;
+      delete b.purchase_store;
+      delete b.purchase_date;
+    });
+    saveState();
+    renderReadingBudget();
+    renderBudgetHistoryList();
+    populateRbBookSelect();
+    if (typeof showToast === 'function') showToast('Sabhi book prices reset ho gaye!');
+  }
+}
+
+function renderBudgetHistoryList(filterStatus) {
+  const container = document.getElementById('rbHistoryListContainer');
+  const countLabel = document.getElementById('rbHistoryCountLabel');
+  if (!container || !state || !Array.isArray(state.books)) return;
+
+  let priced = state.books.filter(b => b.price && Number(b.price) > 0);
+  if (filterStatus) {
+    if (filterStatus === 'WISHLIST') priced = priced.filter(b => b.status !== 'DONE' && b.status !== 'READING');
+    else priced = priced.filter(b => b.status === filterStatus);
+  }
+
+  if (countLabel) countLabel.innerText = `${priced.length} Book${priced.length === 1 ? '' : 's'} Priced`;
+
+  if (priced.length === 0) {
+    container.innerHTML = `
+      <div style="padding:24px 16px;text-align:center;color:var(--text-muted);background:rgba(255,255,255,0.03);border-radius:12px;">
+        <div style="font-size:1.8rem;margin-bottom:6px;">🧾</div>
+        <div style="font-weight:600;color:#fff;font-size:0.9rem;">Koi purchase record nahi mila</div>
+        <div style="font-size:0.78rem;margin-top:4px;">"Add Expense" tab me jakar apni kisi bhi book ka price add karein.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = priced.map(b => {
+    const store = b.purchase_store || 'Bookstore';
+    const date = b.purchase_date || '2026';
+    return `
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;">
+        <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;">
+          <div style="width:36px;height:48px;border-radius:6px;overflow:hidden;flex-shrink:0;background:#1e1b4b;display:flex;align-items:center;justify-content:center;">
+            ${b.cover_url ? `<img src="${b.cover_url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='cover_placeholder.jpg'">` : '<span style="font-size:1.1rem;">📖</span>'}
+          </div>
+          <div style="min-width:0;flex:1;">
+            <div style="font-size:0.85rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${b.title}</div>
+            <div style="font-size:0.74rem;color:var(--text-secondary);display:flex;align-items:center;gap:6px;margin-top:2px;">
+              <span>${b.author}</span> &bull; <span style="color:#10b981;font-weight:600;">${store}</span>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;margin-left:12px;">
+          <span style="font-size:1rem;font-weight:800;color:#fbbf24;">${formatCurrencyAmount(b.price)}</span>
+          <button type="button" onclick="deleteBookExpenseRecord('${b.id}')" title="Remove price" style="background:rgba(239,68,68,0.15);border:none;color:#ef4444;width:26px;height:26px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.85rem;">✕</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function updateBudgetAnalytics() {
+  const priced = state.books.filter(b => b.price && Number(b.price) > 0);
+  const totalSpent = priced.reduce((acc, b) => acc + Number(b.price), 0);
+  const totalPages = state.books.reduce((acc, b) => acc + (b.current_page || 0), 0);
+  const annualBudget = parseFloat(localStorage.getItem('mf_reading_budget_2026') || '5000');
+
+  // Cost per page
+  const costPerPage = totalPages > 0 ? (totalSpent / totalPages).toFixed(2) : '0.00';
+  const elCost = document.getElementById('rbMetricCostPerPage');
+  if (elCost) elCost.innerText = `${getCurrencySymbol()}${costPerPage}`;
+
+  // Highest priced book
+  let highestBook = null;
+  priced.forEach(b => {
+    if (!highestBook || Number(b.price) > Number(highestBook.price)) highestBook = b;
+  });
+  const elHighest = document.getElementById('rbMetricHighestBook');
+  if (elHighest) {
+    elHighest.innerText = highestBook ? `${highestBook.title.slice(0, 16)}... (${formatCurrencyAmount(highestBook.price)})` : 'None';
+  }
+
+  // Savings estimate (assumes avg printed book is ₹450 vs purchased)
+  const savings = Math.max(0, (state.books.length * 450) - totalSpent);
+  const elSavings = document.getElementById('rbMetricSavings');
+  if (elSavings) elSavings.innerText = formatCurrencyAmount(savings);
+
+  // Budget health %
+  const pct = annualBudget > 0 ? Math.round((totalSpent / annualBudget) * 100) : 0;
+  const elHealth = document.getElementById('rbMetricBudgetHealth');
+  if (elHealth) elHealth.innerText = `${pct}% used`;
+}
+
+// ================= PROGRESS DEEP-DIVE MODALS =================
+function openProgressBreakdownModal() {
+  const modal = document.getElementById('progressCollectionBreakdownModal');
+  if (modal) {
+    renderBreakdownList('ALL');
+    modal.style.display = 'flex';
+  }
+}
+function closeProgressBreakdownModal() {
+  const modal = document.getElementById('progressCollectionBreakdownModal');
+  if (modal) modal.style.display = 'none';
+}
+function renderBreakdownList(status) {
+  const container = document.getElementById('progBreakdownListContainer');
+  if (!container || !state || !Array.isArray(state.books)) return;
+
+  // Update tabs
+  ['ALL', 'DONE', 'READING', 'TO_READ'].forEach(s => {
+    const btn = document.getElementById(`progBreakdownTab${s === 'ALL' ? 'All' : s === 'DONE' ? 'Done' : s === 'READING' ? 'Reading' : 'Wish'}`);
+    if (btn) {
+      if (s === status) btn.classList.add('active');
+      else btn.classList.remove('active');
+    }
+  });
+
+  let list = state.books;
+  if (status !== 'ALL') {
+    list = state.books.filter(b => b.status === status);
+  }
+
+  if (list.length === 0) {
+    container.innerHTML = `<div style="padding:24px;text-align:center;color:var(--text-muted);">Is category me koi kitab nahi mili.</div>`;
+    return;
+  }
+
+  container.innerHTML = list.map(b => {
+    const statusPill = b.status === 'DONE' ? '🟢 Read' : b.status === 'READING' ? '🟡 Reading' : '⚪ Want to Read';
+    const pagesInfo = b.total_pages ? `${b.current_page || 0}/${b.total_pages} p.` : '';
+    return `
+      <div style="display:flex;align-items:center;gap:12px;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;">
+        <div style="width:38px;height:52px;border-radius:6px;overflow:hidden;flex-shrink:0;background:#1e1b4b;">
+          ${b.cover_url ? `<img src="${b.cover_url}" style="width:100%;height:100%;object-fit:cover;" onerror="this.src='cover_placeholder.jpg'">` : '<div style="display:flex;align-items:center;justify-content:center;height:100%;">📖</div>'}
+        </div>
+        <div style="min-width:0;flex:1;">
+          <div style="font-size:0.88rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${b.title}</div>
+          <div style="font-size:0.75rem;color:var(--text-secondary);">${b.author}</div>
+          <div style="display:flex;align-items:center;gap:8px;font-size:0.72rem;margin-top:3px;">
+            <span style="font-weight:600;">${statusPill}</span>
+            <span style="color:var(--text-muted);">${pagesInfo}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openProgressStreakModal() {
+  const modal = document.getElementById('progressStreakStudioModal');
+  if (!modal) return;
+  const streak = state.stats.readingStreak || 0;
+  const bigDays = document.getElementById('streakModalBigDays');
+  if (bigDays) bigDays.innerText = `${streak} Days`;
+
+  // Render 30-day heatmap
+  const grid = document.getElementById('streakHeatmapGrid');
+  if (grid) {
+    let dots = '';
+    for (let i = 29; i >= 0; i--) {
+      const isLit = i < streak;
+      const color = isLit ? '#10b981' : 'rgba(255,255,255,0.1)';
+      dots += `<div style="height:32px;background:${color};border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.7rem;color:${isLit?'#000':'#64748b'};font-weight:700;">${30-i}</div>`;
+    }
+    grid.innerHTML = dots;
+  }
+  modal.style.display = 'flex';
+}
+function closeProgressStreakModal() {
+  const modal = document.getElementById('progressStreakStudioModal');
+  if (modal) modal.style.display = 'none';
+}
+function logTodaysReadingSession() {
+  state.stats.readingStreak = (state.stats.readingStreak || 0) + 1;
+  saveState();
+  renderStreakTracker();
+  openProgressStreakModal();
+  if (typeof showToast === 'function') showToast(`🔥 Shaandar! Aaj ka reading session darj ho gaya! New Streak: ${state.stats.readingStreak} Days!`);
+}
+
+function openMonthlyDeepDiveModal() {
+  const modal = document.getElementById('progressMonthlyArchiveModal');
+  if (!modal) return;
+  const container = document.getElementById('monthlyArchiveContainer');
+  if (container) {
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const curMonth = new Date().getMonth();
+    container.innerHTML = months.map((m, idx) => {
+      const isCurrent = idx === curMonth;
+      const doneThisMonth = isCurrent ? state.books.filter(b => b.status === 'DONE').length : 0;
+      return `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:rgba(255,255,255,${isCurrent?'0.08':'0.03'});border:1px solid ${isCurrent?'var(--accent-gold)':'rgba(255,255,255,0.07)'};border-radius:12px;">
+          <div>
+            <div style="font-size:0.9rem;font-weight:700;color:${isCurrent?'var(--accent-gold)':'#fff'};">${m} 2026 ${isCurrent?'<span style="font-size:0.68rem;padding:2px 6px;border-radius:10px;background:rgba(245,158,11,0.2);margin-left:6px;">Current Month</span>':''}</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Target: 2 Books &bull; Completed: ${doneThisMonth} Books</div>
+          </div>
+          <span style="font-size:1.1rem;font-weight:800;color:${doneThisMonth>0?'#10b981':'var(--text-muted)'};">${doneThisMonth}</span>
+        </div>
+      `;
+    }).join('');
+  }
+  modal.style.display = 'flex';
+}
+function closeMonthlyDeepDiveModal() {
+  const modal = document.getElementById('progressMonthlyArchiveModal');
+  if (modal) modal.style.display = 'none';
+}
+
 
 
 
@@ -19700,3 +20011,22 @@ window.triggerBookMenuAction = triggerBookMenuAction;
 
 window.confirmDeleteBook = confirmDeleteBook;
 
+
+window.openReadingBudgetStudioModal = openReadingBudgetStudioModal;
+window.closeReadingBudgetStudioModal = closeReadingBudgetStudioModal;
+window.switchBudgetStudioTab = switchBudgetStudioTab;
+window.setBudgetStudioPreset = setBudgetStudioPreset;
+window.changeBudgetCurrency = changeBudgetCurrency;
+window.saveBudgetStudioTarget = saveBudgetStudioTarget;
+window.selectRbStore = selectRbStore;
+window.addBookExpenseRecord = addBookExpenseRecord;
+window.deleteBookExpenseRecord = deleteBookExpenseRecord;
+window.resetAllBookPrices = resetAllBookPrices;
+window.openProgressBreakdownModal = openProgressBreakdownModal;
+window.closeProgressBreakdownModal = closeProgressBreakdownModal;
+window.renderBreakdownList = renderBreakdownList;
+window.openProgressStreakModal = openProgressStreakModal;
+window.closeProgressStreakModal = closeProgressStreakModal;
+window.logTodaysReadingSession = logTodaysReadingSession;
+window.openMonthlyDeepDiveModal = openMonthlyDeepDiveModal;
+window.closeMonthlyDeepDiveModal = closeMonthlyDeepDiveModal;
