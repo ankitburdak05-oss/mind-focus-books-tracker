@@ -1554,157 +1554,19 @@
 
       <div class="view-header-block flex-between">
         <div>
-          <h2 class="view-main-title">Reading Progress &amp; Analytics</h2>
-          <p class="view-sub-title">VIP Reader Command Center &bull; Live Focus &amp; Budget Studio</p>
-        </div>
-        <div style="display:flex;gap:6px;">
-          <button type="button" class="btn-gold-pill" onclick="openShareReportModal()" title="Share Progress Report">
-            <span>📤</span> Share Card
-          </button>
+          <h2 class="view-main-title">Reading Progress</h2>
+          <p class="view-sub-title">Track your growth &amp; achievements</p>
         </div>
       </div>
 
-      <!-- Time Filter Segment -->
+      <!-- Segmented Time Filter Pills (This Month, This Year, All Time) -->
       <div class="progress-time-pills">
         <button type="button" class="prog-time-pill active" id="progPillMonth" onclick="setProgressPillFilter('month')">This Month</button>
         <button type="button" class="prog-time-pill" id="progPillYear" onclick="setProgressPillFilter('year')">This Year</button>
         <button type="button" class="prog-time-pill" id="progPillAll" onclick="setProgressPillFilter('all')">All Time</button>
       </div>
 
-      <!-- 👑 MODULE 1: THE LUXURY PLATINUM READING BUDGET CARD -->
-      <div class="luxury-budget-card" id="luxuryReadingBudgetCard">
-        <div class="luxury-card-glow"></div>
-        <div class="luxury-card-top">
-          <div class="luxury-chip-wrap">
-            <div class="luxury-emv-chip"></div>
-            <div>
-              <div class="luxury-card-badge">MIND FOCUS PLATINUM &bull; 2026</div>
-              <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.5px;">OFFICIAL READING BUDGET</div>
-            </div>
-          </div>
-          <span id="luxuryHealthBadge" class="prog-pill-badge green">🟢 On Track</span>
-        </div>
-
-        <div>
-          <div class="luxury-balance-label">AVAILABLE REMAINING BUDGET</div>
-          <div class="luxury-balance-num">
-            <span id="luxuryRemainingBalance">₹5,000</span>
-            <span style="font-size:0.9rem;font-weight:600;color:var(--text-muted);text-transform:none;">Left to spend</span>
-          </div>
-          <div class="luxury-balance-sub" id="luxuryBudgetSpentSubtitle">
-            Total Spent: <strong style="color:#ffffff;" id="luxuryTotalSpent">₹0</strong> of <span id="luxuryAnnualTarget">₹5,000</span> Annual Target
-          </div>
-        </div>
-
-        <!-- Progress Track -->
-        <div class="luxury-meter-wrap" onclick="openReadingBudgetStudioModal('target')" style="cursor:pointer;" title="Tap to change target">
-          <div class="luxury-meter-track">
-            <div class="luxury-meter-fill" id="luxuryBudgetMeterFill" style="width: 0%;"></div>
-          </div>
-          <div class="luxury-meter-labels">
-            <span>0% Used</span>
-            <span id="luxuryMeterPct">0% of Budget</span>
-            <span>100% Cap</span>
-          </div>
-        </div>
-
-        <!-- 4 Quick Actions directly on the luxury card -->
-        <div class="luxury-actions-grid">
-          <button type="button" class="luxury-btn primary" onclick="openReadingBudgetStudioModal('add')">
-            <span>➕</span> Add Book Price
-          </button>
-          <button type="button" class="luxury-btn secondary" onclick="openReadingBudgetStudioModal('target')">
-            <span>🎯</span> Adjust Budget
-          </button>
-          <button type="button" class="luxury-btn secondary" onclick="quickLogExpensePreset(250)">
-            <span>⚡</span> Quick +₹250
-          </button>
-          <button type="button" class="luxury-btn secondary" onclick="openReadingBudgetStudioModal('history')">
-            <span>📜</span> View Expenses (<span id="luxuryPricedCount">0</span>)
-          </button>
-        </div>
-
-        <!-- Store Source Strip -->
-        <div class="luxury-store-bar" id="luxuryStoreBar">
-          <span style="font-size:0.68rem;color:var(--text-muted);font-weight:700;">STORES:</span>
-          <div class="luxury-store-chip" id="luxuryStoreAmazon">🛒 Amazon: ₹0</div>
-          <div class="luxury-store-chip" id="luxuryStoreFlipkart">🛍️ Flipkart: ₹0</div>
-          <div class="luxury-store-chip" id="luxuryStoreLocal">🏪 Local Stall: ₹0</div>
-          <div class="luxury-store-chip" id="luxuryStoreKindle">📱 Kindle: ₹0</div>
-        </div>
-      </div>
-
-      <!-- ⏱️ MODULE 2: LIVE READING STOPWATCH & FOCUS SESSION TRACKER -->
-      <div class="stopwatch-card" id="liveReadingStopwatchCard">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
-          <div style="display:flex;align-items:center;gap:6px;font-size:0.9rem;font-weight:800;color:#fff;">
-            <span>⏱️</span> Live Reading Focus Session
-          </div>
-          <span class="prog-pill-badge blue" id="stopwatchStatusBadge">Ready</span>
-        </div>
-
-        <!-- Digital Timer Display -->
-        <div class="stopwatch-digital-display" id="stopwatchDigitalDisplay">00:00:00</div>
-
-        <!-- Select Active Book -->
-        <div style="margin-bottom:10px;">
-          <select id="stopwatchBookSelect" style="width:100%;max-width:320px;padding:8px 12px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.82rem;">
-            <!-- Populated by JS -->
-          </select>
-        </div>
-
-        <!-- Controls -->
-        <div class="stopwatch-controls">
-          <button type="button" class="stopwatch-btn start" id="stopwatchBtnStart" onclick="startReadingStopwatch()">
-            <span>▶️</span> Start Focus
-          </button>
-          <button type="button" class="stopwatch-btn pause" id="stopwatchBtnPause" onclick="pauseReadingStopwatch()" style="display:none;">
-            <span>⏸️</span> Pause
-          </button>
-          <button type="button" class="stopwatch-btn stop" id="stopwatchBtnStop" onclick="finishReadingStopwatch()" style="display:none;">
-            <span>⏹️</span> Finish &amp; Log
-          </button>
-        </div>
-      </div>
-
-      <!-- 🎮 MODULE 3: READER LEVEL & DAILY QUESTS (GAMIFIED) -->
-      <div class="xp-quest-card" id="readerXpQuestCard">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-          <div>
-            <div style="font-size:0.95rem;font-weight:900;color:#fff;" id="readerLevelTitle">⭐ Level 3: Avid Bookworm</div>
-            <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;" id="readerXpProgressText">240 / 400 XP to Level 4 (Master Scholar)</div>
-          </div>
-          <div style="font-size:1.6rem;">🏆</div>
-        </div>
-        <div class="rg-progress-track" style="height:7px;background:rgba(255,255,255,0.08);border-radius:4px;overflow:hidden;margin-bottom:12px;">
-          <div id="readerXpBar" style="width:60%;height:100%;background:linear-gradient(90deg,#a855f7,#ec4899);transition:width 0.4s ease;"></div>
-        </div>
-
-        <div style="font-size:0.8rem;font-weight:800;color:#ffffff;margin-bottom:4px;">Daily Reading Quests:</div>
-        <div class="xp-quest-item" id="quest1" onclick="toggleDailyQuest(1, 50)">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <input type="checkbox" id="questCheck1" style="width:16px;height:16px;accent-color:#10b981;" onclick="event.stopPropagation();toggleDailyQuest(1, 50)">
-            <span style="font-size:0.82rem;color:#ffffff;">Read for 15 minutes today</span>
-          </div>
-          <span style="font-size:0.75rem;font-weight:700;color:#ec4899;">+50 XP</span>
-        </div>
-        <div class="xp-quest-item" id="quest2" onclick="toggleDailyQuest(2, 75)">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <input type="checkbox" id="questCheck2" style="width:16px;height:16px;accent-color:#10b981;" onclick="event.stopPropagation();toggleDailyQuest(2, 75)">
-            <span style="font-size:0.82rem;color:#ffffff;">Finish a reading chapter</span>
-          </div>
-          <span style="font-size:0.75rem;font-weight:700;color:#ec4899;">+75 XP</span>
-        </div>
-        <div class="xp-quest-item" id="quest3" onclick="toggleDailyQuest(3, 40)">
-          <div style="display:flex;align-items:center;gap:10px;">
-            <input type="checkbox" id="questCheck3" style="width:16px;height:16px;accent-color:#10b981;" onclick="event.stopPropagation();toggleDailyQuest(3, 40)">
-            <span style="font-size:0.82rem;color:#ffffff;">Log book price in budget</span>
-          </div>
-          <span style="font-size:0.75rem;font-weight:700;color:#ec4899;">+40 XP</span>
-        </div>
-      </div>
-
-      <!-- 📊 MODULE 4: CORE READING DONUT & STATUS BREAKDOWN -->
+      <!-- Screen 4: Donut Card with Center Books Read & 3 Stats -->
       <div class="progress-donut-card" onclick="openProgressBreakdownModal()" style="cursor:pointer;" title="Tap to view books breakdown">
         <div class="donut-visual-container">
           <svg viewBox="0 0 120 120" style="width: 100%; height: 100%; transform: rotate(-90deg);">
@@ -1748,19 +1610,16 @@
         </div>
       </div>
 
-      <!-- 🔥 MODULE 5: 30-DAY STREAK CARD WITH WEEKDAY TRACK -->
+      <!-- Screen 4: Reading Streak Card with M T W T F S S Weekday Dots -->
       <div class="streak-card-v4" onclick="openProgressStreakModal()" style="cursor:pointer;" title="Tap to view Streak Studio">
         <div class="streak-card-header">
           <div class="streak-title-badge">
             <span>🔥</span>
             <span id="streakDaysCount">0 days</span>
           </div>
-          <div style="display:flex;align-items:center;gap:6px;">
-            <span id="streakShieldStatus" class="prog-pill-badge blue" style="cursor:pointer;" onclick="event.stopPropagation();toggleStreakFreezeToken();">🛡️ Shield Active</span>
-            <span class="streak-see-all-link">Studio &rsaquo;</span>
-          </div>
+          <span class="streak-see-all-link">See All &rsaquo;</span>
         </div>
-        <div class="streak-sub-text">Consistency builds greatness. Every page is a step forward.</div>
+        <div class="streak-sub-text">Keep it going! Every single page builds your dream.</div>
         <div class="streak-days-track">
           <div class="streak-day-badge"><span class="streak-day-name">M</span><span class="streak-day-icon">⚪</span></div>
           <div class="streak-day-badge"><span class="streak-day-name">T</span><span class="streak-day-icon">⚪</span></div>
@@ -1772,10 +1631,10 @@
         </div>
       </div>
 
-      <!-- 📅 MODULE 6: MONTHLY 12-MONTH BAR CHART -->
+      <!-- Screen 4: Monthly Progress 12-Month Bar Chart -->
       <div class="monthly-chart-card-v4" onclick="openMonthlyDeepDiveModal()" style="cursor:pointer;" title="Tap to view Monthly Reading Archive">
         <div class="monthly-chart-header">
-          <span class="monthly-chart-title">Monthly Progress (12 Months)</span>
+          <span class="monthly-chart-title">Monthly Progress</span>
           <span class="monthly-chart-count" id="monthlyProgressRatio">0 books</span>
         </div>
         <div class="monthly-bars-container">
@@ -1791,6 +1650,75 @@
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Oct</span></div>
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Nov</span></div>
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Dec</span></div>
+        </div>
+      </div>
+
+      <!-- 👑 LUXURY PLATINUM READING BUDGET CARD (TOTAL SPENT ON TOP, LEFT TO SPEND BELOW) -->
+      <div class="luxury-budget-card" id="luxuryReadingBudgetCard">
+        <div class="luxury-card-glow"></div>
+        <div class="luxury-card-top">
+          <div class="luxury-chip-wrap">
+            <div class="luxury-emv-chip"></div>
+            <div>
+              <div class="luxury-card-badge">MIND FOCUS PLATINUM &bull; 2026</div>
+              <div style="font-size:0.65rem;color:var(--text-muted);letter-spacing:0.5px;">READING BUDGET &amp; EXPENSES</div>
+            </div>
+          </div>
+          <span id="luxuryHealthBadge" class="prog-pill-badge green">🟢 On Track</span>
+        </div>
+
+        <div>
+          <!-- TOTAL SPENT IS ON TOP AS PRIMARY NUMBER -->
+          <div class="luxury-balance-label">TOTAL SPENT</div>
+          <div class="luxury-balance-num">
+            <span id="luxuryTotalSpent">₹0</span>
+            <span style="font-size:0.9rem;font-weight:600;color:var(--text-muted);text-transform:none;">Total Spent</span>
+          </div>
+
+          <!-- LEFT TO SPEND IS BELOW WITH TARGET DETAILS -->
+          <div class="luxury-balance-sub" id="luxuryBudgetSpentSubtitle" style="margin-top:6px;display:flex;align-items:center;flex-wrap:wrap;gap:8px;">
+            <span style="background:rgba(245,158,11,0.15);color:#fbbf24;border:1px solid rgba(245,158,11,0.3);padding:3px 10px;border-radius:12px;font-weight:700;font-size:0.8rem;">
+              💰 <span id="luxuryRemainingBalance">₹5,000</span> Left to spend
+            </span>
+            <span style="font-size:0.75rem;color:var(--text-muted);">of <span id="luxuryAnnualTarget">₹5,000</span> Annual Target</span>
+          </div>
+        </div>
+
+        <!-- Progress Track -->
+        <div class="luxury-meter-wrap" onclick="openReadingBudgetStudioModal('target')" style="cursor:pointer;" title="Tap to change target">
+          <div class="luxury-meter-track">
+            <div class="luxury-meter-fill" id="luxuryBudgetMeterFill" style="width: 0%;"></div>
+          </div>
+          <div class="luxury-meter-labels">
+            <span>0% Used</span>
+            <span id="luxuryMeterPct">0% of Budget</span>
+            <span>100% Cap</span>
+          </div>
+        </div>
+
+        <!-- 4 Quick Actions directly on the luxury card -->
+        <div class="luxury-actions-grid">
+          <button type="button" class="luxury-btn primary" onclick="openReadingBudgetStudioModal('add')">
+            <span>➕</span> Add Book Price
+          </button>
+          <button type="button" class="luxury-btn secondary" onclick="openReadingBudgetStudioModal('target')">
+            <span>🎯</span> Adjust Budget
+          </button>
+          <button type="button" class="luxury-btn secondary" onclick="quickLogExpensePreset(250)">
+            <span>⚡</span> Quick +₹250
+          </button>
+          <button type="button" class="luxury-btn secondary" onclick="openReadingBudgetStudioModal('history')">
+            <span>📜</span> View Expenses (<span id="luxuryPricedCount">0</span>)
+          </button>
+        </div>
+
+        <!-- Store Source Strip -->
+        <div class="luxury-store-bar" id="luxuryStoreBar">
+          <span style="font-size:0.68rem;color:var(--text-muted);font-weight:700;">STORES:</span>
+          <div class="luxury-store-chip" id="luxuryStoreAmazon">🛒 Amazon: ₹0</div>
+          <div class="luxury-store-chip" id="luxuryStoreFlipkart">🛍️ Flipkart: ₹0</div>
+          <div class="luxury-store-chip" id="luxuryStoreLocal">🏪 Local Stall: ₹0</div>
+          <div class="luxury-store-chip" id="luxuryStoreKindle">📱 Kindle: ₹0</div>
         </div>
       </div>
 

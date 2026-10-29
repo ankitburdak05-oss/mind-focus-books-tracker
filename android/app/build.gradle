@@ -24,7 +24,7 @@ android {
 
         versionCode System.getenv("GITHUB_RUN_NUMBER") ? (Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER")) + 8509) : 8509
 
-        versionName "0.0.80"
+        versionName "0.0.81"
 
     }
 
