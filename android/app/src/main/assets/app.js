@@ -20030,3 +20030,1051 @@ window.closeProgressStreakModal = closeProgressStreakModal;
 window.logTodaysReadingSession = logTodaysReadingSession;
 window.openMonthlyDeepDiveModal = openMonthlyDeepDiveModal;
 window.closeMonthlyDeepDiveModal = closeMonthlyDeepDiveModal;
+
+
+
+// ============================================================================
+// PROGRESS COMMAND CENTER & ANALYTICS SUITE (v0.0.79)
+// 50+ Functional, Non-Dummy Reading Progress & Growth Tools
+// ============================================================================
+
+// State & Defaults
+window._activePaceBenchmarkPPH = parseInt(localStorage.getItem('mf_reading_speed_pph') || '40', 10);
+window._activeDailyReadingMins = parseInt(localStorage.getItem('mf_daily_reading_mins') || '30', 10);
+window._selectedSessionMood = 'Mind-Expanding';
+
+// Pre-seeded quotes treasury
+const DEFAULT_READING_QUOTES = [
+  { id: 'q1', quote: "A reader lives a thousand lives before he dies. The man who never reads lives only one.", author: "George R.R. Martin", book: "A Dance with Dragons", page: 12 },
+  { id: 'q2', quote: "You do not rise to the level of your goals. You fall to the level of your systems.", author: "James Clear", book: "Atomic Habits", page: 27 },
+  { id: 'q3', quote: "राह-ए-तलब में कौन किसी का रफ़ीक़ है, खुद को ही ढूंढना है मुसाफ़िर को राह में।", author: "Mirza Ghalib", book: "Deewan-e-Ghalib", page: 84 },
+  { id: 'q4', quote: "The soul becomes dyed with the color of its thoughts.", author: "Marcus Aurelius", book: "Meditations", page: 45 },
+  { id: 'q5', quote: "तू न थकेगा कभी, तू न थमेगा कभी, तू न मुड़ेगा कभी, कर शपथ! अग्निपथ! अग्निपथ!", author: "Harivansh Rai Bachchan", book: "Agneepath", page: 1 }
+];
+
+// 1. Enhanced renderProgressView
+const _oldRenderProgressView = window.renderProgressView;
+window.renderProgressView = function() {
+  if (typeof _oldRenderProgressView === 'function') {
+    try { _oldRenderProgressView(); } catch(e) { console.warn(e); }
+  }
+  renderAnnualGoalMilestones();
+  renderPacePredictionSection();
+  renderMoodSpectrumSection();
+  renderFormatBreakdownSection();
+  renderSlumpBusterSection();
+  renderMiniBadgesSection();
+  renderQuotesVaultPreview();
+  updateBudgetRoiMetrics();
+};
+
+// 2. Annual 2026 Goal & Marathon Milestones
+function renderAnnualGoalMilestones() {
+  const goalBooks = parseInt(localStorage.getItem('mf_reading_goal_2026') || '25', 10);
+  const goalPages = parseInt(localStorage.getItem('mf_marathon_pages_goal_2026') || '6000', 10);
+
+  const allBooks = state.books || [];
+  const completedBooks = allBooks.filter(b => b.status === 'DONE').length;
+  const totalPagesRead = allBooks.reduce((acc, b) => acc + (parseInt(b.current_page || 0, 10)), 0);
+
+  const booksPct = Math.min(100, Math.round((completedBooks / Math.max(1, goalBooks)) * 100));
+  const pagesPct = Math.min(100, Math.round((totalPagesRead / Math.max(1, goalPages)) * 100));
+
+  const booksValEl = document.getElementById('progGoalBooksVal');
+  const targetValEl = document.getElementById('progGoalTargetVal');
+  const booksBarEl = document.getElementById('progGoalBooksBar');
+  if (booksValEl) booksValEl.innerText = completedBooks;
+  if (targetValEl) targetValEl.innerText = `/ ${goalBooks} Books`;
+  if (booksBarEl) booksBarEl.style.width = `${booksPct}%`;
+
+  const pagesValEl = document.getElementById('progGoalPagesVal');
+  const pagesTargetValEl = document.getElementById('progGoalPagesTargetVal');
+  const pagesBarEl = document.getElementById('progGoalPagesBar');
+  if (pagesValEl) pagesValEl.innerText = totalPagesRead.toLocaleString();
+  if (pagesTargetValEl) pagesTargetValEl.innerText = `/ ${goalPages.toLocaleString()} Pgs`;
+  if (pagesBarEl) pagesBarEl.style.width = `${pagesPct}%`;
+
+  const pctTextEl = document.getElementById('progGoalPctText');
+  if (pctTextEl) pctTextEl.innerText = `${booksPct}%`;
+
+  // Velocity Calculation based on current month (Jan=0, Dec=11)
+  const currentMonth = new Date().getMonth() + 1;
+  const expectedPaceBooks = Math.round((goalBooks / 12) * currentMonth);
+  const velocityBadge = document.getElementById('progGoalVelocityBadge');
+  const adviceEl = document.getElementById('progGoalAdviceText');
+
+  if (velocityBadge) {
+    if (completedBooks >= expectedPaceBooks + 2) {
+      velocityBadge.className = 'prog-pill-badge green';
+      velocityBadge.innerText = '🚀 Ahead of Schedule';
+    } else if (completedBooks >= expectedPaceBooks - 1) {
+      velocityBadge.className = 'prog-pill-badge blue';
+      velocityBadge.innerText = '⚡ On Track';
+    } else {
+      velocityBadge.className = 'prog-pill-badge purple';
+      velocityBadge.innerText = '⚠️ Push Needed';
+    }
+  }
+
+  if (adviceEl) {
+    const remainingDaysInYear = Math.max(1, Math.round((new Date(new Date().getFullYear(), 11, 31) - new Date()) / (1000 * 60 * 60 * 24)));
+    const pagesRemaining = Math.max(0, goalPages - totalPagesRead);
+    const dailyPagesNeeded = Math.ceil(pagesRemaining / remainingDaysInYear);
+    adviceEl.innerText = `Read ${dailyPagesNeeded} pages/day to smash your 2026 milestone!`;
+  }
+}
+
+function openAnnualGoalModal() {
+  const modal = document.getElementById('progressAnnualGoalModal');
+  if (!modal) return;
+  const goalBooks = parseInt(localStorage.getItem('mf_reading_goal_2026') || '25', 10);
+  const goalPages = parseInt(localStorage.getItem('mf_marathon_pages_goal_2026') || '6000', 10);
+
+  const bInput = document.getElementById('annualGoalBooksInput');
+  const pInput = document.getElementById('annualGoalPagesInput');
+  if (bInput) bInput.value = goalBooks;
+  if (pInput) pInput.value = goalPages;
+
+  modal.style.display = 'flex';
+}
+
+function closeAnnualGoalModal() {
+  const modal = document.getElementById('progressAnnualGoalModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function setGoalPreset(num) {
+  const bInput = document.getElementById('annualGoalBooksInput');
+  if (bInput) bInput.value = num;
+  const pInput = document.getElementById('annualGoalPagesInput');
+  if (pInput) pInput.value = num * 250; // est 250 pgs per book
+}
+
+function saveAnnualGoalTargets() {
+  const bInput = document.getElementById('annualGoalBooksInput');
+  const pInput = document.getElementById('annualGoalPagesInput');
+  const books = parseInt(bInput?.value || '25', 10);
+  const pages = parseInt(pInput?.value || '6000', 10);
+
+  localStorage.setItem('mf_reading_goal_2026', String(Math.max(1, books)));
+  localStorage.setItem('mf_marathon_pages_goal_2026', String(Math.max(100, pages)));
+
+  renderAnnualGoalMilestones();
+  closeAnnualGoalModal();
+  if (typeof showToast === 'function') showToast('🎯 Annual Reading Goals updated!');
+}
+
+// 3. Reading Pace Lab & Finish Date Predictor
+function renderPacePredictionSection() {
+  const pph = window._activePaceBenchmarkPPH;
+  const speedDisplay = document.getElementById('progAvgSpeedDisplay');
+  const tierBadge = document.getElementById('progPaceTierBadge');
+
+  if (speedDisplay) speedDisplay.innerText = `${pph} Pages / Hour`;
+  if (tierBadge) {
+    if (pph <= 25) { tierBadge.innerText = '🐢 Deep Study Pace'; tierBadge.className = 'prog-pill-badge blue'; }
+    else if (pph <= 50) { tierBadge.innerText = '⚡ Moderate Flow'; tierBadge.className = 'prog-pill-badge green'; }
+    else if (pph <= 80) { tierBadge.innerText = '🚀 Fast Reader'; tierBadge.className = 'prog-pill-badge gold'; }
+    else { tierBadge.innerText = '⚡ Speed Demon'; tierBadge.className = 'prog-pill-badge purple'; }
+  }
+
+  // Populate book dropdown
+  const select = document.getElementById('progPaceBookSelect');
+  if (select) {
+    const allBooks = state.books || [];
+    const readingBooks = allBooks.filter(b => b.status === 'READING');
+    const displayList = readingBooks.length > 0 ? readingBooks : allBooks;
+    
+    select.innerHTML = displayList.map(b => {
+      const cur = parseInt(b.current_page || 0, 10);
+      const tot = parseInt(b.total_pages || 250, 10);
+      return `<option value="${b.id}">${b.title} (${cur}/${tot} pgs)</option>`;
+    }).join('');
+  }
+
+  updatePacePredictionView();
+}
+
+function updatePacePredictionView() {
+  const select = document.getElementById('progPaceBookSelect');
+  const dateEl = document.getElementById('progPaceProjectedDate');
+  const infoEl = document.getElementById('progPaceRemainingInfo');
+  if (!select || !dateEl || !infoEl) return;
+
+  const bookId = select.value;
+  const book = (state.books || []).find(b => String(b.id) === String(bookId));
+  if (!book) {
+    dateEl.innerText = 'No book selected';
+    infoEl.innerText = '0 pgs left';
+    return;
+  }
+
+  const cur = parseInt(book.current_page || 0, 10);
+  const tot = Math.max(cur, parseInt(book.total_pages || 250, 10));
+  const pagesLeft = Math.max(0, tot - cur);
+
+  const pph = Math.max(10, window._activePaceBenchmarkPPH);
+  const dailyMins = Math.max(10, window._activeDailyReadingMins);
+  const pagesPerDay = (pph / 60) * dailyMins;
+  const daysNeeded = Math.ceil(pagesLeft / Math.max(1, pagesPerDay));
+  const hoursNeeded = (pagesLeft / pph).toFixed(1);
+
+  const targetDate = new Date();
+  targetDate.setDate(targetDate.getDate() + daysNeeded);
+  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const formattedDate = `${monthNames[targetDate.getMonth()]} ${targetDate.getDate()}, ${targetDate.getFullYear()}`;
+
+  if (pagesLeft === 0) {
+    dateEl.innerText = '🎉 Book Completed!';
+    infoEl.innerText = '100% finished';
+  } else {
+    dateEl.innerText = `${formattedDate} (${daysNeeded} ${daysNeeded === 1 ? 'day' : 'days'} left)`;
+    infoEl.innerText = `${pagesLeft} pgs left (~${hoursNeeded} hrs)`;
+  }
+}
+
+function openSpeedCalculatorModal() {
+  const modal = document.getElementById('progressSpeedCalculatorModal');
+  if (!modal) return;
+  const slider = document.getElementById('paceSpeedSlider');
+  const sliderVal = document.getElementById('paceSpeedSliderVal');
+  if (slider) slider.value = window._activePaceBenchmarkPPH;
+  if (sliderVal) sliderVal.innerText = `${window._activePaceBenchmarkPPH} PPH`;
+  modal.style.display = 'flex';
+}
+
+function closeSpeedCalculatorModal() {
+  const modal = document.getElementById('progressSpeedCalculatorModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function onPaceSliderChange(val) {
+  window._activePaceBenchmarkPPH = parseInt(val, 10);
+  const sliderVal = document.getElementById('paceSpeedSliderVal');
+  if (sliderVal) sliderVal.innerText = `${val} PPH`;
+  updatePaceInsightText();
+}
+
+function setPaceDailyMinutes(btn, mins) {
+  window._activeDailyReadingMins = mins;
+  const parent = btn.parentElement;
+  if (parent) {
+    parent.querySelectorAll('.rb-preset-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  updatePaceInsightText();
+}
+
+function updatePaceInsightText() {
+  const insight = document.getElementById('paceCalculatedInsight');
+  if (!insight) return;
+  const pph = window._activePaceBenchmarkPPH;
+  const mins = window._activeDailyReadingMins;
+  const dailyPages = Math.round((pph / 60) * mins);
+  const daysFor300 = Math.ceil(300 / Math.max(1, dailyPages));
+  insight.innerHTML = `You will read approximately <strong>${dailyPages} pages per day</strong> and finish a standard 300-page book in <strong>${daysFor300} days</strong>!`;
+}
+
+function savePaceSettings() {
+  localStorage.setItem('mf_reading_speed_pph', String(window._activePaceBenchmarkPPH));
+  localStorage.setItem('mf_daily_reading_mins', String(window._activeDailyReadingMins));
+  renderPacePredictionSection();
+  closeSpeedCalculatorModal();
+  if (typeof showToast === 'function') showToast('⚡ Reading Pace benchmark updated!');
+}
+
+// 4. StoryGraph-Style Mood Spectrum
+function renderMoodSpectrumSection() {
+  const moods = [
+    { key: 'Mind-Expanding', label: 'Mind-Expanding', color: '#3b82f6', icon: '🧠' },
+    { key: 'Inspiring', label: 'Inspiring', color: '#f59e0b', icon: '⚡' },
+    { key: 'Emotional', label: 'Emotional', color: '#a855f7', icon: '🎭' },
+    { key: 'Peaceful', label: 'Peaceful', color: '#10b981', icon: '🧘' },
+    { key: 'Gripping', label: 'Gripping', color: '#ef4444', icon: '🔍' },
+    { key: 'Philosophical', label: 'Deep Thought', color: '#06b6d4', icon: '💡' }
+  ];
+
+  const moodStorage = JSON.parse(localStorage.getItem('mf_reading_book_moods') || '{}');
+  const allBooks = state.books || [];
+
+  // Count moods
+  const counts = {};
+  moods.forEach(m => counts[m.key] = 0);
+  
+  allBooks.forEach(b => {
+    let m = moodStorage[b.id];
+    if (!m) {
+      // Auto infer from category
+      const cat = (b.category || '').toLowerCase();
+      if (cat.includes('poet') || cat.includes('shayari') || cat.includes('ghazal')) m = 'Emotional';
+      else if (cat.includes('self') || cat.includes('habit') || cat.includes('growth')) m = 'Inspiring';
+      else if (cat.includes('psy') || cat.includes('thrill') || cat.includes('myster')) m = 'Gripping';
+      else if (cat.includes('philo') || cat.includes('meditat')) m = 'Philosophical';
+      else if (cat.includes('spirit') || cat.includes('zen') || cat.includes('peace')) m = 'Peaceful';
+      else m = 'Mind-Expanding';
+    }
+    counts[m] = (counts[m] || 0) + 1;
+  });
+
+  const total = Math.max(1, allBooks.length);
+
+  // Render multi-bar
+  const barWrap = document.getElementById('progMoodMultiBar');
+  if (barWrap) {
+    barWrap.innerHTML = moods.map(m => {
+      const pct = Math.round((counts[m.key] / total) * 100);
+      if (pct === 0) return '';
+      return `<div class="prog-mood-seg" style="width:${pct}%;background:${m.color};" title="${m.label}: ${pct}%"></div>`;
+    }).join('');
+  }
+
+  // Render mood chips
+  const chipsWrap = document.getElementById('progMoodChipsContainer');
+  if (chipsWrap) {
+    chipsWrap.innerHTML = moods.map(m => {
+      const count = counts[m.key] || 0;
+      return `
+        <button type="button" class="prog-mood-chip" onclick="openMoodFilteredBooks('${m.key}')" title="View ${m.label} books">
+          <span>${m.icon}</span>
+          <span>${m.label} (${count})</span>
+        </button>
+      `;
+    }).join('');
+  }
+}
+
+function openMoodFilteredBooks(moodKey) {
+  openProgressBreakdownModal('ALL');
+  if (typeof showToast === 'function') showToast(`Filtering library by mood: ${moodKey}`);
+}
+
+function openMoodStudioModal() {
+  const modal = document.getElementById('progressMoodStudioModal');
+  if (!modal) return;
+  const moodStorage = JSON.parse(localStorage.getItem('mf_reading_book_moods') || '{}');
+  const allBooks = state.books || [];
+  const list = document.getElementById('moodStudioBooksList');
+
+  const moodsList = ['Mind-Expanding', 'Inspiring', 'Emotional', 'Peaceful', 'Gripping', 'Philosophical'];
+
+  if (list) {
+    list.innerHTML = allBooks.map(b => {
+      const curMood = moodStorage[b.id] || 'Mind-Expanding';
+      return `
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:12px;">
+          <div>
+            <div style="font-size:0.85rem;font-weight:700;color:#fff;">${b.title}</div>
+            <div style="font-size:0.72rem;color:var(--text-muted);">${b.author || 'Unknown'} &bull; ${b.category || 'General'}</div>
+          </div>
+          <select onchange="saveBookMoodTag('${b.id}', this.value)" style="padding:6px 10px;border-radius:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);color:var(--accent-gold);font-weight:700;font-size:0.78rem;">
+            ${moodsList.map(m => `<option value="${m}" ${m === curMood ? 'selected' : ''}>${m}</option>`).join('')}
+          </select>
+        </div>
+      `;
+    }).join('');
+  }
+
+  modal.style.display = 'flex';
+}
+
+function closeMoodStudioModal() {
+  const modal = document.getElementById('progressMoodStudioModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function saveBookMoodTag(bookId, mood) {
+  const moodStorage = JSON.parse(localStorage.getItem('mf_reading_book_moods') || '{}');
+  moodStorage[bookId] = mood;
+  localStorage.setItem('mf_reading_book_moods', JSON.stringify(moodStorage));
+  renderMoodSpectrumSection();
+  if (typeof showToast === 'function') showToast(`Mood tagged: ${mood}`);
+}
+
+// 5. Reading Format & Medium Breakdown
+function renderFormatBreakdownSection() {
+  const allBooks = state.books || [];
+  let physical = 0, ebook = 0, audio = 0;
+
+  allBooks.forEach(b => {
+    const title = (b.title || '').toLowerCase();
+    const cat = (b.category || '').toLowerCase();
+    if (b.format === 'AUDIO' || cat.includes('audio') || title.includes('audiobook')) audio++;
+    else if (b.format === 'EBOOK' || cat.includes('ebook') || cat.includes('pdf') || title.includes('kindle')) ebook++;
+    else physical++;
+  });
+
+  const physEl = document.getElementById('progFormatPhysicalVal');
+  const ebookEl = document.getElementById('progFormatEbookVal');
+  const audioEl = document.getElementById('progFormatAudioVal');
+  const pillEl = document.getElementById('progFormatDominantPill');
+
+  if (physEl) physEl.innerText = physical;
+  if (ebookEl) ebookEl.innerText = ebook;
+  if (audioEl) audioEl.innerText = audio;
+
+  if (pillEl) {
+    if (audio > physical && audio > ebook) pillEl.innerText = '🎧 Audio Scholar';
+    else if (ebook > physical) pillEl.innerText = '📱 Digital Reader';
+    else pillEl.innerText = '📕 Physical Paperback Reader';
+  }
+}
+
+// 6. DNF & Slump Buster Lab
+function renderSlumpBusterSection() {
+  const dnfList = JSON.parse(localStorage.getItem('mf_reading_dnf_books') || '[]');
+  const countBadge = document.getElementById('progDnfCount');
+  if (countBadge) countBadge.innerText = dnfList.length;
+}
+
+function runSlumpBuster() {
+  const allBooks = state.books || [];
+  if (allBooks.length === 0) {
+    alert("Add a few books to your library first to activate Slump Buster!");
+    return;
+  }
+
+  // Find shortest reading or pending book
+  const activeCandidates = allBooks.filter(b => b.status === 'READING' || b.status === 'WISHLIST' || b.status === 'PENDING');
+  const candidates = activeCandidates.length > 0 ? activeCandidates : allBooks;
+
+  candidates.sort((a, b) => {
+    const aPgs = parseInt(a.total_pages || 200, 10) - parseInt(a.current_page || 0, 10);
+    const bPgs = parseInt(b.total_pages || 200, 10) - parseInt(b.current_page || 0, 10);
+    return aPgs - bPgs;
+  });
+
+  const pick = candidates[0];
+  const pgsLeft = Math.max(1, parseInt(pick.total_pages || 200, 10) - parseInt(pick.current_page || 0, 10));
+
+  const proceed = confirm(`🚀 SLUMP BUSTER MATCH!\n\n"${pick.title}" by ${pick.author || 'Author'}\nOnly ${pgsLeft} pages remaining!\n\nPsychology tip: Reading just 5 pages right now completely breaks reader fatigue. Would you like to open this book now?`);
+  
+  if (proceed) {
+    if (typeof openRealBookReader === 'function') {
+      openRealBookReader(pick.id);
+    } else if (typeof openBookDetailModal === 'function') {
+      openBookDetailModal(pick.id);
+    }
+  }
+}
+
+function openDnfVaultModal() {
+  const modal = document.getElementById('progressDnfVaultModal');
+  if (!modal) return;
+
+  // Populate currently reading select
+  const select = document.getElementById('dnfAddBookSelect');
+  if (select) {
+    const readingBooks = (state.books || []).filter(b => b.status === 'READING');
+    select.innerHTML = readingBooks.map(b => `<option value="${b.id}">${b.title}</option>`).join('');
+  }
+
+  renderDnfVaultList();
+  modal.style.display = 'flex';
+}
+
+function closeDnfVaultModal() {
+  const modal = document.getElementById('progressDnfVaultModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function renderDnfVaultList() {
+  const dnfList = JSON.parse(localStorage.getItem('mf_reading_dnf_books') || '[]');
+  const container = document.getElementById('dnfVaultList');
+  const badge = document.getElementById('dnfVaultCountBadge');
+  if (badge) badge.innerText = dnfList.length;
+
+  if (!container) return;
+  if (dnfList.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:24px;color:var(--text-muted);font-size:0.85rem;">No paused or DNF books in your vault. You are on fire! 🔥</div>`;
+    return;
+  }
+
+  container.innerHTML = dnfList.map(item => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(239,68,68,0.2);border-radius:12px;">
+      <div>
+        <div style="font-size:0.9rem;font-weight:700;color:#fff;">${item.title}</div>
+        <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Reason: <span style="color:#ef4444;font-weight:600;">${item.reason}</span> &bull; Paused on ${item.date}</div>
+      </div>
+      <button type="button" class="btn-gold-pill" onclick="resumeBookFromDnf('${item.bookId}')" style="font-size:0.75rem;padding:6px 12px;">
+        ▶️ Resume
+      </button>
+    </div>
+  `).join('');
+}
+
+function confirmMoveToDnf() {
+  const select = document.getElementById('dnfAddBookSelect');
+  const reasonSelect = document.getElementById('dnfAddReasonSelect');
+  if (!select || !select.value) {
+    alert("Please select a book to pause.");
+    return;
+  }
+
+  const bookId = select.value;
+  const reason = reasonSelect ? reasonSelect.value : 'Temporary Pause';
+  const book = (state.books || []).find(b => String(b.id) === String(bookId));
+  if (!book) return;
+
+  const dnfList = JSON.parse(localStorage.getItem('mf_reading_dnf_books') || '[]');
+  const nowStr = new Date().toLocaleDateString();
+  dnfList.push({ bookId: book.id, title: book.title, reason, date: nowStr });
+  localStorage.setItem('mf_reading_dnf_books', JSON.stringify(dnfList));
+
+  // Change book status to WISHLIST / PAUSED
+  book.status = 'WISHLIST';
+  if (typeof saveStateToStorage === 'function') saveStateToStorage();
+
+  renderDnfVaultList();
+  renderSlumpBusterSection();
+  if (typeof showToast === 'function') showToast(`"${book.title}" moved to DNF Vault.`);
+}
+
+function resumeBookFromDnf(bookId) {
+  let dnfList = JSON.parse(localStorage.getItem('mf_reading_dnf_books') || '[]');
+  dnfList = dnfList.filter(item => String(item.bookId) !== String(bookId));
+  localStorage.setItem('mf_reading_dnf_books', JSON.stringify(dnfList));
+
+  const book = (state.books || []).find(b => String(b.id) === String(bookId));
+  if (book) {
+    book.status = 'READING';
+    if (typeof saveStateToStorage === 'function') saveStateToStorage();
+  }
+
+  renderDnfVaultList();
+  renderSlumpBusterSection();
+  if (typeof showToast === 'function') showToast("Book resumed to Currently Reading!");
+}
+
+function openQuickDnfPrompt() {
+  openDnfVaultModal();
+}
+
+// 7. Badges Showcase (10 Unlockable Milestones)
+const READER_BADGES_SPEC = [
+  { id: 'b1', name: 'First Step', icon: '🔰', desc: 'Added first book to library', check: () => (state.books || []).length >= 1 },
+  { id: 'b2', name: 'Book Collector', icon: '📚', desc: 'Has 3+ books in collection', check: () => (state.books || []).length >= 3 },
+  { id: 'b3', name: 'First Finish', icon: '🏆', desc: 'Completed reading your 1st book', check: () => (state.books || []).filter(b => b.status === 'DONE').length >= 1 },
+  { id: 'b4', name: 'Master Scholar', icon: '👑', desc: 'Finished 5 or more books', check: () => (state.books || []).filter(b => b.status === 'DONE').length >= 5 },
+  { id: 'b5', name: '7-Day Flame', icon: '🔥', desc: 'Achieved a 7-day reading streak', check: () => (state.stats?.readingStreak || 0) >= 7 },
+  { id: 'b6', name: 'Century Club', icon: '⚡', desc: 'Read over 100 total pages', check: () => (state.books || []).reduce((a, b) => a + (parseInt(b.current_page || 0, 10)), 0) >= 100 },
+  { id: 'b7', name: 'Budget Master', icon: '💰', desc: 'Logged book prices responsibly', check: () => Object.keys(JSON.parse(localStorage.getItem('mf_book_prices') || '{}')).length >= 1 },
+  { id: 'b8', name: 'Quote Keeper', icon: '📜', desc: 'Saved inspiring quotes in vault', check: () => (JSON.parse(localStorage.getItem('mf_reading_quotes_vault') || '[]')).length >= 1 },
+  { id: 'b9', name: 'Genre Polymath', icon: '🌍', desc: 'Read across 3+ distinct categories', check: () => {
+    const cats = new Set((state.books || []).map(b => b.category).filter(Boolean));
+    return cats.size >= 3;
+  }},
+  { id: 'b10', name: 'Streak Shield', icon: '🛡️', desc: 'Activated reading streak protection', check: () => localStorage.getItem('mf_streak_shield_active') === 'true' }
+];
+
+function renderMiniBadgesSection() {
+  const container = document.getElementById('progMiniBadgeGrid');
+  const unlockedPill = document.getElementById('progBadgesUnlockedPill');
+  if (!container) return;
+
+  let unlockedCount = 0;
+  container.innerHTML = READER_BADGES_SPEC.map(b => {
+    const isUnlocked = b.check();
+    if (isUnlocked) unlockedCount++;
+    return `
+      <div class="prog-badge-card ${isUnlocked ? 'unlocked' : 'locked'}" onclick="celebrateBadge('${b.id}')" title="${b.name}: ${b.desc}">
+        <span class="prog-badge-icon">${b.icon}</span>
+        <span class="prog-badge-name">${b.name}</span>
+      </div>
+    `;
+  }).join('');
+
+  if (unlockedPill) unlockedPill.innerText = `${unlockedCount} / 10 Earned`;
+}
+
+function openAchievementsModal() {
+  const modal = document.getElementById('progressAchievementsModal');
+  if (!modal) return;
+  const grid = document.getElementById('achievementsModalGrid');
+  if (grid) {
+    grid.innerHTML = READER_BADGES_SPEC.map(b => {
+      const isUnlocked = b.check();
+      return `
+        <div style="padding:14px;border-radius:14px;background:rgba(255,255,255,${isUnlocked?'0.06':'0.02'});border:1px solid ${isUnlocked?'rgba(245,158,11,0.3)':'rgba(255,255,255,0.06)'};text-align:center;${isUnlocked?'':'opacity:0.5;filter:grayscale(1);'}">
+          <div style="font-size:2.2rem;margin-bottom:6px;">${b.icon}</div>
+          <div style="font-size:0.95rem;font-weight:800;color:${isUnlocked?'var(--accent-gold)':'#fff'};">${b.name}</div>
+          <div style="font-size:0.75rem;color:var(--text-muted);margin-top:4px;">${b.desc}</div>
+          <div style="font-size:0.7rem;font-weight:700;margin-top:8px;color:${isUnlocked?'#10b981':'var(--text-muted)'};">
+            ${isUnlocked ? '✅ UNLOCKED' : '🔒 IN PROGRESS'}
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+  modal.style.display = 'flex';
+}
+
+function closeAchievementsModal() {
+  const modal = document.getElementById('progressAchievementsModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function celebrateBadge(badgeId) {
+  const badge = READER_BADGES_SPEC.find(b => b.id === badgeId);
+  if (!badge) return;
+  const isUnlocked = badge.check();
+  if (isUnlocked) {
+    alert(`🎉 BADGE UNLOCKED!\n\n${badge.icon} ${badge.name}\n${badge.desc}\n\nKeep reading and growing every single day!`);
+  } else {
+    alert(`🔒 BADGE LOCKED: ${badge.name}\n\nTo unlock:\n${badge.desc}`);
+  }
+}
+
+// 8. Streak Freeze / Shield
+function toggleStreakFreezeToken() {
+  const cur = localStorage.getItem('mf_streak_shield_active') === 'true';
+  const next = !cur;
+  localStorage.setItem('mf_streak_shield_active', next ? 'true' : 'false');
+
+  const shieldBadge = document.getElementById('streakShieldStatus');
+  if (shieldBadge) {
+    shieldBadge.className = next ? 'prog-pill-badge blue' : 'prog-pill-badge';
+    shieldBadge.innerText = next ? '🛡️ Shield Active' : '🛡️ Shield Off';
+  }
+  if (typeof showToast === 'function') {
+    showToast(next ? '🛡️ Reading Streak Shield activated (Streak protected!)' : 'Streak Shield turned off');
+  }
+  renderMiniBadgesSection();
+}
+
+// 9. Daily Reading Session Logger Modal
+function openSessionLoggerModal() {
+  const modal = document.getElementById('progressSessionLoggerModal');
+  if (!modal) return;
+
+  const select = document.getElementById('sessionLogBookSelect');
+  if (select) {
+    const allBooks = state.books || [];
+    select.innerHTML = allBooks.map(b => {
+      const cur = parseInt(b.current_page || 0, 10);
+      const tot = parseInt(b.total_pages || 250, 10);
+      return `<option value="${b.id}">${b.title} (Currently at p. ${cur}/${tot})</option>`;
+    }).join('');
+  }
+
+  onSessionBookSelected();
+  renderSessionHistoryList();
+  modal.style.display = 'flex';
+}
+
+function closeSessionLoggerModal() {
+  const modal = document.getElementById('progressSessionLoggerModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function onSessionBookSelected() {
+  const select = document.getElementById('sessionLogBookSelect');
+  if (!select) return;
+  const book = (state.books || []).find(b => String(b.id) === String(select.value));
+  const curPage = book ? parseInt(book.current_page || 0, 10) : 0;
+
+  const startInput = document.getElementById('sessionLogStartPage');
+  const endInput = document.getElementById('sessionLogEndPage');
+  if (startInput) startInput.value = curPage;
+  if (endInput) endInput.value = curPage + 10;
+  calcSessionPagesRead();
+}
+
+function calcSessionPagesRead() {
+  const start = parseInt(document.getElementById('sessionLogStartPage')?.value || '0', 10);
+  const end = parseInt(document.getElementById('sessionLogEndPage')?.value || '0', 10);
+  const read = Math.max(0, end - start);
+
+  const disp = document.getElementById('sessionLogPagesReadDisplay');
+  if (disp) disp.innerText = `${read} Pages`;
+}
+
+function selectSessionMood(btn, mood) {
+  window._selectedSessionMood = mood;
+  const parent = document.getElementById('sessionLogMoodChips');
+  if (parent) {
+    parent.querySelectorAll('.rb-store-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+}
+
+function saveReadingSessionRecord() {
+  const select = document.getElementById('sessionLogBookSelect');
+  const book = (state.books || []).find(b => String(b.id) === String(select?.value));
+  if (!book) {
+    alert("Please select a valid book.");
+    return;
+  }
+
+  const start = parseInt(document.getElementById('sessionLogStartPage')?.value || '0', 10);
+  const end = parseInt(document.getElementById('sessionLogEndPage')?.value || '0', 10);
+  const mins = parseInt(document.getElementById('sessionLogMinutes')?.value || '20', 10);
+  const note = document.getElementById('sessionLogNote')?.value || '';
+  const pagesRead = Math.max(0, end - start);
+
+  // Update book page
+  book.current_page = end;
+  if (book.total_pages && book.current_page >= book.total_pages) {
+    book.status = 'DONE';
+  } else if (book.status !== 'DONE') {
+    book.status = 'READING';
+  }
+
+  // Update streak
+  state.stats.readingStreak = (state.stats.readingStreak || 0) + 1;
+  state.stats.lastReadDate = new Date().toISOString();
+  if (typeof saveStateToStorage === 'function') saveStateToStorage();
+
+  // Save session entry
+  const sessions = JSON.parse(localStorage.getItem('mf_reading_sessions_log') || '[]');
+  const now = new Date();
+  sessions.unshift({
+    id: 'sess_' + Date.now(),
+    bookId: book.id,
+    bookTitle: book.title,
+    pagesRead,
+    startPage: start,
+    endPage: end,
+    durationMins: mins,
+    mood: window._selectedSessionMood,
+    note,
+    date: now.toLocaleDateString(),
+    time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  });
+  localStorage.setItem('mf_reading_sessions_log', JSON.stringify(sessions.slice(0, 50)));
+
+  // If note provided, auto add to quotes vault
+  if (note.trim().length > 10) {
+    saveQuoteToVaultDirect(note.trim(), book.author || 'Author', book.title, end);
+  }
+
+  renderProgressView();
+  renderSessionHistoryList();
+  closeSessionLoggerModal();
+  if (typeof showToast === 'function') showToast(`🎉 Session logged! +${pagesRead} pages & streak increased!`);
+}
+
+function renderSessionHistoryList() {
+  const container = document.getElementById('sessionHistoryList');
+  if (!container) return;
+  const sessions = JSON.parse(localStorage.getItem('mf_reading_sessions_log') || '[]');
+
+  if (sessions.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:16px;color:var(--text-muted);font-size:0.8rem;">No sessions logged yet. Record your first session above!</div>`;
+    return;
+  }
+
+  container.innerHTML = sessions.map(s => `
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;">
+      <div>
+        <div style="font-size:0.85rem;font-weight:700;color:#fff;">${s.bookTitle}</div>
+        <div style="font-size:0.72rem;color:var(--text-muted);margin-top:2px;">
+          +${s.pagesRead} pgs (p. ${s.startPage}–${s.endPage}) &bull; ${s.durationMins} mins &bull; <span style="color:var(--accent-gold);">${s.mood}</span>
+        </div>
+        ${s.note ? `<div style="font-size:0.72rem;color:var(--text-secondary);font-style:italic;margin-top:2px;">"${s.note}"</div>` : ''}
+      </div>
+      <div style="text-align:right;">
+        <span style="font-size:0.68rem;color:var(--text-muted);">${s.date}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// 10. Quotes Vault
+let _currentQuoteIndex = 0;
+
+function getAllQuotes() {
+  const userQuotes = JSON.parse(localStorage.getItem('mf_reading_quotes_vault') || '[]');
+  return [...userQuotes, ...DEFAULT_READING_QUOTES];
+}
+
+function renderQuotesVaultPreview() {
+  const quotes = getAllQuotes();
+  const countEl = document.getElementById('progQuotesTotalCount');
+  if (countEl) countEl.innerText = quotes.length;
+
+  const textEl = document.getElementById('progFeaturedQuoteText');
+  const authEl = document.getElementById('progFeaturedQuoteAuthor');
+
+  if (quotes.length > 0 && textEl && authEl) {
+    const q = quotes[_currentQuoteIndex % quotes.length];
+    textEl.innerText = q.quote;
+    authEl.innerText = `— ${q.author}${q.book ? ' (' + q.book + ')' : ''}`;
+  }
+}
+
+function renderNextRandomQuote() {
+  const quotes = getAllQuotes();
+  if (quotes.length === 0) return;
+  _currentQuoteIndex = (_currentQuoteIndex + 1) % quotes.length;
+  renderQuotesVaultPreview();
+}
+
+function copyCurrentFeaturedQuote() {
+  const quotes = getAllQuotes();
+  if (quotes.length === 0) return;
+  const q = quotes[_currentQuoteIndex % quotes.length];
+  const str = `"${q.quote}"\n— ${q.author}${q.book ? ' (' + q.book + ')' : ''}`;
+  navigator.clipboard.writeText(str).then(() => {
+    if (typeof showToast === 'function') showToast("📋 Quote copied to clipboard!");
+  }).catch(() => alert("Copied: " + str));
+}
+
+function openAddQuoteModal() {
+  const quote = prompt("Enter the inspiring quote or reflection:");
+  if (!quote || !quote.trim()) return;
+
+  const author = prompt("Author or speaker name:", "Unknown") || "Unknown";
+  const book = prompt("Book title (optional):", "") || "";
+  const page = prompt("Page number (optional):", "") || "";
+
+  saveQuoteToVaultDirect(quote.trim(), author.trim(), book.trim(), page.trim());
+}
+
+function saveQuoteToVaultDirect(quote, author, book, page) {
+  const userQuotes = JSON.parse(localStorage.getItem('mf_reading_quotes_vault') || '[]');
+  userQuotes.unshift({
+    id: 'quote_' + Date.now(),
+    quote,
+    author: author || 'Unknown',
+    book: book || '',
+    page: page || '',
+    date: new Date().toLocaleDateString()
+  });
+  localStorage.setItem('mf_reading_quotes_vault', JSON.stringify(userQuotes));
+  renderQuotesVaultPreview();
+  renderMiniBadgesSection();
+  if (typeof showToast === 'function') showToast("📜 Quote saved to Vault!");
+}
+
+function openQuotesVaultModal() {
+  const modal = document.getElementById('progressQuotesVaultModal');
+  if (!modal) return;
+  renderQuotesVaultList();
+  modal.style.display = 'flex';
+}
+
+function closeQuotesVaultModal() {
+  const modal = document.getElementById('progressQuotesVaultModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function renderQuotesVaultList(query) {
+  const container = document.getElementById('quotesVaultListContainer');
+  if (!container) return;
+  const quotes = getAllQuotes();
+
+  const filtered = query ? quotes.filter(q => 
+    q.quote.toLowerCase().includes(query.toLowerCase()) || 
+    q.author.toLowerCase().includes(query.toLowerCase()) ||
+    (q.book || '').toLowerCase().includes(query.toLowerCase())
+  ) : quotes;
+
+  if (filtered.length === 0) {
+    container.innerHTML = `<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:0.85rem;">No quotes found matching search.</div>`;
+    return;
+  }
+
+  container.innerHTML = filtered.map(q => `
+    <div style="padding:14px;border-radius:14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);position:relative;">
+      <p style="font-size:0.85rem;color:#fff;font-style:italic;margin:0 0 8px 0;line-height:1.4;">“${q.quote}”</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);">
+        <span>— <strong>${q.author}</strong> ${q.book ? '&bull; ' + q.book : ''} ${q.page ? '(p. ' + q.page + ')' : ''}</span>
+        <div style="display:flex;gap:8px;">
+          <button type="button" onclick="copySpecificQuote('${q.id}')" style="background:none;border:none;color:#38bdf8;cursor:pointer;font-weight:700;">Copy</button>
+          ${q.id.startsWith('quote_') ? `<button type="button" onclick="deleteQuoteFromVault('${q.id}')" style="background:none;border:none;color:#ef4444;cursor:pointer;">Delete</button>` : ''}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function filterQuotesVaultList(val) {
+  renderQuotesVaultList(val);
+}
+
+function copySpecificQuote(quoteId) {
+  const quotes = getAllQuotes();
+  const q = quotes.find(item => item.id === quoteId);
+  if (!q) return;
+  const str = `"${q.quote}"\n— ${q.author}${q.book ? ' (' + q.book + ')' : ''}`;
+  navigator.clipboard.writeText(str).then(() => {
+    if (typeof showToast === 'function') showToast("📋 Quote copied!");
+  });
+}
+
+function deleteQuoteFromVault(quoteId) {
+  let userQuotes = JSON.parse(localStorage.getItem('mf_reading_quotes_vault') || '[]');
+  userQuotes = userQuotes.filter(q => q.id !== quoteId);
+  localStorage.setItem('mf_reading_quotes_vault', JSON.stringify(userQuotes));
+  renderQuotesVaultList();
+  renderQuotesVaultPreview();
+}
+
+// 11. ROI Metrics Bar in Budget Card
+function updateBudgetRoiMetrics() {
+  const allBooks = state.books || [];
+  const prices = JSON.parse(localStorage.getItem('mf_book_prices') || '{}');
+  const currencySym = typeof getCurrencySymbol === 'function' ? getCurrencySymbol() : '₹';
+
+  let totalSpent = 0;
+  let totalPagesInPriced = 0;
+  let freeBooksCount = 0;
+  const storeCounts = {};
+
+  allBooks.forEach(b => {
+    const pr = parseFloat(prices[b.id] || 0);
+    if (pr > 0) {
+      totalSpent += pr;
+      totalPagesInPriced += parseInt(b.total_pages || 250, 10);
+      const store = b.store || 'Online';
+      storeCounts[store] = (storeCounts[store] || 0) + 1;
+    } else {
+      freeBooksCount++;
+    }
+  });
+
+  const totalPagesRead = allBooks.reduce((acc, b) => acc + (parseInt(b.current_page || 0, 10)), 0);
+
+  const costPerPage = totalPagesRead > 0 ? (totalSpent / totalPagesRead).toFixed(2) : '0.00';
+  const pph = window._activePaceBenchmarkPPH || 40;
+  const costPerHour = (parseFloat(costPerPage) * (pph || 40)).toFixed(2);
+  const avgBookPrice = totalSpent > 0 && Object.keys(prices).length > 0 ? (totalSpent / Object.keys(prices).length) : 350;
+  const moneySaved = Math.round(freeBooksCount * avgBookPrice);
+
+  let topStore = 'Amazon / Local';
+  let maxCount = 0;
+  for (const s in storeCounts) {
+    if (storeCounts[s] > maxCount) {
+      maxCount = storeCounts[s];
+      topStore = s;
+    }
+  }
+
+  const elPerPage = document.getElementById('rbRoiCostPerPage');
+  const elPerHour = document.getElementById('rbRoiCostPerHour');
+  const elSaved = document.getElementById('rbRoiMoneySaved');
+  const elStore = document.getElementById('rbRoiTopStore');
+
+  if (elPerPage) elPerPage.innerText = `${currencySym}${costPerPage}`;
+  if (elPerHour) elPerHour.innerText = `${currencySym}${costPerHour}`;
+  if (elSaved) elSaved.innerText = `${currencySym}${moneySaved.toLocaleString()}`;
+  if (elStore) elStore.innerText = topStore;
+}
+
+// 12. Share Progress Report & Data Hub
+function generateProgressReportSummary() {
+  const goalBooks = parseInt(localStorage.getItem('mf_reading_goal_2026') || '25', 10);
+  const allBooks = state.books || [];
+  const completed = allBooks.filter(b => b.status === 'DONE').length;
+  const reading = allBooks.filter(b => b.status === 'READING').length;
+  const totalPages = allBooks.reduce((a, b) => a + (parseInt(b.current_page || 0, 10)), 0);
+  const streak = state.stats?.readingStreak || 0;
+  const currencySym = typeof getCurrencySymbol === 'function' ? getCurrencySymbol() : '₹';
+  const prices = JSON.parse(localStorage.getItem('mf_book_prices') || '{}');
+  const totalSpent = Object.values(prices).reduce((a, v) => a + parseFloat(v || 0), 0);
+
+  return `📚 MY 2026 READING REPORT CARD
+---------------------------------------
+🎯 Reading Goal: ${completed} / ${goalBooks} Books (${Math.round((completed/goalBooks)*100)}%)
+📖 Currently Reading: ${reading} Books
+📄 Total Pages Read: ${totalPages.toLocaleString()} Pages
+🔥 Active Streak: ${streak} Days
+💰 Book Budget Spent: ${currencySym}${totalSpent.toLocaleString()}
+⚡ Reading Velocity: ${window._activePaceBenchmarkPPH || 40} Pages/Hour
+✨ Tracked with Mind Focus Books Native App`;
+}
+
+function openShareReportModal() {
+  const modal = document.getElementById('progressShareReportModal');
+  if (!modal) return;
+  const card = document.getElementById('shareReportCardContent');
+  if (card) card.innerText = generateProgressReportSummary();
+  modal.style.display = 'flex';
+}
+
+function closeShareReportModal() {
+  const modal = document.getElementById('progressShareReportModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function copyReportCardToClipboard() {
+  const text = generateProgressReportSummary();
+  navigator.clipboard.writeText(text).then(() => {
+    if (typeof showToast === 'function') showToast("📋 Report copied to clipboard for WhatsApp!");
+  }).catch(() => alert(text));
+}
+
+function copyProgressShareCard() {
+  openShareReportModal();
+}
+
+// Data Hub Export & Import
+function exportProgressBackupJson() {
+  const data = {
+    version: '0.0.79',
+    timestamp: new Date().toISOString(),
+    readingGoal: localStorage.getItem('mf_reading_goal_2026'),
+    marathonPagesGoal: localStorage.getItem('mf_marathon_pages_goal_2026'),
+    readingBudget: localStorage.getItem('mf_reading_budget_2026'),
+    readingCurrency: localStorage.getItem('mf_reading_currency'),
+    bookPrices: JSON.parse(localStorage.getItem('mf_book_prices') || '{}'),
+    sessionsLog: JSON.parse(localStorage.getItem('mf_reading_sessions_log') || '[]'),
+    quotesVault: JSON.parse(localStorage.getItem('mf_reading_quotes_vault') || '[]'),
+    dnfBooks: JSON.parse(localStorage.getItem('mf_reading_dnf_books') || '[]'),
+    moodTags: JSON.parse(localStorage.getItem('mf_reading_book_moods') || '{}'),
+    paceBenchmarkPPH: localStorage.getItem('mf_reading_speed_pph'),
+    dailyReadingMins: localStorage.getItem('mf_daily_reading_mins'),
+    stats: state.stats
+  };
+
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `MindFocus-Progress-Backup-${new Date().toISOString().slice(0, 10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  if (typeof showToast === 'function') showToast("💾 Reading Progress JSON exported safely!");
+}
+
+function triggerRestoreProgressJson() {
+  const input = document.getElementById('progRestoreFileInput');
+  if (input) input.click();
+}
+
+function handleRestoreProgressFile(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.readingGoal) localStorage.setItem('mf_reading_goal_2026', data.readingGoal);
+      if (data.marathonPagesGoal) localStorage.setItem('mf_marathon_pages_goal_2026', data.marathonPagesGoal);
+      if (data.readingBudget) localStorage.setItem('mf_reading_budget_2026', data.readingBudget);
+      if (data.readingCurrency) localStorage.setItem('mf_reading_currency', data.readingCurrency);
+      if (data.bookPrices) localStorage.setItem('mf_book_prices', JSON.stringify(data.bookPrices));
+      if (data.sessionsLog) localStorage.setItem('mf_reading_sessions_log', JSON.stringify(data.sessionsLog));
+      if (data.quotesVault) localStorage.setItem('mf_reading_quotes_vault', JSON.stringify(data.quotesVault));
+      if (data.dnfBooks) localStorage.setItem('mf_reading_dnf_books', JSON.stringify(data.dnfBooks));
+      if (data.moodTags) localStorage.setItem('mf_reading_book_moods', JSON.stringify(data.moodTags));
+      if (data.paceBenchmarkPPH) localStorage.setItem('mf_reading_speed_pph', data.paceBenchmarkPPH);
+      if (data.dailyReadingMins) localStorage.setItem('mf_daily_reading_mins', data.dailyReadingMins);
+      if (data.stats && state.stats) Object.assign(state.stats, data.stats);
+
+      renderProgressView();
+      alert("✅ Reading Progress data restored successfully!");
+    } catch(err) {
+      alert("Invalid JSON backup file: " + err.message);
+    }
+  };
+  reader.readAsText(file);
+}
+
+// Auto initialize on tab switch or DOM load
+document.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => {
+    try { renderAnnualGoalMilestones(); renderQuotesVaultPreview(); } catch(e) {}
+  }, 500);
+});

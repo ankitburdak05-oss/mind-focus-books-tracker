@@ -70,6 +70,256 @@
 
 <style>
 /* ================= PROGRESS & BUDGET STUDIO STYLES ================= */
+
+/* ================= PROGRESS STUDIO COMPREHENSIVE SUITE (v0.0.79) ================= */
+.prog-quick-action-strip {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 8px 0 14px 0;
+  scrollbar-width: none;
+}
+.prog-quick-action-strip::-webkit-scrollbar { display: none; }
+.prog-quick-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+.prog-quick-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+.prog-quick-btn.primary {
+  background: linear-gradient(135deg, #10b981, #059669);
+  border-color: #10b981;
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+}
+.prog-quick-btn.gold {
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(245, 158, 11, 0.1));
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+.prog-quick-btn.blue {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+  border-color: rgba(59, 130, 246, 0.4);
+  color: #60a5fa;
+}
+
+.prog-section-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.35), rgba(15, 23, 42, 0.55)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.09) !important;
+  border-radius: 16px !important;
+  padding: 16px !important;
+  margin-bottom: 16px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  overflow: hidden;
+}
+.prog-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.prog-card-title {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.prog-pill-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+.prog-pill-badge.green {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border-color: rgba(16, 185, 129, 0.3);
+}
+.prog-pill-badge.blue {
+  background: rgba(59, 130, 246, 0.15);
+  color: #60a5fa;
+  border-color: rgba(59, 130, 246, 0.3);
+}
+.prog-pill-badge.purple {
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.3);
+}
+
+/* Mood bar */
+.prog-mood-bar-wrap {
+  display: flex;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.08);
+  margin-bottom: 10px;
+}
+.prog-mood-seg {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+.prog-chips-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+}
+.prog-mood-chip, .prog-format-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px;
+  border-radius: 14px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+.prog-mood-chip:hover, .prog-format-chip:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+.prog-mood-chip.active, .prog-format-chip.active {
+  background: rgba(245, 158, 11, 0.2);
+  border-color: #f59e0b;
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+/* Format gauge */
+.prog-format-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 10px;
+}
+.prog-format-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 12px;
+  padding: 10px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.prog-format-item:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+.prog-format-val {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #ffffff;
+}
+.prog-format-lbl {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* Badges showcase */
+.prog-badge-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: 12px;
+}
+@media (max-width: 480px) {
+  .prog-badge-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+.prog-badge-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 10px 6px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.prog-badge-card:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.07);
+}
+.prog-badge-card.unlocked {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(255, 255, 255, 0.02));
+}
+.prog-badge-card.locked {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
+.prog-badge-icon {
+  font-size: 1.8rem;
+  margin-bottom: 4px;
+}
+.prog-badge-name {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+/* ROI metric strip */
+.rb-roi-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(255, 255, 255, 0.1);
+}
+@media (max-width: 480px) {
+  .rb-roi-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.rb-roi-col {
+  text-align: center;
+  padding: 6px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.rb-roi-val {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #10b981;
+}
+.rb-roi-lbl {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
 .reading-budget-card {
   position: relative;
   background: linear-gradient(135deg, rgba(30, 27, 75, 0.4), rgba(15, 23, 42, 0.6)) !important;
@@ -1077,208 +1327,176 @@
     <section id="viewProgress" class="app-view">
 
       <div class="view-header-block flex-between">
-
         <div>
-
-          <h2 class="view-main-title">Reading Progress</h2>
-
-          <p class="view-sub-title">Track your growth &amp; achievements</p>
-
+          <h2 class="view-main-title">Reading Progress &amp; Analytics</h2>
+          <p class="view-sub-title">Executive reading command center &bull; 360&deg; growth suite</p>
         </div>
-
+        <div style="display:flex;gap:6px;">
+          <button type="button" class="btn-gold-pill" onclick="openShareReportModal()" title="Share Progress Report">
+            <span>📤</span> Share Card
+          </button>
+        </div>
       </div>
 
-
+      <!-- Quick Action & Session Trigger Bar -->
+      <div class="prog-quick-action-strip">
+        <button type="button" class="prog-quick-btn primary" onclick="openSessionLoggerModal()">
+          <span>➕</span> Log Reading Session
+        </button>
+        <button type="button" class="prog-quick-btn gold" onclick="openSpeedCalculatorModal()">
+          <span>⚡</span> Reading Pace Lab
+        </button>
+        <button type="button" class="prog-quick-btn blue" onclick="runSlumpBuster()">
+          <span>🚀</span> Slump Buster
+        </button>
+        <button type="button" class="prog-quick-btn" onclick="openQuotesVaultModal()">
+          <span>📜</span> Quotes &amp; Insights
+        </button>
+        <button type="button" class="prog-quick-btn" onclick="openAchievementsModal()">
+          <span>🏅</span> Reader Badges
+        </button>
+      </div>
 
       <!-- Segmented Time Filter Pills (This Month, This Year, All Time) -->
-
       <div class="progress-time-pills">
-
         <button type="button" class="prog-time-pill active" id="progPillMonth" onclick="setProgressPillFilter('month')">This Month</button>
-
         <button type="button" class="prog-time-pill" id="progPillYear" onclick="setProgressPillFilter('year')">This Year</button>
-
         <button type="button" class="prog-time-pill" id="progPillAll" onclick="setProgressPillFilter('all')">All Time</button>
-
       </div>
 
-
-
-      <!-- Screen 4: Donut Card with Center Books Read & 3 Stats -->
-
-      <div class="progress-donut-card" onclick="openProgressBreakdownModal()" style="cursor:pointer;" title="Tap to view books breakdown">
-
-        <div class="donut-visual-container">
-
-          <svg viewBox="0 0 120 120" style="width: 100%; height: 100%; transform: rotate(-90deg);">
-
-            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12"></circle>
-
-            <circle id="progDonutCircle" cx="60" cy="60" r="48" fill="none" stroke="url(#donutGradGold)" stroke-width="12" stroke-dasharray="301.59" stroke-dashoffset="120" stroke-linecap="round"></circle>
-
-            <defs>
-
-              <linearGradient id="donutGradGold" x1="0%" y1="0%" x2="100%" y2="100%">
-
-                <stop offset="0%" stop-color="#f59e0b"></stop>
-
-                <stop offset="100%" stop-color="#10b981"></stop>
-
-              </linearGradient>
-
-            </defs>
-
-          </svg>
-
-          <div class="donut-inner-content">
-
-            <span class="donut-big-number" id="progDonutCenterNum">0</span>
-
-            <span class="donut-sub-label">Books Read</span>
-
+      <!-- 1. Annual 2026 Goal & Marathon Card -->
+      <div class="prog-section-card" id="progAnnualGoalCard">
+        <div class="prog-section-header">
+          <div class="prog-card-title">
+            <span>🎯</span>
+            <span>2026 Reading &amp; Page Marathon</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span class="prog-pill-badge green" id="progGoalVelocityBadge">🚀 Ahead of Schedule</span>
+            <button type="button" class="btn-ghost-sm" onclick="openAnnualGoalModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">⚙️ Set Target</button>
+          </div>
+        </div>
+        
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+          <div style="background:rgba(255,255,255,0.03);padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
+            <div style="font-size:0.72rem;color:var(--text-secondary);">Books Completed</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin-top:2px;">
+              <span id="progGoalBooksVal" style="font-size:1.4rem;font-weight:900;color:var(--accent-gold);">0</span>
+              <span id="progGoalTargetVal" style="font-size:0.8rem;color:var(--text-muted);">/ 25 Books</span>
+            </div>
+            <div class="rg-progress-track" style="margin-top:8px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;">
+              <div id="progGoalBooksBar" style="width:0%;height:100%;background:linear-gradient(90deg,#f59e0b,#10b981);transition:width 0.3s ease;"></div>
+            </div>
           </div>
 
+          <div style="background:rgba(255,255,255,0.03);padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,0.06);">
+            <div style="font-size:0.72rem;color:var(--text-secondary);">Pages Read Marathon</div>
+            <div style="display:flex;align-items:baseline;gap:6px;margin-top:2px;">
+              <span id="progGoalPagesVal" style="font-size:1.4rem;font-weight:900;color:#38bdf8;">0</span>
+              <span id="progGoalPagesTargetVal" style="font-size:0.8rem;color:var(--text-muted);">/ 6,000 Pgs</span>
+            </div>
+            <div class="rg-progress-track" style="margin-top:8px;height:6px;background:rgba(255,255,255,0.08);border-radius:3px;overflow:hidden;">
+              <div id="progGoalPagesBar" style="width:0%;height:100%;background:linear-gradient(90deg,#38bdf8,#818cf8);transition:width 0.3s ease;"></div>
+            </div>
+          </div>
         </div>
+        <div style="font-size:0.75rem;color:var(--text-muted);display:flex;justify-content:space-between;align-items:center;">
+          <span id="progGoalAdviceText">Read 15 pages per day to hit your annual reading milestone!</span>
+          <span id="progGoalPctText" style="font-weight:700;color:var(--accent-gold);">0%</span>
+        </div>
+      </div>
 
-
+      <!-- 2. Screen 4: Donut Card with Center Books Read & 3 Stats -->
+      <div class="progress-donut-card" onclick="openProgressBreakdownModal()" style="cursor:pointer;" title="Tap to view books breakdown">
+        <div class="donut-visual-container">
+          <svg viewBox="0 0 120 120" style="width: 100%; height: 100%; transform: rotate(-90deg);">
+            <circle cx="60" cy="60" r="48" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="12"></circle>
+            <circle id="progDonutCircle" cx="60" cy="60" r="48" fill="none" stroke="url(#donutGradGold)" stroke-width="12" stroke-dasharray="301.59" stroke-dashoffset="120" stroke-linecap="round"></circle>
+            <defs>
+              <linearGradient id="donutGradGold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#f59e0b"></stop>
+                <stop offset="100%" stop-color="#10b981"></stop>
+              </linearGradient>
+            </defs>
+          </svg>
+          <div class="donut-inner-content">
+            <span class="donut-big-number" id="progDonutCenterNum">0</span>
+            <span class="donut-sub-label">Books Read</span>
+          </div>
+        </div>
 
         <div class="donut-stats-col">
-
           <div class="donut-stat-row">
-
             <span class="donut-stat-key">
-
               <span class="donut-stat-dot" style="background: #3b82f6;"></span>
-
               Total Books
-
             </span>
-
             <span class="donut-stat-val" id="progDonutTotalBooks">0</span>
-
           </div>
-
           <div class="donut-stat-row">
-
             <span class="donut-stat-key">
-
               <span class="donut-stat-dot" style="background: #f59e0b;"></span>
-
               Currently Reading
-
             </span>
-
             <span class="donut-stat-val" id="progDonutReading">0</span>
-
           </div>
-
           <div class="donut-stat-row">
-
             <span class="donut-stat-key">
-
               <span class="donut-stat-dot" style="background: #a855f7;"></span>
-
               To Read
-
             </span>
-
             <span class="donut-stat-val" id="progDonutToRead">0</span>
-
           </div>
-
         </div>
-
       </div>
 
-
-
-      <!-- Screen 4: Reading Streak Card with M T W T F S S Weekday Dots -->
-
+      <!-- 3. Screen 4: Reading Streak Card with M T W T F S S Weekday Dots -->
       <div class="streak-card-v4" onclick="openProgressStreakModal()" style="cursor:pointer;" title="Tap to view Streak Studio">
-
         <div class="streak-card-header">
-
           <div class="streak-title-badge">
-
             <span>🔥</span>
-
             <span id="streakDaysCount">0 days</span>
-
           </div>
-
-          <span class="streak-see-all-link" onclick="navigateToSubView('achievements')">See All &rsaquo;</span>
-
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span id="streakShieldStatus" class="prog-pill-badge blue" style="cursor:pointer;" onclick="event.stopPropagation();toggleStreakFreezeToken();">🛡️ Shield Active</span>
+            <span class="streak-see-all-link">Studio &rsaquo;</span>
+          </div>
         </div>
-
         <div class="streak-sub-text">Keep it going! Every single page builds your dream.</div>
-
         <div class="streak-days-track">
-
           <div class="streak-day-badge"><span class="streak-day-name">M</span><span class="streak-day-icon">⚪</span></div>
-
           <div class="streak-day-badge"><span class="streak-day-name">T</span><span class="streak-day-icon">⚪</span></div>
-
           <div class="streak-day-badge"><span class="streak-day-name">W</span><span class="streak-day-icon">⚪</span></div>
-
           <div class="streak-day-badge"><span class="streak-day-name">T</span><span class="streak-day-icon">⚪</span></div>
-
           <div class="streak-day-badge"><span class="streak-day-name">F</span><span class="streak-day-icon">⚪</span></div>
-
           <div class="streak-day-badge"><span class="streak-day-name">S</span><span class="streak-day-icon">⚪</span></div>
-
           <div class="streak-day-badge"><span class="streak-day-name">S</span><span class="streak-day-icon">⚪</span></div>
-
         </div>
-
       </div>
 
-
-
-      <!-- Screen 4: Monthly Progress 12-Month Bar Chart -->
-
+      <!-- 4. Screen 4: Monthly Progress 12-Month Bar Chart -->
       <div class="monthly-chart-card-v4" onclick="openMonthlyDeepDiveModal()" style="cursor:pointer;" title="Tap to view Monthly Reading Archive">
-
         <div class="monthly-chart-header">
-
-          <span class="monthly-chart-title">Monthly Progress</span>
-
+          <span class="monthly-chart-title">Monthly Progress (12 Months)</span>
           <span class="monthly-chart-count" id="monthlyProgressRatio">0 books</span>
-
         </div>
-
         <div class="monthly-bars-container">
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Jan</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Feb</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Mar</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Apr</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">May</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Jun</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Jul</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Aug</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Sep</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Oct</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Nov</span></div>
-
           <div class="monthly-bar-col"><div class="monthly-bar-track"><div class="monthly-bar-fill" style="height: 0%;"></div></div><span class="monthly-bar-month">Dec</span></div>
-
         </div>
-
       </div>
 
-
-
-      <!-- Executive Reading Budget & Expense Studio Card -->
+      <!-- 5. Executive Reading Budget & Expense Studio Card -->
       <div class="reading-budget-card" id="mainReadingBudgetCard">
         <div class="rb-header">
           <div class="rb-info">
@@ -1352,13 +1570,212 @@
           </div>
         </div>
 
+        <!-- ROI Metrics Strip -->
+        <div class="rb-roi-strip">
+          <div class="rb-roi-col">
+            <div class="rb-roi-val" id="rbRoiCostPerPage">₹0.00</div>
+            <div class="rb-roi-lbl">Cost / Page</div>
+          </div>
+          <div class="rb-roi-col">
+            <div class="rb-roi-val" id="rbRoiCostPerHour">₹0.00</div>
+            <div class="rb-roi-lbl">Cost / Hour</div>
+          </div>
+          <div class="rb-roi-col">
+            <div class="rb-roi-val" id="rbRoiMoneySaved">₹0.00</div>
+            <div class="rb-roi-lbl">Free Books Saved</div>
+          </div>
+          <div class="rb-roi-col">
+            <div class="rb-roi-val" id="rbRoiTopStore">Local / Online</div>
+            <div class="rb-roi-lbl">Top Store Source</div>
+          </div>
+        </div>
+
         <!-- Quick Expense Log Strip -->
-        <div class="rb-expense-strip" id="rbRecentExpenseStrip" onclick="openReadingBudgetStudioModal('history')" style="cursor:pointer;" title="View full expenses log">
+        <div class="rb-expense-strip" id="rbRecentExpenseStrip" onclick="openReadingBudgetStudioModal('history')" style="cursor:pointer;margin-top:12px;" title="View full expenses log">
           <div style="display:flex;align-items:center;gap:8px;">
             <span>📜</span>
             <span id="rbRecentExpenseText" style="font-size:0.78rem;color:var(--text-secondary);">No expenses recorded yet &bull; Tap to add</span>
           </div>
           <span style="font-size:0.75rem;color:var(--accent-gold);font-weight:600;white-space:nowrap;">View All Records ›</span>
+        </div>
+      </div>
+
+      <!-- 6. StoryGraph-Style Reading Pace & Finish Date Predictor Card -->
+      <div class="prog-section-card" id="progReadingPaceCard">
+        <div class="prog-section-header">
+          <div class="prog-card-title">
+            <span>⚡</span>
+            <span>Reading Pace &amp; Finish Predictor</span>
+          </div>
+          <button type="button" class="btn-ghost-sm" onclick="openSpeedCalculatorModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">⚡ Pace Studio</button>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);padding:10px 14px;border-radius:12px;margin-bottom:10px;border:1px solid rgba(255,255,255,0.06);">
+          <div>
+            <div style="font-size:0.72rem;color:var(--text-secondary);">Your Average Velocity</div>
+            <div style="font-size:1.15rem;font-weight:800;color:#ffffff;" id="progAvgSpeedDisplay">40 Pages / Hour</div>
+          </div>
+          <span class="prog-pill-badge blue" id="progPaceTierBadge">⚡ Moderate Pace</span>
+        </div>
+
+        <!-- Active Book Predictor Dropdown -->
+        <div style="margin-bottom:10px;">
+          <label style="font-size:0.72rem;color:var(--text-muted);display:block;margin-bottom:4px;">Select Book to Predict Finish Date:</label>
+          <select id="progPaceBookSelect" onchange="updatePacePredictionView()" style="width:100%;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#ffffff;font-size:0.82rem;">
+            <!-- Filled by JS -->
+          </select>
+        </div>
+
+        <!-- Live Prediction Output -->
+        <div id="progPacePredictionResult" style="padding:10px 12px;border-radius:10px;background:linear-gradient(135deg,rgba(16,185,129,0.12),rgba(5,150,105,0.05));border:1px solid rgba(16,185,129,0.3);display:flex;align-items:center;justify-content:space-between;">
+          <div>
+            <div style="font-size:0.72rem;color:#10b981;font-weight:700;">🗓️ Projected Finish Date</div>
+            <div style="font-size:0.95rem;font-weight:800;color:#ffffff;margin-top:2px;" id="progPaceProjectedDate">Nov 5, 2026</div>
+          </div>
+          <div style="text-align:right;">
+            <span style="font-size:0.8rem;font-weight:700;color:var(--accent-gold);" id="progPaceRemainingInfo">0 pgs left</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. StoryGraph-Style Mood Spectrum Card -->
+      <div class="prog-section-card" id="progMoodSpectrumCard">
+        <div class="prog-section-header">
+          <div class="prog-card-title">
+            <span>🎭</span>
+            <span>StoryGraph Mood Spectrum</span>
+          </div>
+          <button type="button" class="btn-ghost-sm" onclick="openMoodStudioModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">🏷️ Tag Moods</button>
+        </div>
+        <div class="prog-mood-bar-wrap" id="progMoodMultiBar">
+          <div class="prog-mood-seg" style="width:35%;background:#3b82f6;" title="Mind-Expanding"></div>
+          <div class="prog-mood-seg" style="width:25%;background:#f59e0b;" title="Inspiring"></div>
+          <div class="prog-mood-seg" style="width:20%;background:#a855f7;" title="Emotional"></div>
+          <div class="prog-mood-seg" style="width:10%;background:#10b981;" title="Peaceful"></div>
+          <div class="prog-mood-seg" style="width:10%;background:#ef4444;" title="Gripping"></div>
+        </div>
+        <div class="prog-chips-flow" id="progMoodChipsContainer">
+          <!-- Dynamic mood filter chips -->
+        </div>
+      </div>
+
+      <!-- 8. Reading Format & Medium Distribution Card -->
+      <div class="prog-section-card" id="progFormatCard">
+        <div class="prog-section-header">
+          <div class="prog-card-title">
+            <span>📱</span>
+            <span>Format &amp; Medium Breakdown</span>
+          </div>
+          <span class="prog-pill-badge" id="progFormatDominantPill">📕 Physical Reader</span>
+        </div>
+        <div class="prog-format-grid">
+          <div class="prog-format-item" onclick="openProgressBreakdownModal('PHYSICAL')">
+            <div style="font-size:1.3rem;">📕</div>
+            <div class="prog-format-val" id="progFormatPhysicalVal">0</div>
+            <div class="prog-format-lbl">Paperbacks</div>
+          </div>
+          <div class="prog-format-item" onclick="openProgressBreakdownModal('EBOOK')">
+            <div style="font-size:1.3rem;">📱</div>
+            <div class="prog-format-val" id="progFormatEbookVal">0</div>
+            <div class="prog-format-lbl">E-Books / PDF</div>
+          </div>
+          <div class="prog-format-item" onclick="openProgressBreakdownModal('AUDIO')">
+            <div style="font-size:1.3rem;">🎧</div>
+            <div class="prog-format-val" id="progFormatAudioVal">0</div>
+            <div class="prog-format-lbl">Audiobooks</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 9. DNF (Did Not Finish) & Slump Buster Lab -->
+      <div class="prog-section-card" id="progSlumpBusterCard" style="background:linear-gradient(135deg,rgba(239,68,68,0.1),rgba(30,27,75,0.4)) !important;border-color:rgba(239,68,68,0.25) !important;">
+        <div class="prog-section-header">
+          <div class="prog-card-title">
+            <span>🚀</span>
+            <span>Reading Slump Buster &amp; DNF Vault</span>
+          </div>
+          <button type="button" class="btn-ghost-sm" onclick="openDnfVaultModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">🚪 DNF Vault (<span id="progDnfCount">0</span>)</button>
+        </div>
+        <p style="font-size:0.78rem;color:var(--text-secondary);margin:0 0 10px 0;line-height:1.4;">
+          Reading fatigue? Slump buster finds the quickest 5-star gem from your library (&lt;150 pages) to kickstart your focus in 5 minutes!
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="prog-quick-btn primary" onclick="runSlumpBuster()">
+            <span>⚡</span> Bust My Slump Now!
+          </button>
+          <button type="button" class="prog-quick-btn" onclick="openQuickDnfPrompt()">
+            <span>⏸️</span> Pause a Book Without Guilt
+          </button>
+        </div>
+      </div>
+
+      <!-- 10. Achievements & Reader Hall of Fame -->
+      <div class="prog-section-card" id="progAchievementsCard">
+        <div class="prog-section-header">
+          <div class="prog-card-title">
+            <span>🏅</span>
+            <span>Reader Hall of Fame &amp; Badges</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span class="prog-pill-badge gold" id="progBadgesUnlockedPill">0 / 10 Earned</span>
+            <button type="button" class="btn-ghost-sm" onclick="openAchievementsModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">Showcase ›</button>
+          </div>
+        </div>
+        <div class="prog-badge-grid" id="progMiniBadgeGrid">
+          <!-- 10 Badges rendered by JS -->
+        </div>
+      </div>
+
+      <!-- 11. Golden Quotes & Key Insights Vault -->
+      <div class="prog-section-card" id="progQuotesVaultCard">
+        <div class="prog-section-header">
+          <div class="prog-card-title">
+            <span>📜</span>
+            <span>Quotes &amp; Golden Insights Vault</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <button type="button" class="btn-ghost-sm" onclick="openAddQuoteModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(16,185,129,0.15);border:1px solid rgba(16,185,129,0.3);color:#10b981;cursor:pointer;font-weight:700;">➕ Add Quote</button>
+            <button type="button" class="btn-ghost-sm" onclick="openQuotesVaultModal()" style="font-size:0.75rem;padding:3px 8px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:var(--text-secondary);cursor:pointer;">All (<span id="progQuotesTotalCount">0</span>) ›</button>
+          </div>
+        </div>
+        
+        <div id="progQuoteFeaturedBox" style="padding:12px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);margin-bottom:8px;">
+          <div style="font-size:1.4rem;color:var(--accent-gold);margin-bottom:4px;">“</div>
+          <p id="progFeaturedQuoteText" style="font-size:0.85rem;color:#ffffff;font-style:italic;margin:0 0 8px 0;line-height:1.4;">
+            A reader lives a thousand lives before he dies. The man who never reads lives only one.
+          </p>
+          <div style="display:flex;justify-content:space-between;align-items:center;font-size:0.75rem;color:var(--text-muted);">
+            <span id="progFeaturedQuoteAuthor">— George R.R. Martin</span>
+            <div style="display:flex;gap:6px;">
+              <button type="button" onclick="renderNextRandomQuote()" title="Next Quote" style="background:none;border:none;color:var(--accent-gold);cursor:pointer;font-size:0.75rem;font-weight:700;">🎲 Next</button>
+              <button type="button" onclick="copyCurrentFeaturedQuote()" title="Copy Quote" style="background:none;border:none;color:#38bdf8;cursor:pointer;font-size:0.75rem;font-weight:700;">📋 Copy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 12. Reader Analytics Report & Data Hub Card -->
+      <div class="prog-section-card" id="progDataHubCard">
+        <div class="prog-section-header">
+          <div class="prog-card-title">
+            <span>📤</span>
+            <span>Progress Reports &amp; Data Hub</span>
+          </div>
+          <span class="prog-pill-badge blue">Safe &bull; Offline Sync</span>
+        </div>
+        <p style="font-size:0.78rem;color:var(--text-secondary);margin:0 0 10px 0;">
+          Share your reading milestones with friends or export your reading logs &amp; budget for safe backup.
+        </p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button type="button" class="prog-quick-btn gold" onclick="copyProgressShareCard()">
+            <span>📋</span> Copy WhatsApp Report
+          </button>
+          <button type="button" class="prog-quick-btn" onclick="exportProgressBackupJson()">
+            <span>💾</span> Backup JSON
+          </button>
+          <button type="button" class="prog-quick-btn" onclick="triggerRestoreProgressJson()">
+            <span>📥</span> Restore Data
+          </button>
+          <input type="file" id="progRestoreFileInput" accept=".json" style="display:none;" onchange="handleRestoreProgressFile(event)">
         </div>
       </div>
 
@@ -8848,6 +9265,348 @@
         <div id="monthlyArchiveContainer" style="display:flex;flex-direction:column;gap:12px;">
           <!-- Dynamically populated -->
         </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ================= PROGRESS STUDIO MODALS SUITE (v0.0.79) ================= -->
+
+  <!-- 1. Daily Reading Session Logger Modal -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressSessionLoggerModal" style="display:none;" onclick="if(event.target===this)closeSessionLoggerModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeSessionLoggerModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">⏱️ Log Reading Session</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Record pages read, reading time &amp; reflections</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeSessionLoggerModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div class="studio-card-box" style="padding:16px;margin-bottom:14px;">
+          <div style="margin-bottom:12px;">
+            <label style="font-size:0.8rem;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:6px;">Select Book:</label>
+            <select id="sessionLogBookSelect" onchange="onSessionBookSelected()" style="width:100%;padding:10px 12px;border-radius:12px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.85rem;">
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div>
+              <label style="font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:4px;">Start Page:</label>
+              <input type="number" id="sessionLogStartPage" placeholder="e.g. 20" oninput="calcSessionPagesRead()" style="width:100%;padding:10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.9rem;">
+            </div>
+            <div>
+              <label style="font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:4px;">End Page:</label>
+              <input type="number" id="sessionLogEndPage" placeholder="e.g. 45" oninput="calcSessionPagesRead()" style="width:100%;padding:10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.9rem;">
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div>
+              <label style="font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:4px;">Pages Read:</label>
+              <div id="sessionLogPagesReadDisplay" style="padding:10px;border-radius:10px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);color:#10b981;font-weight:800;font-size:0.95rem;text-align:center;">0 Pages</div>
+            </div>
+            <div>
+              <label style="font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:4px;">Reading Minutes:</label>
+              <input type="number" id="sessionLogMinutes" placeholder="e.g. 30 mins" style="width:100%;padding:10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.9rem;">
+            </div>
+          </div>
+
+          <!-- Reading Mood selector -->
+          <div style="margin-bottom:12px;">
+            <label style="font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:6px;">Session Vibe &amp; Mood:</label>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;" id="sessionLogMoodChips">
+              <button type="button" class="rb-store-pill active" onclick="selectSessionMood(this, 'Mind-Expanding')">🧠 Mind-Expanding</button>
+              <button type="button" class="rb-store-pill" onclick="selectSessionMood(this, 'Inspiring')">⚡ Inspiring</button>
+              <button type="button" class="rb-store-pill" onclick="selectSessionMood(this, 'Emotional')">🎭 Emotional</button>
+              <button type="button" class="rb-store-pill" onclick="selectSessionMood(this, 'Gripping')">🔍 Gripping</button>
+              <button type="button" class="rb-store-pill" onclick="selectSessionMood(this, 'Peaceful')">🧘 Peaceful</button>
+              <button type="button" class="rb-store-pill" onclick="selectSessionMood(this, 'Philosophical')">💡 Deep Thought</button>
+            </div>
+          </div>
+
+          <!-- Takeaway Note -->
+          <div style="margin-bottom:16px;">
+            <label style="font-size:0.75rem;color:var(--text-muted);display:block;margin-bottom:4px;">Key Takeaway or Quote (Optional):</label>
+            <textarea id="sessionLogNote" rows="2" placeholder="What stood out to you in this session?" style="width:100%;padding:10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.85rem;resize:none;"></textarea>
+          </div>
+
+          <button type="button" class="btn-gold-pill" onclick="saveReadingSessionRecord()" style="width:100%;padding:12px;font-size:0.95rem;justify-content:center;">
+            💾 Save Session &amp; Update Streak
+          </button>
+        </div>
+
+        <!-- Recent Reading Sessions History -->
+        <h4 style="font-size:0.9rem;font-weight:700;margin:0 0 10px 0;color:#fff;">Recent Reading Sessions</h4>
+        <div id="sessionHistoryList" style="display:flex;flex-direction:column;gap:8px;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Reading Pace & Finish Date Studio Modal -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressSpeedCalculatorModal" style="display:none;" onclick="if(event.target===this)closeSpeedCalculatorModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeSpeedCalculatorModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">⚡ Reading Pace &amp; Velocity Lab</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Calibrate speed, predict finish dates &amp; optimize daily reading</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeSpeedCalculatorModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div class="studio-card-box" style="padding:16px;margin-bottom:14px;">
+          <label style="font-size:0.8rem;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:4px;">
+            Your Reading Speed Benchmark (Pages / Hour):
+          </label>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:8px;">
+            <input type="range" id="paceSpeedSlider" min="15" max="120" step="5" value="40" oninput="onPaceSliderChange(this.value)" style="flex:1;">
+            <span id="paceSpeedSliderVal" style="font-size:1.1rem;font-weight:800;color:var(--accent-gold);min-width:65px;">40 PPH</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:0.7rem;color:var(--text-muted);margin-bottom:14px;">
+            <span>🐢 Deep Study (20)</span>
+            <span>📖 Moderate (40)</span>
+            <span>⚡ Fast (70)</span>
+            <span>🚀 Skimmer (100+)</span>
+          </div>
+
+          <label style="font-size:0.8rem;font-weight:700;color:var(--text-secondary);display:block;margin-bottom:4px;">
+            Daily Reading Time Commitment:
+          </label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
+            <button type="button" class="rb-preset-pill active" onclick="setPaceDailyMinutes(this, 15)">15 mins/day</button>
+            <button type="button" class="rb-preset-pill" onclick="setPaceDailyMinutes(this, 30)">30 mins/day</button>
+            <button type="button" class="rb-preset-pill" onclick="setPaceDailyMinutes(this, 45)">45 mins/day</button>
+            <button type="button" class="rb-preset-pill" onclick="setPaceDailyMinutes(this, 60)">60 mins/day</button>
+          </div>
+
+          <div style="padding:14px;border-radius:12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);margin-bottom:14px;">
+            <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:4px;">At this pace:</div>
+            <div id="paceCalculatedInsight" style="font-size:0.95rem;font-weight:700;color:#ffffff;line-height:1.4;">
+              You will read approximately <strong>20 pages per day</strong> and finish a standard 300-page book in <strong>15 days</strong>!
+            </div>
+          </div>
+
+          <button type="button" class="btn-gold-pill" onclick="savePaceSettings()" style="width:100%;padding:12px;font-size:0.95rem;justify-content:center;">
+            💾 Save Pace Benchmark
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. StoryGraph-Style Mood Studio Modal -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressMoodStudioModal" style="display:none;" onclick="if(event.target===this)closeMoodStudioModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeMoodStudioModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">🎭 StoryGraph Mood Studio</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Tag and explore your books by emotional vibe &amp; tone</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeMoodStudioModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div style="margin-bottom:14px;">
+          <label style="font-size:0.8rem;color:var(--text-secondary);display:block;margin-bottom:6px;">Filter Library by Mood:</label>
+          <div style="display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;" id="moodStudioFilterChips">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <div id="moodStudioBooksList" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Books with tag mood dropdowns rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. DNF (Did Not Finish) & Slump Buster Modal -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressDnfVaultModal" style="display:none;" onclick="if(event.target===this)closeDnfVaultModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeDnfVaultModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">🚪 Paused &amp; DNF Books Vault</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Life is too short to read books you aren't enjoying</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeDnfVaultModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div class="studio-card-box" style="padding:14px;margin-bottom:14px;">
+          <h4 style="font-size:0.88rem;font-weight:700;color:#fff;margin:0 0 6px 0;">Pause / DNF an Active Book</h4>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin:0 0 10px 0;">
+            Struggling with a book? Put it in DNF vault with a reason. You can resume it anytime!
+          </p>
+          <div style="display:flex;flex-direction:column;gap:8px;">
+            <select id="dnfAddBookSelect" style="width:100%;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.82rem;">
+              <!-- Currently reading books -->
+            </select>
+            <select id="dnfAddReasonSelect" style="width:100%;padding:8px 10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.82rem;">
+              <option value="Slow Pacing">Pacing is too slow</option>
+              <option value="Found Better Book">Found a more urgent/interesting book</option>
+              <option value="Too Dense/Technical">Too dense or heavy for now</option>
+              <option value="Temporary Pause">Temporary pause (Will return)</option>
+              <option value="Not For Me">Just not enjoying it</option>
+            </select>
+            <button type="button" class="btn-ghost-sm" onclick="confirmMoveToDnf()" style="padding:10px;background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.3);color:#ef4444;border-radius:10px;font-weight:700;cursor:pointer;">
+              ⏸️ Pause Book &amp; Move to Vault
+            </button>
+          </div>
+        </div>
+
+        <h4 style="font-size:0.9rem;font-weight:700;margin:0 0 10px 0;color:#fff;">Your Paused &amp; DNF Books (<span id="dnfVaultCountBadge">0</span>)</h4>
+        <div id="dnfVaultList" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Quotes & Reflections Vault Modal -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressQuotesVaultModal" style="display:none;" onclick="if(event.target===this)closeQuotesVaultModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeQuotesVaultModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">📜 Golden Quotes &amp; Insights Vault</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Your private treasury of memorable book lines</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeQuotesVaultModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div style="display:flex;gap:8px;margin-bottom:12px;">
+          <button type="button" class="btn-gold-pill" onclick="openAddQuoteModal()" style="font-size:0.8rem;padding:6px 14px;">
+            <span>➕</span> Add New Quote
+          </button>
+          <input type="text" id="quotesVaultSearchInput" placeholder="Search quotes or authors..." oninput="filterQuotesVaultList(this.value)" style="flex:1;padding:8px 12px;border-radius:20px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);color:#fff;font-size:0.82rem;">
+        </div>
+        <div id="quotesVaultListContainer" style="display:flex;flex-direction:column;gap:10px;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. Achievements & Reader Hall of Fame Modal -->
+  <div class="modal-overlay modal-overlay-fullscreen" id="progressAchievementsModal" style="display:none;" onclick="if(event.target===this)closeAchievementsModal()">
+    <div class="modal-card modal-card-fullscreen-studio">
+      <div class="modal-header studio-header">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button type="button" class="btn-studio-back" onclick="closeAchievementsModal()" title="Back &amp; Close">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <div>
+            <h3 class="modal-title" style="margin:0;font-size:1.15rem;">🏅 Reader Hall of Fame</h3>
+            <span style="font-size:0.75rem;color:var(--text-muted);">Celebrate your reading milestones &amp; consistency</span>
+          </div>
+        </div>
+        <button type="button" class="modal-close-btn studio-close-btn" onclick="closeAchievementsModal()" title="Close">&times;</button>
+      </div>
+      <div class="modal-body studio-body" style="padding:16px;">
+        <div id="achievementsModalGrid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Share Report Card Modal -->
+  <div class="modal-overlay" id="progressShareReportModal" style="display:none;" onclick="if(event.target===this)closeShareReportModal()">
+    <div class="modal-card" style="max-width:440px;padding:20px;border-radius:20px;background:linear-gradient(145deg, #1e1b4b, #0f172a);border:1px solid rgba(245,158,11,0.3);">
+      <div class="modal-header" style="padding:0 0 12px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+        <h3 class="modal-title" style="margin:0;font-size:1.1rem;color:#ffffff;">📊 Reading Progress Report</h3>
+        <button type="button" class="modal-close-btn" onclick="closeShareReportModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:16px 0;">
+        <div id="shareReportCardContent" style="padding:16px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);font-family:monospace;font-size:0.85rem;color:#e2e8f0;white-space:pre-wrap;line-height:1.5;">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button type="button" class="btn-gold-pill" onclick="copyReportCardToClipboard()" style="flex:1;justify-content:center;padding:10px;">
+          📋 Copy to Clipboard
+        </button>
+        <button type="button" class="btn-ghost-sm" onclick="closeShareReportModal()" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.12);cursor:pointer;">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. Annual Goal Studio Modal -->
+  <div class="modal-overlay" id="progressAnnualGoalModal" style="display:none;" onclick="if(event.target===this)closeAnnualGoalModal()">
+    <div class="modal-card" style="max-width:420px;padding:20px;border-radius:20px;background:linear-gradient(145deg, #1e1b4b, #0f172a);border:1px solid rgba(16,185,129,0.3);">
+      <div class="modal-header" style="padding:0 0 12px 0;border-bottom:1px solid rgba(255,255,255,0.1);">
+        <h3 class="modal-title" style="margin:0;font-size:1.1rem;color:#ffffff;">🎯 Set 2026 Reading Milestones</h3>
+        <button type="button" class="modal-close-btn" onclick="closeAnnualGoalModal()">&times;</button>
+      </div>
+      <div class="modal-body" style="padding:16px 0;">
+        <div style="margin-bottom:14px;">
+          <label style="font-size:0.8rem;color:var(--text-secondary);display:block;margin-bottom:6px;">Annual Books Target:</label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+            <button type="button" class="rb-preset-pill" onclick="setGoalPreset(12)">12 Books</button>
+            <button type="button" class="rb-preset-pill active" onclick="setGoalPreset(24)">24 Books</button>
+            <button type="button" class="rb-preset-pill" onclick="setGoalPreset(36)">36 Books</button>
+            <button type="button" class="rb-preset-pill" onclick="setGoalPreset(52)">52 Books</button>
+          </div>
+          <input type="number" id="annualGoalBooksInput" placeholder="Custom book target" style="width:100%;padding:10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.95rem;">
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <label style="font-size:0.8rem;color:var(--text-secondary);display:block;margin-bottom:6px;">Marathon Pages Goal (Total Pages):</label>
+          <input type="number" id="annualGoalPagesInput" placeholder="e.g. 6000 pages" style="width:100%;padding:10px;border-radius:10px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);color:#fff;font-size:0.95rem;">
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button type="button" class="btn-gold-pill" onclick="saveAnnualGoalTargets()" style="flex:1;justify-content:center;padding:10px;">
+          💾 Save Targets
+        </button>
+        <button type="button" class="btn-ghost-sm" onclick="closeAnnualGoalModal()" style="padding:10px 14px;border-radius:12px;background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.12);cursor:pointer;">
+          Cancel
+        </button>
       </div>
     </div>
   </div>
