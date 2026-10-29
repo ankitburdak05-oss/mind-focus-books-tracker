@@ -2004,8 +2004,9 @@ function triggerExploreAPISearch() {
 
 
 
+
 // ============================================================================
-// UNIVERSAL COUNTRY & ORIGIN ENGINE (India, USA, UK, Japan, Russia, Germany, France, All)
+// UNIVERSAL COUNTRY & HIGH-YIELD SEARCH ENGINE (v0.0.77)
 // ============================================================================
 window._exploreActiveCountry = (function() {
   try {
@@ -2048,6 +2049,19 @@ function generateInlineBookCoverSvg(title, author) {
   return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
 }
 
+const INDIAN_CORE_KEYWORDS = [
+  'hindi', 'urdu', 'ghazal', 'ghazals', 'shayari', 'sayari', 'nazm', 'nazms', 'kavita', 'sahitya',
+  'india', 'indian', 'sanskrit', 'bharat', 'punjab', 'punjabi', 'bengal', 'bengali', 'marathi',
+  'tamil', 'telugu', 'kannada', 'malayalam', 'delhi', 'mumbai', 'bombay', 'kolkata', 'calcutta',
+  'lucknow', 'lahore', 'varanasi', 'banaras', 'kashi', 'agra', 'hyderabad', 'gita', 'upanishad',
+  'vedas', 'ved', 'mahabharata', 'ramayana', 'panchatantra', 'hitopadesh', 'akbar birbal',
+  'premchand', 'ghalib', 'jaun elia', 'gulzar', 'rahat indori', 'faiz', 'iqbal', 'dushyant',
+  'bachchan', 'dinkar', 'bharati', 'tagore', 'kalam', 'gandhi', 'ambedkar', 'vivekananda',
+  'chanakya', 'sahir', 'kaifi', 'firaq', 'ahmed faraz', 'mir taqi mir', 'kanda', 'vajpeyi',
+  'salil', 'chetan bhagat', 'amish tripathi', 'ashwin sanghi', 'surendra mohan pathak',
+  'divya prakash dubey', 'manto', 'kumar vishwas', 'dushyant kumar', 'kabir', 'tulsidas'
+];
+
 const EXPLORE_COUNTRY_DEFINITIONS = {
   all: {
     id: 'all',
@@ -2056,24 +2070,21 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     flag: '🌐',
     statusText: 'World Library (Sabhi Desh)',
     querySuffix: '',
-    languages: [],
-    places: [],
-    authors: [],
     categoryQueries: {
-      SHAYARI: 'urdu poetry OR hindi poetry OR ghazal OR poetry',
-      FUNNY: 'comedy humor satire jokes',
-      ACTION_THRILLER: 'thriller mystery crime detective',
-      FOCUS_MINDSET: 'deep work atomic habits productivity focus',
-      ROMANCE: 'romance love stories romantic novel',
-      HORROR: 'horror ghost stories haunted',
-      BUSINESS_MONEY: 'business investing finance wealth money',
-      PSYCHOLOGY: 'psychology human behavior thinking',
-      PHILOSOPHY_SPIRITUAL: 'philosophy spirituality wisdom',
-      BIOGRAPHY_HISTORY: 'biography autobiography history',
-      SCIFI_TECH: 'science fiction technology space future',
-      HINDI_CLASSICS: 'classic literature great novels',
-      HEALTH_FITNESS: 'health fitness diet exercise nutrition',
-      KIDS_STORIES: 'children stories fairy tales moral stories'
+      SHAYARI: ['poetry collection', 'world poetry', 'poems and ghazals'],
+      FUNNY: ['comedy humor satire jokes'],
+      ACTION_THRILLER: ['thriller mystery crime detective'],
+      FOCUS_MINDSET: ['deep work atomic habits productivity focus'],
+      ROMANCE: ['romance love stories romantic novel'],
+      HORROR: ['horror ghost stories haunted'],
+      BUSINESS_MONEY: ['business investing finance wealth money'],
+      PSYCHOLOGY: ['psychology human behavior thinking'],
+      PHILOSOPHY_SPIRITUAL: ['philosophy spirituality wisdom'],
+      BIOGRAPHY_HISTORY: ['biography autobiography history'],
+      SCIFI_TECH: ['science fiction technology space future'],
+      HINDI_CLASSICS: ['classic literature great novels'],
+      HEALTH_FITNESS: ['health fitness diet exercise nutrition'],
+      KIDS_STORIES: ['children stories fairy tales moral stories']
     }
   },
   in: {
@@ -2083,43 +2094,21 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     flag: '🇮🇳',
     statusText: 'Bharat & Hindi/Urdu Sahitya Database',
     querySuffix: 'india',
-    languages: ['hin', 'urd', 'san', 'ben', 'mar', 'tam', 'tel', 'pan', 'guj', 'mal', 'kan', 'ori', 'inc'],
-    places: [
-      'india', 'bharat', 'delhi', 'new delhi', 'mumbai', 'bombay', 'kolkata', 'calcutta', 
-      'chennai', 'madras', 'varanasi', 'banaras', 'kashi', 'lucknow', 'hyderabad', 'bangalore', 
-      'bengaluru', 'pune', 'allahabad', 'prayagraj', 'patna', 'jaipur', 'lahore', 'punjab', 
-      'bengal', 'kashmir', 'agra', 'ahmedabad', 'bhopal', 'indore', 'chandigarh'
-    ],
-    authors: [
-      'premchand', 'munshi premchand', 'ghalib', 'mirza ghalib', 'jaun elia', 'elia', 
-      'dinkar', 'ramdhari singh dinkar', 'bachchan', 'harivansh rai bachchan', 
-      'dharamvir bharati', 'bharati', 'tagore', 'rabindranath tagore', 'r.k. narayan', 
-      'rk narayan', 'ruskin bond', 'kalam', 'apj abdul kalam', 'gandhi', 'mahatma gandhi', 
-      'ambedkar', 'b.r. ambedkar', 'vivekananda', 'swami vivekananda', 'chanakya', 
-      'rahat indori', 'indori', 'gulzar', 'faiz', 'faiz ahmad faiz', 'amish', 'amish tripathi', 
-      'tripathi', 'chetan bhagat', 'bhagat', 'harishankar parsai', 'parsai', 'ashwin sanghi', 
-      'sanghi', 'surendra mohan pathak', 'pathak', 'ved prakash sharma', 'divya prakash dubey', 
-      'dubey', 'manto', 'saadat hasan manto', 'iqbal', 'allama iqbal', 'kumar vishwas', 
-      'vishwas', 'dushyant kumar', 'kabir', 'tulsidas', 'surdas', 'mira bai', 'sahir ludhianvi', 
-      'kaifi azmi', 'ravinder singh', 'durjoy datta', 'devdutt pattanaik', 'anand neelakantan', 
-      'sudha murty', 'vikram chandra', 'chitra banerjee', 'manoj das', 'kamleshwar', 
-      'bhisham sahni', 'phanishwar nath renu', 'shrilal shukla', 'mohan rakesh', 'kashinath singh'
-    ],
     categoryQueries: {
-      SHAYARI: 'urdu poetry OR hindi poetry OR ghazal OR mirza ghalib OR jaun elia',
-      FUNNY: 'harishankar parsai OR sharad joshi OR hasya vyangya OR hindi humor',
-      ACTION_THRILLER: 'ashwin sanghi OR surendra mohan pathak OR indian thriller',
-      FOCUS_MINDSET: 'swami vivekananda meditation OR bhagavad gita focus mind',
-      ROMANCE: 'gunahon ka devta OR divya prakash dubey OR hindi prem katha',
-      HORROR: 'indian ghost stories OR bhoot pret kahani',
-      BUSINESS_MONEY: 'ratan tata OR indian stock market investing money',
-      PSYCHOLOGY: 'swami vivekananda manovigyan mind power',
-      PHILOSOPHY_SPIRITUAL: 'bhagavad gita OR upanishads OR adi shankaracharya',
-      BIOGRAPHY_HISTORY: 'apj abdul kalam OR bhagat singh OR mahatma gandhi',
-      SCIFI_TECH: 'satyajit ray shonku OR indian science fiction',
-      HINDI_CLASSICS: 'munshi premchand godan OR ramdhari singh dinkar',
-      HEALTH_FITNESS: 'patanjali yoga sutras OR ayurveda swasthya',
-      KIDS_STORIES: 'panchatantra OR hitopadesha OR akbar birbal'
+      SHAYARI: ['hindi poetry', 'ghazal', 'urdu poetry'],
+      FUNNY: ['harishankar parsai', 'sharad joshi', 'hindi humor satire'],
+      ACTION_THRILLER: ['ashwin sanghi', 'surendra mohan pathak', 'indian crime thriller'],
+      FOCUS_MINDSET: ['swami vivekananda meditation', 'bhagavad gita mind focus'],
+      ROMANCE: ['gunahon ka devta', 'divya prakash dubey', 'premchand love stories'],
+      HORROR: ['indian ghost stories', 'bhoot pret kahaniya'],
+      BUSINESS_MONEY: ['ratan tata', 'indian stock market investing', 'dhirubhai ambani'],
+      PSYCHOLOGY: ['swami vivekananda manovigyan', 'indian psychology mind power'],
+      PHILOSOPHY_SPIRITUAL: ['bhagavad gita', 'upanishads vedanta', 'adi shankaracharya'],
+      BIOGRAPHY_HISTORY: ['apj abdul kalam', 'bhagat singh', 'mahatma gandhi'],
+      SCIFI_TECH: ['satyajit ray shonku', 'indian science fiction space'],
+      HINDI_CLASSICS: ['munshi premchand godan', 'ramdhari singh dinkar rashmirathi'],
+      HEALTH_FITNESS: ['patanjali yoga sutras', 'ayurveda swasthya'],
+      KIDS_STORIES: ['panchatantra', 'hitopadesha', 'akbar birbal stories']
     }
   },
   us: {
@@ -2129,25 +2118,24 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     flag: '🇺🇸',
     statusText: 'United States Database',
     querySuffix: 'american',
-    languages: ['eng'],
-    places: ['united states', 'usa', 'u.s.a.', 'new york', 'boston', 'chicago', 'california', 'los angeles', 'washington', 'texas', 'philadelphia', 'san francisco'],
     authors: [
-      'carnegie', 'dale carnegie', 'clear', 'james clear', 'manson', 'mark manson', 
-      'kiyosaki', 'robert kiyosaki', 'hill', 'napoleon hill', 'hemingway', 'ernest hemingway', 
-      'twain', 'mark twain', 'stephen king', 'steinbeck', 'fitzgerald', 'faulkner', 
-      'poe', 'edgar allan poe', 'robert frost', 'walt whitman', 'emily dickinson', 'maya angelou', 
-      'sylvia plath', 'asimov', 'cal newport', 'morgan housel', 'robert greene', 'tim ferriss', 
-      'stephen covey', 'brene brown', 'dan brown'
+      'carnegie', 'dale carnegie', 'james clear', 'clear', 'mark manson', 'manson',
+      'robert kiyosaki', 'kiyosaki', 'napoleon hill', 'ernest hemingway', 'hemingway',
+      'mark twain', 'twain', 'stephen king', 'john steinbeck', 'f scott fitzgerald',
+      'william faulkner', 'edgar allan poe', 'robert frost', 'walt whitman', 'emily dickinson',
+      'maya angelou', 'sylvia plath', 'isaac asimov', 'cal newport', 'morgan housel',
+      'robert greene', 'tim ferriss', 'stephen covey', 'brene brown', 'dan brown'
     ],
+    places: ['united states', 'usa', 'new york', 'boston', 'chicago', 'california', 'los angeles', 'washington', 'texas', 'san francisco'],
     categoryQueries: {
-      SHAYARI: 'american poetry poems robert frost walt whitman emily dickinson',
-      FOCUS_MINDSET: 'james clear atomic habits deep work',
-      BUSINESS_MONEY: 'morgan housel psychology of money kiyosaki',
-      ACTION_THRILLER: 'stephen king thriller mystery dan brown',
-      ROMANCE: 'nicholas sparks american romance novel',
-      HORROR: 'stephen king horror ghost stories',
-      SCIFI_TECH: 'isaac asimov philip k dick science fiction',
-      KIDS_STORIES: 'dr seuss shel silverstein children stories'
+      SHAYARI: ['american poetry', 'robert frost poems', 'walt whitman poetry'],
+      FOCUS_MINDSET: ['james clear atomic habits', 'cal newport deep work'],
+      BUSINESS_MONEY: ['morgan housel psychology of money', 'robert kiyosaki rich dad'],
+      ACTION_THRILLER: ['stephen king thriller', 'dan brown mystery thriller'],
+      ROMANCE: ['nicholas sparks romance novel'],
+      HORROR: ['stephen king horror novels'],
+      SCIFI_TECH: ['isaac asimov science fiction', 'philip k dick sci-fi'],
+      KIDS_STORIES: ['dr seuss children stories', 'shel silverstein']
     }
   },
   uk: {
@@ -2157,21 +2145,19 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     flag: '🇬🇧',
     statusText: 'British Literature Database',
     querySuffix: 'british',
-    languages: ['eng'],
-    places: ['united kingdom', 'uk', 'u.k.', 'england', 'london', 'oxford', 'cambridge', 'scotland', 'edinburgh', 'manchester'],
     authors: [
-      'orwell', 'george orwell', 'doyle', 'arthur conan doyle', 'agatha christie', 'christie', 
-      'j.k. rowling', 'rowling', 'tolkien', 'j.r.r. tolkien', 'dickens', 'charles dickens', 
-      'jane austen', 'austen', 'shakespeare', 'william shakespeare', 'virginia woolf', 
-      'oscar wilde', 'c.s. lewis', 'roald dahl', 'thomas hardy', 'rudyard kipling', 
-      'h.g. wells', 'mary shelley', 'william wordsworth', 'john keats', 'lord byron'
+      'george orwell', 'arthur conan doyle', 'agatha christie', 'j.k. rowling', 'j r r tolkien',
+      'charles dickens', 'jane austen', 'william shakespeare', 'virginia woolf', 'oscar wilde',
+      'c s lewis', 'roald dahl', 'thomas hardy', 'rudyard kipling', 'h g wells', 'mary shelley',
+      'william wordsworth', 'john keats', 'lord byron', 'alfred tennyson'
     ],
+    places: ['united kingdom', 'uk', 'england', 'london', 'oxford', 'cambridge', 'scotland', 'edinburgh', 'manchester'],
     categoryQueries: {
-      SHAYARI: 'british poetry sonnets shakespeare keats wordsworth',
-      ACTION_THRILLER: 'arthur conan doyle sherlock agatha christie',
-      SCIFI_TECH: 'george orwell 1984 h g wells science fiction',
-      KIDS_STORIES: 'roald dahl cs lewis narnia harry potter',
-      ROMANCE: 'jane austen pride and prejudice romance'
+      SHAYARI: ['british poetry sonnets', 'william shakespeare poems', 'john keats poetry'],
+      ACTION_THRILLER: ['arthur conan doyle sherlock', 'agatha christie mystery'],
+      SCIFI_TECH: ['george orwell 1984', 'h g wells time machine'],
+      KIDS_STORIES: ['roald dahl stories', 'c s lewis narnia', 'harry potter'],
+      ROMANCE: ['jane austen pride and prejudice']
     }
   },
   jp: {
@@ -2181,18 +2167,17 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     flag: '🇯🇵',
     statusText: 'Japanese Literature Database',
     querySuffix: 'japan',
-    languages: ['jpn'],
-    places: ['japan', 'tokyo', 'kyoto', 'osaka'],
     authors: [
-      'murakami', 'haruki murakami', 'dazai', 'osamu dazai', 'mishima', 'yukio mishima', 
-      'keigo higashino', 'higashino', 'kawakami', 'kawabata', 'akutagawa', 'yoko ogawa', 
-      'endo', 'oe', 'suzuki', 'matsuo basho', 'kenji miyazawa'
+      'haruki murakami', 'murakami', 'osamu dazai', 'dazai', 'yukio mishima', 'mishima',
+      'keigo higashino', 'higashino', 'kawakami', 'kawabata', 'akutagawa', 'yoko ogawa',
+      'shusaku endo', 'kenzaburo oe', 'daisetz teitaro suzuki', 'matsuo basho', 'kenji miyazawa'
     ],
+    places: ['japan', 'tokyo', 'kyoto', 'osaka'],
     categoryQueries: {
-      SHAYARI: 'haiku japanese poetry matsuo basho',
-      FOCUS_MINDSET: 'ikigai kaizen japanese mindset',
-      ACTION_THRILLER: 'keigo higashino japanese mystery thriller',
-      ROMANCE: 'haruki murakami norwegian wood'
+      SHAYARI: ['japanese haiku poetry', 'matsuo basho haiku'],
+      FOCUS_MINDSET: ['ikigai book', 'kaizen way'],
+      ACTION_THRILLER: ['keigo higashino mystery thriller'],
+      ROMANCE: ['haruki murakami norwegian wood']
     }
   },
   ru: {
@@ -2202,18 +2187,17 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     flag: '🇷🇺',
     statusText: 'Russian Classics Database',
     querySuffix: 'russian',
-    languages: ['rus'],
-    places: ['russia', 'moscow', 'saint petersburg', 'st. petersburg', 'soviet union', 'ussr'],
     authors: [
-      'tolstoy', 'leo tolstoy', 'dostoevsky', 'fyodor dostoevsky', 'chekhov', 'anton chekhov', 
-      'gorky', 'maxim gorky', 'pushkin', 'alexander pushkin', 'gogol', 'turgenev', 
-      'nabokov', 'bulgakov', 'solzhenitsyn', 'anna akhmatova'
+      'leo tolstoy', 'tolstoy', 'fyodor dostoevsky', 'dostoevsky', 'anton chekhov', 'chekhov',
+      'maxim gorky', 'gorky', 'alexander pushkin', 'pushkin', 'nikolai gogol', 'ivan turgenev',
+      'vladimir nabokov', 'mikhail bulgakov', 'aleksandr solzhenitsyn', 'anna akhmatova'
     ],
+    places: ['russia', 'moscow', 'saint petersburg', 'st petersburg', 'ussr', 'soviet'],
     categoryQueries: {
-      SHAYARI: 'russian poetry poems alexander pushkin akhmatova',
-      PHILOSOPHY_SPIRITUAL: 'leo tolstoy fyodor dostoevsky',
-      ACTION_THRILLER: 'dostoevsky crime and punishment',
-      HINDI_CLASSICS: 'leo tolstoy war and peace'
+      SHAYARI: ['alexander pushkin poems', 'russian poetry akhmatova'],
+      PHILOSOPHY_SPIRITUAL: ['leo tolstoy philosophy', 'fyodor dostoevsky brothers karamazov'],
+      ACTION_THRILLER: ['dostoevsky crime and punishment'],
+      HINDI_CLASSICS: ['leo tolstoy war and peace']
     }
   },
   de: {
@@ -2223,18 +2207,18 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     flag: '🇩🇪',
     statusText: 'German Literature Database',
     querySuffix: 'german',
-    languages: ['ger'],
-    places: ['germany', 'berlin', 'munich', 'frankfurt', 'leipzig', 'vienna', 'austria', 'switzerland', 'zurich'],
     authors: [
-      'kafka', 'franz kafka', 'hesse', 'hermann hesse', 'nietzsche', 'friedrich nietzsche', 
-      'goethe', 'johann wolfgang von goethe', 'thomas mann', 'remarque', 'schopenhauer', 
-      'immanuel kant', 'karl marx', 'sigmund freud', 'bertolt brecht', 'rainer maria rilke'
+      'franz kafka', 'kafka', 'hermann hesse', 'hesse', 'friedrich nietzsche', 'nietzsche',
+      'johann wolfgang von goethe', 'goethe', 'thomas mann', 'erich maria remarque',
+      'arthur schopenhauer', 'immanuel kant', 'karl marx', 'sigmund freud', 'bertolt brecht',
+      'rainer maria rilke', 'rilke'
     ],
+    places: ['germany', 'berlin', 'munich', 'frankfurt', 'vienna', 'austria', 'zurich', 'switzerland'],
     categoryQueries: {
-      SHAYARI: 'german poetry poems goethe rilke',
-      FOCUS_MINDSET: 'hermann hesse siddhartha nietzsche',
-      PHILOSOPHY_SPIRITUAL: 'nietzsche schopenhauer hesse',
-      PSYCHOLOGY: 'sigmund freud psychology'
+      SHAYARI: ['goethe poems poetry', 'rainer maria rilke poetry'],
+      FOCUS_MINDSET: ['hermann hesse siddhartha', 'nietzsche thus spoke zarathustra'],
+      PHILOSOPHY_SPIRITUAL: ['arthur schopenhauer', 'immanuel kant pure reason'],
+      PSYCHOLOGY: ['sigmund freud psychoanalysis']
     }
   },
   fr: {
@@ -2244,20 +2228,20 @@ const EXPLORE_COUNTRY_DEFINITIONS = {
     flag: '🇫🇷',
     statusText: 'French Classics Database',
     querySuffix: 'french',
-    languages: ['fre'],
-    places: ['france', 'paris', 'lyon', 'marseille'],
     authors: [
-      'victor hugo', 'hugo', 'alexandre dumas', 'dumas', 'albert camus', 'camus', 
-      'antoine de saint-exupery', 'saint-exupery', 'marcel proust', 'proust', 
-      'jules verne', 'verne', 'voltaire', 'flaubert', 'gustave flaubert', 'emile zola', 
-      'charles baudelaire', 'jean-paul sartre', 'sartre', 'simone de beauvoir', 'arthur rimbaud'
+      'victor hugo', 'hugo', 'alexandre dumas', 'dumas', 'albert camus', 'camus',
+      'antoine de saint-exupery', 'saint-exupery', 'marcel proust', 'proust',
+      'jules verne', 'verne', 'voltaire', 'gustave flaubert', 'emile zola',
+      'charles baudelaire', 'baudelaire', 'jean-paul sartre', 'sartre', 'simone de beauvoir',
+      'arthur rimbaud', 'rimbaud'
     ],
+    places: ['france', 'paris', 'lyon', 'marseille'],
     categoryQueries: {
-      SHAYARI: 'french poetry poems charles baudelaire rimbaud',
-      ACTION_THRILLER: 'alexandre dumas count of monte cristo',
-      SCIFI_TECH: 'jules verne 20000 leagues under the sea',
-      PHILOSOPHY_SPIRITUAL: 'albert camus the stranger the myth of sisyphus',
-      KIDS_STORIES: 'antoine de saint-exupery the little prince'
+      SHAYARI: ['charles baudelaire les fleurs du mal', 'french poetry rimbaud'],
+      ACTION_THRILLER: ['alexandre dumas count of monte cristo'],
+      SCIFI_TECH: ['jules verne twenty thousand leagues under the sea'],
+      PHILOSOPHY_SPIRITUAL: ['albert camus the stranger the myth of sisyphus'],
+      KIDS_STORIES: ['antoine de saint-exupery the little prince']
     }
   }
 };
@@ -2296,68 +2280,76 @@ function selectExploreCountry(countryCode, btnEl) {
 
 function isDocMatchingCountry(doc, countryCode) {
   if (!countryCode || countryCode === 'all') return true;
+
+  const title = (doc.title || '').toLowerCase();
+  const authors = (Array.isArray(doc.author_name) ? doc.author_name : [doc.author || '']).join(' ').toLowerCase();
+  const subjects = (Array.isArray(doc.subject) ? doc.subject.join(' ') : (doc.category || '')).toLowerCase();
+  const places = (Array.isArray(doc.publish_place) ? doc.publish_place : [doc.publish_place || '']).join(' ').toLowerCase();
+  const langs = (Array.isArray(doc.language) ? doc.language : [doc.language || '']).map(l => String(l).toLowerCase().trim());
+  const allText = `${title} ${authors} ${subjects} ${places}`;
+
+  // 1. INDIA CHECK
+  if (countryCode === 'in') {
+    const indianLangs = ['hin', 'urd', 'san', 'ben', 'mar', 'tam', 'tel', 'pan', 'guj', 'mal', 'kan', 'ori', 'inc'];
+    if (langs.some(l => indianLangs.includes(l))) return true;
+
+    // Check against Indian Core Keywords
+    for (const kw of INDIAN_CORE_KEYWORDS) {
+      if (allText.includes(kw)) return true;
+    }
+    return false;
+  }
+
+  // 2. OTHER COUNTRIES (USA, UK, JP, RU, DE, FR)
+  // If book has distinct Indian language, reject from foreign country!
+  const strictlyIndianLangs = ['hin', 'urd', 'san', 'ben', 'mar', 'tam', 'tel', 'pan', 'guj'];
+  if (langs.some(l => strictlyIndianLangs.includes(l))) return false;
+
   const cDef = EXPLORE_COUNTRY_DEFINITIONS[countryCode];
   if (!cDef) return true;
 
-  // 1. Language check with strict exclusion of conflicting languages
-  const langs = (Array.isArray(doc.language) ? doc.language : [doc.language || '']).map(l => String(l).toLowerCase().trim());
-  
-  // If searching outside India and doc has Hindi/Urdu/Sanskrit, exclude!
-  if (countryCode !== 'in' && (langs.includes('hin') || langs.includes('urd') || langs.includes('san') || langs.includes('ben'))) {
-    return false;
-  }
-  // If searching India and doc has primary Indian language, match!
-  if (countryCode === 'in') {
-    for (const l of cDef.languages) {
-      if (langs.includes(l)) return true;
-    }
-  }
-
-  // 2. Publish Place check (word boundary)
-  const places = (Array.isArray(doc.publish_place) ? doc.publish_place : [doc.publish_place || '']).join(' ').toLowerCase();
-  if (places) {
-    for (const p of cDef.places) {
-      const rx = new RegExp('\\b' + p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
-      if (rx.test(places)) return true;
-    }
-  }
-
-  // 3. Author check (word boundary against author name ONLY!)
-  const authors = (Array.isArray(doc.author_name) ? doc.author_name : [doc.author || '']).join(' ').toLowerCase();
-  if (authors) {
+  // Check authors (word boundary against author string)
+  if (authors && cDef.authors) {
     for (const a of cDef.authors) {
       const rx = new RegExp('\\b' + a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
       if (rx.test(authors)) return true;
     }
   }
 
-  // 4. Title & Subject check (word boundary for significant country terms, min 4 chars)
-  const title = (doc.title || '').toLowerCase();
-  const subjects = (Array.isArray(doc.subject) ? doc.subject.join(' ') : (doc.category || '')).toLowerCase();
-  const textToCheck = title + ' ' + subjects;
-
-  for (const p of cDef.places) {
-    if (p.length >= 4) {
+  // Check places (word boundary against places string)
+  if (places && cDef.places) {
+    for (const p of cDef.places) {
       const rx = new RegExp('\\b' + p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
-      if (rx.test(textToCheck)) return true;
+      if (rx.test(places)) return true;
+    }
+  }
+
+  // Check title & subjects for country name or major cities
+  if (cDef.places) {
+    for (const p of cDef.places) {
+      if (p.length >= 4) {
+        const rx = new RegExp('\\b' + p.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\b', 'i');
+        if (rx.test(title) || rx.test(subjects)) return true;
+      }
     }
   }
 
   return false;
 }
 
-function getCountryQueryForSearch(category, coreQ, countryCode) {
+function getCountryQueryListForSearch(category, coreQ, countryCode) {
   const cDef = EXPLORE_COUNTRY_DEFINITIONS[countryCode] || EXPLORE_COUNTRY_DEFINITIONS['in'];
   if (category && cDef.categoryQueries && cDef.categoryQueries[category.id]) {
-    return cDef.categoryQueries[category.id];
+    const queries = cDef.categoryQueries[category.id];
+    return Array.isArray(queries) ? queries : [queries];
   }
   if (category) {
-    return category.apiQueries[0];
+    return [category.apiQueries[0]];
   }
   if (countryCode !== 'all' && cDef.querySuffix) {
-    return `${coreQ} ${cDef.querySuffix}`;
+    return [`${coreQ} ${cDef.querySuffix}`];
   }
-  return coreQ;
+  return [coreQ];
 }
 
 async function searchOpenLibrary(query) {
@@ -2476,7 +2468,7 @@ async function searchOpenLibrary(query) {
     }
   }
 
-  // 2. Online search via OpenLibrary (Page 1)
+  // 2. High-Yield Multi-Query Online search via OpenLibrary
   if (statusEl) {
     statusEl.style.display = 'block';
     const statusCategoryName = matchedCat ? matchedCat.label : 'Books';
@@ -2484,46 +2476,49 @@ async function searchOpenLibrary(query) {
   }
 
   try {
-    const apiQuery = getCountryQueryForSearch(matchedCat, coreQ, activeCountry);
-    const encoded = encodeURIComponent(apiQuery);
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 7000);
-    const url = `https://openlibrary.org/search.json?q=${encoded}&page=1&limit=50`;
-    const response = await fetch(url, { signal: controller.signal });
-    clearTimeout(timer);
+    const queryList = getCountryQueryListForSearch(matchedCat, coreQ, activeCountry);
+    const fetchPromises = queryList.map(qStr => {
+      const encoded = encodeURIComponent(qStr);
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 7500);
+      const url = `https://openlibrary.org/search.json?q=${encoded}&page=1&limit=25`;
+      return fetch(url, { signal: controller.signal })
+        .then(r => r.ok ? r.json() : { docs: [] })
+        .then(data => data.docs || [])
+        .catch(() => [])
+        .finally(() => clearTimeout(timer));
+    });
 
-    if (response.ok) {
-      const data = await response.json();
-      const onlineDocs = data.docs || [];
-      if (onlineDocs.length < 50) {
-        _exploreSearchHasMore = false;
-      }
-      onlineDocs.forEach(d => {
-        if (!d || !d.title) return;
+    const resultsArrays = await Promise.all(fetchPromises);
+    const onlineDocs = resultsArrays.flat();
 
-        // Apply country filter check
-        if (!isDocMatchingCountry(d, activeCountry)) return;
-
-        const cleanT = cleanBookTitle(d.title);
-        const cleanA = cleanBookAuthor((d.author_name && d.author_name[0]) || d.author);
-        const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
-        
-        if (!_exploreSearchSeenKeys.has(dedupeKey)) {
-          _exploreSearchSeenKeys.add(dedupeKey);
-          let cover = getExploreDocCoverUrl(d);
-          if (!cover || cover.includes('placeholder')) {
-            cover = generateInlineBookCoverSvg(cleanT, cleanA);
-          }
-          d.title = cleanT;
-          d.author = cleanA;
-          d.author_name = [cleanA];
-          d.cover_url = cover;
-          window._exploreAPIResults.push(d);
-        }
-      });
-    } else {
+    if (onlineDocs.length < 25) {
       _exploreSearchHasMore = false;
     }
+
+    onlineDocs.forEach(d => {
+      if (!d || !d.title) return;
+
+      // Apply country filter check
+      if (!isDocMatchingCountry(d, activeCountry)) return;
+
+      const cleanT = cleanBookTitle(d.title);
+      const cleanA = cleanBookAuthor((d.author_name && d.author_name[0]) || d.author);
+      const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+      if (!_exploreSearchSeenKeys.has(dedupeKey)) {
+        _exploreSearchSeenKeys.add(dedupeKey);
+        let cover = getExploreDocCoverUrl(d);
+        if (!cover || cover.includes('placeholder')) {
+          cover = generateInlineBookCoverSvg(cleanT, cleanA);
+        }
+        d.title = cleanT;
+        d.author = cleanA;
+        d.author_name = [cleanA];
+        d.cover_url = cover;
+        window._exploreAPIResults.push(d);
+      }
+    });
   } catch (err) {
     console.warn('OpenLibrary search error:', err);
   }
@@ -2618,48 +2613,51 @@ async function loadMoreExploreSearchResults() {
 
   try {
     const coreQ = extractCoreSearchTerms(_exploreSearchQuery.toLowerCase());
-    const apiQuery = getCountryQueryForSearch(_currentMatchedCategory, coreQ, activeCountry);
-    const encoded = encodeURIComponent(apiQuery);
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 7000);
-    const url = `https://openlibrary.org/search.json?q=${encoded}&page=${_exploreSearchPage}&limit=50`;
-    const response = await fetch(url, { signal: controller.signal });
-    clearTimeout(timer);
+    const queryList = getCountryQueryListForSearch(_currentMatchedCategory, coreQ, activeCountry);
 
-    if (response.ok) {
-      const data = await response.json();
-      const onlineDocs = data.docs || [];
-      if (onlineDocs.length < 50) {
-        _exploreSearchHasMore = false;
-      }
+    const fetchPromises = queryList.map(qStr => {
+      const encoded = encodeURIComponent(qStr);
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 7500);
+      const url = `https://openlibrary.org/search.json?q=${encoded}&page=${_exploreSearchPage}&limit=25`;
+      return fetch(url, { signal: controller.signal })
+        .then(r => r.ok ? r.json() : { docs: [] })
+        .then(data => data.docs || [])
+        .catch(() => [])
+        .finally(() => clearTimeout(timer));
+    });
 
-      onlineDocs.forEach(d => {
-        if (!d || !d.title) return;
+    const resultsArrays = await Promise.all(fetchPromises);
+    const onlineDocs = resultsArrays.flat();
 
-        // Apply country filter check
-        if (!isDocMatchingCountry(d, activeCountry)) return;
-
-        const cleanT = cleanBookTitle(d.title);
-        const cleanA = cleanBookAuthor((d.author_name && d.author_name[0]) || d.author);
-        const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
-
-        if (!_exploreSearchSeenKeys.has(dedupeKey)) {
-          _exploreSearchSeenKeys.add(dedupeKey);
-          let cover = getExploreDocCoverUrl(d);
-          if (!cover || cover.includes('placeholder')) {
-            cover = generateInlineBookCoverSvg(cleanT, cleanA);
-          }
-          d.title = cleanT;
-          d.author = cleanA;
-          d.author_name = [cleanA];
-          d.cover_url = cover;
-          newBatch.push(d);
-          window._exploreAPIResults.push(d);
-        }
-      });
-    } else {
+    if (onlineDocs.length < 25) {
       _exploreSearchHasMore = false;
     }
+
+    onlineDocs.forEach(d => {
+      if (!d || !d.title) return;
+
+      // Apply country filter check
+      if (!isDocMatchingCountry(d, activeCountry)) return;
+
+      const cleanT = cleanBookTitle(d.title);
+      const cleanA = cleanBookAuthor((d.author_name && d.author_name[0]) || d.author);
+      const dedupeKey = cleanT.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+      if (!_exploreSearchSeenKeys.has(dedupeKey)) {
+        _exploreSearchSeenKeys.add(dedupeKey);
+        let cover = getExploreDocCoverUrl(d);
+        if (!cover || cover.includes('placeholder')) {
+          cover = generateInlineBookCoverSvg(cleanT, cleanA);
+        }
+        d.title = cleanT;
+        d.author = cleanA;
+        d.author_name = [cleanA];
+        d.cover_url = cover;
+        newBatch.push(d);
+        window._exploreAPIResults.push(d);
+      }
+    });
   } catch (err) {
     console.warn('Load more OpenLibrary error:', err);
     _exploreSearchHasMore = false;

@@ -6,9 +6,9 @@
 
 
 
-const APP_VERSION = '0.0.76';
+const APP_VERSION = '0.0.77';
 
-const CURRENT_APP_VERSION = 'v0.0.76';
+const CURRENT_APP_VERSION = 'v0.0.77';
 
 const STORAGE_KEY = 'mind_focus_books_v1';
 

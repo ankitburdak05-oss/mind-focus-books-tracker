@@ -1,8 +1,8 @@
 window.APP_BROADCAST_NOTICE = {
   "id": "notice-v0.0.74",
-  "version": "v0.0.76",
+  "version": "v0.0.77",
   "title": "\ud83d\udcda MindFocus Books v0.0.74 Ready!",
-  "message": "v0.0.76: Fix Country Filter & 40+ Indian Shayari and International Poetry Books loading",
+  "message": "v0.0.77: Fix High-Yield Multi-Query Search (50+ Indian Shayari & Ghazal books loading instantly)",
   "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.74/MindFocusBooks-Native.apk",
   "action_text": "Download v0.0.74 APK",
   "badge_text": "NEW UPDATE",
