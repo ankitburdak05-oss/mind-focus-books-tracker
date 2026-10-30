@@ -10369,3 +10369,35 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   border-color: #f59e0b;
   transform: scale(1.1);
 }
+
+
+/* ================= EDIT BOOK STORE CHIPS (v0.0.84) ================= */
+.edit-store-chip {
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: var(--text-secondary, #94a3b8) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  user-select: none !important;
+}
+.edit-store-chip:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
+.edit-store-chip.active {
+  background: rgba(16, 185, 129, 0.22) !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;
+  transform: scale(1.02) !important;
+}
+

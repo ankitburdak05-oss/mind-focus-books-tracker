@@ -635,6 +635,7 @@ function loadBooks() {
     state.books = books;
 
     saveBooks();
+  if (typeof renderReadingBudget === "function") renderReadingBudget();
 
   } catch (e) {
 
@@ -4440,7 +4441,7 @@ function renderBudgetHistoryList(filterStatus) {
   }
 
   container.innerHTML = priced.map(b => {
-    const store = b.purchase_store || 'Bookstore';
+    const store = b.store || b.purchase_store || 'Bookstore';
     const date = b.purchase_date || '2026';
     return `
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;">
@@ -4451,7 +4452,7 @@ function renderBudgetHistoryList(filterStatus) {
           <div style="min-width:0;flex:1;">
             <div style="font-size:0.85rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${b.title}</div>
             <div style="font-size:0.74rem;color:var(--text-secondary);display:flex;align-items:center;gap:6px;margin-top:2px;">
-              <span>${b.author}</span> &bull; <span style="color:#10b981;font-weight:600;">${store}</span>
+              <span>${b.author}</span> • <span style="color:#10b981;font-weight:600;">${store}</span>
             </div>
           </div>
         </div>
@@ -7929,6 +7930,21 @@ function renderRealBookPages() {
 
 // ================= COMPREHENSIVE 16-FIELD EDIT / ADD BOOK MODAL =================
 
+
+window.selectEditBookStore = function(storeName) {
+  const normalized = storeName || 'Amazon';
+  const hiddenInput = document.getElementById('editBookStore');
+  if (hiddenInput) hiddenInput.value = normalized;
+  document.querySelectorAll('.edit-store-chip').forEach(btn => {
+    const s = btn.getAttribute('data-store');
+    if (s && s.toLowerCase() === normalized.toLowerCase()) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+};
+
 function openAddBookModal() {
 
   state.editingBookIndex = -1;
@@ -7964,6 +7980,7 @@ function openAddBookModal() {
   document.getElementById('editTotalPages').value = 250;
 
   document.getElementById('editBookPrice').value = '';
+  if (typeof selectEditBookStore === 'function') selectEditBookStore('Amazon');
 
   document.getElementById('editBookRating').value = '0';
 
@@ -8065,7 +8082,9 @@ function openEditModal(index) {
 
   document.getElementById('editTotalPages').value = book.pages || book.total_pages || 250;
 
-  document.getElementById('editBookPrice').value = book.price ? book.price : '';
+  document.getElementById('editBookPrice').value = (book.price !== undefined && book.price !== null && Number(book.price) > 0) ? book.price : '';
+  const existingStore = book.store || book.purchase_store || 'Amazon';
+  if (typeof selectEditBookStore === 'function') selectEditBookStore(existingStore);
 
   document.getElementById('editBookRating').value = (book.rating !== undefined && book.rating !== null) ? String(book.rating) : '0';
 
@@ -20047,7 +20066,7 @@ window.renderReadingBudget = function() {
     if (pr > 0) {
       totalSpent += pr;
       pricedCount++;
-      const st = (b.store || '').toLowerCase();
+      const st = (b.store || b.purchase_store || '').toLowerCase();
       if (st.includes('amazon')) storeTotals.Amazon += pr;
       else if (st.includes('flipkart')) storeTotals.Flipkart += pr;
       else if (st.includes('kindle') || st.includes('ebook')) storeTotals.Kindle += pr;

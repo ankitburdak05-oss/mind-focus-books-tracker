@@ -10397,6 +10397,38 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   transform: scale(1.1);
 }
 
+
+/* ================= EDIT BOOK STORE CHIPS (v0.0.84) ================= */
+.edit-store-chip {
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: var(--text-secondary, #94a3b8) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  user-select: none !important;
+}
+.edit-store-chip:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
+.edit-store-chip.active {
+  background: rgba(16, 185, 129, 0.22) !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;
+  transform: scale(1.02) !important;
+}
+
+
 </style>
 
 
@@ -10482,6 +10514,37 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   font-weight: 900 !important;
   box-shadow: 0 4px 14px rgba(245, 158, 11, 0.5) !important;
   transform: scale(1.03) !important;
+}
+
+
+/* ================= EDIT BOOK STORE CHIPS (v0.0.84) ================= */
+.edit-store-chip {
+  padding: 6px 14px !important;
+  border-radius: 999px !important;
+  font-size: 0.78rem !important;
+  font-weight: 600 !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: var(--text-secondary, #94a3b8) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  user-select: none !important;
+}
+.edit-store-chip:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.28) !important;
+}
+.edit-store-chip.active {
+  background: rgba(16, 185, 129, 0.22) !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  font-weight: 800 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3) !important;
+  transform: scale(1.02) !important;
 }
 
 </style>
@@ -12227,8 +12290,8 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           <button type="button" class="luxury-btn secondary" onclick="openReadingBudgetStudioModal('target')">
             <span>🎯</span> Adjust Budget
           </button>
-          <button type="button" class="luxury-btn secondary" onclick="quickLogExpensePreset(250)">
-            <span>⚡</span> Quick +₹250
+          <button type="button" class="luxury-btn secondary" onclick="openReadingBudgetStudioModal('analytics')">
+            <span>📊</span> Analytics
           </button>
           <button type="button" class="luxury-btn secondary" onclick="openReadingBudgetStudioModal('history')">
             <span>📜</span> View Expenses (<span id="luxuryPricedCount">0</span>)
@@ -18024,6 +18087,32 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
             </div>
 
           </div>
+
+          <!-- Purchase Store Platform Chips (Amazon, Flipkart, Bookstore, Kindle, Gift) -->
+          <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1);">
+            <label style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); display:flex; align-items:center; gap:6px; margin-bottom:8px;">
+              <span>🏪</span> Where did you buy this book? (Store)
+            </label>
+            <input type="hidden" id="editBookStore" value="Amazon">
+            <div class="edit-store-chips-wrap" style="display:flex; flex-wrap:wrap; gap:8px;">
+              <button type="button" class="edit-store-chip active" data-store="Amazon" onclick="selectEditBookStore('Amazon')">
+                <span>🛒</span> Amazon
+              </button>
+              <button type="button" class="edit-store-chip" data-store="Flipkart" onclick="selectEditBookStore('Flipkart')">
+                <span>🛍️</span> Flipkart
+              </button>
+              <button type="button" class="edit-store-chip" data-store="Bookstore" onclick="selectEditBookStore('Bookstore')">
+                <span>🏪</span> Bookstore / Local
+              </button>
+              <button type="button" class="edit-store-chip" data-store="Kindle" onclick="selectEditBookStore('Kindle')">
+                <span>📱</span> Kindle / eBook
+              </button>
+              <button type="button" class="edit-store-chip" data-store="Gift" onclick="selectEditBookStore('Gift')">
+                <span>🎁</span> Gift / Other
+              </button>
+            </div>
+          </div>
+
 
         </div>
 
@@ -25406,9 +25495,9 @@ if (typeof module !== 'undefined' && module.exports) {
 // Mind Focus Books Tracker — Remote Broadcast In-App Notice
 window._mindFocusBroadcastNotice = {
   "id": "notice-v0.0.74",
-  "version": "v0.0.83",
+  "version": "v0.0.84",
   "title": "📚 MindFocus Books v0.0.74 Ready!",
-  "message": "v0.0.83: Fixed Progress tab monthly layout & Vibrant Multi-Year (2024-2030) Pill Switcher",
+  "message": "v0.0.84: Store Platform Chips (Amazon, Flipkart, Local) in Edit Book & Safe Price Sync",
   "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.74/MindFocusBooks-Native.apk",
   "action_text": "Download v0.0.74 APK",
   "badge_text": "NEW UPDATE",
@@ -25422,25 +25511,25 @@ window._mindFocusBroadcastNotice = {
 // Remote Config fallback for Mind Focus Books
 window._mindFocusRemoteConfig = {
   "activeRelease": {
-    "version": "v0.0.83",
-    "name": "Mind Focus Books v0.0.83 (Multi-Year Archive & Layout Fix)",
-    "releaseNotes": "v0.0.83: Fixed Progress tab monthly layout & Vibrant Multi-Year (2024-2030) Pill Switcher",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.83/MindFocusBooks-Native.apk",
+    "version": "v0.0.84",
+    "name": "Mind Focus Books v0.0.84 (Store Platform Selector & Safe Price)",
+    "releaseNotes": "v0.0.84: Store Platform Chips (Amazon, Flipkart, Local) in Edit Book & Safe Price Sync",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.84/MindFocusBooks-Native.apk",
     "mandatory": false,
     "timestamp": "2026-10-28T12:03:49.052Z"
   },
   "latest": {
-    "version": "v0.0.83",
-    "name": "Mind Focus Books v0.0.83 (Multi-Year Archive & Layout Fix)",
-    "releaseNotes": "v0.0.83: Fixed Progress tab monthly layout & Vibrant Multi-Year (2024-2030) Pill Switcher",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.83/MindFocusBooks-Native.apk"
+    "version": "v0.0.84",
+    "name": "Mind Focus Books v0.0.84 (Store Platform Selector & Safe Price)",
+    "releaseNotes": "v0.0.84: Store Platform Chips (Amazon, Flipkart, Local) in Edit Book & Safe Price Sync",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.84/MindFocusBooks-Native.apk"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
-  "latest_version": "0.0.83",
-  "version_code": 8583,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.83/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.83: Fixed Progress tab monthly layout & Vibrant Multi-Year (2024-2030) Pill Switcher",
+  "latest_version": "0.0.84",
+  "version_code": 8584,
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.84/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.84: Store Platform Chips (Amazon, Flipkart, Local) in Edit Book & Safe Price Sync",
   "force_update": false,
   "maintenance": false,
   "published_at": "2026-10-28T12:03:49.101Z",
@@ -26093,6 +26182,7 @@ function loadBooks() {
     state.books = books;
 
     saveBooks();
+  if (typeof renderReadingBudget === "function") renderReadingBudget();
 
   } catch (e) {
 
@@ -30633,7 +30723,7 @@ function renderBudgetHistoryList(filterStatus) {
   }
 
   container.innerHTML = priced.map(b => {
-    const store = b.purchase_store || 'Bookstore';
+    const store = b.store || b.purchase_store || 'Bookstore';
     const date = b.purchase_date || '2026';
     return `
       <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;">
@@ -30644,7 +30734,7 @@ function renderBudgetHistoryList(filterStatus) {
           <div style="min-width:0;flex:1;">
             <div style="font-size:0.85rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${b.title}</div>
             <div style="font-size:0.74rem;color:var(--text-secondary);display:flex;align-items:center;gap:6px;margin-top:2px;">
-              <span>${b.author}</span> &bull; <span style="color:#10b981;font-weight:600;">${store}</span>
+              <span>${b.author}</span> • <span style="color:#10b981;font-weight:600;">${store}</span>
             </div>
           </div>
         </div>
@@ -34122,6 +34212,21 @@ function renderRealBookPages() {
 
 // ================= COMPREHENSIVE 16-FIELD EDIT / ADD BOOK MODAL =================
 
+
+window.selectEditBookStore = function(storeName) {
+  const normalized = storeName || 'Amazon';
+  const hiddenInput = document.getElementById('editBookStore');
+  if (hiddenInput) hiddenInput.value = normalized;
+  document.querySelectorAll('.edit-store-chip').forEach(btn => {
+    const s = btn.getAttribute('data-store');
+    if (s && s.toLowerCase() === normalized.toLowerCase()) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+};
+
 function openAddBookModal() {
 
   state.editingBookIndex = -1;
@@ -34157,6 +34262,7 @@ function openAddBookModal() {
   document.getElementById('editTotalPages').value = 250;
 
   document.getElementById('editBookPrice').value = '';
+  if (typeof selectEditBookStore === 'function') selectEditBookStore('Amazon');
 
   document.getElementById('editBookRating').value = '0';
 
@@ -34258,7 +34364,9 @@ function openEditModal(index) {
 
   document.getElementById('editTotalPages').value = book.pages || book.total_pages || 250;
 
-  document.getElementById('editBookPrice').value = book.price ? book.price : '';
+  document.getElementById('editBookPrice').value = (book.price !== undefined && book.price !== null && Number(book.price) > 0) ? book.price : '';
+  const existingStore = book.store || book.purchase_store || 'Amazon';
+  if (typeof selectEditBookStore === 'function') selectEditBookStore(existingStore);
 
   document.getElementById('editBookRating').value = (book.rating !== undefined && book.rating !== null) ? String(book.rating) : '0';
 
@@ -46240,7 +46348,7 @@ window.renderReadingBudget = function() {
     if (pr > 0) {
       totalSpent += pr;
       pricedCount++;
-      const st = (b.store || '').toLowerCase();
+      const st = (b.store || b.purchase_store || '').toLowerCase();
       if (st.includes('amazon')) storeTotals.Amazon += pr;
       else if (st.includes('flipkart')) storeTotals.Flipkart += pr;
       else if (st.includes('kindle') || st.includes('ebook')) storeTotals.Kindle += pr;

@@ -1,8 +1,8 @@
 {
   "id": "notice-v0.0.74",
-  "version": "v0.0.83",
+  "version": "v0.0.84",
   "title": "📚 MindFocus Books v0.0.74 Ready!",
-  "message": "v0.0.83: Fixed Progress tab monthly layout & Vibrant Multi-Year (2024-2030) Pill Switcher",
+  "message": "v0.0.84: Store Platform Chips (Amazon, Flipkart, Local) in Edit Book & Safe Price Sync",
   "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.74/MindFocusBooks-Native.apk",
   "action_text": "Download v0.0.74 APK",
   "badge_text": "NEW UPDATE",
