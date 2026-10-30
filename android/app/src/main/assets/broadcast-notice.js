@@ -1,12 +1,10 @@
-// Mind Focus Books Tracker — Remote Broadcast In-App Notice
-window._mindFocusBroadcastNotice = {
-  "id": "notice-v0.0.74",
-  "version": "v0.0.84",
-  "title": "📚 MindFocus Books v0.0.74 Ready!",
-  "message": "v0.0.84: Store Platform Chips (Amazon, Flipkart, Local) in Edit Book & Safe Price Sync",
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.74/MindFocusBooks-Native.apk",
-  "action_text": "Download v0.0.74 APK",
-  "badge_text": "NEW UPDATE",
-  "auto_show": true,
-  "timestamp": 1793189029182
+window.BROADCAST_NOTICE = {
+  "active": true,
+  "id": "notice-v0.0.85-store-fix",
+  "version": "v0.0.85",
+  "type": "feature",
+  "message": "v0.0.85: Flipkart & Amazon Store Persistence in Edit Book, Safe Price Preservation & Real-time Budget Store Totals",
+  "actionText": "Check Progress",
+  "actionUrl": "#viewProgress",
+  "timestamp": "2026-10-30T03:43:23.460Z"
 };

@@ -8472,7 +8472,17 @@ function saveBookModal() {
 
   const priceVal = document.getElementById('editBookPrice').value.trim();
 
-  const price = priceVal ? parseFloat(priceVal) : 0;
+  const existingBook = (state.editingBookIndex >= 0 && state.books && state.books[state.editingBookIndex]) ? state.books[state.editingBookIndex] : null;
+
+  let price = 0;
+  if (priceVal !== '') {
+    price = parseFloat(priceVal);
+    if (isNaN(price)) price = 0;
+  } else if (existingBook && existingBook.price !== undefined && existingBook.price !== null && Number(existingBook.price) > 0) {
+    price = parseFloat(existingBook.price);
+  }
+
+  const store = document.getElementById('editBookStore')?.value || (existingBook && (existingBook.store || existingBook.purchase_store)) || 'Amazon';
 
   const rating = parseInt(document.getElementById('editBookRating').value, 10) || 0;
 
@@ -8585,6 +8595,10 @@ function saveBookModal() {
     price,
 
     price_user_set: price > 0,
+
+    store: store,
+
+    purchase_store: store,
 
     rating,
 
@@ -8721,6 +8735,10 @@ function saveBookModal() {
   closeEditModal();
 
   renderApp();
+
+  if (typeof renderReadingBudget === 'function') {
+    renderReadingBudget();
+  }
 
 
 
@@ -20062,15 +20080,20 @@ window.renderReadingBudget = function() {
   const storeTotals = { Amazon: 0, Flipkart: 0, Local: 0, Kindle: 0 };
 
   (state.books || []).forEach(b => {
-    const pr = parseFloat(prices[b.id] || b.price || 0);
+    const pr = parseFloat((b.price !== undefined && b.price !== null && Number(b.price) > 0) ? b.price : ((b.id && prices[b.id]) || (b.no && prices[b.no]) || 0));
     if (pr > 0) {
       totalSpent += pr;
       pricedCount++;
-      const st = (b.store || b.purchase_store || '').toLowerCase();
-      if (st.includes('amazon')) storeTotals.Amazon += pr;
-      else if (st.includes('flipkart')) storeTotals.Flipkart += pr;
-      else if (st.includes('kindle') || st.includes('ebook')) storeTotals.Kindle += pr;
-      else storeTotals.Local += pr;
+      const st = (b.store || b.purchase_store || '').toLowerCase().trim();
+      if (st.includes('amazon')) {
+        storeTotals.Amazon += pr;
+      } else if (st.includes('flipkart') || st.includes('flip')) {
+        storeTotals.Flipkart += pr;
+      } else if (st.includes('kindle') || st.includes('ebook')) {
+        storeTotals.Kindle += pr;
+      } else {
+        storeTotals.Local += pr;
+      }
     }
   });
 
