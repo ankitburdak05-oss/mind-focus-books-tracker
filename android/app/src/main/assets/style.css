@@ -10401,3 +10401,140 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   transform: scale(1.02) !important;
 }
 
+
+
+/* ================= LUXURY EDIT BOOK STUDIO (v0.0.86) ================= */
+.edit-live-hero-card {
+  position: relative;
+  border-radius: 20px !important;
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.65) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  padding: 16px !important;
+  overflow: hidden !important;
+  margin-bottom: 14px !important;
+}
+.edit-live-hero-glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.28) 0%, transparent 70%);
+  pointer-events: none;
+}
+.edit-live-hero-content {
+  display: flex !important;
+  gap: 14px !important;
+  align-items: center !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+.edit-live-cover-wrap {
+  width: 72px !important;
+  height: 104px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.16) !important;
+  background: #0f172a !important;
+}
+.edit-live-cover-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+.edit-live-cover-fallback {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(145deg, #1e293b, #0f172a) !important;
+  font-size: 2rem !important;
+}
+.edit-live-hero-meta {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+.edit-live-hero-title {
+  margin: 0 0 3px 0 !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  letter-spacing: -0.01em !important;
+}
+.edit-live-hero-author {
+  font-size: 0.78rem !important;
+  color: var(--text-muted, #94a3b8) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  margin-bottom: 8px !important;
+}
+.edit-live-hero-stats-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+.edit-live-stat-pill {
+  padding: 3px 8px !important;
+  border-radius: 999px !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #f1f5f9 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+.edit-live-progress-track {
+  width: 100% !important;
+  height: 6px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  margin-top: 12px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+.edit-live-progress-bar {
+  height: 100% !important;
+  background: linear-gradient(90deg, #10b981 0%, #f59e0b 60%, #fbbf24 100%) !important;
+  border-radius: 999px !important;
+  transition: width 0.3s ease !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+}
+
+/* Quick Presets Micro-Buttons */
+.edit-quick-chip-btn {
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: var(--text-secondary, #cbd5e1) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  user-select: none !important;
+}
+.edit-quick-chip-btn:hover {
+  background: rgba(245, 158, 11, 0.18) !important;
+  border-color: #f59e0b !important;
+  color: #fbbf24 !important;
+  transform: translateY(-1px) !important;
+}
+.edit-quick-chip-btn:active {
+  transform: scale(0.97) !important;
+}

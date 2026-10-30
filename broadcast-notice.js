@@ -1,10 +1,10 @@
 window.BROADCAST_NOTICE = {
   "active": true,
-  "id": "notice-v0.0.85-store-fix",
-  "version": "v0.0.85",
+  "id": "notice-v0.0.86-luxury-edit-studio",
+  "version": "v0.0.86",
   "type": "feature",
-  "message": "v0.0.85: Flipkart & Amazon Store Persistence in Edit Book, Safe Price Preservation & Real-time Budget Store Totals",
-  "actionText": "Check Progress",
-  "actionUrl": "#viewProgress",
-  "timestamp": "2026-10-30T03:43:23.460Z"
+  "message": "v0.0.86: Executive Luxury Book Edit Studio with Live Real-time Showcase Banner & Fast Presets",
+  "actionText": "Check Library",
+  "actionUrl": "#viewLibrary",
+  "timestamp": "2026-10-30T04:11:55.121Z"
 };

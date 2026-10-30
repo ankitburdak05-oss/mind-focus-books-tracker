@@ -10429,6 +10429,143 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 }
 
 
+
+/* ================= LUXURY EDIT BOOK STUDIO (v0.0.86) ================= */
+.edit-live-hero-card {
+  position: relative;
+  border-radius: 20px !important;
+  background: linear-gradient(135deg, rgba(30, 27, 75, 0.65) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12) !important;
+  padding: 16px !important;
+  overflow: hidden !important;
+  margin-bottom: 14px !important;
+}
+.edit-live-hero-glow {
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(245, 158, 11, 0.28) 0%, transparent 70%);
+  pointer-events: none;
+}
+.edit-live-hero-content {
+  display: flex !important;
+  gap: 14px !important;
+  align-items: center !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+.edit-live-cover-wrap {
+  width: 72px !important;
+  height: 104px !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  position: relative !important;
+  flex-shrink: 0 !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.16) !important;
+  background: #0f172a !important;
+}
+.edit-live-cover-wrap img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+.edit-live-cover-fallback {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: linear-gradient(145deg, #1e293b, #0f172a) !important;
+  font-size: 2rem !important;
+}
+.edit-live-hero-meta {
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+.edit-live-hero-title {
+  margin: 0 0 3px 0 !important;
+  font-size: 1.05rem !important;
+  font-weight: 800 !important;
+  color: #ffffff !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  letter-spacing: -0.01em !important;
+}
+.edit-live-hero-author {
+  font-size: 0.78rem !important;
+  color: var(--text-muted, #94a3b8) !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  margin-bottom: 8px !important;
+}
+.edit-live-hero-stats-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}
+.edit-live-stat-pill {
+  padding: 3px 8px !important;
+  border-radius: 999px !important;
+  font-size: 0.7rem !important;
+  font-weight: 700 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #f1f5f9 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+.edit-live-progress-track {
+  width: 100% !important;
+  height: 6px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 999px !important;
+  overflow: hidden !important;
+  margin-top: 12px !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+.edit-live-progress-bar {
+  height: 100% !important;
+  background: linear-gradient(90deg, #10b981 0%, #f59e0b 60%, #fbbf24 100%) !important;
+  border-radius: 999px !important;
+  transition: width 0.3s ease !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5) !important;
+}
+
+/* Quick Presets Micro-Buttons */
+.edit-quick-chip-btn {
+  padding: 4px 10px !important;
+  border-radius: 999px !important;
+  font-size: 0.72rem !important;
+  font-weight: 700 !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  color: var(--text-secondary, #cbd5e1) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  user-select: none !important;
+}
+.edit-quick-chip-btn:hover {
+  background: rgba(245, 158, 11, 0.18) !important;
+  border-color: #f59e0b !important;
+  color: #fbbf24 !important;
+  transform: translateY(-1px) !important;
+}
+.edit-quick-chip-btn:active {
+  transform: scale(0.97) !important;
+}
+
 </style>
 
 
@@ -17785,313 +17922,239 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
   <!-- ================= COMPREHENSIVE EDIT / ADD BOOK MODAL (ALL 16 FIELDS) ================= -->
 
   <div class="modal-overlay modal-overlay-fullscreen" id="editBookModalOverlay">
-
     <div class="modal-card modal-card-fullscreen-studio">
-
-      <!-- Frozen Sticky Header with Close Button -->
-
+      <!-- Frozen Sticky Luxury Header -->
       <div class="modal-header studio-header">
-
-        <div style="display:flex; align-items:center; gap:10px;">
-
+        <div style="display:flex; align-items:center; gap:12px;">
           <button type="button" class="btn-studio-back" onclick="closeEditModal()" title="Back &amp; Close">
-
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:18px; height:18px;">
-
               <line x1="19" y1="12" x2="5" y2="12"></line>
-
               <polyline points="12 19 5 12 12 5"></polyline>
-
             </svg>
-
           </button>
-
-          <h3 class="modal-title" id="editBookModalTitle">Edit Book Details</h3>
-
+          <div>
+            <div style="display:flex; align-items:center; gap:8px;">
+              <h3 class="modal-title" id="editBookModalTitle" style="margin:0; font-size:1.15rem; font-weight:800; background:linear-gradient(135deg, #ffffff 0%, #fbbf24 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">👑 Edit Book Details</h3>
+              <span class="prog-pill-badge gold" id="editHeaderStatusBadge" style="font-size:0.68rem; padding:2px 8px;">Studio</span>
+            </div>
+            <span style="font-size:0.72rem; color:var(--text-muted); display:block; margin-top:2px;">Fine-tune details, track velocity &amp; purchase</span>
+          </div>
         </div>
-
         <button type="button" class="modal-close-btn studio-close-btn" onclick="closeEditModal()" title="Close">&times;</button>
-
       </div>
 
+      <div class="modal-body studio-body" style="padding:14px 16px 24px;">
 
-
-      <div class="modal-body studio-body">
-
-        <!-- Card 1: Quick Catalog Search & Auto-Fill -->
-
-        <div class="studio-card-box quick-autofill-box" id="quickAutofillGroup">
-
-          <label style="color: var(--accent-gold); font-weight: 700; display: flex; align-items: center; gap: 6px; margin-bottom: 6px; font-size: 0.85rem;">
-
-            <span>⚡</span> Quick Search &amp; Auto-Fill from Classics
-
-          </label>
-
-          <div style="position: relative;">
-
-            <input type="text" id="quickCatalogSearchInput" placeholder="Search title or author (e.g. Atomic Habits, Deep Work)..." oninput="onQuickCatalogSearch(this.value)" autocomplete="off">
-
-            <div id="quickCatalogDropdown" class="quick-autofill-dropdown" style="display: none;"></div>
-
+        <!-- 🌟 LIVE LUXURY BOOK SHOWCASE BANNER -->
+        <div class="edit-live-hero-card" id="editBookLiveHeroCard">
+          <div class="edit-live-hero-glow"></div>
+          <div class="edit-live-hero-content">
+            <div class="edit-live-cover-wrap">
+              <img id="editLiveHeroCoverImg" src="" alt="Live Cover" style="display:none;" onerror="this.style.display='none'; document.getElementById('editLiveHeroCoverFallback').style.display='flex';">
+              <div id="editLiveHeroCoverFallback" class="edit-live-cover-fallback">
+                <span>📖</span>
+              </div>
+            </div>
+            <div class="edit-live-hero-meta">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:5px;">
+                <span class="prog-pill-badge gold" id="editLiveHeroCategoryBadge">General</span>
+                <span class="prog-pill-badge blue" id="editLiveHeroLangBadge">ENGLISH</span>
+                <span class="prog-pill-badge green" id="editLiveHeroStatusBadge">📖 READING</span>
+              </div>
+              <h4 class="edit-live-hero-title" id="editLiveHeroTitle">Book Title</h4>
+              <div class="edit-live-hero-author" id="editLiveHeroAuthor">by Author Name</div>
+              
+              <div class="edit-live-hero-stats-row">
+                <div class="edit-live-stat-pill" id="editLiveHeroPagesPill">
+                  <span>📄</span> <span id="editLiveHeroPagesText">0 / 250 (0%)</span>
+                </div>
+                <div class="edit-live-stat-pill" id="editLiveHeroPricePill">
+                  <span>💰</span> <span id="editLiveHeroPriceText">Unpriced</span>
+                </div>
+                <div class="edit-live-stat-pill" id="editLiveHeroStorePill">
+                  <span>🏪</span> <span id="editLiveHeroStoreText">Amazon</span>
+                </div>
+                <div class="edit-live-stat-pill" id="editLiveHeroRatingPill">
+                  <span id="editLiveHeroRatingStars">☆☆☆☆☆</span>
+                </div>
+              </div>
+            </div>
           </div>
-
+          
+          <!-- Live Real-Time Velocity Track -->
+          <div class="edit-live-progress-track">
+            <div class="edit-live-progress-bar" id="editLiveHeroProgressBar" style="width: 0%;"></div>
+          </div>
         </div>
 
-
-
-        <!-- Card 2: Essential Book Details -->
-
-        <div class="studio-card-box">
-
-          <div class="studio-card-title">📋 Essential Details</div>
-
-          <div class="form-row">
-
-            <div class="form-group flex-1">
-
-              <label>Book No</label>
-
-              <input type="text" id="editBookNo" placeholder="e.g. book 151">
-
-            </div>
-
-            <div class="form-group flex-1">
-
-              <label>Language</label>
-
-              <input type="text" id="editBookLanguage" placeholder="e.g. HINDI, ENGLISH">
-
-            </div>
-
+        <!-- Card 1: Quick Catalog Search & Auto-Fill from Classics -->
+        <div class="studio-card-box quick-autofill-box" id="quickAutofillGroup">
+          <div class="studio-card-title">
+            <span>⚡</span> Quick Search &amp; Auto-Fill from Classics
           </div>
+          <div style="position: relative;">
+            <input type="text" id="quickCatalogSearchInput" placeholder="Search classic bestseller (e.g. Atomic Habits, Deep Work, Ikigai)..." oninput="onQuickCatalogSearch(this.value)" autocomplete="off">
+            <div id="quickCatalogDropdown" class="quick-autofill-dropdown" style="display: none;"></div>
+          </div>
+          <!-- Popular 1-Click Classics Shortcut Tags -->
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;">
+            <span style="font-size:0.68rem; color:var(--text-muted); align-self:center; font-weight:700;">Trending:</span>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickFillCatalogPreset('Atomic Habits', 'James Clear', 'Productivity', 320)">⚡ Atomic Habits</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickFillCatalogPreset('Deep Work', 'Cal Newport', 'Productivity', 304)">⚡ Deep Work</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickFillCatalogPreset('The Psychology of Money', 'Morgan Housel', 'Finance', 256)">⚡ Psych. of Money</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickFillCatalogPreset('Ikigai', 'Héctor García', 'Philosophy', 208)">⚡ Ikigai</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickFillCatalogPreset('Rich Dad Poor Dad', 'Robert Kiyosaki', 'Finance', 336)">⚡ Rich Dad</button>
+          </div>
+        </div>
 
-
+        <!-- Card 2: Essential Book Identity -->
+        <div class="studio-card-box">
+          <div class="studio-card-title">📋 Essential Identity</div>
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label>Book No</label>
+              <input type="text" id="editBookNo" placeholder="e.g. book 1" oninput="syncEditModalLiveHeroPreview()">
+            </div>
+            <div class="form-group flex-1">
+              <label>Language</label>
+              <input type="text" id="editBookLanguage" placeholder="e.g. HINDI, ENGLISH" oninput="syncEditModalLiveHeroPreview()">
+            </div>
+          </div>
 
           <div class="form-group">
-
             <label>Book Title *</label>
-
-            <input type="text" id="editBookTitle" placeholder="Enter book title">
-
+            <input type="text" id="editBookTitle" placeholder="Enter book title" oninput="syncEditModalLiveHeroPreview()">
           </div>
 
-
-
           <div class="form-row">
-
             <div class="form-group flex-1">
-
               <label>Author</label>
-
-              <input type="text" id="editBookAuthor" placeholder="Author name">
-
+              <input type="text" id="editBookAuthor" placeholder="Author name" oninput="syncEditModalLiveHeroPreview()">
             </div>
-
             <div class="form-group flex-1">
-
               <label>Category</label>
-
-              <input type="text" id="editBookCategory" placeholder="e.g. Productivity">
-
+              <input type="text" id="editBookCategory" placeholder="e.g. Productivity, Philosophy" oninput="syncEditModalLiveHeroPreview()">
             </div>
-
           </div>
-
         </div>
 
-
-
-        <!-- Card 3: Book Cover Studio -->
-
+        <!-- Card 3: Studio Book Cover Photo -->
         <div class="studio-card-box">
-
           <div class="studio-card-title">📸 Book Cover Photo</div>
-
-          <div style="display:flex; gap:14px; align-items:center;">
-
-            <div id="coverPreviewBox" class="cover-preview-box">
-
-              <span id="coverPlaceholderText" style="font-size:0.75rem; color:var(--text-muted);">No Cover</span>
-
-              <img id="coverPreviewImg" src="" alt="Cover" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:8px;">
-
+          <div style="display:flex; gap:16px; align-items:center;">
+            <div id="coverPreviewBox" class="cover-preview-box" style="width:72px; height:104px; border-radius:12px; background:rgba(0,0,0,0.4); border:1px dashed rgba(245,158,11,0.4); display:flex; align-items:center; justify-content:center; overflow:hidden; flex-shrink:0; box-shadow:0 4px 14px rgba(0,0,0,0.4);">
+              <span id="coverPlaceholderText" style="font-size:0.75rem; color:var(--text-muted); text-align:center; padding:4px;">No Cover</span>
+              <img id="coverPreviewImg" src="" alt="Cover" style="display:none; width:100%; height:100%; object-fit:cover; border-radius:10px;">
             </div>
-
             <div style="display:flex; flex-direction:column; gap:8px; flex:1;">
-
-              <input type="text" id="editBookCover" placeholder="Paste Image URL or choose file below" oninput="onEditBookCoverUrlInput(this.value)">
-
+              <input type="text" id="editBookCover" placeholder="Paste image URL (JPG, PNG, WebP) or choose photo" oninput="onEditBookCoverUrlInput(this.value); syncEditModalLiveHeroPreview();">
               <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-
-                <label class="btn-restore" style="cursor:pointer; padding:6px 14px; font-size:12px; font-weight:700;">
-
-                  📁 Upload Photo
-
-                  <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverImageUpload(this)">
-
+                <label class="btn-restore" style="cursor:pointer; padding:7px 16px; font-size:12px; font-weight:700; border-radius:10px; display:inline-flex; align-items:center; gap:6px;">
+                  <span>📁</span> Upload Photo
+                  <input type="file" id="coverImageFileInput" accept="image/*" style="display:none;" onchange="handleCoverImageUpload(this); syncEditModalLiveHeroPreview();">
                 </label>
-
-                <button type="button" class="btn-cancel" id="removeCoverBtn" onclick="removeCoverPhoto()" style="display:none; padding:6px 12px; font-size:12px;">
-
-                  Remove
-
+                <button type="button" class="btn-cancel" id="removeCoverBtn" onclick="removeCoverPhoto(); syncEditModalLiveHeroPreview();" style="display:none; padding:7px 14px; font-size:12px; border-radius:10px;">
+                  Remove Photo
                 </button>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
 
-
-
-        <!-- Card 4: Reading Status & Availability -->
-
+        <!-- Card 4: Reading Status & Lending -->
         <div class="studio-card-box">
-
           <div class="studio-card-title">📌 Status &amp; Lending</div>
-
           <div class="form-row">
-
             <div class="form-group flex-1">
-
               <label>Status</label>
-
-              <select id="editBookStatus" onchange="onEditBookStatusChange(this.value)">
-
+              <select id="editBookStatus" onchange="onEditBookStatusChange(this.value); syncEditModalLiveHeroPreview();">
                 <option value="PENDING">⏳ PENDING</option>
-
                 <option value="READING">📖 READING</option>
-
                 <option value="DONE">✅ DONE</option>
-
                 <option value="LENT">👥 LENT OUT</option>
-
               </select>
-
             </div>
-
             <div class="form-group flex-1">
-
               <label>Availability</label>
-
-              <select id="editBookAvailability">
-
-                <option value="AVAILABLE">Available</option>
-
-                <option value="UNAVAILABLE">Unavailable</option>
-
+              <select id="editBookAvailability" onchange="syncEditModalLiveHeroPreview()">
+                <option value="AVAILABLE">Available in Library</option>
+                <option value="UNAVAILABLE">Unavailable / Archived</option>
               </select>
-
             </div>
-
           </div>
-
-
 
           <!-- Lent Details (visible when status is LENT) -->
-
-          <div class="form-row" id="editLentDetailsRow" style="display:none;">
-
+          <div class="form-row" id="editLentDetailsRow" style="display:none; margin-top:8px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.1);">
             <div class="form-group flex-1">
-
               <label>Borrower Name (Dost ka naam)</label>
-
               <input type="text" id="editLentTo" placeholder="e.g. Rahul Sharma">
-
             </div>
-
             <div class="form-group flex-1">
-
               <label>Borrower Phone</label>
-
               <input type="tel" id="editLentPhone" placeholder="e.g. 9876543210">
-
             </div>
-
           </div>
-
         </div>
 
-
-
-        <!-- Card 5: Pages & Reading Progress -->
-
+        <!-- Card 5: Pages & Reading Velocity -->
         <div class="studio-card-box">
-
-          <div class="studio-card-title">📖 Reading Pages</div>
-
+          <div class="studio-card-title">📖 Reading Pages &amp; Progress</div>
           <div class="form-row">
-
             <div class="form-group flex-1">
-
               <label>Current Page</label>
-
-              <input type="number" id="editCurrentPage" min="0" placeholder="e.g. 0">
-
+              <input type="number" id="editCurrentPage" min="0" placeholder="e.g. 0" oninput="syncEditModalLiveHeroPreview()">
             </div>
-
             <div class="form-group flex-1">
-
               <label>Total Pages</label>
-
-              <input type="number" id="editTotalPages" min="1" placeholder="e.g. 250">
-
+              <input type="number" id="editTotalPages" min="1" placeholder="e.g. 250" oninput="syncEditModalLiveHeroPreview()">
             </div>
-
           </div>
-
+          <!-- Quick Page Adjust Buttons -->
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px;">
+            <span style="font-size:0.68rem; color:var(--text-muted); align-self:center; font-weight:700;">Quick Adjust:</span>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickAdjustEditPages(-10)">-10 Pages</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickAdjustEditPages(10)">+10 Pages</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickAdjustEditPages(25)">+25 Pages</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickAdjustEditPages(50)">+50 Pages</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickMarkFinishedInEdit()" style="color:#34d399; border-color:rgba(16,185,129,0.3); background:rgba(16,185,129,0.1);">✅ Mark Finished</button>
+          </div>
         </div>
 
-
-
-        <!-- Card 6: Purchase Price & Rating -->
-
+        <!-- Card 6: Purchase Price, Store & Rating -->
         <div class="studio-card-box">
-
-          <div class="studio-card-title">💰 Price &amp; Rating</div>
-
+          <div class="studio-card-title">💰 Price, Store &amp; Rating</div>
           <div class="form-row">
-
             <div class="form-group flex-1">
-
               <label>Purchase Price (₹ - Optional)</label>
-
-              <input type="number" id="editBookPrice" min="0" placeholder="Leave blank if not added">
-
+              <input type="number" id="editBookPrice" min="0" placeholder="Leave blank if not added" oninput="syncEditModalLiveHeroPreview()">
             </div>
-
             <div class="form-group flex-1">
-
               <label>Rating</label>
-
-              <select id="editBookRating">
-
+              <select id="editBookRating" onchange="syncEditModalLiveHeroPreview()">
                 <option value="0">☆☆☆☆☆ (No Rating / 0)</option>
-
                 <option value="1">★☆☆☆☆ (1 Star)</option>
-
                 <option value="2">★★☆☆☆ (2 Stars)</option>
-
                 <option value="3">★★★☆☆ (3 Stars)</option>
-
                 <option value="4">★★★★☆ (4 Stars)</option>
-
                 <option value="5">★★★★★ (5 Stars)</option>
-
               </select>
-
             </div>
+          </div>
 
+          <!-- Quick Price Presets -->
+          <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:6px; margin-bottom:12px;">
+            <span style="font-size:0.68rem; color:var(--text-muted); align-self:center; font-weight:700;">Presets:</span>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickSetEditPrice(199)">₹199</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickSetEditPrice(299)">₹299</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickSetEditPrice(399)">₹399</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickSetEditPrice(499)">₹499</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickSetEditPrice(799)">₹799</button>
           </div>
 
           <!-- Purchase Store Platform Chips (Amazon, Flipkart, Bookstore, Kindle, Gift) -->
-          <div style="margin-top: 12px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1);">
+          <div style="padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1);">
             <label style="font-size:0.75rem; font-weight:700; color:var(--text-secondary); display:flex; align-items:center; gap:6px; margin-bottom:8px;">
-              <span>🏪</span> Where did you buy this book? (Store)
+              <span>🏪</span> Where did you buy this book? (Store Platform)
             </label>
             <input type="hidden" id="editBookStore" value="Amazon">
             <div class="edit-store-chips-wrap" style="display:flex; flex-wrap:wrap; gap:8px;">
@@ -18112,85 +18175,62 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
               </button>
             </div>
           </div>
-
-
         </div>
 
-
-
-        <!-- Card 7: Reading Schedule & Timeline -->
-
+        <!-- Card 7: Reading Timeline & Dates -->
         <div class="studio-card-box">
-
           <div class="studio-card-title">📅 Timeline &amp; Dates</div>
-
           <div class="form-row">
-
             <div class="form-group flex-1">
-
               <label>Start Date</label>
-
-              <input type="date" id="editStartDate" onchange="calculateCountDays()">
-
+              <input type="date" id="editStartDate" onchange="calculateCountDays(); syncEditModalLiveHeroPreview();">
             </div>
-
             <div class="form-group flex-1">
-
               <label>End Date</label>
-
-              <input type="date" id="editEndDate" onchange="calculateCountDays()">
-
+              <input type="date" id="editEndDate" onchange="calculateCountDays(); syncEditModalLiveHeroPreview();">
             </div>
-
           </div>
 
-
-
-          <div class="form-group">
-
-            <label>Count Days (Auto-calculated)</label>
-
-            <input type="number" id="editCountDays" placeholder="0" min="0">
-
+          <div class="form-group" style="margin-bottom:8px;">
+            <label>Count Days (Auto-calculated duration)</label>
+            <input type="number" id="editCountDays" placeholder="0" min="0" oninput="syncEditModalLiveHeroPreview()">
           </div>
 
+          <!-- Quick Date Presets -->
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <span style="font-size:0.68rem; color:var(--text-muted); align-self:center; font-weight:700;">Shortcuts:</span>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickSetTimelinePreset('start-today')">📅 Started Today</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickSetTimelinePreset('end-today')">🏁 Finished Today</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickSetTimelinePreset('7-days')">🎯 7-Days Plan</button>
+            <button type="button" class="edit-quick-chip-btn" onclick="quickSetTimelinePreset('30-days')">🚀 30-Days Plan</button>
+          </div>
         </div>
 
-
-
-        <!-- Card 8: Key Takeaways & Reflections -->
-
+        <!-- Card 8: Key Learnings, Quotes & Reflections -->
         <div class="studio-card-box">
-
           <div class="studio-card-title">💡 Key Learnings, Quotes &amp; Reflections</div>
-
-          <div class="form-group" style="margin-bottom:0;">
-
-            <textarea id="editBookTakeaway" rows="4" placeholder="What are the key learnings, quotes, or actionable insights from this book?"></textarea>
-
+          <div class="form-group" style="margin-bottom:6px;">
+            <textarea id="editBookTakeaway" rows="4" placeholder="What are the key learnings, quotes, or actionable insights from this book?" oninput="updateTakeawayCounter()"></textarea>
           </div>
-
+          <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+            <div style="display:flex; gap:6px; flex-wrap:wrap;">
+              <button type="button" class="edit-quick-chip-btn" onclick="quickInsertTakeawayPrompt('💡 \"Favorite Quote\": ')">💡 Quote</button>
+              <button type="button" class="edit-quick-chip-btn" onclick="quickInsertTakeawayPrompt('🎯 Core Lesson: ')">🎯 Lesson</button>
+              <button type="button" class="edit-quick-chip-btn" onclick="quickInsertTakeawayPrompt('🚀 Action Item: ')">🚀 Action</button>
+            </div>
+            <div id="editTakeawayCounter" style="font-size:0.7rem; color:var(--text-muted);">0 words • 0 chars</div>
+          </div>
         </div>
 
       </div>
 
-
-
-      <!-- Frozen Sticky Footer -->
-
+      <!-- Frozen Sticky Luxury Footer -->
       <div class="modal-footer studio-footer">
-
-        <button type="button" class="btn-cancel" onclick="closeEditModal()">Cancel</button>
-
+        <button type="button" class="btn-cancel" onclick="closeEditModal()" style="padding:12px 20px; font-weight:700; border-radius:14px;">Cancel</button>
         <button type="button" class="btn-save-gold" onclick="saveBookModal()" style="flex:1;">Save Changes ✅</button>
-
       </div>
-
     </div>
-
   </div>
-
-
 
   <!-- ================= QUICK LOG PAGES MODAL (UPGRADED) ================= -->
 
@@ -25494,36 +25534,46 @@ if (typeof module !== 'undefined' && module.exports) {
   <script>
 window.BROADCAST_NOTICE = {
   "active": true,
-  "id": "notice-v0.0.85-store-fix",
-  "version": "v0.0.85",
+  "id": "notice-v0.0.86-luxury-edit-studio",
+  "version": "v0.0.86",
   "type": "feature",
-  "message": "v0.0.85: Flipkart & Amazon Store Persistence in Edit Book, Safe Price Preservation & Real-time Budget Store Totals",
-  "actionText": "Check Progress",
-  "actionUrl": "#viewProgress",
-  "timestamp": "2026-10-30T03:43:23.460Z"
+  "message": "v0.0.86: Executive Luxury Book Edit Studio with Live Real-time Showcase Banner & Fast Presets",
+  "actionText": "Check Library",
+  "actionUrl": "#viewLibrary",
+  "timestamp": "2026-10-30T04:11:55.121Z"
 };
 
 </script>
 
   <script>
 window.REMOTE_CONFIG = {
-  "app": {
-    "version": "v0.0.85",
-    "name": "Mind Focus Books v0.0.85 (Store Persistence & Safe Price)",
-    "releaseNotes": "v0.0.85: Flipkart & Amazon Store Persistence in Edit Book, Safe Price Preservation & Real-time Budget Store Totals",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.85/MindFocusBooks-Native.apk"
+  "activeRelease": {
+    "version": "v0.0.86",
+    "name": "Mind Focus Books v0.0.86 (Executive Luxury Edit Studio)",
+    "releaseNotes": "v0.0.86: Executive Luxury Book Edit Studio with Live Real-time Showcase Banner & Fast Presets",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.86/MindFocusBooks-Native.apk",
+    "mandatory": false,
+    "timestamp": "2026-10-30T04:11:55.132Z"
   },
-  "release": {
-    "version": "v0.0.85",
-    "name": "Mind Focus Books v0.0.85 (Store Persistence & Safe Price)",
-    "releaseNotes": "v0.0.85: Flipkart & Amazon Store Persistence in Edit Book, Safe Price Preservation & Real-time Budget Store Totals",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.85/MindFocusBooks-Native.apk"
+  "latest": {
+    "version": "v0.0.86",
+    "name": "Mind Focus Books v0.0.86 (Executive Luxury Edit Studio)",
+    "releaseNotes": "v0.0.86: Executive Luxury Book Edit Studio with Live Real-time Showcase Banner & Fast Presets",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.86/MindFocusBooks-Native.apk"
   },
-  "update": {
-    "latest_version": "0.0.85",
-    "critical": false,
-    "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.85/MindFocusBooks-Native.apk",
-    "release_notes": "v0.0.85: Flipkart & Amazon Store Persistence in Edit Book, Safe Price Preservation & Real-time Budget Store Totals"
+  "stagedRelease": null,
+  "min_required_version": "0.0.1",
+  "latest_version": "0.0.86",
+  "version_code": 8586,
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.86/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.86: Executive Luxury Book Edit Studio with Live Real-time Showcase Banner & Fast Presets",
+  "force_update": false,
+  "maintenance": false,
+  "published_at": "2026-10-30T04:11:55.132Z",
+  "features": {
+    "inAppUpdates": true,
+    "smartBookDossier": true,
+    "exploreModularEngine": true
   }
 };
 
@@ -34212,6 +34262,7 @@ window.selectEditBookStore = function(storeName) {
       btn.classList.remove('active');
     }
   });
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
 };
 
 function openAddBookModal() {
@@ -34279,6 +34330,8 @@ function openAddBookModal() {
 
   document.getElementById('editBookModalOverlay')?.classList.add('active');
 
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+  if (typeof updateTakeawayCounter === 'function') updateTakeawayCounter();
 }
 
 
@@ -34387,6 +34440,8 @@ function openEditModal(index) {
 
   document.getElementById('editBookModalOverlay')?.classList.add('active');
 
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+  if (typeof updateTakeawayCounter === 'function') updateTakeawayCounter();
 }
 
 
@@ -46730,6 +46785,183 @@ function renderArchiveYearView(targetYear) {
     `;
   }).join('');
 }
+
+
+// ================= LUXURY EDIT BOOK STUDIO LIVE SYNC & HELPERS (v0.0.86) =================
+window.syncEditModalLiveHeroPreview = function() {
+  const title = document.getElementById('editBookTitle')?.value.trim() || 'Untitled Book';
+  const author = document.getElementById('editBookAuthor')?.value.trim() || 'Unknown Author';
+  const category = document.getElementById('editBookCategory')?.value.trim() || 'General';
+  const language = document.getElementById('editBookLanguage')?.value.trim() || 'ENGLISH';
+  const status = document.getElementById('editBookStatus')?.value || 'PENDING';
+  const currentPage = parseInt(document.getElementById('editCurrentPage')?.value, 10) || 0;
+  const totalPages = Math.max(1, parseInt(document.getElementById('editTotalPages')?.value, 10) || 250);
+  const priceVal = document.getElementById('editBookPrice')?.value.trim();
+  const store = document.getElementById('editBookStore')?.value || 'Amazon';
+  const rating = parseInt(document.getElementById('editBookRating')?.value, 10) || 0;
+  const coverUrl = state.currentEditingCoverUrl || document.getElementById('editBookCover')?.value.trim() || '';
+
+  // 1. Text metadata
+  const elTitle = document.getElementById('editLiveHeroTitle');
+  if (elTitle) elTitle.innerText = title;
+
+  const elAuthor = document.getElementById('editLiveHeroAuthor');
+  if (elAuthor) elAuthor.innerText = 'by ' + author;
+
+  const elCat = document.getElementById('editLiveHeroCategoryBadge');
+  if (elCat) elCat.innerText = category;
+
+  const elLang = document.getElementById('editLiveHeroLangBadge');
+  if (elLang) elLang.innerText = language;
+
+  // 2. Status Badge
+  const elStatus = document.getElementById('editLiveHeroStatusBadge');
+  const elHeaderStatus = document.getElementById('editHeaderStatusBadge');
+  let statusText = '⏳ PENDING';
+  let statusClass = 'prog-pill-badge gold';
+  if (status === 'READING') {
+    statusText = '📖 READING';
+    statusClass = 'prog-pill-badge blue';
+  } else if (status === 'DONE') {
+    statusText = '✅ DONE';
+    statusClass = 'prog-pill-badge green';
+  } else if (status === 'LENT') {
+    statusText = '👥 LENT';
+    statusClass = 'prog-pill-badge purple';
+  }
+  if (elStatus) {
+    elStatus.className = statusClass;
+    elStatus.innerText = statusText;
+  }
+  if (elHeaderStatus) {
+    elHeaderStatus.className = statusClass;
+    elHeaderStatus.innerText = statusText;
+  }
+
+  // 3. Cover Image / Fallback
+  const elCoverImg = document.getElementById('editLiveHeroCoverImg');
+  const elCoverFallback = document.getElementById('editLiveHeroCoverFallback');
+  if (coverUrl && elCoverImg && elCoverFallback) {
+    elCoverImg.src = coverUrl;
+    elCoverImg.style.display = 'block';
+    elCoverFallback.style.display = 'none';
+  } else if (elCoverImg && elCoverFallback) {
+    elCoverImg.style.display = 'none';
+    elCoverFallback.style.display = 'flex';
+  }
+
+  // 4. Pages & Progress Bar
+  const pct = Math.min(100, Math.round((currentPage / totalPages) * 100));
+  const elPagesText = document.getElementById('editLiveHeroPagesText');
+  if (elPagesText) elPagesText.innerText = currentPage + ' / ' + totalPages + ' (' + pct + '%)';
+
+  const elBar = document.getElementById('editLiveHeroProgressBar');
+  if (elBar) elBar.style.width = pct + '%';
+
+  // 5. Price Pill
+  const elPrice = document.getElementById('editLiveHeroPriceText');
+  if (elPrice) elPrice.innerText = priceVal ? ('₹' + priceVal) : 'Unpriced';
+
+  // 6. Store Pill
+  const elStore = document.getElementById('editLiveHeroStoreText');
+  if (elStore) elStore.innerText = store;
+
+  // 7. Rating Stars
+  const elRating = document.getElementById('editLiveHeroRatingStars');
+  if (elRating) {
+    elRating.innerText = '★'.repeat(rating) + '☆'.repeat(Math.max(0, 5 - rating));
+  }
+};
+
+window.quickFillCatalogPreset = function(title, author, category, pages) {
+  const t = document.getElementById('editBookTitle');
+  if (t) t.value = title;
+  const a = document.getElementById('editBookAuthor');
+  if (a) a.value = author;
+  const c = document.getElementById('editBookCategory');
+  if (c) c.value = category;
+  const p = document.getElementById('editTotalPages');
+  if (p) p.value = pages;
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+  if (typeof showToast === 'function') showToast('Loaded "' + title + '" metadata! ⚡');
+};
+
+window.quickAdjustEditPages = function(delta) {
+  const elCur = document.getElementById('editCurrentPage');
+  const elTot = document.getElementById('editTotalPages');
+  if (!elCur) return;
+  const tot = parseInt(elTot?.value, 10) || 250;
+  let cur = parseInt(elCur.value, 10) || 0;
+  cur = Math.max(0, Math.min(tot, cur + delta));
+  elCur.value = cur;
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+};
+
+window.quickMarkFinishedInEdit = function() {
+  const elCur = document.getElementById('editCurrentPage');
+  const elTot = document.getElementById('editTotalPages');
+  const elStatus = document.getElementById('editBookStatus');
+  const elEnd = document.getElementById('editEndDate');
+  if (elTot && elCur) elCur.value = elTot.value;
+  if (elStatus) elStatus.value = 'DONE';
+  if (elEnd && !elEnd.value) {
+    elEnd.value = typeof getTodayLocalDate === 'function' ? getTodayLocalDate() : new Date().toISOString().split('T')[0];
+  }
+  if (typeof calculateCountDays === 'function') calculateCountDays();
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+  if (typeof showToast === 'function') showToast('Marked as Completed! 🎉');
+};
+
+window.quickSetEditPrice = function(amt) {
+  const el = document.getElementById('editBookPrice');
+  if (el) el.value = amt;
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+};
+
+window.quickSetTimelinePreset = function(type) {
+  const elStart = document.getElementById('editStartDate');
+  const elEnd = document.getElementById('editEndDate');
+  const todayStr = typeof getTodayLocalDate === 'function' ? getTodayLocalDate() : new Date().toISOString().split('T')[0];
+  const today = new Date(todayStr);
+
+  if (type === 'start-today') {
+    if (elStart) elStart.value = todayStr;
+  } else if (type === 'end-today') {
+    if (elEnd) elEnd.value = todayStr;
+  } else if (type === '7-days') {
+    if (elStart && !elStart.value) elStart.value = todayStr;
+    const end = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    if (elEnd) elEnd.value = end.toISOString().split('T')[0];
+  } else if (type === '30-days') {
+    if (elStart && !elStart.value) elStart.value = todayStr;
+    const end = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+    if (elEnd) elEnd.value = end.toISOString().split('T')[0];
+  }
+  if (typeof calculateCountDays === 'function') calculateCountDays();
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+};
+
+window.quickInsertTakeawayPrompt = function(promptText) {
+  const ta = document.getElementById('editBookTakeaway');
+  if (!ta) return;
+  if (ta.value.trim() === '') {
+    ta.value = promptText;
+  } else {
+    ta.value += '\n' + promptText;
+  }
+  ta.focus();
+  if (typeof updateTakeawayCounter === 'function') updateTakeawayCounter();
+};
+
+window.updateTakeawayCounter = function() {
+  const ta = document.getElementById('editBookTakeaway');
+  const counter = document.getElementById('editTakeawayCounter');
+  if (!ta || !counter) return;
+  const text = ta.value.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  const chars = ta.value.length;
+  counter.innerText = words + ' words • ' + chars + ' chars';
+};
 
 </script>
 

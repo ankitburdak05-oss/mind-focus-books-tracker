@@ -7943,6 +7943,7 @@ window.selectEditBookStore = function(storeName) {
       btn.classList.remove('active');
     }
   });
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
 };
 
 function openAddBookModal() {
@@ -8010,6 +8011,8 @@ function openAddBookModal() {
 
   document.getElementById('editBookModalOverlay')?.classList.add('active');
 
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+  if (typeof updateTakeawayCounter === 'function') updateTakeawayCounter();
 }
 
 
@@ -8118,6 +8121,8 @@ function openEditModal(index) {
 
   document.getElementById('editBookModalOverlay')?.classList.add('active');
 
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+  if (typeof updateTakeawayCounter === 'function') updateTakeawayCounter();
 }
 
 
@@ -20461,3 +20466,180 @@ function renderArchiveYearView(targetYear) {
     `;
   }).join('');
 }
+
+
+// ================= LUXURY EDIT BOOK STUDIO LIVE SYNC & HELPERS (v0.0.86) =================
+window.syncEditModalLiveHeroPreview = function() {
+  const title = document.getElementById('editBookTitle')?.value.trim() || 'Untitled Book';
+  const author = document.getElementById('editBookAuthor')?.value.trim() || 'Unknown Author';
+  const category = document.getElementById('editBookCategory')?.value.trim() || 'General';
+  const language = document.getElementById('editBookLanguage')?.value.trim() || 'ENGLISH';
+  const status = document.getElementById('editBookStatus')?.value || 'PENDING';
+  const currentPage = parseInt(document.getElementById('editCurrentPage')?.value, 10) || 0;
+  const totalPages = Math.max(1, parseInt(document.getElementById('editTotalPages')?.value, 10) || 250);
+  const priceVal = document.getElementById('editBookPrice')?.value.trim();
+  const store = document.getElementById('editBookStore')?.value || 'Amazon';
+  const rating = parseInt(document.getElementById('editBookRating')?.value, 10) || 0;
+  const coverUrl = state.currentEditingCoverUrl || document.getElementById('editBookCover')?.value.trim() || '';
+
+  // 1. Text metadata
+  const elTitle = document.getElementById('editLiveHeroTitle');
+  if (elTitle) elTitle.innerText = title;
+
+  const elAuthor = document.getElementById('editLiveHeroAuthor');
+  if (elAuthor) elAuthor.innerText = 'by ' + author;
+
+  const elCat = document.getElementById('editLiveHeroCategoryBadge');
+  if (elCat) elCat.innerText = category;
+
+  const elLang = document.getElementById('editLiveHeroLangBadge');
+  if (elLang) elLang.innerText = language;
+
+  // 2. Status Badge
+  const elStatus = document.getElementById('editLiveHeroStatusBadge');
+  const elHeaderStatus = document.getElementById('editHeaderStatusBadge');
+  let statusText = '⏳ PENDING';
+  let statusClass = 'prog-pill-badge gold';
+  if (status === 'READING') {
+    statusText = '📖 READING';
+    statusClass = 'prog-pill-badge blue';
+  } else if (status === 'DONE') {
+    statusText = '✅ DONE';
+    statusClass = 'prog-pill-badge green';
+  } else if (status === 'LENT') {
+    statusText = '👥 LENT';
+    statusClass = 'prog-pill-badge purple';
+  }
+  if (elStatus) {
+    elStatus.className = statusClass;
+    elStatus.innerText = statusText;
+  }
+  if (elHeaderStatus) {
+    elHeaderStatus.className = statusClass;
+    elHeaderStatus.innerText = statusText;
+  }
+
+  // 3. Cover Image / Fallback
+  const elCoverImg = document.getElementById('editLiveHeroCoverImg');
+  const elCoverFallback = document.getElementById('editLiveHeroCoverFallback');
+  if (coverUrl && elCoverImg && elCoverFallback) {
+    elCoverImg.src = coverUrl;
+    elCoverImg.style.display = 'block';
+    elCoverFallback.style.display = 'none';
+  } else if (elCoverImg && elCoverFallback) {
+    elCoverImg.style.display = 'none';
+    elCoverFallback.style.display = 'flex';
+  }
+
+  // 4. Pages & Progress Bar
+  const pct = Math.min(100, Math.round((currentPage / totalPages) * 100));
+  const elPagesText = document.getElementById('editLiveHeroPagesText');
+  if (elPagesText) elPagesText.innerText = currentPage + ' / ' + totalPages + ' (' + pct + '%)';
+
+  const elBar = document.getElementById('editLiveHeroProgressBar');
+  if (elBar) elBar.style.width = pct + '%';
+
+  // 5. Price Pill
+  const elPrice = document.getElementById('editLiveHeroPriceText');
+  if (elPrice) elPrice.innerText = priceVal ? ('₹' + priceVal) : 'Unpriced';
+
+  // 6. Store Pill
+  const elStore = document.getElementById('editLiveHeroStoreText');
+  if (elStore) elStore.innerText = store;
+
+  // 7. Rating Stars
+  const elRating = document.getElementById('editLiveHeroRatingStars');
+  if (elRating) {
+    elRating.innerText = '★'.repeat(rating) + '☆'.repeat(Math.max(0, 5 - rating));
+  }
+};
+
+window.quickFillCatalogPreset = function(title, author, category, pages) {
+  const t = document.getElementById('editBookTitle');
+  if (t) t.value = title;
+  const a = document.getElementById('editBookAuthor');
+  if (a) a.value = author;
+  const c = document.getElementById('editBookCategory');
+  if (c) c.value = category;
+  const p = document.getElementById('editTotalPages');
+  if (p) p.value = pages;
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+  if (typeof showToast === 'function') showToast('Loaded "' + title + '" metadata! ⚡');
+};
+
+window.quickAdjustEditPages = function(delta) {
+  const elCur = document.getElementById('editCurrentPage');
+  const elTot = document.getElementById('editTotalPages');
+  if (!elCur) return;
+  const tot = parseInt(elTot?.value, 10) || 250;
+  let cur = parseInt(elCur.value, 10) || 0;
+  cur = Math.max(0, Math.min(tot, cur + delta));
+  elCur.value = cur;
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+};
+
+window.quickMarkFinishedInEdit = function() {
+  const elCur = document.getElementById('editCurrentPage');
+  const elTot = document.getElementById('editTotalPages');
+  const elStatus = document.getElementById('editBookStatus');
+  const elEnd = document.getElementById('editEndDate');
+  if (elTot && elCur) elCur.value = elTot.value;
+  if (elStatus) elStatus.value = 'DONE';
+  if (elEnd && !elEnd.value) {
+    elEnd.value = typeof getTodayLocalDate === 'function' ? getTodayLocalDate() : new Date().toISOString().split('T')[0];
+  }
+  if (typeof calculateCountDays === 'function') calculateCountDays();
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+  if (typeof showToast === 'function') showToast('Marked as Completed! 🎉');
+};
+
+window.quickSetEditPrice = function(amt) {
+  const el = document.getElementById('editBookPrice');
+  if (el) el.value = amt;
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+};
+
+window.quickSetTimelinePreset = function(type) {
+  const elStart = document.getElementById('editStartDate');
+  const elEnd = document.getElementById('editEndDate');
+  const todayStr = typeof getTodayLocalDate === 'function' ? getTodayLocalDate() : new Date().toISOString().split('T')[0];
+  const today = new Date(todayStr);
+
+  if (type === 'start-today') {
+    if (elStart) elStart.value = todayStr;
+  } else if (type === 'end-today') {
+    if (elEnd) elEnd.value = todayStr;
+  } else if (type === '7-days') {
+    if (elStart && !elStart.value) elStart.value = todayStr;
+    const end = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000);
+    if (elEnd) elEnd.value = end.toISOString().split('T')[0];
+  } else if (type === '30-days') {
+    if (elStart && !elStart.value) elStart.value = todayStr;
+    const end = new Date(today.getTime() + 30 * 24 * 60 * 60 * 1000);
+    if (elEnd) elEnd.value = end.toISOString().split('T')[0];
+  }
+  if (typeof calculateCountDays === 'function') calculateCountDays();
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+};
+
+window.quickInsertTakeawayPrompt = function(promptText) {
+  const ta = document.getElementById('editBookTakeaway');
+  if (!ta) return;
+  if (ta.value.trim() === '') {
+    ta.value = promptText;
+  } else {
+    ta.value += '\n' + promptText;
+  }
+  ta.focus();
+  if (typeof updateTakeawayCounter === 'function') updateTakeawayCounter();
+};
+
+window.updateTakeawayCounter = function() {
+  const ta = document.getElementById('editBookTakeaway');
+  const counter = document.getElementById('editTakeawayCounter');
+  if (!ta || !counter) return;
+  const text = ta.value.trim();
+  const words = text ? text.split(/\s+/).length : 0;
+  const chars = ta.value.length;
+  counter.innerText = words + ' words • ' + chars + ' chars';
+};
