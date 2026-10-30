@@ -101,7 +101,9 @@ jobs:
       run: npm install
 
     - name: Build Windows Executables (Installer + Portable)
-      run: npm run dist
+      run: npx electron-builder --win --x64 --publish never
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Locate Windows Executables
       shell: bash
@@ -117,34 +119,40 @@ jobs:
   release:
     needs: [build-android, build-windows]
     runs-on: ubuntu-latest
+    if: always() && !cancelled()
     steps:
     - name: Checkout Code
       uses: actions/checkout@v4
 
     - name: Download Android Artifact
       uses: actions/download-artifact@v4
+      continue-on-error: true
       with:
         name: MindFocusBooks-Native-APK
         path: ./artifacts/
 
     - name: Download Windows Artifacts
       uses: actions/download-artifact@v4
+      continue-on-error: true
       with:
         name: MindFocusBooks-Windows-Executables
         path: ./artifacts/
 
     - name: Display Artifacts
       run: |
+        mkdir -p ./artifacts
         ls -la ./artifacts/
 
     - name: Commit Latest APK to Main
       run: |
-        cp ./artifacts/MindFocusBooks-Native.apk ./MindFocusBooks-Native.apk || true
-        git config user.name "github-actions[bot]"
-        git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add MindFocusBooks-Native.apk
-        git commit -m "Update standalone release APK binary [skip ci]" || true
-        git push origin main || true
+        if [ -f "./artifacts/MindFocusBooks-Native.apk" ]; then
+          cp ./artifacts/MindFocusBooks-Native.apk ./MindFocusBooks-Native.apk
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add MindFocusBooks-Native.apk
+          git commit -m "Update standalone release APK binary [skip ci]" || true
+          git push origin main || true
+        fi
 
     - name: Determine Release Tag and Title
       id: get_tag
@@ -169,14 +177,12 @@ jobs:
           #### 📱 Android Edition
           - **Native APK**: `MindFocusBooks-Native.apk` (Signed standalone offline Android APK)
 
-          #### ✨ What's New
+          #### ✨ Highlights
           - **Full Windows Desktop Application**: Offline Electron application with native window shortcuts, fullscreen mode (F11), zoom controls (Ctrl+/Ctrl-), and single-instance lock.
           - **Executive 3D Edit Studio**: 4 segmented luxury tabs, zero data clipping, auto end date calculation, real-time live preview.
           - **Activity Audit Log**: 100% interactive event history linked to books and filters.
           - **Seamless Offline Reading**: High-performance local storage persistence.
-        files: |
-          ./artifacts/MindFocusBooks-Native.apk
-          ./artifacts/*.exe
+        files: ./artifacts/*
         make_latest: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

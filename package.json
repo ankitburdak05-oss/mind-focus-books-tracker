@@ -3,12 +3,16 @@
   "version": "0.0.93",
   "description": "Mind Focus Books - Reading Tracker & Library Desktop Edition",
   "main": "electron-main.js",
-  "author": "Ankit Burdak",
+  "author": "Ankit Burdak <ankitburdak@users.noreply.github.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker.git"
+  },
   "scripts": {
     "start": "electron .",
-    "build:win": "electron-builder --win --x64",
-    "dist": "electron-builder"
+    "build:win": "electron-builder --win --x64 --publish never",
+    "dist": "electron-builder --win --x64 --publish never"
   },
   "build": {
     "appId": "com.mindfocus.bookstracker.desktop",
@@ -37,13 +41,14 @@
       "artifactName": "MindFocusBooks-Portable-v${version}.exe"
     },
     "files": [
-      "**/*",
-      "!android/**",
-      "!.git/**",
-      "!.github/**",
-      "!dist-desktop/**",
-      "!*.apk",
-      "!*.zip"
+      "*.html",
+      "*.css",
+      "*.js",
+      "*.json",
+      "*.png",
+      "*.jpg",
+      "*.ico",
+      "!node_modules/**"
     ]
   },
   "devDependencies": {
