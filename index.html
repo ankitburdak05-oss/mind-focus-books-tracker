@@ -2594,15 +2594,11 @@
 
 
 
-        <div class="profile-menu-item" onclick="openUpdateModal()">
-
+        <div class="profile-menu-item" onclick="navigateToSubView('aboutApp')">
           <div class="pmi-icon grad-dark">ℹ️</div>
-
           <div class="pmi-text">
-
             <div class="pmi-title">About App &amp; Updates</div>
-
-            <div class="pmi-sub" id="aboutAppSubText">Version 0.0.5 &bull; 1-Click Reinstall</div>
+            <div class="pmi-sub" id="aboutAppSubText">Version 0.0.95 &bull; Live Updates &amp; Engine</div>
 
           </div>
 
@@ -4076,89 +4072,19 @@
 
 
 
-    <!-- ================= SCREEN 18: CUSTOMIZATION & UPDATE STATION ================= -->
+    <!-- ================= SCREEN 18: CUSTOMIZATION ================= -->
     <section id="viewCustomization" class="app-view">
 
       <div class="sub-screen-header">
         <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
         <div class="sub-screen-title-wrap">
-          <h2 class="sub-screen-main-title">Customize &amp; App Engine Hub</h2>
-          <p class="sub-screen-sub-title">Personalize aesthetics &bull; Live desktop &amp; mobile updates</p>
+          <h2 class="sub-screen-main-title">Customize Your App</h2>
+          <p class="sub-screen-sub-title">Personalize themes, colors &amp; reading ambience</p>
         </div>
         <div style="width:36px;"></div>
       </div>
 
-      <!-- 1. REAL UPDATE & RELEASE STATION -->
-      <div class="update-station-card">
-        <div class="custom-section-header-wrap">
-          <div class="custom-section-title">
-            <span>🚀 Software Updates &amp; Engine</span>
-          </div>
-          <span class="custom-section-badge" id="updateChannelBadge">Stable Channel</span>
-        </div>
-
-        <div class="update-meta-row">
-          <div class="update-meta-pill">
-            <span id="updateDeviceIcon">💻</span>
-            <span id="updateStationPlatform">Windows Desktop (x64)</span>
-          </div>
-          <div class="update-meta-pill">
-            <span>Installed:</span>
-            <strong id="updateStationCurrentVer">v0.0.93</strong>
-          </div>
-          <div class="update-meta-pill">
-            <span>Engine:</span>
-            <strong id="updateStationEngine">Native Standalone</strong>
-          </div>
-        </div>
-
-        <div class="update-status-display" id="updateStatusBox">
-          <div class="update-status-icon-box success" id="updateStatusIcon">✓</div>
-          <div class="update-status-info">
-            <div class="update-status-title" id="updateStatusTitle">Up to Date</div>
-            <div class="update-status-detail" id="updateStatusDetail">Mind Focus Books v0.0.93 is the latest version available.</div>
-          </div>
-        </div>
-
-        <!-- Live Download Progress Bar -->
-        <div class="update-progress-container" id="customUpdateProgressWrap">
-          <div class="update-progress-stats">
-            <span id="customUpdateProgressLabel">Downloading package...</span>
-            <span id="customUpdateProgressPct">0%</span>
-          </div>
-          <div class="update-progress-track">
-            <div class="update-progress-bar" id="customUpdateProgressBar"></div>
-          </div>
-          <div id="customUpdateProgressSub" style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">Connecting to GitHub Releases CDN...</div>
-          <button type="button" id="customUpdateInstallBtn" class="btn-update-radar" style="display:none; margin-top:12px; width:100%;" onclick="executeDownloadedUpdate()">
-            🔄 Launch Installer &amp; Apply Update
-          </button>
-        </div>
-
-        <div class="update-actions-row">
-          <button type="button" class="btn-update-radar" id="btnCheckUpdatesNow" onclick="manualCheckForUpdates()">
-            <span id="radarScanIcon">📡</span>
-            <span id="radarScanText">Check for Updates Now</span>
-          </button>
-          <button type="button" class="btn-update-secondary" onclick="viewChangelogModal()">
-            <span>📋</span>
-            <span>What's New</span>
-          </button>
-        </div>
-
-        <div class="custom-control-row" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
-          <div>
-            <div class="custom-control-label">Automatic Background Scanner</div>
-            <div class="custom-control-sub">Check for new releases automatically when app opens</div>
-          </div>
-          <label class="custom-switch">
-            <input type="checkbox" id="autoCheckUpdatesSwitch" checked onchange="toggleAutoUpdateCheck(this.checked)">
-            <span class="custom-switch-slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <!-- 2. LIVE THEME SHOWCASE PREVIEW -->
+      <!-- 1. LIVE THEME SHOWCASE PREVIEW -->
       <div class="custom-section-block">
         <div class="custom-section-header-wrap">
           <div class="custom-section-title">
@@ -4183,7 +4109,7 @@
         </div>
       </div>
 
-      <!-- 3. ACCENT COLOR PALETTE -->
+      <!-- 2. ACCENT COLOR PALETTE -->
       <div class="custom-section-block">
         <div class="custom-section-header-wrap">
           <div class="custom-section-title">
@@ -4252,7 +4178,7 @@
         </div>
       </div>
 
-      <!-- 4. BACKGROUND WALLPAPERS -->
+      <!-- 3. BACKGROUND WALLPAPERS -->
       <div class="custom-section-block">
         <div class="custom-section-header-wrap">
           <div class="custom-section-title">
@@ -4318,7 +4244,7 @@
         </div>
       </div>
 
-      <!-- 5. READING COMFORTS & SOUNDS -->
+      <!-- 4. READING COMFORTS & SOUNDS -->
       <div class="custom-section-block">
         <div class="custom-section-title" style="margin-bottom:14px;">
           <span>🎛️ Reading Experience &amp; Effects</span>
@@ -4344,7 +4270,7 @@
         </div>
       </div>
 
-      <!-- 6. ACTION BAR -->
+      <!-- 5. ACTION BAR -->
       <div style="display:flex; gap:12px; margin-top:20px; margin-bottom:30px;">
         <button type="button" class="btn-save-gold" onclick="saveCustomizations()" style="flex:2; padding:14px; font-weight:800; font-size:0.95rem;">
           💾 Save &amp; Apply Changes
@@ -4352,6 +4278,133 @@
         <button type="button" class="btn-cancel" onclick="resetCustomizations()" style="flex:1; padding:14px; font-weight:700;">
           🔄 Reset
         </button>
+      </div>
+
+    </section>
+
+    
+    <!-- ================= VIEW: ABOUT APP & UPDATE ENGINE ================= -->
+    <section id="viewAboutApp" class="app-view">
+
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">About App &amp; Updates</h2>
+          <p class="sub-screen-sub-title">System engine &bull; Live updates &bull; Version diagnostics</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <!-- App Hero Showcase Card -->
+      <div class="custom-section-block" style="text-align:center; padding:24px 18px; background:linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(15,23,42,0.85) 100%); border-color:rgba(245,158,11,0.35);">
+        <div style="width:72px; height:72px; margin:0 auto 12px; border-radius:18px; background:linear-gradient(135deg, #f59e0b, #b45309); display:flex; align-items:center; justify-content:center; font-size:2.2rem; box-shadow:0 8px 24px rgba(245,158,11,0.4);">
+          📖
+        </div>
+        <h3 style="color:#ffffff; font-size:1.25rem; font-weight:900; margin:0 0 4px;">Mind &amp; Focus Books Tracker</h3>
+        <p style="color:#94a3b8; font-size:0.82rem; margin:0 0 14px;">Professional Reading Tracker, 3D Personal Library &amp; Executive Analytics</p>
+        
+        <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap;">
+          <span class="custom-section-badge" id="aboutAppVersionBadge" style="font-size:0.8rem; padding:4px 12px;">Version v0.0.95</span>
+          <span class="custom-section-badge" style="background:rgba(16,185,129,0.15); color:#10b981; border-color:rgba(16,185,129,0.3); font-size:0.8rem; padding:4px 12px;">Official Stable</span>
+        </div>
+      </div>
+
+      <!-- 1. REAL UPDATE & RELEASE STATION (NOW PROUDLY IN ABOUT) -->
+      <div class="update-station-card">
+        <div class="custom-section-header-wrap">
+          <div class="custom-section-title">
+            <span>🚀 Software Updates &amp; Engine</span>
+          </div>
+          <span class="custom-section-badge" id="updateChannelBadge">Stable Channel</span>
+        </div>
+
+        <div class="update-meta-row">
+          <div class="update-meta-pill">
+            <span id="updateDeviceIcon">💻</span>
+            <span id="updateStationPlatform">Windows Desktop (x64)</span>
+          </div>
+          <div class="update-meta-pill">
+            <span>Installed:</span>
+            <strong id="updateStationCurrentVer">v0.0.95</strong>
+          </div>
+          <div class="update-meta-pill">
+            <span>Engine:</span>
+            <strong id="updateStationEngine">Native Standalone</strong>
+          </div>
+        </div>
+
+        <div class="update-status-display" id="updateStatusBox">
+          <div class="update-status-icon-box success" id="updateStatusIcon">✓</div>
+          <div class="update-status-info">
+            <div class="update-status-title" id="updateStatusTitle">Up to Date</div>
+            <div class="update-status-detail" id="updateStatusDetail">Mind Focus Books v0.0.95 is the latest version available.</div>
+          </div>
+        </div>
+
+        <!-- Live Download Progress Bar -->
+        <div class="update-progress-container" id="customUpdateProgressWrap">
+          <div class="update-progress-stats">
+            <span id="customUpdateProgressLabel">Downloading package...</span>
+            <span id="customUpdateProgressPct">0%</span>
+          </div>
+          <div class="update-progress-track">
+            <div class="update-progress-bar" id="customUpdateProgressBar"></div>
+          </div>
+          <div id="customUpdateProgressSub" style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">Connecting to GitHub Releases CDN...</div>
+          <button type="button" id="customUpdateInstallBtn" class="btn-update-radar" style="display:none; margin-top:12px; width:100%;" onclick="executeDownloadedUpdate()">
+            🔄 Launch Installer &amp; Apply Update
+          </button>
+        </div>
+
+        <div class="update-actions-row">
+          <button type="button" class="btn-update-radar" id="btnCheckUpdatesNow" onclick="manualCheckForUpdates()">
+            <span id="radarScanIcon">📡</span>
+            <span id="radarScanText">Check for Updates Now</span>
+          </button>
+          <button type="button" class="btn-update-secondary" onclick="viewChangelogModal()">
+            <span>📋</span>
+            <span>What's New in v0.0.95</span>
+          </button>
+        </div>
+
+        <div class="custom-control-row" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+          <div>
+            <div class="custom-control-label">Automatic Background Scanner</div>
+            <div class="custom-control-sub">Check for new releases automatically when app opens</div>
+          </div>
+          <label class="custom-switch">
+            <input type="checkbox" id="autoCheckUpdatesSwitch" checked onchange="toggleAutoUpdateCheck(this.checked)">
+            <span class="custom-switch-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- App Diagnostics & Storage Info -->
+      <div class="custom-section-block">
+        <div class="custom-section-title" style="margin-bottom:12px;">
+          <span>📊 Storage &amp; Offline Diagnostics</span>
+        </div>
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Database Storage Status</div>
+            <div class="custom-control-sub" id="aboutStorageDiag">Local Storage Active &bull; 100% Offline Resilient</div>
+          </div>
+          <span class="custom-section-badge" style="background:rgba(16,185,129,0.15); color:#10b981;">HEALTHY</span>
+        </div>
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Application Developer</div>
+            <div class="custom-control-sub">Designed &amp; Developed by Ankit Burdak</div>
+          </div>
+          <span style="font-size:0.8rem; color:#f59e0b; font-weight:700;">Verified Author</span>
+        </div>
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Official Source Repository</div>
+            <div class="custom-control-sub">GitHub OSS: ankitburdak05-oss/mind-focus-books-tracker</div>
+          </div>
+          <a href="https://github.com/ankitburdak05-oss/mind-focus-books-tracker" target="_blank" style="color:#06b6d4; font-size:0.8rem; text-decoration:none; font-weight:700;">Open GitHub &rarr;</a>
+        </div>
       </div>
 
     </section>

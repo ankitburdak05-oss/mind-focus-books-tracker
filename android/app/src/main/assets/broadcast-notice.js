@@ -1,10 +1,10 @@
 window.BROADCAST_NOTICE = {
   "active": true,
-  "id": "notice-v0.0.94-update-station",
-  "version": "v0.0.94",
+  "id": "notice-v0.0.95-about-hub",
+  "version": "v0.0.95",
   "type": "feature",
-  "message": "v0.0.94: Real-Time Live Update Radar, 12-Color Theme Palette & Windows Desktop App (.exe)",
-  "actionText": "Check Update",
-  "actionUrl": "#viewCustomization",
-  "timestamp": "2026-10-30T07:45:00.000Z"
+  "message": "v0.0.95: Dedicated About App & Updates Hub in Profile + Windows Desktop (.exe) & Phone (.apk) Auto-Detect",
+  "actionText": "Check About & Updates",
+  "actionUrl": "#viewAboutApp",
+  "timestamp": "2026-10-30T08:00:00.000Z"
 };

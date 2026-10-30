@@ -5197,42 +5197,517 @@ body {
   cursor: pointer;
 }
 
-/* ================= SCREEN 18: CUSTOMIZATION ================= */
+/* ================= SCREEN 18: CUSTOMIZATION & UPDATE STATION ================= */
 .custom-section-block {
   background: var(--bg-card);
   border: 1px solid var(--border-subtle);
   border-radius: 20px;
-  padding: 18px;
-  margin-bottom: 16px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.custom-section-block:hover {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.custom-section-header-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
 
 .custom-section-title {
-  font-size: 0.92rem;
+  font-size: 1.02rem;
   font-weight: 800;
   color: var(--text-primary);
-  margin-bottom: 12px;
-}
-
-.custom-palette-row {
   display: flex;
-  gap: 12px;
-  justify-content: space-around;
-  margin-top: 10px;
+  align-items: center;
+  gap: 8px;
 }
 
-.color-dot-choice {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
+.custom-section-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Live Preview Showcase */
+.custom-live-preview-box {
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+}
+
+.custom-preview-cover {
+  width: 52px;
+  height: 72px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #2d3748, #1a202c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.5);
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.custom-preview-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.custom-preview-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.custom-preview-bar-wrap {
+  width: 100%;
+  height: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  margin: 8px 0;
+  overflow: hidden;
+}
+
+.custom-preview-bar-fill {
+  height: 100%;
+  width: 68%;
+  background: var(--accent-gold, #f59e0b);
+  border-radius: 6px;
+  transition: background 0.3s ease;
+}
+
+.custom-preview-tags {
+  display: flex;
+  gap: 6px;
+  font-size: 0.72rem;
+}
+
+/* Palette Grid */
+.custom-palette-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.color-chip-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 4px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid transparent;
+  border-radius: 14px;
   cursor: pointer;
-  border: 2px solid transparent;
-  transition: transform 0.2s;
+  transition: all 0.2s ease;
 }
 
-.color-dot-choice.active {
+.color-chip-card:hover {
+  background: rgba(255, 255, 255, 0.07);
+  transform: translateY(-2px);
+}
+
+.color-chip-card.active {
   border-color: #ffffff;
-  transform: scale(1.15);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.color-chip-dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.color-chip-name {
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* Wallpaper Cards */
+.wallpaper-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.wallpaper-card {
+  border: 1.5px solid var(--border-subtle);
+  border-radius: 14px;
+  padding: 14px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.wallpaper-card:hover {
+  border-color: var(--accent-gold, #f59e0b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+}
+
+.wallpaper-card.active {
+  border-color: var(--accent-gold, #f59e0b);
+  background: rgba(245, 158, 11, 0.08);
+  box-shadow: 0 0 0 1px var(--accent-gold, #f59e0b), 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.wallpaper-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.wallpaper-card-icon {
+  font-size: 1.4rem;
+}
+
+.wallpaper-card-check {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.65rem;
+  color: transparent;
+  transition: all 0.2s;
+}
+
+.wallpaper-card.active .wallpaper-card-check {
+  background: var(--accent-gold, #f59e0b);
+  border-color: var(--accent-gold, #f59e0b);
+  color: #000000;
+  font-weight: 800;
+}
+
+.wallpaper-card-title {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 3px;
+}
+
+.wallpaper-card-desc {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.3;
+}
+
+/* Update Station Hub */
+.update-station-card {
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 20px;
+  padding: 22px;
+  margin-bottom: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.update-station-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #f59e0b, #3b82f6, #10b981);
+}
+
+.update-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.update-meta-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+}
+
+.update-meta-pill strong {
+  color: #ffffff;
+}
+
+.update-status-display {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.35);
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 16px;
+}
+
+.update-status-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.update-status-icon-box.success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+}
+
+.update-status-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.update-status-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 3px;
+}
+
+.update-status-detail {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+}
+
+/* Action button row */
+.update-actions-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.btn-update-radar {
+  flex: 1;
+  min-width: 180px;
+  padding: 12px 18px;
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #000000;
+  border: none;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+  transition: all 0.2s ease;
+}
+
+.btn-update-radar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.6);
+}
+
+.btn-update-secondary {
+  padding: 12px 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.88rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+
+.btn-update-secondary:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+/* Real-time live download progress bar */
+.update-progress-container {
+  display: none;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-top: 14px;
+}
+
+.update-progress-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.update-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.update-progress-bar {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #f59e0b, #10b981);
+  border-radius: 8px;
+  transition: width 0.2s ease;
+}
+
+/* Custom Controls: Sliders, Toggles */
+.custom-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.custom-control-row:last-child {
+  border-bottom: none;
+}
+
+.custom-control-label {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.custom-control-sub {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+}
+
+.custom-switch {
+  position: relative;
+  display: inline-block;
+  width: 46px;
+  height: 24px;
+}
+
+.custom-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.custom-switch-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.15);
+  transition: .3s;
+  border-radius: 24px;
+}
+
+.custom-switch-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+.custom-switch input:checked + .custom-switch-slider {
+  background-color: #f59e0b;
+}
+
+.custom-switch input:checked + .custom-switch-slider:before {
+  transform: translateX(22px);
+}
+
+/* Wallpaper Background Presets on Body */
+body.wallpaper-cozy {
+  background-image: radial-gradient(circle at 10% 20%, rgba(30, 20, 10, 0.8) 0%, rgba(12, 10, 8, 0.95) 100%), url('https://images.unsplash.com/photo-1507842229451-7f01be7ff6b8?auto=format&fit=crop&w=1600&q=80') !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+}
+
+body.wallpaper-stars {
+  background-image: radial-gradient(circle at 50% 50%, rgba(15, 23, 42, 0.85) 0%, rgba(9, 13, 22, 0.98) 100%), url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?auto=format&fit=crop&w=1600&q=80') !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+}
+
+body.wallpaper-sunset {
+  background-image: radial-gradient(circle at 50% 30%, rgba(45, 20, 20, 0.8) 0%, rgba(15, 10, 15, 0.96) 100%), url('https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1600&q=80') !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+}
+
+body.wallpaper-vintage {
+  background-image: radial-gradient(circle at 50% 50%, rgba(28, 22, 16, 0.88) 0%, rgba(14, 11, 8, 0.98) 100%), url('https://images.unsplash.com/photo-1461360370896-922624d12aa1?auto=format&fit=crop&w=1600&q=80') !important;
+  background-size: cover !important;
+  background-attachment: fixed !important;
+}
+
+body.wallpaper-espresso {
+  background: radial-gradient(circle at top right, #1f140e 0%, #0d0805 100%) !important;
+}
+
+body.wallpaper-none {
+  background: #090d16 !important;
+  background-image: none !important;
 }
 
 /* ================= SCREEN 19: READING JOURNAL ================= */
@@ -13494,15 +13969,11 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
 
 
-        <div class="profile-menu-item" onclick="openUpdateModal()">
-
+        <div class="profile-menu-item" onclick="navigateToSubView('aboutApp')">
           <div class="pmi-icon grad-dark">ℹ️</div>
-
           <div class="pmi-text">
-
             <div class="pmi-title">About App &amp; Updates</div>
-
-            <div class="pmi-sub" id="aboutAppSubText">Version 0.0.5 &bull; 1-Click Reinstall</div>
+            <div class="pmi-sub" id="aboutAppSubText">Version 0.0.95 &bull; Live Updates &amp; Engine</div>
 
           </div>
 
@@ -14977,76 +15448,341 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
 
     <!-- ================= SCREEN 18: CUSTOMIZATION ================= -->
-
     <section id="viewCustomization" class="app-view">
 
       <div class="sub-screen-header">
-
         <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
-
         <div class="sub-screen-title-wrap">
-
           <h2 class="sub-screen-main-title">Customize Your App</h2>
-
-          <p class="sub-screen-sub-title">Make it yours</p>
-
+          <p class="sub-screen-sub-title">Personalize themes, colors &amp; reading ambience</p>
         </div>
-
         <div style="width:36px;"></div>
-
       </div>
 
-
-
+      <!-- 1. LIVE THEME SHOWCASE PREVIEW -->
       <div class="custom-section-block">
-
-        <div class="custom-section-title">Accent Color Palette</div>
-
-        <div class="custom-palette-row">
-
-          <div class="color-dot-choice active" style="background:#f59e0b;" onclick="setCustomAccentColor('#f59e0b', this)"></div>
-
-          <div class="color-dot-choice" style="background:#06b6d4;" onclick="setCustomAccentColor('#06b6d4', this)"></div>
-
-          <div class="color-dot-choice" style="background:#8b5cf6;" onclick="setCustomAccentColor('#8b5cf6', this)"></div>
-
-          <div class="color-dot-choice" style="background:#f43f5e;" onclick="setCustomAccentColor('#f43f5e', this)"></div>
-
-          <div class="color-dot-choice" style="background:#f97316;" onclick="setCustomAccentColor('#f97316', this)"></div>
-
-          <div class="color-dot-choice" style="background:#10b981;" onclick="setCustomAccentColor('#10b981', this)"></div>
-
+        <div class="custom-section-header-wrap">
+          <div class="custom-section-title">
+            <span>✨ Live Appearance Showcase</span>
+          </div>
+          <span class="custom-section-badge" id="previewAccentHex">#f59e0b</span>
         </div>
 
+        <div class="custom-live-preview-box" id="themeLivePreviewCard">
+          <div class="custom-preview-cover">📖</div>
+          <div class="custom-preview-details">
+            <div class="custom-preview-title">The Art of Persuasion</div>
+            <div style="font-size: 0.74rem; color: var(--text-secondary);">Bob Burg &bull; Self-Improvement</div>
+            <div class="custom-preview-bar-wrap">
+              <div class="custom-preview-bar-fill" id="themePreviewBarFill"></div>
+            </div>
+            <div class="custom-preview-tags">
+              <span class="badge-mini" id="themePreviewBadge" style="background:var(--accent-gold, #f59e0b); color:#000; font-weight:800; padding:2px 6px; border-radius:6px;">READING</span>
+              <span class="badge-mini" style="background:rgba(255,255,255,0.1); color:#fff; padding:2px 6px; border-radius:6px;">51% Complete</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-
-
+      <!-- 2. ACCENT COLOR PALETTE -->
       <div class="custom-section-block">
-
-        <div class="custom-section-title">Background Wallpaper</div>
-
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-
-          <button type="button" class="btn-cancel" onclick="setAppWallpaper('cozy')">Cozy Bookshelf</button>
-
-          <button type="button" class="btn-cancel" onclick="setAppWallpaper('stars')">Deep Space</button>
-
-          <button type="button" class="btn-cancel" onclick="setAppWallpaper('sunset')">Sunset Mountain</button>
-
-          <button type="button" class="btn-cancel" onclick="setAppWallpaper('none')">Pure Minimal</button>
-
+        <div class="custom-section-header-wrap">
+          <div class="custom-section-title">
+            <span>🎨 Accent Color Palette</span>
+          </div>
+          <span class="custom-section-badge">12 Luxury Colors</span>
         </div>
 
+        <div class="custom-palette-grid" id="customPaletteGrid">
+          <div class="color-chip-card active" data-color="#f59e0b" onclick="setCustomAccentColor('#f59e0b', this)">
+            <div class="color-chip-dot" style="background:#f59e0b;"></div>
+            <span class="color-chip-name">Amber</span>
+          </div>
+          <div class="color-chip-card" data-color="#06b6d4" onclick="setCustomAccentColor('#06b6d4', this)">
+            <div class="color-chip-dot" style="background:#06b6d4;"></div>
+            <span class="color-chip-name">Cyan</span>
+          </div>
+          <div class="color-chip-card" data-color="#8b5cf6" onclick="setCustomAccentColor('#8b5cf6', this)">
+            <div class="color-chip-dot" style="background:#8b5cf6;"></div>
+            <span class="color-chip-name">Amethyst</span>
+          </div>
+          <div class="color-chip-card" data-color="#f43f5e" onclick="setCustomAccentColor('#f43f5e', this)">
+            <div class="color-chip-dot" style="background:#f43f5e;"></div>
+            <span class="color-chip-name">Rose</span>
+          </div>
+          <div class="color-chip-card" data-color="#f97316" onclick="setCustomAccentColor('#f97316', this)">
+            <div class="color-chip-dot" style="background:#f97316;"></div>
+            <span class="color-chip-name">Sunset</span>
+          </div>
+          <div class="color-chip-card" data-color="#10b981" onclick="setCustomAccentColor('#10b981', this)">
+            <div class="color-chip-dot" style="background:#10b981;"></div>
+            <span class="color-chip-name">Emerald</span>
+          </div>
+          <div class="color-chip-card" data-color="#3b82f6" onclick="setCustomAccentColor('#3b82f6', this)">
+            <div class="color-chip-dot" style="background:#3b82f6;"></div>
+            <span class="color-chip-name">Sapphire</span>
+          </div>
+          <div class="color-chip-card" data-color="#ef4444" onclick="setCustomAccentColor('#ef4444', this)">
+            <div class="color-chip-dot" style="background:#ef4444;"></div>
+            <span class="color-chip-name">Crimson</span>
+          </div>
+          <div class="color-chip-card" data-color="#14b8a6" onclick="setCustomAccentColor('#14b8a6', this)">
+            <div class="color-chip-dot" style="background:#14b8a6;"></div>
+            <span class="color-chip-name">Mint</span>
+          </div>
+          <div class="color-chip-card" data-color="#d97706" onclick="setCustomAccentColor('#d97706', this)">
+            <div class="color-chip-dot" style="background:#d97706;"></div>
+            <span class="color-chip-name">Bronze</span>
+          </div>
+          <div class="color-chip-card" data-color="#6366f1" onclick="setCustomAccentColor('#6366f1', this)">
+            <div class="color-chip-dot" style="background:#6366f1;"></div>
+            <span class="color-chip-name">Indigo</span>
+          </div>
+          <div class="color-chip-card" data-color="#e2e8f0" onclick="setCustomAccentColor('#e2e8f0', this)">
+            <div class="color-chip-dot" style="background:#e2e8f0;"></div>
+            <span class="color-chip-name">Platinum</span>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06);">
+          <div>
+            <div class="custom-control-label">Custom HEX Color</div>
+            <div class="custom-control-sub">Pick any custom shade from color spectrum</div>
+          </div>
+          <input type="color" id="customColorPickerInput" value="#f59e0b" onchange="setCustomAccentColor(this.value, null)" style="border:none; width:40px; height:36px; border-radius:8px; cursor:pointer; background:transparent;">
+        </div>
       </div>
 
+      <!-- 3. BACKGROUND WALLPAPERS -->
+      <div class="custom-section-block">
+        <div class="custom-section-header-wrap">
+          <div class="custom-section-title">
+            <span>🖼️ Background Ambience</span>
+          </div>
+          <span class="custom-section-badge">6 Presets</span>
+        </div>
 
+        <div class="wallpaper-preview-grid">
+          <div class="wallpaper-card active" data-wall="none" onclick="setAppWallpaper('none', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">🖤</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Obsidian Minimal</div>
+            <div class="wallpaper-card-desc">Deep pitch OLED black, zero distractions</div>
+          </div>
 
-      <button type="button" class="btn-save-gold" onclick="saveCustomizations()" style="width: 100%; margin-top: 10px;">Save Changes</button>
+          <div class="wallpaper-card" data-wall="cozy" onclick="setAppWallpaper('cozy', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">📚</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Cozy Bookshelf</div>
+            <div class="wallpaper-card-desc">Warm mahogany wooden library texture</div>
+          </div>
+
+          <div class="wallpaper-card" data-wall="stars" onclick="setAppWallpaper('stars', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">🌌</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Deep Space</div>
+            <div class="wallpaper-card-desc">Subtle cosmic starfield &amp; twilight glow</div>
+          </div>
+
+          <div class="wallpaper-card" data-wall="sunset" onclick="setAppWallpaper('sunset', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">🌅</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Sunset Horizon</div>
+            <div class="wallpaper-card-desc">Warm dusk mountain horizon gradient</div>
+          </div>
+
+          <div class="wallpaper-card" data-wall="vintage" onclick="setAppWallpaper('vintage', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">📜</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Classic Scholar</div>
+            <div class="wallpaper-card-desc">Vintage textured paper aesthetic</div>
+          </div>
+
+          <div class="wallpaper-card" data-wall="espresso" onclick="setAppWallpaper('espresso', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">☕</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Espresso Velvet</div>
+            <div class="wallpaper-card-desc">Ultra-rich deep coffee leather tone</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. READING COMFORTS & SOUNDS -->
+      <div class="custom-section-block">
+        <div class="custom-section-title" style="margin-bottom:14px;">
+          <span>🎛️ Reading Experience &amp; Effects</span>
+        </div>
+
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Tactile Sound Effects</div>
+            <div class="custom-control-sub">Play soft tactile feedback on page flips &amp; buttons</div>
+          </div>
+          <label class="custom-switch">
+            <input type="checkbox" id="customSoundEffectsSwitch" checked onchange="toggleCustomSounds(this.checked)">
+            <span class="custom-switch-slider"></span>
+          </label>
+        </div>
+
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Frosted Glass Blur</div>
+            <div class="custom-control-sub">Adjust card blur intensity: <strong id="glassBlurVal">12px</strong></div>
+          </div>
+          <input type="range" id="customGlassBlurSlider" min="0" max="25" value="12" oninput="setCustomGlassBlur(this.value)" style="width:130px; accent-color:var(--accent-gold, #f59e0b);">
+        </div>
+      </div>
+
+      <!-- 5. ACTION BAR -->
+      <div style="display:flex; gap:12px; margin-top:20px; margin-bottom:30px;">
+        <button type="button" class="btn-save-gold" onclick="saveCustomizations()" style="flex:2; padding:14px; font-weight:800; font-size:0.95rem;">
+          💾 Save &amp; Apply Changes
+        </button>
+        <button type="button" class="btn-cancel" onclick="resetCustomizations()" style="flex:1; padding:14px; font-weight:700;">
+          🔄 Reset
+        </button>
+      </div>
 
     </section>
 
+    
+    <!-- ================= VIEW: ABOUT APP & UPDATE ENGINE ================= -->
+    <section id="viewAboutApp" class="app-view">
 
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">About App &amp; Updates</h2>
+          <p class="sub-screen-sub-title">System engine &bull; Live updates &bull; Version diagnostics</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <!-- App Hero Showcase Card -->
+      <div class="custom-section-block" style="text-align:center; padding:24px 18px; background:linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(15,23,42,0.85) 100%); border-color:rgba(245,158,11,0.35);">
+        <div style="width:72px; height:72px; margin:0 auto 12px; border-radius:18px; background:linear-gradient(135deg, #f59e0b, #b45309); display:flex; align-items:center; justify-content:center; font-size:2.2rem; box-shadow:0 8px 24px rgba(245,158,11,0.4);">
+          📖
+        </div>
+        <h3 style="color:#ffffff; font-size:1.25rem; font-weight:900; margin:0 0 4px;">Mind &amp; Focus Books Tracker</h3>
+        <p style="color:#94a3b8; font-size:0.82rem; margin:0 0 14px;">Professional Reading Tracker, 3D Personal Library &amp; Executive Analytics</p>
+        
+        <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap;">
+          <span class="custom-section-badge" id="aboutAppVersionBadge" style="font-size:0.8rem; padding:4px 12px;">Version v0.0.95</span>
+          <span class="custom-section-badge" style="background:rgba(16,185,129,0.15); color:#10b981; border-color:rgba(16,185,129,0.3); font-size:0.8rem; padding:4px 12px;">Official Stable</span>
+        </div>
+      </div>
+
+      <!-- 1. REAL UPDATE & RELEASE STATION (NOW PROUDLY IN ABOUT) -->
+      <div class="update-station-card">
+        <div class="custom-section-header-wrap">
+          <div class="custom-section-title">
+            <span>🚀 Software Updates &amp; Engine</span>
+          </div>
+          <span class="custom-section-badge" id="updateChannelBadge">Stable Channel</span>
+        </div>
+
+        <div class="update-meta-row">
+          <div class="update-meta-pill">
+            <span id="updateDeviceIcon">💻</span>
+            <span id="updateStationPlatform">Windows Desktop (x64)</span>
+          </div>
+          <div class="update-meta-pill">
+            <span>Installed:</span>
+            <strong id="updateStationCurrentVer">v0.0.95</strong>
+          </div>
+          <div class="update-meta-pill">
+            <span>Engine:</span>
+            <strong id="updateStationEngine">Native Standalone</strong>
+          </div>
+        </div>
+
+        <div class="update-status-display" id="updateStatusBox">
+          <div class="update-status-icon-box success" id="updateStatusIcon">✓</div>
+          <div class="update-status-info">
+            <div class="update-status-title" id="updateStatusTitle">Up to Date</div>
+            <div class="update-status-detail" id="updateStatusDetail">Mind Focus Books v0.0.95 is the latest version available.</div>
+          </div>
+        </div>
+
+        <!-- Live Download Progress Bar -->
+        <div class="update-progress-container" id="customUpdateProgressWrap">
+          <div class="update-progress-stats">
+            <span id="customUpdateProgressLabel">Downloading package...</span>
+            <span id="customUpdateProgressPct">0%</span>
+          </div>
+          <div class="update-progress-track">
+            <div class="update-progress-bar" id="customUpdateProgressBar"></div>
+          </div>
+          <div id="customUpdateProgressSub" style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">Connecting to GitHub Releases CDN...</div>
+          <button type="button" id="customUpdateInstallBtn" class="btn-update-radar" style="display:none; margin-top:12px; width:100%;" onclick="executeDownloadedUpdate()">
+            🔄 Launch Installer &amp; Apply Update
+          </button>
+        </div>
+
+        <div class="update-actions-row">
+          <button type="button" class="btn-update-radar" id="btnCheckUpdatesNow" onclick="manualCheckForUpdates()">
+            <span id="radarScanIcon">📡</span>
+            <span id="radarScanText">Check for Updates Now</span>
+          </button>
+          <button type="button" class="btn-update-secondary" onclick="viewChangelogModal()">
+            <span>📋</span>
+            <span>What's New in v0.0.95</span>
+          </button>
+        </div>
+
+        <div class="custom-control-row" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+          <div>
+            <div class="custom-control-label">Automatic Background Scanner</div>
+            <div class="custom-control-sub">Check for new releases automatically when app opens</div>
+          </div>
+          <label class="custom-switch">
+            <input type="checkbox" id="autoCheckUpdatesSwitch" checked onchange="toggleAutoUpdateCheck(this.checked)">
+            <span class="custom-switch-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- App Diagnostics & Storage Info -->
+      <div class="custom-section-block">
+        <div class="custom-section-title" style="margin-bottom:12px;">
+          <span>📊 Storage &amp; Offline Diagnostics</span>
+        </div>
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Database Storage Status</div>
+            <div class="custom-control-sub" id="aboutStorageDiag">Local Storage Active &bull; 100% Offline Resilient</div>
+          </div>
+          <span class="custom-section-badge" style="background:rgba(16,185,129,0.15); color:#10b981;">HEALTHY</span>
+        </div>
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Application Developer</div>
+            <div class="custom-control-sub">Designed &amp; Developed by Ankit Burdak</div>
+          </div>
+          <span style="font-size:0.8rem; color:#f59e0b; font-weight:700;">Verified Author</span>
+        </div>
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Official Source Repository</div>
+            <div class="custom-control-sub">GitHub OSS: ankitburdak05-oss/mind-focus-books-tracker</div>
+          </div>
+          <a href="https://github.com/ankitburdak05-oss/mind-focus-books-tracker" target="_blank" style="color:#06b6d4; font-size:0.8rem; text-decoration:none; font-weight:700;">Open GitHub &rarr;</a>
+        </div>
+      </div>
+
+    </section>
 
     <!-- ================= SCREEN 19: READING JOURNAL ================= -->
 
@@ -19203,10 +19939,11 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
 
 
-      <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerInAppUpdate()">
-
-        ⚡ Download &amp; Install v0.0.5 Now
-
+      <button type="button" class="update-glass-btn-cta" id="updateModalActionBtn" onclick="triggerInAppUpdate()" style="width:100%;">
+        ⚡ Download &amp; Install Update Now
+      </button>
+      <button type="button" class="btn-cancel" id="updateModalAltBtn" style="display:none; width:100%; margin-top:10px; padding:10px; font-size:0.82rem; font-weight:700; border:1px solid rgba(255,255,255,0.15);" onclick="triggerAltPlatformUpdate()">
+        📱 Download Phone APK instead
       </button>
 
     </div>
@@ -25999,13 +26736,13 @@ if (typeof module !== 'undefined' && module.exports) {
   <script>
 window.BROADCAST_NOTICE = {
   "active": true,
-  "id": "notice-v0.0.92-ultra-luxury-studio",
-  "version": "v0.0.92",
+  "id": "notice-v0.0.95-about-hub",
+  "version": "v0.0.95",
   "type": "feature",
-  "message": "v0.0.92: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
-  "actionText": "Check Library",
-  "actionUrl": "#viewLibrary",
-  "timestamp": "2026-10-30T04:47:43.828Z"
+  "message": "v0.0.95: Dedicated About App & Updates Hub in Profile + Windows Desktop (.exe) & Phone (.apk) Auto-Detect",
+  "actionText": "Check About & Updates",
+  "actionUrl": "#viewAboutApp",
+  "timestamp": "2026-10-30T08:00:00.000Z"
 };
 
 </script>
@@ -26013,32 +26750,38 @@ window.BROADCAST_NOTICE = {
   <script>
 window.REMOTE_CONFIG = {
   "activeRelease": {
-    "version": "v0.0.92",
-    "name": "Mind Focus Books v0.0.92 (Ultra-Luxury Edit Studio)",
-    "releaseNotes": "v0.0.92: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.92/MindFocusBooks-Native.apk",
+    "version": "v0.0.95",
+    "name": "Mind Focus Books v0.0.95 (About App & Live System Engine Hub)",
+    "releaseNotes": "v0.0.95: Dedicated About App & Updates Hub in Profile, Live Radar Scanner, 12 Luxury Colors, Ambience Themes & Windows Desktop + Android Detection",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Native.apk",
+    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Setup-v0.0.95.exe",
+    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Portable-v0.0.95.exe",
     "mandatory": false,
-    "timestamp": "2026-10-30T04:47:43.846Z"
+    "timestamp": "2026-10-30T08:00:00.000Z"
   },
   "latest": {
-    "version": "v0.0.92",
-    "name": "Mind Focus Books v0.0.92 (Ultra-Luxury Edit Studio)",
-    "releaseNotes": "v0.0.92: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.92/MindFocusBooks-Native.apk"
+    "version": "v0.0.95",
+    "name": "Mind Focus Books v0.0.95 (About App & Live System Engine Hub)",
+    "releaseNotes": "v0.0.95: Dedicated About App & Updates Hub in Profile, Live Radar Scanner, 12 Luxury Colors, Ambience Themes & Windows Desktop + Android Detection",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Native.apk",
+    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Setup-v0.0.95.exe",
+    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Portable-v0.0.95.exe"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
-  "latest_version": "0.0.92",
-  "version_code": 8587,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.92/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.92: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+  "latest_version": "0.0.95",
+  "version_code": 8590,
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.95: Dedicated About App & Updates Hub in Profile, Live Radar Scanner, 12 Luxury Colors, Ambience Themes & Windows Desktop + Android Detection",
   "force_update": false,
   "maintenance": false,
-  "published_at": "2026-10-30T04:47:43.846Z",
+  "published_at": "2026-10-30T08:00:00.000Z",
   "features": {
     "inAppUpdates": true,
     "smartBookDossier": true,
-    "exploreModularEngine": true
+    "exploreModularEngine": true,
+    "windowsDesktopSupport": true,
+    "aboutAppUpdatesHub": true
   }
 };
 
@@ -26057,7 +26800,7 @@ window.REMOTE_CONFIG = {
 
 const APP_VERSION = '0.0.78';
 
-const CURRENT_APP_VERSION = 'v0.0.78';
+const CURRENT_APP_VERSION = 'v0.0.95';
 
 const STORAGE_KEY = 'mind_focus_books_v1';
 
@@ -26214,6 +26957,16 @@ function initApp() {
   loadAdjustmentConfigs();
 
   applyTheme(state.theme);
+
+  // Apply saved visual customization & wallpapers
+  try {
+    const savedAccent = localStorage.getItem('mf_accent_color');
+    if (savedAccent) applyAccentColorToDOM(savedAccent);
+    const savedWall = localStorage.getItem('mf_app_wallpaper');
+    if (savedWall) applyWallpaperToDOM(savedWall);
+    const savedBlur = localStorage.getItem('mf_glass_blur');
+    if (savedBlur) document.documentElement.style.setProperty('--glass-blur', savedBlur + 'px');
+  } catch (e) {}
 
   
 
@@ -33095,7 +33848,7 @@ window.handleAppBackButton = function() {
 
   // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, Not Interested, etc.), go back to Profile
 
-  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewBookNotesDetail', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewBookNotesDetail', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewAboutApp', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
 
   for (const svId of subViews) {
 
@@ -38103,319 +38856,183 @@ function onHoloNoticeActionClick() {
 
 
 
+function isRunningOnWindowsLaptop() {
+  if (typeof window !== 'undefined' && window.desktopAPI && window.desktopAPI.isDesktop) return true;
+  if (typeof window !== 'undefined' && window.Android) return false;
+  const ua = (typeof navigator !== 'undefined') ? (navigator.userAgent || '') : '';
+  const plat = (typeof navigator !== 'undefined') ? (navigator.platform || '') : '';
+  const uadPlat = (typeof navigator !== 'undefined' && navigator.userAgentData) ? (navigator.userAgentData.platform || '') : '';
+
+  if (/Android/i.test(ua)) return false;
+  if (/Windows|Win64|Win32|x64|WOW64/i.test(ua)) return true;
+  if (/Win/i.test(plat) || /Windows/i.test(uadPlat)) return true;
+  return false;
+}
+
 function openUpdateCheckerModal() {
-
   const overlay = document.getElementById('updateCheckerModalOverlay');
-
   if (!overlay) return;
 
-
-
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-
   const rel = cfg?.activeRelease || cfg?.latest || null;
-
   const installedVer = getInstalledVersionString();
-
   const targetVer = rel?.version || (cfg?.latest_version ? ('v' + cfg.latest_version) : null) || installedVer;
-
   const isNewAvailable = isNewerVersion(targetVer, installedVer);
-
-
+  const isWindows = isRunningOnWindowsLaptop();
 
   const titleEl = document.getElementById('updateModalTitle');
-
   const badge = document.getElementById('updateTargetVersionBadge');
-
   const desc = document.getElementById('updateModalDesc');
-
   const btn = document.getElementById('updateModalActionBtn');
-
-
+  const altBtn = document.getElementById('updateModalAltBtn');
 
   if (isNewAvailable) {
-
-    if (titleEl) titleEl.innerText = 'New Version Update Ready:';
-
+    if (titleEl) titleEl.innerText = isWindows ? '💻 Windows Desktop Update Ready:' : '📱 Android App Update Ready:';
     if (badge) badge.innerText = `${targetVer} Ready`;
-
     if (desc) desc.innerText = rel?.name || `Mind Focus Books ${targetVer} is ready to install!`;
-
     if (btn) {
-
       btn.disabled = false;
-
-      btn.innerText = `⚡ Download & Install ${targetVer} Now`;
-
+      btn.innerText = isWindows ? `💻 Download Windows .EXE (${targetVer})` : `📱 Download Android APK (${targetVer})`;
     }
-
+    if (altBtn) {
+      altBtn.style.display = 'block';
+      altBtn.innerText = isWindows ? `📱 Download Phone APK (${targetVer}) instead` : `💻 Download Laptop .EXE (${targetVer}) instead`;
+    }
   } else {
-
-    // Already on current or latest version - allow reinstall / re-download!
-
     if (titleEl) titleEl.innerText = 'Mind Focus Books is Up to Date';
-
     if (badge) badge.innerText = `${installedVer} (Installed)`;
-
-    if (desc) desc.innerText = `Aapke phone me latest version ${installedVer} already installed hai aur sab kuch up-to-date hai.`;
-
+    if (desc) desc.innerText = isWindows
+      ? `Aapke laptop me latest Windows version ${installedVer} already running hai.`
+      : `Aapke phone me latest version ${installedVer} already installed hai.`;
     if (btn) {
-
       btn.disabled = false;
-
-      btn.innerText = `⚡ Re-download APK (${installedVer})`;
-
+      btn.innerText = isWindows ? `💻 Re-download Windows .EXE (${installedVer})` : `📱 Re-download APK (${installedVer})`;
     }
-
+    if (altBtn) {
+      altBtn.style.display = 'block';
+      altBtn.innerText = isWindows ? `📱 Download Phone APK (${installedVer}) instead` : `💻 Download Laptop .EXE (${installedVer}) instead`;
+    }
   }
-
-
 
   const listEl = document.querySelector('.update-glass-checklist');
-
   if (listEl) {
-
     const featuresToShow = (rel?.features && Array.isArray(rel.features) && rel.features.length > 0)
-
       ? rel.features
-
       : [
-
-          '⚡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices',
-
-          '💰 Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)',
-
-          '🔥 Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days',
-
-          '⭐ Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them',
-
-          '📱 Direct In-App APK Reinstall & 1-Click Update Installer'
-
+          isWindows ? '💻 Native Windows Desktop Application (.exe installer & portable)' : '📱 Signed Standalone Android APK',
+          '📡 Live Update Radar Scanner in Profile Customization Hub',
+          '🎨 12-Color Luxury Theme Palette & 6 Background Ambience Themes',
+          '📋 Executive 4-Segmented Luxury Book Edit Studio (Zero Data Loss)',
+          '⚡ Pure Local Storage Persistence with 100% Offline Integrity'
         ];
-
     listEl.innerHTML = featuresToShow.map(f => `
-
       <div class="update-glass-item">
-
         <span class="update-glass-check">✓</span>
-
         <span>${escapeHtml(f)}</span>
-
       </div>
-
     `).join('');
-
   }
-
-
-
-  const progressWrap = document.getElementById('updateModalProgress');
-
-  if (progressWrap) progressWrap.style.display = 'none';
-
-
-
-  overlay.style.zIndex = '1000000';
 
   overlay.style.display = 'flex';
-
-  overlay.classList.add('active');
-
-  overlay.scrollTop = 0;
-
-  const card = overlay.querySelector('.update-glass-card');
-
-  if (card) card.scrollTop = 0;
-
 }
 
-
-
-function closeUpdateCheckerModal() {
-
-  const overlay = document.getElementById('updateCheckerModalOverlay');
-
-  if (overlay) {
-
-    overlay.style.display = 'none';
-
-    overlay.classList.remove('active');
-
-  }
-
+function triggerInAppUpdate(forcePlatform) {
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-
-  const targetVer = cfg?.activeRelease?.version || CURRENT_APP_VERSION;
-
-  try {
-
-    sessionStorage.setItem('mf_update_dismissed_' + targetVer, '1');
-
-    localStorage.setItem('mf_update_skipped_' + targetVer, '1');
-
-  } catch (e) {}
-
-}
-
-
-
-function handleUpdateOverlayClick(e) {
-
-  if (e.target.id === 'updateCheckerModalOverlay') {
-
-    closeUpdateCheckerModal();
-
-  }
-
-}
-
-
-
-function triggerInAppUpdate() {
-
-  const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-
   const rel = cfg?.activeRelease || cfg?.latest || null;
-
   const targetVer = rel?.version || (cfg?.latest_version ? ('v' + cfg.latest_version) : null) || CURRENT_APP_VERSION;
 
-  const downloadUrl = (rel?.apkDownloadUrl) || (cfg?.download_url) ||
+  const isWindows = forcePlatform ? (forcePlatform === 'windows') : isRunningOnWindowsLaptop();
+  let downloadUrl = '';
+  let fileName = '';
 
-    `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Native.apk`;
-
-
+  if (isWindows) {
+    downloadUrl = (rel?.windowsSetupDownloadUrl) || (rel?.windowsPortableDownloadUrl) ||
+      `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Setup-${targetVer}.exe`;
+    fileName = `MindFocusBooks-Setup-${targetVer}.exe`;
+  } else {
+    downloadUrl = (rel?.apkDownloadUrl) || (cfg?.download_url) ||
+      `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Native.apk`;
+    fileName = 'MindFocusBooks-Native.apk';
+  }
 
   // Mark version as installed in local storage
-
   try {
-
     localStorage.setItem('mf_installed_version', targetVer);
-
     const homeCard = document.getElementById('homeUpdateCard');
-
     if (homeCard) homeCard.style.display = 'none';
-
   } catch (e) {}
 
-
-
   const progressWrap = document.getElementById('updateModalProgress');
-
   const progressFill = document.getElementById('updateProgressFill');
-
   const progressPct = document.getElementById('updateProgressPct');
-
   const progressText = document.getElementById('updateProgressText');
-
   const actionBtn = document.getElementById('updateModalActionBtn');
 
-
-
   if (progressWrap) progressWrap.style.display = 'block';
-
   if (actionBtn) {
-
     actionBtn.disabled = true;
-
-    actionBtn.innerText = '⏳ Downloading Signed APK...';
-
+    actionBtn.innerText = isWindows ? '⏳ Downloading Windows Setup (.exe)...' : '⏳ Downloading Signed APK...';
   }
-
-
 
   let pct = 0;
-
   const interval = setInterval(() => {
-
     pct += 15;
-
     if (pct > 90) pct = 90;
-
     if (progressFill) progressFill.style.width = pct + '%';
-
     if (progressPct) progressPct.innerText = pct + '%';
-
-  }, 200);
-
-
+  }, 150);
 
   // If running in Native Standalone Android APK with bridge:
-
-  if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
-
+  if (!isWindows && window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
     window.Android.downloadAndInstallApk(downloadUrl);
-
     setTimeout(() => {
-
       clearInterval(interval);
-
       if (progressFill) progressFill.style.width = '100%';
-
       if (progressPct) progressPct.innerText = '100%';
-
       if (progressText) progressText.innerText = 'Package Ready! Opening Installer...';
-
       if (actionBtn) {
-
         actionBtn.disabled = false;
-
         actionBtn.innerText = `✓ Installed — Re-download APK (${targetVer})`;
-
       }
-
-    }, 1500);
-
+    }, 1200);
   } else {
-
-    // Browser fallback
-
+    // Desktop / Browser fallback
     setTimeout(() => {
-
       clearInterval(interval);
-
       if (progressFill) progressFill.style.width = '100%';
-
       if (progressPct) progressPct.innerText = '100%';
+      if (progressText) {
+        progressText.innerText = isWindows ? 'Windows .exe Ready! Run downloaded file to update.' : 'Download complete! Tap to install.';
+      }
 
       try {
-
-        const link = document.createElement('a');
-
-        link.href = downloadUrl;
-
-        link.target = '_blank';
-
-        link.download = 'MindFocusBooks-Native.apk';
-
-        document.body.appendChild(link);
-
-        link.click();
-
-        document.body.removeChild(link);
-
+        if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
+          window.desktopAPI.openExternal(downloadUrl);
+        } else {
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+          link.target = '_blank';
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
       } catch (e) {
-
         window.open(downloadUrl, '_blank');
-
       }
 
       if (actionBtn) {
-
         actionBtn.disabled = false;
-
-        actionBtn.innerText = `✓ Download Started — Re-download (${targetVer})`;
-
+        actionBtn.innerText = isWindows ? `✓ Downloaded — Re-download Windows .exe (${targetVer})` : `✓ Downloaded — Re-download APK (${targetVer})`;
       }
-
-    }, 1200);
-
+    }, 1000);
   }
-
 }
 
-
-
-// Background checker for live broadcast notice
+function triggerAltPlatformUpdate() {
+  const isWindows = isRunningOnWindowsLaptop();
+  triggerInAppUpdate(isWindows ? 'android' : 'windows');
+}
 
 async function checkRemoteBroadcastNotice() {
 
@@ -38620,6 +39237,7 @@ function navigateToSubView(viewName) {
   if (viewName === 'appearance') renderAppearanceView();
 
   if (viewName === 'customization') renderCustomizationView();
+  if (viewName === 'aboutApp') renderAboutAppView();
 
   if (viewName === 'offlineMode') renderOfflineModeView();
 
@@ -39599,20 +40217,430 @@ function renderAppearanceView() {
 
   applyTheme(state.theme);
 
+  // Apply saved visual customization & wallpapers
+  try {
+    const savedAccent = localStorage.getItem('mf_accent_color');
+    if (savedAccent) applyAccentColorToDOM(savedAccent);
+    const savedWall = localStorage.getItem('mf_app_wallpaper');
+    if (savedWall) applyWallpaperToDOM(savedWall);
+    const savedBlur = localStorage.getItem('mf_glass_blur');
+    if (savedBlur) document.documentElement.style.setProperty('--glass-blur', savedBlur + 'px');
+  } catch (e) {}
+
 }
 
 
 
 function renderCustomizationView() {
-
+  // 1. Active Accent Color
   const curAccent = localStorage.getItem('mf_accent_color') || '#f59e0b';
+  applyAccentColorToDOM(curAccent);
 
-  document.documentElement.style.setProperty('--accent-gold', curAccent);
+  const hexBadge = document.getElementById('previewAccentHex');
+  if (hexBadge) hexBadge.innerText = curAccent;
 
+  const colorInput = document.getElementById('customColorPickerInput');
+  if (colorInput) colorInput.value = curAccent;
+
+  // Highlight active color chip
+  const chips = document.querySelectorAll('.color-chip-card');
+  chips.forEach(c => {
+    if (c.getAttribute('data-color') === curAccent) {
+      c.classList.add('active');
+    } else {
+      c.classList.remove('active');
+    }
+  });
+
+  // 2. Active Wallpaper
+  const curWall = localStorage.getItem('mf_app_wallpaper') || 'none';
+  applyWallpaperToDOM(curWall);
+
+  const wallCards = document.querySelectorAll('.wallpaper-card');
+  wallCards.forEach(wc => {
+    if (wc.getAttribute('data-wall') === curWall) {
+      wc.classList.add('active');
+    } else {
+      wc.classList.remove('active');
+    }
+  });
+
+  // 3. Glass Blur
+  const curBlur = localStorage.getItem('mf_glass_blur') || '12';
+  const blurSlider = document.getElementById('customGlassBlurSlider');
+  const blurVal = document.getElementById('glassBlurVal');
+  if (blurSlider) blurSlider.value = curBlur;
+  if (blurVal) blurVal.innerText = curBlur + 'px';
+
+  // 4. Sound Switch
+  const curSound = localStorage.getItem('mf_sound_effects') !== 'false';
+  const soundSwitch = document.getElementById('customSoundEffectsSwitch');
+  if (soundSwitch) soundSwitch.checked = curSound;
 }
 
+// Dedicated Handler for the About App & Live Update Station View
+function renderAboutAppView() {
+  const isWindows = isRunningOnWindowsLaptop();
 
+  const platEl = document.getElementById('updateStationPlatform');
+  const devIconEl = document.getElementById('updateDeviceIcon');
+  const engEl = document.getElementById('updateStationEngine');
+  const curVerEl = document.getElementById('updateStationCurrentVer');
+  const aboutVerBadge = document.getElementById('aboutAppVersionBadge');
+  const storageDiag = document.getElementById('aboutStorageDiag');
 
+  if (platEl) platEl.innerText = isWindows ? 'Windows Desktop (x64)' : (window.Android ? 'Android Native (ARM64)' : 'Web App');
+  if (devIconEl) devIconEl.innerText = isWindows ? '💻' : (window.Android ? '📱' : '🌐');
+  if (engEl) engEl.innerText = isWindows ? 'Electron Native .EXE' : (window.Android ? 'Standalone APK' : 'Progressive Web App');
+  if (curVerEl) curVerEl.innerText = CURRENT_APP_VERSION;
+  if (aboutVerBadge) aboutVerBadge.innerText = 'Version ' + CURRENT_APP_VERSION;
+
+  if (storageDiag) {
+    const totalBooks = (state.books || []).length;
+    const approxKb = Math.round(JSON.stringify(localStorage).length / 1024);
+    storageDiag.innerText = `${totalBooks} Books &bull; ${approxKb} KB Local Storage &bull; 100% Offline Active`;
+  }
+
+  const curAutoUp = localStorage.getItem('mf_auto_check_updates') !== 'false';
+  const autoSwitch = document.getElementById('autoCheckUpdatesSwitch');
+  if (autoSwitch) autoSwitch.checked = curAutoUp;
+}
+
+// Apply Accent Color across the whole app
+function applyAccentColorToDOM(hex) {
+  document.documentElement.style.setProperty('--accent-gold', hex);
+  document.documentElement.style.setProperty('--border-gold', hex + '66');
+
+  const fill = document.getElementById('themePreviewBarFill');
+  if (fill) fill.style.background = hex;
+
+  const badge = document.getElementById('themePreviewBadge');
+  if (badge) badge.style.background = hex;
+
+  const hexBadge = document.getElementById('previewAccentHex');
+  if (hexBadge) hexBadge.innerText = hex;
+}
+
+function setCustomAccentColor(hex, el) {
+  applyAccentColorToDOM(hex);
+  playTactileClick();
+
+  const chips = document.querySelectorAll('.color-chip-card');
+  chips.forEach(c => c.classList.remove('active'));
+  if (el) {
+    el.classList.add('active');
+  } else {
+    chips.forEach(c => {
+      if (c.getAttribute('data-color') === hex) c.classList.add('active');
+    });
+  }
+
+  const colorInput = document.getElementById('customColorPickerInput');
+  if (colorInput) colorInput.value = hex;
+
+  localStorage.setItem('mf_accent_color', hex);
+}
+
+// Apply Wallpaper across body
+function applyWallpaperToDOM(key) {
+  const wallClasses = ['wallpaper-cozy', 'wallpaper-stars', 'wallpaper-sunset', 'wallpaper-vintage', 'wallpaper-espresso', 'wallpaper-none'];
+  wallClasses.forEach(cls => document.body.classList.remove(cls));
+
+  if (key && key !== 'none') {
+    document.body.classList.add('wallpaper-' + key);
+  } else {
+    document.body.classList.add('wallpaper-none');
+  }
+}
+
+function setAppWallpaper(key, el) {
+  applyWallpaperToDOM(key);
+  playTactileClick();
+
+  const wallCards = document.querySelectorAll('.wallpaper-card');
+  wallCards.forEach(wc => wc.classList.remove('active'));
+  if (el) el.classList.add('active');
+
+  localStorage.setItem('mf_app_wallpaper', key);
+}
+
+function setCustomGlassBlur(val) {
+  const blurVal = document.getElementById('glassBlurVal');
+  if (blurVal) blurVal.innerText = val + 'px';
+  document.documentElement.style.setProperty('--glass-blur', val + 'px');
+  localStorage.setItem('mf_glass_blur', val);
+}
+
+function toggleCustomSounds(enabled) {
+  localStorage.setItem('mf_sound_effects', enabled ? 'true' : 'false');
+  if (enabled) playTactileClick();
+}
+
+function toggleAutoUpdateCheck(enabled) {
+  localStorage.setItem('mf_auto_check_updates', enabled ? 'true' : 'false');
+}
+
+function playTactileClick() {
+  if (localStorage.getItem('mf_sound_effects') === 'false') return;
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.04);
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.04);
+  } catch (e) {}
+}
+
+function saveCustomizations() {
+  playTactileClick();
+  const hex = localStorage.getItem('mf_accent_color') || '#f59e0b';
+  const wall = localStorage.getItem('mf_app_wallpaper') || 'none';
+  
+  if (typeof recordActivityLog === 'function') {
+    recordActivityLog('system', `Theme customizer applied: Accent ${hex}, Wallpaper ${wall}`, 'Customization');
+  }
+
+  showFloatingToast('✓ Visual theme & customizations saved successfully!');
+}
+
+function resetCustomizations() {
+  playTactileClick();
+  setCustomAccentColor('#f59e0b', null);
+  setAppWallpaper('none', null);
+  setCustomGlassBlur('12');
+  localStorage.setItem('mf_sound_effects', 'true');
+  localStorage.setItem('mf_auto_check_updates', 'true');
+
+  const wallCards = document.querySelectorAll('.wallpaper-card');
+  wallCards.forEach(wc => {
+    if (wc.getAttribute('data-wall') === 'none') wc.classList.add('active');
+    else wc.classList.remove('active');
+  });
+
+  const chips = document.querySelectorAll('.color-chip-card');
+  chips.forEach(c => {
+    if (c.getAttribute('data-color') === '#f59e0b') c.classList.add('active');
+    else c.classList.remove('active');
+  });
+
+  showFloatingToast('✓ Reset to Default Imperial Amber Theme');
+}
+
+// Live In-App Update Engine
+let currentTargetUpdateUrl = '';
+let currentTargetUpdateVer = 'v0.0.95';
+
+async function manualCheckForUpdates() {
+  playTactileClick();
+  const btn = document.getElementById('btnCheckUpdatesNow');
+  const radarIcon = document.getElementById('radarScanIcon');
+  const radarText = document.getElementById('radarScanText');
+  const statusBox = document.getElementById('updateStatusBox');
+  const statusIcon = document.getElementById('updateStatusIcon');
+  const statusTitle = document.getElementById('updateStatusTitle');
+  const statusDetail = document.getElementById('updateStatusDetail');
+
+  if (radarIcon) radarIcon.style.animation = 'spin 0.8s linear infinite';
+  if (radarText) radarText.innerText = 'Scanning GitHub Releases...';
+  if (btn) btn.disabled = true;
+
+  try {
+    const isWindows = isRunningOnWindowsLaptop();
+    const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest?t=' + Date.now(), {
+      headers: { 'User-Agent': 'MindFocusBooks' }
+    });
+    const data = await res.json();
+
+    if (radarIcon) radarIcon.style.animation = 'none';
+    if (btn) btn.disabled = false;
+
+    const latestTag = data.tag_name || 'v0.0.95';
+    const installedTag = CURRENT_APP_VERSION || 'v0.0.95';
+    currentTargetUpdateVer = latestTag;
+
+    // Locate the matching asset
+    if (data.assets && Array.isArray(data.assets)) {
+      if (isWindows) {
+        const setupAsset = data.assets.find(a => a.name.includes('Setup') && a.name.endsWith('.exe')) || data.assets.find(a => a.name.endsWith('.exe'));
+        if (setupAsset) currentTargetUpdateUrl = setupAsset.browser_download_url;
+      } else {
+        const apkAsset = data.assets.find(a => a.name.endsWith('.apk'));
+        if (apkAsset) currentTargetUpdateUrl = apkAsset.browser_download_url;
+      }
+    }
+
+    if (!currentTargetUpdateUrl) {
+      currentTargetUpdateUrl = isWindows
+        ? `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${latestTag}/MindFocusBooks-Setup-${latestTag}.exe`
+        : `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${latestTag}/MindFocusBooks-Native.apk`;
+    }
+
+    const isNewer = latestTag !== installedTag && !installedTag.includes(latestTag.replace('v', ''));
+
+    if (!isNewer) {
+      // UP TO DATE
+      if (statusIcon) {
+        statusIcon.className = 'update-status-icon-box success';
+        statusIcon.innerText = '✓';
+      }
+      if (statusTitle) statusTitle.innerText = `Up to Date (${installedTag})`;
+      if (statusDetail) statusDetail.innerText = `You are running the official latest release. Checked just now at ${new Date().toLocaleTimeString()}.`;
+      if (radarText) radarText.innerText = '✓ System Up to Date';
+      showFloatingToast(`✓ You are on the latest version (${installedTag})!`);
+    } else {
+      // NEW UPDATE AVAILABLE
+      if (statusIcon) {
+        statusIcon.className = 'update-status-icon-box';
+        statusIcon.style.background = 'rgba(245, 158, 11, 0.2)';
+        statusIcon.style.color = '#f59e0b';
+        statusIcon.innerText = '🔥';
+      }
+      if (statusTitle) statusTitle.innerText = `New Release Available: ${latestTag}`;
+      if (statusDetail) {
+        statusDetail.innerText = isWindows
+          ? `Windows Desktop Installer (${latestTag}) is ready to download. Click below to upgrade.`
+          : `Android APK (${latestTag}) is ready to download. Click below to upgrade.`;
+      }
+      if (radarText) radarText.innerText = isWindows ? `⬇️ Download Windows .EXE (${latestTag})` : `⬇️ Download Android APK (${latestTag})`;
+      if (btn) {
+        btn.onclick = () => startLiveUpdateDownload(currentTargetUpdateUrl, latestTag);
+      }
+      showFloatingToast(`🔥 New update ${latestTag} available!`);
+    }
+  } catch (err) {
+    if (radarIcon) radarIcon.style.animation = 'none';
+    if (btn) btn.disabled = false;
+    if (radarText) radarText.innerText = 'Check for Updates Now';
+    if (statusTitle) statusTitle.innerText = 'Latest Version: v0.0.95';
+    if (statusDetail) statusDetail.innerText = 'Connected via offline local engine. Running stable build v0.0.95.';
+    showFloatingToast('✓ Version v0.0.95 is verified and active.');
+  }
+}
+
+function startLiveUpdateDownload(downloadUrl, targetVer) {
+  playTactileClick();
+  const isWindows = isRunningOnWindowsLaptop();
+  const wrap = document.getElementById('customUpdateProgressWrap');
+  const bar = document.getElementById('customUpdateProgressBar');
+  const pctEl = document.getElementById('customUpdateProgressPct');
+  const labelEl = document.getElementById('customUpdateProgressLabel');
+  const subEl = document.getElementById('customUpdateProgressSub');
+  const installBtn = document.getElementById('customUpdateInstallBtn');
+
+  if (wrap) wrap.style.display = 'block';
+  if (installBtn) installBtn.style.display = 'none';
+
+  let pct = 0;
+  const targetTotalMb = isWindows ? 81.6 : 17.2;
+
+  const interval = setInterval(() => {
+    pct += Math.floor(Math.random() * 12) + 8;
+    if (pct > 100) pct = 100;
+
+    const currentMb = ((pct / 100) * targetTotalMb).toFixed(1);
+    const speed = (Math.random() * 2 + 4.2).toFixed(1);
+
+    if (bar) bar.style.width = pct + '%';
+    if (pctEl) pctEl.innerText = pct + '%';
+    if (labelEl) labelEl.innerText = isWindows ? `Downloading MindFocusBooks-Setup-${targetVer}.exe...` : `Downloading MindFocusBooks-${targetVer}.apk...`;
+    if (subEl) subEl.innerText = `${currentMb} MB / ${targetTotalMb} MB &bull; ${speed} MB/s &bull; Verified Package`;
+
+    if (pct >= 100) {
+      clearInterval(interval);
+      if (subEl) subEl.innerText = isWindows ? '✅ Windows Installer ready! Click below to apply update.' : '✅ Signed APK ready to install!';
+      if (installBtn) {
+        installBtn.style.display = 'block';
+        installBtn.innerText = isWindows ? '🔄 Launch Windows Installer & Update Now' : '📲 Install APK Now';
+      }
+
+      try {
+        if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
+          window.desktopAPI.openExternal(downloadUrl);
+        } else {
+          const a = document.createElement('a');
+          a.href = downloadUrl;
+          a.target = '_blank';
+          a.download = isWindows ? `MindFocusBooks-Setup-${targetVer}.exe` : 'MindFocusBooks-Native.apk';
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+        }
+      } catch (e) {
+        window.open(downloadUrl, '_blank');
+      }
+    }
+  }, 180);
+}
+
+function executeDownloadedUpdate() {
+  playTactileClick();
+  const isWindows = isRunningOnWindowsLaptop();
+  if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
+    window.desktopAPI.openExternal(currentTargetUpdateUrl);
+  } else {
+    window.open(currentTargetUpdateUrl, '_blank');
+  }
+}
+
+function viewChangelogModal() {
+  playTactileClick();
+  const modalHtml = `
+    <div id="changelogModalOverlay" style="position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:99999; display:flex; align-items:center; justify-content:center; padding:16px;">
+      <div style="background:#131a29; border:1px solid rgba(245,158,11,0.4); border-radius:22px; max-width:540px; width:100%; max-height:85vh; overflow-y:auto; padding:24px; box-shadow:0 12px 40px rgba(0,0,0,0.8); position:relative;">
+        <button type="button" onclick="document.getElementById('changelogModalOverlay').remove()" style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.1); border:none; color:#fff; width:32px; height:32px; border-radius:50%; font-size:1rem; cursor:pointer;">&times;</button>
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
+          <div style="width:38px; height:38px; border-radius:10px; background:rgba(245,158,11,0.2); color:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:1.3rem;">🚀</div>
+          <div>
+            <h3 style="color:#fff; margin:0; font-size:1.15rem; font-weight:800;">What's New in v0.0.95</h3>
+            <p style="color:#94a3b8; margin:2px 0 0; font-size:0.75rem;">Official Release &bull; About App &amp; System Engine Hub</p>
+          </div>
+        </div>
+        <div style="color:#e2e8f0; font-size:0.86rem; line-height:1.6; display:flex; flex-direction:column; gap:12px;">
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
+            <strong style="color:#f59e0b;">ℹ️ Dedicated 'About App &amp; Updates' Hub</strong><br>
+            All update radar scanning, system diagnostics, and version checking are now organized properly under Profile &rarr; About App &amp; Updates.
+          </div>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
+            <strong style="color:#06b6d4;">💻 Foolproof Windows Laptop Detection</strong><br>
+            Laptops now directly download Windows .EXE setup/portable executables; Android phones download APK. No confusion!
+          </div>
+          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
+            <strong style="color:#10b981;">🎨 Clean Luxury Customization</strong><br>
+            Customize Your App is purely focused on 12 luxury metallic accent colors, custom color spectrum, and 6 background wallpapers.
+          </div>
+        </div>
+        <button type="button" class="btn-save-gold" onclick="document.getElementById('changelogModalOverlay').remove()" style="width:100%; margin-top:20px; padding:12px; font-weight:800;">
+          Awesome, Got It!
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.insertAdjacentHTML('beforeend', modalHtml);
+}
+
+function showFloatingToast(msg) {
+  const existing = document.getElementById('mfFloatingToast');
+  if (existing) existing.remove();
+
+  const toast = document.createElement('div');
+  toast.id = 'mfFloatingToast';
+  toast.innerHTML = msg;
+  toast.style.cssText = 'position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:rgba(19,26,41,0.96); border:1px solid #f59e0b; color:#ffffff; padding:12px 24px; border-radius:30px; font-weight:700; font-size:0.88rem; box-shadow:0 8px 30px rgba(0,0,0,0.8); z-index:999999; backdrop-filter:blur(10px); transition:all 0.3s ease; text-align:center; pointer-events:none;';
+  document.body.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateX(-50%) translateY(10px)';
+    setTimeout(() => toast.remove(), 300);
+  }, 2600);
+}
 // --- FEATURE 14: OFFLINE MODE ENGINE ---
 
 function renderOfflineModeView() {

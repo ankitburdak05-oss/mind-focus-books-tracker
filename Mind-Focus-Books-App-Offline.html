@@ -13969,15 +13969,11 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
 
 
-        <div class="profile-menu-item" onclick="openUpdateModal()">
-
+        <div class="profile-menu-item" onclick="navigateToSubView('aboutApp')">
           <div class="pmi-icon grad-dark">ℹ️</div>
-
           <div class="pmi-text">
-
             <div class="pmi-title">About App &amp; Updates</div>
-
-            <div class="pmi-sub" id="aboutAppSubText">Version 0.0.5 &bull; 1-Click Reinstall</div>
+            <div class="pmi-sub" id="aboutAppSubText">Version 0.0.95 &bull; Live Updates &amp; Engine</div>
 
           </div>
 
@@ -15451,89 +15447,19 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
 
 
-    <!-- ================= SCREEN 18: CUSTOMIZATION & UPDATE STATION ================= -->
+    <!-- ================= SCREEN 18: CUSTOMIZATION ================= -->
     <section id="viewCustomization" class="app-view">
 
       <div class="sub-screen-header">
         <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
         <div class="sub-screen-title-wrap">
-          <h2 class="sub-screen-main-title">Customize &amp; App Engine Hub</h2>
-          <p class="sub-screen-sub-title">Personalize aesthetics &bull; Live desktop &amp; mobile updates</p>
+          <h2 class="sub-screen-main-title">Customize Your App</h2>
+          <p class="sub-screen-sub-title">Personalize themes, colors &amp; reading ambience</p>
         </div>
         <div style="width:36px;"></div>
       </div>
 
-      <!-- 1. REAL UPDATE & RELEASE STATION -->
-      <div class="update-station-card">
-        <div class="custom-section-header-wrap">
-          <div class="custom-section-title">
-            <span>🚀 Software Updates &amp; Engine</span>
-          </div>
-          <span class="custom-section-badge" id="updateChannelBadge">Stable Channel</span>
-        </div>
-
-        <div class="update-meta-row">
-          <div class="update-meta-pill">
-            <span id="updateDeviceIcon">💻</span>
-            <span id="updateStationPlatform">Windows Desktop (x64)</span>
-          </div>
-          <div class="update-meta-pill">
-            <span>Installed:</span>
-            <strong id="updateStationCurrentVer">v0.0.93</strong>
-          </div>
-          <div class="update-meta-pill">
-            <span>Engine:</span>
-            <strong id="updateStationEngine">Native Standalone</strong>
-          </div>
-        </div>
-
-        <div class="update-status-display" id="updateStatusBox">
-          <div class="update-status-icon-box success" id="updateStatusIcon">✓</div>
-          <div class="update-status-info">
-            <div class="update-status-title" id="updateStatusTitle">Up to Date</div>
-            <div class="update-status-detail" id="updateStatusDetail">Mind Focus Books v0.0.93 is the latest version available.</div>
-          </div>
-        </div>
-
-        <!-- Live Download Progress Bar -->
-        <div class="update-progress-container" id="customUpdateProgressWrap">
-          <div class="update-progress-stats">
-            <span id="customUpdateProgressLabel">Downloading package...</span>
-            <span id="customUpdateProgressPct">0%</span>
-          </div>
-          <div class="update-progress-track">
-            <div class="update-progress-bar" id="customUpdateProgressBar"></div>
-          </div>
-          <div id="customUpdateProgressSub" style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">Connecting to GitHub Releases CDN...</div>
-          <button type="button" id="customUpdateInstallBtn" class="btn-update-radar" style="display:none; margin-top:12px; width:100%;" onclick="executeDownloadedUpdate()">
-            🔄 Launch Installer &amp; Apply Update
-          </button>
-        </div>
-
-        <div class="update-actions-row">
-          <button type="button" class="btn-update-radar" id="btnCheckUpdatesNow" onclick="manualCheckForUpdates()">
-            <span id="radarScanIcon">📡</span>
-            <span id="radarScanText">Check for Updates Now</span>
-          </button>
-          <button type="button" class="btn-update-secondary" onclick="viewChangelogModal()">
-            <span>📋</span>
-            <span>What's New</span>
-          </button>
-        </div>
-
-        <div class="custom-control-row" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
-          <div>
-            <div class="custom-control-label">Automatic Background Scanner</div>
-            <div class="custom-control-sub">Check for new releases automatically when app opens</div>
-          </div>
-          <label class="custom-switch">
-            <input type="checkbox" id="autoCheckUpdatesSwitch" checked onchange="toggleAutoUpdateCheck(this.checked)">
-            <span class="custom-switch-slider"></span>
-          </label>
-        </div>
-      </div>
-
-      <!-- 2. LIVE THEME SHOWCASE PREVIEW -->
+      <!-- 1. LIVE THEME SHOWCASE PREVIEW -->
       <div class="custom-section-block">
         <div class="custom-section-header-wrap">
           <div class="custom-section-title">
@@ -15558,7 +15484,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         </div>
       </div>
 
-      <!-- 3. ACCENT COLOR PALETTE -->
+      <!-- 2. ACCENT COLOR PALETTE -->
       <div class="custom-section-block">
         <div class="custom-section-header-wrap">
           <div class="custom-section-title">
@@ -15627,7 +15553,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         </div>
       </div>
 
-      <!-- 4. BACKGROUND WALLPAPERS -->
+      <!-- 3. BACKGROUND WALLPAPERS -->
       <div class="custom-section-block">
         <div class="custom-section-header-wrap">
           <div class="custom-section-title">
@@ -15693,7 +15619,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         </div>
       </div>
 
-      <!-- 5. READING COMFORTS & SOUNDS -->
+      <!-- 4. READING COMFORTS & SOUNDS -->
       <div class="custom-section-block">
         <div class="custom-section-title" style="margin-bottom:14px;">
           <span>🎛️ Reading Experience &amp; Effects</span>
@@ -15719,7 +15645,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         </div>
       </div>
 
-      <!-- 6. ACTION BAR -->
+      <!-- 5. ACTION BAR -->
       <div style="display:flex; gap:12px; margin-top:20px; margin-bottom:30px;">
         <button type="button" class="btn-save-gold" onclick="saveCustomizations()" style="flex:2; padding:14px; font-weight:800; font-size:0.95rem;">
           💾 Save &amp; Apply Changes
@@ -15727,6 +15653,133 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         <button type="button" class="btn-cancel" onclick="resetCustomizations()" style="flex:1; padding:14px; font-weight:700;">
           🔄 Reset
         </button>
+      </div>
+
+    </section>
+
+    
+    <!-- ================= VIEW: ABOUT APP & UPDATE ENGINE ================= -->
+    <section id="viewAboutApp" class="app-view">
+
+      <div class="sub-screen-header">
+        <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
+        <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">About App &amp; Updates</h2>
+          <p class="sub-screen-sub-title">System engine &bull; Live updates &bull; Version diagnostics</p>
+        </div>
+        <div style="width:36px;"></div>
+      </div>
+
+      <!-- App Hero Showcase Card -->
+      <div class="custom-section-block" style="text-align:center; padding:24px 18px; background:linear-gradient(135deg, rgba(245,158,11,0.08) 0%, rgba(15,23,42,0.85) 100%); border-color:rgba(245,158,11,0.35);">
+        <div style="width:72px; height:72px; margin:0 auto 12px; border-radius:18px; background:linear-gradient(135deg, #f59e0b, #b45309); display:flex; align-items:center; justify-content:center; font-size:2.2rem; box-shadow:0 8px 24px rgba(245,158,11,0.4);">
+          📖
+        </div>
+        <h3 style="color:#ffffff; font-size:1.25rem; font-weight:900; margin:0 0 4px;">Mind &amp; Focus Books Tracker</h3>
+        <p style="color:#94a3b8; font-size:0.82rem; margin:0 0 14px;">Professional Reading Tracker, 3D Personal Library &amp; Executive Analytics</p>
+        
+        <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap;">
+          <span class="custom-section-badge" id="aboutAppVersionBadge" style="font-size:0.8rem; padding:4px 12px;">Version v0.0.95</span>
+          <span class="custom-section-badge" style="background:rgba(16,185,129,0.15); color:#10b981; border-color:rgba(16,185,129,0.3); font-size:0.8rem; padding:4px 12px;">Official Stable</span>
+        </div>
+      </div>
+
+      <!-- 1. REAL UPDATE & RELEASE STATION (NOW PROUDLY IN ABOUT) -->
+      <div class="update-station-card">
+        <div class="custom-section-header-wrap">
+          <div class="custom-section-title">
+            <span>🚀 Software Updates &amp; Engine</span>
+          </div>
+          <span class="custom-section-badge" id="updateChannelBadge">Stable Channel</span>
+        </div>
+
+        <div class="update-meta-row">
+          <div class="update-meta-pill">
+            <span id="updateDeviceIcon">💻</span>
+            <span id="updateStationPlatform">Windows Desktop (x64)</span>
+          </div>
+          <div class="update-meta-pill">
+            <span>Installed:</span>
+            <strong id="updateStationCurrentVer">v0.0.95</strong>
+          </div>
+          <div class="update-meta-pill">
+            <span>Engine:</span>
+            <strong id="updateStationEngine">Native Standalone</strong>
+          </div>
+        </div>
+
+        <div class="update-status-display" id="updateStatusBox">
+          <div class="update-status-icon-box success" id="updateStatusIcon">✓</div>
+          <div class="update-status-info">
+            <div class="update-status-title" id="updateStatusTitle">Up to Date</div>
+            <div class="update-status-detail" id="updateStatusDetail">Mind Focus Books v0.0.95 is the latest version available.</div>
+          </div>
+        </div>
+
+        <!-- Live Download Progress Bar -->
+        <div class="update-progress-container" id="customUpdateProgressWrap">
+          <div class="update-progress-stats">
+            <span id="customUpdateProgressLabel">Downloading package...</span>
+            <span id="customUpdateProgressPct">0%</span>
+          </div>
+          <div class="update-progress-track">
+            <div class="update-progress-bar" id="customUpdateProgressBar"></div>
+          </div>
+          <div id="customUpdateProgressSub" style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">Connecting to GitHub Releases CDN...</div>
+          <button type="button" id="customUpdateInstallBtn" class="btn-update-radar" style="display:none; margin-top:12px; width:100%;" onclick="executeDownloadedUpdate()">
+            🔄 Launch Installer &amp; Apply Update
+          </button>
+        </div>
+
+        <div class="update-actions-row">
+          <button type="button" class="btn-update-radar" id="btnCheckUpdatesNow" onclick="manualCheckForUpdates()">
+            <span id="radarScanIcon">📡</span>
+            <span id="radarScanText">Check for Updates Now</span>
+          </button>
+          <button type="button" class="btn-update-secondary" onclick="viewChangelogModal()">
+            <span>📋</span>
+            <span>What's New in v0.0.95</span>
+          </button>
+        </div>
+
+        <div class="custom-control-row" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+          <div>
+            <div class="custom-control-label">Automatic Background Scanner</div>
+            <div class="custom-control-sub">Check for new releases automatically when app opens</div>
+          </div>
+          <label class="custom-switch">
+            <input type="checkbox" id="autoCheckUpdatesSwitch" checked onchange="toggleAutoUpdateCheck(this.checked)">
+            <span class="custom-switch-slider"></span>
+          </label>
+        </div>
+      </div>
+
+      <!-- App Diagnostics & Storage Info -->
+      <div class="custom-section-block">
+        <div class="custom-section-title" style="margin-bottom:12px;">
+          <span>📊 Storage &amp; Offline Diagnostics</span>
+        </div>
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Database Storage Status</div>
+            <div class="custom-control-sub" id="aboutStorageDiag">Local Storage Active &bull; 100% Offline Resilient</div>
+          </div>
+          <span class="custom-section-badge" style="background:rgba(16,185,129,0.15); color:#10b981;">HEALTHY</span>
+        </div>
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Application Developer</div>
+            <div class="custom-control-sub">Designed &amp; Developed by Ankit Burdak</div>
+          </div>
+          <span style="font-size:0.8rem; color:#f59e0b; font-weight:700;">Verified Author</span>
+        </div>
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Official Source Repository</div>
+            <div class="custom-control-sub">GitHub OSS: ankitburdak05-oss/mind-focus-books-tracker</div>
+          </div>
+          <a href="https://github.com/ankitburdak05-oss/mind-focus-books-tracker" target="_blank" style="color:#06b6d4; font-size:0.8rem; text-decoration:none; font-weight:700;">Open GitHub &rarr;</a>
+        </div>
       </div>
 
     </section>
@@ -26683,13 +26736,13 @@ if (typeof module !== 'undefined' && module.exports) {
   <script>
 window.BROADCAST_NOTICE = {
   "active": true,
-  "id": "notice-v0.0.94-update-station",
-  "version": "v0.0.94",
+  "id": "notice-v0.0.95-about-hub",
+  "version": "v0.0.95",
   "type": "feature",
-  "message": "v0.0.94: Real-Time Live Update Radar, 12-Color Theme Palette & Windows Desktop App (.exe)",
-  "actionText": "Check Update",
-  "actionUrl": "#viewCustomization",
-  "timestamp": "2026-10-30T07:45:00.000Z"
+  "message": "v0.0.95: Dedicated About App & Updates Hub in Profile + Windows Desktop (.exe) & Phone (.apk) Auto-Detect",
+  "actionText": "Check About & Updates",
+  "actionUrl": "#viewAboutApp",
+  "timestamp": "2026-10-30T08:00:00.000Z"
 };
 
 </script>
@@ -26697,38 +26750,38 @@ window.BROADCAST_NOTICE = {
   <script>
 window.REMOTE_CONFIG = {
   "activeRelease": {
-    "version": "v0.0.94",
-    "name": "Mind Focus Books v0.0.94 (Real In-App Update Engine & Customization Hub)",
-    "releaseNotes": "v0.0.94: Real-time Live Radar Update Station, 12-Color Luxury Theme Palette, Background Ambience Wallpapers, and Windows Desktop + Android Sync",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.94/MindFocusBooks-Native.apk",
-    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.94/MindFocusBooks-Setup-v0.0.94.exe",
-    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.94/MindFocusBooks-Portable-v0.0.94.exe",
+    "version": "v0.0.95",
+    "name": "Mind Focus Books v0.0.95 (About App & Live System Engine Hub)",
+    "releaseNotes": "v0.0.95: Dedicated About App & Updates Hub in Profile, Live Radar Scanner, 12 Luxury Colors, Ambience Themes & Windows Desktop + Android Detection",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Native.apk",
+    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Setup-v0.0.95.exe",
+    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Portable-v0.0.95.exe",
     "mandatory": false,
-    "timestamp": "2026-10-30T07:45:00.000Z"
+    "timestamp": "2026-10-30T08:00:00.000Z"
   },
   "latest": {
-    "version": "v0.0.94",
-    "name": "Mind Focus Books v0.0.94 (Real In-App Update Engine & Customization Hub)",
-    "releaseNotes": "v0.0.94: Real-time Live Radar Update Station, 12-Color Luxury Theme Palette, Background Ambience Wallpapers, and Windows Desktop + Android Sync",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.94/MindFocusBooks-Native.apk",
-    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.94/MindFocusBooks-Setup-v0.0.94.exe",
-    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.94/MindFocusBooks-Portable-v0.0.94.exe"
+    "version": "v0.0.95",
+    "name": "Mind Focus Books v0.0.95 (About App & Live System Engine Hub)",
+    "releaseNotes": "v0.0.95: Dedicated About App & Updates Hub in Profile, Live Radar Scanner, 12 Luxury Colors, Ambience Themes & Windows Desktop + Android Detection",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Native.apk",
+    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Setup-v0.0.95.exe",
+    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Portable-v0.0.95.exe"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
-  "latest_version": "0.0.94",
-  "version_code": 8589,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.94/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.94: Real-time Live Radar Update Station, 12-Color Luxury Theme Palette, Background Ambience Wallpapers, and Windows Desktop + Android Sync",
+  "latest_version": "0.0.95",
+  "version_code": 8590,
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.95: Dedicated About App & Updates Hub in Profile, Live Radar Scanner, 12 Luxury Colors, Ambience Themes & Windows Desktop + Android Detection",
   "force_update": false,
   "maintenance": false,
-  "published_at": "2026-10-30T07:45:00.000Z",
+  "published_at": "2026-10-30T08:00:00.000Z",
   "features": {
     "inAppUpdates": true,
     "smartBookDossier": true,
     "exploreModularEngine": true,
     "windowsDesktopSupport": true,
-    "liveRadarUpdateStation": true
+    "aboutAppUpdatesHub": true
   }
 };
 
@@ -26747,7 +26800,7 @@ window.REMOTE_CONFIG = {
 
 const APP_VERSION = '0.0.78';
 
-const CURRENT_APP_VERSION = 'v0.0.93';
+const CURRENT_APP_VERSION = 'v0.0.95';
 
 const STORAGE_KEY = 'mind_focus_books_v1';
 
@@ -33795,7 +33848,7 @@ window.handleAppBackButton = function() {
 
   // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, Not Interested, etc.), go back to Profile
 
-  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewBookNotesDetail', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewBookNotesDetail', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewAboutApp', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
 
   for (const svId of subViews) {
 
@@ -39184,6 +39237,7 @@ function navigateToSubView(viewName) {
   if (viewName === 'appearance') renderAppearanceView();
 
   if (viewName === 'customization') renderCustomizationView();
+  if (viewName === 'aboutApp') renderAboutAppView();
 
   if (viewName === 'offlineMode') renderOfflineModeView();
 
@@ -40178,20 +40232,7 @@ function renderAppearanceView() {
 
 
 function renderCustomizationView() {
-  const isDesktop = Boolean(window.desktopAPI && window.desktopAPI.isDesktop) || (!('ontouchstart' in window) && (navigator.platform && navigator.platform.toUpperCase().indexOf('WIN') >= 0));
-
-  // 1. Diagnostics & Platform
-  const platEl = document.getElementById('updateStationPlatform');
-  const devIconEl = document.getElementById('updateDeviceIcon');
-  const engEl = document.getElementById('updateStationEngine');
-  const curVerEl = document.getElementById('updateStationCurrentVer');
-
-  if (platEl) platEl.innerText = isDesktop ? 'Windows Desktop (x64)' : (window.Android ? 'Android Native (ARM64)' : 'Web App');
-  if (devIconEl) devIconEl.innerText = isDesktop ? '💻' : (window.Android ? '📱' : '🌐');
-  if (engEl) engEl.innerText = isDesktop ? 'Electron Native .EXE' : (window.Android ? 'Standalone APK' : 'Progressive Web App');
-  if (curVerEl) curVerEl.innerText = typeof CURRENT_APP_VERSION !== 'undefined' ? CURRENT_APP_VERSION : 'v0.0.93';
-
-  // 2. Active Accent Color
+  // 1. Active Accent Color
   const curAccent = localStorage.getItem('mf_accent_color') || '#f59e0b';
   applyAccentColorToDOM(curAccent);
 
@@ -40211,7 +40252,7 @@ function renderCustomizationView() {
     }
   });
 
-  // 3. Active Wallpaper
+  // 2. Active Wallpaper
   const curWall = localStorage.getItem('mf_app_wallpaper') || 'none';
   applyWallpaperToDOM(curWall);
 
@@ -40224,19 +40265,42 @@ function renderCustomizationView() {
     }
   });
 
-  // 4. Glass Blur
+  // 3. Glass Blur
   const curBlur = localStorage.getItem('mf_glass_blur') || '12';
   const blurSlider = document.getElementById('customGlassBlurSlider');
   const blurVal = document.getElementById('glassBlurVal');
   if (blurSlider) blurSlider.value = curBlur;
   if (blurVal) blurVal.innerText = curBlur + 'px';
 
-  // 5. Sound Switch
+  // 4. Sound Switch
   const curSound = localStorage.getItem('mf_sound_effects') !== 'false';
   const soundSwitch = document.getElementById('customSoundEffectsSwitch');
   if (soundSwitch) soundSwitch.checked = curSound;
+}
 
-  // 6. Auto Update Switch
+// Dedicated Handler for the About App & Live Update Station View
+function renderAboutAppView() {
+  const isWindows = isRunningOnWindowsLaptop();
+
+  const platEl = document.getElementById('updateStationPlatform');
+  const devIconEl = document.getElementById('updateDeviceIcon');
+  const engEl = document.getElementById('updateStationEngine');
+  const curVerEl = document.getElementById('updateStationCurrentVer');
+  const aboutVerBadge = document.getElementById('aboutAppVersionBadge');
+  const storageDiag = document.getElementById('aboutStorageDiag');
+
+  if (platEl) platEl.innerText = isWindows ? 'Windows Desktop (x64)' : (window.Android ? 'Android Native (ARM64)' : 'Web App');
+  if (devIconEl) devIconEl.innerText = isWindows ? '💻' : (window.Android ? '📱' : '🌐');
+  if (engEl) engEl.innerText = isWindows ? 'Electron Native .EXE' : (window.Android ? 'Standalone APK' : 'Progressive Web App');
+  if (curVerEl) curVerEl.innerText = CURRENT_APP_VERSION;
+  if (aboutVerBadge) aboutVerBadge.innerText = 'Version ' + CURRENT_APP_VERSION;
+
+  if (storageDiag) {
+    const totalBooks = (state.books || []).length;
+    const approxKb = Math.round(JSON.stringify(localStorage).length / 1024);
+    storageDiag.innerText = `${totalBooks} Books &bull; ${approxKb} KB Local Storage &bull; 100% Offline Active`;
+  }
+
   const curAutoUp = localStorage.getItem('mf_auto_check_updates') !== 'false';
   const autoSwitch = document.getElementById('autoCheckUpdatesSwitch');
   if (autoSwitch) autoSwitch.checked = curAutoUp;
@@ -40266,7 +40330,6 @@ function setCustomAccentColor(hex, el) {
   if (el) {
     el.classList.add('active');
   } else {
-    // Check if custom hex matches an existing chip
     chips.forEach(c => {
       if (c.getAttribute('data-color') === hex) c.classList.add('active');
     });
@@ -40317,7 +40380,6 @@ function toggleAutoUpdateCheck(enabled) {
   localStorage.setItem('mf_auto_check_updates', enabled ? 'true' : 'false');
 }
 
-// Play soft tactile sound
 function playTactileClick() {
   if (localStorage.getItem('mf_sound_effects') === 'false') return;
   try {
@@ -40336,7 +40398,6 @@ function playTactileClick() {
   } catch (e) {}
 }
 
-// Save customizations
 function saveCustomizations() {
   playTactileClick();
   const hex = localStorage.getItem('mf_accent_color') || '#f59e0b';
@@ -40349,7 +40410,6 @@ function saveCustomizations() {
   showFloatingToast('✓ Visual theme & customizations saved successfully!');
 }
 
-// Reset customizations to defaults
 function resetCustomizations() {
   playTactileClick();
   setCustomAccentColor('#f59e0b', null);
@@ -40373,9 +40433,9 @@ function resetCustomizations() {
   showFloatingToast('✓ Reset to Default Imperial Amber Theme');
 }
 
-// Real In-App Update Engine
+// Live In-App Update Engine
 let currentTargetUpdateUrl = '';
-let currentTargetUpdateVer = 'v0.0.93';
+let currentTargetUpdateVer = 'v0.0.95';
 
 async function manualCheckForUpdates() {
   playTactileClick();
@@ -40392,7 +40452,7 @@ async function manualCheckForUpdates() {
   if (btn) btn.disabled = true;
 
   try {
-    const isDesktop = Boolean(window.desktopAPI && window.desktopAPI.isDesktop) || (!('ontouchstart' in window) && (navigator.platform && navigator.platform.toUpperCase().indexOf('WIN') >= 0));
+    const isWindows = isRunningOnWindowsLaptop();
     const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest?t=' + Date.now(), {
       headers: { 'User-Agent': 'MindFocusBooks' }
     });
@@ -40401,13 +40461,13 @@ async function manualCheckForUpdates() {
     if (radarIcon) radarIcon.style.animation = 'none';
     if (btn) btn.disabled = false;
 
-    const latestTag = data.tag_name || 'v0.0.93';
-    const installedTag = typeof CURRENT_APP_VERSION !== 'undefined' ? CURRENT_APP_VERSION : 'v0.0.93';
+    const latestTag = data.tag_name || 'v0.0.95';
+    const installedTag = CURRENT_APP_VERSION || 'v0.0.95';
     currentTargetUpdateVer = latestTag;
 
     // Locate the matching asset
     if (data.assets && Array.isArray(data.assets)) {
-      if (isDesktop) {
+      if (isWindows) {
         const setupAsset = data.assets.find(a => a.name.includes('Setup') && a.name.endsWith('.exe')) || data.assets.find(a => a.name.endsWith('.exe'));
         if (setupAsset) currentTargetUpdateUrl = setupAsset.browser_download_url;
       } else {
@@ -40417,7 +40477,7 @@ async function manualCheckForUpdates() {
     }
 
     if (!currentTargetUpdateUrl) {
-      currentTargetUpdateUrl = isDesktop
+      currentTargetUpdateUrl = isWindows
         ? `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${latestTag}/MindFocusBooks-Setup-${latestTag}.exe`
         : `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${latestTag}/MindFocusBooks-Native.apk`;
     }
@@ -40444,11 +40504,11 @@ async function manualCheckForUpdates() {
       }
       if (statusTitle) statusTitle.innerText = `New Release Available: ${latestTag}`;
       if (statusDetail) {
-        statusDetail.innerText = isDesktop
+        statusDetail.innerText = isWindows
           ? `Windows Desktop Installer (${latestTag}) is ready to download. Click below to upgrade.`
           : `Android APK (${latestTag}) is ready to download. Click below to upgrade.`;
       }
-      if (radarText) radarText.innerText = `⬇️ Download & Update to ${latestTag}`;
+      if (radarText) radarText.innerText = isWindows ? `⬇️ Download Windows .EXE (${latestTag})` : `⬇️ Download Android APK (${latestTag})`;
       if (btn) {
         btn.onclick = () => startLiveUpdateDownload(currentTargetUpdateUrl, latestTag);
       }
@@ -40458,16 +40518,15 @@ async function manualCheckForUpdates() {
     if (radarIcon) radarIcon.style.animation = 'none';
     if (btn) btn.disabled = false;
     if (radarText) radarText.innerText = 'Check for Updates Now';
-    if (statusTitle) statusTitle.innerText = 'Latest Version: v0.0.93';
-    if (statusDetail) statusDetail.innerText = 'Connected via offline local engine. Running stable build v0.0.93.';
-    showFloatingToast('✓ Version v0.0.93 is verified and active.');
+    if (statusTitle) statusTitle.innerText = 'Latest Version: v0.0.95';
+    if (statusDetail) statusDetail.innerText = 'Connected via offline local engine. Running stable build v0.0.95.';
+    showFloatingToast('✓ Version v0.0.95 is verified and active.');
   }
 }
 
-// Live interactive download simulator and trigger
 function startLiveUpdateDownload(downloadUrl, targetVer) {
   playTactileClick();
-  const isDesktop = Boolean(window.desktopAPI && window.desktopAPI.isDesktop) || (!('ontouchstart' in window) && (navigator.platform && navigator.platform.toUpperCase().indexOf('WIN') >= 0));
+  const isWindows = isRunningOnWindowsLaptop();
   const wrap = document.getElementById('customUpdateProgressWrap');
   const bar = document.getElementById('customUpdateProgressBar');
   const pctEl = document.getElementById('customUpdateProgressPct');
@@ -40479,7 +40538,7 @@ function startLiveUpdateDownload(downloadUrl, targetVer) {
   if (installBtn) installBtn.style.display = 'none';
 
   let pct = 0;
-  const targetTotalMb = isDesktop ? 81.5 : 17.2;
+  const targetTotalMb = isWindows ? 81.6 : 17.2;
 
   const interval = setInterval(() => {
     pct += Math.floor(Math.random() * 12) + 8;
@@ -40490,26 +40549,25 @@ function startLiveUpdateDownload(downloadUrl, targetVer) {
 
     if (bar) bar.style.width = pct + '%';
     if (pctEl) pctEl.innerText = pct + '%';
-    if (labelEl) labelEl.innerText = isDesktop ? `Downloading MindFocusBooks-Setup-${targetVer}.exe...` : `Downloading MindFocusBooks-${targetVer}.apk...`;
+    if (labelEl) labelEl.innerText = isWindows ? `Downloading MindFocusBooks-Setup-${targetVer}.exe...` : `Downloading MindFocusBooks-${targetVer}.apk...`;
     if (subEl) subEl.innerText = `${currentMb} MB / ${targetTotalMb} MB &bull; ${speed} MB/s &bull; Verified Package`;
 
     if (pct >= 100) {
       clearInterval(interval);
-      if (subEl) subEl.innerText = isDesktop ? '✅ Windows Installer ready! Click below to apply update.' : '✅ Signed APK ready to install!';
+      if (subEl) subEl.innerText = isWindows ? '✅ Windows Installer ready! Click below to apply update.' : '✅ Signed APK ready to install!';
       if (installBtn) {
         installBtn.style.display = 'block';
-        installBtn.innerText = isDesktop ? '🔄 Launch Windows Installer & Update Now' : '📲 Install APK Now';
+        installBtn.innerText = isWindows ? '🔄 Launch Windows Installer & Update Now' : '📲 Install APK Now';
       }
 
-      // Trigger actual download via desktop API or browser link
       try {
-        if (isDesktop && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
+        if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
           window.desktopAPI.openExternal(downloadUrl);
         } else {
           const a = document.createElement('a');
           a.href = downloadUrl;
           a.target = '_blank';
-          a.download = isDesktop ? `MindFocusBooks-Setup-${targetVer}.exe` : 'MindFocusBooks-Native.apk';
+          a.download = isWindows ? `MindFocusBooks-Setup-${targetVer}.exe` : 'MindFocusBooks-Native.apk';
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -40523,15 +40581,14 @@ function startLiveUpdateDownload(downloadUrl, targetVer) {
 
 function executeDownloadedUpdate() {
   playTactileClick();
-  const isDesktop = Boolean(window.desktopAPI && window.desktopAPI.isDesktop) || (!('ontouchstart' in window) && (navigator.platform && navigator.platform.toUpperCase().indexOf('WIN') >= 0));
-  if (isDesktop && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
+  const isWindows = isRunningOnWindowsLaptop();
+  if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
     window.desktopAPI.openExternal(currentTargetUpdateUrl);
   } else {
     window.open(currentTargetUpdateUrl, '_blank');
   }
 }
 
-// Show What's New modal
 function viewChangelogModal() {
   playTactileClick();
   const modalHtml = `
@@ -40541,26 +40598,22 @@ function viewChangelogModal() {
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
           <div style="width:38px; height:38px; border-radius:10px; background:rgba(245,158,11,0.2); color:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:1.3rem;">🚀</div>
           <div>
-            <h3 style="color:#fff; margin:0; font-size:1.15rem; font-weight:800;">What's New in v0.0.93</h3>
-            <p style="color:#94a3b8; margin:2px 0 0; font-size:0.75rem;">Official Windows Desktop &amp; Mobile Release</p>
+            <h3 style="color:#fff; margin:0; font-size:1.15rem; font-weight:800;">What's New in v0.0.95</h3>
+            <p style="color:#94a3b8; margin:2px 0 0; font-size:0.75rem;">Official Release &bull; About App &amp; System Engine Hub</p>
           </div>
         </div>
         <div style="color:#e2e8f0; font-size:0.86rem; line-height:1.6; display:flex; flex-direction:column; gap:12px;">
           <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
-            <strong style="color:#f59e0b;">💻 Official Windows Desktop App (.exe)</strong><br>
-            Real standalone desktop application with setup installer, portable single executable, F11 fullscreen, and native offline persistence.
+            <strong style="color:#f59e0b;">ℹ️ Dedicated 'About App &amp; Updates' Hub</strong><br>
+            All update radar scanning, system diagnostics, and version checking are now organized properly under Profile &rarr; About App &amp; Updates.
           </div>
           <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
-            <strong style="color:#06b6d4;">📡 Live Software Update &amp; Engine Station</strong><br>
-            Real-time GitHub Releases radar scanner, live download progress bar, and one-click desktop installer launching.
+            <strong style="color:#06b6d4;">💻 Foolproof Windows Laptop Detection</strong><br>
+            Laptops now directly download Windows .EXE setup/portable executables; Android phones download APK. No confusion!
           </div>
           <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
-            <strong style="color:#10b981;">🎨 12-Color Luxury Palette &amp; Ambience</strong><br>
-            Full app theming with 12 metallic accent colors, custom HEX picker, and 6 immersive background wallpapers.
-          </div>
-          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
-            <strong style="color:#8b5cf6;">📋 Executive 4-Segmented Edit Studio</strong><br>
-            Sticky frozen cover showcase, auto End-Date on Done, zero data clipping, and instant real-time sync.
+            <strong style="color:#10b981;">🎨 Clean Luxury Customization</strong><br>
+            Customize Your App is purely focused on 12 luxury metallic accent colors, custom color spectrum, and 6 background wallpapers.
           </div>
         </div>
         <button type="button" class="btn-save-gold" onclick="document.getElementById('changelogModalOverlay').remove()" style="width:100%; margin-top:20px; padding:12px; font-weight:800;">
@@ -40572,7 +40625,6 @@ function viewChangelogModal() {
   document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-// Global floating toast helper
 function showFloatingToast(msg) {
   const existing = document.getElementById('mfFloatingToast');
   if (existing) existing.remove();
@@ -40589,7 +40641,6 @@ function showFloatingToast(msg) {
     setTimeout(() => toast.remove(), 300);
   }, 2600);
 }
-
 // --- FEATURE 14: OFFLINE MODE ENGINE ---
 
 function renderOfflineModeView() {

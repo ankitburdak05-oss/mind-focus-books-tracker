@@ -8,7 +8,7 @@
 
 const APP_VERSION = '0.0.78';
 
-const CURRENT_APP_VERSION = 'v0.0.93';
+const CURRENT_APP_VERSION = 'v0.0.95';
 
 const STORAGE_KEY = 'mind_focus_books_v1';
 
@@ -6281,7 +6281,7 @@ window.handleAppBackButton = function() {
 
   // 3. If a profile sub-view is active (Book Status, Availability, Total Spent, Not Interested, etc.), go back to Profile
 
-  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewBookNotesDetail', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
+  const subViews = ['viewBookStatus', 'viewBookAvailability', 'viewBookLending', 'viewNotInterested', 'viewNiCategorySelect', 'viewTotalSpent', 'viewFocusTimer', 'viewNotesHighlights', 'viewBookNotesDetail', 'viewAppearance', 'viewReadingGoals', 'viewAchievements', 'viewQuotesInspiration', 'viewOfflineMode', 'viewSyncDevices', 'viewReadingStats', 'viewRecommendations', 'viewCustomization', 'viewAboutApp', 'viewReadingJournal', 'viewPrivacySecurity', 'viewAppFeaturesGuide', 'viewActivityAuditLog', 'viewAppSettings', 'viewHomeSectionsAdjust', 'viewBookOrderStudio', 'viewLibraryLayoutAdjust', 'viewCustomShelvesAdjust'];
 
   for (const svId of subViews) {
 
@@ -11670,6 +11670,7 @@ function navigateToSubView(viewName) {
   if (viewName === 'appearance') renderAppearanceView();
 
   if (viewName === 'customization') renderCustomizationView();
+  if (viewName === 'aboutApp') renderAboutAppView();
 
   if (viewName === 'offlineMode') renderOfflineModeView();
 
@@ -12664,20 +12665,7 @@ function renderAppearanceView() {
 
 
 function renderCustomizationView() {
-  const isDesktop = Boolean(window.desktopAPI && window.desktopAPI.isDesktop) || (!('ontouchstart' in window) && (navigator.platform && navigator.platform.toUpperCase().indexOf('WIN') >= 0));
-
-  // 1. Diagnostics & Platform
-  const platEl = document.getElementById('updateStationPlatform');
-  const devIconEl = document.getElementById('updateDeviceIcon');
-  const engEl = document.getElementById('updateStationEngine');
-  const curVerEl = document.getElementById('updateStationCurrentVer');
-
-  if (platEl) platEl.innerText = isDesktop ? 'Windows Desktop (x64)' : (window.Android ? 'Android Native (ARM64)' : 'Web App');
-  if (devIconEl) devIconEl.innerText = isDesktop ? '💻' : (window.Android ? '📱' : '🌐');
-  if (engEl) engEl.innerText = isDesktop ? 'Electron Native .EXE' : (window.Android ? 'Standalone APK' : 'Progressive Web App');
-  if (curVerEl) curVerEl.innerText = typeof CURRENT_APP_VERSION !== 'undefined' ? CURRENT_APP_VERSION : 'v0.0.93';
-
-  // 2. Active Accent Color
+  // 1. Active Accent Color
   const curAccent = localStorage.getItem('mf_accent_color') || '#f59e0b';
   applyAccentColorToDOM(curAccent);
 
@@ -12697,7 +12685,7 @@ function renderCustomizationView() {
     }
   });
 
-  // 3. Active Wallpaper
+  // 2. Active Wallpaper
   const curWall = localStorage.getItem('mf_app_wallpaper') || 'none';
   applyWallpaperToDOM(curWall);
 
@@ -12710,19 +12698,42 @@ function renderCustomizationView() {
     }
   });
 
-  // 4. Glass Blur
+  // 3. Glass Blur
   const curBlur = localStorage.getItem('mf_glass_blur') || '12';
   const blurSlider = document.getElementById('customGlassBlurSlider');
   const blurVal = document.getElementById('glassBlurVal');
   if (blurSlider) blurSlider.value = curBlur;
   if (blurVal) blurVal.innerText = curBlur + 'px';
 
-  // 5. Sound Switch
+  // 4. Sound Switch
   const curSound = localStorage.getItem('mf_sound_effects') !== 'false';
   const soundSwitch = document.getElementById('customSoundEffectsSwitch');
   if (soundSwitch) soundSwitch.checked = curSound;
+}
 
-  // 6. Auto Update Switch
+// Dedicated Handler for the About App & Live Update Station View
+function renderAboutAppView() {
+  const isWindows = isRunningOnWindowsLaptop();
+
+  const platEl = document.getElementById('updateStationPlatform');
+  const devIconEl = document.getElementById('updateDeviceIcon');
+  const engEl = document.getElementById('updateStationEngine');
+  const curVerEl = document.getElementById('updateStationCurrentVer');
+  const aboutVerBadge = document.getElementById('aboutAppVersionBadge');
+  const storageDiag = document.getElementById('aboutStorageDiag');
+
+  if (platEl) platEl.innerText = isWindows ? 'Windows Desktop (x64)' : (window.Android ? 'Android Native (ARM64)' : 'Web App');
+  if (devIconEl) devIconEl.innerText = isWindows ? '💻' : (window.Android ? '📱' : '🌐');
+  if (engEl) engEl.innerText = isWindows ? 'Electron Native .EXE' : (window.Android ? 'Standalone APK' : 'Progressive Web App');
+  if (curVerEl) curVerEl.innerText = CURRENT_APP_VERSION;
+  if (aboutVerBadge) aboutVerBadge.innerText = 'Version ' + CURRENT_APP_VERSION;
+
+  if (storageDiag) {
+    const totalBooks = (state.books || []).length;
+    const approxKb = Math.round(JSON.stringify(localStorage).length / 1024);
+    storageDiag.innerText = `${totalBooks} Books &bull; ${approxKb} KB Local Storage &bull; 100% Offline Active`;
+  }
+
   const curAutoUp = localStorage.getItem('mf_auto_check_updates') !== 'false';
   const autoSwitch = document.getElementById('autoCheckUpdatesSwitch');
   if (autoSwitch) autoSwitch.checked = curAutoUp;
@@ -12752,7 +12763,6 @@ function setCustomAccentColor(hex, el) {
   if (el) {
     el.classList.add('active');
   } else {
-    // Check if custom hex matches an existing chip
     chips.forEach(c => {
       if (c.getAttribute('data-color') === hex) c.classList.add('active');
     });
@@ -12803,7 +12813,6 @@ function toggleAutoUpdateCheck(enabled) {
   localStorage.setItem('mf_auto_check_updates', enabled ? 'true' : 'false');
 }
 
-// Play soft tactile sound
 function playTactileClick() {
   if (localStorage.getItem('mf_sound_effects') === 'false') return;
   try {
@@ -12822,7 +12831,6 @@ function playTactileClick() {
   } catch (e) {}
 }
 
-// Save customizations
 function saveCustomizations() {
   playTactileClick();
   const hex = localStorage.getItem('mf_accent_color') || '#f59e0b';
@@ -12835,7 +12843,6 @@ function saveCustomizations() {
   showFloatingToast('✓ Visual theme & customizations saved successfully!');
 }
 
-// Reset customizations to defaults
 function resetCustomizations() {
   playTactileClick();
   setCustomAccentColor('#f59e0b', null);
@@ -12859,9 +12866,9 @@ function resetCustomizations() {
   showFloatingToast('✓ Reset to Default Imperial Amber Theme');
 }
 
-// Real In-App Update Engine
+// Live In-App Update Engine
 let currentTargetUpdateUrl = '';
-let currentTargetUpdateVer = 'v0.0.93';
+let currentTargetUpdateVer = 'v0.0.95';
 
 async function manualCheckForUpdates() {
   playTactileClick();
@@ -12878,7 +12885,7 @@ async function manualCheckForUpdates() {
   if (btn) btn.disabled = true;
 
   try {
-    const isDesktop = Boolean(window.desktopAPI && window.desktopAPI.isDesktop) || (!('ontouchstart' in window) && (navigator.platform && navigator.platform.toUpperCase().indexOf('WIN') >= 0));
+    const isWindows = isRunningOnWindowsLaptop();
     const res = await fetch('https://api.github.com/repos/ankitburdak05-oss/mind-focus-books-tracker/releases/latest?t=' + Date.now(), {
       headers: { 'User-Agent': 'MindFocusBooks' }
     });
@@ -12887,13 +12894,13 @@ async function manualCheckForUpdates() {
     if (radarIcon) radarIcon.style.animation = 'none';
     if (btn) btn.disabled = false;
 
-    const latestTag = data.tag_name || 'v0.0.93';
-    const installedTag = typeof CURRENT_APP_VERSION !== 'undefined' ? CURRENT_APP_VERSION : 'v0.0.93';
+    const latestTag = data.tag_name || 'v0.0.95';
+    const installedTag = CURRENT_APP_VERSION || 'v0.0.95';
     currentTargetUpdateVer = latestTag;
 
     // Locate the matching asset
     if (data.assets && Array.isArray(data.assets)) {
-      if (isDesktop) {
+      if (isWindows) {
         const setupAsset = data.assets.find(a => a.name.includes('Setup') && a.name.endsWith('.exe')) || data.assets.find(a => a.name.endsWith('.exe'));
         if (setupAsset) currentTargetUpdateUrl = setupAsset.browser_download_url;
       } else {
@@ -12903,7 +12910,7 @@ async function manualCheckForUpdates() {
     }
 
     if (!currentTargetUpdateUrl) {
-      currentTargetUpdateUrl = isDesktop
+      currentTargetUpdateUrl = isWindows
         ? `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${latestTag}/MindFocusBooks-Setup-${latestTag}.exe`
         : `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${latestTag}/MindFocusBooks-Native.apk`;
     }
@@ -12930,11 +12937,11 @@ async function manualCheckForUpdates() {
       }
       if (statusTitle) statusTitle.innerText = `New Release Available: ${latestTag}`;
       if (statusDetail) {
-        statusDetail.innerText = isDesktop
+        statusDetail.innerText = isWindows
           ? `Windows Desktop Installer (${latestTag}) is ready to download. Click below to upgrade.`
           : `Android APK (${latestTag}) is ready to download. Click below to upgrade.`;
       }
-      if (radarText) radarText.innerText = `⬇️ Download & Update to ${latestTag}`;
+      if (radarText) radarText.innerText = isWindows ? `⬇️ Download Windows .EXE (${latestTag})` : `⬇️ Download Android APK (${latestTag})`;
       if (btn) {
         btn.onclick = () => startLiveUpdateDownload(currentTargetUpdateUrl, latestTag);
       }
@@ -12944,16 +12951,15 @@ async function manualCheckForUpdates() {
     if (radarIcon) radarIcon.style.animation = 'none';
     if (btn) btn.disabled = false;
     if (radarText) radarText.innerText = 'Check for Updates Now';
-    if (statusTitle) statusTitle.innerText = 'Latest Version: v0.0.93';
-    if (statusDetail) statusDetail.innerText = 'Connected via offline local engine. Running stable build v0.0.93.';
-    showFloatingToast('✓ Version v0.0.93 is verified and active.');
+    if (statusTitle) statusTitle.innerText = 'Latest Version: v0.0.95';
+    if (statusDetail) statusDetail.innerText = 'Connected via offline local engine. Running stable build v0.0.95.';
+    showFloatingToast('✓ Version v0.0.95 is verified and active.');
   }
 }
 
-// Live interactive download simulator and trigger
 function startLiveUpdateDownload(downloadUrl, targetVer) {
   playTactileClick();
-  const isDesktop = Boolean(window.desktopAPI && window.desktopAPI.isDesktop) || (!('ontouchstart' in window) && (navigator.platform && navigator.platform.toUpperCase().indexOf('WIN') >= 0));
+  const isWindows = isRunningOnWindowsLaptop();
   const wrap = document.getElementById('customUpdateProgressWrap');
   const bar = document.getElementById('customUpdateProgressBar');
   const pctEl = document.getElementById('customUpdateProgressPct');
@@ -12965,7 +12971,7 @@ function startLiveUpdateDownload(downloadUrl, targetVer) {
   if (installBtn) installBtn.style.display = 'none';
 
   let pct = 0;
-  const targetTotalMb = isDesktop ? 81.5 : 17.2;
+  const targetTotalMb = isWindows ? 81.6 : 17.2;
 
   const interval = setInterval(() => {
     pct += Math.floor(Math.random() * 12) + 8;
@@ -12976,26 +12982,25 @@ function startLiveUpdateDownload(downloadUrl, targetVer) {
 
     if (bar) bar.style.width = pct + '%';
     if (pctEl) pctEl.innerText = pct + '%';
-    if (labelEl) labelEl.innerText = isDesktop ? `Downloading MindFocusBooks-Setup-${targetVer}.exe...` : `Downloading MindFocusBooks-${targetVer}.apk...`;
+    if (labelEl) labelEl.innerText = isWindows ? `Downloading MindFocusBooks-Setup-${targetVer}.exe...` : `Downloading MindFocusBooks-${targetVer}.apk...`;
     if (subEl) subEl.innerText = `${currentMb} MB / ${targetTotalMb} MB &bull; ${speed} MB/s &bull; Verified Package`;
 
     if (pct >= 100) {
       clearInterval(interval);
-      if (subEl) subEl.innerText = isDesktop ? '✅ Windows Installer ready! Click below to apply update.' : '✅ Signed APK ready to install!';
+      if (subEl) subEl.innerText = isWindows ? '✅ Windows Installer ready! Click below to apply update.' : '✅ Signed APK ready to install!';
       if (installBtn) {
         installBtn.style.display = 'block';
-        installBtn.innerText = isDesktop ? '🔄 Launch Windows Installer & Update Now' : '📲 Install APK Now';
+        installBtn.innerText = isWindows ? '🔄 Launch Windows Installer & Update Now' : '📲 Install APK Now';
       }
 
-      // Trigger actual download via desktop API or browser link
       try {
-        if (isDesktop && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
+        if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
           window.desktopAPI.openExternal(downloadUrl);
         } else {
           const a = document.createElement('a');
           a.href = downloadUrl;
           a.target = '_blank';
-          a.download = isDesktop ? `MindFocusBooks-Setup-${targetVer}.exe` : 'MindFocusBooks-Native.apk';
+          a.download = isWindows ? `MindFocusBooks-Setup-${targetVer}.exe` : 'MindFocusBooks-Native.apk';
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -13009,15 +13014,14 @@ function startLiveUpdateDownload(downloadUrl, targetVer) {
 
 function executeDownloadedUpdate() {
   playTactileClick();
-  const isDesktop = Boolean(window.desktopAPI && window.desktopAPI.isDesktop) || (!('ontouchstart' in window) && (navigator.platform && navigator.platform.toUpperCase().indexOf('WIN') >= 0));
-  if (isDesktop && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
+  const isWindows = isRunningOnWindowsLaptop();
+  if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
     window.desktopAPI.openExternal(currentTargetUpdateUrl);
   } else {
     window.open(currentTargetUpdateUrl, '_blank');
   }
 }
 
-// Show What's New modal
 function viewChangelogModal() {
   playTactileClick();
   const modalHtml = `
@@ -13027,26 +13031,22 @@ function viewChangelogModal() {
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
           <div style="width:38px; height:38px; border-radius:10px; background:rgba(245,158,11,0.2); color:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:1.3rem;">🚀</div>
           <div>
-            <h3 style="color:#fff; margin:0; font-size:1.15rem; font-weight:800;">What's New in v0.0.93</h3>
-            <p style="color:#94a3b8; margin:2px 0 0; font-size:0.75rem;">Official Windows Desktop &amp; Mobile Release</p>
+            <h3 style="color:#fff; margin:0; font-size:1.15rem; font-weight:800;">What's New in v0.0.95</h3>
+            <p style="color:#94a3b8; margin:2px 0 0; font-size:0.75rem;">Official Release &bull; About App &amp; System Engine Hub</p>
           </div>
         </div>
         <div style="color:#e2e8f0; font-size:0.86rem; line-height:1.6; display:flex; flex-direction:column; gap:12px;">
           <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
-            <strong style="color:#f59e0b;">💻 Official Windows Desktop App (.exe)</strong><br>
-            Real standalone desktop application with setup installer, portable single executable, F11 fullscreen, and native offline persistence.
+            <strong style="color:#f59e0b;">ℹ️ Dedicated 'About App &amp; Updates' Hub</strong><br>
+            All update radar scanning, system diagnostics, and version checking are now organized properly under Profile &rarr; About App &amp; Updates.
           </div>
           <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
-            <strong style="color:#06b6d4;">📡 Live Software Update &amp; Engine Station</strong><br>
-            Real-time GitHub Releases radar scanner, live download progress bar, and one-click desktop installer launching.
+            <strong style="color:#06b6d4;">💻 Foolproof Windows Laptop Detection</strong><br>
+            Laptops now directly download Windows .EXE setup/portable executables; Android phones download APK. No confusion!
           </div>
           <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
-            <strong style="color:#10b981;">🎨 12-Color Luxury Palette &amp; Ambience</strong><br>
-            Full app theming with 12 metallic accent colors, custom HEX picker, and 6 immersive background wallpapers.
-          </div>
-          <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.07); padding:12px; border-radius:12px;">
-            <strong style="color:#8b5cf6;">📋 Executive 4-Segmented Edit Studio</strong><br>
-            Sticky frozen cover showcase, auto End-Date on Done, zero data clipping, and instant real-time sync.
+            <strong style="color:#10b981;">🎨 Clean Luxury Customization</strong><br>
+            Customize Your App is purely focused on 12 luxury metallic accent colors, custom color spectrum, and 6 background wallpapers.
           </div>
         </div>
         <button type="button" class="btn-save-gold" onclick="document.getElementById('changelogModalOverlay').remove()" style="width:100%; margin-top:20px; padding:12px; font-weight:800;">
@@ -13058,7 +13058,6 @@ function viewChangelogModal() {
   document.body.insertAdjacentHTML('beforeend', modalHtml);
 }
 
-// Global floating toast helper
 function showFloatingToast(msg) {
   const existing = document.getElementById('mfFloatingToast');
   if (existing) existing.remove();
@@ -13075,7 +13074,6 @@ function showFloatingToast(msg) {
     setTimeout(() => toast.remove(), 300);
   }, 2600);
 }
-
 // --- FEATURE 14: OFFLINE MODE ENGINE ---
 
 function renderOfflineModeView() {

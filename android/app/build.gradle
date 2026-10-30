@@ -22,9 +22,9 @@ android {
 
         targetSdk 34
 
-        versionCode System.getenv("GITHUB_RUN_NUMBER") ? (Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER")) + 8589) : 8589
+        versionCode System.getenv("GITHUB_RUN_NUMBER") ? (Integer.parseInt(System.getenv("GITHUB_RUN_NUMBER")) + 8590) : 8590
 
-        versionName "0.0.94"
+        versionName "0.0.95"
 
     }
 
