@@ -1,10 +1,10 @@
 window.BROADCAST_NOTICE = {
   "active": true,
-  "id": "notice-v0.0.92-ultra-luxury-studio",
-  "version": "v0.0.92",
+  "id": "notice-v0.0.93-windows-desktop-edition",
+  "version": "v0.0.93",
   "type": "feature",
-  "message": "v0.0.92: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+  "message": "v0.0.93: Official Windows Desktop Edition (.exe) released for Laptop & PC! Download installer or portable exe.",
   "actionText": "Check Library",
   "actionUrl": "#viewLibrary",
-  "timestamp": "2026-10-30T04:47:43.828Z"
+  "timestamp": "2026-10-30T06:30:00.000Z"
 };

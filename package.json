@@ -1,0 +1,53 @@
+{
+  "name": "mind-focus-books",
+  "version": "0.0.93",
+  "description": "Mind Focus Books - Reading Tracker & Library Desktop Edition",
+  "main": "electron-main.js",
+  "author": "Ankit Burdak",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win --x64",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.mindfocus.bookstracker.desktop",
+    "productName": "Mind Focus Books",
+    "copyright": "Copyright © 2026 Mind Focus Books",
+    "directories": {
+      "output": "dist-desktop"
+    },
+    "win": {
+      "icon": "icon.ico",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Mind Focus Books",
+      "uninstallDisplayName": "Mind Focus Books",
+      "artifactName": "MindFocusBooks-Setup-v${version}.exe"
+    },
+    "portable": {
+      "artifactName": "MindFocusBooks-Portable-v${version}.exe"
+    },
+    "files": [
+      "**/*",
+      "!android/**",
+      "!.git/**",
+      "!.github/**",
+      "!dist-desktop/**",
+      "!*.apk",
+      "!*.zip"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8"
+  }
+}

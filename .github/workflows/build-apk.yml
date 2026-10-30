@@ -1,4 +1,4 @@
-name: Build Native Android APK
+name: Build Android APK & Windows Desktop App
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-android:
     runs-on: ubuntu-latest
 
     steps:
@@ -28,6 +28,7 @@ jobs:
         echo "ANDROID_SDK_ROOT=/usr/local/lib/android/sdk" >> $GITHUB_ENV
         mkdir -p android
         echo "sdk.dir=/usr/local/lib/android/sdk" > android/local.properties
+
     - name: Prepare Android Assets
       run: |
         mkdir -p android/app/src/main/assets
@@ -37,7 +38,7 @@ jobs:
         cp -a ./*.json android/app/src/main/assets/ || true
         cp -a ./*.png android/app/src/main/assets/ || true
         cp -a ./*.jpg android/app/src/main/assets/ || true
-        cp explore.js android/app/src/main/assets/
+        cp explore.js android/app/src/main/assets/ || true
 
     - name: Ensure Permanent Keystore Exists
       working-directory: ./android/app
@@ -84,8 +85,61 @@ jobs:
         name: MindFocusBooks-Native-APK
         path: MindFocusBooks-Native.apk
 
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 20
+
+    - name: Install Dependencies
+      run: npm install
+
+    - name: Build Windows Executables (Installer + Portable)
+      run: npm run dist
+
+    - name: Locate Windows Executables
+      shell: bash
+      run: |
+        ls -la dist-desktop/
+
+    - name: Upload Windows Executables Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: MindFocusBooks-Windows-Executables
+        path: dist-desktop/*.exe
+
+  release:
+    needs: [build-android, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Download Android Artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: MindFocusBooks-Native-APK
+        path: ./artifacts/
+
+    - name: Download Windows Artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: MindFocusBooks-Windows-Executables
+        path: ./artifacts/
+
+    - name: Display Artifacts
+      run: |
+        ls -la ./artifacts/
+
     - name: Commit Latest APK to Main
       run: |
+        cp ./artifacts/MindFocusBooks-Native.apk ./MindFocusBooks-Native.apk || true
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git add MindFocusBooks-Native.apk
@@ -95,7 +149,7 @@ jobs:
     - name: Determine Release Tag and Title
       id: get_tag
       run: |
-        TAG=$(node -e "const c = require('./remote-config.json'); console.log((c.activeRelease && c.activeRelease.version) || (c.latest && c.latest.version) || (c.latest_version ? 'v'+c.latest_version : 'v0.0.68'));")
+        TAG=$(node -e "const c = require('./remote-config.json'); console.log((c.activeRelease && c.activeRelease.version) || (c.latest && c.latest.version) || (c.latest_version ? 'v'+c.latest_version : 'v0.0.93'));")
         NAME=$(node -e "const c = require('./remote-config.json'); console.log((c.activeRelease && c.activeRelease.name) || (c.latest && c.latest.name) || ('Mind Focus Books ' + '$TAG'));")
         echo "tag=$TAG" >> $GITHUB_OUTPUT
         echo "name=$NAME" >> $GITHUB_OUTPUT
@@ -105,8 +159,24 @@ jobs:
       with:
         tag_name: ${{ steps.get_tag.outputs.tag }}
         name: ${{ steps.get_tag.outputs.name }}
-        body: "Mind Focus Books Native Android Release. Includes 3D Dictionary, Mystery Golden Gift Box, and In-App Update Engine."
-        files: MindFocusBooks-Native.apk
+        body: |
+          ### 🚀 Mind Focus Books v0.0.93 Released!
+
+          #### 💻 Windows Desktop Edition (Laptop / PC)
+          - **Setup Installer**: `MindFocusBooks-Setup-v0.0.93.exe` (Complete Windows installer with desktop and start menu shortcuts)
+          - **Portable Executable**: `MindFocusBooks-Portable-v0.0.93.exe` (Standalone single file, run immediately without installation)
+
+          #### 📱 Android Edition
+          - **Native APK**: `MindFocusBooks-Native.apk` (Signed standalone offline Android APK)
+
+          #### ✨ What's New
+          - **Full Windows Desktop Application**: Offline Electron application with native window shortcuts, fullscreen mode (F11), zoom controls (Ctrl+/Ctrl-), and single-instance lock.
+          - **Executive 3D Edit Studio**: 4 segmented luxury tabs, zero data clipping, auto end date calculation, real-time live preview.
+          - **Activity Audit Log**: 100% interactive event history linked to books and filters.
+          - **Seamless Offline Reading**: High-performance local storage persistence.
+        files: |
+          ./artifacts/MindFocusBooks-Native.apk
+          ./artifacts/*.exe
         make_latest: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
