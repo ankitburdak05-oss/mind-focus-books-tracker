@@ -7985,6 +7985,7 @@ window.selectEditBookStore = function(storeName) {
       btn.classList.remove('active');
     }
   });
+  if (typeof switchEditStudioTab === 'function') switchEditStudioTab('info');
   if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
 };
 
@@ -20270,7 +20271,7 @@ function getBookMonthYear(book) {
 }
 
 // 1. Dynamic Bahar: renderMonthlyBarChart()
-window.renderMonthlyBarChart = function() {
+window.renderMonthlyBarChartModern = window.renderMonthlyBarChart = function() {
   const container = document.getElementById('monthlyBarsContainer');
   if (!container) return;
 
@@ -20714,4 +20715,20 @@ window.onPagesSliderInput = function(pctVal) {
   const elCur = document.getElementById('editCurrentPage');
   if (elCur) elCur.value = curPage;
   if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
+};
+
+
+window.switchEditStudioTab = function(tabName) {
+  const tabs = ['info', 'reading', 'store', 'timeline'];
+  tabs.forEach(t => {
+    const pane = document.getElementById('editTabPane_' + t);
+    const btn = document.getElementById('editTabBtn_' + t);
+    if (pane) pane.style.display = (t === tabName) ? 'block' : 'none';
+    if (btn) btn.classList.toggle('active', t === tabName);
+  });
+  const body = document.querySelector('.luxury-studio-body');
+  if (body) body.scrollTop = 0;
+  if (typeof syncEditModalLiveHeroPreview === 'function') {
+    syncEditModalLiveHeroPreview();
+  }
 };
