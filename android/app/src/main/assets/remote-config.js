@@ -1,36 +1,37 @@
-window.REMOTE_CONFIG = {
+window.__DEFAULT_REMOTE_CONFIG__ = {
   "activeRelease": {
-    "version": "v0.0.95",
-    "name": "Mind Focus Books v0.0.95 (About App & Live System Engine Hub)",
-    "releaseNotes": "v0.0.95: Dedicated About App & Updates Hub in Profile, Live Radar Scanner, 12 Luxury Colors, Ambience Themes & Windows Desktop + Android Detection",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Native.apk",
-    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Setup-v0.0.95.exe",
-    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Portable-v0.0.95.exe",
+    "version": "v0.0.96",
+    "name": "Mind Focus Books v0.0.96 (Native In-App Desktop Updater & Live Radar Engine)",
+    "releaseNotes": "v0.0.96: Native In-App Desktop Updater (No browser opening, real MB & speed progress bar, automatic app close & seamless Windows setup launcher)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.96/MindFocusBooks-Native.apk",
+    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.96/MindFocusBooks-Setup-v0.0.96.exe",
+    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.96/MindFocusBooks-Portable-v0.0.96.exe",
     "mandatory": false,
-    "timestamp": "2026-10-30T08:00:00.000Z"
+    "timestamp": "2026-10-30T08:32:01.998Z"
   },
   "latest": {
-    "version": "v0.0.95",
-    "name": "Mind Focus Books v0.0.95 (About App & Live System Engine Hub)",
-    "releaseNotes": "v0.0.95: Dedicated About App & Updates Hub in Profile, Live Radar Scanner, 12 Luxury Colors, Ambience Themes & Windows Desktop + Android Detection",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Native.apk",
-    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Setup-v0.0.95.exe",
-    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Portable-v0.0.95.exe"
+    "version": "v0.0.96",
+    "name": "Mind Focus Books v0.0.96 (Native In-App Desktop Updater & Live Radar Engine)",
+    "releaseNotes": "v0.0.96: Native In-App Desktop Updater (No browser opening, real MB & speed progress bar, automatic app close & seamless Windows setup launcher)",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.96/MindFocusBooks-Native.apk",
+    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.96/MindFocusBooks-Setup-v0.0.96.exe",
+    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.96/MindFocusBooks-Portable-v0.0.96.exe"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
-  "latest_version": "0.0.95",
-  "version_code": 8590,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.95/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.95: Dedicated About App & Updates Hub in Profile, Live Radar Scanner, 12 Luxury Colors, Ambience Themes & Windows Desktop + Android Detection",
+  "latest_version": "0.0.96",
+  "version_code": 8591,
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.96/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.96: Native In-App Desktop Updater (No browser opening, real MB & speed progress bar, automatic app close & seamless Windows setup launcher)",
   "force_update": false,
   "maintenance": false,
-  "published_at": "2026-10-30T08:00:00.000Z",
+  "published_at": "2026-10-30T08:32:02.002Z",
   "features": {
     "inAppUpdates": true,
     "smartBookDossier": true,
     "exploreModularEngine": true,
     "windowsDesktopSupport": true,
-    "aboutAppUpdatesHub": true
+    "aboutAppUpdatesHub": true,
+    "nativeDesktopInAppUpdater": true
   }
 };
