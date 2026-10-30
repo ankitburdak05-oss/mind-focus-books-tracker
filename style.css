@@ -10538,3 +10538,273 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 .edit-quick-chip-btn:active {
   transform: scale(0.97) !important;
 }
+
+
+/* ================= ULTRA-LUXURY EXECUTIVE EDIT STUDIO (v0.0.87) ================= */
+.modal-card-fullscreen-studio.luxury-studio-theme {
+  background: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #090d16 65%, #030712 100%) !important;
+  color: #f8fafc !important;
+}
+
+.luxury-studio-header {
+  background: rgba(10, 15, 29, 0.88) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-bottom: 1px solid rgba(245, 158, 11, 0.25) !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.6) !important;
+  padding: 14px 18px !important;
+}
+
+.luxury-back-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 12px !important;
+  color: #ffffff !important;
+  transition: all 0.2s ease !important;
+}
+.luxury-back-btn:hover {
+  background: rgba(245, 158, 11, 0.2) !important;
+  border-color: #f59e0b !important;
+  color: #fbbf24 !important;
+  transform: scale(1.05) !important;
+}
+
+.luxury-gold-title {
+  font-size: 1.2rem !important;
+  font-weight: 900 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #fde68a 50%, #f59e0b 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  letter-spacing: -0.01em !important;
+}
+
+.luxury-close-btn {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 12px !important;
+  color: #e2e8f0 !important;
+  transition: all 0.2s ease !important;
+}
+.luxury-close-btn:hover {
+  background: rgba(239, 68, 68, 0.25) !important;
+  border-color: #ef4444 !important;
+  color: #f87171 !important;
+}
+
+/* Luxury Card Boxes */
+.studio-card-box.luxury-card {
+  background: linear-gradient(145deg, rgba(22, 29, 49, 0.72) 0%, rgba(12, 17, 32, 0.88) 100%) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px !important;
+  padding: 18px 20px !important;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08) !important;
+  margin-bottom: 16px !important;
+  transition: all 0.25s ease !important;
+}
+.studio-card-box.luxury-card:focus-within {
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  box-shadow: 0 12px 36px rgba(245, 158, 11, 0.12), inset 0 1px 0 rgba(245, 158, 11, 0.2) !important;
+}
+
+.studio-card-box.luxury-card .studio-card-title {
+  font-size: 0.95rem !important;
+  font-weight: 800 !important;
+  color: #fbbf24 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  margin-bottom: 14px !important;
+  padding-bottom: 8px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07) !important;
+  letter-spacing: 0.02em !important;
+}
+
+/* Luxury Form Inputs */
+.luxury-input {
+  background: rgba(9, 13, 24, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 14px !important;
+  color: #ffffff !important;
+  font-size: 0.94rem !important;
+  font-weight: 600 !important;
+  padding: 12px 16px !important;
+  height: 48px !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.22s ease !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+.luxury-input:hover {
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+.luxury-input:focus {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.28), 0 4px 16px rgba(245, 158, 11, 0.18) !important;
+  background: rgba(14, 20, 36, 0.96) !important;
+  outline: none !important;
+}
+
+.luxury-textarea {
+  background: rgba(9, 13, 24, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  border-radius: 14px !important;
+  color: #ffffff !important;
+  font-size: 0.92rem !important;
+  padding: 14px 16px !important;
+  min-height: 110px !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.22s ease !important;
+  width: 100% !important;
+  line-height: 1.6 !important;
+  box-sizing: border-box !important;
+}
+.luxury-textarea:focus {
+  border-color: #f59e0b !important;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.28), 0 4px 16px rgba(245, 158, 11, 0.18) !important;
+  outline: none !important;
+}
+
+/* Luxury Labels */
+.luxury-card label {
+  font-size: 0.72rem !important;
+  font-weight: 800 !important;
+  letter-spacing: 0.05em !important;
+  text-transform: uppercase !important;
+  color: #fbbf24 !important;
+  margin-bottom: 7px !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+}
+
+/* Luxury Segmented Status Grid */
+.edit-status-segment-grid {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: 8px !important;
+  margin-bottom: 12px !important;
+}
+.edit-status-segment-btn {
+  padding: 11px 14px !important;
+  border-radius: 14px !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #cbd5e1 !important;
+  font-size: 0.82rem !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  user-select: none !important;
+}
+.edit-status-segment-btn:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+}
+.edit-status-segment-btn.active[data-status="READING"] {
+  background: rgba(56, 189, 248, 0.24) !important;
+  border-color: #38bdf8 !important;
+  color: #38bdf8 !important;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.35) !important;
+  font-weight: 900 !important;
+  transform: scale(1.02) !important;
+}
+.edit-status-segment-btn.active[data-status="DONE"] {
+  background: rgba(16, 185, 129, 0.25) !important;
+  border-color: #10b981 !important;
+  color: #10b981 !important;
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.4) !important;
+  font-weight: 900 !important;
+  transform: scale(1.02) !important;
+}
+.edit-status-segment-btn.active[data-status="PENDING"] {
+  background: rgba(245, 158, 11, 0.22) !important;
+  border-color: #f59e0b !important;
+  color: #fbbf24 !important;
+  box-shadow: 0 0 14px rgba(245, 158, 11, 0.35) !important;
+  font-weight: 900 !important;
+  transform: scale(1.02) !important;
+}
+.edit-status-segment-btn.active[data-status="LENT"] {
+  background: rgba(168, 85, 247, 0.25) !important;
+  border-color: #a855f7 !important;
+  color: #c084fc !important;
+  box-shadow: 0 0 14px rgba(168, 85, 247, 0.35) !important;
+  font-weight: 900 !important;
+  transform: scale(1.02) !important;
+}
+
+/* Luxury Range Slider */
+.luxury-range-slider {
+  width: 100% !important;
+  height: 8px !important;
+  border-radius: 999px !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  outline: none !important;
+  -webkit-appearance: none !important;
+  cursor: pointer !important;
+}
+.luxury-range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none !important;
+  width: 22px !important;
+  height: 22px !important;
+  border-radius: 50% !important;
+  background: linear-gradient(135deg, #fbbf24 0%, #ea580c 100%) !important;
+  border: 2px solid #ffffff !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.7) !important;
+  cursor: pointer !important;
+  transition: transform 0.15s ease !important;
+}
+.luxury-range-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15) !important;
+}
+
+/* Luxury Footer */
+.luxury-studio-footer {
+  background: rgba(10, 15, 29, 0.92) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border-top: 1px solid rgba(245, 158, 11, 0.25) !important;
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.6) !important;
+  padding: 14px 18px !important;
+}
+.luxury-footer-cancel {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  color: #e2e8f0 !important;
+  font-weight: 700 !important;
+  border-radius: 14px !important;
+  padding: 13px 22px !important;
+  transition: all 0.2s ease !important;
+}
+.luxury-footer-cancel:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+.luxury-footer-save {
+  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%) !important;
+  border: 1px solid #fde68a !important;
+  color: #0b0f19 !important;
+  font-weight: 900 !important;
+  font-size: 1rem !important;
+  letter-spacing: 0.03em !important;
+  border-radius: 14px !important;
+  padding: 13px 24px !important;
+  box-shadow: 0 6px 22px rgba(245, 158, 11, 0.45) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+.luxury-footer-save:hover {
+  filter: brightness(1.1) !important;
+  box-shadow: 0 8px 28px rgba(245, 158, 11, 0.65) !important;
+  transform: translateY(-1px) !important;
+}
+.luxury-footer-save:active {
+  transform: scale(0.98) !important;
+}

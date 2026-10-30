@@ -2948,15 +2948,57 @@ function toggleBookLendingForCurrent() {
 
 
 function onEditBookStatusChange(status) {
-
   const row = document.getElementById('editLentDetailsRow');
-
   if (row) {
-
     row.style.display = status === 'LENT' ? 'flex' : 'none';
-
   }
 
+  const todayStr = typeof getTodayLocalDate === 'function' ? getTodayLocalDate() : new Date().toISOString().split('T')[0];
+
+  // Sync the hidden / native select value
+  const sel = document.getElementById('editBookStatus');
+  if (sel && sel.value !== status) {
+    sel.value = status;
+  }
+
+  // Sync visual segmented buttons
+  document.querySelectorAll('.edit-status-segment-btn').forEach(btn => {
+    if (btn.getAttribute('data-status') === status) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
+  if (status === 'DONE') {
+    // 1. Automatically set End Date to Today if empty or changed to DONE!
+    const endInput = document.getElementById('editEndDate');
+    if (endInput && !endInput.value) {
+      endInput.value = todayStr;
+    }
+    // 2. Automatically mark Current Page = Total Pages!
+    const curP = document.getElementById('editCurrentPage');
+    const totP = document.getElementById('editTotalPages');
+    if (curP && totP) {
+      const totVal = parseInt(totP.value, 10) || 250;
+      if (parseInt(curP.value, 10) < totVal) {
+        curP.value = totVal;
+      }
+    }
+    if (typeof calculateCountDays === 'function') calculateCountDays();
+    if (typeof showToast === 'function') showToast('Status Done: End date set to today! 🎉');
+  } else if (status === 'READING') {
+    // If Start Date is empty, automatically set to today!
+    const startInput = document.getElementById('editStartDate');
+    if (startInput && !startInput.value) {
+      startInput.value = todayStr;
+    }
+    if (typeof calculateCountDays === 'function') calculateCountDays();
+  }
+
+  if (typeof syncEditModalLiveHeroPreview === 'function') {
+    syncEditModalLiveHeroPreview();
+  }
 }
 
 
@@ -20539,6 +20581,20 @@ window.syncEditModalLiveHeroPreview = function() {
   const elBar = document.getElementById('editLiveHeroProgressBar');
   if (elBar) elBar.style.width = pct + '%';
 
+  const elSlider = document.getElementById('editPagesRangeSlider');
+  if (elSlider && document.activeElement !== elSlider) {
+    elSlider.value = pct;
+  }
+
+  // Sync status segmented buttons
+  document.querySelectorAll('.edit-status-segment-btn').forEach(btn => {
+    if (btn.getAttribute('data-status') === status) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
+
   // 5. Price Pill
   const elPrice = document.getElementById('editLiveHeroPriceText');
   if (elPrice) elPrice.innerText = priceVal ? ('₹' + priceVal) : 'Unpriced';
@@ -20642,4 +20698,20 @@ window.updateTakeawayCounter = function() {
   const words = text ? text.split(/\s+/).length : 0;
   const chars = ta.value.length;
   counter.innerText = words + ' words • ' + chars + ' chars';
+};
+
+
+window.setEditBookStatusSegment = function(st) {
+  const sel = document.getElementById('editBookStatus');
+  if (sel) sel.value = st;
+  if (typeof onEditBookStatusChange === 'function') onEditBookStatusChange(st);
+};
+
+window.onPagesSliderInput = function(pctVal) {
+  const pct = parseInt(pctVal, 10) || 0;
+  const totP = Math.max(1, parseInt(document.getElementById('editTotalPages')?.value, 10) || 250);
+  const curPage = Math.min(totP, Math.round((pct / 100) * totP));
+  const elCur = document.getElementById('editCurrentPage');
+  if (elCur) elCur.value = curPage;
+  if (typeof syncEditModalLiveHeroPreview === 'function') syncEditModalLiveHeroPreview();
 };

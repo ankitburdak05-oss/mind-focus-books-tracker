@@ -1,10 +1,10 @@
 {
   "active": true,
-  "id": "notice-v0.0.86-luxury-edit-studio",
-  "version": "v0.0.86",
+  "id": "notice-v0.0.87-ultra-luxury-studio",
+  "version": "v0.0.87",
   "type": "feature",
-  "message": "v0.0.86: Executive Luxury Book Edit Studio with Live Real-time Showcase Banner & Fast Presets",
+  "message": "v0.0.87: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
   "actionText": "Check Library",
   "actionUrl": "#viewLibrary",
-  "timestamp": "2026-10-30T04:11:55.121Z"
+  "timestamp": "2026-10-30T04:47:43.828Z"
 }
