@@ -38277,150 +38277,94 @@ function handleUpdateOverlayClick(e) {
 
 
 function triggerInAppUpdate() {
-
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-
   const rel = cfg?.activeRelease || cfg?.latest || null;
-
   const targetVer = rel?.version || (cfg?.latest_version ? ('v' + cfg.latest_version) : null) || CURRENT_APP_VERSION;
 
-  const downloadUrl = (rel?.apkDownloadUrl) || (cfg?.download_url) ||
+  const isDesktop = Boolean(window.desktopAPI && window.desktopAPI.isDesktop) || (!('ontouchstart' in window) && (navigator.platform && navigator.platform.toUpperCase().indexOf('WIN') >= 0));
 
-    `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Native.apk`;
-
-
+  let downloadUrl = '';
+  if (isDesktop) {
+    downloadUrl = (rel?.windowsSetupDownloadUrl) || (rel?.windowsPortableDownloadUrl) ||
+      `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Setup-${targetVer}.exe`;
+  } else {
+    downloadUrl = (rel?.apkDownloadUrl) || (cfg?.download_url) ||
+      `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Native.apk`;
+  }
 
   // Mark version as installed in local storage
-
   try {
-
     localStorage.setItem('mf_installed_version', targetVer);
-
     const homeCard = document.getElementById('homeUpdateCard');
-
     if (homeCard) homeCard.style.display = 'none';
-
   } catch (e) {}
 
-
-
   const progressWrap = document.getElementById('updateModalProgress');
-
   const progressFill = document.getElementById('updateProgressFill');
-
   const progressPct = document.getElementById('updateProgressPct');
-
   const progressText = document.getElementById('updateProgressText');
-
   const actionBtn = document.getElementById('updateModalActionBtn');
 
-
-
   if (progressWrap) progressWrap.style.display = 'block';
-
   if (actionBtn) {
-
     actionBtn.disabled = true;
-
-    actionBtn.innerText = '⏳ Downloading Signed APK...';
-
+    actionBtn.innerText = isDesktop ? '⏳ Downloading Windows Update (.exe)...' : '⏳ Downloading Signed APK...';
   }
-
-
 
   let pct = 0;
-
   const interval = setInterval(() => {
-
     pct += 15;
-
     if (pct > 90) pct = 90;
-
     if (progressFill) progressFill.style.width = pct + '%';
-
     if (progressPct) progressPct.innerText = pct + '%';
-
   }, 200);
 
-
-
   // If running in Native Standalone Android APK with bridge:
-
-  if (window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
-
+  if (!isDesktop && window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
     window.Android.downloadAndInstallApk(downloadUrl);
-
     setTimeout(() => {
-
       clearInterval(interval);
-
       if (progressFill) progressFill.style.width = '100%';
-
       if (progressPct) progressPct.innerText = '100%';
-
       if (progressText) progressText.innerText = 'Package Ready! Opening Installer...';
-
       if (actionBtn) {
-
         actionBtn.disabled = false;
-
         actionBtn.innerText = `✓ Installed — Re-download APK (${targetVer})`;
-
       }
-
     }, 1500);
-
   } else {
-
-    // Browser fallback
-
+    // Desktop / Browser fallback
     setTimeout(() => {
-
       clearInterval(interval);
-
       if (progressFill) progressFill.style.width = '100%';
-
       if (progressPct) progressPct.innerText = '100%';
+      if (progressText) {
+        progressText.innerText = isDesktop ? 'Desktop .exe Ready! Run downloaded file to update.' : 'Download complete! Tap to install.';
+      }
 
       try {
-
-        const link = document.createElement('a');
-
-        link.href = downloadUrl;
-
-        link.target = '_blank';
-
-        link.download = 'MindFocusBooks-Native.apk';
-
-        document.body.appendChild(link);
-
-        link.click();
-
-        document.body.removeChild(link);
-
+        if (isDesktop && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
+          window.desktopAPI.openExternal(downloadUrl);
+        } else {
+          const link = document.createElement('a');
+          link.href = downloadUrl;
+          link.target = '_blank';
+          link.download = isDesktop ? `MindFocusBooks-Setup-${targetVer}.exe` : 'MindFocusBooks-Native.apk';
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+        }
       } catch (e) {
-
         window.open(downloadUrl, '_blank');
-
       }
 
       if (actionBtn) {
-
         actionBtn.disabled = false;
-
-        actionBtn.innerText = `✓ Download Started — Re-download (${targetVer})`;
-
+        actionBtn.innerText = isDesktop ? `✓ Downloaded — Re-download Windows .exe (${targetVer})` : `✓ Downloaded — Re-download APK (${targetVer})`;
       }
-
     }, 1200);
-
   }
-
 }
-
-
-
-// Background checker for live broadcast notice
 
 async function checkRemoteBroadcastNotice() {
 

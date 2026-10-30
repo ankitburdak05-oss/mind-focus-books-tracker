@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu, shell, globalShortcut } = require('electron');
+const { app, BrowserWindow, Menu, shell, globalShortcut, ipcMain } = require('electron');
 const path = require('path');
 
 // Ensure single instance of the application
@@ -15,7 +15,14 @@ if (!gotTheLock) {
     }
   });
 
-  app.whenReady().then(createMainWindow);
+  app.whenReady().then(() => {
+    ipcMain.on('open-external-url', (event, url) => {
+      if (url && (url.startsWith('http://') || url.startsWith('https://'))) {
+        shell.openExternal(url);
+      }
+    });
+    createMainWindow();
+  });
 }
 
 function createMainWindow() {
