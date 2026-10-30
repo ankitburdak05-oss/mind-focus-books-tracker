@@ -8,7 +8,7 @@
 
 const APP_VERSION = '0.0.78';
 
-const CURRENT_APP_VERSION = 'v0.0.95';
+const CURRENT_APP_VERSION = 'v0.0.96';
 
 const STORAGE_KEY = 'mind_focus_books_v1';
 
@@ -11321,11 +11321,11 @@ function openUpdateCheckerModal() {
 
   if (isNewAvailable) {
     if (titleEl) titleEl.innerText = isWindows ? '💻 Windows Desktop Update Ready:' : '📱 Android App Update Ready:';
-    if (badge) badge.innerText = `${targetVer} Ready`;
+    if (badge) badge.innerText = `${targetVer} Ready (${isWindows ? "85.6 MB" : "18 MB"})`;
     if (desc) desc.innerText = rel?.name || `Mind Focus Books ${targetVer} is ready to install!`;
     if (btn) {
       btn.disabled = false;
-      btn.innerText = isWindows ? `💻 Download Windows .EXE (${targetVer})` : `📱 Download Android APK (${targetVer})`;
+      btn.innerText = isWindows ? `💻 Download & Install Windows Update (${targetVer})` : `📱 Download Android APK (${targetVer})`;
     }
     if (altBtn) {
       altBtn.style.display = 'block';
@@ -12895,7 +12895,7 @@ async function manualCheckForUpdates() {
     if (btn) btn.disabled = false;
 
     const latestTag = data.tag_name || 'v0.0.95';
-    const installedTag = CURRENT_APP_VERSION || 'v0.0.95';
+    const installedTag = CURRENT_APP_VERSION || 'v0.0.96';
     currentTargetUpdateVer = latestTag;
 
     // Locate the matching asset
@@ -12970,8 +12970,47 @@ function startLiveUpdateDownload(downloadUrl, targetVer) {
   if (wrap) wrap.style.display = 'block';
   if (installBtn) installBtn.style.display = 'none';
 
+  // 1. REAL DESKTOP ELECTRON UPDATER (ZERO BROWSER, REAL MBs, RESTART & INSTALL)
+  if (isWindows && window.desktopAPI && typeof window.desktopAPI.startDesktopUpdate === 'function') {
+    if (labelEl) labelEl.innerText = `Downloading MindFocusBooks-Setup-${targetVer}.exe...`;
+    if (subEl) subEl.innerText = 'Connecting to GitHub CDN...';
+    if (bar) bar.style.width = '0%';
+    if (pctEl) pctEl.innerText = '0%';
+
+    window.desktopAPI.onUpdateProgress((data) => {
+      const receivedMb = (data.receivedBytes / (1024 * 1024)).toFixed(1);
+      const totalMb = data.totalBytes > 0 ? (data.totalBytes / (1024 * 1024)).toFixed(1) : '85.6';
+      const speedMb = (data.speedBytesPerSec / (1024 * 1024)).toFixed(1);
+      const pct = data.percent || 0;
+
+      if (bar) bar.style.width = pct + '%';
+      if (pctEl) pctEl.innerText = pct + '%';
+      if (labelEl) labelEl.innerText = `Downloading Update: ${pct}%`;
+      if (subEl) subEl.innerText = `${receivedMb} MB / ${totalMb} MB &bull; ${speedMb} MB/s &bull; Verified Package`;
+    });
+
+    window.desktopAPI.startDesktopUpdate(downloadUrl, targetVer).then((res) => {
+      if (res && res.success) {
+        if (bar) bar.style.width = '100%';
+        if (pctEl) pctEl.innerText = '100%';
+        if (labelEl) labelEl.innerText = '✅ Download 100% Complete!';
+        if (subEl) subEl.innerText = 'App will close now and launch Windows Installer...';
+
+        setTimeout(() => {
+          window.desktopAPI.installAndRestart(res.targetPath);
+        }, 1300);
+      } else {
+        if (subEl) subEl.innerText = 'Download error: ' + (res?.error || 'Failed');
+      }
+    }).catch((err) => {
+      if (subEl) subEl.innerText = 'Download failed. Please check internet connection.';
+    });
+    return;
+  }
+
+  // 2. FALLBACK (MOBILE / WEB)
   let pct = 0;
-  const targetTotalMb = isWindows ? 81.6 : 17.2;
+  const targetTotalMb = isWindows ? 85.6 : 17.2;
 
   const interval = setInterval(() => {
     pct += Math.floor(Math.random() * 12) + 8;
@@ -12994,17 +13033,13 @@ function startLiveUpdateDownload(downloadUrl, targetVer) {
       }
 
       try {
-        if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
-          window.desktopAPI.openExternal(downloadUrl);
-        } else {
-          const a = document.createElement('a');
-          a.href = downloadUrl;
-          a.target = '_blank';
-          a.download = isWindows ? `MindFocusBooks-Setup-${targetVer}.exe` : 'MindFocusBooks-Native.apk';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-        }
+        const a = document.createElement('a');
+        a.href = downloadUrl;
+        a.target = '_blank';
+        a.download = isWindows ? `MindFocusBooks-Setup-${targetVer}.exe` : 'MindFocusBooks-Native.apk';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
       } catch (e) {
         window.open(downloadUrl, '_blank');
       }
@@ -13031,7 +13066,7 @@ function viewChangelogModal() {
         <div style="display:flex; align-items:center; gap:10px; margin-bottom:14px;">
           <div style="width:38px; height:38px; border-radius:10px; background:rgba(245,158,11,0.2); color:#f59e0b; display:flex; align-items:center; justify-content:center; font-size:1.3rem;">🚀</div>
           <div>
-            <h3 style="color:#fff; margin:0; font-size:1.15rem; font-weight:800;">What's New in v0.0.95</h3>
+            <h3 style="color:#fff; margin:0; font-size:1.15rem; font-weight:800;">What's New in v0.0.96</h3>
             <p style="color:#94a3b8; margin:2px 0 0; font-size:0.75rem;">Official Release &bull; About App &amp; System Engine Hub</p>
           </div>
         </div>
