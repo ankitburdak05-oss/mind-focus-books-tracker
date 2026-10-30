@@ -1,24 +1,24 @@
 {
   "activeRelease": {
-    "version": "v0.0.88",
-    "name": "Mind Focus Books v0.0.88 (Ultra-Luxury Edit Studio)",
-    "releaseNotes": "v0.0.88: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.88/MindFocusBooks-Native.apk",
+    "version": "v0.0.89",
+    "name": "Mind Focus Books v0.0.89 (Ultra-Luxury Edit Studio)",
+    "releaseNotes": "v0.0.89: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.89/MindFocusBooks-Native.apk",
     "mandatory": false,
     "timestamp": "2026-10-30T04:47:43.846Z"
   },
   "latest": {
-    "version": "v0.0.88",
-    "name": "Mind Focus Books v0.0.88 (Ultra-Luxury Edit Studio)",
-    "releaseNotes": "v0.0.88: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.88/MindFocusBooks-Native.apk"
+    "version": "v0.0.89",
+    "name": "Mind Focus Books v0.0.89 (Ultra-Luxury Edit Studio)",
+    "releaseNotes": "v0.0.89: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.89/MindFocusBooks-Native.apk"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
-  "latest_version": "0.0.88",
+  "latest_version": "0.0.89",
   "version_code": 8587,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.88/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.88: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.89/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.89: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
   "force_update": false,
   "maintenance": false,
   "published_at": "2026-10-30T04:47:43.846Z",

@@ -24,7 +24,7 @@
 
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-  <link rel="stylesheet" href="style.css?v=0.0.55">
+  <link rel="stylesheet" href="style.css?v=0.0.89">
 
 
 <style>
@@ -870,6 +870,53 @@
   font-weight: 700;
 }
 </style>
+
+
+  <style id="inlineTabStudioStyles">
+    .edit-studio-nav-bar {
+      display: flex !important;
+      gap: 8px !important;
+      padding: 10px 16px !important;
+      background: #090e1a !important;
+      border-bottom: 1px solid rgba(245, 158, 11, 0.25) !important;
+      overflow-x: auto !important;
+      -webkit-overflow-scrolling: touch !important;
+      flex-shrink: 0 !important;
+      scrollbar-width: none !important;
+      z-index: 50 !important;
+    }
+    .edit-studio-nav-bar::-webkit-scrollbar { display: none !important; }
+    .edit-studio-tab-pill {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      padding: 8px 16px !important;
+      border-radius: 999px !important;
+      font-size: 0.8rem !important;
+      font-weight: 700 !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      color: #cbd5e1 !important;
+      cursor: pointer !important;
+      white-space: nowrap !important;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      user-select: none !important;
+      outline: none !important;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
+    }
+    .edit-studio-tab-pill:hover {
+      background: rgba(245, 158, 11, 0.18) !important;
+      border-color: rgba(245, 158, 11, 0.5) !important;
+      color: #fbbf24 !important;
+    }
+    .edit-studio-tab-pill.active {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+      border-color: #fbbf24 !important;
+      color: #0b0f19 !important;
+      font-weight: 900 !important;
+      box-shadow: 0 2px 14px rgba(245, 158, 11, 0.5) !important;
+    }
+  </style>
 
 </head>
 
@@ -7442,17 +7489,17 @@
       </div>
 
       <!-- 👑 LUXURY 4-TAB SEGMENTED NAVIGATION BAR -->
-      <div class="edit-studio-nav-bar" id="editStudioTabsBar">
-        <button type="button" class="edit-studio-tab-pill active" id="editTabBtn_info" onclick="switchEditStudioTab('info')">
+      <div class="edit-studio-nav-bar" id="editStudioTabsBar" style="display:flex; gap:8px; padding:10px 16px; background:#090e1a; border-bottom:1px solid rgba(245, 158, 11, 0.25); overflow-x:auto; -webkit-overflow-scrolling:touch; flex-shrink:0;">
+        <button type="button" class="edit-studio-tab-pill active" id="editTabBtn_info" onclick="window.switchEditStudioTab('info')" style="padding:8px 16px; border-radius:999px; font-size:0.8rem; font-weight:900; background:linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border:1px solid #fbbf24; color:#0b0f19; cursor:pointer; white-space:nowrap; outline:none;">
           <span>📋</span> Info &amp; Cover
         </button>
-        <button type="button" class="edit-studio-tab-pill" id="editTabBtn_reading" onclick="switchEditStudioTab('reading')">
+        <button type="button" class="edit-studio-tab-pill" id="editTabBtn_reading" onclick="window.switchEditStudioTab('reading')" style="padding:8px 16px; border-radius:999px; font-size:0.8rem; font-weight:700; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.16); color:#cbd5e1; cursor:pointer; white-space:nowrap; outline:none;">
           <span>📖</span> Reading
         </button>
-        <button type="button" class="edit-studio-tab-pill" id="editTabBtn_store" onclick="switchEditStudioTab('store')">
+        <button type="button" class="edit-studio-tab-pill" id="editTabBtn_store" onclick="window.switchEditStudioTab('store')" style="padding:8px 16px; border-radius:999px; font-size:0.8rem; font-weight:700; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.16); color:#cbd5e1; cursor:pointer; white-space:nowrap; outline:none;">
           <span>💰</span> Store &amp; Price
         </button>
-        <button type="button" class="edit-studio-tab-pill" id="editTabBtn_timeline" onclick="switchEditStudioTab('timeline')">
+        <button type="button" class="edit-studio-tab-pill" id="editTabBtn_timeline" onclick="window.switchEditStudioTab('timeline')" style="padding:8px 16px; border-radius:999px; font-size:0.8rem; font-weight:700; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.16); color:#cbd5e1; cursor:pointer; white-space:nowrap; outline:none;">
           <span>📅</span> Dates &amp; Notes
         </button>
       </div>
@@ -9038,7 +9085,7 @@
 
   <script src="explore.js?v=0.0.78"></script>
 
-  <script src="app.js?v=0.0.78"></script>
+  <script src="app.js?v=0.0.89"></script>
 
 
 
@@ -9769,6 +9816,46 @@
     </div>
   </div>
 
+<div id="inlineTabStudioScript">
+  <script>
+    window.switchEditStudioTab = function(tabName) {
+      try {
+        var tabs = ['info', 'reading', 'store', 'timeline'];
+        tabs.forEach(function(t) {
+          var pane = document.getElementById('editTabPane_' + t);
+          var btn = document.getElementById('editTabBtn_' + t);
+          if (pane) {
+            pane.style.setProperty('display', (t === tabName) ? 'block' : 'none', 'important');
+          }
+          if (btn) {
+            if (t === tabName) {
+              btn.className = 'edit-studio-tab-pill active';
+              btn.style.setProperty('background', 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', 'important');
+              btn.style.setProperty('color', '#0b0f19', 'important');
+              btn.style.setProperty('border-color', '#fbbf24', 'important');
+              btn.style.setProperty('font-weight', '900', 'important');
+              btn.style.setProperty('box-shadow', '0 2px 14px rgba(245, 158, 11, 0.5)', 'important');
+            } else {
+              btn.className = 'edit-studio-tab-pill';
+              btn.style.setProperty('background', 'rgba(255, 255, 255, 0.08)', 'important');
+              btn.style.setProperty('color', '#cbd5e1', 'important');
+              btn.style.setProperty('border-color', 'rgba(255, 255, 255, 0.16)', 'important');
+              btn.style.setProperty('font-weight', '700', 'important');
+              btn.style.setProperty('box-shadow', '0 2px 6px rgba(0, 0, 0, 0.3)', 'important');
+            }
+          }
+        });
+        var body = document.querySelector('.luxury-studio-body') || document.querySelector('.studio-body');
+        if (body) body.scrollTop = 0;
+        if (typeof syncEditModalLiveHeroPreview === 'function') {
+          syncEditModalLiveHeroPreview();
+        }
+      } catch (err) {
+        console.error('switchEditStudioTab error:', err);
+      }
+    };
+  </script>
+</div>
 </body>
 
 </html>

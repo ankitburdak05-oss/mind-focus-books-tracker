@@ -20719,16 +20719,36 @@ window.onPagesSliderInput = function(pctVal) {
 
 
 window.switchEditStudioTab = function(tabName) {
-  const tabs = ['info', 'reading', 'store', 'timeline'];
-  tabs.forEach(t => {
-    const pane = document.getElementById('editTabPane_' + t);
-    const btn = document.getElementById('editTabBtn_' + t);
-    if (pane) pane.style.display = (t === tabName) ? 'block' : 'none';
-    if (btn) btn.classList.toggle('active', t === tabName);
-  });
-  const body = document.querySelector('.luxury-studio-body');
-  if (body) body.scrollTop = 0;
-  if (typeof syncEditModalLiveHeroPreview === 'function') {
-    syncEditModalLiveHeroPreview();
+  try {
+    var tabs = ['info', 'reading', 'store', 'timeline'];
+    tabs.forEach(function(t) {
+      var pane = document.getElementById('editTabPane_' + t);
+      var btn = document.getElementById('editTabBtn_' + t);
+      if (pane) {
+        pane.style.setProperty('display', (t === tabName) ? 'block' : 'none', 'important');
+      }
+      if (btn) {
+        if (t === tabName) {
+          btn.className = 'edit-studio-tab-pill active';
+          btn.style.setProperty('background', 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)', 'important');
+          btn.style.setProperty('color', '#0b0f19', 'important');
+          btn.style.setProperty('border-color', '#fbbf24', 'important');
+          btn.style.setProperty('font-weight', '900', 'important');
+        } else {
+          btn.className = 'edit-studio-tab-pill';
+          btn.style.setProperty('background', 'rgba(255, 255, 255, 0.08)', 'important');
+          btn.style.setProperty('color', '#cbd5e1', 'important');
+          btn.style.setProperty('border-color', 'rgba(255, 255, 255, 0.16)', 'important');
+          btn.style.setProperty('font-weight', '700', 'important');
+        }
+      }
+    });
+    var body = document.querySelector('.luxury-studio-body') || document.querySelector('.studio-body');
+    if (body) body.scrollTop = 0;
+    if (typeof syncEditModalLiveHeroPreview === 'function') {
+      syncEditModalLiveHeroPreview();
+    }
+  } catch (err) {
+    console.error('switchEditStudioTab error:', err);
   }
 };
