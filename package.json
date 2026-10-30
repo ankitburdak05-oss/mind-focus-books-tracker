@@ -1,6 +1,6 @@
 {
   "name": "mind-focus-books",
-  "version": "0.0.96",
+  "version": "0.0.97",
   "description": "Mind Focus Books - Reading Tracker & Library Desktop Edition",
   "main": "electron-main.js",
   "author": "Ankit Burdak <ankitburdak@users.noreply.github.com>",
