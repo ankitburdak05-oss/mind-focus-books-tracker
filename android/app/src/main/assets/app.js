@@ -11289,188 +11289,103 @@ function onHoloNoticeActionClick() {
 
 
 
+function isRunningOnWindowsLaptop() {
+  if (typeof window !== 'undefined' && window.desktopAPI && window.desktopAPI.isDesktop) return true;
+  if (typeof window !== 'undefined' && window.Android) return false;
+  const ua = (typeof navigator !== 'undefined') ? (navigator.userAgent || '') : '';
+  const plat = (typeof navigator !== 'undefined') ? (navigator.platform || '') : '';
+  const uadPlat = (typeof navigator !== 'undefined' && navigator.userAgentData) ? (navigator.userAgentData.platform || '') : '';
+
+  if (/Android/i.test(ua)) return false;
+  if (/Windows|Win64|Win32|x64|WOW64/i.test(ua)) return true;
+  if (/Win/i.test(plat) || /Windows/i.test(uadPlat)) return true;
+  return false;
+}
+
 function openUpdateCheckerModal() {
-
   const overlay = document.getElementById('updateCheckerModalOverlay');
-
   if (!overlay) return;
 
-
-
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-
   const rel = cfg?.activeRelease || cfg?.latest || null;
-
   const installedVer = getInstalledVersionString();
-
   const targetVer = rel?.version || (cfg?.latest_version ? ('v' + cfg.latest_version) : null) || installedVer;
-
   const isNewAvailable = isNewerVersion(targetVer, installedVer);
-
-
+  const isWindows = isRunningOnWindowsLaptop();
 
   const titleEl = document.getElementById('updateModalTitle');
-
   const badge = document.getElementById('updateTargetVersionBadge');
-
   const desc = document.getElementById('updateModalDesc');
-
   const btn = document.getElementById('updateModalActionBtn');
-
-
+  const altBtn = document.getElementById('updateModalAltBtn');
 
   if (isNewAvailable) {
-
-    if (titleEl) titleEl.innerText = 'New Version Update Ready:';
-
+    if (titleEl) titleEl.innerText = isWindows ? '💻 Windows Desktop Update Ready:' : '📱 Android App Update Ready:';
     if (badge) badge.innerText = `${targetVer} Ready`;
-
     if (desc) desc.innerText = rel?.name || `Mind Focus Books ${targetVer} is ready to install!`;
-
     if (btn) {
-
       btn.disabled = false;
-
-      btn.innerText = `⚡ Download & Install ${targetVer} Now`;
-
+      btn.innerText = isWindows ? `💻 Download Windows .EXE (${targetVer})` : `📱 Download Android APK (${targetVer})`;
     }
-
+    if (altBtn) {
+      altBtn.style.display = 'block';
+      altBtn.innerText = isWindows ? `📱 Download Phone APK (${targetVer}) instead` : `💻 Download Laptop .EXE (${targetVer}) instead`;
+    }
   } else {
-
-    // Already on current or latest version - allow reinstall / re-download!
-
     if (titleEl) titleEl.innerText = 'Mind Focus Books is Up to Date';
-
     if (badge) badge.innerText = `${installedVer} (Installed)`;
-
-    if (desc) desc.innerText = `Aapke phone me latest version ${installedVer} already installed hai aur sab kuch up-to-date hai.`;
-
+    if (desc) desc.innerText = isWindows
+      ? `Aapke laptop me latest Windows version ${installedVer} already running hai.`
+      : `Aapke phone me latest version ${installedVer} already installed hai.`;
     if (btn) {
-
       btn.disabled = false;
-
-      btn.innerText = `⚡ Re-download APK (${installedVer})`;
-
+      btn.innerText = isWindows ? `💻 Re-download Windows .EXE (${installedVer})` : `📱 Re-download APK (${installedVer})`;
     }
-
+    if (altBtn) {
+      altBtn.style.display = 'block';
+      altBtn.innerText = isWindows ? `📱 Download Phone APK (${installedVer}) instead` : `💻 Download Laptop .EXE (${installedVer}) instead`;
+    }
   }
-
-
 
   const listEl = document.querySelector('.update-glass-checklist');
-
   if (listEl) {
-
     const featuresToShow = (rel?.features && Array.isArray(rel.features) && rel.features.length > 0)
-
       ? rel.features
-
       : [
-
-          '⚡ 100% Real User Data: Zero fake mock fallbacks for reading streak, reading counts, or prices',
-
-          '💰 Pure User Pricing: Only user-recorded prices are tracked (no auto-fill dummy MRPs)',
-
-          '🔥 Dynamic Weekly Streak: 0 days when inactive, highlights active consecutive days',
-
-          '⭐ Honest Ratings: Unrated books show 0.0 (Unrated) until you rate them',
-
-          '📱 Direct In-App APK Reinstall & 1-Click Update Installer'
-
+          isWindows ? '💻 Native Windows Desktop Application (.exe installer & portable)' : '📱 Signed Standalone Android APK',
+          '📡 Live Update Radar Scanner in Profile Customization Hub',
+          '🎨 12-Color Luxury Theme Palette & 6 Background Ambience Themes',
+          '📋 Executive 4-Segmented Luxury Book Edit Studio (Zero Data Loss)',
+          '⚡ Pure Local Storage Persistence with 100% Offline Integrity'
         ];
-
     listEl.innerHTML = featuresToShow.map(f => `
-
       <div class="update-glass-item">
-
         <span class="update-glass-check">✓</span>
-
         <span>${escapeHtml(f)}</span>
-
       </div>
-
     `).join('');
-
   }
-
-
-
-  const progressWrap = document.getElementById('updateModalProgress');
-
-  if (progressWrap) progressWrap.style.display = 'none';
-
-
-
-  overlay.style.zIndex = '1000000';
 
   overlay.style.display = 'flex';
-
-  overlay.classList.add('active');
-
-  overlay.scrollTop = 0;
-
-  const card = overlay.querySelector('.update-glass-card');
-
-  if (card) card.scrollTop = 0;
-
 }
 
-
-
-function closeUpdateCheckerModal() {
-
-  const overlay = document.getElementById('updateCheckerModalOverlay');
-
-  if (overlay) {
-
-    overlay.style.display = 'none';
-
-    overlay.classList.remove('active');
-
-  }
-
-  const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
-
-  const targetVer = cfg?.activeRelease?.version || CURRENT_APP_VERSION;
-
-  try {
-
-    sessionStorage.setItem('mf_update_dismissed_' + targetVer, '1');
-
-    localStorage.setItem('mf_update_skipped_' + targetVer, '1');
-
-  } catch (e) {}
-
-}
-
-
-
-function handleUpdateOverlayClick(e) {
-
-  if (e.target.id === 'updateCheckerModalOverlay') {
-
-    closeUpdateCheckerModal();
-
-  }
-
-}
-
-
-
-function triggerInAppUpdate() {
+function triggerInAppUpdate(forcePlatform) {
   const cfg = (window.__LIVE_REMOTE_CONFIG__ || window.__DEFAULT_REMOTE_CONFIG__ || null);
   const rel = cfg?.activeRelease || cfg?.latest || null;
   const targetVer = rel?.version || (cfg?.latest_version ? ('v' + cfg.latest_version) : null) || CURRENT_APP_VERSION;
 
-  const isDesktop = Boolean(window.desktopAPI && window.desktopAPI.isDesktop) || (!('ontouchstart' in window) && (navigator.platform && navigator.platform.toUpperCase().indexOf('WIN') >= 0));
-
+  const isWindows = forcePlatform ? (forcePlatform === 'windows') : isRunningOnWindowsLaptop();
   let downloadUrl = '';
-  if (isDesktop) {
+  let fileName = '';
+
+  if (isWindows) {
     downloadUrl = (rel?.windowsSetupDownloadUrl) || (rel?.windowsPortableDownloadUrl) ||
       `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Setup-${targetVer}.exe`;
+    fileName = `MindFocusBooks-Setup-${targetVer}.exe`;
   } else {
     downloadUrl = (rel?.apkDownloadUrl) || (cfg?.download_url) ||
       `https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/${targetVer}/MindFocusBooks-Native.apk`;
+    fileName = 'MindFocusBooks-Native.apk';
   }
 
   // Mark version as installed in local storage
@@ -11489,7 +11404,7 @@ function triggerInAppUpdate() {
   if (progressWrap) progressWrap.style.display = 'block';
   if (actionBtn) {
     actionBtn.disabled = true;
-    actionBtn.innerText = isDesktop ? '⏳ Downloading Windows Update (.exe)...' : '⏳ Downloading Signed APK...';
+    actionBtn.innerText = isWindows ? '⏳ Downloading Windows Setup (.exe)...' : '⏳ Downloading Signed APK...';
   }
 
   let pct = 0;
@@ -11498,10 +11413,10 @@ function triggerInAppUpdate() {
     if (pct > 90) pct = 90;
     if (progressFill) progressFill.style.width = pct + '%';
     if (progressPct) progressPct.innerText = pct + '%';
-  }, 200);
+  }, 150);
 
   // If running in Native Standalone Android APK with bridge:
-  if (!isDesktop && window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
+  if (!isWindows && window.Android && typeof window.Android.downloadAndInstallApk === 'function') {
     window.Android.downloadAndInstallApk(downloadUrl);
     setTimeout(() => {
       clearInterval(interval);
@@ -11512,7 +11427,7 @@ function triggerInAppUpdate() {
         actionBtn.disabled = false;
         actionBtn.innerText = `✓ Installed — Re-download APK (${targetVer})`;
       }
-    }, 1500);
+    }, 1200);
   } else {
     // Desktop / Browser fallback
     setTimeout(() => {
@@ -11520,17 +11435,17 @@ function triggerInAppUpdate() {
       if (progressFill) progressFill.style.width = '100%';
       if (progressPct) progressPct.innerText = '100%';
       if (progressText) {
-        progressText.innerText = isDesktop ? 'Desktop .exe Ready! Run downloaded file to update.' : 'Download complete! Tap to install.';
+        progressText.innerText = isWindows ? 'Windows .exe Ready! Run downloaded file to update.' : 'Download complete! Tap to install.';
       }
 
       try {
-        if (isDesktop && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
+        if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
           window.desktopAPI.openExternal(downloadUrl);
         } else {
           const link = document.createElement('a');
           link.href = downloadUrl;
           link.target = '_blank';
-          link.download = isDesktop ? `MindFocusBooks-Setup-${targetVer}.exe` : 'MindFocusBooks-Native.apk';
+          link.download = fileName;
           document.body.appendChild(link);
           link.click();
           document.body.removeChild(link);
@@ -11541,10 +11456,15 @@ function triggerInAppUpdate() {
 
       if (actionBtn) {
         actionBtn.disabled = false;
-        actionBtn.innerText = isDesktop ? `✓ Downloaded — Re-download Windows .exe (${targetVer})` : `✓ Downloaded — Re-download APK (${targetVer})`;
+        actionBtn.innerText = isWindows ? `✓ Downloaded — Re-download Windows .exe (${targetVer})` : `✓ Downloaded — Re-download APK (${targetVer})`;
       }
-    }, 1200);
+    }, 1000);
   }
+}
+
+function triggerAltPlatformUpdate() {
+  const isWindows = isRunningOnWindowsLaptop();
+  triggerInAppUpdate(isWindows ? 'android' : 'windows');
 }
 
 async function checkRemoteBroadcastNotice() {
