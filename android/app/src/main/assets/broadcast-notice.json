@@ -1,9 +1,9 @@
 {
   "active": true,
-  "id": "notice-v0.0.91-ultra-luxury-studio",
-  "version": "v0.0.91",
+  "id": "notice-v0.0.92-ultra-luxury-studio",
+  "version": "v0.0.92",
   "type": "feature",
-  "message": "v0.0.91: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+  "message": "v0.0.92: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
   "actionText": "Check Library",
   "actionUrl": "#viewLibrary",
   "timestamp": "2026-10-30T04:47:43.828Z"

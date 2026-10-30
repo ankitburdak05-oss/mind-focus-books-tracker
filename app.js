@@ -5466,7 +5466,13 @@ function openBookDetailView(book) {
 
     // Render personal notes for this book
 
-    renderCurrentBookDetailNotes();
+    try {
+      if (typeof renderCurrentBookDetailNotes === 'function') {
+        renderCurrentBookDetailNotes();
+      }
+    } catch (eNotes) {
+      console.warn('renderCurrentBookDetailNotes error:', eNotes);
+    }
 
     
 
@@ -6340,6 +6346,100 @@ function switchDetailTab(tabName) {
 }
 
 
+
+
+
+// ================= BOOK DETAIL PERSONAL REFLECTIONS & NOTES =================
+function renderCurrentBookDetailNotes() {
+  const container = document.getElementById('bookDetailNotesContainer');
+  const countBadge = document.getElementById('detailBookNotesCountBadge');
+  const book = state.currentBook;
+  if (!container || !book) return;
+
+  const notesList = Array.isArray(book.userNotes) ? book.userNotes : [];
+  
+  if (countBadge) {
+    countBadge.innerText = notesList.length + ' Note' + (notesList.length === 1 ? '' : 's');
+  }
+
+  if (notesList.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px 16px; color: var(--text-muted); background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.08);">
+        <span style="font-size: 1.8rem; display: block; margin-bottom: 6px;">📝</span>
+        <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-secondary);">No personal notes added yet</div>
+        <div style="font-size: 0.72rem; margin-top: 3px;">Type above to save your first reflection for this book.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = notesList.map((n, idx) => `
+    <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-size: 0.72rem; color: var(--accent-gold); font-weight: 700;">
+          ${n.page ? '📄 Page ' + n.page : '📝 Note'}
+        </span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 0.68rem; color: var(--text-muted);">${n.date || ''}</span>
+          <button type="button" onclick="deleteBookDetailNote(${idx})" style="background: none; border: none; color: #ef4444; font-size: 0.75rem; cursor: pointer; padding: 2px;" title="Delete Note">✕</button>
+        </div>
+      </div>
+      <div style="font-size: 0.85rem; color: #f8fafc; line-height: 1.45; white-space: pre-wrap;">${escapeHtml(n.text || '')}</div>
+    </div>
+  `).join('');
+}
+
+function saveNewBookDetailNote() {
+  const book = state.currentBook;
+  if (!book) return;
+
+  const inputEl = document.getElementById('bookDetailNewNoteInput');
+  const pageEl = document.getElementById('bookDetailNewNotePage');
+  if (!inputEl) return;
+
+  const text = inputEl.value.trim();
+  if (!text) {
+    showToast('Please enter a note before saving.');
+    return;
+  }
+
+  const page = pageEl ? (parseInt(pageEl.value, 10) || null) : null;
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+
+  if (!Array.isArray(book.userNotes)) {
+    book.userNotes = [];
+  }
+
+  book.userNotes.unshift({
+    id: 'note_' + Date.now(),
+    text,
+    page,
+    date: dateStr,
+    timestamp: Date.now()
+  });
+
+  inputEl.value = '';
+  if (pageEl) pageEl.value = '';
+
+  saveBooks();
+  renderCurrentBookDetailNotes();
+  showToast('Note saved! 📝');
+
+  if (typeof window.addAuditLog === 'function') {
+    window.addAuditLog('Added note on "' + book.title + '"', 'Reading', text.slice(0, 60), '📝', state.books.indexOf(book));
+  }
+}
+
+function deleteBookDetailNote(idx) {
+  const book = state.currentBook;
+  if (!book || !Array.isArray(book.userNotes)) return;
+
+  book.userNotes.splice(idx, 1);
+  saveBooks();
+  renderCurrentBookDetailNotes();
+  showToast('Note deleted.');
+}
 
 function saveCurrentBookNotes(notesVal) {
 

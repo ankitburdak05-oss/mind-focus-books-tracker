@@ -25999,10 +25999,10 @@ if (typeof module !== 'undefined' && module.exports) {
   <script>
 window.BROADCAST_NOTICE = {
   "active": true,
-  "id": "notice-v0.0.91-ultra-luxury-studio",
-  "version": "v0.0.91",
+  "id": "notice-v0.0.92-ultra-luxury-studio",
+  "version": "v0.0.92",
   "type": "feature",
-  "message": "v0.0.91: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+  "message": "v0.0.92: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
   "actionText": "Check Library",
   "actionUrl": "#viewLibrary",
   "timestamp": "2026-10-30T04:47:43.828Z"
@@ -26013,25 +26013,25 @@ window.BROADCAST_NOTICE = {
   <script>
 window.REMOTE_CONFIG = {
   "activeRelease": {
-    "version": "v0.0.91",
-    "name": "Mind Focus Books v0.0.91 (Ultra-Luxury Edit Studio)",
-    "releaseNotes": "v0.0.91: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.91/MindFocusBooks-Native.apk",
+    "version": "v0.0.92",
+    "name": "Mind Focus Books v0.0.92 (Ultra-Luxury Edit Studio)",
+    "releaseNotes": "v0.0.92: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.92/MindFocusBooks-Native.apk",
     "mandatory": false,
     "timestamp": "2026-10-30T04:47:43.846Z"
   },
   "latest": {
-    "version": "v0.0.91",
-    "name": "Mind Focus Books v0.0.91 (Ultra-Luxury Edit Studio)",
-    "releaseNotes": "v0.0.91: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.91/MindFocusBooks-Native.apk"
+    "version": "v0.0.92",
+    "name": "Mind Focus Books v0.0.92 (Ultra-Luxury Edit Studio)",
+    "releaseNotes": "v0.0.92: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.92/MindFocusBooks-Native.apk"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
-  "latest_version": "0.0.91",
+  "latest_version": "0.0.92",
   "version_code": 8587,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.91/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.91: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.92/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.92: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
   "force_update": false,
   "maintenance": false,
   "published_at": "2026-10-30T04:47:43.846Z",
@@ -32290,7 +32290,13 @@ function openBookDetailView(book) {
 
     // Render personal notes for this book
 
-    renderCurrentBookDetailNotes();
+    try {
+      if (typeof renderCurrentBookDetailNotes === 'function') {
+        renderCurrentBookDetailNotes();
+      }
+    } catch (eNotes) {
+      console.warn('renderCurrentBookDetailNotes error:', eNotes);
+    }
 
     
 
@@ -33164,6 +33170,100 @@ function switchDetailTab(tabName) {
 }
 
 
+
+
+
+// ================= BOOK DETAIL PERSONAL REFLECTIONS & NOTES =================
+function renderCurrentBookDetailNotes() {
+  const container = document.getElementById('bookDetailNotesContainer');
+  const countBadge = document.getElementById('detailBookNotesCountBadge');
+  const book = state.currentBook;
+  if (!container || !book) return;
+
+  const notesList = Array.isArray(book.userNotes) ? book.userNotes : [];
+  
+  if (countBadge) {
+    countBadge.innerText = notesList.length + ' Note' + (notesList.length === 1 ? '' : 's');
+  }
+
+  if (notesList.length === 0) {
+    container.innerHTML = `
+      <div style="text-align: center; padding: 24px 16px; color: var(--text-muted); background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed rgba(255,255,255,0.08);">
+        <span style="font-size: 1.8rem; display: block; margin-bottom: 6px;">📝</span>
+        <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-secondary);">No personal notes added yet</div>
+        <div style="font-size: 0.72rem; margin-top: 3px;">Type above to save your first reflection for this book.</div>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = notesList.map((n, idx) => `
+    <div style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 12px 14px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+        <span style="font-size: 0.72rem; color: var(--accent-gold); font-weight: 700;">
+          ${n.page ? '📄 Page ' + n.page : '📝 Note'}
+        </span>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="font-size: 0.68rem; color: var(--text-muted);">${n.date || ''}</span>
+          <button type="button" onclick="deleteBookDetailNote(${idx})" style="background: none; border: none; color: #ef4444; font-size: 0.75rem; cursor: pointer; padding: 2px;" title="Delete Note">✕</button>
+        </div>
+      </div>
+      <div style="font-size: 0.85rem; color: #f8fafc; line-height: 1.45; white-space: pre-wrap;">${escapeHtml(n.text || '')}</div>
+    </div>
+  `).join('');
+}
+
+function saveNewBookDetailNote() {
+  const book = state.currentBook;
+  if (!book) return;
+
+  const inputEl = document.getElementById('bookDetailNewNoteInput');
+  const pageEl = document.getElementById('bookDetailNewNotePage');
+  if (!inputEl) return;
+
+  const text = inputEl.value.trim();
+  if (!text) {
+    showToast('Please enter a note before saving.');
+    return;
+  }
+
+  const page = pageEl ? (parseInt(pageEl.value, 10) || null) : null;
+  const now = new Date();
+  const dateStr = now.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' });
+
+  if (!Array.isArray(book.userNotes)) {
+    book.userNotes = [];
+  }
+
+  book.userNotes.unshift({
+    id: 'note_' + Date.now(),
+    text,
+    page,
+    date: dateStr,
+    timestamp: Date.now()
+  });
+
+  inputEl.value = '';
+  if (pageEl) pageEl.value = '';
+
+  saveBooks();
+  renderCurrentBookDetailNotes();
+  showToast('Note saved! 📝');
+
+  if (typeof window.addAuditLog === 'function') {
+    window.addAuditLog('Added note on "' + book.title + '"', 'Reading', text.slice(0, 60), '📝', state.books.indexOf(book));
+  }
+}
+
+function deleteBookDetailNote(idx) {
+  const book = state.currentBook;
+  if (!book || !Array.isArray(book.userNotes)) return;
+
+  book.userNotes.splice(idx, 1);
+  saveBooks();
+  renderCurrentBookDetailNotes();
+  showToast('Note deleted.');
+}
 
 function saveCurrentBookNotes(notesVal) {
 
@@ -37335,7 +37435,7 @@ function renderDictionaryWords(words, highlightQuery = '') {
 
     if (!highlightQuery || !text) return text || '';
 
-    const escaped = highlightQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\<script src="app.js?v=0.0.91"></script>');
+    const escaped = highlightQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\<script src="app.js?v=0.0.92"></script>');
 
     const regex = new RegExp(`(${escaped})`, 'gi');
 
