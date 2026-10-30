@@ -1,4 +1,4 @@
-const CACHE_NAME = 'books-tracker-v89';
+const CACHE_NAME = 'books-tracker-v90';
 
 const ASSETS = [
 

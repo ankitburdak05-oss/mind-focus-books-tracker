@@ -5519,48 +5519,27 @@ function openBookDetailView(book) {
     
 
     const elTarget = document.getElementById('detailDateTarget');
-
     if (elTarget) {
-
       if (book.status === 'DONE') {
-
         const frozenDate = book.completed_date || book.end_date || today;
-
         if (!book.end_date || !book.completed_date) {
-
           book.end_date = frozenDate;
-
           book.completed_date = frozenDate;
-
           saveBooks();
-
         }
-
-        elTarget.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">🔒 ${formatDateDisplay(frozenDate)} (Completed • Frozen)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Edit</span>`;
-
+        elTarget.innerText = formatDateDisplay(frozenDate);
       } else if (book.status === 'READING') {
-
-        // While reading: Live ongoing date ALWAYS tracks today's system clock!
-
-        if (book.target_date && book.target_date !== today) {
-
-          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">🎯 Target: ${formatDateDisplay(book.target_date)}</span> <span style="font-size:11px; color:var(--text-secondary); margin-left:4px;">(Live: ${formatDateDisplay(today)})</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️</span>`;
-
+        if (book.end_date) {
+          elTarget.innerText = formatDateDisplay(book.end_date);
+        } else if (book.target_date) {
+          elTarget.innerText = formatDateDisplay(book.target_date);
         } else {
-
-          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">📅 ${formatDateDisplay(today)} (Live • Ongoing)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Set Target</span>`;
-
+          elTarget.innerText = 'Ongoing';
         }
-
       } else {
-
         elTarget.innerText = book.end_date ? formatDateDisplay(book.end_date) : 'Not Set';
-
       }
-
     }
-
-    
 
     const elDays = document.getElementById('detailDaysSpent');
 

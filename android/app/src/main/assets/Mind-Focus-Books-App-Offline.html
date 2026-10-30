@@ -13818,14 +13818,10 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
             </div>
 
-            <div class="rm-item" onclick="promptSetTargetDate()" style="cursor:pointer;" title="Tap to set or edit target date">
-
-              <span class="rm-icon">🎯</span>
-
-              <span class="rm-label">End / Target Date</span>
-
-              <span class="rm-val" id="detailDateTarget">In Progress</span>
-
+            <div class="rm-item">
+              <span class="rm-icon">🏁</span>
+              <span class="rm-label">End Date</span>
+              <span class="rm-val" id="detailDateTarget">Not Set</span>
             </div>
 
             <div class="rm-item">
@@ -26003,10 +25999,10 @@ if (typeof module !== 'undefined' && module.exports) {
   <script>
 window.BROADCAST_NOTICE = {
   "active": true,
-  "id": "notice-v0.0.89-ultra-luxury-studio",
-  "version": "v0.0.89",
+  "id": "notice-v0.0.90-ultra-luxury-studio",
+  "version": "v0.0.90",
   "type": "feature",
-  "message": "v0.0.89: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+  "message": "v0.0.90: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
   "actionText": "Check Library",
   "actionUrl": "#viewLibrary",
   "timestamp": "2026-10-30T04:47:43.828Z"
@@ -26017,25 +26013,25 @@ window.BROADCAST_NOTICE = {
   <script>
 window.REMOTE_CONFIG = {
   "activeRelease": {
-    "version": "v0.0.89",
-    "name": "Mind Focus Books v0.0.89 (Ultra-Luxury Edit Studio)",
-    "releaseNotes": "v0.0.89: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.89/MindFocusBooks-Native.apk",
+    "version": "v0.0.90",
+    "name": "Mind Focus Books v0.0.90 (Ultra-Luxury Edit Studio)",
+    "releaseNotes": "v0.0.90: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.90/MindFocusBooks-Native.apk",
     "mandatory": false,
     "timestamp": "2026-10-30T04:47:43.846Z"
   },
   "latest": {
-    "version": "v0.0.89",
-    "name": "Mind Focus Books v0.0.89 (Ultra-Luxury Edit Studio)",
-    "releaseNotes": "v0.0.89: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.89/MindFocusBooks-Native.apk"
+    "version": "v0.0.90",
+    "name": "Mind Focus Books v0.0.90 (Ultra-Luxury Edit Studio)",
+    "releaseNotes": "v0.0.90: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.90/MindFocusBooks-Native.apk"
   },
   "stagedRelease": null,
   "min_required_version": "0.0.1",
-  "latest_version": "0.0.89",
+  "latest_version": "0.0.90",
   "version_code": 8587,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.89/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.89: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
+  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.90/MindFocusBooks-Native.apk",
+  "release_notes": "v0.0.90: Ultra-Luxury Book Edit Studio with Auto End-Date on Done, Glassmorphism Inputs & Tactile Sliders",
   "force_update": false,
   "maintenance": false,
   "published_at": "2026-10-30T04:47:43.846Z",
@@ -32347,48 +32343,27 @@ function openBookDetailView(book) {
     
 
     const elTarget = document.getElementById('detailDateTarget');
-
     if (elTarget) {
-
       if (book.status === 'DONE') {
-
         const frozenDate = book.completed_date || book.end_date || today;
-
         if (!book.end_date || !book.completed_date) {
-
           book.end_date = frozenDate;
-
           book.completed_date = frozenDate;
-
           saveBooks();
-
         }
-
-        elTarget.innerHTML = `<span style="color:var(--accent-emerald); font-weight:700;">🔒 ${formatDateDisplay(frozenDate)} (Completed • Frozen)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Edit</span>`;
-
+        elTarget.innerText = formatDateDisplay(frozenDate);
       } else if (book.status === 'READING') {
-
-        // While reading: Live ongoing date ALWAYS tracks today's system clock!
-
-        if (book.target_date && book.target_date !== today) {
-
-          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">🎯 Target: ${formatDateDisplay(book.target_date)}</span> <span style="font-size:11px; color:var(--text-secondary); margin-left:4px;">(Live: ${formatDateDisplay(today)})</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️</span>`;
-
+        if (book.end_date) {
+          elTarget.innerText = formatDateDisplay(book.end_date);
+        } else if (book.target_date) {
+          elTarget.innerText = formatDateDisplay(book.target_date);
         } else {
-
-          elTarget.innerHTML = `<span style="color:var(--accent-gold); font-weight:700;">📅 ${formatDateDisplay(today)} (Live • Ongoing)</span> <span style="font-size:11px; color:var(--accent-cyan); margin-left:6px; cursor:pointer;" onclick="promptSetTargetDate()">✏️ Set Target</span>`;
-
+          elTarget.innerText = 'Ongoing';
         }
-
       } else {
-
         elTarget.innerText = book.end_date ? formatDateDisplay(book.end_date) : 'Not Set';
-
       }
-
     }
-
-    
 
     const elDays = document.getElementById('detailDaysSpent');
 
@@ -37354,7 +37329,7 @@ function renderDictionaryWords(words, highlightQuery = '') {
 
     if (!highlightQuery || !text) return text || '';
 
-    const escaped = highlightQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\<script src="app.js?v=0.0.89"></script>');
+    const escaped = highlightQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\<script src="app.js?v=0.0.90"></script>');
 
     const regex = new RegExp(`(${escaped})`, 'gi');
 
