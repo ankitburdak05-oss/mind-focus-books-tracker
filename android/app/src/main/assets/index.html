@@ -4076,77 +4076,285 @@
 
 
 
-    <!-- ================= SCREEN 18: CUSTOMIZATION ================= -->
-
+    <!-- ================= SCREEN 18: CUSTOMIZATION & UPDATE STATION ================= -->
     <section id="viewCustomization" class="app-view">
 
       <div class="sub-screen-header">
-
         <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
-
         <div class="sub-screen-title-wrap">
-
-          <h2 class="sub-screen-main-title">Customize Your App</h2>
-
-          <p class="sub-screen-sub-title">Make it yours</p>
-
+          <h2 class="sub-screen-main-title">Customize &amp; App Engine Hub</h2>
+          <p class="sub-screen-sub-title">Personalize aesthetics &bull; Live desktop &amp; mobile updates</p>
         </div>
-
         <div style="width:36px;"></div>
-
       </div>
 
-
-
-      <div class="custom-section-block">
-
-        <div class="custom-section-title">Accent Color Palette</div>
-
-        <div class="custom-palette-row">
-
-          <div class="color-dot-choice active" style="background:#f59e0b;" onclick="setCustomAccentColor('#f59e0b', this)"></div>
-
-          <div class="color-dot-choice" style="background:#06b6d4;" onclick="setCustomAccentColor('#06b6d4', this)"></div>
-
-          <div class="color-dot-choice" style="background:#8b5cf6;" onclick="setCustomAccentColor('#8b5cf6', this)"></div>
-
-          <div class="color-dot-choice" style="background:#f43f5e;" onclick="setCustomAccentColor('#f43f5e', this)"></div>
-
-          <div class="color-dot-choice" style="background:#f97316;" onclick="setCustomAccentColor('#f97316', this)"></div>
-
-          <div class="color-dot-choice" style="background:#10b981;" onclick="setCustomAccentColor('#10b981', this)"></div>
-
+      <!-- 1. REAL UPDATE & RELEASE STATION -->
+      <div class="update-station-card">
+        <div class="custom-section-header-wrap">
+          <div class="custom-section-title">
+            <span>🚀 Software Updates &amp; Engine</span>
+          </div>
+          <span class="custom-section-badge" id="updateChannelBadge">Stable Channel</span>
         </div>
 
-      </div>
-
-
-
-      <div class="custom-section-block">
-
-        <div class="custom-section-title">Background Wallpaper</div>
-
-        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-
-          <button type="button" class="btn-cancel" onclick="setAppWallpaper('cozy')">Cozy Bookshelf</button>
-
-          <button type="button" class="btn-cancel" onclick="setAppWallpaper('stars')">Deep Space</button>
-
-          <button type="button" class="btn-cancel" onclick="setAppWallpaper('sunset')">Sunset Mountain</button>
-
-          <button type="button" class="btn-cancel" onclick="setAppWallpaper('none')">Pure Minimal</button>
-
+        <div class="update-meta-row">
+          <div class="update-meta-pill">
+            <span id="updateDeviceIcon">💻</span>
+            <span id="updateStationPlatform">Windows Desktop (x64)</span>
+          </div>
+          <div class="update-meta-pill">
+            <span>Installed:</span>
+            <strong id="updateStationCurrentVer">v0.0.93</strong>
+          </div>
+          <div class="update-meta-pill">
+            <span>Engine:</span>
+            <strong id="updateStationEngine">Native Standalone</strong>
+          </div>
         </div>
 
+        <div class="update-status-display" id="updateStatusBox">
+          <div class="update-status-icon-box success" id="updateStatusIcon">✓</div>
+          <div class="update-status-info">
+            <div class="update-status-title" id="updateStatusTitle">Up to Date</div>
+            <div class="update-status-detail" id="updateStatusDetail">Mind Focus Books v0.0.93 is the latest version available.</div>
+          </div>
+        </div>
+
+        <!-- Live Download Progress Bar -->
+        <div class="update-progress-container" id="customUpdateProgressWrap">
+          <div class="update-progress-stats">
+            <span id="customUpdateProgressLabel">Downloading package...</span>
+            <span id="customUpdateProgressPct">0%</span>
+          </div>
+          <div class="update-progress-track">
+            <div class="update-progress-bar" id="customUpdateProgressBar"></div>
+          </div>
+          <div id="customUpdateProgressSub" style="font-size:0.72rem; color:var(--text-muted); margin-top:6px;">Connecting to GitHub Releases CDN...</div>
+          <button type="button" id="customUpdateInstallBtn" class="btn-update-radar" style="display:none; margin-top:12px; width:100%;" onclick="executeDownloadedUpdate()">
+            🔄 Launch Installer &amp; Apply Update
+          </button>
+        </div>
+
+        <div class="update-actions-row">
+          <button type="button" class="btn-update-radar" id="btnCheckUpdatesNow" onclick="manualCheckForUpdates()">
+            <span id="radarScanIcon">📡</span>
+            <span id="radarScanText">Check for Updates Now</span>
+          </button>
+          <button type="button" class="btn-update-secondary" onclick="viewChangelogModal()">
+            <span>📋</span>
+            <span>What's New</span>
+          </button>
+        </div>
+
+        <div class="custom-control-row" style="margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.08);">
+          <div>
+            <div class="custom-control-label">Automatic Background Scanner</div>
+            <div class="custom-control-sub">Check for new releases automatically when app opens</div>
+          </div>
+          <label class="custom-switch">
+            <input type="checkbox" id="autoCheckUpdatesSwitch" checked onchange="toggleAutoUpdateCheck(this.checked)">
+            <span class="custom-switch-slider"></span>
+          </label>
+        </div>
       </div>
 
+      <!-- 2. LIVE THEME SHOWCASE PREVIEW -->
+      <div class="custom-section-block">
+        <div class="custom-section-header-wrap">
+          <div class="custom-section-title">
+            <span>✨ Live Appearance Showcase</span>
+          </div>
+          <span class="custom-section-badge" id="previewAccentHex">#f59e0b</span>
+        </div>
 
+        <div class="custom-live-preview-box" id="themeLivePreviewCard">
+          <div class="custom-preview-cover">📖</div>
+          <div class="custom-preview-details">
+            <div class="custom-preview-title">The Art of Persuasion</div>
+            <div style="font-size: 0.74rem; color: var(--text-secondary);">Bob Burg &bull; Self-Improvement</div>
+            <div class="custom-preview-bar-wrap">
+              <div class="custom-preview-bar-fill" id="themePreviewBarFill"></div>
+            </div>
+            <div class="custom-preview-tags">
+              <span class="badge-mini" id="themePreviewBadge" style="background:var(--accent-gold, #f59e0b); color:#000; font-weight:800; padding:2px 6px; border-radius:6px;">READING</span>
+              <span class="badge-mini" style="background:rgba(255,255,255,0.1); color:#fff; padding:2px 6px; border-radius:6px;">51% Complete</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      <button type="button" class="btn-save-gold" onclick="saveCustomizations()" style="width: 100%; margin-top: 10px;">Save Changes</button>
+      <!-- 3. ACCENT COLOR PALETTE -->
+      <div class="custom-section-block">
+        <div class="custom-section-header-wrap">
+          <div class="custom-section-title">
+            <span>🎨 Accent Color Palette</span>
+          </div>
+          <span class="custom-section-badge">12 Luxury Colors</span>
+        </div>
+
+        <div class="custom-palette-grid" id="customPaletteGrid">
+          <div class="color-chip-card active" data-color="#f59e0b" onclick="setCustomAccentColor('#f59e0b', this)">
+            <div class="color-chip-dot" style="background:#f59e0b;"></div>
+            <span class="color-chip-name">Amber</span>
+          </div>
+          <div class="color-chip-card" data-color="#06b6d4" onclick="setCustomAccentColor('#06b6d4', this)">
+            <div class="color-chip-dot" style="background:#06b6d4;"></div>
+            <span class="color-chip-name">Cyan</span>
+          </div>
+          <div class="color-chip-card" data-color="#8b5cf6" onclick="setCustomAccentColor('#8b5cf6', this)">
+            <div class="color-chip-dot" style="background:#8b5cf6;"></div>
+            <span class="color-chip-name">Amethyst</span>
+          </div>
+          <div class="color-chip-card" data-color="#f43f5e" onclick="setCustomAccentColor('#f43f5e', this)">
+            <div class="color-chip-dot" style="background:#f43f5e;"></div>
+            <span class="color-chip-name">Rose</span>
+          </div>
+          <div class="color-chip-card" data-color="#f97316" onclick="setCustomAccentColor('#f97316', this)">
+            <div class="color-chip-dot" style="background:#f97316;"></div>
+            <span class="color-chip-name">Sunset</span>
+          </div>
+          <div class="color-chip-card" data-color="#10b981" onclick="setCustomAccentColor('#10b981', this)">
+            <div class="color-chip-dot" style="background:#10b981;"></div>
+            <span class="color-chip-name">Emerald</span>
+          </div>
+          <div class="color-chip-card" data-color="#3b82f6" onclick="setCustomAccentColor('#3b82f6', this)">
+            <div class="color-chip-dot" style="background:#3b82f6;"></div>
+            <span class="color-chip-name">Sapphire</span>
+          </div>
+          <div class="color-chip-card" data-color="#ef4444" onclick="setCustomAccentColor('#ef4444', this)">
+            <div class="color-chip-dot" style="background:#ef4444;"></div>
+            <span class="color-chip-name">Crimson</span>
+          </div>
+          <div class="color-chip-card" data-color="#14b8a6" onclick="setCustomAccentColor('#14b8a6', this)">
+            <div class="color-chip-dot" style="background:#14b8a6;"></div>
+            <span class="color-chip-name">Mint</span>
+          </div>
+          <div class="color-chip-card" data-color="#d97706" onclick="setCustomAccentColor('#d97706', this)">
+            <div class="color-chip-dot" style="background:#d97706;"></div>
+            <span class="color-chip-name">Bronze</span>
+          </div>
+          <div class="color-chip-card" data-color="#6366f1" onclick="setCustomAccentColor('#6366f1', this)">
+            <div class="color-chip-dot" style="background:#6366f1;"></div>
+            <span class="color-chip-name">Indigo</span>
+          </div>
+          <div class="color-chip-card" data-color="#e2e8f0" onclick="setCustomAccentColor('#e2e8f0', this)">
+            <div class="color-chip-dot" style="background:#e2e8f0;"></div>
+            <span class="color-chip-name">Platinum</span>
+          </div>
+        </div>
+
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px; padding-top:12px; border-top:1px solid rgba(255,255,255,0.06);">
+          <div>
+            <div class="custom-control-label">Custom HEX Color</div>
+            <div class="custom-control-sub">Pick any custom shade from color spectrum</div>
+          </div>
+          <input type="color" id="customColorPickerInput" value="#f59e0b" onchange="setCustomAccentColor(this.value, null)" style="border:none; width:40px; height:36px; border-radius:8px; cursor:pointer; background:transparent;">
+        </div>
+      </div>
+
+      <!-- 4. BACKGROUND WALLPAPERS -->
+      <div class="custom-section-block">
+        <div class="custom-section-header-wrap">
+          <div class="custom-section-title">
+            <span>🖼️ Background Ambience</span>
+          </div>
+          <span class="custom-section-badge">6 Presets</span>
+        </div>
+
+        <div class="wallpaper-preview-grid">
+          <div class="wallpaper-card active" data-wall="none" onclick="setAppWallpaper('none', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">🖤</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Obsidian Minimal</div>
+            <div class="wallpaper-card-desc">Deep pitch OLED black, zero distractions</div>
+          </div>
+
+          <div class="wallpaper-card" data-wall="cozy" onclick="setAppWallpaper('cozy', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">📚</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Cozy Bookshelf</div>
+            <div class="wallpaper-card-desc">Warm mahogany wooden library texture</div>
+          </div>
+
+          <div class="wallpaper-card" data-wall="stars" onclick="setAppWallpaper('stars', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">🌌</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Deep Space</div>
+            <div class="wallpaper-card-desc">Subtle cosmic starfield &amp; twilight glow</div>
+          </div>
+
+          <div class="wallpaper-card" data-wall="sunset" onclick="setAppWallpaper('sunset', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">🌅</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Sunset Horizon</div>
+            <div class="wallpaper-card-desc">Warm dusk mountain horizon gradient</div>
+          </div>
+
+          <div class="wallpaper-card" data-wall="vintage" onclick="setAppWallpaper('vintage', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">📜</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Classic Scholar</div>
+            <div class="wallpaper-card-desc">Vintage textured paper aesthetic</div>
+          </div>
+
+          <div class="wallpaper-card" data-wall="espresso" onclick="setAppWallpaper('espresso', this)">
+            <div class="wallpaper-card-header">
+              <span class="wallpaper-card-icon">☕</span>
+              <span class="wallpaper-card-check">✓</span>
+            </div>
+            <div class="wallpaper-card-title">Espresso Velvet</div>
+            <div class="wallpaper-card-desc">Ultra-rich deep coffee leather tone</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. READING COMFORTS & SOUNDS -->
+      <div class="custom-section-block">
+        <div class="custom-section-title" style="margin-bottom:14px;">
+          <span>🎛️ Reading Experience &amp; Effects</span>
+        </div>
+
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Tactile Sound Effects</div>
+            <div class="custom-control-sub">Play soft tactile feedback on page flips &amp; buttons</div>
+          </div>
+          <label class="custom-switch">
+            <input type="checkbox" id="customSoundEffectsSwitch" checked onchange="toggleCustomSounds(this.checked)">
+            <span class="custom-switch-slider"></span>
+          </label>
+        </div>
+
+        <div class="custom-control-row">
+          <div>
+            <div class="custom-control-label">Frosted Glass Blur</div>
+            <div class="custom-control-sub">Adjust card blur intensity: <strong id="glassBlurVal">12px</strong></div>
+          </div>
+          <input type="range" id="customGlassBlurSlider" min="0" max="25" value="12" oninput="setCustomGlassBlur(this.value)" style="width:130px; accent-color:var(--accent-gold, #f59e0b);">
+        </div>
+      </div>
+
+      <!-- 6. ACTION BAR -->
+      <div style="display:flex; gap:12px; margin-top:20px; margin-bottom:30px;">
+        <button type="button" class="btn-save-gold" onclick="saveCustomizations()" style="flex:2; padding:14px; font-weight:800; font-size:0.95rem;">
+          💾 Save &amp; Apply Changes
+        </button>
+        <button type="button" class="btn-cancel" onclick="resetCustomizations()" style="flex:1; padding:14px; font-weight:700;">
+          🔄 Reset
+        </button>
+      </div>
 
     </section>
-
-
 
     <!-- ================= SCREEN 19: READING JOURNAL ================= -->
 
