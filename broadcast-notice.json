@@ -1,10 +1,10 @@
 {
   "active": true,
-  "id": "notice-v0.0.93-windows-desktop-edition",
-  "version": "v0.0.93",
+  "id": "notice-v0.0.94-update-station",
+  "version": "v0.0.94",
   "type": "feature",
-  "message": "v0.0.93: Official Windows Desktop Edition (.exe) released for Laptop & PC! Download installer or portable exe.",
-  "actionText": "Check Library",
-  "actionUrl": "#viewLibrary",
-  "timestamp": "2026-10-30T06:30:00.000Z"
+  "message": "v0.0.94: Real-Time Live Update Radar, 12-Color Theme Palette & Windows Desktop App (.exe)",
+  "actionText": "Check Update",
+  "actionUrl": "#viewCustomization",
+  "timestamp": "2026-10-30T07:45:00.000Z"
 }
