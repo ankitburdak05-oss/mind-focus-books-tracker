@@ -1,10 +1,8 @@
 {
-  "active": true,
-  "id": "notice-v0.0.97-progress-engine",
-  "version": "v0.0.97",
+  "id": "v0.0.98-sync-update",
+  "title": "🎉 Phone ↔ Laptop Sync Hub Live!",
+  "message": "Ab aap apne Phone aur Laptop ke beech bina kisi cable ya login ke sirf 5-akshar ke code ya QR photo upload se saara book data sync kar sakte hain!",
   "type": "feature",
-  "message": "v0.0.97: 100% Real Interactive Reading Progress! Clickable Month / Year / All-Time Donut Stats",
-  "actionText": "Check Progress",
-  "actionUrl": "#viewProgress",
-  "timestamp": "2026-10-30T09:50:18.795Z"
+  "version": "v0.0.98",
+  "date": "2026-10-31"
 }
