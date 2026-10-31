@@ -13951,29 +13951,20 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
 
 
-        <div class="profile-menu-item" onclick="navigateToSubView('syncDevices')">
-
-          <div class="pmi-icon grad-blue">☁️</div>
-
+        <div class="profile-menu-item" style="border-left: 3px solid #3b82f6; background: linear-gradient(135deg, rgba(59,130,246,0.08) 0%, rgba(255,255,255,0.02) 100%);" onclick="navigateToSubView('syncDevices')">
+          <div class="pmi-icon grad-blue">🔄</div>
           <div class="pmi-text">
-
-            <div class="pmi-title">Sync Across Devices</div>
-
-            <div class="pmi-sub">Cloud sync &bull; Phone, Mac, Tablet</div>
-
+            <div class="pmi-title">Phone ↔ Laptop Sync</div>
+            <div class="pmi-sub" id="profileSyncSubText">6-Digit Code &amp; QR Sync &bull; Instant Pairing</div>
           </div>
-
           <div class="pmi-arrow">&rsaquo;</div>
-
         </div>
-
-
 
         <div class="profile-menu-item" onclick="navigateToSubView('aboutApp')">
           <div class="pmi-icon grad-dark">ℹ️</div>
           <div class="pmi-text">
             <div class="pmi-title">About App &amp; Updates</div>
-            <div class="pmi-sub" id="aboutAppSubText">Version 0.0.97 &bull; Live Updates &amp; Engine</div>
+            <div class="pmi-sub" id="aboutAppSubText">Version 0.0.98 &bull; Live Updates &amp; Engine</div>
 
           </div>
 
@@ -15193,94 +15184,145 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
 
     <!-- ================= SCREEN 15: SYNC ACROSS DEVICES ================= -->
 
+        <!-- ================= SUB-SCREEN: PHONE ↔ LAPTOP SYNC HUB ================= -->
     <section id="viewSyncDevices" class="app-view">
 
       <div class="sub-screen-header">
-
         <button type="button" class="sub-screen-back-btn" onclick="navigateBack()">&larr;</button>
-
         <div class="sub-screen-title-wrap">
+          <h2 class="sub-screen-main-title">Phone ↔ Laptop Sync</h2>
+          <p class="sub-screen-sub-title">Instant Wireless 6-Digit Code &amp; QR Library Pairing</p>
+        </div>
+        <button type="button" class="sub-screen-action-btn" onclick="renderSyncDevicesView()" title="Refresh">&#x21bb;</button>
+      </div>
 
-          <h2 class="sub-screen-main-title">Sync Across Devices</h2>
+      <!-- Current Device Indicator Card -->
+      <div class="custom-section-block" style="padding:16px 20px; background:linear-gradient(135deg, rgba(59,130,246,0.12) 0%, rgba(15,23,42,0.85) 100%); border-color:rgba(59,130,246,0.3); margin-bottom:16px;">
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div id="syncDeviceTypeIcon" style="width:44px; height:44px; border-radius:12px; background:rgba(59,130,246,0.2); color:#60a5fa; display:flex; align-items:center; justify-content:center; font-size:1.5rem;">
+              💻
+            </div>
+            <div>
+              <div style="font-size:0.95rem; font-weight:800; color:#fff;" id="syncDeviceTypeName">This Device: Laptop Edition</div>
+              <div style="font-size:0.75rem; color:#94a3b8;" id="syncDeviceStatsBrief">Loading library state...</div>
+            </div>
+          </div>
+          <span class="custom-section-badge" style="background:rgba(16,185,129,0.15); color:#10b981; border-color:rgba(16,185,129,0.3); font-size:0.75rem;">READY</span>
+        </div>
+      </div>
 
-          <p class="sub-screen-sub-title">Your progress, everywhere</p>
+      <!-- Dual Action Tabs: SEND vs RECEIVE -->
+      <div class="book-status-tabs-bar" style="margin-bottom:16px;">
+        <button type="button" class="book-status-tab-btn active" id="syncTabSend" onclick="switchSyncMode('SEND')">
+          <span class="bstat-tab-icon">📤</span>
+          <span class="bstat-tab-label">Send Data to Other Device</span>
+        </button>
+        <button type="button" class="book-status-tab-btn" id="syncTabReceive" onclick="switchSyncMode('RECEIVE')">
+          <span class="bstat-tab-icon">📥</span>
+          <span class="bstat-tab-label">Receive Data on This Device</span>
+        </button>
+      </div>
 
+      <!-- PANEL 1: SEND / SHARE DATA -->
+      <div id="syncPanelSend" class="custom-section-block" style="padding:20px 18px;">
+        <div style="text-align:center; margin-bottom:16px;">
+          <h3 style="color:#fff; font-size:1.1rem; font-weight:800; margin:0 0 6px;">Share Library &amp; Progress</h3>
+          <p style="color:#94a3b8; font-size:0.8rem; margin:0 auto; max-width:440px;">
+            Generate an instant 5-character sync code or QR code to wirelessly send all your books, reading streak, notes, and prices to your other device.
+          </p>
         </div>
 
-        <button type="button" class="sub-screen-action-btn" onclick="triggerDeviceSync()" title="Sync Now">&#x21bb;</button>
+        <button type="button" class="btn-save-gold" id="btnGenerateSyncCode" onclick="generateDeviceSyncCode()" style="width:100%; padding:14px; font-size:0.95rem; font-weight:800; display:flex; align-items:center; justify-content:center; gap:8px;">
+          <span>⚡</span>
+          <span>Generate 5-Character Sync Code &amp; QR</span>
+        </button>
 
+        <!-- Sync Code Generated Result Box -->
+        <div id="syncCodeResultBox" style="display:none; margin-top:20px; text-align:center; padding:18px; background:rgba(0,0,0,0.4); border:1px solid rgba(245,158,11,0.4); border-radius:18px;">
+          <div style="font-size:0.75rem; color:#f59e0b; text-transform:uppercase; font-weight:800; letter-spacing:1px; margin-bottom:8px;">
+            Your Direct Sync Code (Valid for 24h)
+          </div>
+          <div id="syncCodeDisplay" style="font-size:2.2rem; font-weight:900; letter-spacing:6px; color:#ffffff; font-family:monospace; background:rgba(255,255,255,0.06); padding:10px 18px; border-radius:12px; display:inline-block; margin-bottom:12px; border:1px dashed rgba(245,158,11,0.6);">
+            ------
+          </div>
+
+          <!-- QR Code Image -->
+          <div style="margin:12px 0;">
+            <img id="syncQrCodeImg" src="" alt="Sync QR Code" style="width:180px; height:180px; border-radius:12px; background:#fff; padding:8px; box-shadow:0 8px 24px rgba(0,0,0,0.5); display:inline-block;">
+          </div>
+          <div style="font-size:0.78rem; color:#cbd5e1; margin-bottom:14px;">
+            📱 Phone se scan karein, ya doosre device me upar wala 5-letter code type karein!
+          </div>
+
+          <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+            <button type="button" class="btn-cancel" onclick="copyGeneratedSyncCode()" style="padding:10px 18px; font-size:0.82rem; font-weight:700;">
+              📋 Copy Code
+            </button>
+            <button type="button" class="btn-cancel" onclick="downloadSyncPackageFile()" style="padding:10px 18px; font-size:0.82rem; font-weight:700;">
+              💾 Save File (.json)
+            </button>
+          </div>
+        </div>
       </div>
 
-
-
-      <div class="sync-hero-card">
-
-        <div class="sync-cloud-icon">☁️</div>
-
-        <h3 style="font-size: 1.1rem; font-weight: 800; color: var(--text-primary); margin-bottom: 4px;">Sync Progress</h3>
-
-        <p style="font-size: 0.8rem; color: var(--text-secondary); margin-bottom: 12px;" id="lastSyncTimeText">Last synced Today, 11:42 AM</p>
-
-        <button type="button" class="btn-save-gold" id="btnSyncNow" onclick="triggerDeviceSync()" style="margin: 0 auto; max-width: 180px;">🔄 Sync Now</button>
-
-      </div>
-
-
-
-      <div class="section-header" style="margin-top: 18px;">
-
-        <h3 class="section-title">Connected Devices</h3>
-
-      </div>
-
-      <div class="sync-device-item">
-
-        <div class="sync-dev-icon">📱</div>
-
-        <div class="sync-dev-meta">
-
-          <div class="sync-dev-name">This Phone</div>
-
-          <div class="sync-dev-status" style="color: #34d399;">Active &bull; Current Session</div>
-
+      <!-- PANEL 2: RECEIVE / IMPORT DATA -->
+      <div id="syncPanelReceive" class="custom-section-block" style="display:none; padding:20px 18px;">
+        <div style="text-align:center; margin-bottom:18px;">
+          <h3 style="color:#fff; font-size:1.1rem; font-weight:800; margin:0 0 6px;">Connect &amp; Receive Library</h3>
+          <p style="color:#94a3b8; font-size:0.8rem; margin:0;">
+            Enter the 5-character code from your other device, or upload a photo / screenshot of the QR code.
+          </p>
         </div>
 
-        <span style="font-size: 0.72rem; color: #34d399; font-weight: 800;">CURRENT</span>
-
-      </div>
-
-      <div class="sync-device-item">
-
-        <div class="sync-dev-icon">💻</div>
-
-        <div class="sync-dev-meta">
-
-          <div class="sync-dev-name">MacBook</div>
-
-          <div class="sync-dev-status">Synced 2 hours ago</div>
-
+        <!-- Method 1: Enter Code -->
+        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px; margin-bottom:16px;">
+          <label style="display:block; font-size:0.82rem; color:#e2e8f0; font-weight:700; margin-bottom:8px;">
+            🔑 Enter 5-Character Sync Code:
+          </label>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="syncInputCode" placeholder="e.g. ZFACf" maxlength="10" style="flex:1; background:rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.2); color:#fff; font-family:monospace; font-size:1.2rem; font-weight:800; letter-spacing:2px; text-transform:none; padding:10px 14px; border-radius:10px; outline:none;">
+            <button type="button" class="btn-save-gold" id="btnConnectSync" onclick="connectAndFetchSyncData()" style="padding:10px 18px; font-size:0.88rem; font-weight:800; flex-shrink:0;">
+              🚀 Connect
+            </button>
+          </div>
         </div>
 
-        <span style="font-size: 0.72rem; color: var(--text-muted);">READY</span>
+        <!-- Method 2: Photo / Screenshot / File Upload -->
+        <div style="background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px; margin-bottom:16px; text-align:center;">
+          <div style="font-size:0.85rem; color:#e2e8f0; font-weight:700; margin-bottom:6px;">
+            📁 Or Upload QR Photo / Screenshot / Backup File:
+          </div>
+          <div style="font-size:0.75rem; color:#94a3b8; margin-bottom:12px;">
+            Laptop me live camera ki zaroorat nahi — phone se photo khinch kar ya QR screenshot upload karein!
+          </div>
 
-      </div>
-
-      <div class="sync-device-item">
-
-        <div class="sync-dev-icon">📱</div>
-
-        <div class="sync-dev-meta">
-
-          <div class="sync-dev-name">Tablet</div>
-
-          <div class="sync-dev-status">Synced yesterday</div>
-
+          <label class="btn-cancel" style="display:inline-flex; align-items:center; gap:8px; cursor:pointer; padding:10px 20px; font-weight:700; font-size:0.85rem; border:1px dashed rgba(245,158,11,0.5);">
+            <span>📷 Choose Photo or Sync File</span>
+            <input type="file" id="syncFileInput" accept="image/*,.json" style="display:none;" onchange="handleSyncFileUpload(event)">
+          </label>
         </div>
 
-        <span style="font-size: 0.72rem; color: var(--text-muted);">READY</span>
+        <!-- Incoming Data Preview Box -->
+        <div id="syncIncomingPreviewBox" style="display:none; padding:16px; background:rgba(16,185,129,0.08); border:1px solid rgba(16,185,129,0.4); border-radius:16px; margin-top:16px;">
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+            <span style="font-size:1.4rem;">📦</span>
+            <div>
+              <div style="font-size:0.95rem; font-weight:800; color:#10b981;">Sync Package Ready to Merge!</div>
+              <div style="font-size:0.75rem; color:#94a3b8;" id="syncIncomingStats">Loading details...</div>
+            </div>
+          </div>
 
+          <div style="display:flex; gap:10px; margin-top:14px;">
+            <button type="button" class="btn-save-gold" onclick="applyIncomingSyncData('MERGE')" style="flex:2; padding:12px; font-size:0.9rem; font-weight:800;">
+              ✅ Smart Merge (Recommended)
+            </button>
+            <button type="button" class="btn-cancel" onclick="applyIncomingSyncData('REPLACE')" style="flex:1; padding:12px; font-size:0.82rem; font-weight:700;">
+              ⚡ Replace All
+            </button>
+          </div>
+        </div>
       </div>
-
     </section>
 
 
@@ -15679,7 +15721,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
         <p style="color:#94a3b8; font-size:0.82rem; margin:0 0 14px;">Professional Reading Tracker, 3D Personal Library &amp; Executive Analytics</p>
         
         <div style="display:flex; justify-content:center; gap:8px; flex-wrap:wrap;">
-          <span class="custom-section-badge" id="aboutAppVersionBadge" style="font-size:0.8rem; padding:4px 12px;">Version v0.0.97</span>
+          <span class="custom-section-badge" id="aboutAppVersionBadge" style="font-size:0.8rem; padding:4px 12px;">Version v0.0.98</span>
           <span class="custom-section-badge" style="background:rgba(16,185,129,0.15); color:#10b981; border-color:rgba(16,185,129,0.3); font-size:0.8rem; padding:4px 12px;">Official Stable</span>
         </div>
       </div>
@@ -15700,7 +15742,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           </div>
           <div class="update-meta-pill">
             <span>Installed:</span>
-            <strong id="updateStationCurrentVer">v0.0.97</strong>
+            <strong id="updateStationCurrentVer">v0.0.98</strong>
           </div>
           <div class="update-meta-pill">
             <span>Engine:</span>
@@ -15712,7 +15754,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           <div class="update-status-icon-box success" id="updateStatusIcon">✓</div>
           <div class="update-status-info">
             <div class="update-status-title" id="updateStatusTitle">Up to Date</div>
-            <div class="update-status-detail" id="updateStatusDetail">Mind Focus Books v0.0.97 is the latest version available.</div>
+            <div class="update-status-detail" id="updateStatusDetail">Mind Focus Books v0.0.98 is the latest version available.</div>
           </div>
         </div>
 
@@ -15738,7 +15780,7 @@ body.pref-reduce-motion *, body.pref-reduce-motion *:before, body.pref-reduce-mo
           </button>
           <button type="button" class="btn-update-secondary" onclick="viewChangelogModal()">
             <span>📋</span>
-            <span>What's New in v0.0.97</span>
+            <span>What's New in v0.0.98</span>
           </button>
         </div>
 
@@ -26734,57 +26776,28 @@ if (typeof module !== 'undefined' && module.exports) {
 </script>
 
   <script>
-window.BROADCAST_NOTICE = {
-  "active": true,
-  "id": "notice-v0.0.97-progress-engine",
-  "version": "v0.0.97",
+// Broadcast Notice Fallback
+window.MIND_FOCUS_BROADCAST_NOTICE = {
+  "id": "v0.0.98-sync-update",
+  "title": "🎉 Phone ↔ Laptop Sync Hub Live!",
+  "message": "Ab aap apne Phone aur Laptop ke beech bina kisi cable ya login ke sirf 5-akshar ke code ya QR photo upload se saara book data sync kar sakte hain!",
   "type": "feature",
-  "message": "v0.0.97: 100% Real Interactive Reading Progress! Clickable Month / Year / All-Time Donut Stats",
-  "actionText": "Check Progress",
-  "actionUrl": "#viewProgress",
-  "timestamp": "2026-10-30T09:50:18.795Z"
+  "version": "v0.0.98",
+  "date": "2026-10-31"
 };
 
 </script>
 
   <script>
-window.__DEFAULT_REMOTE_CONFIG__ = {
-  "activeRelease": {
-    "version": "v0.0.97",
-    "name": "Mind Focus Books v0.0.97 (Interactive Reading Progress & Donut Stats Engine)",
-    "releaseNotes": "v0.0.97: 100% Real Interactive Reading Progress (Clickable This Month / This Year / All-Time Pills, Real Books Read & Total Books Donut Counter)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.97/MindFocusBooks-Native.apk",
-    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.97/MindFocusBooks-Setup-v0.0.97.exe",
-    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.97/MindFocusBooks-Portable-v0.0.97.exe",
-    "mandatory": false,
-    "timestamp": "2026-10-30T09:50:18.772Z"
-  },
-  "latest": {
-    "version": "v0.0.97",
-    "name": "Mind Focus Books v0.0.97 (Interactive Reading Progress & Donut Stats Engine)",
-    "releaseNotes": "v0.0.97: 100% Real Interactive Reading Progress (Clickable This Month / This Year / All-Time Pills, Real Books Read & Total Books Donut Counter)",
-    "apkDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.97/MindFocusBooks-Native.apk",
-    "windowsSetupDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.97/MindFocusBooks-Setup-v0.0.97.exe",
-    "windowsPortableDownloadUrl": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.97/MindFocusBooks-Portable-v0.0.97.exe"
-  },
-  "stagedRelease": null,
-  "min_required_version": "0.0.1",
-  "latest_version": "0.0.97",
-  "version_code": 8592,
-  "download_url": "https://github.com/ankitburdak05-oss/mind-focus-books-tracker/releases/download/v0.0.97/MindFocusBooks-Native.apk",
-  "release_notes": "v0.0.97: 100% Real Interactive Reading Progress (Clickable This Month / This Year / All-Time Pills, Real Books Read & Total Books Donut Counter)",
-  "force_update": false,
-  "maintenance": false,
-  "published_at": "2026-10-30T09:50:18.788Z",
-  "features": {
-    "inAppUpdates": true,
-    "smartBookDossier": true,
-    "exploreModularEngine": true,
-    "windowsDesktopSupport": true,
-    "aboutAppUpdatesHub": true,
-    "nativeDesktopInAppUpdater": true,
-    "interactiveReadingProgressPills": true
-  }
+// Remote Config Fallback for GitHub Pages & Local WebView
+window.MIND_FOCUS_REMOTE_CONFIG = {
+  "latest_version": "v0.0.98",
+  "min_supported_version": "v0.0.80",
+  "critical_update": false,
+  "changelog_hindi": "v0.0.98: Phone <-> Laptop Wireless Sync Hub (5-Character Pairing & QR Scanner/Photo Import), Book Lending Tracker fully connected, and offline multi-device reading sync!",
+  "update_url_windows": "https://github.com/ram1122334455/Mind-focus-Books/releases/download/v0.0.98/MindFocusBooks-Portable-v0.0.98.exe",
+  "update_url_android": "https://github.com/ram1122334455/Mind-focus-Books/releases/download/v0.0.98/MindFocusBooks-v0.0.98.apk",
+  "timestamp": "2026-10-31T04:50:15.798Z"
 };
 
 </script>
@@ -26802,7 +26815,7 @@ window.__DEFAULT_REMOTE_CONFIG__ = {
 
 const APP_VERSION = '0.0.78';
 
-const CURRENT_APP_VERSION = 'v0.0.97';
+const CURRENT_APP_VERSION = 'v0.0.98';
 
 const STORAGE_KEY = 'mind_focus_books_v1';
 
@@ -40730,7 +40743,9 @@ function startLiveUpdateDownload(downloadUrl, targetVer) {
 function executeDownloadedUpdate() {
   playTactileClick();
   const isWindows = isRunningOnWindowsLaptop();
-  if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
+  if (isWindows && window.desktopAPI && typeof window.desktopAPI.installAndRestart === 'function') {
+    window.desktopAPI.installAndRestart();
+  } else if (isWindows && window.desktopAPI && typeof window.desktopAPI.openExternal === 'function') {
     window.desktopAPI.openExternal(currentTargetUpdateUrl);
   } else {
     window.open(currentTargetUpdateUrl, '_blank');
@@ -40813,19 +40828,349 @@ function renderOfflineModeView() {
 
 // --- FEATURE 15: SYNC ACROSS DEVICES ENGINE ---
 
+
+// ============================================================================
+// 🔄 PHONE ↔ LAPTOP REAL-TIME SYNC ENGINE (v0.0.98)
+// Wireless 5-6 Character Code Pairing, QR Code, Photo / File Import & Smart Merge
+// ============================================================================
+
+window._generatedSyncCode = '';
+window._incomingSyncPackage = null;
+
 function renderSyncDevicesView() {
+  playTactileClick();
+  const isWindows = isRunningOnWindowsLaptop();
+  const iconEl = document.getElementById('syncDeviceTypeIcon');
+  const nameEl = document.getElementById('syncDeviceTypeName');
+  const briefEl = document.getElementById('syncDeviceStatsBrief');
 
-  const lastSyncEl = document.getElementById('lastSyncTimeText');
+  if (iconEl) iconEl.innerText = isWindows ? '💻' : '📱';
+  if (nameEl) nameEl.innerText = isWindows ? 'This Device: Laptop / PC Edition' : 'This Device: Android Phone Edition';
 
-  if (lastSyncEl) {
+  const totalBooks = (state.books || []).length;
+  const streak = state.stats?.readingStreak || 0;
+  const spent = typeof calculateTotalSpentAmount === 'function' ? calculateTotalSpentAmount() : 0;
 
-    const lastSyncTime = localStorage.getItem('mf_last_sync_time') || 'Today, 11:42 AM';
+  if (briefEl) {
+    briefEl.innerText = `Ready to sync ${totalBooks} Books • ₹${spent} Spent • ${streak}-day streak`;
+  }
+}
+window.renderSyncDevicesView = renderSyncDevicesView;
 
-    lastSyncEl.innerText = `Last synced: ${lastSyncTime}`;
+function switchSyncMode(mode) {
+  playTactileClick();
+  const tabSend = document.getElementById('syncTabSend');
+  const tabReceive = document.getElementById('syncTabReceive');
+  const panelSend = document.getElementById('syncPanelSend');
+  const panelReceive = document.getElementById('syncPanelReceive');
 
+  if (mode === 'SEND') {
+    if (tabSend) tabSend.classList.add('active');
+    if (tabReceive) tabReceive.classList.remove('active');
+    if (panelSend) panelSend.style.display = 'block';
+    if (panelReceive) panelReceive.style.display = 'none';
+  } else {
+    if (tabSend) tabSend.classList.remove('active');
+    if (tabReceive) tabReceive.classList.add('active');
+    if (panelSend) panelSend.style.display = 'none';
+    if (panelReceive) panelReceive.style.display = 'block';
+  }
+}
+window.switchSyncMode = switchSyncMode;
+
+async function generateDeviceSyncCode() {
+  playTactileClick();
+  const btn = document.getElementById('btnGenerateSyncCode');
+  const resultBox = document.getElementById('syncCodeResultBox');
+  const displayEl = document.getElementById('syncCodeDisplay');
+  const qrImg = document.getElementById('syncQrCodeImg');
+
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<span>⏳</span><span>Packaging &amp; Uploading Sync Session...</span>';
   }
 
+  try {
+    const isWindows = isRunningOnWindowsLaptop();
+    const payload = {
+      app: 'MindFocusBooks',
+      version: CURRENT_APP_VERSION,
+      exportedAt: new Date().toISOString(),
+      sourceDevice: isWindows ? 'Windows Laptop' : 'Android Phone',
+      books: state.books || [],
+      stats: state.stats || {},
+      prices: JSON.parse(localStorage.getItem('mf_book_prices') || '{}'),
+      budget: JSON.parse(localStorage.getItem('mf_reading_budget') || '{}'),
+      lending: (typeof lendingRecords !== 'undefined' ? lendingRecords : []),
+      shelves: JSON.parse(localStorage.getItem('mf_custom_shelves') || '[]')
+    };
+
+    const res = await fetch('https://dpaste.org/api/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'content=' + encodeURIComponent(JSON.stringify(payload)) + '&expiry_days=1&format=json'
+    });
+
+    const data = await res.json();
+    const code = (data.url || '').replace('https://dpaste.org/', '').replace(/\//g, '').trim();
+
+    if (!code) throw new Error('Could not generate sync session code');
+
+    window._generatedSyncCode = code;
+    window._lastGeneratedPayload = payload;
+
+    if (displayEl) displayEl.innerText = code;
+    if (qrImg) {
+      // Free HTTPS QuickChart QR endpoint with raw data link
+      const qrDataUrl = `https://quickchart.io/qr?text=${encodeURIComponent('https://dpaste.org/' + code + '/raw')}&size=220&margin=1`;
+      qrImg.src = qrDataUrl;
+    }
+
+    if (resultBox) resultBox.style.display = 'block';
+    localStorage.setItem('mf_last_sync_time', new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+
+    if (typeof showToast === 'function') {
+      showToast(`⚡ Sync Code ${code} generated! Enter it on your other device.`);
+    }
+  } catch (err) {
+    console.error('Sync generation error:', err);
+    if (typeof showToast === 'function') {
+      showToast('⚠️ Could not connect to sync relay. Check internet connection.');
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>⚡</span><span>Regenerate Sync Code &amp; QR</span>';
+    }
+  }
 }
+window.generateDeviceSyncCode = generateDeviceSyncCode;
+
+function copyGeneratedSyncCode() {
+  playTactileClick();
+  const code = window._generatedSyncCode;
+  if (!code) return;
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(code).then(() => {
+      if (typeof showToast === 'function') showToast(`✓ Code ${code} copied to clipboard!`);
+    });
+  } else {
+    prompt('Copy your sync code:', code);
+  }
+}
+window.copyGeneratedSyncCode = copyGeneratedSyncCode;
+
+function downloadSyncPackageFile() {
+  playTactileClick();
+  const payload = window._lastGeneratedPayload || {
+    app: 'MindFocusBooks',
+    version: CURRENT_APP_VERSION,
+    exportedAt: new Date().toISOString(),
+    books: state.books || [],
+    stats: state.stats || {}
+  };
+  const jsonStr = JSON.stringify(payload, null, 2);
+  const blob = new Blob([jsonStr], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `MindFocus-Library-Sync-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  if (typeof showToast === 'function') showToast('✓ Sync file downloaded to your device!');
+}
+window.downloadSyncPackageFile = downloadSyncPackageFile;
+
+async function connectAndFetchSyncData() {
+  playTactileClick();
+  const inputEl = document.getElementById('syncInputCode');
+  let rawCode = (inputEl?.value || '').trim();
+
+  // If user pasted full dpaste link, extract code
+  if (rawCode.includes('dpaste.org/')) {
+    rawCode = rawCode.replace('https://dpaste.org/', '').replace('http://dpaste.org/', '').replace('/raw', '').replace(/\//g, '').trim();
+  }
+
+  if (!rawCode) {
+    if (typeof showToast === 'function') showToast('⚠️ Kripya 5-character Sync Code enter karein!');
+    return;
+  }
+
+  const btn = document.getElementById('btnConnectSync');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = '⏳ Connecting...';
+  }
+
+  try {
+    const res = await fetch(`https://dpaste.org/${rawCode}/raw`);
+    if (!res.ok) throw new Error(`Code not found or expired (HTTP ${res.status})`);
+
+    const text = await res.text();
+    const data = JSON.parse(text);
+
+    if (!data || !Array.isArray(data.books)) {
+      throw new Error('Invalid sync package data received');
+    }
+
+    displayIncomingSyncPreview(data);
+  } catch (err) {
+    console.error('Fetch sync error:', err);
+    if (typeof showToast === 'function') {
+      showToast('❌ Code invalid ya expire ho chuka hai. Check karein aur dubara dalein.');
+    }
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerText = '🚀 Connect';
+    }
+  }
+}
+window.connectAndFetchSyncData = connectAndFetchSyncData;
+
+function displayIncomingSyncPreview(data) {
+  window._incomingSyncPackage = data;
+  const box = document.getElementById('syncIncomingPreviewBox');
+  const statsEl = document.getElementById('syncIncomingStats');
+
+  const count = (data.books || []).length;
+  const streak = data.stats?.readingStreak || 0;
+  const device = data.sourceDevice || 'Other Device';
+
+  if (statsEl) {
+    statsEl.innerText = `From ${device} • ${count} Books • ${streak}-day Reading Streak`;
+  }
+  if (box) box.style.display = 'block';
+
+  if (typeof showToast === 'function') {
+    showToast(`✓ Found ${count} books from ${device}! Select merge option below.`);
+  }
+}
+
+function handleSyncFileUpload(event) {
+  const file = event?.target?.files?.[0];
+  if (!file) return;
+
+  if (file.name.endsWith('.json') || file.type === 'application/json') {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        if (data && Array.isArray(data.books)) {
+          displayIncomingSyncPreview(data);
+        } else {
+          showToast('⚠️ JSON file me valid books data nahi mila.');
+        }
+      } catch (err) {
+        showToast('❌ JSON file parse karne me error aayi.');
+      }
+    };
+    reader.readAsText(file);
+    return;
+  }
+
+  // If user uploaded an image / screenshot
+  if (file.type.startsWith('image/')) {
+    if (typeof showToast === 'function') {
+      showToast('📷 Image loaded! Decoding QR code from screenshot...');
+    }
+    // Attempt BarcodeDetector if available in browser
+    if (typeof window.BarcodeDetector !== 'undefined') {
+      const barcodeDetector = new window.BarcodeDetector({ formats: ['qr_code'] });
+      createImageBitmap(file).then(bitmap => {
+        barcodeDetector.detect(bitmap).then(barcodes => {
+          if (barcodes.length > 0) {
+            const rawValue = barcodes[0].rawValue;
+            console.log('Decoded QR rawValue:', rawValue);
+            document.getElementById('syncInputCode').value = rawValue;
+            connectAndFetchSyncData();
+          } else {
+            showToast('⚠️ Photo me QR code detect nahi ho paya. Kripya 5-letter code dalein.');
+          }
+        }).catch(() => {
+          showToast('⚠️ Photo me QR code detect nahi ho paya. Kripya 5-letter code dalein.');
+        });
+      });
+    } else {
+      showToast('💡 Photo loaded! Kripya QR ke niche likha 5-letter code type karein.');
+    }
+  }
+}
+window.handleSyncFileUpload = handleSyncFileUpload;
+
+function applyIncomingSyncData(mergeMode) {
+  playTactileClick();
+  const incoming = window._incomingSyncPackage;
+  if (!incoming || !Array.isArray(incoming.books)) {
+    if (typeof showToast === 'function') showToast('⚠️ Koi sync package select nahi hai.');
+    return;
+  }
+
+  const localBooks = state.books || [];
+  let finalBooks = [];
+
+  if (mergeMode === 'REPLACE') {
+    finalBooks = incoming.books;
+  } else {
+    // SMART MERGE (Merge without duplicates, keep highest pages & completed status)
+    finalBooks = [...localBooks];
+    incoming.books.forEach(inBook => {
+      const idx = finalBooks.findIndex(b => (b.id && b.id === inBook.id) || (b.title && b.title.toLowerCase().trim() === inBook.title.toLowerCase().trim()));
+      if (idx >= 0) {
+        const exist = finalBooks[idx];
+        const maxPage = Math.max(exist.current_page || 0, inBook.current_page || 0);
+        const isDone = (exist.status === 'DONE' || inBook.status === 'DONE');
+        finalBooks[idx] = Object.assign({}, exist, inBook, {
+          current_page: maxPage,
+          status: isDone ? 'DONE' : (maxPage > 0 ? 'READING' : exist.status)
+        });
+      } else {
+        finalBooks.push(inBook);
+      }
+    });
+  }
+
+  // Update state
+  state.books = finalBooks;
+  saveBooks();
+
+  // Merge stats & reading streak (take higher streak)
+  if (incoming.stats) {
+    state.stats.readingStreak = Math.max(state.stats?.readingStreak || 0, incoming.stats?.readingStreak || 0);
+    if (typeof saveStateToStorage === 'function') saveStateToStorage();
+  }
+
+  // Merge prices & budget
+  if (incoming.prices && typeof incoming.prices === 'object') {
+    const curPrices = JSON.parse(localStorage.getItem('mf_book_prices') || '{}');
+    const mergedPrices = Object.assign({}, curPrices, incoming.prices);
+    localStorage.setItem('mf_book_prices', JSON.stringify(mergedPrices));
+  }
+
+  // Update UI and record audit log
+  if (typeof window.addAuditLog === 'function') {
+    window.addAuditLog(
+      `Synced with ${incoming.sourceDevice || 'Other Device'}`,
+      'Sync',
+      `Total ${finalBooks.length} books merged (${mergeMode} mode)`,
+      '🔄',
+      0
+    );
+  }
+
+  const box = document.getElementById('syncIncomingPreviewBox');
+  if (box) box.style.display = 'none';
+
+  if (typeof renderReadingBudget === 'function') renderReadingBudget();
+  if (typeof renderProgressView === 'function') renderProgressView();
+  if (typeof renderHome === 'function') renderHome();
+  renderSyncDevicesView();
+
+  if (typeof showToast === 'function') {
+    showToast(`🎉 Success! ${finalBooks.length} Books synced & merged perfectly!`);
+  }
+}
+window.applyIncomingSyncData = applyIncomingSyncData;
 
 
 
